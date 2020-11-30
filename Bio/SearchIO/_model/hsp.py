@@ -839,11 +839,11 @@ class HSPFragment(_BaseHSP):
         # sequences
         if self.query is not None and self.hit is not None:
             try:
-                qseq = str(self.query.seq)
+                qseq = self.query.seq
             except AttributeError:  # query is None
                 qseq = "?"
             try:
-                hseq = str(self.hit.seq)
+                hseq = self.hit.seq
             except AttributeError:  # hit is None
                 hseq = "?"
 

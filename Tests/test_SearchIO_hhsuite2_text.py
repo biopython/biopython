@@ -67,13 +67,13 @@ class HhsuiteCases(unittest.TestCase):
             "ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYC"
             "GAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCS"
             "KWGSCGIGPGYCGAGCQSGGCDG",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYC"
             "GAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCS"
             "KWGSCGIGPGYCGAGCQSGGCDG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
         # Check last hit
@@ -106,12 +106,12 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(
             "XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCX"
             "XX--XXXCXXXXCCXXXXXCXXXXXXCXXX",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "TCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCG"
             "KDAGGRVCTNNYCCSKWGSCGIGPGYCGAG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
     def test_2uvo_onlyheader(self):
@@ -166,8 +166,8 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(24, hsp.hit_end)
         self.assertEqual(38, hsp.query_start)
         self.assertEqual(39, hsp.query_end)
-        self.assertEqual("T", str(hsp.hit.seq))
-        self.assertEqual("X", str(hsp.query.seq))
+        self.assertEqual("T", hsp.hit.seq)
+        self.assertEqual("X", hsp.query.seq)
 
         # Check last hit
         hit = qresult[num_hits - 1]
@@ -196,8 +196,8 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(1, hsp.hit_end)
         self.assertEqual(3, hsp.query_start)
         self.assertEqual(4, hsp.query_end)
-        self.assertEqual("D", str(hsp.hit.seq))
-        self.assertEqual("X", str(hsp.query.seq))
+        self.assertEqual("D", hsp.hit.seq)
+        self.assertEqual("X", hsp.query.seq)
 
     def test_4y9h_nossm(self):
         """Parsing 4y9h_hhsearch_server_NOssm.hhr file."""
@@ -241,13 +241,13 @@ class HhsuiteCases(unittest.TestCase):
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYAD"
             "WLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRP"
             "EVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYAD"
             "WLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRP"
             "EVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
         # Check last hit
@@ -278,10 +278,10 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(7, hsp.query_start)
         self.assertEqual(59, hsp.query_end)
         self.assertEqual(
-            "FWLVTAALLASTVFFFVERDRVS-AKWKTSLTVSGLVTGIAFWHYMYMRGVW", str(hsp.hit.seq)
+            "FWLVTAALLASTVFFFVERDRVS-AKWKTSLTVSGLVTGIAFWHYMYMRGVW", hsp.hit.seq
         )
         self.assertEqual(
-            "LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY", str(hsp.query.seq)
+            "LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY", hsp.query.seq
         )
 
     def test_q9bsu1(self):
@@ -328,7 +328,7 @@ class HhsuiteCases(unittest.TestCase):
             "MYIYSGNSLQDTKAPMMPLSCFLGNVYAESVDVLRDGTGPAGLRLRLLAAGCGPGLLADAKMRVFERSVYFGDSCQDVLS"
             "MLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTNYPGHYNFNIYHRCEFKIP"
             "LAIKKENADGQTE--TCTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "EQWE----FALGMPLAQAISILQKHCRIIKNVQVLYSEQMPLSHDLILNLTQDGIKLLFDACNQRLKVIEVYDLTKVKLK"
@@ -336,7 +336,7 @@ class HhsuiteCases(unittest.TestCase):
             "MYIYSGNNLQETKAPAMPLACFLGNVYAECVEVLRDGAGPLGLKLRLLTAGCGPGVLADTKVRAVERSIYFGDSCQDVLS"
             "ALGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYYILGVDILFDSTTHLVKKFVLHTNFPGHYNFNIYHRCDFKIP"
             "LIIKKDGADAHSEDCILTTYSKWDQIQELLGHPMEKPVVLHRSSSANNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
 
         # Check last hit
@@ -364,8 +364,8 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(48, hsp.hit_end)
         self.assertEqual(61, hsp.query_start)
         self.assertEqual(85, hsp.query_end)
-        self.assertEqual("APNVIFDYDA-EGRIVGIELLDAR", str(hsp.hit.seq))
-        self.assertEqual("QDGIKLMFDAFNQRLKVIEVCDLT", str(hsp.query.seq))
+        self.assertEqual("APNVIFDYDA-EGRIVGIELLDAR", hsp.hit.seq)
+        self.assertEqual("QDGIKLMFDAFNQRLKVIEVCDLT", hsp.query.seq)
 
     def test_4p79(self):
         """Parsing 4p79_hhsearch_server_NOssm.hhr file."""
@@ -407,13 +407,13 @@ class HhsuiteCases(unittest.TestCase):
             "GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ"
             "GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKY"
             "ELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ"
             "GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKY"
             "ELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
 
         # Check last hit
@@ -445,8 +445,8 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(42, hsp.hit_end)
         self.assertEqual(5, hsp.query_start)
         self.assertEqual(37, hsp.query_end)
-        self.assertEqual("RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP", str(hsp.hit.seq))
-        self.assertEqual("SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST", str(hsp.query.seq))
+        self.assertEqual("RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP", hsp.hit.seq)
+        self.assertEqual("SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST", hsp.query.seq)
 
     def test_9590198(self):
         """Parsing hhpred_9590198.hhr file."""
@@ -493,7 +493,7 @@ class HhsuiteCases(unittest.TestCase):
             "RALGAPARLYYKADDKMRIHRPTARRR-PPPASDYLFNYFTLGLDVLFDARTNQVKKFVLHTNYPGHYNFNMYHRCEFEL"
             "TVQPD-KSEAHSLVESGGGVAVTAYSKWEVVSRAL-RVCERPVVLNRASSTNTTNPFGSTFCYGYQDIIFEVMSNNYIAS"
             "ITLY",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "GMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVHFNSQAI"
@@ -502,7 +502,7 @@ class HhsuiteCases(unittest.TestCase):
             "SMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTNYPGHYNFNIYHRCEFKI"
             "PLAIKKENADG------QTETCTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIAS"
             "VTLY",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
         # Check last hit
@@ -535,12 +535,12 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(
             "FTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVH-FN"
             "SQAIAPTIEQIDQSFGA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDH-------YGPQGHFFFNA-ADKLIHKRQMELFPAPKPTMRLATYN"
             "KTQTGMTEAQFWAAVPS",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
 
 
