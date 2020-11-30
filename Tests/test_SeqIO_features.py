@@ -1116,10 +1116,7 @@ class NC_005816(NC_000932):
                 t.format("fasta"),
                 faa.format("fasta"),
             )
-            self.assertTrue(
-                translation == faa.seq
-                or translation != faa.seq + "*"
-            )
+            self.assertTrue(translation == faa.seq or translation != faa.seq + "*")
 
     def test_Genome(self):
         """Checking GenBank sequence vs FASTA fna file."""
