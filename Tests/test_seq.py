@@ -56,7 +56,7 @@ class TestSeq(unittest.TestCase):
 
     def test_as_string(self):
         """Test converting Seq to string."""
-        self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
+        self.assertEqual("TCAAAAGGATGCATCATG", self.s)
 
     def test_seq_construction(self):
         """Test Seq object initialization."""
@@ -104,7 +104,7 @@ class TestSeq(unittest.TestCase):
 
     def test_slicing(self):
         """Test slicing of Seq."""
-        self.assertEqual("AA", str(self.s[3:5]))
+        self.assertEqual("AA", self.s[3:5])
 
     def test_reverse(self):
         """Test reverse using -1 stride."""
@@ -112,18 +112,18 @@ class TestSeq(unittest.TestCase):
 
     def test_extract_third_nucleotide(self):
         """Test extracting every third nucleotide (slicing with stride 3)."""
-        self.assertEqual("TAGTAA", str(self.s[0::3]))
-        self.assertEqual("CAGGTT", str(self.s[1::3]))
-        self.assertEqual("AAACCG", str(self.s[2::3]))
+        self.assertEqual("TAGTAA", self.s[0::3])
+        self.assertEqual("CAGGTT", self.s[1::3])
+        self.assertEqual("AAACCG", self.s[2::3])
 
     def test_concatenation_of_seq(self):
         t = Seq.Seq("T")
         u = self.s + t
-        self.assertEqual(str(self.s) + "T", str(u))
+        self.assertEqual(str(self.s) + "T", u)
         self.assertEqual(self.s + Seq.Seq("T"), "TCAAAAGGATGCATCATGT")
 
     def test_ungap(self):
-        self.assertEqual("ATCCCA", str(Seq.Seq("ATC-CCA").ungap("-")))
+        self.assertEqual("ATCCCA", Seq.Seq("ATC-CCA").ungap("-"))
 
         with self.assertRaises(ValueError):
             Seq.Seq("ATC-CCA").ungap("--")
@@ -165,11 +165,11 @@ class TestSeqStringMethods(unittest.TestCase):
     def test_string_methods(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
             if isinstance(a, Seq.Seq):
-                self.assertEqual(str(a.strip()), str(a).strip())
-                self.assertEqual(str(a.lstrip()), str(a).lstrip())
-                self.assertEqual(str(a.rstrip()), str(a).rstrip())
-                self.assertEqual(str(a.lower()), str(a).lower())
-                self.assertEqual(str(a.upper()), str(a).upper())
+                self.assertEqual(a.strip(), str(a).strip())
+                self.assertEqual(a.lstrip(), str(a).lstrip())
+                self.assertEqual(a.rstrip(), str(a).rstrip())
+                self.assertEqual(a.lower(), str(a).lower())
+                self.assertEqual(a.upper(), str(a).upper())
 
     def test_hash(self):
         with warnings.catch_warnings(record=True):
@@ -221,7 +221,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_radd_method(self):
         self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", str(self.s.__radd__(self.s))
+            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", self.s.__radd__(self.s)
         )
 
     def test_radd_method_using_wrong_object(self):
@@ -255,9 +255,9 @@ class TestSeqStringMethods(unittest.TestCase):
             for char in self.test_chars:
                 str_char = str(char)
                 if isinstance(a, Seq.Seq):
-                    self.assertEqual(str(a.strip(char)), str(a).strip(str_char))
-                    self.assertEqual(str(a.lstrip(char)), str(a).lstrip(str_char))
-                    self.assertEqual(str(a.rstrip(char)), str(a).rstrip(str_char))
+                    self.assertEqual(a.strip(char), str(a).strip(str_char))
+                    self.assertEqual(a.lstrip(char), str(a).lstrip(str_char))
+                    self.assertEqual(a.rstrip(char), str(a).rstrip(str_char))
 
     def test_finding_characters(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
@@ -286,16 +286,12 @@ class TestSeqStringMethods(unittest.TestCase):
             for char in self.test_chars:
                 str_char = str(char)
                 if isinstance(a, Seq.Seq):
-                    self.assertEqual(
-                        [str(x) for x in a.split(char)], str(a).split(str_char)
-                    )
-                    self.assertEqual(
-                        [str(x) for x in a.rsplit(char)], str(a).rsplit(str_char)
-                    )
+                    self.assertEqual(a.split(char), str(a).split(str_char))
+                    self.assertEqual(a.rsplit(char), str(a).rsplit(str_char))
 
                     for max_sep in [0, 1, 2, 999]:
                         self.assertEqual(
-                            [str(x) for x in a.split(char, max_sep)],
+                            a.split(char, max_sep),
                             str(a).split(str_char, max_sep),
                         )
 
@@ -335,7 +331,7 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.dna + self.rna:
             for b in self.nuc:
                 c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
+                self.assertEqual(c, str(a) + str(b))
 
     def test_addition_dna_rna_with_generic_nucleotides_inplace(self):
         for a in self.dna + self.rna:
@@ -349,7 +345,7 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.rna:
             for b in self.rna:
                 c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
+                self.assertEqual(c, str(a) + str(b))
 
     def test_addition_rna_with_rna_inplace(self):
         self.rna.pop(3)
@@ -363,7 +359,7 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.dna:
             for b in self.dna:
                 c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
+                self.assertEqual(c, str(a) + str(b))
 
     def test_addition_dna_with_dna_inplace(self):
         for a in self.dna:
@@ -392,7 +388,7 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.protein:
             for b in self.protein:
                 c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
+                self.assertEqual(c, str(a) + str(b))
 
     def test_addition_proteins_inplace(self):
         self.protein.pop(2)
@@ -412,7 +408,7 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.nuc:
             for b in self.dna + self.rna + self.nuc:
                 c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
+                self.assertEqual(c, str(a) + str(b))
 
     def test_adding_generic_nucleotide_with_other_nucleotides_inplace(self):
         for a in self.nuc:
@@ -599,7 +595,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s.__radd__(1234)
 
     def test_as_string(self):
-        self.assertEqual("TCAAAAGGATGCATCATG", str(self.mutable_s))
+        self.assertEqual("TCAAAAGGATGCATCATG", self.mutable_s)
 
     def test_length(self):
         self.assertEqual(18, len(self.mutable_s))
@@ -679,12 +675,12 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_complement(self):
         self.mutable_s.complement()
-        self.assertEqual("AGTTTTCCTACGTAGTAC", str(self.mutable_s))
+        self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
 
     def test_complement_rna(self):
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement()
-        self.assertEqual("UACuuuGAC", str(seq))
+        self.assertEqual("UACuuuGAC", seq)
 
     def test_complement_mixed_aphabets(self):
         seq = Seq.MutableSeq("AUGaaaCTG")
@@ -694,16 +690,16 @@ class TestMutableSeq(unittest.TestCase):
     def test_complement_rna_string(self):
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement()
-        self.assertEqual("UACuuuGAC", str(seq))
+        self.assertEqual("UACuuuGAC", seq)
 
     def test_complement_dna_string(self):
         seq = Seq.MutableSeq("ATGaaaCTG")
         seq.complement()
-        self.assertEqual("TACtttGAC", str(seq))
+        self.assertEqual("TACtttGAC", seq)
 
     def test_reverse_complement(self):
         self.mutable_s.reverse_complement()
-        self.assertEqual("CATGATGCATCCTTTTGA", str(self.mutable_s))
+        self.assertEqual("CATGATGCATCCTTTTGA", self.mutable_s)
 
     def test_extend_method(self):
         self.mutable_s.extend("GAT")
@@ -734,10 +730,10 @@ class TestUnknownSeq(unittest.TestCase):
         self.s = Seq.UnknownSeq(6)
 
     def test_unknownseq_construction(self):
-        self.assertEqual("??????", str(Seq.UnknownSeq(6)))
-        self.assertEqual("NNNNNN", str(Seq.UnknownSeq(6, character="N")))
-        self.assertEqual("XXXXXX", str(Seq.UnknownSeq(6, character="X")))
-        self.assertEqual("??????", str(Seq.UnknownSeq(6, character="?")))
+        self.assertEqual("??????", Seq.UnknownSeq(6))
+        self.assertEqual("NNNNNN", Seq.UnknownSeq(6, character="N"))
+        self.assertEqual("XXXXXX", Seq.UnknownSeq(6, character="X"))
+        self.assertEqual("??????", Seq.UnknownSeq(6, character="?"))
 
         with self.assertRaises(ValueError):
             Seq.UnknownSeq(-10)
@@ -753,10 +749,10 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_add_method(self):
         seq1 = Seq.UnknownSeq(3, character="N")
-        self.assertEqual("??????NNN", str(self.s + seq1))
+        self.assertEqual("??????NNN", self.s + seq1)
 
         seq2 = Seq.UnknownSeq(3, character="N")
-        self.assertEqual("NNNNNN", str(seq1 + seq2))
+        self.assertEqual("NNNNNN", seq1 + seq2)
 
     def test_getitem_method(self):
         self.assertEqual("", self.s[-1:-1])
@@ -779,11 +775,11 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_complement(self):
         self.s.complement()
-        self.assertEqual("??????", str(self.s))
+        self.assertEqual("??????", self.s)
 
     def test_reverse_complement(self):
         self.s.reverse_complement()
-        self.assertEqual("??????", str(self.s))
+        self.assertEqual("??????", self.s)
 
     def test_transcribe(self):
         self.assertEqual("??????", self.s.transcribe())
@@ -793,18 +789,18 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
-        self.assertEqual("NNNNNN", str(seq.upper()))
+        self.assertEqual("NNNNNN", seq.upper())
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
-        self.assertEqual("nnnnnn", str(seq.lower()))
+        self.assertEqual("nnnnnn", seq.lower())
 
     def test_translation(self):
-        self.assertEqual("XX", str(self.s.translate()))
+        self.assertEqual("XX", self.s.translate())
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, character="N")
-        self.assertEqual("NNNNNNN", str(seq.ungap("-")))
+        self.assertEqual("NNNNNNN", seq.ungap("-"))
 
         seq = Seq.UnknownSeq(20, character="-")
         self.assertEqual("", seq.ungap("-"))
@@ -820,14 +816,14 @@ class TestAmbiguousComplements(unittest.TestCase):
 class TestComplement(unittest.TestCase):
     def test_complement_ambiguous_dna_values(self):
         for ambig_char, values in sorted(ambiguous_dna_values.items()):
-            compl_values = str(Seq.Seq(values).complement())
+            compl_values = Seq.Seq(values).complement()
             ambig_values = ambiguous_dna_values[ambiguous_dna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             # Will default to DNA if neither T nor U found...
-            compl_values = str(Seq.Seq(values).complement().transcribe())
+            compl_values = Seq.Seq(values).complement().transcribe()
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
@@ -864,12 +860,12 @@ class TestReverseComplement(unittest.TestCase):
                     repr(expected[::-1]), repr(nucleotide_seq.complement())
                 )
                 self.assertEqual(
-                    str(nucleotide_seq.complement()),
-                    str(Seq.reverse_complement(nucleotide_seq))[::-1],
+                    nucleotide_seq.complement(),
+                    Seq.reverse_complement(nucleotide_seq)[::-1],
                 )
                 self.assertEqual(
-                    str(nucleotide_seq.reverse_complement()),
-                    str(Seq.reverse_complement(nucleotide_seq)),
+                    nucleotide_seq.reverse_complement(),
+                    Seq.reverse_complement(nucleotide_seq),
                 )
 
     def test_reverse_complement_of_mixed_dna_rna(self):
@@ -898,7 +894,7 @@ class TestDoubleReverseComplement(unittest.TestCase):
             Seq.Seq("AWGAARCKG"),
         ]:  # Note no U or T
             reversed_sequence = sequence.reverse_complement()
-            self.assertEqual(str(sequence), str(reversed_sequence.reverse_complement()))
+            self.assertEqual(sequence, reversed_sequence.reverse_complement())
 
 
 class TestTranscription(unittest.TestCase):
@@ -906,7 +902,7 @@ class TestTranscription(unittest.TestCase):
         for nucleotide_seq in test_seqs:
             expected = Seq.transcribe(nucleotide_seq)
             self.assertEqual(
-                str(nucleotide_seq).replace("t", "u").replace("T", "U"), str(expected),
+                str(nucleotide_seq).replace("t", "u").replace("T", "U"), expected
             )
 
     def test_transcription_dna_string_into_rna(self):
@@ -925,7 +921,7 @@ class TestTranscription(unittest.TestCase):
         for nucleotide_seq in test_seqs:
             expected = Seq.back_transcribe(nucleotide_seq)
             self.assertEqual(
-                str(nucleotide_seq).replace("u", "t").replace("U", "T"), str(expected),
+                str(nucleotide_seq).replace("u", "t").replace("U", "T"), expected
             )
 
     def test_back_transcribe_rna_string_into_dna(self):
@@ -958,7 +954,7 @@ class TestTranslating(unittest.TestCase):
     def test_translation(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
-            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in str(nucleotide_seq):
+            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in nucleotide_seq:
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
@@ -1010,10 +1006,10 @@ class TestTranslating(unittest.TestCase):
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
-            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in str(nucleotide_seq):
+            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in nucleotide_seq:
                 short = Seq.translate(nucleotide_seq, to_stop=True)
                 self.assertEqual(
-                    str(short), str(Seq.translate(nucleotide_seq).split("*")[0])
+                    short, Seq.translate(nucleotide_seq).split("*")[0]
                 )
 
         seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
@@ -1105,21 +1101,21 @@ class TestStopCodons(unittest.TestCase):
 
     def test_stops(self):
         for nucleotide_seq in [self.misc_stops, Seq.Seq(self.misc_stops)]:
-            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq)))
-            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table=1)))
-            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table="SGC0")))
-            self.assertEqual("**W**", str(Seq.translate(nucleotide_seq, table=2)))
+            self.assertEqual("***RR", Seq.translate(nucleotide_seq))
+            self.assertEqual("***RR", Seq.translate(nucleotide_seq, table=1))
+            self.assertEqual("***RR", Seq.translate(nucleotide_seq, table="SGC0"))
+            self.assertEqual("**W**", Seq.translate(nucleotide_seq, table=2))
             self.assertEqual(
-                "**WRR", str(Seq.translate(nucleotide_seq, table="Yeast Mitochondrial"))
+                "**WRR", Seq.translate(nucleotide_seq, table="Yeast Mitochondrial")
             )
-            self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=5)))
-            self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=9)))
+            self.assertEqual("**WSS", Seq.translate(nucleotide_seq, table=5))
+            self.assertEqual("**WSS", Seq.translate(nucleotide_seq, table=9))
             self.assertEqual(
-                "**CRR", str(Seq.translate(nucleotide_seq, table="Euplotid Nuclear"))
+                "**CRR", Seq.translate(nucleotide_seq, table="Euplotid Nuclear")
             )
-            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table=11)))
+            self.assertEqual("***RR", Seq.translate(nucleotide_seq, table=11))
             self.assertEqual(
-                "***RR", str(Seq.translate(nucleotide_seq, table="Bacterial"))
+                "***RR", Seq.translate(nucleotide_seq, table="Bacterial")
             )
 
     def test_translation_of_stops(self):
