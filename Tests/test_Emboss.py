@@ -187,7 +187,8 @@ class SeqRetTests(unittest.TestCase):
                 msg,
             )
             self.assertEqual(len(old.seq), len(new.seq), msg)
-            if str(old.seq).upper() != str(new.seq).upper():
+            if old.seq.upper() != new.seq.upper():
+                raise Exception
                 if str(old.seq).replace("X", "N") == str(new.seq):
                     self.fail("%s: X -> N (protein forced into nucleotide?)" % msg)
                 else:
@@ -280,7 +281,7 @@ class SeqRetSeqIOTests(SeqRetTests):
                 pass
             else:
                 self.assertEqual(old.id, new.id)
-            self.assertEqual(str(old.seq), str(new.seq))
+            self.assertEqual(old.seq, new.seq)
             if emboss_version < (6, 3, 0) and new.letter_annotations[
                 "phred_quality"
             ] == [1] * len(old):
@@ -458,15 +459,13 @@ class PairwiseAlignmentTests(unittest.TestCase):
                 # Local alignment
                 self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
                 self.assertIn(
-                    str(alignment[1].seq).replace("-", "").upper(),
-                    str(target.seq).upper(),
+                    str(alignment[1].seq).replace("-", "").upper(), target.seq.upper(),
                 )
             else:
                 # Global alignment
-                self.assertEqual(str(query_seq), str(alignment[0].seq).replace("-", ""))
+                self.assertEqual(query_seq, str(alignment[0].seq).replace("-", ""))
                 self.assertEqual(
-                    str(target.seq).upper(),
-                    str(alignment[1].seq).replace("-", "").upper(),
+                    target.seq.upper(), str(alignment[1].seq).replace("-", "").upper(),
                 )
         return True
 
@@ -501,8 +500,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we can parse the output...
         align = AlignIO.read(cline.outfile, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0].seq, "ACCCGGGCGCGGT")
+        self.assertEqual(align[1].seq, "ACCCGAGCGCGGT")
         # Clean up,
         os.remove(cline.outfile)
 
@@ -538,8 +537,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we could read its output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0].seq, "ACCCGGGCGCGGT")
+        self.assertEqual(align[1].seq, "ACCCGAGCGCGGT")
         # Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
@@ -573,8 +572,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we can parse the output...
         align = AlignIO.read(filename, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0].seq, "ACCCGGGCGCGGT")
+        self.assertEqual(align[1].seq, "ACCCGAGCGCGGT")
         # Clean up,
         os.remove(filename)
 
@@ -610,8 +609,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we could read its output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0].seq, "ACCCGGGCGCGGT")
+        self.assertEqual(align[1].seq, "ACCCGAGCGCGGT")
         # Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
@@ -902,7 +901,7 @@ class TranslationTests(unittest.TestCase):
         else:
             self.assertTrue(record.id.startswith("asis"), msg=msg)
 
-        translation = str(record.seq)
+        translation = record.seq
         if table is None:
             table = 1
         self.assertEqual(translation, sequence.translate(table))
