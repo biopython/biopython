@@ -131,7 +131,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
         if msg:
             err_msg = "%s; %s" % (msg, err_msg)
-        self.assertEqual(str(old.seq).upper(), str(new.seq).upper(), msg=err_msg)
+        self.assertEqual(old.seq.upper(), new.seq.upper(), msg=err_msg)
         if old.features and new.features:
             self.assertEqual(len(old.features), len(new.features), msg=msg)
             for old_feature, new_feature in zip(old.features, new.features):
@@ -251,7 +251,7 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
 
         new = feature.extract(parent_seq)
         self.assertIsInstance(new, Seq)
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
         new = feature.extract(str(parent_seq))
         self.assertIsInstance(new, str)
@@ -259,7 +259,7 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
 
         new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
         new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
         self.assertIsInstance(new, UnknownSeq)
@@ -1071,9 +1071,9 @@ class NC_000932(SeqIOFeatureTestBaseClass):
                 msg = "%s\n%r, %r, %r\n%s" % (e, r.id, nuc, self.table, f)
                 self.fail(msg)
             if pro[-1] == "*":
-                self.assertEqual(str(pro)[:-1], str(r.seq))
+                self.assertEqual(pro[:-1], r.seq)
             else:
-                self.assertEqual(str(pro), str(r.seq))
+                self.assertEqual(pro, r.seq)
 
 
 class NC_005816(NC_000932):
@@ -1116,10 +1116,7 @@ class NC_005816(NC_000932):
                 t.format("fasta"),
                 faa.format("fasta"),
             )
-            self.assertTrue(
-                str(translation) == str(faa.seq)
-                or str(translation) != str(faa.seq) + "*"
-            )
+            self.assertTrue(translation == faa.seq or translation != faa.seq + "*")
 
     def test_Genome(self):
         """Checking GenBank sequence vs FASTA fna file."""
@@ -1149,8 +1146,7 @@ class NC_005816(NC_000932):
         for fa_record, f in zip(fa_records, features):
             # TODO - check the FASTA ID line against the co-ordinates?
             f_seq = f.extract(gb_record.seq)
-            self.assertEqual(len(fa_record.seq), len(f_seq))
-            self.assertEqual(str(fa_record.seq), str(f_seq))
+            self.assertEqual(fa_record.seq, f_seq)
             self.assertEqual(len(f_seq), len(f))
 
 

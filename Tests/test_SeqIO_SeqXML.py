@@ -53,10 +53,10 @@ class TestDetailedRead(unittest.TestCase):
 
     def test_full_characters_set_read(self):
         """Read full characters set for each type."""
-        self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-")
-        self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-")
+        self.assertEqual(self.records["dna"][1].seq, "ACGTMRWSYKVHDBXN.-")
+        self.assertEqual(self.records["rna"][1].seq, "ACGUMRWSYKVHDBXN.-")
         self.assertEqual(
-            str(self.records["protein"][1].seq), "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*"
+            self.records["protein"][1].seq, "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*"
         )
 
     def test_duplicated_property(self):
