@@ -115,7 +115,7 @@ class CodonAlignment(MultipleSeqAlignment):
                 BiopythonWarning,
             )
             merged = (
-                SeqRecord(seq=CodonSeq(str(left.seq) + str(right.seq)))
+                SeqRecord(seq=CodonSeq(left.seq + right.seq))
                 for left, right in zip(self, other)
             )
             return CodonAlignment(merged)
