@@ -291,8 +291,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
                     for max_sep in [0, 1, 2, 999]:
                         self.assertEqual(
-                            a.split(char, max_sep),
-                            str(a).split(str_char, max_sep),
+                            a.split(char, max_sep), str(a).split(str_char, max_sep)
                         )
 
 
@@ -1008,9 +1007,7 @@ class TestTranslating(unittest.TestCase):
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
             if isinstance(nucleotide_seq, Seq.Seq) and "X" not in nucleotide_seq:
                 short = Seq.translate(nucleotide_seq, to_stop=True)
-                self.assertEqual(
-                    short, Seq.translate(nucleotide_seq).split("*")[0]
-                )
+                self.assertEqual(short, Seq.translate(nucleotide_seq).split("*")[0])
 
         seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
         self.assertEqual("VAIVMGRWKGAR", Seq.translate(seq, table=2, to_stop=True))
@@ -1114,9 +1111,7 @@ class TestStopCodons(unittest.TestCase):
                 "**CRR", Seq.translate(nucleotide_seq, table="Euplotid Nuclear")
             )
             self.assertEqual("***RR", Seq.translate(nucleotide_seq, table=11))
-            self.assertEqual(
-                "***RR", Seq.translate(nucleotide_seq, table="Bacterial")
-            )
+            self.assertEqual("***RR", Seq.translate(nucleotide_seq, table="Bacterial"))
 
     def test_translation_of_stops(self):
         self.assertEqual(Seq.translate("TAT"), "Y")
