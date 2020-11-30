@@ -486,11 +486,11 @@ class SeqInterfaceTest(unittest.TestCase):
         test_seq = self.item.seq
 
         other = Seq(test_seq)
-        self.assertEqual(str(test_seq), str(other))
+        self.assertEqual(test_seq, other)
         self.assertIsInstance(other, Seq)
 
         other = MutableSeq(test_seq)
-        self.assertEqual(str(test_seq), str(other))
+        self.assertEqual(test_seq, other)
         self.assertIsInstance(other, MutableSeq)
 
     def test_addition(self):
@@ -503,10 +503,10 @@ class SeqInterfaceTest(unittest.TestCase):
             test_seq,
         ]:
             test = test_seq + other
-            self.assertEqual(str(test), str(test_seq) + str(other))
+            self.assertEqual(test, str(test_seq) + str(other))
             self.assertIsInstance(test, Seq)
             test = other + test_seq
-            self.assertEqual(str(test), str(other) + str(test_seq))
+            self.assertEqual(test, str(other) + str(test_seq))
 
     def test_multiplication(self):
         """Check can multiply DBSeq objects by integers."""
@@ -535,16 +535,15 @@ class SeqInterfaceTest(unittest.TestCase):
         new_seq = test_seq[:10]
         self.assertIsInstance(new_seq, BioSeq.DBSeq)
         # simple slicing
-        self.assertEqual(str(test_seq[:5]), "ATTTG")
-        self.assertEqual(str(test_seq[0:5]), "ATTTG")
-        self.assertEqual(str(test_seq[2:3]), "T")
-        self.assertEqual(str(test_seq[2:4]), "TT")
-        self.assertEqual(str(test_seq[870:]), "TTGAATTATA")
+        self.assertEqual(test_seq[:5], "ATTTG")
+        self.assertEqual(test_seq[0:5], "ATTTG")
+        self.assertEqual(test_seq[2:3], "T")
+        self.assertEqual(test_seq[2:4], "TT")
+        self.assertEqual(test_seq[870:], "TTGAATTATA")
         # getting more fancy
         self.assertEqual(test_seq[-1], "A")
         self.assertEqual(test_seq[1], "T")
-        self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
-        self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
+        self.assertEqual(test_seq[-10:][5:], "TTATA")
 
     def test_record_slicing(self):
         """Check that slices of DBSeqRecord are retrieved properly."""
@@ -978,7 +977,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(db_record.id, record.id)
         self.assertEqual(db_record.name, record.name)
         self.assertEqual(db_record.description, record.description)
-        self.assertEqual(str(db_record.seq), str(record.seq))
+        self.assertEqual(db_record.seq, record.seq)
         # Good... now try reloading it!
         with self.assertRaises(Exception) as cm:
             self.db.load([record])
