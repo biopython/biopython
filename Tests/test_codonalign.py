@@ -111,8 +111,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                new_aln[x].seq,
-                self.codon_aln[x].seq + self.codon_aln[x].seq
+                new_aln[x].seq, self.codon_aln[x].seq + self.codon_aln[x].seq
             )
 
     def test_ValueError(self):
