@@ -87,8 +87,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(19, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(19, hsp.aln_span)
-        self.assertEqual("CAGGCCAGCGACTTCTGGG", str(hsp.query.seq))
-        self.assertEqual("CAGGCCAGCGACTTCTGGG", str(hsp.hit.seq))
+        self.assertEqual("CAGGCCAGCGACTTCTGGG", hsp.query.seq)
+        self.assertEqual("CAGGCCAGCGACTTCTGGG", hsp.hit.seq)
         self.assertEqual("|||||||||||||||||||", hsp.aln_annotation["similarity"])
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -117,8 +117,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(20, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(21, hsp.aln_span)
-        self.assertEqual("TGAAAGGAAATNAAAATGGAA", str(hsp.query.seq))
-        self.assertEqual("TGAAAGGAAATCAAAATGGAA", str(hsp.hit.seq))
+        self.assertEqual("TGAAAGGAAATNAAAATGGAA", hsp.query.seq)
+        self.assertEqual("TGAAAGGAAATCAAAATGGAA", hsp.hit.seq)
         self.assertEqual("||||||||||| |||||||||", hsp.aln_annotation["similarity"])
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -210,11 +210,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.aln_span)
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -264,11 +264,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, hsp.aln_span)
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -290,10 +290,10 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(53, hsp.aln_span)
         self.assertEqual(
-            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", str(hsp.query.seq)
+            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", hsp.query.seq
         )
         self.assertEqual(
-            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", str(hsp.hit.seq)
+            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", hsp.hit.seq
         )
         self.assertEqual(
             "|||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -327,11 +327,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, hsp.aln_span)
         self.assertEqual(
             "TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||",
@@ -452,11 +452,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.aln_span)
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -514,11 +514,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, hsp.aln_span)
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -540,10 +540,10 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(53, hsp.aln_span)
         self.assertEqual(
-            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", str(hsp.query.seq)
+            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", hsp.query.seq
         )
         self.assertEqual(
-            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", str(hsp.hit.seq)
+            "CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA", hsp.hit.seq
         )
         self.assertEqual(
             "|||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -577,11 +577,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, hsp.aln_span)
         self.assertEqual(
             "TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||",
@@ -677,11 +677,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.aln_span)
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -732,11 +732,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, hsp.aln_span)
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -769,11 +769,11 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, hsp.aln_span)
         self.assertEqual(
             "TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "TCATGCCACTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
@@ -890,11 +890,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(103, hsp.aln_span)
         self.assertEqual(
             "MRLCLIIIYHRGTCMGGISIWQXXXXXXXXXXXFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV",
@@ -927,10 +927,10 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(4, hsp.gap_num)
         self.assertEqual(51, hsp.aln_span)
         self.assertEqual(
-            "KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ", str(hsp.query.seq)
+            "KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ", hsp.query.seq
         )
         self.assertEqual(
-            "KKEADDKAKKDLEAKTKKEADEKAKKEADEKA-KKEAEAKTKEAEAKTKKE", str(hsp.hit.seq)
+            "KKEADDKAKKDLEAKTKKEADEKAKKEADEKA-KKEAEAKTKEAEAKTKKE", hsp.hit.seq
         )
         self.assertEqual(
             "K  +DD+ K+D   KT ++AD  AK  AD++A   + +AKT++A+   K++",
@@ -995,10 +995,10 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(2, hsp.gap_num)
         self.assertEqual(50, hsp.aln_span)
         self.assertEqual(
-            "AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP", str(hsp.query.seq)
+            "AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP", hsp.query.seq
         )
         self.assertEqual(
-            "AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP", str(hsp.hit.seq)
+            "AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP", hsp.hit.seq
         )
         self.assertEqual(
             "AW+ D   +A C  +  V I+E  +SG ++  +  L+EH+  V  + W P",
@@ -1030,10 +1030,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(23, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(42, hsp.aln_span)
-        self.assertEqual(
-            "TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP", str(hsp.query.seq)
-        )
-        self.assertEqual("TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP", str(hsp.hit.seq))
+        self.assertEqual("TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP", hsp.query.seq)
+        self.assertEqual("TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP", hsp.hit.seq)
         self.assertEqual(
             "T +A C  + +V I+++   +W+++     H+  V  + WAP",
             hsp.aln_annotation["similarity"],
@@ -1197,11 +1195,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, hsp.aln_span)
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
@@ -1235,11 +1233,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, hsp.aln_span)
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFALSAGVSVWNAFVFEIVMTFGLVYTVYATAIDPKKGDLGVIAPIAIGFIVGANI",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI",
@@ -1334,11 +1332,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, hsp.aln_span)
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPVSFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPVS DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN",
@@ -1382,11 +1380,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
@@ -1409,11 +1407,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.aln_span)
         self.assertEqual(
             "IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A",
@@ -1442,11 +1440,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
@@ -1569,11 +1567,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, hsp.aln_span)
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPVSFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPVS DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN",
@@ -1645,11 +1643,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
@@ -1672,11 +1670,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.aln_span)
         self.assertEqual(
             "IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A",
@@ -1705,11 +1703,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
@@ -1831,11 +1829,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, hsp.aln_span)
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
@@ -1879,11 +1877,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
@@ -1906,11 +1904,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.aln_span)
         self.assertEqual(
             "IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A",
@@ -1939,11 +1937,11 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
@@ -2012,11 +2010,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(133, hsp.aln_span)
         self.assertEqual(
             "DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFEGPYTDFTPWTTEEQKLLEQALKTYPVNTPERWEKIAEAVPGRTKK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERF GPYTDFTP TTE QKL EQAL TYPVNT ERW  IA AVPGR K+",
@@ -2047,11 +2045,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(3, hsp.gap_num)
         self.assertEqual(
             "AGTNSRWEVIANYMNI--HSSSGVKRT-AKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "SSSNSSSKASASSSNVGASSSSGTKKSDSKSSNESSKSKRDKEDHKEGSINRSKDEKVSKEHRVVKE",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "+ +NS  +  A+  N+   SSSG K++ +K     +KS +  + H++  IN+   +K  KEH VV +",
@@ -2120,8 +2118,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(25, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(26, hsp.aln_span)
-        self.assertEqual("HMLVSKIKPCMCKYEQIQTVKLRMAH", str(hsp.query.seq))
-        self.assertEqual("HMLVSKIKPCMCKYELIRTVKLRMAH", str(hsp.hit.seq))
+        self.assertEqual("HMLVSKIKPCMCKYEQIQTVKLRMAH", hsp.query.seq)
+        self.assertEqual("HMLVSKIKPCMCKYELIRTVKLRMAH", hsp.hit.seq)
         self.assertEqual("HMLVSKIKPCMCKYE I+TVKLRMAH", hsp.aln_annotation["similarity"])
 
     def test_xml_2226_blastx_001(self):
@@ -2206,11 +2204,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, hsp.aln_span)
         self.assertEqual(
             "LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP",
@@ -2233,11 +2231,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, hsp.aln_span)
         self.assertEqual(
             "VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G",
@@ -2268,11 +2266,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, hsp.aln_span)
         self.assertEqual(
             "SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQACLELLTSGGLLASASQSAGITGVSHHAR",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+",
@@ -2387,11 +2385,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, hsp.aln_span)
         self.assertEqual(
             "LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP",
@@ -2414,11 +2412,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, hsp.aln_span)
         self.assertEqual(
             "VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G",
@@ -2449,11 +2447,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, hsp.aln_span)
         self.assertEqual(
             "SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQACLELLTSGGLLASASQSAGITGVSHHAR",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+",
@@ -2545,11 +2543,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, hsp.aln_span)
         self.assertEqual(
             "LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP",
@@ -2572,11 +2570,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, hsp.aln_span)
         self.assertEqual(
             "VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G",
@@ -2607,11 +2605,11 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, hsp.aln_span)
         self.assertEqual(
             "VAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQPLCE",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "VPHAGVQWHNLSSLQPPPSRFKPFSYLSLLSSWDQRRPPPCLVTFVFLIETGFRHVGQAGLKLLTSGDPSASASQSAGIRGVSHCTWPECQ",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "V  AGVQW +L   QPPP  FK FS LS  SSWD R  PPCL+ FVFL+ETGF HVGQAGL+   SG+  A ASQS GI GVSH   P C+",
@@ -2680,11 +2678,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(252, hsp.aln_span)
         self.assertEqual(
             "LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGVENPVPSH---ELSLENWNQVIDTNLTGAFLGSREAIKYFVENDIKG-NVINMSSVHEMIPWPLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LQGKVVAITGCSTGIGRAIAIGAAKNGANVVLHHLGDSTASDIAQVQEECKQAGAKTVVVPGDIAEAKTANEIVSAAVSSFSRIDVLISNAGI---CPFHSFLDLPHPLWKRVQDVNLNGSFYVVQAVANQMAKQEPKGGSIVAVSSISALMGGGEQCHYTPTKAGIKSLMESCAIALGPMGIRCNSVLPGTIETNINKEDLSNPEKRADQIRRVPLGRLGKPEDLVGPTLFFASDLSNYCTGASVLVDGGM",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "L+ KVV +TG S G+GRA+A+   +  + VV+++  +   +   + + E  +AG + ++V GD+ + +    +V  AV  F  +DV+I+NAG+    P H   +L    W +V D NL G+F   +       + + KG +++ +SS+  ++      HY  +K G+K + E+ A+   P GIR N++ PG I+T IN E  ++PE+RAD    +P+G +GKPE++     F AS  ++Y TG ++  DGGM",
@@ -2717,11 +2715,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(228, hsp.aln_span)
         self.assertEqual(
             "LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGV-----------ENPVPS-HELSLE-----NWNQVIDTNLTGAFLGSREAIKYFVENDIKGNVINMSSVHEMIPW-PLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPI----------NAEKFADPE",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LDGKVALVTGAGRGIGAAIAVALGQPGAKVVVNYANSREAAEKVVDEIKSNAQSAISIQADVGDPDAVTKLMDQAVEHFGYLDIVSSNAGIVSFGHVKDVTPDVCVPSPYESPVEL*PQQEFDRVFRVNTRGQFFVAREAYRHLREG---GRIILTSSNTASVKGVPRHAVYSGSKGAIDTFVRCLAIDCGDKKITVNAVAPGAIKTDMFLSVSREYIPNGETFTDEQ",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "L  KV +VTG  +G+G A+AV  GQ  +KVVVNY ++ E A +V  EI+     AI ++ DV   + V  L++ AV+ FG LD++ +NAG+           +  VPS +E  +E      +++V   N  G F  +REA ++  E    G +I  SS    +   P    Y+ SKG +      LA++   K I VN + PGAI T +          N E F D +",
@@ -2813,12 +2811,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq)
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq)
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],
@@ -2864,11 +2858,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
@@ -2891,11 +2885,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(71, hsp.aln_span)
         self.assertEqual(
             "IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "+ +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +ER  W++ I+ A",
@@ -2926,10 +2920,10 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(9, hsp.gap_num)
         self.assertEqual(52, hsp.aln_span)
         self.assertEqual(
-            "GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS", str(hsp.query.seq)
+            "GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS", hsp.query.seq
         )
         self.assertEqual(
-            "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS", str(hsp.hit.seq)
+            "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS", hsp.hit.seq
         )
         self.assertEqual(
             "GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS",
@@ -3043,12 +3037,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq)
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq)
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],
@@ -3121,11 +3111,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
@@ -3148,11 +3138,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(71, hsp.aln_span)
         self.assertEqual(
             "IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "+ +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +ER  W++ I+ A",
@@ -3183,10 +3173,10 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(9, hsp.gap_num)
         self.assertEqual(52, hsp.aln_span)
         self.assertEqual(
-            "GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS", str(hsp.query.seq)
+            "GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS", hsp.query.seq
         )
         self.assertEqual(
-            "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS", str(hsp.hit.seq)
+            "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS", hsp.hit.seq
         )
         self.assertEqual(
             "GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS",
@@ -3276,12 +3266,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq)
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq)
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],
@@ -3327,11 +3313,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
@@ -3354,11 +3340,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.aln_span)
         self.assertEqual(
             "IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDF-GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNHDGKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  GK+     + +I T  +  ++ QAA  +ER  W++ I+ A",
@@ -3389,11 +3375,11 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.aln_span)
         self.assertEqual(
             "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "KRIREGYLVKKGS+FNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
@@ -3466,11 +3452,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(118, hsp.aln_span)
         self.assertEqual(
             "ECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "ECCFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "EC FIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD",
@@ -3500,8 +3486,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(19, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(28, hsp.aln_span)
-        self.assertEqual("PLTKAHRLFQTSIVFYVTCFTASSQQLL", str(hsp.query.seq))
-        self.assertEqual("PLNKYHTIFQISLCFYLFCYNMAQKQLL", str(hsp.hit.seq))
+        self.assertEqual("PLTKAHRLFQTSIVFYVTCFTASSQQLL", hsp.query.seq)
+        self.assertEqual("PLNKYHTIFQISLCFYLFCYNMAQKQLL", hsp.hit.seq)
         self.assertEqual(
             "PL K H +FQ S+ FY+ C+  + +QLL", hsp.aln_annotation["similarity"]
         )
@@ -3592,11 +3578,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, hsp.aln_span)
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
@@ -3617,8 +3603,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(9, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, hsp.aln_span)
-        self.assertEqual("KFWMPSLRLLI", str(hsp.query.seq))
-        self.assertEqual("KKWVPPVKLLI", str(hsp.hit.seq))
+        self.assertEqual("KFWMPSLRLLI", hsp.query.seq)
+        self.assertEqual("KKWVPPVKLLI", hsp.hit.seq)
         self.assertEqual("K W+P ++LLI", hsp.aln_annotation["similarity"])
 
         hit = qresult[-1]
@@ -3646,11 +3632,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, hsp.aln_span)
         self.assertEqual(
             "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK",
@@ -3766,11 +3752,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, hsp.aln_span)
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
@@ -3791,8 +3777,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(9, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, hsp.aln_span)
-        self.assertEqual("KFWMPSLRLLI", str(hsp.query.seq))
-        self.assertEqual("KKWVPPVKLLI", str(hsp.hit.seq))
+        self.assertEqual("KFWMPSLRLLI", hsp.query.seq)
+        self.assertEqual("KKWVPPVKLLI", hsp.hit.seq)
         self.assertEqual("K W+P ++LLI", hsp.aln_annotation["similarity"])
 
         hit = qresult[-1]
@@ -3820,11 +3806,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, hsp.aln_span)
         self.assertEqual(
             "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK",
@@ -3928,11 +3914,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, hsp.aln_span)
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
@@ -3953,8 +3939,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(14, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(14, hsp.aln_span)
-        self.assertEqual("MAMNTGGFDSMQRQ", str(hsp.query.seq))
-        self.assertEqual("MAMNTGGFDSMQRQ", str(hsp.hit.seq))
+        self.assertEqual("MAMNTGGFDSMQRQ", hsp.query.seq)
+        self.assertEqual("MAMNTGGFDSMQRQ", hsp.hit.seq)
         self.assertEqual("MAMNTGGFDSMQRQ", hsp.aln_annotation["similarity"])
 
         hit = qresult[-1]
@@ -3983,11 +3969,11 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, hsp.aln_span)
         self.assertEqual(
             "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
         self.assertEqual(
             "IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK",

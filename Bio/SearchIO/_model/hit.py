@@ -234,8 +234,7 @@ class Hit(_BaseSearchObject):
                 hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
                 # append the hsp row
                 lines.append(
-                    pattern
-                    % (str(idx), evalue, bitscore, aln_span, query_range, hit_range)
+                    pattern % (idx, evalue, bitscore, aln_span, query_range, hit_range)
                 )
 
         return "\n".join(lines)
