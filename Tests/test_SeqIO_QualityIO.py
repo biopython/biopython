@@ -168,7 +168,7 @@ class TestReferenceSffConversions(unittest.TestCase):
             self.assertEqual(old.id, new.id)
             self.assertEqual(old.name, new.name)
             if fmt != "qual":
-                self.assertEqual(str(old.seq), str(new.seq))
+                self.assertEqual(old.seq, new.seq)
             elif fmt != "fasta":
                 self.assertEqual(
                     old.letter_annotations["phred_quality"],
@@ -867,7 +867,7 @@ class MappingTests(unittest.TestCase):
             self.assertLessEqual(len(w), 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
-        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq, seq)
         self.assertEqual(record.letter_annotations["solexa_quality"], expected_sol)
 
     def test_solexa_to_sanger(self):
@@ -885,7 +885,7 @@ class MappingTests(unittest.TestCase):
         SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"), out_handle, "fastq-sanger")
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
-        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq, seq)
         self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
 
     def test_sanger_to_illumina(self):
@@ -903,7 +903,7 @@ class MappingTests(unittest.TestCase):
             self.assertLessEqual(len(w), 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
-        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq, seq)
         self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
 
     def test_illumina_to_sanger(self):
@@ -918,7 +918,7 @@ class MappingTests(unittest.TestCase):
         )
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
-        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq, seq)
         self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
 
 
@@ -928,7 +928,7 @@ class TestSFF(unittest.TestCase):
     def test_overlapping_clip(self):
         record = next(SeqIO.parse("Roche/greek.sff", "sff"))
         self.assertEqual(len(record), 395)
-        s = str(record.seq.lower())
+        s = record.seq.lower()
         # Apply overlapping clipping
         record.annotations["clip_qual_left"] = 51
         record.annotations["clip_qual_right"] = 44
@@ -951,7 +951,7 @@ class TestSFF(unittest.TestCase):
         self.assertEqual(record.annotations["clip_adapter_left"], 50)
         self.assertEqual(record.annotations["clip_adapter_right"], 75)
         self.assertEqual(len(record), 395)
-        self.assertEqual(s, str(record.seq.lower()))
+        self.assertEqual(s, record.seq.lower())
         # And check with trimming applied...
         h.seek(0)
         with warnings.catch_warnings(record=True) as w:

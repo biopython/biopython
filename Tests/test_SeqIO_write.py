@@ -263,7 +263,7 @@ class WriterTests(SeqIOTestBaseClass):
                 )
             else:
                 self.assertEqual(record.id, new_record.id, msg=msg)
-            self.assertEqual(str(record.seq), str(new_record.seq), msg=msg)
+            self.assertEqual(record.seq, new_record.seq, msg=msg)
         handle.close()
 
     def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):

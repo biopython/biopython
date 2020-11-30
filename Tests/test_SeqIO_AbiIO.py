@@ -249,7 +249,7 @@ class TestAbi(unittest.TestCase):
                     basename(test_data[trace]["path"][-1]).replace(".ab1", ""),
                     record.name,
                 )
-                self.assertEqual(test_data[trace]["seq"], str(record.seq))
+                self.assertEqual(test_data[trace]["seq"], record.seq)
                 self.assertEqual(
                     test_data[trace]["qual"], record.letter_annotations["phred_quality"]
                 )
@@ -275,10 +275,10 @@ class TestAbi(unittest.TestCase):
         for trace in test_data:
             record = SeqIO.read(test_data[trace]["handle"], "abi-trim")
             if trace != "data_empty" and trace != "test_fsa":
-                self.assertNotEqual(str(record.seq), test_data[trace]["seq"])
+                self.assertNotEqual(record.seq, test_data[trace]["seq"])
                 self.assertIn(str(record.seq), test_data[trace]["seq"])
             else:
-                self.assertEqual(str(record.seq), test_data[trace]["seq"])
+                self.assertEqual(record.seq, test_data[trace]["seq"])
 
     def test_no_smpl1(self):
         """Test parsing of ABIF file without the normally expected SMPL1 tag."""

@@ -94,7 +94,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
                 err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
             if msg is not None:
                 err_msg = "%s: %s" % (msg, err_msg)
-            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
+            self.assertEqual(old.seq, new.seq, msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
@@ -252,7 +252,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(record_one.name, record_two.name, msg=msg)
         self.assertEqual(record_one.description, record_two.description, msg=msg)
         self.assertEqual(len(record_one), len(record_two), msg=msg)
-        self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+        self.assertEqual(record_one.seq, record_two.seq, msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
@@ -365,12 +365,12 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check the sequence
                 if fmt in ["gb", "genbank", "embl", "imgt"]:
                     # The GenBank/EMBL parsers will convert to upper case.
-                    self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                    self.assertEqual(r1.seq.upper(), r2.seq)
                 elif fmt == "qual":
                     self.assertIsInstance(r2.seq, UnknownSeq)
                     self.assertEqual(len(r2), len(r1))
                 else:
-                    self.assertEqual(str(r1.seq), str(r2.seq))
+                    self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -574,7 +574,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                         length = None
                         seq = record.seq
                     else:
-                        seq = str(record.seq)
+                        seq = record.seq
                         length = len(seq)
                         if length > 50:
                             seq = str(seq[:40]) + "..." + str(seq[-7:])
