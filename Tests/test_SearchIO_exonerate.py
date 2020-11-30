@@ -1183,15 +1183,11 @@ class ExonerateTextCases(unittest.TestCase):
             "GCATATTTTTTCCAACCTTCTTGCCAATTCTTCA-ACAAG", hsp.hit_all[0].seq[-40:]
         )
         # last block
-        self.assertEqual(
-            "TAAAGATGCTCTGGACAAGTACCAGTTGGAAAGAGA", hsp.query_all[-1].seq
-        )
+        self.assertEqual("TAAAGATGCTCTGGACAAGTACCAGTTGGAAAGAGA", hsp.query_all[-1].seq)
         self.assertEqual(
             " ||||||  |||  || | |  ||||||||||||||", hsp[-1].aln_annotation["similarity"]
         )
-        self.assertEqual(
-            "AAAAGATTTTCT--ACGACTTGCAGTTGGAAAGAGA", hsp.hit_all[-1].seq
-        )
+        self.assertEqual("AAAAGATTTTCT--ACGACTTGCAGTTGGAAAGAGA", hsp.hit_all[-1].seq)
 
     def test_exn_22_m_ungapped(self):
         """Test parsing exonerate output (exn_22_m_ungapped.exn)."""
@@ -2243,17 +2239,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(122, hsp.score)
         self.assertEqual([0, 0], hsp.query_strand_all)
         self.assertEqual([-1, -1], hsp.hit_strand_all)
-        self.assertEqual(
-            "RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERX", hsp[0].query.seq
-        )
+        self.assertEqual("RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERX", hsp[0].query.seq)
         self.assertEqual("NENVPDDSKAKKKAQNRAAQKAFRERKEARMKELQDKX", hsp[0].hit.seq)
         self.assertEqual("!.!", hsp.aln_annotation_all[0]["similarity"][0])
         self.assertEqual(":!", hsp.aln_annotation_all[0]["similarity"][-1])
         self.assertEqual("AAT", hsp.aln_annotation_all[0]["hit_annotation"][0])
         self.assertEqual("TT", hsp.aln_annotation_all[0]["hit_annotation"][-1])
         self.assertEqual(
-            "XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE",
-            hsp[-1].query.seq,
+            "XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE", hsp[-1].query.seq,
         )
         self.assertEqual(
             "XNKILNRDPQFMSNSSFHQCVSLDSINTIEKDEEKNSDDDAGLQAATDARE", hsp[-1].hit.seq

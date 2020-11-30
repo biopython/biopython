@@ -1030,9 +1030,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(23, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(42, hsp.aln_span)
-        self.assertEqual(
-            "TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP", hsp.query.seq
-        )
+        self.assertEqual("TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP", hsp.query.seq)
         self.assertEqual("TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP", hsp.hit.seq)
         self.assertEqual(
             "T +A C  + +V I+++   +W+++     H+  V  + WAP",
@@ -2813,12 +2811,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],
@@ -3043,12 +3037,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],
@@ -3276,12 +3266,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, hsp.aln_span)
-        self.assertEqual(
-            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq
-        )
-        self.assertEqual(
-            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq
-        )
+        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq)
+        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", hsp.hit.seq)
         self.assertEqual(
             "P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"],

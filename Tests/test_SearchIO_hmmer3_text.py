@@ -549,12 +549,10 @@ class HmmscanCases(unittest.TestCase):
             hsp.aln_annotation["CS"],
         )
         self.assertEqual(
-            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk",
-            hsp.hit.seq,
+            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk", hsp.hit.seq,
         )
         self.assertEqual(
-            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR",
-            hsp.query.seq,
+            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR", hsp.query.seq,
         )
         self.assertEqual(
             "79****************************************************997",
@@ -590,9 +588,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("..", hsp.env_endtype)
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual("aLGarLralReraGLtqeevAerlg......vSastlsrlE", hsp.hit.seq)
-        self.assertEqual(
-            "QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE", hsp.query.seq
-        )
+        self.assertEqual("QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE", hsp.query.seq)
         self.assertEqual(
             "6999***********************************99", hsp.aln_annotation["PP"]
         )
@@ -1140,12 +1136,10 @@ class HmmscanCases(unittest.TestCase):
             hsp.aln_annotation["CS"],
         )
         self.assertEqual(
-            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk",
-            hsp.hit.seq,
+            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk", hsp.hit.seq
         )
         self.assertEqual(
-            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR",
-            hsp.query.seq,
+            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR", hsp.query.seq
         )
         self.assertEqual(
             "79****************************************************997",
@@ -1181,9 +1175,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("..", hsp.env_endtype)
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual("aLGarLralReraGLtqeevAerlg......vSastlsrlE", hsp.hit.seq)
-        self.assertEqual(
-            "QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE", hsp.query.seq
-        )
+        self.assertEqual("QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE", hsp.query.seq)
         self.assertEqual(
             "6999***********************************99", hsp.aln_annotation["PP"]
         )

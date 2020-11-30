@@ -330,8 +330,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(86, hsp.query_start)
         self.assertEqual(141, hsp.query_end)
         self.assertEqual(
-            "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA",
-            hsp.query.seq,
+            "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA", hsp.query.seq,
         )
         self.assertEqual(17, hsp.hit_start)
         self.assertEqual(69, hsp.hit_end)
@@ -632,14 +631,10 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(43, hsp.aln_span)
         self.assertEqual(196, hsp.query_start)
         self.assertEqual(238, hsp.query_end)
-        self.assertEqual(
-            "SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC", hsp.query.seq
-        )
+        self.assertEqual("SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC", hsp.query.seq)
         self.assertEqual(51, hsp.hit_start)
         self.assertEqual(94, hsp.hit_end)
-        self.assertEqual(
-            "SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC", hsp.hit.seq
-        )
+        self.assertEqual("SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC", hsp.hit.seq)
         self.assertEqual(0, hsp.query_strand)
         self.assertEqual({}, hsp.aln_annotation)
 
@@ -997,14 +992,10 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(45, hsp.aln_span)
         self.assertEqual(26, hsp.query_start)
         self.assertEqual(66, hsp.query_end)
-        self.assertEqual(
-            "EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTDDRVLKEVMR", hsp.query.seq
-        )
+        self.assertEqual("EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTDDRVLKEVMR", hsp.query.seq)
         self.assertEqual(42, hsp.hit_start)
         self.assertEqual(87, hsp.hit_end)
-        self.assertEqual(
-            "ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTDDQLIDFMLQ", hsp.hit.seq
-        )
+        self.assertEqual("ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTDDQLIDFMLQ", hsp.hit.seq)
         self.assertEqual(0, hsp.query_strand)
         self.assertEqual(
             {"similarity": ":. :  :. : .: ..::  .-----:: . ...:::...  ..."},
@@ -1182,14 +1173,10 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(43, hsp.aln_span)
         self.assertEqual(196, hsp.query_start)
         self.assertEqual(238, hsp.query_end)
-        self.assertEqual(
-            "SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC", hsp.query.seq
-        )
+        self.assertEqual("SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC", hsp.query.seq)
         self.assertEqual(51, hsp.hit_start)
         self.assertEqual(94, hsp.hit_end)
-        self.assertEqual(
-            "SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC", hsp.hit.seq
-        )
+        self.assertEqual("SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC", hsp.hit.seq)
         self.assertEqual(0, hsp.query_strand)
         self.assertEqual(
             {"similarity": ":...: . . :  ::.: : .:: -. . . .:. . ... ::"},
@@ -1964,9 +1951,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(42, hsp.aln_span)
         self.assertEqual(33, hsp.query_start)
         self.assertEqual(75, hsp.query_end)
-        self.assertEqual(
-            "CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq
-        )
+        self.assertEqual("CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq)
         self.assertEqual(11, hsp.hit_start)
         self.assertEqual(52, hsp.hit_end)
         self.assertEqual("CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG", hsp.hit.seq)
@@ -1992,9 +1977,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(42, hsp.aln_span)
         self.assertEqual(33, hsp.query_start)
         self.assertEqual(75, hsp.query_end)
-        self.assertEqual(
-            "CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq
-        )
+        self.assertEqual("CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq)
         self.assertEqual(11, hsp.hit_start)
         self.assertEqual(52, hsp.hit_end)
         self.assertEqual("CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG", hsp.hit.seq)
@@ -2021,9 +2004,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(42, hsp.aln_span)
         self.assertEqual(33, hsp.query_start)
         self.assertEqual(75, hsp.query_end)
-        self.assertEqual(
-            "CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq
-        )
+        self.assertEqual("CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq)
         self.assertEqual(11, hsp.hit_start)
         self.assertEqual(52, hsp.hit_end)
         self.assertEqual("CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG", hsp.hit.seq)
@@ -2074,9 +2055,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(42, hsp.aln_span)
         self.assertEqual(33, hsp.query_start)
         self.assertEqual(75, hsp.query_end)
-        self.assertEqual(
-            "CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq
-        )
+        self.assertEqual("CAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGG", hsp.query.seq)
         self.assertEqual(11, hsp.hit_start)
         self.assertEqual(52, hsp.hit_end)
         self.assertEqual("CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG", hsp.hit.seq)

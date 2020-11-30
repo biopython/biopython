@@ -152,11 +152,7 @@ def compare_attrs(obj_a, obj_b, attrs):
         if attr in ("_hit", "_query") and (val_a is not None and val_b is not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
-                assert val_a.seq == val_b.seq, "%s: %r vs %r" % (
-                    attr,
-                    val_a,
-                    val_b,
-                )
+                assert val_a.seq == val_b.seq, "%s: %r vs %r" % (attr, val_a, val_b,)
             elif isinstance(val_a, list) and isinstance(val_b, list):
                 for seq_a, seq_b in zip(val_a, val_b):
                     assert seq_a.seq == seq_b.seq, "%s: %r vs %r" % (
