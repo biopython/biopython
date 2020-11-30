@@ -86,14 +86,8 @@ class StringMethodTests(unittest.TestCase):
             _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
-    def _test_method(self, method_name, pre_comp_function=None, start_end=False):
+    def _test_method(self, method_name, start_end=False):
         """Check this method matches the plain string's method."""
-        if pre_comp_function is None:
-            # Define a no-op function:
-
-            def pre_comp_function(x):
-                return x
-
         self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
@@ -115,20 +109,20 @@ class StringMethodTests(unittest.TestCase):
                 str2 = str(example2)
 
                 try:
-                    i = pre_comp_function(getattr(example1, method_name)(str2))
+                    i = getattr(example1, method_name)(str2)
                 except ValueError:
                     i = ValueError
                 try:
-                    j = pre_comp_function(getattr(str1, method_name)(str2))
+                    j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
                 self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, str2))
                 try:
-                    i = pre_comp_function(getattr(example1, method_name)(example2))
+                    i = getattr(example1, method_name)(example2)
                 except ValueError:
                     i = ValueError
                 try:
-                    j = pre_comp_function(getattr(str1, method_name)(str2))
+                    j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
                 self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, example2))
@@ -139,15 +133,11 @@ class StringMethodTests(unittest.TestCase):
                         continue
                     for start in self._start_end_values:
                         try:
-                            i = pre_comp_function(
-                                getattr(example1, method_name)(str2, start)
-                            )
+                            i = getattr(example1, method_name)(str2, start)
                         except ValueError:
                             i = ValueError
                         try:
-                            j = pre_comp_function(
-                                getattr(str1, method_name)(str2, start)
-                            )
+                            j = getattr(str1, method_name)(str2, start)
                         except ValueError:
                             j = ValueError
                         self.assertEqual(
@@ -156,15 +146,11 @@ class StringMethodTests(unittest.TestCase):
 
                         for end in self._start_end_values:
                             try:
-                                i = pre_comp_function(
-                                    getattr(example1, method_name)(str2, start, end)
-                                )
+                                i = getattr(example1, method_name)(str2, start, end)
                             except ValueError:
                                 i = ValueError
                             try:
-                                j = pre_comp_function(
-                                    getattr(str1, method_name)(str2, start, end)
-                                )
+                                j = getattr(str1, method_name)(str2, start, end)
                             except ValueError:
                                 j = ValueError
                             self.assertEqual(
@@ -480,39 +466,31 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_strip(self):
         """Check matches the python string strip method."""
-        self._test_method("strip", pre_comp_function=str)
+        self._test_method("strip")
         self.assertEqual(Seq(" ACGT ").strip(), "ACGT")
         self.assertRaises(TypeError, Seq("ACGT").strip, 7)
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
-        self._test_method("rstrip", pre_comp_function=str)
+        self._test_method("rstrip")
         self.assertEqual(Seq(" ACGT ").rstrip(), " ACGT")
         self.assertRaises(TypeError, Seq("ACGT").rstrip, 7)
 
     def test_str_lstrip(self):
         """Check matches the python string lstrip method."""
-        self._test_method("rstrip", pre_comp_function=str)
+        self._test_method("rstrip")
         self.assertEqual(Seq(" ACGT ").lstrip(), "ACGT ")
         self.assertRaises(TypeError, Seq("ACGT").lstrip, 7)
 
     def test_str_split(self):
         """Check matches the python string rstrip method."""
-        # Calling split should return a list of Seq-like objects, we'll
-        # just apply str() to each of them so it matches the string method
-        self._test_method(
-            "split", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
-        )
+        self._test_method("split")
         self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".split("7"))
         self.assertRaises(TypeError, Seq("AC7GT").split, 7)
 
     def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
-        # Calling rsplit should return a list of Seq-like objects, we'll
-        # just apply str() to each of them so it matches the string method
-        self._test_method(
-            "rsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
-        )
+        self._test_method("rsplit")
         self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".rsplit("7"))
         self.assertRaises(TypeError, Seq("AC7GT").rsplit, 7)
 
@@ -528,7 +506,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             str1 = str(example1)
-            self.assertEqual(str(example1.upper()), str1.upper())
+            self.assertEqual(example1.upper(), str1.upper())
 
     def test_str_lower(self):
         """Check matches the python string lower method."""
@@ -536,7 +514,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             str1 = str(example1)
-            self.assertEqual(str(example1.lower()), str1.lower())
+            self.assertEqual(example1.lower(), str1.lower())
 
     def test_str_encode(self):
         """Check matches the python string encode method."""
@@ -544,8 +522,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             str1 = str(example1)
-            self.assertEqual(example1.encode("ascii"), str1.encode("ascii"))
-            self.assertEqual(example1.encode(), str1.encode())
+            self.assertEqual(bytes(example1), str1.encode("ascii"))
 
     def test_str_hash(self):
         for example1 in self._examples:
@@ -602,11 +579,11 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             for i in self._start_end_values:
                 if i is not None and abs(i) < len(example1):
-                    self.assertEqual(str(example1[i]), str1[i])
-                self.assertEqual(str(example1[:i]), str1[:i])
-                self.assertEqual(str(example1[i:]), str1[i:])
+                    self.assertEqual(example1[i], str1[i])
+                self.assertEqual(example1[:i], str1[:i])
+                self.assertEqual(example1[i:], str1[i:])
                 for j in self._start_end_values:
-                    self.assertEqual(str(example1[i:j]), str1[i:j])
+                    self.assertEqual(example1[i:j], str1[i:j])
                     for step in range(-3, 4):
                         if step == 0:
                             try:
@@ -615,21 +592,21 @@ class StringMethodTests(unittest.TestCase):
                             except ValueError:
                                 pass
                         else:
-                            self.assertEqual(str(example1[i:j:step]), str1[i:j:step])
+                            self.assertEqual(example1[i:j:step], str1[i:j:step])
 
     def test_tomutable(self):
         """Check creating a MutableSeq object."""
         for example1 in self._examples:
             mut = MutableSeq(example1)
             self.assertIsInstance(mut, MutableSeq)
-            self.assertEqual(str(mut), str(example1))
+            self.assertEqual(mut, example1)
 
     def test_toseq(self):
         """Check creating a Seq object."""
         for example1 in self._examples:
             seq = Seq(example1)
             self.assertIsInstance(seq, Seq)
-            self.assertEqual(str(seq), str(example1))
+            self.assertEqual(seq, example1)
 
     def test_the_complement(self):
         """Check obj.complement() method."""
@@ -648,7 +625,7 @@ class StringMethodTests(unittest.TestCase):
             else:
                 # Default to DNA, e.g. complement("A") -> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            self.assertEqual(str1.translate(mapping), str(comp))
+            self.assertEqual(str1.translate(mapping), comp)
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
@@ -667,7 +644,7 @@ class StringMethodTests(unittest.TestCase):
             else:
                 # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            self.assertEqual(str1.translate(mapping)[::-1], str(comp))
+            self.assertEqual(str1.translate(mapping)[::-1], comp)
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""
@@ -687,7 +664,7 @@ class StringMethodTests(unittest.TestCase):
             if len(str1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
                 continue
-            self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
+            self.assertEqual(str1.replace("T", "U").replace("t", "u"), tran)
 
     def test_the_back_transcription(self):
         """Check obj.back_transcribe() method."""
@@ -704,7 +681,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 raise
             str1 = str(example1)
-            self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
+            self.assertEqual(str1.replace("U", "T").replace("u", "t"), tran)
 
     def test_the_translate(self):
         """Check obj.translate() method."""
@@ -730,21 +707,21 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.translate() method with stop codons."""
         misc_stops = "TAATAGTGAAGAAGG"
         nuc = Seq(misc_stops)
-        self.assertEqual("***RR", str(nuc.translate()))
-        self.assertEqual("***RR", str(nuc.translate(1)))
-        self.assertEqual("***RR", str(nuc.translate("SGC0")))
-        self.assertEqual("**W**", str(nuc.translate(table=2)))
-        self.assertEqual("**WRR", str(nuc.translate(table="Yeast Mitochondrial")))
-        self.assertEqual("**WSS", str(nuc.translate(table=5)))
-        self.assertEqual("**WSS", str(nuc.translate(table=9)))
-        self.assertEqual("**CRR", str(nuc.translate(table="Euplotid Nuclear")))
-        self.assertEqual("***RR", str(nuc.translate(table=11)))
-        self.assertEqual("***RR", str(nuc.translate(table="11")))
-        self.assertEqual("***RR", str(nuc.translate(table="Bacterial")))
-        self.assertEqual("**GRR", str(nuc.translate(table=25)))
-        self.assertEqual("", str(nuc.translate(to_stop=True)))
-        self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
-        self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
+        self.assertEqual("***RR", nuc.translate())
+        self.assertEqual("***RR", nuc.translate(1))
+        self.assertEqual("***RR", nuc.translate("SGC0"))
+        self.assertEqual("**W**", nuc.translate(table=2))
+        self.assertEqual("**WRR", nuc.translate(table="Yeast Mitochondrial"))
+        self.assertEqual("**WSS", nuc.translate(table=5))
+        self.assertEqual("**WSS", nuc.translate(table=9))
+        self.assertEqual("**CRR", nuc.translate(table="Euplotid Nuclear"))
+        self.assertEqual("***RR", nuc.translate(table=11))
+        self.assertEqual("***RR", nuc.translate(table="11"))
+        self.assertEqual("***RR", nuc.translate(table="Bacterial"))
+        self.assertEqual("**GRR", nuc.translate(table=25))
+        self.assertEqual("", nuc.translate(to_stop=True))
+        self.assertEqual("O*ORR", nuc.translate(table=special_table))
+        self.assertEqual("*QWRR", nuc.translate(table=Chilodonella_uncinata_table))
         # These test the Bio.Seq.translate() function - move these?:
         self.assertEqual(
             "*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table)
@@ -755,18 +732,18 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual("***RR", translate(str(nuc), table="11"))
         self.assertEqual("***RR", translate(str(nuc), table=11))
         self.assertEqual("**W**", translate(str(nuc), table=2))
-        self.assertEqual(str(Seq("TAT").translate()), "Y")
-        self.assertEqual(str(Seq("TAR").translate()), "*")
-        self.assertEqual(str(Seq("TAN").translate()), "X")
-        self.assertEqual(str(Seq("NNN").translate()), "X")
-        self.assertEqual(str(Seq("TAt").translate()), "Y")
-        self.assertEqual(str(Seq("TaR").translate()), "*")
-        self.assertEqual(str(Seq("TaN").translate()), "X")
-        self.assertEqual(str(Seq("nnN").translate()), "X")
-        self.assertEqual(str(Seq("tat").translate()), "Y")
-        self.assertEqual(str(Seq("tar").translate()), "*")
-        self.assertEqual(str(Seq("tan").translate()), "X")
-        self.assertEqual(str(Seq("nnn").translate()), "X")
+        self.assertEqual(Seq("TAT").translate(), "Y")
+        self.assertEqual(Seq("TAR").translate(), "*")
+        self.assertEqual(Seq("TAN").translate(), "X")
+        self.assertEqual(Seq("NNN").translate(), "X")
+        self.assertEqual(Seq("TAt").translate(), "Y")
+        self.assertEqual(Seq("TaR").translate(), "*")
+        self.assertEqual(Seq("TaN").translate(), "X")
+        self.assertEqual(Seq("nnN").translate(), "X")
+        self.assertEqual(Seq("tat").translate(), "Y")
+        self.assertEqual(Seq("tar").translate(), "*")
+        self.assertEqual(Seq("tan").translate(), "X")
+        self.assertEqual(Seq("nnn").translate(), "X")
 
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
@@ -792,7 +769,7 @@ class StringMethodTests(unittest.TestCase):
                             for b in ambig_values[c2]
                             for c in ambig_values[c3]
                         }
-                        t = str(Seq(c1 + c2 + c3).translate())
+                        t = Seq(c1 + c2 + c3).translate()
                         if t == "*":
                             self.assertEqual(values, set("*"))
                         elif t == "X":
@@ -866,11 +843,11 @@ class StringMethodTests(unittest.TestCase):
         # strings with empty spacer
         str_concatenated = spacer1.join(example_strings)
 
-        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated, "".join(example_strings))
 
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
-            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated, str(spacer).join(example_strings))
             # Now try single sequence arguments, should join the letters
             for target in example_strings + example_strings_seqs:
                 self.assertEqual(
@@ -898,11 +875,11 @@ class StringMethodTests(unittest.TestCase):
         # strings with empty spacer
         str_concatenated = spacer2.join(example_strings)
 
-        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated, "".join(example_strings))
 
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
-            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated, str(spacer).join(example_strings))
             # Now try single sequence arguments, should join the letters
             for target in example_strings + example_strings_seqs:
                 self.assertEqual(
@@ -936,8 +913,8 @@ class StringMethodTests(unittest.TestCase):
         ref_data = str(spacer).join(seqlist_as_strings)
         ref_data1 = str(spacer1).join(seqlist_as_strings)
 
-        self.assertEqual(str(seq_concatenated), ref_data)
-        self.assertEqual(str(seq_concatenated1), ref_data1)
+        self.assertEqual(seq_concatenated, ref_data)
+        self.assertEqual(seq_concatenated1, ref_data1)
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
 
@@ -958,8 +935,8 @@ class StringMethodTests(unittest.TestCase):
         ref_data = str(spacer).join(seqlist_as_strings)
         ref_data1 = str(spacer1).join(seqlist_as_strings)
 
-        self.assertEqual(str(seq_concatenated), ref_data)
-        self.assertEqual(str(seq_concatenated1), ref_data1)
+        self.assertEqual(seq_concatenated, ref_data)
+        self.assertEqual(seq_concatenated1, ref_data1)
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
 
@@ -979,11 +956,11 @@ class StringMethodTests(unittest.TestCase):
         # strings with empty spacer
         str_concatenated = spacer1.join(example_strings)
 
-        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated, "".join(example_strings))
 
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
-            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated, str(spacer).join(example_strings))
 
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
@@ -1002,8 +979,8 @@ class StringMethodTests(unittest.TestCase):
         ref_data = str(spacer).join(seqlist_as_strings)
         ref_data1 = str(spacer1).join(seqlist_as_strings)
 
-        self.assertEqual(str(seq_concatenated), ref_data)
-        self.assertEqual(str(seq_concatenated1), ref_data1)
+        self.assertEqual(seq_concatenated, ref_data)
+        self.assertEqual(seq_concatenated1, ref_data1)
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
 

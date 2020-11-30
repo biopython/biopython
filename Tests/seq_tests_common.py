@@ -130,7 +130,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
     def compare_sequence(self, old, new):
         """Compare two Seq or DBSeq objects."""
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old), str(new))
+        self.assertEqual(old, new)
 
         if isinstance(old, UnknownSeq):
             self.assertIsInstance(new, UnknownSeq)
@@ -161,27 +161,27 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         for i in indices:
             for j in indices:
                 expected = s[i:j]
-                self.assertEqual(expected, str(old[i:j]))
-                self.assertEqual(expected, str(new[i:j]))
+                self.assertEqual(expected, old[i:j])
+                self.assertEqual(expected, new[i:j])
                 # Slicing with step of 1 should make no difference.
                 # Slicing with step 3 might be useful for codons.
                 for step in [1, 3]:
                     expected = s[i:j:step]
-                    self.assertEqual(expected, str(old[i:j:step]))
-                    self.assertEqual(expected, str(new[i:j:step]))
+                    self.assertEqual(expected, old[i:j:step])
+                    self.assertEqual(expected, new[i:j:step])
 
             # Check automatic end points
             expected = s[i:]
-            self.assertEqual(expected, str(old[i:]))
-            self.assertEqual(expected, str(new[i:]))
+            self.assertEqual(expected, old[i:])
+            self.assertEqual(expected, new[i:])
 
             expected = s[:i]
-            self.assertEqual(expected, str(old[:i]))
-            self.assertEqual(expected, str(new[:i]))
+            self.assertEqual(expected, old[:i])
+            self.assertEqual(expected, new[:i])
 
         # Check "copy" splice
-        self.assertEqual(s, str(old[:]))
-        self.assertEqual(s, str(new[:]))
+        self.assertEqual(s, old[:])
+        self.assertEqual(s, new[:])
 
     def compare_record(self, old, new):
         """Compare two SeqRecord or DBSeqRecord objects."""
