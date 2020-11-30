@@ -1104,8 +1104,12 @@ class BlatPslxCases(BlatPslCases):
         )
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual("cacaaaggggctgggcgtggtggctcacacctgtaatccca", hsp.query_all[0].seq)
-        self.assertEqual("cacaaaggggctgggcgtggtggctcacacctgtaatccca", hsp.hit_all[0].seq)
+        self.assertEqual(
+            "cacaaaggggctgggcgtggtggctcacacctgtaatccca", hsp.query_all[0].seq
+        )
+        self.assertEqual(
+            "cacaaaggggctgggcgtggtggctcacacctgtaatccca", hsp.hit_all[0].seq
+        )
         # second qresult, third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual("aaaggggctgggcgtggtggctcacacctgtaatcc", hsp.query_all[0].seq)
@@ -1132,11 +1136,15 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual("cacctgtaatc", hsp.hit_all[1].seq)
         # second qresult, fifth hit, second hsp
         hsp = qresult[4].hsps[1]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.hit_all[0].seq)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].hsps[2]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggatgacaggggtgaggcaccacgcccagcccctttg", hsp.hit_all[0].seq)
 
     def test_pslx_34_002(self, testf="pslx_34_002.pslx"):
@@ -1210,11 +1218,15 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual("cacctgtaatc", hsp.hit_all[1].seq)
         # first qresult, fifth hit, second hsp
         hsp = qresult[4].hsps[1]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.hit_all[0].seq)
         # first qresult, fifth hit, third hsp
         hsp = qresult[4].hsps[2]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggatgacaggggtgaggcaccacgcccagcccctttg", hsp.hit_all[0].seq)
 
     def test_pslx_34_005(self, testf="pslx_34_005.pslx"):
@@ -1280,11 +1292,15 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual("cacctgtaatc", hsp.hit_all[1].seq)
         # second qresult, fifth hit, second hsp
         hsp = qresult[4].hsps[1]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.hit_all[0].seq)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].hsps[2]
-        self.assertEqual("tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq)
+        self.assertEqual(
+            "tgggattacaggtgtgagccaccacgcccagcccctttg", hsp.query_all[0].seq
+        )
         self.assertEqual("tgggatgacaggggtgaggcaccacgcccagcccctttg", hsp.hit_all[0].seq)
 
     def test_pslx_35_002(self, testf="pslx_35_002.pslx"):
@@ -1295,12 +1311,20 @@ class BlatPslxCases(BlatPslCases):
         qresult = self.qresults[0]
         hsp = qresult[-1].hsps[0]
 
-        self.assertEqual("MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVY", hsp.query_all[0].seq[:35])
-        self.assertEqual("ETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL", hsp.query_all[0].seq[-35:])
+        self.assertEqual(
+            "MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVY", hsp.query_all[0].seq[:35]
+        )
+        self.assertEqual(
+            "ETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL", hsp.query_all[0].seq[-35:]
+        )
         self.assertEqual("DAIEVCKKFMERDPDELRFNAIALSAA", hsp.query_all[1].seq)
 
-        self.assertEqual("MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVY", hsp.hit_all[0].seq[:35])
-        self.assertEqual("ETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYEL", hsp.hit_all[0].seq[-35:])
+        self.assertEqual(
+            "MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVY", hsp.hit_all[0].seq[:35]
+        )
+        self.assertEqual(
+            "ETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYEL", hsp.hit_all[0].seq[-35:]
+        )
         self.assertEqual("DAIEVCKKFMERDPDELRFNAIALSAA", hsp.hit_all[1].seq)
 
 

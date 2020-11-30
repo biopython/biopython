@@ -110,7 +110,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG", hsp.hit.seq[:40])
-        self.assertEqual("AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -148,7 +150,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG", hsp.hit.seq[:40])
-        self.assertEqual("AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -206,7 +210,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG", hsp.hit.seq[:40])
-        self.assertEqual("AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -249,7 +255,9 @@ class BlastnCases(BaseBlastCases):
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
         )
-        self.assertEqual("AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA", hsp.hit.seq[-40:])
+        self.assertEqual(
+            "AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA", hsp.hit.seq[-40:]
+        )
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
         self.assertEqual(53, hsp.aln_span)
@@ -273,7 +281,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT", hsp.hit.seq[:40])
-        self.assertEqual("GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -341,7 +351,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG", hsp.hit.seq[:40])
-        self.assertEqual("AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -379,7 +391,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG", hsp.hit.seq[:40])
-        self.assertEqual("AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -430,7 +444,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG", hsp.hit.seq[:40])
-        self.assertEqual("AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -459,7 +475,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT", hsp.hit.seq[:40])
-        self.assertEqual("GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -497,7 +515,9 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG", hsp.hit.seq[:40])
-        self.assertEqual("AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
@@ -568,19 +588,13 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(102, hsp.query_end)
         self.assertEqual(102, hsp.hit_end)
-        self.assertEqual(
-            "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG", hsp.query.seq[:40]
-        )
+        self.assertEqual("MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG", hsp.query.seq[:40])
         self.assertEqual(
             "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG",
             hsp.aln_annotation["similarity"][:40],
         )
-        self.assertEqual(
-            "MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG", hsp.hit.seq[:40]
-        )
-        self.assertEqual(
-            "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:]
-        )
+        self.assertEqual("MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG", hsp.hit.seq[:40])
+        self.assertEqual("DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:])
         self.assertEqual(
             "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
             hsp.aln_annotation["similarity"][-40:],
@@ -618,7 +632,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEG", hsp.hit.seq[:40])
-        self.assertEqual("DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:])
+        self.assertEqual(
+            "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN",
             hsp.aln_annotation["similarity"][-40:],
@@ -670,7 +686,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -699,7 +717,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "  K     + +I T  +  ++ QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -736,7 +756,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -765,7 +787,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "GK+     + +I T  +  ++ QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -833,7 +857,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEG", hsp.hit.seq[:40])
-        self.assertEqual("DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:])
+        self.assertEqual(
+            "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN",
             hsp.aln_annotation["similarity"][-40:],
@@ -871,7 +897,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MKKTIAASFLILLFSVVLAACGTAEQSKKGSG-SSENQAQ", hsp.hit.seq[:40])
-        self.assertEqual("LDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "LDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             " + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A",
             hsp.aln_annotation["similarity"][-40:],
@@ -916,7 +944,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -945,7 +975,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "  K     + +I T  +  ++ QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -982,7 +1014,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -1011,7 +1045,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "GK+     + +I T  +  ++ QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -1088,7 +1124,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP", hsp.hit.seq[:40])
-        self.assertEqual("NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE", hsp.query.seq[-40:])
+        self.assertEqual(
+            "NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE",
             hsp.aln_annotation["similarity"][-40:],
@@ -1123,7 +1161,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP", hsp.hit.seq[:40])
-        self.assertEqual("NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE", hsp.query.seq[-40:])
+        self.assertEqual(
+            "NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "NSEG SS PC  RP+AVKLEKVEP+PEESQDMKALQKELE",
             hsp.aln_annotation["similarity"][-40:],
@@ -1181,7 +1221,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSW", hsp.hit.seq[:40])
-        self.assertEqual("VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:])
+        self.assertEqual(
+            "VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP",
             hsp.aln_annotation["similarity"][-40:],
@@ -1210,7 +1252,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPP", hsp.hit.seq[:40])
-        self.assertEqual("WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG", hsp.query.seq[-40:])
+        self.assertEqual(
+            "WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "W+ R  PPH AN     F F +   F  V QAG++ +  G",
             hsp.aln_annotation["similarity"][-40:],
@@ -1247,7 +1291,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPP", hsp.hit.seq[:40])
-        self.assertEqual("VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:])
+        self.assertEqual(
+            "VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P",
             hsp.aln_annotation["similarity"][-40:],
@@ -1276,7 +1322,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHV", hsp.hit.seq[:40])
-        self.assertEqual("SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ", hsp.query.seq[-40:])
+        self.assertEqual(
+            "SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "SL SSWD R  PP  AN     F F +   F  V QAG++",
             hsp.aln_annotation["similarity"][-40:],
@@ -1344,7 +1392,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSW", hsp.hit.seq[:40])
-        self.assertEqual("VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:])
+        self.assertEqual(
+            "VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP",
             hsp.aln_annotation["similarity"][-40:],
@@ -1373,7 +1423,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPP", hsp.hit.seq[:40])
-        self.assertEqual("WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG", hsp.query.seq[-40:])
+        self.assertEqual(
+            "WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "W+ R  PPH AN     F F +   F  V QAG++ +  G",
             hsp.aln_annotation["similarity"][-40:],
@@ -1410,7 +1462,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPP", hsp.hit.seq[:40])
-        self.assertEqual("VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:])
+        self.assertEqual(
+            "VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P",
             hsp.aln_annotation["similarity"][-40:],
@@ -1439,7 +1493,9 @@ class BlastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHV", hsp.hit.seq[:40])
-        self.assertEqual("SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ", hsp.query.seq[-40:])
+        self.assertEqual(
+            "SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "SL SSWD R  PP  AN     F F +   F  V QAG++",
             hsp.aln_annotation["similarity"][-40:],
@@ -1516,7 +1572,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*K", hsp.hit.seq[:40])
-        self.assertEqual("NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq[-40:])
+        self.assertEqual(
+            "NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"][-40:],
@@ -1554,7 +1612,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IGNDSYLALSKG---GLVDEHVLILPIGHYPSSIDAPQEV", hsp.hit.seq[:40])
-        self.assertEqual("DITEESTSDLDK--------FNSGDKVTITYEKNDEGQLL", hsp.query.seq[-40:])
+        self.assertEqual(
+            "DITEESTSDLDK--------FNSGDKVTITYEKNDEGQLL", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "D  +E   ++DK        F+S ++  + +E+N   Q L",
             hsp.aln_annotation["similarity"][-40:],
@@ -1609,7 +1669,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -1638,7 +1700,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "GK+     + +I T  +  ++ QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -1676,7 +1740,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -1705,7 +1771,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWER", hsp.hit.seq[:40])
-        self.assertEqual("GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "GK  F+ +     T  +  +F QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -1773,7 +1841,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*K", hsp.hit.seq[:40])
-        self.assertEqual("NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq[-40:])
+        self.assertEqual(
+            "NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "   TK+GT +GL   HTI   + +  +SL++ E++  D+D",
             hsp.aln_annotation["similarity"][-40:],
@@ -1811,7 +1881,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYY", hsp.hit.seq[:40])
-        self.assertEqual("DITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", hsp.query.seq[-40:])
+        self.assertEqual(
+            "DITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "D+TEE  ++LD+F S          K  + YE+N   Q L",
             hsp.aln_annotation["similarity"][-40:],
@@ -1859,7 +1931,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -1888,7 +1962,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWER", hsp.hit.seq[:40])
-        self.assertEqual("GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "GK  F+ +     T  +  +F QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -1926,7 +2002,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNS", hsp.hit.seq[:40])
-        self.assertEqual("FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "FGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             hsp.aln_annotation["similarity"][-40:],
@@ -1955,7 +2033,9 @@ class TblastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED", hsp.hit.seq[:40])
-        self.assertEqual("QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "    +   + +I T  +  +F QAA  +ER  W++ I+ A",
             hsp.aln_annotation["similarity"][-40:],
@@ -2032,7 +2112,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG", hsp.hit.seq[:40])
-        self.assertEqual("TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N", hsp.query.seq[-40:])
+        self.assertEqual(
+            "TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N",
             hsp.aln_annotation["similarity"][-40:],
@@ -2070,7 +2152,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG", hsp.hit.seq[:40])
-        self.assertEqual("TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N", hsp.query.seq[-40:])
+        self.assertEqual(
+            "TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "TQREPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N",
             hsp.aln_annotation["similarity"][-40:],
@@ -2127,7 +2211,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("VTQAGVKWHNLSSLQPPPPGFKQFSCLSLPSSWDYRRGPP", hsp.hit.seq[:40])
-        self.assertEqual("WLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVF", hsp.query.seq[-40:])
+        self.assertEqual(
+            "WLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVF", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "W DLG  Q PPPGF  FSCLS PSSWDYR   P   NF++",
             hsp.aln_annotation["similarity"][-40:],
@@ -2156,7 +2242,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("FCIFSRDGVSSCWPGWSRTPDLK*STHLGLPKCWDYRREP", hsp.hit.seq[:40])
-        self.assertEqual("SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "SRDGV  CW GWSRTPDL+*S  LGLPKCWDYR EPPRPA",
             hsp.aln_annotation["similarity"][-40:],
@@ -2194,7 +2282,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("EMEFRSCCPGWSAMAQSWLIATSVSWVQVILWPQPPE*LG", hsp.hit.seq[:40])
-        self.assertEqual("SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA", hsp.query.seq[-40:])
+        self.assertEqual(
+            "SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "SRDGV PCWSGWSRTPDLR*SACLGLPKCWDYR EPP PA",
             hsp.aln_annotation["similarity"][-40:],
@@ -2223,7 +2313,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("AGHGGSRL*SQHFGRPRQADHLRSGVRDQPDQHGETPSLL", hsp.hit.seq[:40])
-        self.assertEqual("PSYSGD*GRRIT*IQEVEAVVGQDQAIALQPGQQERNSVS", hsp.query.seq[-40:])
+        self.assertEqual(
+            "PSYSGD*GRRIT*IQEVEAVVGQDQAIALQPGQQERNSVS", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "PSYSG *G+RIT* QE E  + QD AIALQPGQQERNS+S",
             hsp.aln_annotation["similarity"][-40:],
@@ -2291,7 +2383,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINP", hsp.hit.seq[:40])
-        self.assertEqual("WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K", hsp.query.seq[-40:])
+        self.assertEqual(
+            "WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
             hsp.aln_annotation["similarity"][-40:],
@@ -2320,7 +2414,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALP", hsp.hit.seq[:40])
-        self.assertEqual("WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP", hsp.query.seq[-40:])
+        self.assertEqual(
+            "WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP",
             hsp.aln_annotation["similarity"][-40:],
@@ -2358,7 +2454,9 @@ class TblastxCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRN", hsp.hit.seq[:40])
-        self.assertEqual("LAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK", hsp.query.seq[-40:])
+        self.assertEqual(
+            "LAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "+AMQCLQGL++VPSIP SR+ E+LD FIEAT LAMEIQLK",
             hsp.aln_annotation["similarity"][-40:],
