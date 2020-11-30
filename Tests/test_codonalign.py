@@ -93,8 +93,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln1, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln1[x].seq),
-                str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq),
+                new_aln1[x].seq, self.codon_aln[x].seq + self.multi_aln[x].seq
             )
 
         new_aln2 = self.multi_aln + self.codon_aln
@@ -102,8 +101,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln2, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln2[x].seq),
-                str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq),
+                new_aln2[x].seq, self.multi_aln[x].seq + self.codon_aln[x].seq
             )
 
     def test_addition_CodonAlignment(self):
@@ -113,8 +111,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln[x].seq),
-                str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq),
+                new_aln[x].seq, self.codon_aln[x].seq + self.codon_aln[x].seq
             )
 
     def test_ValueError(self):
