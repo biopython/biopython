@@ -2287,6 +2287,72 @@ class MutableSeq:
             else:
                 return overlap_count
 
+    def find(self, sub, start=None, end=None):
+        """Find method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Returns an integer, the index of the first occurrence of substring
+        argument sub in the (sub)sequence given by [start:end].
+
+        Arguments:
+         - sub - a string or another Seq or MutableSeq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the first typical start codon, AUG, in an RNA sequence:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.find("AUG")
+        3
+        """
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = bytes(sub)
+        elif isinstance(sub, str):
+            sub = sub.encode("ASCII")
+        elif not isinstance(sub, (bytes, bytearray)):
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
+        return self._data.find(sub, start, end)
+
+    def rfind(self, sub, start=None, end=None):
+        """Find from right method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Returns an integer, the index of the last (right most) occurrence of
+        substring argument sub in the (sub)sequence given by [start:end].
+
+        Arguments:
+         - sub - a string or another Seq or MutablSeq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the last typical start codon, AUG, in an RNA sequence:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.rfind("AUG")
+        15
+        """
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = bytes(sub)
+        elif isinstance(sub, str):
+            sub = sub.encode("ASCII")
+        elif not isinstance(sub, (bytes, bytearray)):
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
+        return self._data.rfind(sub, start, end)
+
     def index(self, sub, start=None, end=None):
         """Return first occurrence position of a single entry (i.e. letter).
 

@@ -82,7 +82,7 @@ class StringMethodTests(unittest.TestCase):
         UnknownSeq(12),
     ]
     for seq in _examples[:]:
-        if isinstance(seq, Seq):
+        if not isinstance(seq, MutableSeq):
             _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
@@ -121,9 +121,6 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, example2))
 
                 if start_end:
-                    if isinstance(example1, MutableSeq):
-                        # Does not support start/end arguments
-                        continue
                     for start in self._start_end_values:
                         try:
                             i = getattr(example1, method_name)(str2, start)
@@ -518,8 +515,6 @@ class StringMethodTests(unittest.TestCase):
     def test_str_encode(self):
         """Check matches the python string encode method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             str1 = str(example1)
             self.assertEqual(bytes(example1), str1.encode("ascii"))
 
