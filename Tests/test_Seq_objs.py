@@ -99,13 +99,6 @@ class StringMethodTests(unittest.TestCase):
                 if not hasattr(example2, method_name):
                     # e.g. MutableSeq does not support find
                     continue
-                if (
-                    method_name in ("index", "rindex")
-                    and isinstance(example1, MutableSeq)
-                    and len(example2) > 1
-                ):
-                    # MutableSeq index only supports single entries
-                    continue
                 str2 = str(example2)
 
                 try:
@@ -399,6 +392,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("AC7GT").index("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").index, 7)
         self.assertRaises(TypeError, Seq("ACGT").index, None)
+        self.assertEqual(MutableSeq("AC7GT").index("7"), 2)
+        self.assertRaises(TypeError, MutableSeq("AC7GT").index, 7)
+        self.assertRaises(TypeError, MutableSeq("ACGT").index, None)
 
     def test_str_rindex(self):
         """Check matches the python string rindex method."""
@@ -406,6 +402,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("AC7GT").rindex("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").rindex, 7)
         self.assertRaises(TypeError, Seq("ACGT").rindex, None)
+        self.assertEqual(MutableSeq("AC7GT").rindex("7"), 2)
+        self.assertRaises(TypeError, MutableSeq("AC7GT").rindex, 7)
+        self.assertRaises(TypeError, MutableSeq("ACGT").rindex, None)
 
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
