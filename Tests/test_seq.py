@@ -263,23 +263,17 @@ class TestSeqStringMethods(unittest.TestCase):
         for a in self.dna + self.rna + self.nuc + self.protein:
             for char in self.test_chars:
                 str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.find(char), str(a).find(str_char))
-                    self.assertEqual(a.find(char, 2, -2), str(a).find(str_char, 2, -2))
-                    self.assertEqual(a.rfind(char), str(a).rfind(str_char))
-                    self.assertEqual(
-                        a.rfind(char, 2, -2), str(a).rfind(str_char, 2, -2)
-                    )
+                self.assertEqual(a.find(char), str(a).find(str_char))
+                self.assertEqual(a.find(char, 2, -2), str(a).find(str_char, 2, -2))
+                self.assertEqual(a.rfind(char), str(a).rfind(str_char))
+                self.assertEqual(a.rfind(char, 2, -2), str(a).rfind(str_char, 2, -2))
 
     def test_counting_characters(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
             for char in self.test_chars:
                 str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.count(char), str(a).count(str_char))
-                    self.assertEqual(
-                        a.count(char, 2, -2), str(a).count(str_char, 2, -2)
-                    )
+                self.assertEqual(a.count(char), str(a).count(str_char))
+                self.assertEqual(a.count(char, 2, -2), str(a).count(str_char, 2, -2))
 
     def test_splits(self):
         for a in self.dna + self.rna + self.nuc + self.protein:

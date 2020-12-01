@@ -524,9 +524,8 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check returned expected object type
                 self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
-                    if (not isinstance(record.seq, Seq)) and (
-                        not isinstance(record.seq, UnknownSeq)
-                    ):
+                    if not isinstance(record.seq, Seq):
+                        # UnknownSeq is a subclass of Seq
                         self.failureException("Expected a Seq or UnknownSeq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
