@@ -2287,6 +2287,24 @@ class MutableSeq:
             else:
                 return overlap_count
 
+    def __contains__(self, item):
+        """Implement the 'in' keyword, like a python string.
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_dna = MutableSeq("ATATGAAATTTGAAAA")
+        >>> "AAA" in my_dna
+        True
+        >>> MutableSeq("AAA") in my_dna
+        True
+        """
+        if isinstance(item, (Seq, MutableSeq)):
+            item = bytes(item)
+        elif isinstance(item, str):
+            item = item.encode("ASCII")
+        return item in self._data
+
     def find(self, sub, start=None, end=None):
         """Find method, like that of a python string.
 
@@ -2386,6 +2404,72 @@ class MutableSeq:
                 % type(sub)
             )
         return self._data.rindex(sub, start, end)
+
+    def startswith(self, prefix, start=None, end=None):
+        """Return True if the MutableSeq starts with the given prefix, False otherwise.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence starts with the specified prefix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        prefix can also be a tuple of strings to try.  e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.startswith("GUC")
+        True
+        >>> my_rna.startswith("AUG")
+        False
+        >>> my_rna.startswith("AUG", 3)
+        True
+        >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
+        True
+        """
+        if isinstance(prefix, tuple):
+            prefix = tuple(
+                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                for p in prefix
+            )
+        elif isinstance(prefix, (Seq, MutableSeq)):
+            prefix = bytes(prefix)
+        elif isinstance(prefix, str):
+            prefix = prefix.encode("ASCII")
+        return self._data.startswith(prefix, start, end)
+
+    def endswith(self, suffix, start=None, end=None):
+        """Return True if the MutableSeq ends with the given suffix, False otherwise.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence ends with the specified suffix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        suffix can also be a tuple of strings to try.  e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.endswith("UUG")
+        True
+        >>> my_rna.endswith("AUG")
+        False
+        >>> my_rna.endswith("AUG", 0, 18)
+        True
+        >>> my_rna.endswith(("UCC", "UCA", "UUG"))
+        True
+        """
+        if isinstance(suffix, tuple):
+            suffix = tuple(
+                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                for p in suffix
+            )
+        elif isinstance(suffix, (Seq, MutableSeq)):
+            suffix = bytes(suffix)
+        elif isinstance(suffix, str):
+            suffix = suffix.encode("ASCII")
+        return self._data.endswith(suffix, start, end)
 
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
