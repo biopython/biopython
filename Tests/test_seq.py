@@ -572,7 +572,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s.__radd__(self.mutable_s),
         )
 
-    def test_radd_method_using_mutalbeseq_object(self):
+    def test_radd_method_using_mutableseq_object(self):
         self.assertEqual(
             "UCAAAAGGATCAAAAGGATGCATCATG",
             self.mutable_s.__radd__(Seq.MutableSeq("UCAAAAGGA")),
@@ -586,6 +586,17 @@ class TestMutableSeq(unittest.TestCase):
     def test_radd_method_wrong_type(self):
         with self.assertRaises(TypeError):
             self.mutable_s.__radd__(1234)
+
+    def test_contains_method(self):
+        self.assertIn("AAAA", self.mutable_s)
+
+    def test_startswith(self):
+        self.assertTrue(self.mutable_s.startswith("TCA"))
+        self.assertTrue(self.mutable_s.startswith(("CAA", "CTA"), 1))
+
+    def test_endswith(self):
+        self.assertTrue(self.mutable_s.endswith("ATG"))
+        self.assertTrue(self.mutable_s.endswith(("ATG", "CTA")))
 
     def test_as_string(self):
         self.assertEqual("TCAAAAGGATGCATCATG", self.mutable_s)
