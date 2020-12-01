@@ -2287,7 +2287,7 @@ class MutableSeq:
             else:
                 return overlap_count
 
-    def index(self, item):
+    def index(self, sub, start=None, end=None):
         """Return first occurrence position of a single entry (i.e. letter).
 
         >>> my_seq = MutableSeq("ACTCGACGTCG")
@@ -2298,15 +2298,28 @@ class MutableSeq:
         >>> my_seq.index(Seq("T"))
         2
         """
-        if isinstance(item, MutableSeq):
-            item = item._data
-        elif isinstance(item, Seq):
-            item = bytes(item)
-        elif isinstance(item, str):
-            item = item.encode("ASCII")
+        if isinstance(sub, MutableSeq):
+            sub = sub._data
+        elif isinstance(sub, Seq):
+            sub = bytes(sub)
+        elif isinstance(sub, str):
+            sub = sub.encode("ASCII")
         else:
             raise TypeError("expected a string, Seq or MutableSeq")
-        return self._data.index(item)
+        return self._data.index(sub, start, end)
+
+    def rindex(self, sub, start=None, end=None):
+        """Like rfind() but raise ValueError when the substring is not found."""
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = bytes(sub)
+        elif isinstance(sub, str):
+            sub = sub.encode("ASCII")
+        elif not isinstance(sub, (bytes, bytearray)):
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
+        return self._data.rindex(sub, start, end)
 
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
