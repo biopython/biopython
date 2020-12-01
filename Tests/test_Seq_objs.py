@@ -91,13 +91,13 @@ class StringMethodTests(unittest.TestCase):
         self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
-                # e.g. MutableSeq does not support find
+                # e.g. MutableSeq does not support translate
                 continue
             str1 = str(example1)
 
             for example2 in self._examples:
                 if not hasattr(example2, method_name):
-                    # e.g. MutableSeq does not support find
+                    # e.g. MutableSeq does not support translate
                     continue
                 str2 = str(example2)
 
@@ -408,12 +408,10 @@ class StringMethodTests(unittest.TestCase):
         self._test_method("startswith", start_end=True)
         self.assertTrue("ABCDE".startswith(("ABE", "OBE", "ABC")))
         self.assertRaises(TypeError, Seq("ACGT").startswith, None)
+        self.assertRaises(TypeError, MutableSeq("ACGT").startswith, None)
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
-            if not hasattr(example1, "startswith"):
-                # e.g. MutableSeq does not support this
-                continue
             subs = tuple(
                 example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
             )
@@ -441,9 +439,6 @@ class StringMethodTests(unittest.TestCase):
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
-            if not hasattr(example1, "endswith"):
-                # e.g. MutableSeq does not support this
-                continue
             subs = tuple(
                 example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
             )
