@@ -1,0 +1,75 @@
+LOCUS       CAA46787                 478 aa            linear   PLN 18-APR-2005
+DEFINITION  glutamate-1-semialdehyde 2,1-aminomutase [Nicotiana tabacum].
+ACCESSION   CAA46787
+VERSION     CAA46787.1
+DBSOURCE    embl accession X65974.1
+KEYWORDS    .
+SOURCE      Nicotiana tabacum (common tobacco)
+  ORGANISM  Nicotiana tabacum
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliopsida; eudicotyledons; Gunneridae;
+            Pentapetalae; asterids; lamiids; Solanales; Solanaceae;
+            Nicotianoideae; Nicotianeae; Nicotiana.
+REFERENCE   1  (residues 1 to 478)
+  AUTHORS   Hofgen,R., Axelsen,K.B., Kannangara,C.G., Schuttke,I.,
+            Pohlenz,H.D., Willmitzer,L., Grimm,B. and von Wettstein,D.
+  TITLE     A visible marker for antisense mRNA expression in plants:
+            inhibition of chlorophyll synthesis with a glutamate-1-semialdehyde
+            aminotransferase antisense gene
+  JOURNAL   Proc Natl Acad Sci U S A 91 (5), 1726-1730 (1994)
+   PUBMED   8127872
+REFERENCE   2  (residues 1 to 478)
+  AUTHORS   Axelsen,K.B.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAY-1992) K.B. Axelsen, Carlsberg Laboratory, Dept.of
+            Physiology, Gl.Carlsberg Vej 10, DK 2500 Copenhagen-Valby, DENMARK
+FEATURES             Location/Qualifiers
+     source          1..478
+                     /organism="Nicotiana tabacum"
+                     /db_xref="taxon:4097"
+                     /clone_lib="lambda ZAP"
+     Protein         1..478
+                     /product="glutamate-1-semialdehyde 2,1-aminomutase"
+                     /EC_number="5.4.3.8"
+     Region          2..478
+                     /region_name="PLN02482"
+                     /note="glutamate-1-semialdehyde 2,1-aminomutase"
+                     /db_xref="CDD:178100"
+     Region          54..478
+                     /region_name="PRK00062"
+                     /note="glutamate-1-semialdehyde aminotransferase;
+                     Provisional"
+                     /db_xref="CDD:234607"
+     Site            order(167..169,195..196,198,257,290,292..293,318)
+                     /site_type="inhibition"
+                     /note="inhibitor-cofactor binding pocket"
+                     /db_xref="CDD:99735"
+     Site            order(168..169,195..196,257,290,293,318)
+                     /site_type="other"
+                     /note="pyridoxal 5'-phosphate binding site [chemical
+                     binding]"
+                     /db_xref="CDD:99735"
+     Site            318
+                     /site_type="active"
+                     /note="catalytic residue [active]"
+                     /db_xref="CDD:99735"
+     CDS             1..478
+                     /gene="GSA"
+                     /coded_by="X65974.1:105..1541"
+                     /db_xref="GOA:P31593"
+                     /db_xref="InterPro:IPR004639"
+                     /db_xref="InterPro:IPR005814"
+                     /db_xref="InterPro:IPR015421"
+                     /db_xref="InterPro:IPR015422"
+                     /db_xref="InterPro:IPR015424"
+                     /db_xref="UniProtKB/Swiss-Prot:P31593"
+ORIGIN      
+        1 maavngvgis wpskltqsqr pklvfspspr rctpssstik mtasvdekkk tftlqkseea
+       61 fskakelmpg gvnspvrafk svggqpiiid svkgsrmrdi dgndyidyvg swgpaiigha
+      121 ddevlaalae tmkkgtsfga pcllentlae mvisavpsie mvrfvnsgte acmgvlrlar
+      181 aftgrpkiik fegcyhghad pflvkagsgv atlglpdspg vpkaattdtl tapyndisav
+      241 eslfkehkge vaaiilepvv gnagfiqpnp dflaairkit kendallifd evmtgfrlay
+      301 ggaqeyfgit pdlttlgkii ggglpvgayg grrdimemva pagpmyqagt lsgnplamta
+      361 gihtlkrlqg pgtydyldki tgeltqgild agkktghamc ggyirgmfgf ffvegpvnnf
+      421 sdakksdtek fgrfyrgmle egvyfapsqf eagftslaht sediqrtvaa aekvlkqi
+//
