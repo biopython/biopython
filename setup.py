@@ -50,10 +50,12 @@ if "bdist_wheel" in sys.argv:
 MIN_PY_VER = (3, 6)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
-        ("Biopython requires Python %i.%i or later. " % MIN_PY_VER)
+        ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
+elif sys.version_info[:2] == (3, 6):
+    sys.stderr.write("WARNING: Biopython will soon drop support for Python 3.6\n")
 
 
 class test_biopython(Command):
