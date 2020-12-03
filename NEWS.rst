@@ -29,6 +29,9 @@ atomic solvent accessible areas without third-party tools.
 Expected ``TypeError`` behaviour has been restored to the ``Seq`` object's
 string like methods (fixing a regression in Biopython 1.78).
 
+A parser for twoBit (.2bit) sequence data was added to ``Bio.SeqIO``. This is
+a lazy parser that allows fast access to genome-size DNA sequence files.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
