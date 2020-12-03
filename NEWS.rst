@@ -11,8 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.79
 ===============================================
 
-This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
-tested on PyPy3.6.1 v7.1.1.
+This is intended to be our final release supporting Python 3.6. It also
+supports Python 3.7 and 3.8, and has also been tested on PyPy3.6.1 v7.1.1.
 
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
