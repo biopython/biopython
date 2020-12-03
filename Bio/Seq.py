@@ -95,26 +95,45 @@ class Seq:
             self._data = bytes(data)
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
+        elif self._check_bytes_like(data):
+            # e.g. the TwoBitSequence objects, which return bytes when
+            # __getitem__ is called on them.
+            self._data = data
         else:
             raise TypeError(
                 "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
             )
 
+    def _check_bytes_like(self, data):
+        # Check if data is bytes-like. This currently requires two things:
+        # - calling len(data) must return the length of the data
+        # - calling __getitem__ must return a bytes object for the requested region
+        try:
+            len(data)
+        except TypeError:
+            return False
+        try:
+            c = data[:0]
+        except TypeError:
+            return False
+        if c != b"":
+            return False
+        return True
+
     def __bytes__(self):
-        return self._data
+        return bytes(self._data[:])
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
-        data = bytes(self)
-        if len(data) > 60:
+        if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            start = data[:54].decode("ASCII")
-            end = data[-3:].decode("ASCII")
+            start = bytes(self[:54]).decode("ASCII")
+            end = bytes(self[-3:]).decode("ASCII")
             return f"{self.__class__.__name__}('{start}...{end}')"
         else:
-            data = data.decode("ASCII")
+            data = bytes(self).decode("ASCII")
             return f"{self.__class__.__name__}('{data}')"
 
     def __str__(self):
@@ -134,7 +153,10 @@ class Seq:
                 as_string = str(seq_obj)
 
         """
-        return self._data.decode("ASCII")
+        data = self._data
+        if not isinstance(data, (bytes, bytearray)):
+            data = bytes(self)
+        return data.decode("ASCII")
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.

@@ -396,6 +396,7 @@ from Bio.SeqIO import SffIO
 from Bio.SeqIO import SnapGeneIO
 from Bio.SeqIO import SwissIO
 from Bio.SeqIO import TabIO
+from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import QualityIO  # FastQ and qual files
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
@@ -438,10 +439,10 @@ _FormatToIterator = {
     "seqxml": SeqXmlIO.SeqXmlIterator,
     "sff": SffIO.SffIterator,
     "snapgene": SnapGeneIO.SnapGeneIterator,
-    # Not sure about this in the long run:
-    "sff-trim": SffIO._SffTrimIterator,
+    "sff-trim": SffIO._SffTrimIterator,  # Not sure about this in the long run
     "swiss": SwissIO.SwissIterator,
     "tab": TabIO.TabIterator,
+    "twobit": TwoBitIO.TwoBitIterator,
     "uniprot-xml": UniprotIO.UniprotIterator,
     "xdna": XdnaIO.XdnaIterator,
 }
@@ -572,6 +573,10 @@ def parse(handle, format, alphabet=None):
     ...    print("Sequence length %i" % len(record))
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
+
+    For lazy-loading file formats such as twobit, for which the file contents
+    is read on demand only, ensure that the file remains open while extracting
+    sequence data.
 
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
