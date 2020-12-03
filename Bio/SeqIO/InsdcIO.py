@@ -1085,6 +1085,9 @@ class GenBankWriter(_InsdcWriter):
             taxonomy = "."
         self._write_multi_line("", taxonomy)
 
+        if "db_source" in record.annotations:
+            self._write_single_line("DBSOURCE", record.annotations["db_source"])
+
         if "references" in record.annotations:
             self._write_references(record)
 
