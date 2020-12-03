@@ -72,9 +72,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(
-            len(set(input_records.keys())), len(set(output_records.keys()))
-        )
+        self.assertEqual(len(input_records), len(output_records))
         for record in align:
             self.assertEqual(record.seq, output_records[record.id].seq)
 

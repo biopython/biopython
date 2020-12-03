@@ -822,14 +822,14 @@ class TestComplement(unittest.TestCase):
         for ambig_char, values in sorted(ambiguous_dna_values.items()):
             compl_values = Seq.Seq(values).complement()
             ambig_values = ambiguous_dna_values[ambiguous_dna_complement[ambig_char]]
-            self.assertEqual(set(compl_values), set(ambig_values))
+            self.assertCountEqual(compl_values, ambig_values)
 
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             # Will default to DNA if neither T nor U found...
             compl_values = Seq.Seq(values).complement().transcribe()
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
-            self.assertEqual(set(compl_values), set(ambig_values))
+            self.assertCountEqual(compl_values, ambig_values)
 
     def test_complement_incompatible_letters(self):
         seq = Seq.Seq("CAGGTU")

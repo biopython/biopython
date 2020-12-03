@@ -288,12 +288,12 @@ class ParseReal(unittest.TestCase):
         )
 
         # Check that the residue types were parsed correctly.
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_1.disordered_get_id_list()),
             {"PRO", "SER"},
             "Residue 1 is proline/serine",
         )
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_15.disordered_get_id_list()),
             {"ARG", "GLN", "GLU"},
             "Residue 15 is arginine/glutamine/glutamic acid",
