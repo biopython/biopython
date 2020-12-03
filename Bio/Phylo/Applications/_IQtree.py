@@ -14,6 +14,14 @@ def _is_int(x):
 	"""Checker function for Integer required inputs"""
 	return isinstance(x, int) or x.isdigit()
 
+def _is_number(x):
+	"""Checker function for numeric inputs that include float"""
+	try:
+		float(x)
+		return True
+	except ValueError:
+		return False
+
 
 class IQTreeCommandline(AbstractCommandline):
 	r"""Command-line wrapper for IQTree.
@@ -84,6 +92,9 @@ class IQTreeCommandline(AbstractCommandline):
 				["-te", "usertree"],
 				"""Like -t but fixing user tree, no tree search is performed
 				   and the program computes the log-likelihood of the fixed user tree
+
+				   Specify a user-defined tree to determine ancestral sequences along this tree.
+				   If the nodes do not have names IQTree will assign node names as Node1, Node2, etc.
 				   """,
 				equate = False,
 				filename = (lambda x: not(x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))),                            #Not sure if this works
@@ -179,7 +190,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function = _is_int
 				),
 
-			#Likelihood mapping analysis comands
+			### Likelihood mapping analysis comands ###
 
 			_Option(
 				["-lmap", "lmap"],
@@ -215,7 +226,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function = _is_int
 				),
 
-			#Automatic model selection
+			### Automatic model selection ###
 
 			_Option(
 				["-m", "model"],
@@ -399,7 +410,7 @@ class IQTreeCommandline(AbstractCommandline):
 				"""Minimum Gamma shape parameter for site rates
 				   Default: 0.02""",
 				equate = False,
-				checker_function = lambda x: x.isnumeric(),
+				checker_function = _is_number,
 				),
 			_Switch(
 				["-gmedian", "gmedian"],
@@ -427,7 +438,7 @@ class IQTreeCommandline(AbstractCommandline):
 				"""Computing site-specific rates to .mhrate file using Meyer & von Haeseler method""",
 				),
 
-			### Partition model options 
+			### Partition model options ###
 
 			_Option(
 				["-q", "q"],
@@ -477,7 +488,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   """,
 				),
 
-			#Tree search parameters
+			### Tree search parameters ###
 
 			_Switch(
 				["-allnni", "allnni"],
@@ -518,6 +529,198 @@ class IQTreeCommandline(AbstractCommandline):
 				equate = False,
 				checker_function = _is_int,      #im assuming you can't input half a tree so it should be int
 				),
+			_Option(
+				["-ntop", "ntop"],
+				"""Specify number of top initial parsimony trees to optimize with ML nearest neighbor interchange
+				   (NNI) search to initialize the candidate set.
+
+				   Default: 20
+				   """,
+				equate = False,
+				checker_function = _is_int,                   #assuming this has to be an int
+				),
+			_Option(
+				["-nbest", "nbest"],
+				"""Specify number of trees in the candidate set to maintain during ML tree search.
+
+				   Default: 5
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Option(
+				["-nstop", "nstop"],
+				"""Specify number of unsuccessful iterations to stop.
+
+				   Default: 100
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Option(
+				["-pers", "pers"],
+				"""Specify perturbation strength (between 0 and 1) for randomized NNI.
+
+				   Default: 0.5
+				   """,
+				equate = False,
+				checker_function = lambda x: True if (x in range(0, 1)) else False
+				),
+			_Option(
+				["-sprrad", "sprrad"],
+				"""Specify SPR radius for the initial parsimony tree serach
+
+				   Default: 6
+				   """,
+				equate = False,
+				#checker_function= _is_int           #not sure if radius must be an integer
+				),
+
+			### Ultrafast booststrap parameters ###
+
+
+			_Option(
+				["-bb", "bb"],
+				"""Specify a number of bootstrap replicates (>= 1000)
+				   """,
+				checker_function = _is_number   #not sure if it must be integer or not
+				),
+			_Option(
+				["-bcor", "bcor"],
+				"""Specify minimum correlation coefficient for UFBoot convergence criterion
+
+				   Default: 0.99
+				   """,
+				equate = False,
+				checker_function = _is_number
+				),
+			_Option(
+				["-beps", "beps"],
+				"""Specify a small epsilon to break tie in RELL evaluation for bootstrap trees.
+
+				   Default: 0.5
+				   """,
+				equate = False,
+				checker_function = _is_number
+				),
+			_Switch(
+				["-bnni", "bnni"],
+				"""Perform an additional step to further optimize UFBoot trees by nearest neighbor interchange
+				   (NNI) based directly on bootstrap alignments.
+				   This option is recommended in the presence of severe model violations.
+				   It increases computing times by 2-fold but reduces the risk of overestimating branch supports
+				   due to severe model violations
+				   """,
+				),
+			_Option(
+				["-bsam", "bsam"],
+				"""Specify the resampling strategies for partitioned analysis.
+				   By default IQTree resamples alignment sites within partitions.
+				     -bsam GENE           IQTree will resample partitions
+					 -bsam GENESITE       IQTree will resample partitions and then resample sites within 
+										  resampled partitons
+				   """,
+				equate = False,
+				checker_function = lambda x: x in ("GENE", "GENESITE"),
+				),
+			_Option(
+				["-nm", "nm"],
+				"""Specify maximum number of iterations to stop.
+
+				   Default: 1000
+				   """,
+				equate = False,
+				checker_function = _is_int
+				),
+			_Option(
+				["-nstep", "nstep"],
+				"""Specify iteration interval checking for UFBoot convergence.
+
+				   Default: every 1000 iterations.
+				   """,
+				equate = False,
+				checker_function = _is_int
+				),
+			_Switch(
+				["-wbt", "wbt"],
+				"""Turn on writing bootstrap tree to .ufboot file
+
+				   Default: OFF
+				   """,
+				),
+			_Switch(
+				["-wbtl", "wbtl"],
+				"""Like -wbt but booststrap trees written with branch lengths.""",
+				),
+
+			### Nonpoarametric bootstrap ###
+
+			_Option(
+				["-b", "b"],
+				"""Specify number of bootstrap replicates (recommended >= 100).
+				   This will perfom both bootstrap and analysis on original alignment and
+				   provide a consensus tree.
+				   """,
+				equate = False,
+				checker_function = _is_int      #im assuming this requires an integer
+				),
+			_Option(
+				["-bs", "bs"],
+				"""Like -b but omit analysis on original alignment.""",
+				equate = False,
+				checker_function = _is_int     #same as above
+				),
+			_Option(
+				["-bo", "bo"],
+				"""Like -b but only perform bootstrap analysis (no analysis on original alignment
+				   and no consensus tree)
+				   """,
+				equate = False,
+				checker_function = True,
+				),
+
+			### Single branch tests ###
+
+			_Option(
+				["-alrt", "alrt"],
+				"""Specify number of replicates (>=1000) to perform SH-like approximate likelihood
+				   ratio test (SH-aLRT).
+				   If number of replicates is set to 0 (-alrt 0), then the parametric aLRT test is
+				   performed, instead of SH-aLRT.
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Switch(
+				["-abayes", "abayes"],
+				"""Perform approximate Bayes test""",
+				),
+			_Option(
+				["-lbp", "lbp"],
+				"""Specify number of replicates (>=1000) to perform fast local bootstrap probability
+				   method""",
+				equate = False,
+				checker_function = _is_int,
+				),
+
+			### Ancestral sequence reconstruction ###
+
+			_Switch(
+				["-asr", "asr"],
+				"""Write ancestral sequences (by empirical Bayesian method) for all nodes of the
+				   tree to .state file
+				"""
+				),
+			_Option(
+				["-asr-min","asr-min"],
+				"""Specify the minimum threshold of posterior probability to determine the best ancestral
+				   state.
+
+				   Default: observed state frequency from the alignment""",
+				equate = False,
+				checker_function = _is_number,       #assuming probability is a float
+				),
+			
 		]
 
 		AbstractCommandline.__init__(self, cmd, **kwargs)
