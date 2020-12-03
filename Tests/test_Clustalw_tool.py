@@ -127,7 +127,7 @@ class ClustalWTestCase(unittest.TestCase):
         # The length of the alignment will depend on the version of clustalw
         # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(set(input_records.keys()), set(output_records.keys()))
+        self.assertCountEqual(input_records.keys(), output_records.keys())
         for record in align:
             self.assertEqual(record.seq, output_records[record.id].seq)
             self.assertEqual(

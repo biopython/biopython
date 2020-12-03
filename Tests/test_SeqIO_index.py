@@ -405,7 +405,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             os.remove(self.index_tmp)
 
     def check_dict_methods(self, rec_dict, keys, ids, msg):
-        self.assertEqual(set(keys), set(rec_dict), msg=msg)
+        self.assertCountEqual(keys, rec_dict.keys(), msg=msg)
         # This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict), msg=msg)
         # Make sure boolean evaluation works
@@ -600,10 +600,9 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                     ":memory:", filename, fmt, key_function=str.lower,
                 )
 
-        self.assertEqual(set(id_list), set(rec_dict), msg=msg)
+        self.assertCountEqual(id_list, rec_dict.keys(), msg=msg)
         if sqlite3:
-            self.assertEqual(set(id_list), set(rec_dict_db), msg=msg)
-        self.assertEqual(len(id_list), len(rec_dict), msg=msg)
+            self.assertCountEqual(id_list, rec_dict_db.keys(), msg=msg)
         for key in id_list:
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(key, rec_dict[key].id.lower(), msg=msg)
