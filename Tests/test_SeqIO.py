@@ -3173,14 +3173,14 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_genbank22(self):
-        """Test that genbank format write doesn't destroy db_source in annotations"""
-        record = SeqIO.read('GenBank/CAA46787.gb', 'genbank')
-        db_source = record.annotations.get('db_source')
+        """Test that genbank format write doesn't destroy db_source in annotations."""
+        record = SeqIO.read("GenBank/protein_refseq.gb", "genbank")
+        db_source = record.annotations.get("db_source")
         handle = StringIO()
-        SeqIO.write(record, handle, 'genbank')
+        SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        read_record = SeqIO.read(handle, 'genbank')
-        read_db_source = read_record.annotations.get('db_source')
+        read_record = SeqIO.read(handle, "genbank")
+        read_db_source = read_record.annotations.get("db_source")
 
         self.assertEqual(db_source, read_db_source)
 
