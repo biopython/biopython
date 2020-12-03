@@ -848,7 +848,7 @@ class ClosedLoopTest(SeqRecordTestBaseClass):
         self.assertEqual(len(new_records), len(original_records))
         for old, new in zip(original_records, new_records):
             # TODO - remove this hack because we don't yet write these (yet):
-            for key in ["comment", "references", "db_source"]:
+            for key in ["comment", "references"]:
                 if key in old.annotations and key not in new.annotations:
                     del old.annotations[key]
             self.compare_record(old, new)
