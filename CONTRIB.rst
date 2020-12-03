@@ -234,6 +234,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Peter Kerpedjiev <https://github.com/pkerpedjiev>
 - Peter Slickers <piet at domain clondiag.com>
 - Philip Bergstrom <https://github.com/phber>
+- Philip Capel <insert.available.name at gmail>
 - Phillip Garland <pgarland at gmail>
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
