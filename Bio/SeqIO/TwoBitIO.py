@@ -9,7 +9,7 @@
 
 This parser reads the index stored in the twoBit file, as well as the masked
 regions and the N's for ean sequence. It also creates sequence data objects
-(TwoBitSequenceData objects), which support only two methods: __len__ and
+(_TwoBitSequenceData objects), which support only two methods: __len__ and
 __getitem__. The former will return the length of the sequence, while the
 latter returns the sequence (as a bytes object) for the requested region.
 
@@ -84,8 +84,8 @@ from .Interfaces import SequenceIterator
 from . import _twoBitIO
 
 
-class TwoBitSequenceData:
-    """Store the information needed to retrieve sequence data from a .2bit file.
+class _TwoBitSequenceData:
+    """Stores information needed to retrieve sequence data from a .2bit file (PRIVATE).
 
     Objects of this class store the file position at which the sequence data
     start, the sequence length, and the start and end position of unknown (N)
@@ -177,7 +177,7 @@ class TwoBitIterator(SequenceIterator):
             name = data.decode("ASCII")
             data = stream.read(4)
             offset = int.from_bytes(data, byteorder, signed=False)
-            sequence = TwoBitSequenceData(stream, offset)
+            sequence = _TwoBitSequenceData(stream, offset)
             sequences[name] = sequence
         self.sequences = sequences
         for name, sequence in sequences.items():
