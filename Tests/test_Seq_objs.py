@@ -583,8 +583,9 @@ class StringMethodTests(unittest.TestCase):
                         if step == 0:
                             with self.assertRaises(ValueError) as cm:
                                 example1[i:j:step]
-                            self.assertEqual(str(cm.exception),
-                                             "slice step cannot be zero")
+                            self.assertEqual(
+                                str(cm.exception), "slice step cannot be zero"
+                            )
                         else:
                             self.assertEqual(example1[i:j:step], str1[i:j:step])
 
