@@ -1085,6 +1085,13 @@ class GenBankWriter(_InsdcWriter):
             taxonomy = "."
         self._write_multi_line("", taxonomy)
 
+        if "db_source" in record.annotations:
+            # Hack around the issue of BioSQL loading a list for the db_source
+            db_source = record.annotations["db_source"]
+            if isinstance(db_source, list):
+                db_source = db_source[0]
+            self._write_single_line("DBSOURCE", db_source)
+
         if "references" in record.annotations:
             self._write_references(record)
 
