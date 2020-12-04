@@ -480,7 +480,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertRaises(TypeError, test_seq.__getitem__, None)
 
     def test_convert(self):
-        """Check can turn a DBSeq object into a Seq or MutableSeq."""
+        """Check can turn a Seq object from BioSQL into a Seq or MutableSeq."""
         test_seq = self.item.seq
 
         other = Seq(test_seq)
@@ -492,7 +492,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertIsInstance(other, MutableSeq)
 
     def test_addition(self):
-        """Check can add DBSeq objects together."""
+        """Check can add Seq objects from BioSQL together."""
         test_seq = self.item.seq
         for other in [
             Seq("ACGT"),
@@ -507,24 +507,21 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(test, str(other) + str(test_seq))
 
     def test_multiplication(self):
-        """Check can multiply DBSeq objects by integers."""
+        """Check can multiply Seq objects from BioSQL by integers."""
         test_seq = self.item.seq
         tripled = test_seq * 3
-        # Test DBSeq.__mul__
+        # Test Seq.__mul__
         self.assertIsInstance(tripled, Seq)
-        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
-        # Test DBSeq.__rmul__
+        # Test Seq.__rmul__
         tripled = 3 * test_seq
         self.assertIsInstance(tripled, Seq)
-        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
-        # Test DBSeq.__imul__
+        # Test Seq.__imul__
         original = self.item.seq
         tripled = test_seq
         tripled *= 3
         self.assertIsInstance(tripled, Seq)
-        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(original) * 3)
 
     def test_seq_slicing(self):

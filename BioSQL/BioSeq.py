@@ -23,14 +23,16 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 
-class DBSeq:
-    """BioSQL equivalent of the Biopython Seq object."""
+class _BioSQLSequenceData:
+    """Retrieves sequence data from a BioSQL database (PRIVATE).."""
 
     def __init__(self, primary_id, adaptor, start=0, length=0):
-        """Create a new DBSeq object referring to a BioSQL entry.
+        """Create a new _BioSQLSequenceData object referring to a BioSQL entry.
 
-        You wouldn't normally create a DBSeq object yourself, this is done
-        for you when retrieving a DBSeqRecord object from the database.
+        You wouldn't normally create a _BioSQLSequenceData object yourself,
+        this is done for you when retrieving a DBSeqRecord object from the
+        database, which creates a Seq object using a _BioSQLSequenceData
+        instance as the data provider..
         """
         self.primary_id = primary_id
         self.adaptor = adaptor
@@ -41,15 +43,15 @@ class DBSeq:
         """Return the length of the sequence."""
         return self._length
 
-    def __getitem__(self, key):  # Seq API requirement
-        """Return a subsequence or single letter."""
+    def __getitem__(self, key):
+        """Return a subsequence as a bytes or a _BioSQLSequenceData object."""
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
             if size == 0:
                 return b""
         else:
-            # Return a single letter as a string
+            # Return a single letter as an integer (consistent with bytes)
             i = key
             if i < 0:
                 i += self._length
@@ -63,10 +65,12 @@ class DBSeq:
             return ord(c)
 
         if step == 1:
-            # Easy case - can return a DBSeq with the start and end adjusted
-            return DBSeq(self.primary_id, self.adaptor, self.start + start, size)
+            # Return a _BioSQLSequenceData with the start and end adjusted
+            return _BioSQLSequenceData(
+                self.primary_id, self.adaptor, self.start + start, size
+            )
         else:
-            # Tricky.  Will have to extract the sequence because of the stride
+            # Will have to extract the sequence because of the stride
             full = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + start, self.start + end
             )
@@ -128,8 +132,8 @@ def _retrieve_seq(adaptor, primary_id):
     del given_length
 
     if have_seq:
-        sequence = DBSeq(primary_id, adaptor, start=0, length=int(length))
-        return Seq(sequence)
+        data = _BioSQLSequenceData(primary_id, adaptor, start=0, length=int(length))
+        return Seq(data)
     else:
         if moltype in ("dna", "rna"):
             character = "N"
