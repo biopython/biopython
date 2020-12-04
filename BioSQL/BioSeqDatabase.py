@@ -323,7 +323,7 @@ class DBServer:
 
 
 class _CursorWrapper:
-    """A wraper for mysql.connector resolving bytestring representations."""
+    """A wrapper for mysql.connector resolving bytestring representations."""
 
     def __init__(self, real_cursor):
         self.real_cursor = real_cursor

@@ -11,7 +11,7 @@
 # available and licensed separately.  Please consult www.biosql.org
 """Implementations of Biopython-like Seq objects on top of BioSQL.
 
-This allows retrival of items stored in a BioSQL database using
+This allows retrieval of items stored in a BioSQL database using
 a biopython-like SeqRecord and Seq interface.
 
 Note: Currently we do not support recording per-letter-annotations
@@ -52,55 +52,25 @@ class DBSeq:
             # Return a single letter as a string
             i = key
             if i < 0:
-                if -i > self._length:
-                    raise IndexError(i)
-                i = i + self._length
+                i += self._length
+                if i < 0:
+                    raise IndexError(key)
             elif i >= self._length:
-                raise IndexError(i)
+                raise IndexError(key)
             c = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + i, self.start + i + 1
             )
             return ord(c)
 
-        # Return the (sub)sequence as another DBSeq or Seq object
-        # (see the Seq obect's __getitem__ method)
-        if key.start is None:
-            i = 0
-        else:
-            i = key.start
-        if i < 0:
-            # Map to equivalent positive index
-            if -i > self._length:
-                raise IndexError(i)
-            i = i + self._length
-        elif i >= self._length:
-            # Trivial case, should return empty string!
-            i = self._length
-
-        if key.stop is None:
-            j = self._length
-        else:
-            j = key.stop
-        if j < 0:
-            # Map to equivalent positive index
-            if -j > self._length:
-                raise IndexError(j)
-            j = j + self._length
-        elif j >= self._length:
-            j = self._length
-
-        if i >= j:
-            # Trivial case, empty string.
-            return b""
-        elif key.step is None or key.step == 1:
+        if step == 1:
             # Easy case - can return a DBSeq with the start and end adjusted
-            return DBSeq(self.primary_id, self.adaptor, self.start + i, j - i)
+            return DBSeq(self.primary_id, self.adaptor, self.start + start, size)
         else:
-            # Tricky.  Will have to create a Seq object because of the stride
+            # Tricky.  Will have to extract the sequence because of the stride
             full = self.adaptor.get_subseq_as_string(
-                self.primary_id, self.start + i, self.start + j
+                self.primary_id, self.start + start, self.start + end
             )
-            return full[:: key.step].encode("ASCII")
+            return full[:: step].encode("ASCII")
 
     def __bytes__(self):
         """Return the full sequence as bytes."""
