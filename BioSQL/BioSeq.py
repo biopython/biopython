@@ -23,17 +23,15 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 
-class DBSeq(Seq):
+class DBSeq:
     """BioSQL equivalent of the Biopython Seq object."""
 
-    def __init__(self, primary_id, adaptor, alphabet=None, start=0, length=0):
+    def __init__(self, primary_id, adaptor, start=0, length=0):
         """Create a new DBSeq object referring to a BioSQL entry.
 
         You wouldn't normally create a DBSeq object yourself, this is done
         for you when retrieving a DBSeqRecord object from the database.
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         self.primary_id = primary_id
         self.adaptor = adaptor
         self._length = length
@@ -43,31 +41,35 @@ class DBSeq(Seq):
         """Return the length of the sequence."""
         return self._length
 
-    def __getitem__(self, index):  # Seq API requirement
+    def __getitem__(self, key):  # Seq API requirement
         """Return a subsequence or single letter."""
-        if isinstance(index, int):
+        if isinstance(key, slice):
+            start, end, step = key.indices(self._length)
+            size = len(range(start, end, step))
+            if size == 0:
+                return b""
+        else:
             # Return a single letter as a string
-            i = index
+            i = key
             if i < 0:
                 if -i > self._length:
                     raise IndexError(i)
                 i = i + self._length
             elif i >= self._length:
                 raise IndexError(i)
-            return self.adaptor.get_subseq_as_string(
+            c = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + i, self.start + i + 1
             )
-        if not isinstance(index, slice):
-            raise TypeError("Unexpected index type")
+            return ord(c)
 
         # Return the (sub)sequence as another DBSeq or Seq object
         # (see the Seq obect's __getitem__ method)
-        if index.start is None:
+        if key.start is None:
             i = 0
         else:
-            i = index.start
+            i = key.start
         if i < 0:
-            # Map to equavilent positive index
+            # Map to equivalent positive index
             if -i > self._length:
                 raise IndexError(i)
             i = i + self._length
@@ -75,12 +77,12 @@ class DBSeq(Seq):
             # Trivial case, should return empty string!
             i = self._length
 
-        if index.stop is None:
+        if key.stop is None:
             j = self._length
         else:
-            j = index.stop
+            j = key.stop
         if j < 0:
-            # Map to equavilent positive index
+            # Map to equivalent positive index
             if -j > self._length:
                 raise IndexError(j)
             j = j + self._length
@@ -89,101 +91,23 @@ class DBSeq(Seq):
 
         if i >= j:
             # Trivial case, empty string.
-            return Seq("")
-        elif index.step is None or index.step == 1:
+            return b""
+        elif key.step is None or key.step == 1:
             # Easy case - can return a DBSeq with the start and end adjusted
-            return self.__class__(
-                self.primary_id, self.adaptor, None, self.start + i, j - i
-            )
+            return DBSeq(self.primary_id, self.adaptor, self.start + i, j - i)
         else:
             # Tricky.  Will have to create a Seq object because of the stride
             full = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + i, self.start + j
             )
-            return Seq(full[:: index.step])
-
-    def tostring(self):
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring().
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-
-        warnings.warn(
-            "This method is obsolete; please use str(my_seq) "
-            "instead of my_seq.tostring().",
-            BiopythonDeprecationWarning,
-        )
-        return self.adaptor.get_subseq_as_string(
-            self.primary_id, self.start, self.start + self._length
-        )
+            return full[:: key.step].encode("ASCII")
 
     def __bytes__(self):
         """Return the full sequence as bytes."""
-        return str(self).encode("ASCII")
-
-    def __str__(self):
-        """Return the full sequence as a python string."""
-        return self.adaptor.get_subseq_as_string(
+        sequence = self.adaptor.get_subseq_as_string(
             self.primary_id, self.start, self.start + self._length
         )
-
-    data = property(tostring, doc="Sequence as string (DEPRECATED)")
-
-    def toseq(self):
-        """Return the full sequence as a Seq object."""
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-
-        warnings.warn(
-            "This method is obsolete; please use Seq(my_seq) "
-            "instead of my_seq.toseq().",
-            BiopythonDeprecationWarning,
-        )
-        # Note - the method name copies that of the MutableSeq object
-        return Seq(self)
-
-    def __add__(self, other):
-        """Add another sequence or string to this sequence.
-
-        The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) + other
-
-    def __radd__(self, other):
-        """Add another sequence or string to the left.
-
-        The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return other + Seq(self)
-
-    def __mul__(self, other):
-        """Multiply sequence by an integer.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) * other
-
-    def __rmul__(self, other):
-        """Multiply integer by a sequence.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return other * Seq(self)
-
-    def __imul__(self, other):
-        """Multiply sequence by integer in-place.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) * other
+        return sequence.encode("ASCII")
 
 
 def _retrieve_seq_len(adaptor, primary_id):
@@ -234,7 +158,8 @@ def _retrieve_seq(adaptor, primary_id):
     del given_length
 
     if have_seq:
-        return DBSeq(primary_id, adaptor, alphabet=None, start=0, length=int(length))
+        sequence = DBSeq(primary_id, adaptor, start=0, length=int(length))
+        return Seq(sequence)
     else:
         if moltype in ("dna", "rna"):
             character = "N"

@@ -447,7 +447,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface."""
         test_record = self.item
-        self.assertIsInstance(test_record.seq, BioSeq.DBSeq)
+        self.assertIsInstance(test_record.seq, Seq)
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
@@ -467,8 +467,6 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
-        data = test_seq.data
-        self.assertEqual(type(data), type(""))
         string_rep = str(test_seq)
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
         self.assertEqual(type(string_rep), type(""))
@@ -533,7 +531,7 @@ class SeqInterfaceTest(unittest.TestCase):
         """Check that slices of sequences are retrieved properly."""
         test_seq = self.item.seq
         new_seq = test_seq[:10]
-        self.assertIsInstance(new_seq, BioSeq.DBSeq)
+        self.assertIsInstance(new_seq, Seq)
         # simple slicing
         self.assertEqual(test_seq[:5], "ATTTG")
         self.assertEqual(test_seq[0:5], "ATTTG")
