@@ -35,6 +35,9 @@ class IQTreeCommandline(AbstractCommandline):
 
 	References:
 
+	Usage:
+
+		iqtree -s <alignment> [OPTIONS]
 
 	Example on Windows:
 
@@ -720,7 +723,175 @@ class IQTreeCommandline(AbstractCommandline):
 				equate = False,
 				checker_function = _is_number,       #assuming probability is a float
 				),
-			
+
+			### Tree topology tests ###
+
+			_Option(
+				["-z", "z"],
+				"""Specify a file containing a set of trees.
+				   IQTree will compute the log-likelihoods of all trees
+				   """,
+				equate = False,
+				filename = True,
+				),
+			_Option(
+				["-zb", "zb"],
+				"""Specify the number of RELL replicates (>=1000) to perform several tere topology tests for
+				   all trees passed via -z.
+				   The tests include bootstrap proportion (BP), KH test, SH test and expected likelihood weights
+				   (ELW).
+				   """,
+				equate = False,
+				checker_function = _is_int,    #Assuming this is an int
+				#Assuming this requires a previous -z command, not sure how to check for it though
+				),
+			_Switch(
+				["-zw", "zw"],
+				"""Used together with -zb to additionally perform the weighted-KH and weighted-SH tests.
+				   """,
+				),
+			_Switch(
+				["-au", "au"],
+				"""Used together with -zb to additionally perform the approximately unbiased (AU) test.
+				   Note that you have to specify the number of replicates for the AU test via -zb
+				   """,
+				),
+
+			### Constructing consensus tree ###
+
+			_Switch(
+				["-con", "con"],
+				"""Compute consensus tree of the trees passed via -t.
+				   Resulting consensus tree is written to .contree file.
+				   """
+				),
+			_Switch(
+			    ["-net", "net"],
+				"""Compute consensus network of the trees passed via -t.
+				   Resulting consensus network is written to .nex file.
+				   """
+				),
+			_Option(
+				["-minsup", "minsup"],
+				"""Specify a minimum threshold (between 0 and 1) to keep branches in the consensus tree.
+				   -minsup 0.5 means to compute majority-rule consensus tree.
+
+				   Default: 0 to compute extended majority-rule consensus.
+				   """,
+				equate = False,
+				checker_function = lambda x: True if (x in range(0, 1)) else False,
+				),
+			_Option(
+				["-bi", "bi"],
+				"""Specify a burn-in, which is the number of beginning trees passed via -t to discard
+				   before consensus construction.
+				   This is useful e.g. when summarizing trees from MrBayes analysis.
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Option(
+				["-sup", "sup"],
+				"""Specify an input "target" tree file.
+				   That means, support values are first extracted from the trees passed via -t,
+				   and then mapped onto the target tree.
+
+				   Resulting tree with assigned support values is written to .suptree file.
+
+				   This option is useful to map and compare support values from different approaches onto
+				   a single tree
+				   """,
+				equate = False,
+				filename = True,
+				),
+			_Option(
+				["-suptag", "suptag"],
+				"""Specify name of a node in -sup target tree.
+				   The corresponding node of .suptree will then be assigned with IDs of trees where this node
+				   appears.
+
+				   Special option -suptag ALL will assign such IDs for all nodes of the target tree.
+				   """,
+				equate = False,
+				),
+			_Option(
+				["-scale", "scale"],
+				"""Set the scaling factor of support values for -sup option
+
+				   Default: 100, i.e. percentages
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Option(
+				["-prec", "prec"],
+				"""Set the precision of support values for -sup option.
+
+				   Default: 0
+				   """,
+				equate = False,
+				checker_function = _is_int
+				),
+			_Option(
+				["-rf", "rf"],
+				"""Specify a second set of trees.
+				   IQTree computes all pairwise RF distances between two tree sets passed via -t and -rf
+				   """,
+				equate = False,
+				filename = True,
+				),
+			_Switch(
+				["-rf_all", "rf_all"],
+				"""Compute all-to-all RF distances between all tress passed via -t""",
+				),
+			_Switch(
+				["-rf_adj", "rf_adj"],
+				"""Compute RF distances between adjacent trees passed via -t""",
+				),
+
+			### Generating random trees ###
+
+			_Option(
+				["-r", "r"],
+				"""Specify number of taxa.
+				   IQTree will create a random tree under Yule-Harding model with specified number of taxa
+				   """,
+				equate = False,
+				checker_function = _is_number  #not sure if it's supposed to be an int
+				),
+			_Option(
+				["-ru", "ru"],
+				"""Like -r but a random tree is created under uniform model""",
+				equate = False,
+				checker_function = _is_number  #not sure if it's supposed to be an int
+				),
+			_Option(
+				["-rcat", "rcat"],
+				"""Like -r, but a random caterpillar tree is created""",
+				equate = False,
+				checker_function = _is_number
+				),
+			_Option(
+				["-rbal", "rbal"],
+				"""Like -r, but a random balanced tree is created""",
+				equate = False,
+				checker_function = _is_number
+				),
+			_Option(
+				["-rcsg", "rcsg"],
+				"""Like -r, but a random circular split network is created""",
+				equate = False,
+				checker_function = _is_number
+				),
+			_Option(
+				["-rlen", "rlen"],
+				"""Specify three numbers: minimum, mean and maximum branch lengths of the random tree
+
+				   Defaul: -rlen 0.001 0.1 0.999
+				   """,
+				equate = False,
+				checker_function = _is_number,       #need to check how it works with multiple inputs
+				)
 		]
 
 		AbstractCommandline.__init__(self, cmd, **kwargs)
