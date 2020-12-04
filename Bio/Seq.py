@@ -1167,27 +1167,8 @@ class Seq:
                 "the python string object's translate method. "
                 "Use str(my_seq).translate(...) instead."
             )
-        try:
-            table_id = int(table)
-        except ValueError:
-            # Assume its a table name
-            # The same table can be used for RNA or DNA
-            codon_table = CodonTable.ambiguous_generic_by_name[table]
 
-        except (AttributeError, TypeError):
-            # Assume its a CodonTable object
-            if isinstance(table, CodonTable.CodonTable):
-                codon_table = table
-            else:
-                raise ValueError("Bad table argument") from None
-        else:
-            # Assume its a table ID
-            # The same table can be used for RNA or DNA
-            codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-
-        return Seq(
-            _translate_str(str(self), codon_table, stop_symbol, to_stop, cds, gap=gap)
-        )
+        return Seq(_translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap))
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
@@ -2493,6 +2474,96 @@ class MutableSeq:
             suffix = suffix.encode("ASCII")
         return self._data.endswith(suffix, start, end)
 
+    def translate(
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
+    ):
+        """Turn a nucleotide sequence into a protein sequence by creating a new MutableSeq object.
+
+        This method will translate DNA or RNA sequences. It should not
+        be used on protein sequences as any result will be biologically
+        meaningless.
+
+        Arguments:
+         - table - Which codon table to use?  This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - stop_symbol - Single character string, what to use for
+           terminators.  This defaults to the asterisk, "*".
+         - to_stop - Boolean, defaults to False meaning do a full
+           translation continuing on past any stop codons (translated as the
+           specified stop_symbol).  If True, translation is terminated at
+           the first in frame stop codon (and the stop_symbol is not
+           appended to the returned protein sequence).
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+           this checks the sequence starts with a valid alternative start
+           codon (which will be translated as methionine, M), that the
+           sequence length is a multiple of three, and that there is a
+           single in frame stop codon at the end (this will be excluded
+           from the protein sequence, regardless of the to_stop option).
+           If these tests fail, an exception is raised.
+         - gap - Single character string to denote symbol used for gaps.
+           Defaults to the minus sign.
+
+        e.g. Using the standard table:
+
+        >>> coding_dna = MutableSeq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> coding_dna.translate()
+        MutableSeq('VAIVMGR*KGAR*')
+        >>> coding_dna.translate(stop_symbol="@")
+        MutableSeq('VAIVMGR@KGAR@')
+        >>> coding_dna.translate(to_stop=True)
+        MutableSeq('VAIVMGR')
+
+        Now using NCBI table 2, where TGA is not a stop codon:
+
+        >>> coding_dna.translate(table=2)
+        MutableSeq('VAIVMGRWKGAR*')
+        >>> coding_dna.translate(table=2, to_stop=True)
+        MutableSeq('VAIVMGRWKGAR')
+
+        In fact, GTG is an alternative start codon under NCBI table 2, meaning
+        this sequence could be a complete CDS:
+
+        >>> coding_dna.translate(table=2, cds=True)
+        MutableSeq('MAIVMGRWKGAR')
+
+        It isn't a valid CDS under NCBI table 1, due to both the start codon
+        and also the in frame stop codons:
+
+        >>> coding_dna.translate(table=1, cds=True)
+        Traceback (most recent call last):
+            ...
+        Bio.Data.CodonTable.TranslationError: First codon 'GTG' is not a start codon
+
+        If the sequence has no in-frame stop codon, then the to_stop argument
+        has no effect:
+
+        >>> coding_dna2 = MutableSeq("TTGGCCATTGTAATGGGCCGC")
+        >>> coding_dna2.translate()
+        MutableSeq('LAIVMGR')
+        >>> coding_dna2.translate(to_stop=True)
+        MutableSeq('LAIVMGR')
+
+        NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
+        or a stop codon.  These are translated as "X".  Any invalid codon
+        (e.g. "TA?" or "T-A") will throw a TranslationError.
+
+        NOTE - This does NOT behave like the python string's translate
+        method.  For that use str(my_seq).translate(...) instead
+        """
+        if isinstance(table, str) and len(table) == 256:
+            raise ValueError(
+                "The MutableSeq object translate method DOES NOT "
+                "take a 256 character string mapping table like "
+                "the python string object's translate method. "
+                "Use str(my_seq).translate(...) instead."
+            )
+
+        return MutableSeq(
+            _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
+        )
+
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
 
@@ -2632,7 +2703,9 @@ def _translate_str(
 
     Arguments:
      - sequence - a string
-     - table - a CodonTable object (NOT a table name or id number)
+     - table - Which codon table to use?  This can be either a name (string),
+       an NCBI identifier (integer), or a CodonTable object (useful for
+       non-standard genetic codes).  This defaults to the "Standard" table.
      - stop_symbol - a single character string, what to use for terminators.
      - to_stop - boolean, should translation terminate at the first
        in frame stop codon?  If there is no in-frame stop codon
@@ -2688,12 +2761,29 @@ def _translate_str(
        ...
     Bio.Data.CodonTable.TranslationError: Extra in frame stop codon found.
     """
+    try:
+        table_id = int(table)
+    except ValueError:
+        # Assume it's a table name
+        # The same table can be used for RNA or DNA
+        codon_table = CodonTable.ambiguous_generic_by_name[table]
+
+    except (AttributeError, TypeError):
+        # Assume it's a CodonTable object
+        if isinstance(table, CodonTable.CodonTable):
+            codon_table = table
+        else:
+            raise ValueError("Bad table argument") from None
+    else:
+        # Assume it's a table ID
+        # The same table can be used for RNA or DNA
+        codon_table = CodonTable.ambiguous_generic_by_id[table_id]
     sequence = sequence.upper()
     amino_acids = []
-    forward_table = table.forward_table
-    stop_codons = table.stop_codons
-    if table.nucleotide_alphabet is not None:
-        valid_letters = set(table.nucleotide_alphabet.upper())
+    forward_table = codon_table.forward_table
+    stop_codons = codon_table.stop_codons
+    if codon_table.nucleotide_alphabet is not None:
+        valid_letters = set(codon_table.nucleotide_alphabet.upper())
     else:
         # Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(
@@ -2708,7 +2798,7 @@ def _translate_str(
         if to_stop:
             raise ValueError(
                 "You cannot use 'to_stop=True' with this table as it contains"
-                f" {len(dual_coding)} codon(s) which can be both  STOP and an"
+                f" {len(dual_coding)} codon(s) which can be both STOP and an"
                 f" amino acid (e.g. '{c}' -> '{forward_table[c]}' or STOP)."
             )
         warnings.warn(
@@ -2719,7 +2809,7 @@ def _translate_str(
         )
 
     if cds:
-        if str(sequence[:3]).upper() not in table.start_codons:
+        if str(sequence[:3]).upper() not in codon_table.start_codons:
             raise CodonTable.TranslationError(
                 f"First codon '{sequence[:3]}' is not a start codon"
             )
@@ -2753,7 +2843,7 @@ def _translate_str(
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):
-            if codon in table.stop_codons:
+            if codon in codon_table.stop_codons:
                 if cds:
                     raise CodonTable.TranslationError(
                         "Extra in frame stop codon found."
@@ -2874,17 +2964,8 @@ def translate(
         # Return a Seq object
         return Seq(sequence).translate(table, stop_symbol, to_stop, cds)
     else:
-        # Assume its a string, return a string
-        try:
-            codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
-        except ValueError:
-            codon_table = CodonTable.ambiguous_generic_by_name[table]
-        except (AttributeError, TypeError):
-            if isinstance(table, CodonTable.CodonTable):
-                codon_table = table
-            else:
-                raise ValueError("Bad table argument") from None
-        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds, gap=gap)
+        # Assume it's a string, return a string
+        return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
 
 
 def reverse_complement(sequence):
@@ -2939,7 +3020,7 @@ def complement(sequence):
         # 'in place'.
         return Seq(sequence).complement()
 
-    # Assume its a string.
+    # Assume it's a string.
     # In order to avoid some code duplication, the old code would turn the
     # string into a Seq, use the reverse_complement method, and convert back
     # to a string.

@@ -82,7 +82,7 @@ class StringMethodTests(unittest.TestCase):
         UnknownSeq(12),
     ]
     for seq in _examples[:]:
-        if not isinstance(seq, MutableSeq):
+        if not isinstance(seq, UnknownSeq):
             _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
@@ -91,13 +91,13 @@ class StringMethodTests(unittest.TestCase):
         self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
-                # e.g. MutableSeq does not support translate
+                # e.g. MutableSeq does not support upper
                 continue
             str1 = str(example1)
 
             for example2 in self._examples:
                 if not hasattr(example2, method_name):
-                    # e.g. MutableSeq does not support translate
+                    # e.g. MutableSeq does not support upper
                     continue
                 str2 = str(example2)
 
@@ -172,15 +172,18 @@ class StringMethodTests(unittest.TestCase):
             3,
             3,
             1,
+            0,  # Seq() Tests
             0,
             0,
             0,
             0,
             0,
-            0,
-            0,
+            0,  # UnknownSeq() Tests
+            3,
+            3,
+            1,
+            0,  # MutableSeq() Tests
         ]
-        expected *= 2  # MutableSeq() Tests
 
         assert len(self._examples) == len(expected)
 
@@ -280,9 +283,12 @@ class StringMethodTests(unittest.TestCase):
             0,
             11,
             0,
+            0,  # UnknownSeq() Tests
             0,
-        ]  # UnknownSeq() Tests
-        expected *= 2  # MutableSeq() Tests
+            0,
+            0,
+            0,  # MutableSeq() Tests
+        ]
 
         assert len(self._examples) == len(expected)
 
@@ -575,11 +581,10 @@ class StringMethodTests(unittest.TestCase):
                     self.assertEqual(example1[i:j], str1[i:j])
                     for step in range(-3, 4):
                         if step == 0:
-                            try:
-                                print(example1[i:j:step])
-                                self._assert(False)  # Should fail!
-                            except ValueError:
-                                pass
+                            with self.assertRaises(ValueError) as cm:
+                                example1[i:j:step]
+                            self.assertEqual(str(cm.exception),
+                                             "slice step cannot be zero")
                         else:
                             self.assertEqual(example1[i:j:step], str1[i:j:step])
 
@@ -603,11 +608,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                comp = example1.complement()
-            except ValueError as e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
-                continue
+            comp = example1.complement()
             str1 = str(example1)
             if "U" in str1 or "u" in str1:
                 mapping = str.maketrans("ACGUacgu", "UGCAugca")
@@ -622,11 +623,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                comp = example1.reverse_complement()
-            except ValueError as e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
-                continue
+            comp = example1.reverse_complement()
             str1 = str(example1)
             if "U" in str1 or "u" in str1:
                 mapping = str.maketrans("ACGUacgu", "UGCAugca")
@@ -641,14 +638,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                tran = example1.transcribe()
-            except ValueError as e:
-                if str(e) == "Proteins cannot be transcribed!":
-                    continue
-                if str(e) == "RNA cannot be transcribed!":
-                    continue
-                raise
+            tran = example1.transcribe()
             str1 = str(example1)
             if len(str1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
@@ -661,14 +651,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                tran = example1.back_transcribe()
-            except ValueError as e:
-                if str(e) == "Proteins cannot be back transcribed!":
-                    continue
-                if str(e) == "DNA cannot be back transcribed!":
-                    continue
-                raise
+            tran = example1.back_transcribe()
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), tran)
 
@@ -676,17 +659,10 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.translate() method."""
         mapping = ""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             if len(example1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
                 continue
-            try:
-                tran = example1.translate()
-            except ValueError as e:
-                if str(e) == "Proteins cannot be translated!":
-                    continue
-                raise
+            tran = example1.translate()
             # Try with positional vs named argument:
             self.assertEqual(example1.translate(11), example1.translate(table=11))
 
@@ -696,6 +672,22 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.translate() method with stop codons."""
         misc_stops = "TAATAGTGAAGAAGG"
         nuc = Seq(misc_stops)
+        self.assertEqual("***RR", nuc.translate())
+        self.assertEqual("***RR", nuc.translate(1))
+        self.assertEqual("***RR", nuc.translate("SGC0"))
+        self.assertEqual("**W**", nuc.translate(table=2))
+        self.assertEqual("**WRR", nuc.translate(table="Yeast Mitochondrial"))
+        self.assertEqual("**WSS", nuc.translate(table=5))
+        self.assertEqual("**WSS", nuc.translate(table=9))
+        self.assertEqual("**CRR", nuc.translate(table="Euplotid Nuclear"))
+        self.assertEqual("***RR", nuc.translate(table=11))
+        self.assertEqual("***RR", nuc.translate(table="11"))
+        self.assertEqual("***RR", nuc.translate(table="Bacterial"))
+        self.assertEqual("**GRR", nuc.translate(table=25))
+        self.assertEqual("", nuc.translate(to_stop=True))
+        self.assertEqual("O*ORR", nuc.translate(table=special_table))
+        self.assertEqual("*QWRR", nuc.translate(table=Chilodonella_uncinata_table))
+        nuc = MutableSeq(misc_stops)
         self.assertEqual("***RR", nuc.translate())
         self.assertEqual("***RR", nuc.translate(1))
         self.assertEqual("***RR", nuc.translate("SGC0"))
@@ -737,12 +729,13 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
+            msg = "Translating %s should fail" % codon
             nuc = Seq(codon)
-            try:
+            with self.assertRaises(TranslationError, msg=msg):
                 nuc.translate()
-                self.fail("Translating %s should fail" % codon)
-            except TranslationError:
-                pass
+            nuc = MutableSeq(codon)
+            with self.assertRaises(TranslationError, msg=msg):
+                nuc.translate()
 
     def test_the_translation_of_ambig_codons(self):
         """Check obj.translate() method with ambiguous codons."""
