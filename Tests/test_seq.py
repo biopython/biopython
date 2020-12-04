@@ -958,9 +958,12 @@ class TestTranslating(unittest.TestCase):
     def test_translation(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
-            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in nucleotide_seq:
+            if (
+                isinstance(nucleotide_seq, (Seq.Seq, Seq.MutableSeq))
+                and "X" not in nucleotide_seq
+            ):
                 expected = Seq.translate(nucleotide_seq)
-                self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
+                self.assertEqual(expected, nucleotide_seq.translate())
 
     def test_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
