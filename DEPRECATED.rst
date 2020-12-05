@@ -834,7 +834,7 @@ Bio.SubsMat
 -----------
 The methods ``letter_sum`` and ``all_letters_sum`` were removed from the
 ``SeqMat`` class in Bio.SubsMat in Release 1.57.
-The methods ``print_full_mat`` and ``print_mat`` were removed from the 
+The methods ``print_full_mat`` and ``print_mat`` were removed from the
 `SeqMat`` class in Bio.SubsMat in Release 1.79.
 The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
 please consider using Bio.Align.substitution_matrices.
