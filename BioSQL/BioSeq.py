@@ -32,7 +32,7 @@ class _BioSQLSequenceData:
         You wouldn't normally create a _BioSQLSequenceData object yourself,
         this is done for you when retrieving a DBSeqRecord object from the
         database, which creates a Seq object using a _BioSQLSequenceData
-        instance as the data provider..
+        instance as the data provider.
         """
         self.primary_id = primary_id
         self.adaptor = adaptor
@@ -74,7 +74,7 @@ class _BioSQLSequenceData:
             full = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + start, self.start + end
             )
-            return full[:: step].encode("ASCII")
+            return full[::step].encode("ASCII")
 
     def __bytes__(self):
         """Return the full sequence as bytes."""
