@@ -134,6 +134,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
+- Jared Lumpe <https://github.com/jlumpe>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
