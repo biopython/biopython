@@ -164,12 +164,34 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_string_methods(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
+            self.assertEqual(a.lower(), str(a).lower())
+            self.assertEqual(a.upper(), str(a).upper())
             if isinstance(a, Seq.Seq):
                 self.assertEqual(a.strip(), str(a).strip())
                 self.assertEqual(a.lstrip(), str(a).lstrip())
                 self.assertEqual(a.rstrip(), str(a).rstrip())
-                self.assertEqual(a.lower(), str(a).lower())
-                self.assertEqual(a.upper(), str(a).upper())
+
+    def test_mutableseq_upper_lower(self):
+        seq = Seq.MutableSeq("ACgt")
+        lseq = seq.lower()
+        self.assertEqual(lseq, "acgt")
+        self.assertEqual(seq, "ACgt")
+        lseq = seq.lower(inplace=False)
+        self.assertEqual(lseq, "acgt")
+        self.assertEqual(seq, "ACgt")
+        lseq = seq.lower(inplace=True)
+        self.assertEqual(lseq, "acgt")
+        self.assertIs(lseq, seq)
+        seq = Seq.MutableSeq("ACgt")
+        useq = seq.upper()
+        self.assertEqual(useq, "ACGT")
+        self.assertEqual(seq, "ACgt")
+        useq = seq.upper(inplace=False)
+        self.assertEqual(useq, "ACGT")
+        self.assertEqual(seq, "ACgt")
+        useq = seq.upper(inplace=True)
+        self.assertEqual(useq, "ACGT")
+        self.assertIs(useq, seq)
 
     def test_hash(self):
         with warnings.catch_warnings(record=True):

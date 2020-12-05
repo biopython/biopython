@@ -2474,6 +2474,76 @@ class MutableSeq:
             suffix = suffix.encode("ASCII")
         return self._data.endswith(suffix, start, end)
 
+    def upper(self, inplace=False):
+        """Return the sequence in upper case.
+
+        An upper-case copy of the sequence is returned if inplace is False,
+        the default value:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("VHLTPeeK*")
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+        >>> my_seq.lower()
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper()
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq.lower(inplace=True)
+        MutableSeq('vhltpeek*')
+        >>> my_seq
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper(inplace=True)
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPEEK*')
+        """
+        data = self._data.upper()
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
+    def lower(self, inplace=False):
+        """Return the sequence in lower case.
+
+        A lower-case copy of the sequence is returned if inplace is False,
+        the default value:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("VHLTPeeK*")
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+        >>> my_seq.lower()
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper()
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq.lower(inplace=True)
+        MutableSeq('vhltpeek*')
+        >>> my_seq
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper(inplace=True)
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPEEK*')
+        """
+        data = self._data.lower()
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
     ):

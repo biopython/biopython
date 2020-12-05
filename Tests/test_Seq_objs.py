@@ -91,13 +91,13 @@ class StringMethodTests(unittest.TestCase):
         self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
-                # e.g. MutableSeq does not support upper
+                # e.g. MutableSeq does not support strip
                 continue
             str1 = str(example1)
 
             for example2 in self._examples:
                 if not hasattr(example2, method_name):
-                    # e.g. MutableSeq does not support upper
+                    # e.g. MutableSeq does not support strip
                     continue
                 str2 = str(example2)
 
@@ -500,16 +500,12 @@ class StringMethodTests(unittest.TestCase):
     def test_str_upper(self):
         """Check matches the python string upper method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             str1 = str(example1)
             self.assertEqual(example1.upper(), str1.upper())
 
     def test_str_lower(self):
         """Check matches the python string lower method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             str1 = str(example1)
             self.assertEqual(example1.lower(), str1.lower())
 
