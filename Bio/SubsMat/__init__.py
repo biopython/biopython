@@ -304,69 +304,6 @@ class SeqMat(dict):
             lines.append(letterline)
         return "\n".join(lines)
 
-    def print_full_mat(
-        self,
-        f=None,
-        format="%4d",
-        topformat="%4s",
-        alphabet=None,
-        factor=1,
-        non_sym=None,
-    ):
-        """Print the full matrix to the file handle f or stdout."""
-        warnings.warn(
-            "SeqMat.print_full_mat has been deprecated, and we intend to remove "
-            "it in a future release of Biopython. Instead of\n"
-            "mat.print_full_mat(<arguments>)\n"
-            "please use\n"
-            "print(mat.format(<arguments>, full=True)",
-            BiopythonDeprecationWarning,
-        )
-        if factor == 1:
-            mat = self
-        else:
-            mat = factor * self
-            warnings.warn(
-                "Instead of 'mat.print_full_mat(..., factor, ...)' please "
-                "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
-                BiopythonDeprecationWarning,
-            )
-        f = f or sys.stdout
-        text = mat.format(format, topformat, alphabet, non_sym, True)
-        f.write(text + "\n")
-
-    def print_mat(
-        self, f=None, format="%4d", bottomformat="%4s", alphabet=None, factor=1
-    ):
-        """Print a nice half-matrix.
-
-        f=sys.stdout to see on the screen.
-
-        User may pass own alphabet, which should contain all letters in the
-        alphabet of the matrix, but may be in a different order. This
-        order will be the order of the letters on the axes.
-        """
-        warnings.warn(
-            "SeqMat.print_mat has been deprecated, and we intend to remove it "
-            "in a future release of Biopython. Instead of\n"
-            "mat.print_mat(<arguments>)\n"
-            "please use\n"
-            "print(mat.format(<arguments>)",
-            BiopythonDeprecationWarning,
-        )
-        if factor == 1:
-            mat = self
-        else:
-            mat = factor * self
-            warnings.warn(
-                "Instead of 'mat.print_mat(..., factor, ...)' please "
-                "use 'mat2 = factor * mat; print(mat2.format(...))'",
-                BiopythonDeprecationWarning,
-            )
-        f = f or sys.stdout
-        text = self.format(format, bottomformat, alphabet, None, False)
-        f.write(text + "\n")
-
     def __str__(self):
         """Print a nice half-matrix."""
         return self.format()
