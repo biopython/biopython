@@ -569,14 +569,10 @@ class TestSeqIO(SeqIOTestBaseClass):
                 if i < 3:
                     self.assertEqual(record.id, expected_ids[i])
                     self.assertEqual(record.name, expected_names[i])
-                    if record.seq is None:
-                        length = None
-                        seq = record.seq
-                    else:
-                        seq = record.seq
-                        length = len(seq)
-                        if length > 50:
-                            seq = str(seq[:40]) + "..." + str(seq[-7:])
+                    seq = record.seq
+                    length = len(seq)
+                    if length > 50:
+                        seq = str(seq[:40]) + "..." + str(seq[-7:])
                     self.assertEqual(seq, expected_sequences[i])
                     self.assertEqual(length, expected_lengths[i])
 
