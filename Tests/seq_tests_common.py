@@ -127,7 +127,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             self.compare_feature(old_f, new_f)
 
     def compare_sequence(self, old, new):
-        """Compare two Seq or DBSeq objects."""
+        """Compare two Seq objects."""
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
