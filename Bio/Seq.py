@@ -3079,7 +3079,8 @@ def _translate_str(
     else:
         # Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(
-            IUPACData.ambiguous_dna_letters.upper() + IUPACData.ambiguous_rna_letters.upper()
+            IUPACData.ambiguous_dna_letters.upper()
+            + IUPACData.ambiguous_rna_letters.upper()
         )
     n = len(sequence)
 
