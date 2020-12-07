@@ -24,10 +24,7 @@ import array
 import warnings
 
 from Bio import BiopythonWarning, BiopythonDeprecationWarning
-from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
-from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
-from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
-from Bio.Data import CodonTable
+from Bio.Data import IUPACData, CodonTable
 
 
 def _maketrans(complement_mapping):
@@ -49,10 +46,11 @@ def _maketrans(complement_mapping):
     return bytes.maketrans(keys + keys.lower(), values + values.lower())
 
 
-_dna_complement_table = _maketrans(ambiguous_dna_complement)
-ambiguous_rna_complement = dict(ambiguous_rna_complement)
+_dna_complement_table = _maketrans(IUPACData.ambiguous_dna_complement)
+ambiguous_rna_complement = dict(IUPACData.ambiguous_rna_complement)
 ambiguous_rna_complement["T"] = ambiguous_rna_complement["U"]
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
+del ambiguous_rna_complement
 
 
 class Seq:
@@ -3081,7 +3079,8 @@ def _translate_str(
     else:
         # Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(
-            _ambiguous_dna_letters.upper() + _ambiguous_rna_letters.upper()
+            IUPACData.ambiguous_dna_letters.upper()
+            + IUPACData.ambiguous_rna_letters.upper()
         )
     n = len(sequence)
 
