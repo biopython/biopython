@@ -166,10 +166,9 @@ class TestSeqStringMethods(unittest.TestCase):
         for a in self.dna + self.rna + self.nuc + self.protein:
             self.assertEqual(a.lower(), str(a).lower())
             self.assertEqual(a.upper(), str(a).upper())
-            if isinstance(a, Seq.Seq):
-                self.assertEqual(a.strip(), str(a).strip())
-                self.assertEqual(a.lstrip(), str(a).lstrip())
-                self.assertEqual(a.rstrip(), str(a).rstrip())
+            self.assertEqual(a.strip(), str(a).strip())
+            self.assertEqual(a.lstrip(), str(a).lstrip())
+            self.assertEqual(a.rstrip(), str(a).rstrip())
 
     def test_mutableseq_upper_lower(self):
         seq = Seq.MutableSeq("ACgt")
@@ -276,10 +275,9 @@ class TestSeqStringMethods(unittest.TestCase):
         for a in self.dna + self.rna + self.nuc + self.protein:
             for char in self.test_chars:
                 str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.strip(char), str(a).strip(str_char))
-                    self.assertEqual(a.lstrip(char), str(a).lstrip(str_char))
-                    self.assertEqual(a.rstrip(char), str(a).rstrip(str_char))
+                self.assertEqual(a.strip(char), str(a).strip(str_char))
+                self.assertEqual(a.lstrip(char), str(a).lstrip(str_char))
+                self.assertEqual(a.rstrip(char), str(a).rstrip(str_char))
 
     def test_finding_characters(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
@@ -301,14 +299,13 @@ class TestSeqStringMethods(unittest.TestCase):
         for a in self.dna + self.rna + self.nuc + self.protein:
             for char in self.test_chars:
                 str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.split(char), str(a).split(str_char))
-                    self.assertEqual(a.rsplit(char), str(a).rsplit(str_char))
+                self.assertEqual(a.split(char), str(a).split(str_char))
+                self.assertEqual(a.rsplit(char), str(a).rsplit(str_char))
 
-                    for max_sep in [0, 1, 2, 999]:
-                        self.assertEqual(
-                            a.split(char, max_sep), str(a).split(str_char, max_sep)
-                        )
+                for max_sep in [0, 1, 2, 999]:
+                    self.assertEqual(
+                        a.split(char, max_sep), str(a).split(str_char, max_sep)
+                    )
 
 
 class TestSeqAddition(unittest.TestCase):
@@ -980,10 +977,7 @@ class TestTranslating(unittest.TestCase):
     def test_translation(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
-            if (
-                isinstance(nucleotide_seq, (Seq.Seq, Seq.MutableSeq))
-                and "X" not in nucleotide_seq
-            ):
+            if "X" not in nucleotide_seq:
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(expected, nucleotide_seq.translate())
 
@@ -1035,7 +1029,7 @@ class TestTranslating(unittest.TestCase):
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[: 3 * (len(nucleotide_seq) // 3)]
-            if isinstance(nucleotide_seq, Seq.Seq) and "X" not in nucleotide_seq:
+            if "X" not in nucleotide_seq:
                 short = Seq.translate(nucleotide_seq, to_stop=True)
                 self.assertEqual(short, Seq.translate(nucleotide_seq).split("*")[0])
 
@@ -1048,9 +1042,8 @@ class TestTranslating(unittest.TestCase):
             with self.assertRaises(TranslationError):
                 Seq.translate(s)
 
-            if isinstance(s, Seq.Seq):
-                with self.assertRaises(TranslationError):
-                    s.translate()
+            with self.assertRaises(TranslationError):
+                s.translate()
 
     def test_translation_of_invalid_codon(self):
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
