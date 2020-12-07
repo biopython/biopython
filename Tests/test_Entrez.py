@@ -14,6 +14,7 @@ from unittest import mock
 import warnings
 from http.client import HTTPMessage
 from urllib.parse import urlparse, parse_qs
+from urllib.request import Request
 
 from Bio import Entrez
 from Bio.Entrez import Parser
@@ -65,16 +66,17 @@ def patch_urlopen(**kwargs):
     return unittest.mock.patch("Bio.Entrez.urlopen", return_value=response)
 
 
-def get_patched_get_url(patched_urlopen, testcase=None):
-    """Get the URL of the GET request made to the patched urlopen() function.
+def get_patched_request(patched_urlopen, testcase=None):
+    """Get the Request object passed to the patched urlopen() function.
 
-    Expects that the patched function should have been called a single time with the url as the only
-    positional argument and no keyword arguments.
+    Expects that the patched function should have been called a single time with a Request instance
+    as the only positional argument and no keyword arguments.
 
     :param patched_urlopen: value returned when entering the context manager created by patch_urlopen.
     :type patched_urlopen: unittest.mock.Mock
-    :param testcase: Test case currently being run, which is used to make asserts
+    :param testcase: Test case currently being run, which is used to make asserts.
     :type testcase: unittest.TestCase
+    :rtype: urllib.urlopen.Request
     """
     args, kwargs = patched_urlopen.call_args
 
@@ -82,34 +84,37 @@ def get_patched_get_url(patched_urlopen, testcase=None):
         testcase.assertEqual(patched_urlopen.call_count, 1)
         testcase.assertEqual(len(args), 1)
         testcase.assertEqual(len(kwargs), 0)
+        testcase.assertIsInstance(args[0], Request)
 
     return args[0]
 
 
-def get_patched_post_args(patched_urlopen, testcase=None, decode=False):
-    """Get the URL and content data of the POST request made to the patched urlopen() function.
+def deconstruct_request(request, testcase=None):
+    """Get the base URL and parsed parameters of a Request object.
 
-    Expects that the patched function should have been called a single time with the url as the only
-    positional argument and "data" as the only keyword argument. Returns a (url, data) tuple.
+    Method may be either GET or POST, POST data should be encoded query params.
 
-    :param patched_urlopen: value returned when entering the context manager created by patch_urlopen.
-    :type patched_urlopen: unittest.mock.Mock
-    :param testcase: Test case currently being run, which is used to make asserts
+    :param request: Request object passed to urlopen().
+    :type request: urllib.request.Request
+    :param testcase: Test case currently being run, which is used to make asserts.
     :type testcase: unittest.TestCase
-    :param bool decode: Decode the value of the "data" keyword argument before returning
+    :returns: (base_url, params) tuple.
     """
-    args, kwargs = patched_urlopen.call_args
+    parsed = urlparse(request.full_url)
 
-    if testcase is not None:
-        testcase.assertEqual(patched_urlopen.call_count, 1)
-        testcase.assertEqual(len(args), 1)
-        testcase.assertEqual(list(kwargs), ["data"])
+    if request.method == "GET":
+        params = parse_qs(parsed.query)
 
-    data = kwargs["data"]
-    if decode:
-        data = data.decode("utf8")
+    elif request.method == "POST":
+        data = request.data.decode("utf8")
+        params = parse_qs(data)
 
-    return args[0], data
+    else:
+        raise ValueError(
+            "Expected method to be either GET or POST, got %r" % request.method
+        )
+
+    return get_base_url(parsed), params
 
 
 class TestURLConstruction(unittest.TestCase):
@@ -137,11 +142,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.ecitmatch(**variables)
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "ecitmatch.cgi")
+        self.assertEqual(base_url, URL_HEAD + "ecitmatch.cgi")
         query.pop("bdata")  # TODO
         self.assertDictEqual(
             query, {"retmode": ["xml"], "db": [variables["db"]], **QUERY_DEFAULTS}
@@ -152,11 +157,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.einfo()
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "einfo.fcgi")
+        self.assertEqual(base_url, URL_HEAD + "einfo.fcgi")
         self.assertDictEqual(query, QUERY_DEFAULTS)
 
     def test_construct_cgi_epost1(self):
@@ -165,10 +170,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.epost(**variables)
 
-        result_url, options = get_patched_post_args(patched, self, decode=True)
-        query = parse_qs(options)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "POST")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        self.assertEqual(base_url, URL_HEAD + "epost.fcgi")  # Params in POST data
         self.assertDictEqual(
             query, {"db": [variables["db"]], "id": [variables["id"]], **QUERY_DEFAULTS}
         )
@@ -179,10 +185,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.epost(**variables)
 
-        result_url, options = get_patched_post_args(patched, self, decode=True)
-        query = parse_qs(options)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "POST")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        self.assertEqual(base_url, URL_HEAD + "epost.fcgi")  # Params in POST data
         # Compare IDs up to reordering:
         self.assertCountEqual(query.pop("id"), variables["id"])
         self.assertDictEqual(query, {"db": [variables["db"]], **QUERY_DEFAULTS})
@@ -200,11 +207,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.elink(**variables)
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
         self.assertDictEqual(
             query,
             {
@@ -227,11 +234,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.elink(**variables)
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
         self.assertDictEqual(
             query,
             {
@@ -253,11 +260,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.elink(**variables)
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
         # Compare IDs up to reordering:
         self.assertCountEqual(query.pop("id"), variables["id"])
         self.assertDictEqual(
@@ -279,11 +286,11 @@ class TestURLConstruction(unittest.TestCase):
         with patch_urlopen() as patched:
             Entrez.efetch(**variables)
 
-        result_url = get_patched_get_url(patched, self)
-        parsed = urlparse(result_url)
-        query = parse_qs(parsed.query)
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
 
-        self.assertEqual(get_base_url(parsed), URL_HEAD + "efetch.fcgi")
+        self.assertEqual(base_url, URL_HEAD + "efetch.fcgi")
         self.assertDictEqual(
             query,
             {

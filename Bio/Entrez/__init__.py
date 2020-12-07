@@ -122,7 +122,7 @@ import warnings
 import io
 from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 
 
 email = None
@@ -149,7 +149,8 @@ def epost(db, **keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
     variables = {"db": db}
     variables.update(keywds)
-    return _open(cgi, variables, post=True)
+    request = _build_request(cgi, variables, post=True)
+    return _open(request)
 
 
 def efetch(db, **keywords):
@@ -204,7 +205,8 @@ def efetch(db, **keywords):
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are
             # more than about 200 IDs
             post = True
-    return _open(cgi, variables, post=post)
+    request = _build_request(cgi, variables, post=post)
+    return _open(request)
 
 
 def esearch(db, term, **keywds):
@@ -239,7 +241,8 @@ def esearch(db, term, **keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
     variables = {"db": db, "term": term}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def elink(**keywds):
@@ -278,7 +281,8 @@ def elink(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def einfo(**keywds):
@@ -306,7 +310,8 @@ def einfo(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def esummary(**keywds):
@@ -339,7 +344,8 @@ def esummary(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def egquery(**keywds):
@@ -373,7 +379,8 @@ def egquery(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def espell(**keywds):
@@ -402,7 +409,8 @@ def espell(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def _update_ecitmatch_variables(keywds):
@@ -461,7 +469,8 @@ def ecitmatch(**keywds):
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
     variables = _update_ecitmatch_variables(keywds)
-    return _open(cgi, variables, ecitmatch=True)
+    request = _build_request(cgi, variables, ecitmatch=True)
+    return _open(request)
 
 
 def read(handle, validate=True, escape=False):
@@ -563,25 +572,39 @@ def parse(handle, validate=True, escape=False):
     return records
 
 
-def _open(cgi, params=None, post=None, ecitmatch=False):
+def _open(req_or_cgi, params=None, post=None, ecitmatch=False):
     """Build the URL and open a handle to it (PRIVATE).
 
-    Open a handle to Entrez.  cgi is the URL for the cgi script to access.
-    params is a dictionary with the options to pass to it.  Does some
-    simple error checking, and will raise an IOError if it encounters one.
+    Open a handle to Entrez. Does some simple error checking, and will raise an IOError if it
+    encounters one. This function also enforces the "up to three queries per second rule" to avoid
+    abusing the NCBI servers.
 
-    The argument post should be a boolean to explicitly control if an HTTP
-    POST should be used rather an HTTP GET based on the query length.
-    By default (post=None), POST is used if the URL encoded parameters would
-    be over 1000 characters long.
-
-    This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers.
+    :param req_or_cgi: A Request object returned by ``_build_request``, or a URL to be passed
+        as the first argument to ``_build_request``.
+    :type req_or_cgi: urllib.request.Request or str
+    :param dict params: A dictionary of options to be passed to ``_build_request`` if the first
+        argument is a string, ignored otherwise.
+    :param bool post: Whether to use the HTTP POST method instead of HTTP get. Passed to
+        ``_build_request`` if the first argument is a string, ignored otherwise.
+    :param bool ecitmatch: Passed to ``_build_request`` if the first argument is a string, ignored
+        otherwise.
+    :returns: Handle to HTTP response as returned by ``urllib.request.urlopen``. Will be wrapped in
+        an ``io.TextIOWrapper`` if its content type is plain text.
+    :rtype: http.client.HTTPResponse or io.TextIOWrapper
     """
+    if isinstance(req_or_cgi, Request):
+        request = req_or_cgi
+    else:
+        warnings.warn(
+            "Passing anything other than a Request object is deprecated, use _build_request() first.",
+            DeprecationWarning,
+        )
+        request = _build_request(
+            req_or_cgi, params=params, post=post, ecitmatch=ecitmatch
+        )
+
     # NCBI requirement: At most three queries per second if no API key is provided.
     # Equivalently, at least a third of second between queries
-    params = _construct_params(params)
-    options = _encode_options(ecitmatch, params)
     # Using just 0.333333334 seconds sometimes hit the NCBI rate limit,
     # the slightly longer pause of 0.37 seconds has been more reliable.
     delay = 0.1 if api_key else 0.37
@@ -593,17 +616,9 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     else:
         _open.previous = current
 
-    # By default, post is None. Set to a boolean to over-ride length choice:
-    if post is None and len(options) > 1000:
-        post = True
-    cgi = _construct_cgi(cgi, post, options)
-
     for i in range(max_tries):
         try:
-            if post:
-                handle = urlopen(cgi, data=options.encode("utf8"))
-            else:
-                handle = urlopen(cgi)
+            handle = urlopen(request)
         except HTTPError as exception:
             # Reraise if the final try fails
             if i >= max_tries - 1:
@@ -636,6 +651,36 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
 
 
 _open.previous = 0
+
+
+def _build_request(cgi, params=None, post=None, ecitmatch=False):
+    """Build a Request object for an E-utility.
+
+    :param str cgi: base URL for the CGI script to access.
+    :param params: Mapping containing options to pass to the CGI script. Keys must be strings.
+    :type params: dict or None
+    :param bool post: Whether to use the HTTP POST method rather than GET. By default (``post=None``),
+        POST is used if the URL encoded parameters would be over 1000 characters long, as is
+        suggested in the E-Utilities documentation.
+    :param bool ecitmatch: Don't URL-encode pipe ("|") characters, this is expected by the ecitmatch
+        tool.
+    :returns: A request object ready to be passed to ``_open``.
+    :rtype: urllib.request.Request
+    """
+    params = _construct_params(params)
+
+    params_str = urlencode(params, doseq=True)
+    if ecitmatch:
+        params_str = params_str.replace("%7C", "|")
+
+    # By default, post is None. Set to a boolean to over-ride length choice:
+    if post is None and len(params_str) > 1000:
+        post = True
+
+    if post:
+        return Request(cgi, data=params_str.encode("utf8"), method="POST")
+    else:
+        return Request(cgi + "?" + params_str, method="GET")
 
 
 def _construct_params(params):
@@ -672,22 +717,6 @@ E-utilities.""",
     if api_key and "api_key" not in params:
         params["api_key"] = api_key
     return params
-
-
-def _encode_options(ecitmatch, params):
-    # Open a handle to Entrez.
-    options = urlencode(params, doseq=True)
-    # urlencode encodes pipes, which NCBI expects in ECitMatch
-    if ecitmatch:
-        options = options.replace("%7C", "|")
-    return options
-
-
-def _construct_cgi(cgi, post, options):
-    if not post:
-        # HTTP GET
-        cgi += "?" + options
-    return cgi
 
 
 if __name__ == "__main__":
