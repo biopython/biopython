@@ -1845,7 +1845,7 @@ class MutableSeq:
             self._data = bytearray(bytes(data))
         else:
             raise TypeError(
-                "data should be a string, bytearray obejct, Seq object, or a "
+                "data should be a string, bytearray object, Seq object, or a "
                 "MutableSeq object"
             )
 
@@ -2473,6 +2473,300 @@ class MutableSeq:
         elif isinstance(suffix, str):
             suffix = suffix.encode("ASCII")
         return self._data.endswith(suffix, start, end)
+
+    def split(self, sep=None, maxsplit=-1):
+        """Split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as MutableSeq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done.  If maxsplit is omitted, all
+        splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_aa = my_rna.translate()
+        >>> my_aa
+        MutableSeq('VMAIVMGR*KGAR*L')
+        >>> for pep in my_aa.split("*"):
+        ...     pep
+        MutableSeq('VMAIVMGR')
+        MutableSeq('KGAR')
+        MutableSeq('L')
+        >>> for pep in my_aa.split("*", 1):
+        ...     pep
+        MutableSeq('VMAIVMGR')
+        MutableSeq('KGAR*L')
+
+        See also the rsplit method:
+
+        >>> for pep in my_aa.rsplit("*", 1):
+        ...     pep
+        MutableSeq('VMAIVMGR*KGAR')
+        MutableSeq('L')
+        """
+        if isinstance(sep, (Seq, MutableSeq)):
+            sep = bytes(sep)
+        elif isinstance(sep, str):
+            sep = sep.encode("ASCII")
+        return [MutableSeq(part) for part in self._data.split(sep, maxsplit)]
+
+    def rsplit(self, sep=None, maxsplit=-1):
+        """Do a right split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as MutableSeq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done COUNTING FROM THE RIGHT.
+        If maxsplit is omitted, all splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+
+        e.g. print(my_seq.rsplit("*",1))
+
+        See also the split method.
+        """
+        if isinstance(sep, (Seq, MutableSeq)):
+            sep = bytes(sep)
+        elif isinstance(sep, str):
+            sep = sep.encode("ASCII")
+        return [MutableSeq(part) for part in self._data.rsplit(sep, maxsplit)]
+
+    def strip(self, chars=None, inplace=False):
+        """Return a MutableSeq object with leading and trailing ends stripped.
+
+        This behaves like the python string method of the same name.
+
+        A copy of the sequence is returned if ``inplace`` is `False` (the
+        default value). If ``inplace`` is `True`, the sequence is stripped
+        in-place and returned:
+
+        >>> seq = MutableSeq("ACGT ")
+        >>> seq.strip()
+        MutableSeq('ACGT')
+        >>> seq
+        MutableSeq('ACGT ')
+        >>> seq.strip(inplace=True)
+        MutableSeq('ACGT')
+        >>> seq
+        MutableSeq('ACGT')
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        e.g.
+
+        >>> MutableSeq("ACGT ").strip()
+        MutableSeq('ACGT')
+        >>> MutableSeq("ACGT ").strip(" ")
+        MutableSeq('ACGT')
+
+        Just like the Python string, the order of the characters to be
+        removed is not important:
+
+        >>> MutableSeq("ACGTACGT").strip("TGCA")
+        MutableSeq('')
+
+        As with the Python string, an inappropriate argument
+        will give a TypeError:
+
+        >>> MutableSeq("ACGT ").strip(7)
+        Traceback (most recent call last):
+           ...
+        TypeError: argument must be None or a string, Seq, MutableSeq, or bytes-like object
+
+        See also the lstrip and rstrip methods.
+        """
+        if isinstance(chars, (Seq, MutableSeq)):
+            chars = bytes(chars)
+        elif isinstance(chars, str):
+            chars = chars.encode("ASCII")
+        try:
+            data = self._data.strip(chars)
+        except TypeError:
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
+    def lstrip(self, chars=None, inplace=False):
+        """Return a MutableSeq object with leading (left) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        A copy of the sequence is returned if ``inplace`` is `False` (the
+        default value). If ``inplace`` is `True`, the sequence is stripped
+        in-place and returned:
+
+        >>> seq = MutableSeq(" ACGT ")
+        >>> seq.lstrip()
+        MutableSeq('ACGT ')
+        >>> seq
+        MutableSeq(' ACGT ')
+        >>> seq.lstrip(inplace=True)
+        MutableSeq('ACGT ')
+        >>> seq
+        MutableSeq('ACGT ')
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        >>> MutableSeq("AAACGTA").lstrip("A")
+        MutableSeq('CGTA')
+
+        See also the strip and rstrip methods.
+        """
+        if isinstance(chars, (Seq, MutableSeq)):
+            chars = bytes(chars)
+        elif isinstance(chars, str):
+            chars = chars.encode("ASCII")
+        try:
+            data = self._data.lstrip(chars)
+        except TypeError:
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
+    def rstrip(self, chars=None, inplace=False):
+        """Return a MutableSeq object with trailing (right) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        A copy of the sequence is returned if ``inplace`` is `False` (the
+        default value). If ``inplace`` is `True`, the sequence is stripped
+        in-place and returned:
+
+        >>> seq = MutableSeq(" ACGT ")
+        >>> seq.rstrip()
+        MutableSeq(' ACGT')
+        >>> seq
+        MutableSeq(' ACGT ')
+        >>> seq.rstrip(inplace=True)
+        MutableSeq(' ACGT')
+        >>> seq
+        MutableSeq(' ACGT')
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        e.g. Removing a nucleotide sequence's polyadenylation (poly-A tail):
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("CGGTACGCTTATGTCACGTAGAAAAAA")
+        >>> my_seq
+        MutableSeq('CGGTACGCTTATGTCACGTAGAAAAAA')
+        >>> my_seq.rstrip("A")
+        MutableSeq('CGGTACGCTTATGTCACGTAG')
+
+        See also the strip and lstrip methods.
+        """
+        if isinstance(chars, (Seq, MutableSeq)):
+            chars = bytes(chars)
+        elif isinstance(chars, str):
+            chars = chars.encode("ASCII")
+        try:
+            data = self._data.rstrip(chars)
+        except TypeError:
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
+    def upper(self, inplace=False):
+        """Return the sequence in upper case.
+
+        An upper-case copy of the sequence is returned if inplace is False,
+        the default value:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("VHLTPeeK*")
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+        >>> my_seq.lower()
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper()
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq.lower(inplace=True)
+        MutableSeq('vhltpeek*')
+        >>> my_seq
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper(inplace=True)
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPEEK*')
+        """
+        data = self._data.upper()
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
+
+    def lower(self, inplace=False):
+        """Return the sequence in lower case.
+
+        A lower-case copy of the sequence is returned if inplace is False,
+        the default value:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("VHLTPeeK*")
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+        >>> my_seq.lower()
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper()
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq.lower(inplace=True)
+        MutableSeq('vhltpeek*')
+        >>> my_seq
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper(inplace=True)
+        MutableSeq('VHLTPEEK*')
+        >>> my_seq
+        MutableSeq('VHLTPEEK*')
+        """
+        data = self._data.lower()
+        if inplace:
+            self._data[:] = data
+            return self
+        else:
+            return MutableSeq(data)
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"

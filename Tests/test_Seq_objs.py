@@ -91,13 +91,13 @@ class StringMethodTests(unittest.TestCase):
         self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
-                # e.g. MutableSeq does not support upper
+                # e.g. MutableSeq does not support transcribe
                 continue
             str1 = str(example1)
 
             for example2 in self._examples:
                 if not hasattr(example2, method_name):
-                    # e.g. MutableSeq does not support upper
+                    # e.g. MutableSeq does not support transcribe
                     continue
                 str2 = str(example2)
 
@@ -464,32 +464,60 @@ class StringMethodTests(unittest.TestCase):
     def test_str_strip(self):
         """Check matches the python string strip method."""
         self._test_method("strip")
-        self.assertEqual(Seq(" ACGT ").strip(), "ACGT")
-        self.assertRaises(TypeError, Seq("ACGT").strip, 7)
+        s = Seq(" ACGT ")
+        m = MutableSeq(" ACGT ")
+        self.assertEqual(s.strip(), "ACGT")
+        self.assertRaises(TypeError, s.strip, 7)
+        self.assertEqual(s, " ACGT ")
+        self.assertEqual(m.strip(), "ACGT")
+        self.assertRaises(TypeError, m.strip, 7)
+        self.assertEqual(m, " ACGT ")
+        self.assertEqual(m.strip(inplace=True), "ACGT")
+        self.assertEqual(m, "ACGT")
+
+    def test_str_lstrip(self):
+        """Check matches the python string lstrip method."""
+        self._test_method("lstrip")
+        s = Seq(" ACGT ")
+        m = MutableSeq(" ACGT ")
+        self.assertEqual(s.lstrip(), "ACGT ")
+        self.assertRaises(TypeError, s.lstrip, 7)
+        self.assertEqual(s, " ACGT ")
+        self.assertEqual(m.lstrip(), "ACGT ")
+        self.assertRaises(TypeError, m.lstrip, 7)
+        self.assertEqual(m, " ACGT ")
+        self.assertEqual(m.lstrip(inplace=True), "ACGT ")
+        self.assertEqual(m, "ACGT ")
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip")
-        self.assertEqual(Seq(" ACGT ").rstrip(), " ACGT")
-        self.assertRaises(TypeError, Seq("ACGT").rstrip, 7)
-
-    def test_str_lstrip(self):
-        """Check matches the python string lstrip method."""
-        self._test_method("rstrip")
-        self.assertEqual(Seq(" ACGT ").lstrip(), "ACGT ")
-        self.assertRaises(TypeError, Seq("ACGT").lstrip, 7)
+        s = Seq(" ACGT ")
+        m = MutableSeq(" ACGT ")
+        self.assertEqual(s.rstrip(), " ACGT")
+        self.assertRaises(TypeError, s.rstrip, 7)
+        self.assertEqual(s, " ACGT ")
+        self.assertEqual(m.rstrip(), " ACGT")
+        self.assertRaises(TypeError, m.rstrip, 7)
+        self.assertEqual(m, " ACGT ")
+        self.assertEqual(m.rstrip(inplace=True), " ACGT")
+        self.assertEqual(m, " ACGT")
 
     def test_str_split(self):
-        """Check matches the python string rstrip method."""
+        """Check matches the python string split method."""
         self._test_method("split")
-        self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".split("7"))
+        self.assertEqual(Seq("AC7GT").split("7"), "AC7GT".split("7"))
         self.assertRaises(TypeError, Seq("AC7GT").split, 7)
+        self.assertEqual(MutableSeq("AC7GT").split("7"), "AC7GT".split("7"))
+        self.assertRaises(TypeError, MutableSeq("AC7GT").split, 7)
 
     def test_str_rsplit(self):
-        """Check matches the python string rstrip method."""
+        """Check matches the python string rsplit method."""
         self._test_method("rsplit")
         self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".rsplit("7"))
         self.assertRaises(TypeError, Seq("AC7GT").rsplit, 7)
+        self.assertEqual(MutableSeq("AC7GT").rsplit("7"), "AC7GT".rsplit("7"))
+        self.assertRaises(TypeError, MutableSeq("AC7GT").rsplit, 7)
 
     def test_str_length(self):
         """Check matches the python string __len__ method."""
@@ -500,16 +528,12 @@ class StringMethodTests(unittest.TestCase):
     def test_str_upper(self):
         """Check matches the python string upper method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             str1 = str(example1)
             self.assertEqual(example1.upper(), str1.upper())
 
     def test_str_lower(self):
         """Check matches the python string lower method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
             str1 = str(example1)
             self.assertEqual(example1.lower(), str1.lower())
 
