@@ -297,7 +297,7 @@ class DBServer:
 
 
 class _CursorWrapper:
-    """A wraper for mysql.connector resolving bytestring representations."""
+    """A wrapper for mysql.connector resolving bytestring representations."""
 
     def __init__(self, real_cursor):
         self.real_cursor = real_cursor
@@ -665,7 +665,7 @@ class BioSeqDatabase:
         Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
 
         The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
+        rather than a Seq object, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_display_id(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
@@ -676,7 +676,7 @@ class BioSeqDatabase:
         Example: seq_rec = db.get_Seq_by_acc('X77802')
 
         The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
+        rather than a Seq object, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_accession(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
@@ -687,7 +687,7 @@ class BioSeqDatabase:
         Example: seq_rec = db.get_Seq_by_ver('X77802.1')
 
         The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
+        rather than a Seq object, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_version(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
@@ -698,7 +698,7 @@ class BioSeqDatabase:
         Example: seq_recs = db.get_Seq_by_acc('X77802')
 
         The name of this method is misleading since it returns a list of
-        DBSeqRecord objects rather than a list of DBSeq ojbects, and presumably
+        DBSeqRecord objects rather than a list of Seq objects, and presumably
         was to mirror BioPerl.
         """
         seqids = self.adaptor.fetch_seqids_by_accession(self.dbid, name)
