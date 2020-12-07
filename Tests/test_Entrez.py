@@ -13,6 +13,7 @@ import unittest
 from unittest import mock
 import warnings
 from http.client import HTTPMessage
+from urllib.parse import urlparse, parse_qs
 
 from Bio import Entrez
 from Bio.Entrez import Parser
@@ -23,9 +24,18 @@ Entrez.email = "biopython@biopython.org"
 Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
-URL_TOOL = "tool=biopython"
-URL_EMAIL = "email=biopython%40biopython.org"
-URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
+
+# Default values of URL query string (or POST data) when parsed with urllib.parse.parse_qs
+QUERY_DEFAULTS = {
+    "tool": [Entrez.tool],
+    "email": [Entrez.email],
+    "api_key": [Entrez.api_key],
+}
+
+
+def get_base_url(parsed):
+    """Convert a parsed URL back to string but only include scheme, netloc, and path, omitting query."""
+    return parsed.scheme + "://" + parsed.netloc + parsed.path
 
 
 def mock_httpresponse(code=200, content_type="/xml"):
@@ -128,9 +138,14 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.ecitmatch(**variables)
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertIn("retmode=xml", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "ecitmatch.cgi")
+        query.pop("bdata")  # TODO
+        self.assertDictEqual(
+            query, {"retmode": ["xml"], "db": [variables["db"]], **QUERY_DEFAULTS},
+        )
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
@@ -138,10 +153,11 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.einfo()
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "einfo.fcgi")
+        self.assertDictEqual(query, QUERY_DEFAULTS)
 
     def test_construct_cgi_epost1(self):
         variables = {"db": "nuccore", "id": "186972394,160418"}
@@ -150,8 +166,12 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.epost(**variables)
 
         result_url, options = get_patched_post_args(patched, self, decode=True)
+        query = parse_qs(options)
 
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
+        self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        self.assertDictEqual(
+            query, {"db": [variables["db"]], "id": [variables["id"]], **QUERY_DEFAULTS},
+        )
 
     def test_construct_cgi_epost2(self):
         variables = {"db": "nuccore", "id": ["160418", "160351"]}
@@ -160,8 +180,14 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.epost(**variables)
 
         result_url, options = get_patched_post_args(patched, self, decode=True)
+        query = parse_qs(options)
 
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
+        self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        # Compare IDs up to reordering:
+        self.assertCountEqual(query.pop("id"), variables["id"])
+        self.assertDictEqual(
+            query, {"db": [variables["db"]], **QUERY_DEFAULTS},
+        )
 
     def test_construct_cgi_elink1(self):
         variables = {
@@ -177,12 +203,20 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.elink(**variables)
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=22347800%2C48526535", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "cmd": [variables["cmd"]],
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                "id": [variables["id"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
@@ -196,12 +230,19 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.elink(**variables)
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680%2C157427902%2C119703751", result_url, result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                "id": [variables["id"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_elink3(self):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
@@ -215,14 +256,20 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.elink(**variables)
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680", result_url)
-        self.assertIn("id=157427902", result_url)
-        self.assertIn("id=119703751", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "elink.fcgi")
+        # Compare IDs up to reordering:
+        self.assertCountEqual(query.pop("id"), variables["id"])
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_efetch(self):
         variables = {
@@ -235,12 +282,19 @@ class TestURLConstruction(unittest.TestCase):
             Entrez.efetch(**variables)
 
         result_url = get_patched_get_url(patched, self)
+        parsed = urlparse(result_url)
+        query = parse_qs(parsed.query)
 
-        self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680%2C157427902%2C119703751", result_url, result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        self.assertEqual(get_base_url(parsed), URL_HEAD + "efetch.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "id": [variables["id"]],
+                "retmode": [variables["retmode"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
 
 class CustomDirectoryTest(unittest.TestCase):
