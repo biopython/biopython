@@ -10,7 +10,9 @@
 """
 
 import unittest
+from unittest import mock
 import warnings
+from http.client import HTTPMessage
 
 from Bio import Entrez
 from Bio.Entrez import Parser
@@ -20,10 +22,84 @@ from Bio.Entrez import Parser
 Entrez.email = "biopython@biopython.org"
 Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
-URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython%40biopython.org"
 URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
+
+
+def mock_httpresponse(code=200, content_type="/xml"):
+    """Create a mocked version of a response object returned by urlopen().
+
+    :param int code: Value of "code" attribute.
+    :param str content_type: Used to set the "Content-Type" header in the "headers" attribute. This
+        is checked in Entrez._open() to determine if the response data is plain text.
+    """
+    resp = mock.NonCallableMock()
+    resp.code = code
+
+    resp.headers = HTTPMessage()
+    resp.headers.add_header("Content-Type", content_type + "; charset=UTF-8")
+
+    return resp
+
+
+def patch_urlopen(**kwargs):
+    """Create a context manager which replaces Bio.Entrez.urlopen with a mocked version.
+
+    Within the decorated function, Bio.Entrez.urlopen will be replaced with a unittest.mock.Mock
+    object which when called simply records the arguments passed to it and returns a mocked response
+    object. The actual urlopen function will not be called so no request will actually be made.
+    """
+    response = mock_httpresponse(**kwargs)
+    return unittest.mock.patch("Bio.Entrez.urlopen", return_value=response)
+
+
+def get_patched_get_url(patched_urlopen, testcase=None):
+    """Get the URL of the GET request made to the patched urlopen() function.
+
+    Expects that the patched function should have been called a single time with the url as the only
+    positional argument and no keyword arguments.
+
+    :param patched_urlopen: value returned when entering the context manager created by patch_urlopen.
+    :type patched_urlopen: unittest.mock.Mock
+    :param testcase: Test case currently being run, which is used to make asserts
+    :type testcase: unittest.TestCase
+    """
+    args, kwargs = patched_urlopen.call_args
+
+    if testcase is not None:
+        testcase.assertEqual(patched_urlopen.call_count, 1)
+        testcase.assertEqual(len(args), 1)
+        testcase.assertEqual(len(kwargs), 0)
+
+    return args[0]
+
+
+def get_patched_post_args(patched_urlopen, testcase=None, decode=False):
+    """Get the URL and content data of the POST request made to the patched urlopen() function.
+
+    Expects that the patched function should have been called a single time with the url as the only
+    positional argument and "data" as the only keyword argument. Returns a (url, data) tuple.
+
+    :param patched_urlopen: value returned when entering the context manager created by patch_urlopen.
+    :type patched_urlopen: unittest.mock.Mock
+    :param testcase: Test case currently being run, which is used to make asserts
+    :type testcase: unittest.TestCase
+    :param bool decode: Decode the value of the "data" keyword argument before returning
+    """
+    args, kwargs = patched_urlopen.call_args
+
+    if testcase is not None:
+        testcase.assertEqual(patched_urlopen.call_count, 1)
+        testcase.assertEqual(len(args), 1)
+        testcase.assertEqual(list(kwargs), ["data"])
+
+    data = kwargs["data"]
+    if decode:
+        data = data.decode("utf8")
+
+    return args[0], data
 
 
 class TestURLConstruction(unittest.TestCase):
@@ -44,50 +120,50 @@ class TestURLConstruction(unittest.TestCase):
             "author_name": "mann bj",
             "key": "citation_1",
         }
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
         variables = Entrez._update_ecitmatch_variables(
             {"db": "pubmed", "bdata": [citation]}
         )
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=True, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.ecitmatch(**variables)
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertIn("retmode=xml", result_url)
         self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
-        params = Entrez._construct_params(params=None)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=False, options=options)
+        with patch_urlopen() as patched:
+            Entrez.einfo()
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"), result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
 
     def test_construct_cgi_epost1(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
         variables = {"db": "nuccore", "id": "186972394,160418"}
-        post = True
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.epost(**variables)
+
+        result_url, options = get_patched_post_args(patched, self, decode=True)
+
         self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
 
     def test_construct_cgi_epost2(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
         variables = {"db": "nuccore", "id": ["160418", "160351"]}
-        post = True
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.epost(**variables)
+
+        result_url, options = get_patched_post_args(patched, self, decode=True)
+
         self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
 
     def test_construct_cgi_elink1(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "cmd": "neighbor_history",
             "db": "nucleotide",
@@ -96,11 +172,12 @@ class TestURLConstruction(unittest.TestCase):
             "query_key": None,
             "webenv": None,
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"), result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
@@ -109,17 +186,17 @@ class TestURLConstruction(unittest.TestCase):
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "db": "gene",
             "dbfrom": "protein",
             "id": "15718680,157427902,119703751",
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
@@ -128,17 +205,17 @@ class TestURLConstruction(unittest.TestCase):
 
     def test_construct_cgi_elink3(self):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "db": "gene",
             "dbfrom": "protein",
             "id": ["15718680", "157427902", "119703751"],
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
@@ -148,17 +225,17 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_efetch(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
         variables = {
             "db": "protein",
             "id": "15718680,157427902,119703751",
             "retmode": "xml",
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        with patch_urlopen() as patched:
+            Entrez.efetch(**variables)
+
+        result_url = get_patched_get_url(patched, self)
+
         self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"), result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
