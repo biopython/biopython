@@ -206,36 +206,33 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_efetch_ids(self):
         """Test different options to supply ids."""
-        ids = (
-            [15718680, 157427902],
-            (15718680, 157427902),
-            {15718680, 157427902},
-            ["15718680", "157427902"],
-            ("15718680", "157427902"),
-            {15718680, "157427902"},
-            "15718680, 157427902",
-        )
-        for _id in ids:
-            with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
-                # _id can be a set with unpredictable sorting,
-                # thus we test the ids separately
-                self.assertIn("15718680", handle.url)
-                self.assertIn("157427902", handle.url)
-                recs = list(Entrez.parse(handle))
-                self.assertEqual(2, len(recs))
+        id_sets = [[15718680, 157427902], [15718680]]
+        id_vals = [
+            [
+                [15718680, 157427902],
+                (15718680, 157427902),
+                {15718680, 157427902},
+                ["15718680", "157427902"],
+                ("15718680", "157427902"),
+                {15718680, "157427902"},
+                "15718680, 157427902",
+            ],
+            [[15718680], (15718680), {15718680}, 15718680, "15718680", "15718680,"],
+        ]
 
-        ids = (
-            [15718680],
-            (15718680),
-            {15718680},
-            15718680,
-            "15718680",
-            "15718680,",
-        )
-        for _id in ids:
-            with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
-                recs = list(Entrez.parse(handle))
-                self.assertEqual(1, len(recs))
+        for ids, vals in zip(id_sets, id_vals):
+            for _id in vals:
+                with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
+                    recs = list(Entrez.parse(handle))
+
+                # Extract the numerical IDs of returned records
+                rec_ids = [
+                    int(seqid[3:])
+                    for rec in recs
+                    for seqid in rec["GBSeq_other-seqids"]
+                    if seqid.startswith("gi|")
+                ]
+                self.assertCountEqual(rec_ids, ids)
 
     def test_efetch_gds_utf8(self):
         """Test correct handling of encodings in Entrez.efetch."""
