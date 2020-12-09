@@ -57,7 +57,7 @@ class IQTreeCommandline(AbstractCommandline):
 
 		self.parameters = [
 			_Option(						#INPUT 
-				["-s", "specify"],   
+				["-s", "s"],   
 				"""Specify input alignment file in PHYLIP, FASTA, NEXUS
 				   CLUSTAL or MSF format
 				   """,
@@ -66,7 +66,7 @@ class IQTreeCommandline(AbstractCommandline):
 				filename=True
 				),  
 			_Option(
-				["-st", "sequencetype"],
+				["-st", "st"],
 				"""Specify sequence type as either DNA, AA, BIN, MORPH, 
 			       CODON or NT2AA for DNA, ammino-acid, binary, morphological
 				   codon or DNA-to-AA translate sequences
@@ -80,7 +80,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function= lambda x: x in ("DNA", "AA", "BIN", "MORPH", "CODON", "NT2AA", "DNA-to-AA")
 				),
 			_Option(
-				["-t", "tree"],
+				["-t", "t"],
 				"""Specify a file containing starting tree for tree search.
 					BIONJ starts a tree search from BIONJ tree
 					RANDOM starts tree search from completely random tree
@@ -92,7 +92,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function= lambda x: True if filename else (x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))     #Need tree file to test
 				),
 			_Option(
-				["-te", "usertree"],
+				["-te", "te"],
 				"""Like -t but fixing user tree, no tree search is performed
 				   and the program computes the log-likelihood of the fixed user tree
 
@@ -104,7 +104,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function= lambda x: True if filename else (x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))     #Need tree file to test
 				),
 			_Option(
-				["-o", "outgroup"],
+				["-o", "o"],
 				"""Specify an outgroup taxon name to root the tree
 				   Output tree will be rooted accordingly
 
@@ -113,7 +113,7 @@ class IQTreeCommandline(AbstractCommandline):
 				equate = False
 				),
 			_Option(
-				["-pre", "prefix"],                        #This outputs the files in the project folder for some reason
+				["-pre", "pre"],                        #This outputs the files in the project folder for some reason
 				"""Specify a prefix for all output files
 
 				   Default: either alignment file name (-s) or partition file name
@@ -151,7 +151,7 @@ class IQTreeCommandline(AbstractCommandline):
 					"""
 				),
 			_Switch(
-				["-keep-ident", "keep"],
+				["-keep-ident", "keep-ident"],
 				"""Keep identical sequences in the alignment.
 				   Default: IQTree will remove identical sequences during the analysis and add
 				   them at the end
@@ -165,7 +165,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   """
 				),
 			_Option(
-				["-mem", "memory"],
+				["-mem", "mem"],
 				"""Specify maximal RAM usage 
 				   Example:
 						-mem 64G to use at most 64 GB of RAM
@@ -184,7 +184,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   """
 				),
 			_Option(
-				["-cptime", "checkpoint_interval"],
+				["-cptime", "cptime"],
 				"""Specify the minimum checkpoint time interval in seconds
 
 				   Default 20 seconds
@@ -204,7 +204,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function = lambda x: isinstance(x, int) or x.isdigit() or x in ("ALL")
 				),
 			_Option(
-				["-lmclust", "taxon_clusters"],
+				["-lmclust", "lmclust"],
 				"""Specify a NEXUS file containing taxon clusters for quartet mapping analysis
 				""",
 				filename = True,
@@ -232,7 +232,7 @@ class IQTreeCommandline(AbstractCommandline):
 			### Automatic model selection ###
 
 			_Option(
-				["-m", "model"],
+				["-m", "m"],
 				"""The default model may not fit well to the data, therefore IQTree allows to
 				   automatically determine the best-fit model via a series of -m TEST options:
 				   - TESTONLY        (Standard model selection)
@@ -270,7 +270,6 @@ class IQTreeCommandline(AbstractCommandline):
 				  (For more information on supported Model names or Frequency Typings available consult IQTree
 				   documentation at http://www.iqtree.org/doc/Command-Reference)
 				   """,
-
 				equate = False,
 				),   
 			_Option(
@@ -306,12 +305,10 @@ class IQTreeCommandline(AbstractCommandline):
 				   program.
 				   Alternatively, one can specify a comma-separated list of base models
 
-				   Example: -mset WAG, LG, JTT will restrict model selection to WAG, LG and JTT instead of
+				   Example: -mset WAG,LG,JTT will restrict model selection to WAG, LG and JTT instead of
 				            all 18 AA models to save computations
 				   """,
-
 				equate = False
-				#might need a checker function
 				),
 			_Option(
 				["-msub", "msub"],
@@ -329,7 +326,7 @@ class IQTreeCommandline(AbstractCommandline):
 				            -mfreq ,F1x4,F3x4,F for codon models
 				   """,
 				equate = False
-				),    #idk about a checker function for this one
+				),    # Checker function might be checking if input is a list?
 			_Option(
 				["-mrate", "mrate"],
 				"""Specify a comma-separated list of rate heterogeneity types for model selection
@@ -337,7 +334,8 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: -mrate E,I,G,I+G for standard procedure
 				            -mrate E,I,G,I+G,R for new selection procedure
 				   """,
-				equate = False
+				equate = False,
+				checker_function = _is_int,              #this should be int
 				),
 			_Option(
 				["-cmin", "cmin"],
@@ -345,7 +343,8 @@ class IQTreeCommandline(AbstractCommandline):
 
 				   Default: 2
 				   """,
-				equate = False
+				equate = False,
+				checker_function = _is_int,               #this should be int
 				),
 			_Option(
 				["-cmax", "cmax"],
@@ -354,7 +353,8 @@ class IQTreeCommandline(AbstractCommandline):
 
 				   Default: 10
 				   """,
-				equate = False
+				equate = False,
+				checker_function = _is_int,              #this should be int
 				),
 			_Option(
 				["-merit", "merit"],
@@ -891,7 +891,113 @@ class IQTreeCommandline(AbstractCommandline):
 				   """,
 				equate = False,
 				checker_function = _is_number,       #need to check how it works with multiple inputs
-				)
+				),
+
+			### Miscellaneous options ###
+
+			_Switch(
+				["-alninfo", "alninfo"],
+				"""Print alignment site statistics to .alninfo file""",
+				),
+			_Switch(
+				["-blfix", "blfix"],
+				"""Fix branch lengths of tree passed via -t or -te.
+				   This is useful to evaluate the log-likelihood of an input tree with fixed topology
+				   and branch lengths.
+
+				   Default: OFF
+				   """,
+				),
+			_Option(
+				["-blmin", "blmin"],
+				"""Specify minimum branch length.
+
+				   Default: the smaller of 0.000001 and 0.1/alignment_length
+				   """,
+				equate = False,
+				checker_function = _is_number,
+				),
+			_Option(
+				["-blmax", "blmax"],
+				"""Specify the maximum branch length.
+
+				   Default: 10
+				   """,
+				equate = False,
+				checker_function = _is_number,
+				),
+			_Switch(
+				["-czb", "czb"],
+				"""Collapse near zero branches, so that the final tree may be multifurcating.
+				   This is useful for bootstrapping in the presence of polytomy to reduce bootstrap
+				   supports of short branches.
+				   """,
+				),
+			_Option(
+				["-me", "me"],
+				"""Specify the log-likelihood epsilon for final model parameter estimation.
+				   With -fast option the epsilon is raised to 0.05
+
+				   Default: 0.01
+				   """,
+				equate = False,
+				checker_function = _is_number,
+				),
+			_Switch(
+				["-wpl", "wpl"],
+				"""Write partition log-likelihoods to .partlh file.
+				   Only effective with partition model.
+				   """,
+				),
+			_Switch(
+				["-wspr", "wspr"],
+				"""Write site posterior probabilities per rate category to .siteprob file""",
+				),
+			_Switch(
+				["-wspm", "wspm"],
+				"""Write site posterior probabilities per mixture class to .siteprob file.""",
+				),
+			_Switch(
+				["-wspmr", "wspmr"],
+				"""Write site posterior probabilities per mixture class and rate category to .siteprob file""",
+				),
+			_Switch(
+				["-wsl", "wsl"],
+				"""Write size log-likelihoods to .sitelh file in TREE-PUZZLE format.
+				   Such file can then be passed on to CONSEL for further tree tests.
+				   """,
+				),
+			_Switch(
+				["-wslr", "wslr"],
+				"""Write site log likelihoods per rate category to .sitelh file""",
+				),
+			_Switch(
+				["-wslm", "wslm"],
+				"""Write site log likelihoods per mixture class to .sitelh file.""",
+				),
+			_Switch(
+				["-wslmr", "wslmr"],
+				"""Write site log likelihoods per mixture class and rate category to .sitelh file""",
+				),
+			_Switch(
+				["-wt", "wt"],
+				"""Turn on writing all locally optimal trees into .treels file.""",
+				),
+			_Switch(
+				["-fconst", "fconst"],
+				"""Specify a list of comma-separated integer numbers.
+				   The number of entries should be equal to the number of states in the model
+				   (e.g. 4 for DNA and 20 for protein).
+				   IQTree will then add a number of constant sites accordingly.
+
+				   For example, -fconst 10,20,15,40 will add 10 constant sites of all A, 20 constant sites of all C,
+				   15 constant sites of all G and 40 constant sites of all T into the alignment.
+				   """,
+				equate = False,
+				### maybe see if you can get a checker function to check each comma separated argument
+				### test how the wrapper works with list arguments
+				),
+			 
 		]
 
 		AbstractCommandline.__init__(self, cmd, **kwargs)
