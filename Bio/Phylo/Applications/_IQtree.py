@@ -151,7 +151,7 @@ class IQTreeCommandline(AbstractCommandline):
 					"""
 				),
 			_Switch(
-				["-keep-ident", "keep-ident"],
+				["-keep-ident", "keepident"],
 				"""Keep identical sequences in the alignment.
 				   Default: IQTree will remove identical sequences during the analysis and add
 				   them at the end
@@ -291,7 +291,7 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function= _is_int
 				),
 			_Option(
-				["-rcluster-max", "rcluster-max"],
+				["-rcluster-max", "rclustermax"],
 				"""Specify the absolute maximum number of partition pairs in the partition merging phase.
 
 				   Default: the larger of 1000 and 10 times the number of partitions
@@ -326,7 +326,7 @@ class IQTreeCommandline(AbstractCommandline):
 				            -mfreq ,F1x4,F3x4,F for codon models
 				   """,
 				equate = False
-				),    # Checker function might be checking if input is a list?
+				),     #test this
 			_Option(
 				["-mrate", "mrate"],
 				"""Specify a comma-separated list of rate heterogeneity types for model selection
@@ -335,7 +335,6 @@ class IQTreeCommandline(AbstractCommandline):
 				            -mrate E,I,G,I+G,R for new selection procedure
 				   """,
 				equate = False,
-				checker_function = _is_int,              #this should be int
 				),
 			_Option(
 				["-cmin", "cmin"],
@@ -403,7 +402,7 @@ class IQTreeCommandline(AbstractCommandline):
 				""",
 				),
 			_Option(
-				["-a", "a"],    #Maybe change a to gamma also idk if this is always a number or what
+				["-a", "a"],    #idk if this is always a number or what
 				"""Specify the Gamma shape parameter
 				   Default: estimate""",
 				equate = False,
@@ -455,15 +454,6 @@ class IQTreeCommandline(AbstractCommandline):
 				["-spp", "spp"],
 				"""Like -q but allowing partitions to have different evolutionary speeds
 				   (Edge proportional partition model)
-				   """,
-				equate = False,
-				filename = True,
-				),
-			_Option(
-				["-spp", "spp"],
-				"""Specify partition file for edge-unlinked partition model.
-				   That means, each partition has its own set of branch lengths.
-				   This is the mot parameter-rich partition model to accomodate heterotachy
 				   """,
 				equate = False,
 				filename = True,
@@ -655,6 +645,15 @@ class IQTreeCommandline(AbstractCommandline):
 				["-wbtl", "wbtl"],
 				"""Like -wbt but booststrap trees written with branch lengths.""",
 				),
+			_Option(                                     #not present in documentation, only on -h list
+				["-j", "j"],
+				"""Proportion of sites for jackknife
+
+				   Default: NONE
+				   """,
+				equate = False,
+				#idk if this shuold be a number
+				),
 
 			### Nonpoarametric bootstrap ###
 
@@ -679,7 +678,13 @@ class IQTreeCommandline(AbstractCommandline):
 				   and no consensus tree)
 				   """,
 				equate = False,
-				checker_function = True,
+				checker_function = _is_int,
+				),
+			_Option(
+				["-bc", "bc"],
+				"""Like -b but with no ML tree, only consensus tree""",
+				equate = False,
+				checker_function = _is_int,
 				),
 
 			### Single branch tests ###
@@ -715,7 +720,7 @@ class IQTreeCommandline(AbstractCommandline):
 				"""
 				),
 			_Option(
-				["-asr-min","asr-min"],
+				["-asr-min","asrmin"],
 				"""Specify the minimum threshold of posterior probability to determine the best ancestral
 				   state.
 
@@ -889,8 +894,7 @@ class IQTreeCommandline(AbstractCommandline):
 
 				   Defaul: -rlen 0.001 0.1 0.999
 				   """,
-				equate = False,
-				checker_function = _is_number,       #need to check how it works with multiple inputs
+				equate = False,        
 				),
 
 			### Miscellaneous options ###
@@ -983,7 +987,7 @@ class IQTreeCommandline(AbstractCommandline):
 				["-wt", "wt"],
 				"""Turn on writing all locally optimal trees into .treels file.""",
 				),
-			_Switch(
+			_Option(
 				["-fconst", "fconst"],
 				"""Specify a list of comma-separated integer numbers.
 				   The number of entries should be equal to the number of states in the model
