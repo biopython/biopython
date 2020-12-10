@@ -17,7 +17,7 @@ from Bio.Seq import (
     MutableSeq,
     UndefinedSequenceData,
     UndefinedSequenceError,
-    translate
+    translate,
 )
 from Bio.Data.CodonTable import TranslationError, CodonTable
 

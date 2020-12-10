@@ -20,7 +20,7 @@ from Bio.Seq import (
     UnknownSeq,
     MutableSeq,
     UndefinedSequenceError,
-    reverse_complement
+    reverse_complement,
 )
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
