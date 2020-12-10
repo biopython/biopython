@@ -166,13 +166,7 @@ class SequenceWriter:
 
     def _get_seq_string(self, record):
         """Use this to catch errors like the sequence being None (PRIVATE)."""
-        if not isinstance(record, SeqRecord):
-            raise TypeError("Expected a SeqRecord object")
-        if record.seq is None:
-            raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
-        elif not isinstance(record.seq, (Seq, MutableSeq)):
-            raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
-        return str(record.seq)
+        return _get_seq_string(record)
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""

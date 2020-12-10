@@ -123,6 +123,8 @@ class Seq:
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
+        if isinstance(self._data, UndefinedSequenceData):
+            return f"Seq(UndefinedSequenceData({len(self)}))"
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
@@ -2941,6 +2943,44 @@ class MutableSeq:
         """
         # returns Seq object instead of MutableSeq
         return Seq(self).join(other)
+
+
+class UndefinedSequenceError(ValueError):
+    """Sequence contents is undefined."""
+
+
+class UndefinedSequenceData:
+    """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
+    Objects of this class can be used to create a Seq object to represent
+    sequences with a known length is known, but an unknown sequence contents.
+    Calling __len__ returns the sequence length, calling __getitem__ raises a
+    ValueError except for requests of zero size, for which it returns an empty
+    bytes object.
+    """
+
+    def __init__(self, length):
+        """Initialize the object with the sequence length."""
+        if length < 0:
+            raise ValueError("Length must not be negative.")
+        self._length = length
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            start, end, step = key.indices(self._length)
+            size = len(range(start, end, step))
+            if size == 0:
+                return b""
+            return UndefinedSequenceData(size)
+        else:
+            raise UndefinedSequenceError("sequence contents is undefined")
+
+    def __len__(self):
+        return self._length
+
+    def __bytes__(self):
+        if self._length == 0:
+            return b""
+        raise UndefinedSequenceError("sequence contents is undefined")
 
 
 # The transcribe, backward_transcribe, and translate functions are

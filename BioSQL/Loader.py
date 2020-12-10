@@ -23,7 +23,7 @@ from time import gmtime, strftime
 # biopython
 from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
-from Bio.Seq import UnknownSeq
+from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.SeqFeature import UnknownPosition
 
 
@@ -714,7 +714,10 @@ class DatabaseLoader:
         if isinstance(record.seq, UnknownSeq):
             seq_str = None
         else:
-            seq_str = str(record.seq)
+            try:
+                seq_str = str(record.seq)
+            except UndefinedSequenceError:
+                seq_str = None
 
         sql = (
             "INSERT INTO biosequence (bioentry_id, version, "
