@@ -316,10 +316,12 @@ class TestQual(QualityIOTestBaseClass):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             records = SeqIO.parse(h, "qual")
+
             def add_sequence(records):
                 for record in records:
                     record.seq = Seq(len(record.seq) * "?")
                     yield record
+
             records = add_sequence(records)
             self.assertEqual(4, SeqIO.write(records, h2, "fastq"))
         self.assertEqual(

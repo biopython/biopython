@@ -2951,6 +2951,7 @@ class UndefinedSequenceError(ValueError):
 
 class UndefinedSequenceData:
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
+
     Objects of this class can be used to create a Seq object to represent
     sequences with a known length is known, but an unknown sequence contents.
     Calling __len__ returns the sequence length, calling __getitem__ raises a

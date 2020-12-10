@@ -11,7 +11,14 @@ import unittest
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
-from Bio.Seq import Seq, UnknownSeq, MutableSeq, UndefinedSequenceData, UndefinedSequenceError, translate
+from Bio.Seq import (
+    Seq,
+    UnknownSeq,
+    MutableSeq,
+    UndefinedSequenceData,
+    UndefinedSequenceError,
+    translate
+)
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
 

@@ -299,10 +299,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             debug = False
         unequal_length = len({len(_) for _ in records}) != 1
         for fmt in test_write_read_alignment_formats:
-            if (
-                fmt not in possible_unknown_seq_formats
-                and len(records[0].seq) > 100
-            ):
++            if fmt not in possible_unknown_seq_formats and len(records[0].seq) > 100:
                 try:
                     bytes(records[0].seq)
                 except UndefinedSequenceError:

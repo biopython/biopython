@@ -15,7 +15,13 @@ from io import StringIO
 
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
-from Bio.Seq import Seq, UnknownSeq, MutableSeq, UndefinedSequenceError, reverse_complement
+from Bio.Seq import (
+    Seq,
+    UnknownSeq,
+    MutableSeq,
+    UndefinedSequenceError,
+    reverse_complement
+)
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
