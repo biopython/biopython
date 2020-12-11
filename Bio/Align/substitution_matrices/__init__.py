@@ -235,6 +235,7 @@ class Array(numpy.ndarray):
 
     def __reduce__(self):
         import pickle
+
         values = numpy.array(self)
         state = pickle.dumps(values)
         alphabet = self._alphabet
@@ -245,7 +246,8 @@ class Array(numpy.ndarray):
 
     def __setstate__(self, state):
         import pickle
-        self[:,:] = pickle.loads(state)
+
+        self[:, :] = pickle.loads(state)
 
     def transpose(self, axes=None):
         """Transpose the array."""
