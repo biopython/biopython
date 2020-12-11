@@ -18,7 +18,7 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio.Seq import Seq, UndefinedSequenceData
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
@@ -133,9 +133,9 @@ def _retrieve_seq(adaptor, primary_id):
 
     if have_seq:
         data = _BioSQLSequenceData(primary_id, adaptor, start=0, length=length)
+        return Seq(data)
     else:
-        data = UndefinedSequenceData(length)
-    return Seq(data)
+        return Seq(None, length=length)
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):

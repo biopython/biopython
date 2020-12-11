@@ -44,7 +44,7 @@ import re
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Seq import Seq, UndefinedSequenceData
+from Bio.Seq import Seq
 from Bio import SeqFeature
 
 # other Bio.GenBank stuff
@@ -1409,8 +1409,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 "molecule_type", molecule_type
             )
         if not sequence and self._expected_size:
-            sequence = UndefinedSequenceData(self._expected_size)
-        self.data.seq = Seq(sequence)
+            self.data.seq = Seq(None, length=self._expected_size)
+        else:
+            self.data.seq = Seq(sequence)
 
 
 class _RecordConsumer(_BaseGenBankConsumer):

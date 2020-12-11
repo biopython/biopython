@@ -15,7 +15,6 @@ from Bio.Seq import (
     Seq,
     UnknownSeq,
     MutableSeq,
-    UndefinedSequenceData,
     UndefinedSequenceError,
     translate,
 )
@@ -833,8 +832,7 @@ class StringMethodTests(unittest.TestCase):
         spacer = UnknownSeq(5, character="-")
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
-        data = UndefinedSequenceData(5)
-        spacer = Seq(data)
+        spacer = Seq(None, length=5)
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 

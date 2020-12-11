@@ -358,7 +358,7 @@ are approximately equal.
 """
 
 from Bio.File import as_handle
-from Bio.Seq import Seq, UndefinedSequenceData
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
 from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
@@ -1419,8 +1419,7 @@ class QualPhredIterator(SequenceIterator):
                 qualities = [max(0, q) for q in qualities]
 
             # Return the record and then continue...
-            data = UndefinedSequenceData(len(qualities))
-            sequence = Seq(data)
+            sequence = Seq(None, length=len(qualities))
             record = SeqRecord(sequence, id=id, name=name, description=descr)
             # Dirty trick to speed up this line:
             # record.letter_annotations["phred_quality"] = qualities

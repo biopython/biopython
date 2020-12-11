@@ -68,17 +68,18 @@ class Seq:
     not applicable to protein sequences).
     """
 
-    def __init__(self, data):
+    def __init__(self, data, length=None):
         """Create a Seq object.
 
         Arguments:
          - data - Sequence, required (string)
+         - length - Sequence length, used only if data is None (integer)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
         the seq property.
 
-        However, will often want to create your own Seq objects directly:
+        However, you can also create a Seq object directly:
 
         >>> from Bio.Seq import Seq
         >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF")
@@ -86,21 +87,42 @@ class Seq:
         Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
         >>> print(my_seq)
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+
+        To create a Seq object with for a sequence of known length but
+        unknown sequence contents, use None for the data argument and pass
+        the sequence length for the length argument. Trying to access the
+        sequence contents of a Seq object created in this way will raise
+        an UndefinedSequenceError:
+
+        >>> my_undefined_seq = Seq(None, 20)
+        >>> my_undefined_seq
+        Seq(None, length=20)
+        >>> len(my_undefined_seq)
+        20
+        >>> print(my_undefined_seq)
+        Traceback (most recent call last):
+        ...
+        Bio.Seq.UndefinedSequenceError: sequence contents is undefined
         """
-        if isinstance(data, bytes):
-            self._data = data
-        elif isinstance(data, (bytearray, Seq, MutableSeq)):
-            self._data = bytes(data)
-        elif isinstance(data, str):
-            self._data = bytes(data, encoding="ASCII")
-        elif self._check_bytes_like(data):
-            # e.g. the TwoBitSequence objects, which return bytes when
-            # __getitem__ is called on them.
-            self._data = data
+        if length is None:
+            if isinstance(data, bytes):
+                self._data = data
+            elif isinstance(data, (bytearray, Seq, MutableSeq)):
+                self._data = bytes(data)
+            elif isinstance(data, str):
+                self._data = bytes(data, encoding="ASCII")
+            elif self._check_bytes_like(data):
+                # e.g. the TwoBitSequence objects, which return bytes when
+                # __getitem__ is called on them.
+                self._data = data
+            else:
+                raise TypeError(
+                    "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
+                )
         else:
-            raise TypeError(
-                "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
-            )
+            if data is not None:
+                raise ValueError("length should be None if data is None")
+            self._data = _UndefinedSequenceData(length)
 
     def _check_bytes_like(self, data):
         # Check if data is bytes-like. This currently requires two things:
@@ -123,8 +145,8 @@ class Seq:
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
-        if isinstance(self._data, UndefinedSequenceData):
-            return f"Seq(UndefinedSequenceData({len(self)}))"
+        if isinstance(self._data, _UndefinedSequenceData):
+            return f"Seq(None, length={len(self)})"
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
@@ -2949,7 +2971,7 @@ class UndefinedSequenceError(ValueError):
     """Sequence contents is undefined."""
 
 
-class UndefinedSequenceData:
+class _UndefinedSequenceData:
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
 
     Objects of this class can be used to create a Seq object to represent
@@ -2971,7 +2993,7 @@ class UndefinedSequenceData:
             size = len(range(start, end, step))
             if size == 0:
                 return b""
-            return UndefinedSequenceData(size)
+            return _UndefinedSequenceData(size)
         else:
             raise UndefinedSequenceError("sequence contents is undefined")
 

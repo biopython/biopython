@@ -751,8 +751,7 @@ class TestMutableSeq(unittest.TestCase):
 class TestUnknownSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.UnknownSeq(6)
-        data = Seq.UndefinedSequenceData(6)
-        self.u = Seq.Seq(data)
+        self.u = Seq.Seq(None, length=6)
 
     def test_unknownseq_construction(self):
         self.assertEqual("??????", Seq.UnknownSeq(6))
@@ -768,7 +767,7 @@ class TestUnknownSeq(unittest.TestCase):
             Seq.UnknownSeq(-10)
 
         with self.assertRaises(ValueError):
-            Seq.UndefinedSequenceData(-10)
+            Seq.Seq(None, length=-10)
 
         with self.assertRaises(ValueError):
             Seq.UnknownSeq(6, character="??")
@@ -779,7 +778,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_repr(self):
         self.assertEqual("UnknownSeq(6, character='?')", repr(self.s))
-        self.assertEqual("Seq(UndefinedSequenceData(6))", repr(self.u))
+        self.assertEqual("Seq(None, length=6)", repr(self.u))
 
     def test_add_method(self):
         seq1 = Seq.UnknownSeq(3, character="N")
