@@ -17,12 +17,14 @@ except ImportError:
 
 
 import os
+import pickle
 from collections import Counter
 import unittest
 
 
 import numpy
 from Bio import SeqIO
+from Bio.Align import substitution_matrices
 
 from Bio.Data import IUPACData
 
@@ -32,8 +34,6 @@ protein_alphabet = IUPACData.protein_letters
 
 class Test_basics(unittest.TestCase):
     def test_basics_vector(self):
-        from Bio.Align import substitution_matrices
-
         counts = substitution_matrices.Array("XYZ")
         self.assertEqual(
             str(counts),
@@ -63,8 +63,6 @@ Z  5.5
             counts[8]
 
     def test_basics_matrix(self):
-        from Bio.Align import substitution_matrices
-
         counts = substitution_matrices.Array("XYZ", dims=2)
         self.assertEqual(
             str(counts),
@@ -110,8 +108,6 @@ Z  0.0
         )
 
     def test_read_write(self):
-        from Bio.Align import substitution_matrices
-
         path = os.path.join("Align", "hg38.chrom.sizes")
         sizes = substitution_matrices.read(path, numpy.int64)
         # Note that sum(sizes) below is larger than 2147483647, and won't
@@ -132,8 +128,6 @@ Z  0.0
         self.assertEqual(lines[4], "chr5 181538259")
 
     def test_nucleotide_freq(self):
-        from Bio.Align import substitution_matrices
-
         counts = Counter()
         path = os.path.join("Align", "ecoli.fa")
         records = SeqIO.parse(path, "fasta")
@@ -186,8 +180,6 @@ Z  0.0
         self.assertAlmostEqual(frequencies["T"], 0.2025723472668810)
 
     def test_protein_freq(self):
-        from Bio.Align import substitution_matrices
-
         counts = Counter()
         path = os.path.join("Align", "cow.fa")
         records = SeqIO.parse(path, "fasta")
@@ -271,6 +263,15 @@ Z  0.0
         self.assertAlmostEqual(frequencies["W"], 0.015217055)
         self.assertAlmostEqual(frequencies["Y"], 0.031515526)
 
+    def test_pickling(self):
+        matrix = substitution_matrices.load("BLOSUM62")
+        pickled = pickle.dumps(matrix)
+        loaded = pickle.loads(pickled)
+        self.assertEqual(matrix.alphabet, loaded.alphabet)
+        for c1 in matrix.alphabet:
+            for c2 in matrix.alphabet:
+                self.assertAlmostEqual(matrix[c1, c2], loaded[c1, c2])
+
 
 class TestScoringMatrices(unittest.TestCase):
     @classmethod
@@ -278,7 +279,6 @@ class TestScoringMatrices(unittest.TestCase):
 
         from Bio import SeqIO
         from Bio.Align import PairwiseAligner
-        from Bio.Align import substitution_matrices
 
         observed = substitution_matrices.Array(alphabet=protein_alphabet, dims=2)
         aligner = PairwiseAligner()
@@ -2382,7 +2382,6 @@ class TestScoringMatrices(unittest.TestCase):
         # Proceedings of the National Academy of Sciences USA 89(2):
         # 10915-10919 (1992).
         from Bio.Data.IUPACData import protein_letters as alphabet
-        from Bio.Align import substitution_matrices
 
         m = substitution_matrices.load("BLOSUM62")
         self.assertEqual(alphabet, "ACDEFGHIKLMNPQRSTVWY")
