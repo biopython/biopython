@@ -233,6 +233,22 @@ class Array(numpy.ndarray):
 
         return results[0] if len(results) == 1 else results
 
+    def __reduce__(self):
+        import pickle
+
+        values = numpy.array(self)
+        state = pickle.dumps(values)
+        alphabet = self._alphabet
+        dims = len(self.shape)
+        dtype = self.dtype
+        arguments = (Array, alphabet, dims, None, dtype)
+        return (Array.__new__, arguments, state)
+
+    def __setstate__(self, state):
+        import pickle
+
+        self[:, :] = pickle.loads(state)
+
     def transpose(self, axes=None):
         """Transpose the array."""
         other = numpy.ndarray.transpose(self, axes)
