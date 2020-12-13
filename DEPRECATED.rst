@@ -95,7 +95,7 @@ in release 1.77, in favor of a ``__format__`` method that can be used from the
 
 Bio.Restriction.RanaConfig
 --------------------------
-Removed in Biopython 1.74 without explicit depreciation period. RanaConfig was
+Removed in Biopython 1.74 without explicit deprecation period. RanaConfig was
 a configuration file containing some constants for Bio.Restriction.PrintFormat
 and ranacompiler.py, a script to update Bio.Restriction.Restriction_Dictionary,
 and which is not part of the Biopython installation. The constants were
@@ -234,6 +234,16 @@ This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
 from the standard library instead. This had required manual intervention to
 include when installing Biopython from source due to a dependency on flex.
 
+Bio.PDB.Residue
+---------------
+The ``sort`` and ``get_atom`` methods of the ``Residue`` class were removed in
+Release 1.79.
+
+Bio.PDB.ResidueDepth
+--------------------
+Use of the ``PDB_TO_XYZR`` bash script was removed from ``get_surface`` in
+Release 1.79.
+
 Bio.SeqFeature
 --------------
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
@@ -370,6 +380,13 @@ BioSQL and psycopg
 ------------------
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
 in Release 1.51, and removed in Release 1.55. Please use psycopg2 instead.
+
+BioSQL.BioSeqDatabase
+---------------------
+The ``remove_database`` and ``get_all_primary_ids`` methods were removed from
+the ``DBServer`` class in Release 1.79.
+The ``get_Seq_by_primary_id`` method was removed from the ``BioSeqDatabase``
+class in Release 1.79.
 
 Bio.Application.generic_run and ApplicationResult
 -------------------------------------------------
@@ -815,8 +832,10 @@ in Release 1.59, deprecated in Release 1.61, and removed in Release 1.64.
 
 Bio.SubsMat
 -----------
-The methods letter_sum and all_letters_sum were removed from the SeqMat class
-in Bio.SubsMat in Release 1.57.
+The methods ``letter_sum`` and ``all_letters_sum`` were removed from the
+``SeqMat`` class in Bio.SubsMat in Release 1.57.
+The methods ``print_full_mat`` and ``print_mat`` were removed from the
+`SeqMat`` class in Bio.SubsMat in Release 1.79.
 The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
 please consider using Bio.Align.substitution_matrices.
 
@@ -873,3 +892,11 @@ Bio.Phylo.BaseTree.Tree
 -----------------------
 The format method was deprecated in Release 1.79 in favor of the __format__
 method, which supports Python's built-in format function.
+
+Bio.Phylo._utils
+----------------
+The ``draw_graphviz`` function was removed in Release 1.79.
+
+Scripts/Restriction/ranacompiler.py
+-----------------------------------
+The ``is_palindrom`` function was removed in Release 1.79.
