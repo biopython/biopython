@@ -7,9 +7,6 @@
 
 """Residue class, used by Structure objects."""
 
-# My Stuff
-import warnings
-from Bio import BiopythonDeprecationWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
@@ -53,20 +50,6 @@ class Residue(Entity):
             )
         Entity.add(self, atom)
 
-    def sort(self):
-        """Sort child atoms.
-
-        Atoms N, CA, C, O always come first, thereafter alphabetically
-        by name, with any alternative location specifier for disordered
-        atoms (altloc) as a tie-breaker.
-        """
-        warnings.warn(
-            "The custom sort() method will be removed in the future in favour of rich "
-            "comparison methods. Use the built-in sorted() function instead.",
-            BiopythonDeprecationWarning,
-        )
-        self.child_list.sort()
-
     def flag_disordered(self):
         """Set the disordered flag."""
         self.disordered = 1
@@ -96,15 +79,6 @@ class Residue(Entity):
 
     def get_atoms(self):
         """Return atoms."""
-        yield from self
-
-    def get_atom(self):
-        """Return atom."""
-        warnings.warn(
-            "`get_atom` has been deprecated and we intend to remove it"
-            " in a future release of Biopython. Please use `get_atoms` instead.",
-            BiopythonDeprecationWarning,
-        )
         yield from self
 
 
