@@ -326,7 +326,7 @@ class IQTreeCommandline(AbstractCommandline):
 				            -mfreq ,F1x4,F3x4,F for codon models
 				   """,
 				equate = False
-				),     #test this
+				),
 			_Option(
 				["-mrate", "mrate"],
 				"""Specify a comma-separated list of rate heterogeneity types for model selection
@@ -645,7 +645,7 @@ class IQTreeCommandline(AbstractCommandline):
 				["-wbtl", "wbtl"],
 				"""Like -wbt but booststrap trees written with branch lengths.""",
 				),
-			_Option(                                     #not present in documentation, only on -h list
+			_Option(                                 
 				["-j", "j"],
 				"""Proportion of sites for jackknife
 
@@ -999,9 +999,40 @@ class IQTreeCommandline(AbstractCommandline):
 				   """,
 				equate = False,
 				### maybe see if you can get a checker function to check each comma separated argument
-				### test how the wrapper works with list arguments
 				),
-			 
+
+			#These weren't on the documentation but are present on -h list of commands
+
+			_Switch(
+				["--show-lh", "showlh"],
+				"""Compute tree likelihood without optimisation""",
+				),
+			_Switch(
+				["--eigenlib", "eigenlib"],
+				"""Use Eigen3 library""",
+				),
+			_Switch(
+				["--no-outfiles", "nooutfiles"],
+				"""Suppress printing output files""",
+				),
+			_Option(
+				["-nni-eval", "nnieval"],
+				"""Specify n times to loop for NNI evaluation 
+				   
+				   Default: 1 
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
+			_Option(
+				["--runs", "runs"],
+				"""Number of independent runs
+
+				   Default: 1
+				   """,
+				equate = False,
+				checker_function = _is_int,
+				),
 		]
 
 		AbstractCommandline.__init__(self, cmd, **kwargs)
