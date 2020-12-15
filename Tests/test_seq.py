@@ -751,24 +751,34 @@ class TestMutableSeq(unittest.TestCase):
 class TestUnknownSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.UnknownSeq(6)
+        self.u = Seq.Seq(None, length=6)
 
     def test_unknownseq_construction(self):
         self.assertEqual("??????", Seq.UnknownSeq(6))
         self.assertEqual("NNNNNN", Seq.UnknownSeq(6, character="N"))
         self.assertEqual("XXXXXX", Seq.UnknownSeq(6, character="X"))
         self.assertEqual("??????", Seq.UnknownSeq(6, character="?"))
+        with self.assertRaises(ValueError):
+            "??????" == self.u
+        with self.assertRaises(ValueError):
+            self.u == "??????"
 
         with self.assertRaises(ValueError):
             Seq.UnknownSeq(-10)
+
+        with self.assertRaises(ValueError):
+            Seq.Seq(None, length=-10)
 
         with self.assertRaises(ValueError):
             Seq.UnknownSeq(6, character="??")
 
     def test_length(self):
         self.assertEqual(6, len(self.s))
+        self.assertEqual(6, len(self.u))
 
     def test_repr(self):
         self.assertEqual("UnknownSeq(6, character='?')", repr(self.s))
+        self.assertEqual("Seq(None, length=6)", repr(self.u))
 
     def test_add_method(self):
         seq1 = Seq.UnknownSeq(3, character="N")
@@ -787,6 +797,8 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual("????", self.s[1:-1])
         with self.assertRaises(ValueError):
             self.s[1:6:0]
+        with self.assertRaises(ValueError):
+            self.u[1:6:0]
 
     def test_count(self):
         self.assertEqual(6, self.s.count("?"))
@@ -795,31 +807,39 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("??"))
         self.assertEqual(4, Seq.UnknownSeq(6, character="?").count("?", start=2))
         self.assertEqual(2, Seq.UnknownSeq(6, character="?").count("??", start=2))
+        self.assertRaises(ValueError, self.u.count, "?")
 
     def test_complement(self):
         self.s.complement()
         self.assertEqual("??????", self.s)
+        self.assertRaises(ValueError, self.u.complement)
 
     def test_reverse_complement(self):
         self.s.reverse_complement()
         self.assertEqual("??????", self.s)
+        self.assertRaises(ValueError, self.u.reverse_complement)
 
     def test_transcribe(self):
         self.assertEqual("??????", self.s.transcribe())
+        self.assertRaises(ValueError, self.u.transcribe)
 
     def test_back_transcribe(self):
         self.assertEqual("??????", self.s.back_transcribe())
+        self.assertRaises(ValueError, self.u.back_transcribe)
 
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("NNNNNN", seq.upper())
+        self.assertRaises(ValueError, self.u.upper)
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("nnnnnn", seq.lower())
+        self.assertRaises(ValueError, self.u.lower)
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())
+        self.assertRaises(ValueError, self.u.translate)
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, character="N")

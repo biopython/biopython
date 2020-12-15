@@ -310,7 +310,7 @@ class FastaWriter(SequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = _get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data

@@ -11,7 +11,13 @@ import unittest
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
-from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
+from Bio.Seq import (
+    Seq,
+    UnknownSeq,
+    MutableSeq,
+    UndefinedSequenceError,
+    translate,
+)
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
 
@@ -826,6 +832,9 @@ class StringMethodTests(unittest.TestCase):
         spacer = UnknownSeq(5, character="-")
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        spacer = Seq(None, length=5)
+        self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
     def test_join_MutableSeq_TypeError_iter(self):
         """Checks that a TypeError is thrown for all non-iterable types."""
@@ -1018,13 +1027,17 @@ class StringMethodTests(unittest.TestCase):
 class FileBasedTests(unittest.TestCase):
     """Test Seq objects created from files by SeqIO."""
 
-    def test_unknown_seq_ungap(self):
-        """Test ungap() works properly on UnknownSeq instances."""
+    def test_unknown_seq(self):
+        """Test if feature extraction works properly for unknown sequences."""
         rec = SeqIO.read("GenBank/NT_019265.gb", "genbank")
-        self.assertIsInstance(rec.seq, UnknownSeq)
+        self.assertIsInstance(rec.seq, Seq)
+        self.assertRaises(UndefinedSequenceError, bytes, rec.seq)
 
-        ungapped_seq = rec.features[1].extract(rec.seq).ungap("-")
-        self.assertIsInstance(ungapped_seq, UnknownSeq)
+        feature = rec.features[1]
+        seq = feature.extract(rec.seq)
+        self.assertIsInstance(seq, Seq)
+        self.assertEqual(len(seq), len(feature))
+        self.assertRaises(UndefinedSequenceError, bytes, seq)
 
 
 if __name__ == "__main__":

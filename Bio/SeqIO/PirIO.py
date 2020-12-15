@@ -89,7 +89,7 @@ Sequence codes and their meanings:
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
 
 
 _pir_mol_type = {
@@ -269,7 +269,7 @@ class PirWriter(SequenceWriter):
 
         self.handle.write(">%s;%s\n%s\n" % (code, title, description))
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = _get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data
