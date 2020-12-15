@@ -16,6 +16,7 @@
 
 from io import StringIO
 from Bio import StreamModeError
+from Bio.Seq import UndefinedSequenceError
 
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
@@ -652,8 +653,14 @@ class SeqRecord:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)
             )
-        # Don't want to include the entire sequence
-        lines.append(repr(self.seq))
+        try:
+            bytes(self.seq)
+        except UndefinedSequenceError:
+            lines.append(f"Undefined sequence of length {len(self.seq)}")
+        else:
+            # Don't want to include the entire sequence
+            seq = repr(self.seq)
+            lines.append(seq)
         return "\n".join(lines)
 
     def __repr__(self):

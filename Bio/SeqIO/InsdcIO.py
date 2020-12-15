@@ -35,11 +35,11 @@ import warnings
 from datetime import datetime
 from Bio import BiopythonWarning
 
-from Bio.Seq import UnknownSeq
+from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import SeqIO
 from Bio import SeqFeature
-from .Interfaces import SequenceIterator, SequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
 
 
 # NOTE
@@ -955,6 +955,14 @@ class GenBankWriter(_InsdcWriter):
         # TODO - Force lower case?
 
         if isinstance(record.seq, UnknownSeq):
+            data = None
+        else:
+            try:
+                data = _get_seq_string(record)
+            except UndefinedSequenceError:
+                data = None
+
+        if data is None:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -964,7 +972,7 @@ class GenBankWriter(_InsdcWriter):
             return
 
         # Catches sequence being None:
-        data = self._get_seq_string(record).lower()
+        data = data.lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
         for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
@@ -1134,6 +1142,14 @@ class EmblWriter(_InsdcWriter):
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
+            data = None
+        else:
+            try:
+                data = _get_seq_string(record)
+            except UndefinedSequenceError:
+                data = None
+
+        if data is None:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1144,7 +1160,7 @@ class EmblWriter(_InsdcWriter):
             return
 
         # Catches sequence being None
-        data = self._get_seq_string(record).lower()
+        data = data.lower()
         seq_len = len(data)
 
         molecule_type = record.annotations.get("molecule_type")

@@ -18,7 +18,7 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
@@ -100,7 +100,7 @@ def _retrieve_seq(adaptor, primary_id):
     # The database schema ensures there will be only one matching
     # row in the table.
 
-    # If an UnknownSeq was recorded, seq will be NULL,
+    # If an undefined sequence was recorded, seq will be NULL,
     # but length will be populated.  This means length(seq)
     # will return None.
     seqs = adaptor.execute_and_fetchall(
@@ -114,7 +114,7 @@ def _retrieve_seq(adaptor, primary_id):
 
     try:
         length = int(length)
-        given_length = int(length)
+        given_length = int(given_length)
         assert length == given_length
         have_seq = True
     except TypeError:
@@ -132,16 +132,10 @@ def _retrieve_seq(adaptor, primary_id):
     del given_length
 
     if have_seq:
-        data = _BioSQLSequenceData(primary_id, adaptor, start=0, length=int(length))
+        data = _BioSQLSequenceData(primary_id, adaptor, start=0, length=length)
         return Seq(data)
     else:
-        if moltype in ("dna", "rna"):
-            character = "N"
-        elif moltype == "protein":
-            character = "X"
-        else:
-            character = "?"
-        return UnknownSeq(length, character=character)
+        return Seq(None, length=length)
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):
