@@ -88,8 +88,7 @@ class IQTreeCommandline(AbstractCommandline):
 					Default: 100 parsimony trees + BIONJ tree
 					""",
 				equate = False,
-				filename = (lambda x: not(x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))),                            #Not sure if this works
-				checker_function= lambda x: True if filename else (x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))     #Need tree file to test
+				filename = (lambda x: not(x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))),
 				),
 			_Option(
 				["-te", "te"],
@@ -100,8 +99,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   If the nodes do not have names IQTree will assign node names as Node1, Node2, etc.
 				   """,
 				equate = False,
-				filename = (lambda x: not(x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))),                            #Not sure if this works
-				checker_function= lambda x: True if filename else (x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))     #Need tree file to test
+				filename = (lambda x: not(x in ("BIONJ", "RANDOM","PARS", "PLLPARS"))),
 				),
 			_Option(
 				["-o", "o"],
@@ -402,7 +400,7 @@ class IQTreeCommandline(AbstractCommandline):
 				""",
 				),
 			_Option(
-				["-a", "a"],    #idk if this is always a number or what
+				["-a", "a"],                    #idk if this is always a number or what
 				"""Specify the Gamma shape parameter
 				   Default: estimate""",
 				equate = False,
@@ -520,7 +518,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: 100
 				   """,
 				equate = False,
-				checker_function = _is_int,      #im assuming you can't input half a tree so it should be int
+				checker_function = _is_int,      
 				),
 			_Option(
 				["-ntop", "ntop"],
@@ -530,7 +528,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: 20
 				   """,
 				equate = False,
-				checker_function = _is_int,                   #assuming this has to be an int
+				checker_function = _is_int,                 
 				),
 			_Option(
 				["-nbest", "nbest"],
@@ -576,7 +574,7 @@ class IQTreeCommandline(AbstractCommandline):
 				["-bb", "bb"],
 				"""Specify a number of bootstrap replicates (>= 1000)
 				   """,
-				checker_function = _is_number   #not sure if it must be integer or not
+				checker_function = _is_number   
 				),
 			_Option(
 				["-bcor", "bcor"],
@@ -663,13 +661,13 @@ class IQTreeCommandline(AbstractCommandline):
 				   provide a consensus tree.
 				   """,
 				equate = False,
-				checker_function = _is_int      #im assuming this requires an integer
+				checker_function = _is_int    
 				),
 			_Option(
 				["-bs", "bs"],
 				"""Like -b but omit analysis on original alignment.""",
 				equate = False,
-				checker_function = _is_int     #same as above
+				checker_function = _is_int    
 				),
 			_Option(
 				["-bo", "bo"],
@@ -725,7 +723,7 @@ class IQTreeCommandline(AbstractCommandline):
 
 				   Default: observed state frequency from the alignment""",
 				equate = False,
-				checker_function = _is_number,       #assuming probability is a float
+				checker_function = _is_number,    
 				),
 
 			### Tree topology tests ###
@@ -746,7 +744,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   (ELW).
 				   """,
 				equate = False,
-				checker_function = _is_int,    #Assuming this is an int
+				checker_function = _is_int,    
 				),
 			_Switch(
 				["-zw", "zw"],
