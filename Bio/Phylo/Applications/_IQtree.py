@@ -436,7 +436,7 @@ class IQTreeCommandline(AbstractCommandline):
 				""",
 				),
 			_Switch(
-				["-mh", "mh"],                     #not in documentation, found in -h list of commands
+				["-mh", "mh"],                    
 				"""Computing site-specific rates to .mhrate file using Meyer & von Haeseler method""",
 				),
 
@@ -566,7 +566,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: 6
 				   """,
 				equate = False,
-				#checker_function= _is_int           #not sure if radius must be an integer
+				checker_function= _is_number,
 				),
 
 			### Ultrafast booststrap parameters ###
@@ -652,7 +652,6 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: NONE
 				   """,
 				equate = False,
-				#idk if this shuold be a number
 				),
 
 			### Nonpoarametric bootstrap ###
@@ -748,7 +747,6 @@ class IQTreeCommandline(AbstractCommandline):
 				   """,
 				equate = False,
 				checker_function = _is_int,    #Assuming this is an int
-				#Assuming this requires a previous -z command, not sure how to check for it though
 				),
 			_Switch(
 				["-zw", "zw"],
@@ -998,7 +996,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   15 constant sites of all G and 40 constant sites of all T into the alignment.
 				   """,
 				equate = False,
-				### maybe see if you can get a checker function to check each comma separated argument
+				checker_function = lambda x: True if (all(y.isdigit() for y in x.split(","))) else False,
 				),
 
 			#These weren't on the documentation but are present on -h list of commands
