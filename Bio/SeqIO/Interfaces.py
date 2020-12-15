@@ -98,7 +98,6 @@ class SequenceIterator(ABC):
         """Start parsing the file, and return a SeqRecord iterator."""
 
 
-# Function variant of the SequenceWriter method.
 def _get_seq_string(record):
     """Use this to catch errors like the sequence being None (PRIVATE)."""
     if not isinstance(record, SeqRecord):
@@ -163,10 +162,6 @@ class SequenceWriter:
 
         self._target = target
         self.handle = handle
-
-    def _get_seq_string(self, record):
-        """Use this to catch errors like the sequence being None (PRIVATE)."""
-        return _get_seq_string(record)
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""

@@ -102,7 +102,7 @@ class Seq:
         >>> print(my_undefined_seq)
         Traceback (most recent call last):
         ...
-        Bio.Seq.UndefinedSequenceError: sequence contents is undefined
+        Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
         if length is None:
             if isinstance(data, bytes):
@@ -2995,7 +2995,7 @@ class _UndefinedSequenceData:
                 return b""
             return _UndefinedSequenceData(size)
         else:
-            raise UndefinedSequenceError("sequence contents is undefined")
+            raise UndefinedSequenceError("Sequence content is undefined")
 
     def __len__(self):
         return self._length
@@ -3003,7 +3003,7 @@ class _UndefinedSequenceData:
     def __bytes__(self):
         if self._length == 0:
             return b""
-        raise UndefinedSequenceError("sequence contents is undefined")
+        raise UndefinedSequenceError("Sequence content is undefined")
 
 
 # The transcribe, backward_transcribe, and translate functions are

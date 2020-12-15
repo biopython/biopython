@@ -39,7 +39,7 @@ from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import SeqIO
 from Bio import SeqFeature
-from .Interfaces import SequenceIterator, SequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
 
 
 # NOTE
@@ -958,7 +958,7 @@ class GenBankWriter(_InsdcWriter):
             data = None
         else:
             try:
-                data = self._get_seq_string(record)
+                data = _get_seq_string(record)
             except UndefinedSequenceError:
                 data = None
 
@@ -1145,7 +1145,7 @@ class EmblWriter(_InsdcWriter):
             data = None
         else:
             try:
-                data = self._get_seq_string(record)
+                data = _get_seq_string(record)
             except UndefinedSequenceError:
                 data = None
 

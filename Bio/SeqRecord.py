@@ -656,7 +656,7 @@ class SeqRecord:
         try:
             bytes(self.seq)
         except UndefinedSequenceError:
-            pass
+            lines.append(f"Undefined sequence of length {len(self.seq)}")
         else:
             # Don't want to include the entire sequence
             seq = repr(self.seq)
