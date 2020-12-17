@@ -77,14 +77,14 @@ methods that allow it to be used as a dictionary.
 
 import numpy
 
-from Bio.Seq import Seq
+from Bio.Seq import Seq, SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator
 from . import _twoBitIO
 
 
-class _TwoBitSequenceData:
+class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
     """Stores information needed to retrieve sequence data from a .2bit file (PRIVATE).
 
     Objects of this class store the file position at which the sequence data
@@ -97,14 +97,16 @@ class _TwoBitSequenceData:
     is loaded only if explicitly requested.
     """
 
-    def __init__(self, stream, offset):
+    def __init__(self, stream, offset, length):
         """Initialize the file stream and file position of the sequence data."""
         self.stream = stream
         self.offset = offset
+        self.length = length
+        super().__init__()
 
     def __getitem__(self, key):
-        length = self.length
         if isinstance(key, slice):
+            length = self.length
             start, end, step = key.indices(length)
             size = len(range(start, end, step))
             if size == 0:
@@ -177,15 +179,13 @@ class TwoBitIterator(SequenceIterator):
             name = data.decode("ASCII")
             data = stream.read(4)
             offset = int.from_bytes(data, byteorder, signed=False)
-            sequence = _TwoBitSequenceData(stream, offset)
-            sequences[name] = sequence
+            sequences[name] = (stream, offset)
         self.sequences = sequences
-        for name, sequence in sequences.items():
-            offset = sequence.offset
+        for name, (stream, offset) in sequences.items():
             stream.seek(offset)
             data = stream.read(4)
             dnaSize = int.from_bytes(data, byteorder, signed=False)
-            sequence.length = dnaSize
+            sequence = _TwoBitSequenceData(stream, offset, dnaSize)
             data = stream.read(4)
             nBlockCount = int.from_bytes(data, byteorder, signed=False)
             nBlockStarts = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
@@ -205,6 +205,7 @@ class TwoBitIterator(SequenceIterator):
             if reserved != 0:
                 raise ValueError("Found non-zero reserved field %u" % reserved)
             sequence.offset = stream.tell()
+            sequences[name] = sequence
 
     def parse(self, stream):
         """Iterate over the sequences in the file."""

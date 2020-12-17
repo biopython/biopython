@@ -18,12 +18,12 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio.Seq import Seq
+from Bio.Seq import Seq, SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 
-class _BioSQLSequenceData:
+class _BioSQLSequenceData(SequenceDataAbstractBaseClass):
     """Retrieves sequence data from a BioSQL database (PRIVATE).."""
 
     def __init__(self, primary_id, adaptor, start=0, length=0):
@@ -38,6 +38,7 @@ class _BioSQLSequenceData:
         self.adaptor = adaptor
         self._length = length
         self.start = start
+        super().__init__()
 
     def __len__(self):
         """Return the length of the sequence."""
