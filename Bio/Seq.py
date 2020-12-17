@@ -22,6 +22,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 import array
 import warnings
+from abc import ABC, abstractmethod
 
 from Bio import BiopythonWarning, BiopythonDeprecationWarning
 from Bio.Data import IUPACData, CodonTable
@@ -51,6 +52,43 @@ ambiguous_rna_complement = dict(IUPACData.ambiguous_rna_complement)
 ambiguous_rna_complement["T"] = ambiguous_rna_complement["U"]
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
 del ambiguous_rna_complement
+
+
+class SequenceDataAbstractBaseClass(ABC):
+    """Abstract base class for sequence content providers.
+
+    Most users will not need to use this class. It is used internally as a base
+    class for sequence content provider classes such as _UndefinedSequenceData
+    defined in this module, and _TwoBitSequenceData in Bio.SeqIO.TwoBitIO.
+    Instances of these classes can be used instead of a ``bytes`` object as the
+    data argument when creating a Seq object, and provide the sequence content
+    only when requested via ``__getitem``. This allows lazy parsers to load and
+    parse sequence data from a file only for the requested sequence regions,
+    and _UndefinedSequenceData instances to raise an exception when undefined
+    sequence data are requested.
+
+    Future implementations of lazy parsers that similarly provide on-demand
+    parsing of sequence data should use a subclass of this abstract class and
+    implement the abstract methods ``__len__`` (which must return the sequence
+    length) and ``__getitem__``, which must return a ``bytes`` object or a new
+    instance of the subclass for the requested region, or raise an
+    ``UndefinedSequenceError``. Calling ``__getitem__`` for a sequence region
+    of size zero should always return an empty ``bytes`` object. Subclasses of
+    SequenceDataAbstractBaseClass must call ``super().__init__()`` as part of
+    their ``__init__`` method.
+    """
+
+    def __init__(self):
+        """Check if ``__getitem__`` returns a bytes-like object."""
+        assert self[:0] == b""
+
+    @abstractmethod
+    def __len__(self):
+        pass
+
+    @abstractmethod
+    def __getitem__(self, key):
+        pass
 
 
 class Seq:
@@ -105,16 +143,12 @@ class Seq:
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
         if length is None:
-            if isinstance(data, bytes):
+            if isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
                 self._data = data
             elif isinstance(data, (bytearray, Seq, MutableSeq)):
                 self._data = bytes(data)
             elif isinstance(data, str):
                 self._data = bytes(data, encoding="ASCII")
-            elif self._check_bytes_like(data):
-                # e.g. the TwoBitSequence objects, which return bytes when
-                # __getitem__ is called on them.
-                self._data = data
             else:
                 raise TypeError(
                     "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
@@ -123,22 +157,6 @@ class Seq:
             if data is not None:
                 raise ValueError("length should be None if data is None")
             self._data = _UndefinedSequenceData(length)
-
-    def _check_bytes_like(self, data):
-        # Check if data is bytes-like. This currently requires two things:
-        # - calling len(data) must return the length of the data
-        # - calling __getitem__ must return a bytes object for the requested region
-        try:
-            len(data)
-        except TypeError:
-            return False
-        try:
-            c = data[:0]
-        except TypeError:
-            return False
-        if c != b"":
-            return False
-        return True
 
     def __bytes__(self):
         return bytes(self._data[:])
@@ -2971,11 +2989,11 @@ class UndefinedSequenceError(ValueError):
     """Sequence contents is undefined."""
 
 
-class _UndefinedSequenceData:
+class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
 
     Objects of this class can be used to create a Seq object to represent
-    sequences with a known length is known, but an unknown sequence contents.
+    sequences with a known length, but an unknown sequence contents.
     Calling __len__ returns the sequence length, calling __getitem__ raises a
     ValueError except for requests of zero size, for which it returns an empty
     bytes object.
@@ -2986,6 +3004,7 @@ class _UndefinedSequenceData:
         if length < 0:
             raise ValueError("Length must not be negative.")
         self._length = length
+        super().__init__()
 
     def __getitem__(self, key):
         if isinstance(key, slice):
