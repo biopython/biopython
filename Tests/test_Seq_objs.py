@@ -83,14 +83,16 @@ class StringMethodTests(unittest.TestCase):
     ]
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-        _examples.extend([
-            UnknownSeq(1),
-            UnknownSeq(1, character="n"),
-            UnknownSeq(1, character="N"),
-            UnknownSeq(12, character="N"),
-            UnknownSeq(12, character="X"),
-            UnknownSeq(12),
-        ])
+        _examples.extend(
+            [
+                UnknownSeq(1),
+                UnknownSeq(1, character="n"),
+                UnknownSeq(1, character="N"),
+                UnknownSeq(12, character="N"),
+                UnknownSeq(12, character="X"),
+                UnknownSeq(12),
+            ]
+        )
     for seq in _examples[:]:
         if not isinstance(seq, UnknownSeq):
             _examples.append(MutableSeq(seq))
@@ -439,11 +441,13 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, UnknownSeq) and len(example1) > 1:
                 with self.assertWarns(BiopythonDeprecationWarning):
                     subs = tuple(
-                        example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
-                )
+                        example1[start : start + 2]
+                        for start in range(0, len(example1) - 2, 3)
+                    )
             else:
                 subs = tuple(
-                    example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
+                    example1[start : start + 2]
+                    for start in range(0, len(example1) - 2, 3)
                 )
             subs_str = tuple(str(s) for s in subs)
 
@@ -472,7 +476,8 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, UnknownSeq) and len(example1) > 1:
                 with self.assertWarns(BiopythonDeprecationWarning):
                     subs = tuple(
-                        example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
+                        example1[start : start + 2]
+                        for start in range(0, len(example1) - 2, 3)
                     )
             else:
                 subs = tuple(
@@ -763,7 +768,9 @@ class StringMethodTests(unittest.TestCase):
                 with self.assertWarns(BiopythonDeprecationWarning):
                     tran = example1.translate()
                     # Try with positional vs named argument:
-                    self.assertEqual(example1.translate(11), example1.translate(table=11))
+                    self.assertEqual(
+                        example1.translate(11), example1.translate(table=11)
+                    )
             else:
                 tran = example1.translate()
                 # Try with positional vs named argument:
@@ -954,7 +961,9 @@ class StringMethodTests(unittest.TestCase):
 
             self.assertEqual(
                 "-" * 15,
-                spacer1.join([UnknownSeq(5, character="-"), UnknownSeq(5, character="-")]),
+                spacer1.join(
+                    [UnknownSeq(5, character="-"), UnknownSeq(5, character="-")]
+                ),
             )
             self.assertEqual(
                 "N" * 5 + "-" * 10,

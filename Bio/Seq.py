@@ -310,7 +310,9 @@ class Seq:
         >>> Seq("MELKI") + "LV"
         Seq('MELKILV')
         """
-        if isinstance(self._data, _UndefinedSequenceData) and isinstance(other._data, _UndefinedSequenceData):
+        if isinstance(self._data, _UndefinedSequenceData) and isinstance(
+            other._data, _UndefinedSequenceData
+        ):
             return Seq(None, len(self) + len(other))
         elif isinstance(other, (Seq, MutableSeq)):
             return self.__class__(bytes(self) + bytes(other))
