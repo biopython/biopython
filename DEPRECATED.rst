@@ -188,6 +188,15 @@ Deprecated in release 1.79.
 Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
 Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
+Bio.Seq.UnknownSeq
+------------------
+Deprecated in release 1.79.
+Instead of ``UnknownSeq(length)``, please use ``Seq(None, length=length)``.
+Note that the sequence contents of a ``Seq`` object constructed in this way
+is considered to be unknown, and any attempt to access the sequence contents
+(for example, by calling ``print`` on the object) will result in an
+``UndefinedSequenceError``.
+
 Iterator .next() methods
 ------------------------
 The .next() method defined for any Biopython iterator is deprecated as of

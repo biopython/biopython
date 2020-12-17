@@ -585,6 +585,32 @@ As an extension to this, using sequence objects as keys in a Python dictionary
 is equivalent to using the sequence as a plain string for the key.
 See also Section~\ref{sec:seq-to-string}.
 
+\section{Sequences with unknown sequence contents}
+
+In some cases, the length of a sequence may be known but not the actual letters constituting it. For example, GenBank and EMBL files may represent a genomic DNA sequence only by its config information, without specifying the sequence contents explicitly. Such sequences can be represented by creating a \verb|Seq| object with the argument \verb|None|, followed by the sequence length:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> unknown_seq = Seq(None, 10)
+\end{minted}
+
+The \verb|Seq| object thus created has a well-defined length. Any attempt to access the sequence contents, however, will raise an \verb|UndefinedSequenceError|:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> unknown_seq
+Seq(None, length=10)
+>>> len(unknown_seq)
+10
+>>> print(unknown_seq)
+Traceback (most recent call last):
+...
+Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+>>>
+\end{minted}
+
+
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
 
@@ -657,6 +683,10 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
 \section{UnknownSeq objects}
+
+\textbf{Note that \verb|UnknownSeq| is deprecated. To represent a sequence of
+known length but unknown sequence contents, please use \verb|Seq(None, length)|.}}
+
 The \verb|UnknownSeq| object is a subclass of the basic \verb|Seq| object
 and its purpose is to represent a
 sequence where we know the length, but not the actual letters making it up.

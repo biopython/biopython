@@ -171,7 +171,7 @@ class SeqRecord:
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
+         - seq         - Sequence, required (Seq or MutableSeq)
          - id          - Sequence identifier, recommended (string)
          - name        - Sequence name, optional (string)
          - description - Sequence description, optional (string)
@@ -189,9 +189,6 @@ class SeqRecord:
         Note that while an id is optional, we strongly recommend you supply a
         unique id string for each record.  This is especially important
         if you wish to write your sequences to a file.
-
-        If you don't have the actual sequence, but you do know its length,
-        then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
         attributes later.

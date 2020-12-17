@@ -9,7 +9,7 @@ import copy
 import unittest
 import warnings
 
-from Bio import BiopythonWarning
+from Bio import BiopythonWarning, BiopythonDeprecationWarning
 from Bio import Seq
 from Bio.Data.IUPACData import (
     ambiguous_dna_complement,
@@ -508,7 +508,8 @@ class TestMutableSeq(unittest.TestCase):
             mutable_s, Seq.MutableSeq, "Initializing MutableSeq from MutableSeq"
         )
         # Deprecated:
-        mutable_s = Seq.MutableSeq(array.array("u", sequence.decode("ASCII")))
+        with self.assertWarns(BiopythonDeprecationWarning):
+            mutable_s = Seq.MutableSeq(array.array("u", sequence.decode("ASCII")))
         self.assertIsInstance(
             mutable_s, Seq.MutableSeq, "Creating MutableSeq using array"
         )
@@ -750,6 +751,7 @@ class TestMutableSeq(unittest.TestCase):
 
 class TestUnknownSeq(unittest.TestCase):
     def setUp(self):
+        warnings.simplefilter("ignore", BiopythonDeprecationWarning)
         self.s = Seq.UnknownSeq(6)
         self.u = Seq.Seq(None, length=6)
 
@@ -812,20 +814,28 @@ class TestUnknownSeq(unittest.TestCase):
     def test_complement(self):
         self.s.complement()
         self.assertEqual("??????", self.s)
-        self.assertRaises(ValueError, self.u.complement)
+        t = self.u.complement()
+        self.assertEqual(len(t), 6)
+        self.assertRaises(ValueError, str, t)
 
     def test_reverse_complement(self):
         self.s.reverse_complement()
         self.assertEqual("??????", self.s)
-        self.assertRaises(ValueError, self.u.reverse_complement)
+        t = self.u.reverse_complement()
+        self.assertEqual(len(t), 6)
+        self.assertRaises(ValueError, str, t)
 
     def test_transcribe(self):
         self.assertEqual("??????", self.s.transcribe())
-        self.assertRaises(ValueError, self.u.transcribe)
+        t = self.u.transcribe()
+        self.assertEqual(len(t), 6)
+        self.assertRaises(ValueError, str, t)
 
     def test_back_transcribe(self):
         self.assertEqual("??????", self.s.back_transcribe())
-        self.assertRaises(ValueError, self.u.back_transcribe)
+        t = self.u.back_transcribe()
+        self.assertEqual(len(t), 6)
+        self.assertRaises(ValueError, str, t)
 
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
@@ -839,7 +849,9 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())
-        self.assertRaises(ValueError, self.u.translate)
+        t = self.u.translate()
+        self.assertEqual(len(t), 2)
+        self.assertRaises(ValueError, str, t)
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, character="N")
@@ -1059,11 +1071,20 @@ class TestTranslating(unittest.TestCase):
     def test_translation_on_proteins(self):
         """Check translation fails on a protein."""
         for s in protein_seqs:
-            with self.assertRaises(TranslationError):
-                Seq.translate(s)
+            if len(s) % 3 != 0:
+                with self.assertWarns(BiopythonWarning):
+                    with self.assertRaises(TranslationError):
+                        Seq.translate(s)
 
-            with self.assertRaises(TranslationError):
-                s.translate()
+                with self.assertWarns(BiopythonWarning):
+                    with self.assertRaises(TranslationError):
+                        s.translate()
+            else:
+                with self.assertRaises(TranslationError):
+                    Seq.translate(s)
+
+                with self.assertRaises(TranslationError):
+                    s.translate()
 
     def test_translation_of_invalid_codon(self):
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:

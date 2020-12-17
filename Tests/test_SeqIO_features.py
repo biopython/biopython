@@ -11,8 +11,10 @@ and confirms they are consistent using our different parsers.
 
 import os
 import unittest
+import warnings
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import (
@@ -282,9 +284,11 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(new, answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
-        self.assertIsInstance(new, UnknownSeq)
+        new = feature.extract(Seq(None, len(parent_seq)))
+        self.assertIsInstance(new, Seq)
         self.assertEqual(len(new), len(answer_str))
+        if len(answer_str) > 0:
+            self.assertRaises(UndefinedSequenceError, str, new)
 
         if _get_location_string(feature, 1326) != location_str:
             # This is to avoid issues with the N^1 between feature which only
