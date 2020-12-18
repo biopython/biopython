@@ -481,7 +481,8 @@ class StringMethodTests(unittest.TestCase):
                     )
             else:
                 subs = tuple(
-                    example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
+                    example1[start : start + 2]
+                    for start in range(0, len(example1) - 2, 3)
                 )
             subs_str = tuple(str(s) for s in subs)
 
