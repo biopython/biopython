@@ -755,6 +755,9 @@ class TestUnknownSeq(unittest.TestCase):
         self.s = Seq.UnknownSeq(6)
         self.u = Seq.Seq(None, length=6)
 
+    def tearDown(self):
+        warnings.simplefilter("default", BiopythonDeprecationWarning)
+
     def test_unknownseq_construction(self):
         self.assertEqual("??????", Seq.UnknownSeq(6))
         self.assertEqual("NNNNNN", Seq.UnknownSeq(6, character="N"))

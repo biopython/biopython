@@ -62,8 +62,8 @@ class SequenceDataAbstractBaseClass(ABC):
     defined in this module, and _TwoBitSequenceData in Bio.SeqIO.TwoBitIO.
     Instances of these classes can be used instead of a ``bytes`` object as the
     data argument when creating a Seq object, and provide the sequence content
-    only when requested via ``__getitem``. This allows lazy parsers to load and
-    parse sequence data from a file only for the requested sequence regions,
+    only when requested via ``__getitem__``. This allows lazy parsers to load
+    and parse sequence data from a file only for the requested sequence regions,
     and _UndefinedSequenceData instances to raise an exception when undefined
     sequence data are requested.
 
