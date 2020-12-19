@@ -62,8 +62,8 @@ class SequenceDataAbstractBaseClass(ABC):
     defined in this module, and _TwoBitSequenceData in Bio.SeqIO.TwoBitIO.
     Instances of these classes can be used instead of a ``bytes`` object as the
     data argument when creating a Seq object, and provide the sequence content
-    only when requested via ``__getitem``. This allows lazy parsers to load and
-    parse sequence data from a file only for the requested sequence regions,
+    only when requested via ``__getitem__``. This allows lazy parsers to load
+    and parse sequence data from a file only for the requested sequence regions,
     and _UndefinedSequenceData instances to raise an exception when undefined
     sequence data are requested.
 
@@ -310,7 +310,11 @@ class Seq:
         >>> Seq("MELKI") + "LV"
         Seq('MELKILV')
         """
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(self._data, _UndefinedSequenceData) and isinstance(
+            other._data, _UndefinedSequenceData
+        ):
+            return Seq(None, len(self) + len(other))
+        elif isinstance(other, (Seq, MutableSeq)):
             return self.__class__(bytes(self) + bytes(other))
         elif isinstance(other, str):
             return self.__class__(bytes(self) + other.encode("ASCII"))
@@ -975,6 +979,10 @@ class Seq:
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
+        if isinstance(self._data, _UndefinedSequenceData):
+            # complement of an undefined sequence is an undefined sequence
+            # of the same length
+            return self
         if (b"U" in self._data or b"u" in self._data) and (
             b"T" in self._data or b"t" in self._data
         ):
@@ -1058,6 +1066,10 @@ class Seq:
         >>> Seq("CGAUT").complement_rna()
         Seq('GCUAA')
         """
+        if isinstance(self._data, _UndefinedSequenceData):
+            # complement of an undefined sequence is an undefined sequence
+            # of the same length
+            return self
         return Seq(bytes(self).translate(_rna_complement_table))
 
     def reverse_complement_rna(self):
@@ -1095,7 +1107,13 @@ class Seq:
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
-        return Seq(bytes(self).replace(b"T", b"U").replace(b"t", b"u"))
+        try:
+            data = bytes(self)
+        except UndefinedSequenceError:
+            # transcribing an undefined sequence yields an undefined sequence
+            # of the same length
+            return self
+        return Seq(data.replace(b"T", b"U").replace(b"t", b"u"))
 
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
@@ -1120,7 +1138,13 @@ class Seq:
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
-        return Seq(bytes(self).replace(b"U", b"T").replace(b"u", b"t"))
+        try:
+            data = bytes(self)
+        except UndefinedSequenceError:
+            # back-transcribing an undefined sequence yields an undefined
+            # sequence of the same length
+            return self
+        return Seq(data.replace(b"U", b"T").replace(b"u", b"t"))
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -1207,8 +1231,21 @@ class Seq:
                 "the python string object's translate method. "
                 "Use str(my_seq).translate(...) instead."
             )
+        try:
+            data = str(self)
+        except UndefinedSequenceError:
+            # translating an undefined sequence yields an undefined
+            # sequence with the length divided by 3
+            n = len(self)
+            if n % 3 != 0:
+                warnings.warn(
+                    "Partial codon, len(sequence) not a multiple of three. "
+                    "This may become an error in future.",
+                    BiopythonWarning,
+                )
+            return Seq(None, n // 3)
 
-        return Seq(_translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap))
+        return Seq(_translate_str(data, table, stop_symbol, to_stop, cds, gap=gap))
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
@@ -1268,7 +1305,7 @@ class Seq:
 
 
 class UnknownSeq(Seq):
-    """Read-only sequence object of known length but unknown contents.
+    """Read-only sequence object of known length but unknown contents (DEPRECATED).
 
     If you have an unknown sequence, you can represent this with a normal
     Seq object, for example:
@@ -1339,6 +1376,10 @@ class UnknownSeq(Seq):
          - character - single letter string, default "?". Typically "N"
            for nucleotides, "X" for proteins, and "?" otherwise.
         """
+        warnings.warn(
+            "UnknownSeq(length) is deprecated; please use Seq(None, length) instead.",
+            BiopythonDeprecationWarning,
+        )
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         self._length = int(length)
