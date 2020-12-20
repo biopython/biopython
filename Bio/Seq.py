@@ -247,10 +247,8 @@ class Seq:
             return bytes(self) < bytes(other)
         elif isinstance(other, str):
             return bytes(self) < other.encode("ASCII")
-        raise TypeError(
-            f"'<' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return bytes(self) < other
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -258,10 +256,8 @@ class Seq:
             return bytes(self) <= bytes(other)
         elif isinstance(other, str):
             return bytes(self) <= other.encode("ASCII")
-        raise TypeError(
-            f"'<=' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return bytes(self) <= other
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
@@ -269,10 +265,8 @@ class Seq:
             return bytes(self) > bytes(other)
         elif isinstance(other, str):
             return bytes(self) > other.encode("ASCII")
-        raise TypeError(
-            f"'>' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return bytes(self) > other
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
@@ -280,10 +274,8 @@ class Seq:
             return bytes(self) >= bytes(other)
         elif isinstance(other, str):
             return bytes(self) >= other.encode("ASCII")
-        raise TypeError(
-            f"'>=' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return bytes(self) >= other
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -2021,10 +2013,8 @@ class MutableSeq:
             return self._data < bytes(other)
         if isinstance(other, str):
             return self._data < other.encode("ASCII")
-        raise TypeError(
-            f"'<' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return self._data < other
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -2034,10 +2024,8 @@ class MutableSeq:
             return self._data <= bytes(other)
         if isinstance(other, str):
             return self._data <= other.encode("ASCII")
-        raise TypeError(
-            f"'<=' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return self._data <= other
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
@@ -2047,10 +2035,8 @@ class MutableSeq:
             return self._data > bytes(other)
         if isinstance(other, str):
             return self._data > other.encode("ASCII")
-        raise TypeError(
-            f"'>' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return self._data > other
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
@@ -2060,10 +2046,8 @@ class MutableSeq:
             return self._data >= bytes(other)
         if isinstance(other, str):
             return self._data >= other.encode("ASCII")
-        raise TypeError(
-            f"'>=' not supported between instances of '{type(self).__name__}'"
-            f" and '{type(other).__name__}'"
-        )
+        else:
+            return self._data >= other
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
