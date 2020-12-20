@@ -19,7 +19,7 @@ from Bio import BiopythonWarning
 
 # local stuff
 from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
 from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
@@ -436,6 +436,7 @@ class SeqInterfaceTest(unittest.TestCase):
         )
         self.db = self.server["biosql-test"]
         self.item = self.db.lookup(accession="X62281")
+        self.item2 = self.db.lookup(accession="AJ237582")
 
     def tearDown(self):
         self.server.close()
@@ -569,6 +570,314 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(len(multi_ann), 2)
         self.assertIn("GI:16354", multi_ann)
         self.assertIn("SWISS-PROT:P31169", multi_ann)
+
+    def test_eq(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertEqual(seq1[30:32], seq2[3:5])
+        self.assertEqual(seq1[30:32], "CA")
+        self.assertEqual(seq2[3:5], "CA")
+        self.assertEqual(seq1[30:32], b"CA")
+        self.assertEqual(seq2[3:5], b"CA")
+        self.assertEqual(seq1[30:32], Seq("CA"))
+        self.assertEqual(seq2[3:5], Seq("CA"))
+        self.assertEqual(seq1[30:32], MutableSeq("CA"))
+        self.assertEqual(seq2[3:5], MutableSeq("CA"))
+        self.assertEqual(seq2[3:5], seq1[30:32])
+        self.assertEqual("CA", seq1[30:32])
+        self.assertEqual("CA", seq2[3:5])
+        self.assertEqual(b"CA", seq1[30:32])
+        self.assertEqual(b"CA", seq2[3:5])
+        self.assertEqual(Seq("CA"), seq1[30:32])
+        self.assertEqual(Seq("CA"), seq2[3:5])
+        self.assertEqual(MutableSeq("CA"), seq1[30:32])
+        self.assertEqual(MutableSeq("CA"), seq2[3:5])
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 == Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 == Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 == Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 == Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, len(seq1)) == seq1
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, len(seq2)) == seq2
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, 10) == seq1
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, 10) == seq2
+
+    def test_ne(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertNotEqual(seq1, seq2)
+        self.assertNotEqual(seq1, "CA")
+        self.assertNotEqual(seq2, "CA")
+        self.assertNotEqual(seq1, b"CA")
+        self.assertNotEqual(seq2, b"CA")
+        self.assertNotEqual(seq1, Seq("CA"))
+        self.assertNotEqual(seq2, Seq("CA"))
+        self.assertNotEqual(seq1, MutableSeq("CA"))
+        self.assertNotEqual(seq2, MutableSeq("CA"))
+        self.assertNotEqual(seq1[30:32], "GG")
+        self.assertNotEqual(seq2[3:5], "GG")
+        self.assertNotEqual(seq1[30:32], b"GG")
+        self.assertNotEqual(seq2[3:5], b"GG")
+        self.assertNotEqual(seq1[30:32], Seq("GG"))
+        self.assertNotEqual(seq2[3:5], Seq("GG"))
+        self.assertNotEqual(seq1[30:32], MutableSeq("GG"))
+        self.assertNotEqual(seq2[3:5], MutableSeq("GG"))
+        self.assertNotEqual(seq2, seq1)
+        self.assertNotEqual("CA", seq1)
+        self.assertNotEqual("CA", seq2)
+        self.assertNotEqual(b"CA", seq1)
+        self.assertNotEqual(b"CA", seq2)
+        self.assertNotEqual(Seq("CA"), seq1)
+        self.assertNotEqual(Seq("CA"), seq2)
+        self.assertNotEqual(MutableSeq("CA"), seq1)
+        self.assertNotEqual(MutableSeq("CA"), seq2)
+        self.assertNotEqual("GG", seq1[30:32])
+        self.assertNotEqual("GG", seq2[3:5])
+        self.assertNotEqual(b"GG", seq1[30:32])
+        self.assertNotEqual(b"GG", seq2[3:5])
+        self.assertNotEqual(Seq("GG"), seq1[30:32])
+        self.assertNotEqual(Seq("GG"), seq2[3:5])
+        self.assertNotEqual(MutableSeq("GG"), seq1[30:32])
+        self.assertNotEqual(MutableSeq("GG"), seq2[3:5])
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 != Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 != Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 != Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 != Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, len(seq1)) != seq1
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, len(seq2)) != seq2
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, 10) != seq1
+        with self.assertRaises(UndefinedSequenceError):
+            Seq(None, 10) != seq2
+
+    def test_lt(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertLess(seq1, seq2)
+        self.assertLess(seq1, "CC")
+        self.assertLess("CC", seq2)
+        self.assertLess(seq1, b"CC")
+        self.assertLess(b"CC", seq2)
+        self.assertLess(seq1, Seq("CC"))
+        self.assertLess(Seq("CC"), seq2)
+        self.assertLess(seq1, MutableSeq("CC"))
+        self.assertLess(MutableSeq("CC"), seq2)
+        self.assertLess("AA", seq1)
+        self.assertLess("AA", seq2)
+        self.assertLess(b"AA", seq1)
+        self.assertLess(b"AA", seq2)
+        self.assertLess(Seq("AA"), seq1)
+        self.assertLess(Seq("AA"), seq2)
+        self.assertLess(MutableSeq("AA"), seq1)
+        self.assertLess(MutableSeq("AA"), seq2)
+        self.assertLess(seq1, "TT")
+        self.assertLess(seq2, "TT")
+        self.assertLess(seq1, b"TT")
+        self.assertLess(seq2, b"TT")
+        self.assertLess(seq1, Seq("TT"))
+        self.assertLess(seq2, Seq("TT"))
+        self.assertLess(seq1, MutableSeq("TT"))
+        self.assertLess(seq2, MutableSeq("TT"))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, 10)
+        self.assertLess("AA", seq1[30:32])
+        self.assertLess("AA", seq2[3:5])
+        self.assertLess(b"AA", seq1[30:32])
+        self.assertLess(b"AA", seq2[3:5])
+        self.assertLess(seq1[30:32], seq2[3:7])
+        self.assertLess(Seq("AA"), seq1[30:32])
+        self.assertLess(Seq("AA"), seq2[3:5])
+        self.assertLess(MutableSeq("AA"), seq1[30:32])
+        self.assertLess(MutableSeq("AA"), seq2[3:5])
+        self.assertLess(seq1[30:32], "TT")
+        self.assertLess(seq2[3:5], "TT")
+        self.assertLess(seq1[30:32], b"TT")
+        self.assertLess(seq2[3:5], b"TT")
+        self.assertLess(seq1[30:32], Seq("TT"))
+        self.assertLess(seq2[3:5], Seq("TT"))
+        self.assertLess(seq1[30:32], MutableSeq("TT"))
+        self.assertLess(seq2[3:5], MutableSeq("TT"))
+
+    def test_le(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertLessEqual(seq1, seq2)
+        self.assertLessEqual(seq1, "CC")
+        self.assertLessEqual("CC", seq2)
+        self.assertLessEqual(seq1, b"CC")
+        self.assertLessEqual(b"CC", seq2)
+        self.assertLessEqual(seq1, Seq("CC"))
+        self.assertLessEqual(Seq("CC"), seq2)
+        self.assertLessEqual(seq1, MutableSeq("CC"))
+        self.assertLessEqual(MutableSeq("CC"), seq2)
+        self.assertLessEqual("AA", seq1)
+        self.assertLessEqual("AA", seq2)
+        self.assertLessEqual(b"AA", seq1)
+        self.assertLessEqual(b"AA", seq2)
+        self.assertLessEqual(Seq("AA"), seq1)
+        self.assertLessEqual(Seq("AA"), seq2)
+        self.assertLessEqual(MutableSeq("AA"), seq1)
+        self.assertLessEqual(MutableSeq("AA"), seq2)
+        self.assertLessEqual(seq1, "TT")
+        self.assertLessEqual(seq2, "TT")
+        self.assertLessEqual(seq1, b"TT")
+        self.assertLessEqual(seq2, b"TT")
+        self.assertLessEqual(seq1, Seq("TT"))
+        self.assertLessEqual(seq2, Seq("TT"))
+        self.assertLessEqual(seq1, MutableSeq("TT"))
+        self.assertLessEqual(seq2, MutableSeq("TT"))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, 10)
+        self.assertLessEqual("AA", seq1[30:32])
+        self.assertLessEqual("AA", seq2[3:5])
+        self.assertLessEqual(b"AA", seq1[30:32])
+        self.assertLessEqual(b"AA", seq2[3:5])
+        self.assertLessEqual(seq1[30:32], seq2[3:7])
+        self.assertLessEqual(Seq("AA"), seq1[30:32])
+        self.assertLessEqual(Seq("AA"), seq2[3:5])
+        self.assertLessEqual(MutableSeq("AA"), seq1[30:32])
+        self.assertLessEqual(MutableSeq("AA"), seq2[3:5])
+        self.assertLessEqual(seq1[30:32], "TT")
+        self.assertLessEqual(seq2[3:5], "TT")
+        self.assertLessEqual(seq1[30:32], b"TT")
+        self.assertLessEqual(seq2[3:5], b"TT")
+        self.assertLessEqual(seq1[30:32], Seq("TT"))
+        self.assertLessEqual(seq2[3:5], Seq("TT"))
+        self.assertLessEqual(seq1[30:32], MutableSeq("TT"))
+        self.assertLessEqual(seq2[3:5], MutableSeq("TT"))
+
+    def test_gt(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertGreater(seq2, seq1)
+        self.assertGreater("CC", seq1)
+        self.assertGreater(seq2, "CC")
+        self.assertGreater(b"CC", seq1)
+        self.assertGreater(seq2, b"CC")
+        self.assertGreater(Seq("CC"), seq1)
+        self.assertGreater(seq2, Seq("CC"))
+        self.assertGreater(MutableSeq("CC"), seq1)
+        self.assertGreater(seq2, MutableSeq("CC"))
+        self.assertGreater(seq1, "AA")
+        self.assertGreater(seq2, "AA")
+        self.assertGreater(seq1, b"AA")
+        self.assertGreater(seq2, b"AA")
+        self.assertGreater(seq1, Seq("AA"))
+        self.assertGreater(seq2, Seq("AA"))
+        self.assertGreater(seq1, MutableSeq("AA"))
+        self.assertGreater(seq2, MutableSeq("AA"))
+        self.assertGreater("TT", seq1)
+        self.assertGreater("TT", seq2)
+        self.assertGreater(b"TT", seq1)
+        self.assertGreater(b"TT", seq2)
+        self.assertGreater(Seq("TT"), seq1)
+        self.assertGreater(Seq("TT"), seq2)
+        self.assertGreater(MutableSeq("TT"), seq1)
+        self.assertGreater(MutableSeq("TT"), seq2)
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, 10)
+        self.assertGreater(seq1[30:32], "AA")
+        self.assertGreater(seq2[3:5], "AA")
+        self.assertGreater(seq1[30:32], b"AA")
+        self.assertGreater(seq2[3:5], b"AA")
+        self.assertGreater(seq1[30:34], seq2[3:5])
+        self.assertGreater(seq1[30:32], Seq("AA"))
+        self.assertGreater(seq2[3:5], Seq("AA"))
+        self.assertGreater(seq1[30:32], MutableSeq("AA"))
+        self.assertGreater(seq2[3:5], MutableSeq("AA"))
+        self.assertGreater("TT", seq1[30:32])
+        self.assertGreater("TT", seq2[3:5])
+        self.assertGreater(b"TT", seq1[30:32])
+        self.assertGreater(b"TT", seq2[3:5])
+        self.assertGreater(Seq("TT"), seq1[30:32])
+        self.assertGreater(Seq("TT"), seq2[3:5])
+        self.assertGreater(MutableSeq("TT"), seq1[30:32])
+        self.assertGreater(MutableSeq("TT"), seq2[3:5])
+
+    def test_ge(self):
+        seq1 = self.item.seq
+        seq2 = self.item2.seq
+        self.assertGreaterEqual(seq2, seq1)
+        self.assertGreaterEqual("CC", seq1)
+        self.assertGreaterEqual(seq2, "CC")
+        self.assertGreaterEqual(b"CC", seq1)
+        self.assertGreaterEqual(seq2, b"CC")
+        self.assertGreaterEqual(Seq("CC"), seq1)
+        self.assertGreaterEqual(seq2, Seq("CC"))
+        self.assertGreaterEqual(MutableSeq("CC"), seq1)
+        self.assertGreaterEqual(seq2, MutableSeq("CC"))
+        self.assertGreaterEqual(seq1, "AA")
+        self.assertGreaterEqual(seq2, "AA")
+        self.assertGreaterEqual(seq1, b"AA")
+        self.assertGreaterEqual(seq2, b"AA")
+        self.assertGreaterEqual(seq1, Seq("AA"))
+        self.assertGreaterEqual(seq2, Seq("AA"))
+        self.assertGreaterEqual(seq1, MutableSeq("AA"))
+        self.assertGreaterEqual(seq2, MutableSeq("AA"))
+        self.assertGreaterEqual("TT", seq1)
+        self.assertGreaterEqual("TT", seq2)
+        self.assertGreaterEqual(b"TT", seq1)
+        self.assertGreaterEqual(b"TT", seq2)
+        self.assertGreaterEqual(Seq("TT"), seq1)
+        self.assertGreaterEqual(Seq("TT"), seq2)
+        self.assertGreaterEqual(MutableSeq("TT"), seq1)
+        self.assertGreaterEqual(MutableSeq("TT"), seq2)
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, len(seq1))
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, len(seq2))
+        with self.assertRaises(UndefinedSequenceError):
+            seq1 < Seq(None, 10)
+        with self.assertRaises(UndefinedSequenceError):
+            seq2 < Seq(None, 10)
+        self.assertGreaterEqual(seq1[30:32], "AA")
+        self.assertGreaterEqual(seq2[3:5], "AA")
+        self.assertGreaterEqual(seq1[30:32], b"AA")
+        self.assertGreaterEqual(seq2[3:5], b"AA")
+        self.assertGreaterEqual(seq1[30:34], seq2[3:5])
+        self.assertGreaterEqual(seq1[30:32], Seq("AA"))
+        self.assertGreaterEqual(seq2[3:5], Seq("AA"))
+        self.assertGreaterEqual(seq1[30:32], MutableSeq("AA"))
+        self.assertGreaterEqual(seq2[3:5], MutableSeq("AA"))
+        self.assertGreaterEqual("TT", seq1[30:32])
+        self.assertGreaterEqual("TT", seq2[3:5])
+        self.assertGreaterEqual(b"TT", seq1[30:32])
+        self.assertGreaterEqual(b"TT", seq2[3:5])
+        self.assertGreaterEqual(Seq("TT"), seq1[30:32])
+        self.assertGreaterEqual(Seq("TT"), seq2[3:5])
+        self.assertGreaterEqual(MutableSeq("TT"), seq1[30:32])
+        self.assertGreaterEqual(MutableSeq("TT"), seq2[3:5])
 
 
 class LoaderTest(unittest.TestCase):
