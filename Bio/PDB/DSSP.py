@@ -414,8 +414,8 @@ class DSSP(AbstractResiduePropertyMap):
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
-            File type switch: either PDB, MMCIF or DSSP. Inferred from file
-            extension by default.
+            File type switch: either PDB, MMCIF or DSSP. Inferred from the
+            file extension by default.
 
         """
         self.residue_max_acc = residue_max_acc[acc_array]
