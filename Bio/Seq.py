@@ -142,7 +142,7 @@ class SequenceDataAbstractBaseClass(ABC):
         return bytes(self).rindex(sub, start, end)
 
     def startswith(self, suffix, start=None, end=None):
-        return bytes(self).endswith(suffix, start, end)
+        return bytes(self).startswith(suffix, start, end)
 
     def endswith(self, suffix, start=None, end=None):
         return bytes(self).endswith(suffix, start, end)
@@ -155,6 +155,9 @@ class SequenceDataAbstractBaseClass(ABC):
 
     def strip(self, chars=None):
         return bytes(self).strip(chars)
+
+    def lstrip(self, chars=None):
+        return bytes(self).lstrip(chars)
 
     def rstrip(self, chars=None):
         return bytes(self).rstrip(chars)

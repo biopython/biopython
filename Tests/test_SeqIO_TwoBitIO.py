@@ -8,7 +8,6 @@ import unittest
 from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio.SeqIO import TwoBitIO
 
 
 class Parsing(unittest.TestCase):
@@ -19,10 +18,10 @@ class Parsing(unittest.TestCase):
         records = SeqIO.parse(path, "fasta")
         self.records = list(records)
 
-    def test_littleendian(self):
+    def test_littleendian(self, step=5):
         path = "TwoBit/sequence.littleendian.2bit"
         with open(path, "rb") as stream:
-            records = TwoBitIO.TwoBitIterator(stream)
+            records = SeqIO.parse(stream, "twobit")
             self.assertEqual(records.byteorder, "little")
             self.assertEqual(len(self.records), len(records))
             for record1, record2 in zip(self.records, records):
@@ -31,15 +30,15 @@ class Parsing(unittest.TestCase):
                 seq2 = record2.seq
                 self.assertEqual(seq1, seq2)
                 n = len(seq1)
-                for i in range(n):
-                    for j in range(i, n):
+                for i in range(0, n, step):
+                    for j in range(i, n, step):
                         self.assertEqual(seq1[i:j], seq2[i:j])
                         self.assertEqual(repr(seq1[i:j]), repr(seq2[i:j]))
 
-    def test_bigendian(self):
+    def test_bigendian(self, step=5):
         path = "TwoBit/sequence.bigendian.2bit"
         with open(path, "rb") as stream:
-            records = TwoBitIO.TwoBitIterator(stream)
+            records = SeqIO.parse(stream, "twobit")
             self.assertEqual(len(records), 6)
             self.assertEqual(records.byteorder, "big")
             for record1, record2 in zip(self.records, records):
@@ -48,8 +47,8 @@ class Parsing(unittest.TestCase):
                 seq2 = record2.seq
                 self.assertEqual(seq1, seq2)
                 n = len(seq1)
-                for i in range(n):
-                    for j in range(i, n):
+                for i in range(0, n, step):
+                    for j in range(i, n, step):
                         self.assertEqual(seq1[i:j], seq2[i:j])
                         self.assertEqual(repr(seq1[i:j]), repr(seq2[i:j]))
 
@@ -57,20 +56,20 @@ class Parsing(unittest.TestCase):
         path = "TwoBit/sequence.long.2bit"
         with open(path, "rb") as stream:
             with self.assertRaises(ValueError) as cm:
-                TwoBitIO.TwoBitIterator(stream)
+                SeqIO.parse(stream, "twobit")
             self.assertEqual(
                 str(cm.exception),
                 "version-1 twoBit files with 64-bit offsets for index are currently not supported",
             )
 
 
-class Comparisons(unittest.TestCase):
+class TestComparisons(unittest.TestCase):
     """Test comparisons of sequences read from 2bit files to Seq and other objects."""
 
     def setUp(self):
         path = "TwoBit/sequence.bigendian.2bit"
         self.stream = open(path, "rb")
-        records = TwoBitIO.TwoBitIterator(self.stream)
+        records = SeqIO.parse(self.stream, "twobit")
         record1 = next(records)
         record2 = next(records)
         self.seq1 = record1.seq
@@ -380,6 +379,158 @@ class Comparisons(unittest.TestCase):
         self.assertGreaterEqual(Seq("TT"), seq2[3:5])
         self.assertGreaterEqual(MutableSeq("TT"), seq1[2:4])
         self.assertGreaterEqual(MutableSeq("TT"), seq2[3:5])
+
+
+class TestBaseClassMethods(unittest.TestCase):
+    """Test if methods from the base class are called correctly."""
+
+    def setUp(self):
+        path = "TwoBit/sequence.bigendian.2bit"
+        self.stream = open(path, "rb")
+        records = SeqIO.parse(self.stream, "twobit")
+        record = next(records)
+        self.seq1 = record.seq
+        path = "TwoBit/sequence.fa"
+        records = SeqIO.parse(path, "fasta")
+        record = next(records)
+        self.seq2 = record.seq
+
+    def tearDown(self):
+        self.stream.close()
+
+    def test_bytes(self):
+        b = bytes(self.seq1)
+        self.assertIsInstance(b, bytes)
+        self.assertEqual(len(b), 480)
+        self.assertEqual(b, bytes(self.seq2))
+        b = bytes(self.seq1[:10])
+        self.assertEqual(len(b), 10)
+        self.assertIsInstance(b, bytes)
+        self.assertEqual(b, b'GTATACCCCT')
+
+    def test_hash(self):
+        self.assertEqual(hash(self.seq1), hash(self.seq2))
+        self.assertEqual(hash(self.seq1[:10]), hash(self.seq2[:10]))
+        self.assertEqual(hash(self.seq1[15:38]), hash(self.seq2[15:38]))
+
+    def test_add(self):
+        self.assertIsInstance(self.seq1 + "ABCD", Seq)
+        self.assertIsInstance(self.seq1[:10] + "ABCD", Seq)
+        self.assertIsInstance(self.seq1[15:38] + "ABCD", Seq)
+        self.assertEqual(self.seq1 + "ABCD", self.seq2 + "ABCD")
+        self.assertEqual(self.seq1[:10] + "ABCD", "GTATACCCCTABCD")
+        self.assertEqual(self.seq1[15:38] + "ABCD", "AGATTTACCCCTCTCGTCCCTGTABCD")
+
+    def test_radd(self):
+        self.assertIsInstance("ABCD" + self.seq1, Seq)
+        self.assertIsInstance("ABCD" + self.seq1[:10], Seq)
+        self.assertIsInstance("ABCD" + self.seq1[15:38], Seq)
+        self.assertEqual("ABCD" + self.seq1, "ABCD" + self.seq2)
+        self.assertEqual("ABCD" + self.seq1[:10], "ABCDGTATACCCCT")
+        self.assertEqual("ABCD" + self.seq1[15:38], "ABCDAGATTTACCCCTCTCGTCCCTGT")
+
+    def test_mul(self):
+        self.assertIsInstance(2 * self.seq1, Seq)
+        self.assertEqual(2 * self.seq1, 2 * self.seq2)
+        self.assertIsInstance(self.seq1 * 2, Seq)
+        self.assertEqual(self.seq1 * 2, self.seq2 * 2)
+
+    def test_contains(self):
+        self.assertIn("ACCCCT", self.seq1)
+        self.assertNotIn("ACGTACGT", self.seq1)
+
+    def test_repr(self):
+        self.assertIsInstance(repr(self.seq1), str)
+        self.assertEqual(repr(self.seq1), repr(self.seq2))
+
+    def test_str(self):
+        self.assertIsInstance(str(self.seq1), str)
+        self.assertEqual(str(self.seq1), str(self.seq2))
+
+    def test_count(self):
+        self.assertEqual(self.seq1.count("CT"), self.seq2.count("CT"))
+        self.assertEqual(self.seq1.count("CT", 75), self.seq2.count("CT", 75))
+        self.assertEqual(self.seq1.count("CT", 125, 250), self.seq2.count("CT", 125, 250))
+
+    def test_find(self):
+        self.assertEqual(self.seq1.find("CT"), self.seq2.find("CT"))
+        self.assertEqual(self.seq1.find("CT", 75), self.seq2.find("CT", 75))
+        self.assertEqual(self.seq1.find("CT", 75, 100), self.seq2.find("CT", 75, 100))
+        self.assertEqual(self.seq1.find("CT", None, 100), self.seq2.find("CT", None, 100))
+
+    def test_rfind(self):
+        self.assertEqual(self.seq1.rfind("CT"), self.seq2.rfind("CT"))
+        self.assertEqual(self.seq1.rfind("CT", 450), self.seq2.rfind("CT", 450))
+        self.assertEqual(self.seq1.rfind("CT", None, 100), self.seq2.rfind("CT", None, 100))
+        self.assertEqual(self.seq1.rfind("CT", 75, 100), self.seq2.rfind("CT", 75, 100))
+
+    def test_index(self):
+        self.assertEqual(self.seq1.index("CT"), self.seq2.index("CT"))
+        self.assertEqual(self.seq1.index("CT", 75), self.seq2.index("CT", 75))
+        self.assertRaises(ValueError, self.seq1.index, "CT", 75, 100)
+        self.assertRaises(ValueError, self.seq2.index, "CT", 75, 100)
+        self.assertEqual(self.seq1.index("CT", None, 100), self.seq2.index("CT", None, 100))
+
+    def test_rindex(self):
+        self.assertEqual(self.seq1.rindex("CT"), self.seq2.rindex("CT"))
+        self.assertRaises(ValueError, self.seq1.rindex, "CT", 450)
+        self.assertRaises(ValueError, self.seq2.rindex, "CT", 450)
+        self.assertEqual(self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100))
+        self.assertRaises(ValueError, self.seq1.rindex, "CT", 75, 100)
+        self.assertRaises(ValueError, self.seq2.rindex, "CT", 75, 100)
+
+    def test_startswith(self):
+        self.assertTrue(self.seq1.startswith("GTAT"))
+        self.assertTrue(self.seq1.startswith("TGGG", start=10))
+        self.assertTrue(self.seq1.startswith("TGGG", start=10, end=14))
+        self.assertFalse(self.seq1.startswith("TGGG", start=10, end=12))
+        self.assertTrue(self.seq2.startswith("GTAT"))
+        self.assertTrue(self.seq2.startswith("TGGG", start=10))
+        self.assertTrue(self.seq2.startswith("TGGG", start=10, end=14))
+        self.assertFalse(self.seq2.startswith("TGGG", start=10, end=12))
+
+    def test_endswith(self):
+        self.assertTrue(self.seq1.endswith("ACCG"))
+        self.assertTrue(self.seq1.endswith("ACCG", 476))
+        self.assertTrue(self.seq1.endswith("GCAC", 472, 478))
+        self.assertFalse(self.seq1.endswith("GCAC", 476, 478))
+        self.assertTrue(self.seq2.endswith("ACCG"))
+        self.assertTrue(self.seq2.endswith("ACCG", 476))
+        self.assertTrue(self.seq2.endswith("GCAC", 472, 478))
+        self.assertFalse(self.seq2.endswith("GCAC", 476, 478))
+
+    def test_split(self):
+        self.assertEqual(self.seq1.split(), self.seq2.split())
+        self.assertEqual(self.seq1.split("C"), self.seq2.split("C"))
+        self.assertEqual(self.seq1.split("C", 1), self.seq2.split("C", 1))
+
+    def test_rsplit(self):
+        self.assertEqual(self.seq1.rsplit(), self.seq2.rsplit())
+        self.assertEqual(self.seq1.rsplit("C"), self.seq2.rsplit("C"))
+        self.assertEqual(self.seq1.rsplit("C", 1), self.seq2.rsplit("C", 1))
+
+    def test_strip(self):
+        self.assertEqual(self.seq1.strip("G"), self.seq2.strip("G"))
+
+    def test_lstrip(self, chars=None):
+        self.assertEqual(self.seq1.lstrip("G"), self.seq2.lstrip("G"))
+
+    def test_rstrip(self, chars=None):
+        self.assertEqual(self.seq1.rstrip("G"), self.seq2.rstrip("G"))
+
+    def test_upper(self):
+        self.assertEqual(self.seq1.upper(), self.seq2.upper())
+
+    def test_lower(self):
+        self.assertEqual(self.seq1.lower(), self.seq2.lower())
+
+    def test_replace(self):
+        # seq.transcribe uses seq._data.replace
+        self.assertEqual(self.seq1.transcribe(), self.seq2.transcribe())
+
+    def test_translate(self):
+        # seq.complement uses seq._data.translate
+        self.assertEqual(self.seq1.complement(), self.seq2.complement())
 
 
 if __name__ == "__main__":
