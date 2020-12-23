@@ -397,7 +397,7 @@ class DSSP(AbstractResiduePropertyMap):
     """
 
     def __init__(
-        self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""    
+        self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""
     ):
         """Create a DSSP object.
 
