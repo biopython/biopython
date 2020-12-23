@@ -397,7 +397,7 @@ class DSSP(AbstractResiduePropertyMap):
     """
 
     def __init__(
-        self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""
+        self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""    
     ):
         """Create a DSSP object.
 
@@ -421,14 +421,14 @@ class DSSP(AbstractResiduePropertyMap):
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
-        if file_type == '':
+        if file_type == "":
             file_type = os.path.splitext(in_file)[1][1:]
         file_type = file_type.upper()
-        if file_type == 'CIF':
-            file_type = 'MMCIF'
-        assert file_type in ['PDB', 'MMCIF', 'DSSP']
+        if file_type == "CIF":
+            file_type = "MMCIF"
+        assert file_type in ["PDB", "MMCIF", "DSSP"]
         # If the input file is a PDB or mmCIF file run DSSP and parse output:
-        if file_type == 'PDB' or file_type == 'MMCIF':
+        if file_type == "PDB" or file_type == "MMCIF":
             # Newer versions of DSSP program call the binary 'mkdssp', so
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
@@ -457,12 +457,12 @@ class DSSP(AbstractResiduePropertyMap):
         # But MMCIFParser reads in the auth_asym_id
         # Here we create a dictionary to map label_asym_id to auth_asym_id
         # using the mmCIF file
-        if file_type == 'MMCIF':
+        if file_type == "MMCIF":
             mmcif_dict = MMCIF2Dict(in_file)
             mmcif_chain_dict = {}
-            for i, c in enumerate(mmcif_dict['_atom_site.label_asym_id']):
+            for i, c in enumerate(mmcif_dict["_atom_site.label_asym_id"]):
                 if c not in mmcif_chain_dict:
-                    mmcif_chain_dict[c] = mmcif_dict['_atom_site.auth_asym_id'][i]
+                    mmcif_chain_dict[c] = mmcif_dict["_atom_site.auth_asym_id"][i]
             dssp_mapped_keys = []
 
         # Now create a dictionary that maps Residue objects to
@@ -470,7 +470,7 @@ class DSSP(AbstractResiduePropertyMap):
         # (residue, (secondary structure, accessibility)) tuples
         for key in dssp_keys:
             chain_id, res_id = key
-            if file_type == 'MMCIF':
+            if file_type == "MMCIF":
                 chain_id = mmcif_chain_dict[chain_id]
                 dssp_mapped_keys.append((chain_id, res_id))
             chain = model[chain_id]
@@ -613,6 +613,6 @@ class DSSP(AbstractResiduePropertyMap):
             dssp_map[(chain_id, res_id)] = dssp_vals
             dssp_list.append(dssp_vals)
 
-        if file_type == 'MMCIF':
+        if file_type == "MMCIF":
             dssp_keys = dssp_mapped_keys
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
