@@ -1540,3 +1540,149 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
                 self.assertIsInstance(feature.location.start, UnknownPosition)
             else:
                 self.assertIsInstance(feature.location.start, ExactPosition)
+
+
+class TestBaseClassMethods(unittest.TestCase):
+    """Test if methods from the Bio.Seq base class are called correctly."""
+
+    def setUp(self):
+        """Load a database."""
+        path = "GenBank/cor6_6.gb"
+        accession = "X62281"
+        load_database(path)
+
+        self.server = BioSeqDatabase.open_database(
+            driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
+        )
+        self.db = self.server["biosql-test"]
+        self.seq1 = self.db.lookup(accession=accession).seq
+        records = SeqIO.parse(path, "genbank")
+        for record in records:
+            if accession in record.annotations['accessions']:
+                break
+        else:
+            raise RuntimeError("Failed to find accession %s in GenBank file" % accession)
+        self.seq2 = record.seq
+
+    def tearDown(self):
+        self.server.close()
+        destroy_database()
+        del self.db
+        del self.seq1
+        del self.seq2
+        del self.server
+
+    def test_bytes(self):
+        b = bytes(self.seq1)
+        self.assertIsInstance(b, bytes)
+        self.assertEqual(len(b), 880)
+        self.assertEqual(b, bytes(self.seq2))
+
+    def test_hash(self):
+        self.assertEqual(hash(self.seq1), hash(self.seq2))
+
+    def test_add(self):
+        self.assertIsInstance(self.seq1 + "ABCD", Seq)
+        self.assertEqual(self.seq1 + "ABCD", self.seq2 + "ABCD")
+
+    def test_radd(self):
+        self.assertIsInstance("ABCD" + self.seq1, Seq)
+        self.assertEqual("ABCD" + self.seq1, "ABCD" + self.seq2)
+
+    def test_mul(self):
+        self.assertIsInstance(2 * self.seq1, Seq)
+        self.assertEqual(2 * self.seq1, 2 * self.seq2)
+        self.assertIsInstance(self.seq1 * 2, Seq)
+        self.assertEqual(self.seq1 * 2, self.seq2 * 2)
+
+    def test_contains(self):
+        for seq in (self.seq1, self.seq2):
+            self.assertIn("CCTTAAGCCCA", seq)
+            self.assertNotIn("ACGTACGT", seq)
+
+    def test_repr(self):
+        self.assertIsInstance(repr(self.seq1), str)
+        self.assertEqual(repr(self.seq1), repr(self.seq2))
+
+    def test_str(self):
+        self.assertIsInstance(str(self.seq1), str)
+        self.assertEqual(str(self.seq1), str(self.seq2))
+
+    def test_count(self):
+        self.assertEqual(self.seq1.count("CT"), self.seq2.count("CT"))
+        self.assertEqual(self.seq1.count("CT", 75), self.seq2.count("CT", 75))
+        self.assertEqual(self.seq1.count("CT", 125, 250), self.seq2.count("CT", 125, 250))
+
+    def test_find(self):
+        self.assertEqual(self.seq1.find("CT"), self.seq2.find("CT"))
+        self.assertEqual(self.seq1.find("CT", 75), self.seq2.find("CT", 75))
+        self.assertEqual(self.seq1.find("CG", 75, 100), self.seq2.find("CG", 75, 100))
+        self.assertEqual(self.seq1.find("CT", None, 100), self.seq2.find("CT", None, 100))
+
+    def test_rfind(self):
+        self.assertEqual(self.seq1.rfind("CT"), self.seq2.rfind("CT"))
+        self.assertEqual(self.seq1.rfind("CT", 450), self.seq2.rfind("CT", 450))
+        self.assertEqual(self.seq1.rfind("CT", None, 100), self.seq2.rfind("CT", None, 100))
+        self.assertEqual(self.seq1.rfind("CT", 75, 100), self.seq2.rfind("CT", 75, 100))
+
+    def test_index(self):
+        self.assertEqual(self.seq1.index("CT"), self.seq2.index("CT"))
+        self.assertEqual(self.seq1.index("CT", 75), self.seq2.index("CT", 75))
+        self.assertEqual(self.seq1.index("CT", None, 100), self.seq2.index("CT", None, 100))
+        for seq in (self.seq1, self.seq2):
+            self.assertRaises(ValueError, seq.index, "CG", 75, 100)
+            self.assertRaises(ValueError, seq.index, "CG", 75, 100)
+
+    def test_rindex(self):
+        self.assertEqual(self.seq1.rindex("CT"), self.seq2.rindex("CT"))
+        self.assertEqual(self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100))
+        for seq in (self.seq1, self.seq2):
+            self.assertRaises(ValueError, seq.rindex, "AG", 850)
+            self.assertRaises(ValueError, seq.rindex, "CG", 75, 100)
+
+    def test_startswith(self):
+        for seq in (self.seq1, self.seq2):
+            self.assertTrue(seq.startswith("ATTT"))
+            self.assertTrue(seq.startswith("TAAA", start=10))
+            self.assertTrue(seq.startswith("TAAA", start=10, end=14))
+            self.assertFalse(seq.startswith("TAAA", start=10, end=12))
+
+    def test_endswith(self):
+        for seq in (self.seq1, self.seq2):
+            self.assertTrue(seq.endswith("TATA"))
+            self.assertTrue(seq.endswith("TATA", 876))
+            self.assertTrue(seq.endswith("ATTA", 872, 878))
+            self.assertFalse(seq.endswith("ATTA", 876, 878))
+
+    def test_split(self):
+        self.assertEqual(self.seq1.split(), self.seq2.split())
+        self.assertEqual(self.seq1.split("C"), self.seq2.split("C"))
+        self.assertEqual(self.seq1.split("C", 1), self.seq2.split("C", 1))
+
+    def test_rsplit(self):
+        self.assertEqual(self.seq1.rsplit(), self.seq2.rsplit())
+        self.assertEqual(self.seq1.rsplit("C"), self.seq2.rsplit("C"))
+        self.assertEqual(self.seq1.rsplit("C", 1), self.seq2.rsplit("C", 1))
+
+    def test_strip(self):
+        self.assertEqual(self.seq1.strip("G"), self.seq2.strip("G"))
+
+    def test_lstrip(self, chars=None):
+        self.assertEqual(self.seq1.lstrip("G"), self.seq2.lstrip("G"))
+
+    def test_rstrip(self, chars=None):
+        self.assertEqual(self.seq1.rstrip("G"), self.seq2.rstrip("G"))
+
+    def test_upper(self):
+        self.assertEqual(self.seq1.upper(), self.seq2.upper())
+
+    def test_lower(self):
+        self.assertEqual(self.seq1.lower(), self.seq2.lower())
+
+    def test_replace(self):
+        # seq.transcribe uses seq._data.replace
+        self.assertEqual(self.seq1.transcribe(), self.seq2.transcribe())
+
+    def test_translate(self):
+        # seq.complement uses seq._data.translate
+        self.assertEqual(self.seq1.complement(), self.seq2.complement())

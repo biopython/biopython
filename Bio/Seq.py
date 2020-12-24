@@ -361,9 +361,9 @@ class Seq:
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
-        return len(self._data)  # Seq API requirement
+        return len(self._data)
 
-    def __getitem__(self, index):  # Seq API requirement
+    def __getitem__(self, index):
         """Return a subsequence of single letter, use my_seq[index].
 
         >>> my_seq = Seq('ACTCGACGTCG')
@@ -375,7 +375,7 @@ class Seq:
             return chr(self._data[index])
         else:
             # Return the (sub)sequence as another Seq object
-            return Seq(self._data[index])
+            return self.__class__(self._data[index])
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1323,7 +1323,7 @@ class Seq:
                 )
             return Seq(None, n // 3)
 
-        return Seq(_translate_str(data, table, stop_symbol, to_stop, cds, gap=gap))
+        return self.__class__(_translate_str(data, table, stop_symbol, to_stop, cds, gap=gap))
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
@@ -2147,7 +2147,7 @@ class MutableSeq:
             return chr(self._data[index])
         else:
             # Return the (sub)sequence as another Seq object
-            return MutableSeq(self._data[index])
+            return self.__class__(self._data[index])
 
     def __setitem__(self, index, value):
         """Set a subsequence of single letter via value parameter.
@@ -2677,7 +2677,7 @@ class MutableSeq:
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
-        return [MutableSeq(part) for part in self._data.split(sep, maxsplit)]
+        return [self.__class__(part) for part in self._data.split(sep, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
         """Do a right split method, like that of a python string.
@@ -2701,7 +2701,7 @@ class MutableSeq:
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
-        return [MutableSeq(part) for part in self._data.rsplit(sep, maxsplit)]
+        return [self.__class__(part) for part in self._data.rsplit(sep, maxsplit)]
 
     def strip(self, chars=None, inplace=False):
         """Return a MutableSeq object with leading and trailing ends stripped.
@@ -3015,7 +3015,7 @@ class MutableSeq:
                 "Use str(my_seq).translate(...) instead."
             )
 
-        return MutableSeq(
+        return self.__class__(
             _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
         )
 

@@ -320,8 +320,9 @@ class TestBaseClassMethods(unittest.TestCase):
         self.assertEqual(self.seq1 * 2, self.seq2 * 2)
 
     def test_contains(self):
-        self.assertIn("ACCCCT", self.seq1)
-        self.assertNotIn("ACGTACGT", self.seq1)
+        for seq in (self.seq1, self.seq2):
+            self.assertIn("ACCCCT", seq)
+            self.assertNotIn("ACGTACGT", seq)
 
     def test_repr(self):
         self.assertIsInstance(repr(self.seq1), str)
@@ -351,37 +352,30 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_index(self):
         self.assertEqual(self.seq1.index("CT"), self.seq2.index("CT"))
         self.assertEqual(self.seq1.index("CT", 75), self.seq2.index("CT", 75))
-        self.assertRaises(ValueError, self.seq1.index, "CT", 75, 100)
-        self.assertRaises(ValueError, self.seq2.index, "CT", 75, 100)
         self.assertEqual(self.seq1.index("CT", None, 100), self.seq2.index("CT", None, 100))
+        for seq in (self.seq1, self.seq2):
+            self.assertRaises(ValueError, seq.index, "CT", 75, 100)
 
     def test_rindex(self):
         self.assertEqual(self.seq1.rindex("CT"), self.seq2.rindex("CT"))
-        self.assertRaises(ValueError, self.seq1.rindex, "CT", 450)
-        self.assertRaises(ValueError, self.seq2.rindex, "CT", 450)
         self.assertEqual(self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100))
-        self.assertRaises(ValueError, self.seq1.rindex, "CT", 75, 100)
-        self.assertRaises(ValueError, self.seq2.rindex, "CT", 75, 100)
+        for seq in (self.seq1, self.seq2):
+            self.assertRaises(ValueError, seq.rindex, "CT", 450)
+            self.assertRaises(ValueError, seq.rindex, "CT", 75, 100)
 
     def test_startswith(self):
-        self.assertTrue(self.seq1.startswith("GTAT"))
-        self.assertTrue(self.seq1.startswith("TGGG", start=10))
-        self.assertTrue(self.seq1.startswith("TGGG", start=10, end=14))
-        self.assertFalse(self.seq1.startswith("TGGG", start=10, end=12))
-        self.assertTrue(self.seq2.startswith("GTAT"))
-        self.assertTrue(self.seq2.startswith("TGGG", start=10))
-        self.assertTrue(self.seq2.startswith("TGGG", start=10, end=14))
-        self.assertFalse(self.seq2.startswith("TGGG", start=10, end=12))
+        for seq in (self.seq1, self.seq2):
+            self.assertTrue(seq.startswith("GTAT"))
+            self.assertTrue(seq.startswith("TGGG", start=10))
+            self.assertTrue(seq.startswith("TGGG", start=10, end=14))
+            self.assertFalse(seq.startswith("TGGG", start=10, end=12))
 
     def test_endswith(self):
-        self.assertTrue(self.seq1.endswith("ACCG"))
-        self.assertTrue(self.seq1.endswith("ACCG", 476))
-        self.assertTrue(self.seq1.endswith("GCAC", 472, 478))
-        self.assertFalse(self.seq1.endswith("GCAC", 476, 478))
-        self.assertTrue(self.seq2.endswith("ACCG"))
-        self.assertTrue(self.seq2.endswith("ACCG", 476))
-        self.assertTrue(self.seq2.endswith("GCAC", 472, 478))
-        self.assertFalse(self.seq2.endswith("GCAC", 476, 478))
+        for seq in (self.seq1, self.seq2):
+            self.assertTrue(seq.endswith("ACCG"))
+            self.assertTrue(seq.endswith("ACCG", 476))
+            self.assertTrue(seq.endswith("GCAC", 472, 478))
+            self.assertFalse(seq.endswith("GCAC", 476, 478))
 
     def test_split(self):
         self.assertEqual(self.seq1.split(), self.seq2.split())
