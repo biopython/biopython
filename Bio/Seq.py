@@ -69,13 +69,23 @@ class SequenceDataAbstractBaseClass(ABC):
 
     Future implementations of lazy parsers that similarly provide on-demand
     parsing of sequence data should use a subclass of this abstract class and
-    implement the abstract methods ``__len__`` (which must return the sequence
-    length) and ``__getitem__``, which must return a ``bytes`` object or a new
-    instance of the subclass for the requested region, or raise an
-    ``UndefinedSequenceError``. Calling ``__getitem__`` for a sequence region
-    of size zero should always return an empty ``bytes`` object. Subclasses of
-    SequenceDataAbstractBaseClass must call ``super().__init__()`` as part of
-    their ``__init__`` method.
+    implement the abstract methods ``__len__`` and ``__getitem__``:
+
+    * ``__len__`` must return the sequence length;
+    * ``__getitem__`` must return
+
+      * a ``bytes`` object for the requested region; or
+      * a new instance of the subclass for the requested region; or
+      * raise an ``UndefinedSequenceError``.
+
+      Calling ``__getitem__`` for a sequence region of size zero should always
+      return an empty ``bytes`` object.
+      Calling ``__getitem__`` for the full sequence (as in data[:]) should
+      either return a ``bytes`` object with the full sequence, or raise an
+      ``UndefinedSequenceError``.
+
+    Subclasses of SequenceDataAbstractBaseClass must call ``super().__init__()``
+    as part of their ``__init__`` method.
     """
 
     def __init__(self):
@@ -216,13 +226,13 @@ class SequenceDataAbstractBaseClass(ABC):
     def rsplit(self, sep=None, maxsplit=-1):
         """Return a list of the sections in the data, using sep as the delimiter.
 
-          sep
-            The delimiter according which to split the data.
-            None (the default value) means split on ASCII whitespace characters
-            (space, tab, return, newline, formfeed, vertical tab).
-          maxsplit
-            Maximum number of splits to do.
-            -1 (the default value) means no limit.
+        sep
+          The delimiter according which to split the data.
+          None (the default value) means split on ASCII whitespace characters
+          (space, tab, return, newline, formfeed, vertical tab).
+        maxsplit
+          Maximum number of splits to do.
+          -1 (the default value) means no limit.
 
         Splitting is done starting at the end of the data and working to the front.
         """
@@ -258,15 +268,7 @@ class SequenceDataAbstractBaseClass(ABC):
         return bytes(self).lower()
 
     def replace(self, old, new):
-        """Return a copy with all occurrences of substring old replaced by new.
-
-          count
-            Maximum number of occurrences to replace.
-            -1 (the default value) means replace all occurrences.
-
-        If the optional argument count is given, only the first count occurrences are
-        replaced.
-        """
+        """Return a copy with all occurrences of substring old replaced by new."""
         return bytes(self).replace(old, new)
 
     def translate(self, table, delete=b""):
