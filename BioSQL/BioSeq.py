@@ -66,23 +66,23 @@ class _BioSQLSequenceData(SequenceDataAbstractBaseClass):
             return ord(c)
 
         if step == 1:
-            # Return a _BioSQLSequenceData with the start and end adjusted
-            return _BioSQLSequenceData(
-                self.primary_id, self.adaptor, self.start + start, size
-            )
+            if start == 0 and size == self._length:
+                # Return the full sequence as bytes
+                sequence = self.adaptor.get_subseq_as_string(
+                    self.primary_id, self.start, self.start + self._length
+                )
+                return sequence.encode("ASCII")
+            else:
+                # Return a _BioSQLSequenceData with the start and end adjusted
+                return _BioSQLSequenceData(
+                    self.primary_id, self.adaptor, self.start + start, size
+                )
         else:
             # Will have to extract the sequence because of the stride
             full = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + start, self.start + end
             )
             return full[::step].encode("ASCII")
-
-    def __bytes__(self):
-        """Return the full sequence as bytes."""
-        sequence = self.adaptor.get_subseq_as_string(
-            self.primary_id, self.start, self.start + self._length
-        )
-        return sequence.encode("ASCII")
 
 
 def _retrieve_seq_len(adaptor, primary_id):
