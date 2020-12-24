@@ -1636,8 +1636,8 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_index(self):
         self.assertEqual(self.seq1.index("CT"), self.seq2.index("CT"))
         self.assertEqual(self.seq1.index("CT", 75), self.seq2.index("CT", 75))
-        self.assertEqual(self.seq1.index(
-            "CT", None, 100), self.seq2.index("CT", None, 100)
+        self.assertEqual(
+            self.seq1.index("CT", None, 100), self.seq2.index("CT", None, 100)
         )
         for seq in (self.seq1, self.seq2):
             self.assertRaises(ValueError, seq.index, "CG", 75, 100)

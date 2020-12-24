@@ -271,6 +271,7 @@ class SequenceDataAbstractBaseClass(ABC):
 
     def translate(self, table):
         """Return a copy with each character mapped by the given translation table.
+
           table
             Translation table, which must be a bytes object of length 256.
         """
