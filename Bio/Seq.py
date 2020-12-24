@@ -124,54 +124,169 @@ class SequenceDataAbstractBaseClass(ABC):
         return bytes(self).__contains__(item)
 
     def decode(self, encoding="utf-8"):
+        """Decode the data as bytes using the codec registered for encoding.
+
+        encoding
+          The encoding with which to decode the bytes.
+        """
         return bytes(self).decode(encoding)
 
     def count(self, sub, start=None, end=None):
+        """data.count(sub[, start[, end]]) -> int
+
+        Return the number of non-overlapping occurrences of subsection sub in
+        data[start:end].  Optional arguments start and end are interpreted as
+        in slice notation.
+        """
         return bytes(self).count(sub, start, end)
 
     def find(self, sub, start=None, end=None):
+        """data.find(sub[, start[, end]]) -> int
+
+        Return the lowest index in data where subsection sub is found,
+        such that sub is contained within data[start,end].  Optional
+        arguments start and end are interpreted as in slice notation.
+
+        Return -1 on failure.
+        """
         return bytes(self).find(sub, start, end)
 
     def rfind(self, sub, start=None, end=None):
+        """data.rfind(sub[, start[, end]]) -> int
+
+        Return the highest index in data where subsection sub is found,
+        such that sub is contained within data[start,end].  Optional
+        arguments start and end are interpreted as in slice notation.
+
+        Return -1 on failure.
+        """
         return bytes(self).rfind(sub, start, end)
 
     def index(self, sub, start=None, end=None):
+        """data.index(sub[, start[, end]]) -> int
+
+        Return the lowest index in data where subsection sub is found,
+        such that sub is contained within data[start,end].  Optional
+        arguments start and end are interpreted as in slice notation.
+
+        Raises ValueError when the subsection is not found.
+        """
         return bytes(self).index(sub, start, end)
 
     def rindex(self, sub, start=None, end=None):
+        """data.rindex(sub[, start[, end]]) -> int
+
+        Return the highest index in data where subsection sub is found,
+        such that sub is contained within data[start,end].  Optional
+        arguments start and end are interpreted as in slice notation.
+
+        Raise ValueError when the subsection is not found.
+        """
         return bytes(self).rindex(sub, start, end)
 
-    def startswith(self, suffix, start=None, end=None):
-        return bytes(self).startswith(suffix, start, end)
+    def startswith(self, prefix, start=None, end=None):
+        """data.startswith(prefix[, start[, end]]) -> bool
+
+        Return True if data starts with the specified prefix, False otherwise.
+        With optional start, test data beginning at that position.
+        With optional end, stop comparing data at that position.
+        prefix can also be a tuple of bytes to try.
+        """
+        return bytes(self).startswith(prefix, start, end)
 
     def endswith(self, suffix, start=None, end=None):
+        """data.endswith(suffix[, start[, end]]) -> bool
+
+        Return True if data ends with the specified suffix, False otherwise.
+        With optional start, test data beginning at that position.
+        With optional end, stop comparing data at that position.
+        suffix can also be a tuple of bytes to try.
+        """
         return bytes(self).endswith(suffix, start, end)
 
     def split(self, sep=None, maxsplit=-1):
+        """Return a list of the sections in the data, using sep as the delimiter.
+
+        sep
+          The delimiter according which to split the data.
+          None (the default value) means split on ASCII whitespace characters
+          (space, tab, return, newline, formfeed, vertical tab).
+        maxsplit
+          Maximum number of splits to do.
+          -1 (the default value) means no limit.
+        """
         return bytes(self).split(sep, maxsplit)
 
     def rsplit(self, sep=None, maxsplit=-1):
+        """rsplit(self, /, sep=None, maxsplit=-1)
+        Return a list of the sections in the data, using sep as the delimiter.
+
+          sep
+            The delimiter according which to split the data.
+            None (the default value) means split on ASCII whitespace characters
+            (space, tab, return, newline, formfeed, vertical tab).
+          maxsplit
+            Maximum number of splits to do.
+            -1 (the default value) means no limit.
+
+        Splitting is done starting at the end of the data and working to the front.
+        """
         return bytes(self).rsplit(sep, maxsplit)
 
     def strip(self, chars=None):
+        """strip(self, chars=None, /)
+        Strip leading and trailing characters contained in the argument.
+
+        If the argument is omitted or None, strip leading and trailing ASCII whitespace.
+        """
         return bytes(self).strip(chars)
 
     def lstrip(self, chars=None):
+        """Strip leading characters contained in the argument.
+
+        If the argument is omitted or None, strip leading ASCII whitespace.
+        """
         return bytes(self).lstrip(chars)
 
     def rstrip(self, chars=None):
+        """Strip trailing characters contained in the argument.
+
+        If the argument is omitted or None, strip trailing ASCII whitespace.
+        """
         return bytes(self).rstrip(chars)
 
     def upper(self):
+        """data.upper() -> copy of data
+
+        Return a copy of data with all ASCII characters converted to uppercase.
+        """
         return bytes(self).upper()
 
     def lower(self):
+        """data.lower() -> copy of data
+
+        Return a copy of data with all ASCII characters converted to lowercase.
+        """
         return bytes(self).lower()
 
     def replace(self, old, new):
+        """Return a copy with all occurrences of substring old replaced by new.
+
+       count
+            Maximum number of occurrences to replace.
+            -1 (the default value) means replace all occurrences.
+
+        If the optional argument count is given, only the first count occurrences are
+        replaced.
+        """
         return bytes(self).replace(old, new)
 
     def translate(self, table):
+        """Return a copy with each character mapped by the given translation table.
+
+          table
+            Translation table, which must be a bytes object of length 256.
+        """
         return bytes(self).translate(table)
 
 
@@ -1323,7 +1438,9 @@ class Seq:
                 )
             return Seq(None, n // 3)
 
-        return self.__class__(_translate_str(data, table, stop_symbol, to_stop, cds, gap=gap))
+        return self.__class__(
+            _translate_str(data, table, stop_symbol, to_stop, cds, gap=gap)
+        )
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
@@ -2199,7 +2316,6 @@ class MutableSeq:
             return NotImplemented
         else:
             raise TypeError
-
 
     def __radd__(self, other):
         """Add a sequence on the left.

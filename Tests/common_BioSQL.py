@@ -1558,10 +1558,12 @@ class TestBaseClassMethods(unittest.TestCase):
         self.seq1 = self.db.lookup(accession=accession).seq
         records = SeqIO.parse(path, "genbank")
         for record in records:
-            if accession in record.annotations['accessions']:
+            if accession in record.annotations["accessions"]:
                 break
         else:
-            raise RuntimeError("Failed to find accession %s in GenBank file" % accession)
+            raise RuntimeError(
+                "Failed to find accession %s in GenBank file" % accession
+            )
         self.seq2 = record.seq
 
     def tearDown(self):
@@ -1611,18 +1613,24 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_count(self):
         self.assertEqual(self.seq1.count("CT"), self.seq2.count("CT"))
         self.assertEqual(self.seq1.count("CT", 75), self.seq2.count("CT", 75))
-        self.assertEqual(self.seq1.count("CT", 125, 250), self.seq2.count("CT", 125, 250))
+        self.assertEqual(
+            self.seq1.count("CT", 125, 250), self.seq2.count("CT", 125, 250)
+        )
 
     def test_find(self):
         self.assertEqual(self.seq1.find("CT"), self.seq2.find("CT"))
         self.assertEqual(self.seq1.find("CT", 75), self.seq2.find("CT", 75))
         self.assertEqual(self.seq1.find("CG", 75, 100), self.seq2.find("CG", 75, 100))
-        self.assertEqual(self.seq1.find("CT", None, 100), self.seq2.find("CT", None, 100))
+        self.assertEqual(
+            self.seq1.find("CT", None, 100), self.seq2.find("CT", None, 100)
+        )
 
     def test_rfind(self):
         self.assertEqual(self.seq1.rfind("CT"), self.seq2.rfind("CT"))
         self.assertEqual(self.seq1.rfind("CT", 450), self.seq2.rfind("CT", 450))
-        self.assertEqual(self.seq1.rfind("CT", None, 100), self.seq2.rfind("CT", None, 100))
+        self.assertEqual(
+            self.seq1.rfind("CT", None, 100), self.seq2.rfind("CT", None, 100)
+        )
         self.assertEqual(self.seq1.rfind("CT", 75, 100), self.seq2.rfind("CT", 75, 100))
 
     def test_index(self):
@@ -1635,7 +1643,9 @@ class TestBaseClassMethods(unittest.TestCase):
 
     def test_rindex(self):
         self.assertEqual(self.seq1.rindex("CT"), self.seq2.rindex("CT"))
-        self.assertEqual(self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100))
+        self.assertEqual(
+            self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100)
+        )
         for seq in (self.seq1, self.seq2):
             self.assertRaises(ValueError, seq.rindex, "AG", 850)
             self.assertRaises(ValueError, seq.rindex, "CG", 75, 100)
