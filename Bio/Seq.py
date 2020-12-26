@@ -1384,6 +1384,48 @@ class _SeqAbstractBaseClass(ABC):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
         return self.__class__(str(self).join([str(_) for _ in other]))
 
+    def replace(self, old, new, inplace=False):
+        """Return a copy with all occurrences of subsequence old replaced by new.
+
+        >>> s = Seq("ACGTAACCGGTT")
+        >>> t = s.replace("AC", "XYZ")
+        >>> s
+        Seq('ACGTAACCGGTT')
+        >>> t
+        Seq('XYZGTAXYZCGGTT')
+
+        For mutable sequences, passing inplace=True will modify the sequence in place:
+
+        >>> m = MutableSeq("ACGTAACCGGTT")
+        >>> t = m.replace("AC", "XYZ")
+        >>> m
+        MutableSeq('ACGTAACCGGTT')
+        >>> t
+        MutableSeq('XYZGTAXYZCGGTT')
+
+        >>> m = MutableSeq("ACGTAACCGGTT")
+        >>> t = m.replace("AC", "XYZ", inplace=True)
+        >>> m
+        MutableSeq('XYZGTAXYZCGGTT')
+        >>> t
+        MutableSeq('XYZGTAXYZCGGTT')
+        """
+        if isinstance(old, (Seq, MutableSeq)):
+            old = bytes(old)
+        elif isinstance(old, str):
+            old = old.encode("ASCII")
+        if isinstance(new, (Seq, MutableSeq)):
+            new = bytes(new)
+        elif isinstance(new, str):
+            new = new.encode("ASCII")
+        data = self._data.replace(old, new)
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
+        return self.__class__(data)
+
 
 class Seq(_SeqAbstractBaseClass):
     """Read-only sequence object (essentially a string with biological methods).
@@ -1648,8 +1690,7 @@ class Seq(_SeqAbstractBaseClass):
             raise ValueError("Gap character required.")
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
-        gap = gap.encode("ASCII")
-        return Seq(self._data.replace(gap, b""))
+        return self.replace(gap, b"")
 
 
 class UnknownSeq(Seq):
