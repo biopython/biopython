@@ -7,6 +7,8 @@
 
 """Residue class, used by Structure objects."""
 
+from Bio.PDB.Atom import Atom
+from typing import Generator
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
@@ -77,7 +79,7 @@ class Residue(Entity):
         """Return the segment identifier."""
         return self.segid
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms."""
         yield from self
 

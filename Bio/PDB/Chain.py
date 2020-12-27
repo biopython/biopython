@@ -7,10 +7,13 @@
 
 """Chain class, used in Structure objects."""
 
+from Bio.PDB.Atom import Atom
+from Bio.KEGG import Gene
+from Bio.PDB.Residue import Residue
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
 
-from typing import Optional
+from typing import Generator, List, Optional
 
 
 class Chain(Entity):
@@ -20,7 +23,7 @@ class Chain(Entity):
     access atoms from residues.
     """
 
-    def __init__(self, id):
+    def __init__(self, id) -> None:
         """Initialize the class."""
         self.level = "C"
         self.internal_coord = None
@@ -133,7 +136,7 @@ class Chain(Entity):
 
     # Public methods
 
-    def get_unpacked_list(self):
+    def get_unpacked_list(self) -> List[Residue]:
         """Return a list of undisordered residues.
 
         Some Residue objects hide several disordered residues
@@ -166,11 +169,11 @@ class Chain(Entity):
 
     # Public
 
-    def get_residues(self):
+    def get_residues(self) -> Generator[Residue, None, None]:
         """Return residues."""
         yield from self
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms from residues."""
         for r in self.get_residues():
             yield from r

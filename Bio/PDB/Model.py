@@ -5,8 +5,13 @@
 
 """Model class, used in Structure objects."""
 
-from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Entity import Entity
+
+from typing import Generator
 
 
 class Model(Entity):
@@ -37,16 +42,16 @@ class Model(Entity):
         """Return model identifier."""
         return "<Model id=%s>" % self.get_id()
 
-    def get_chains(self):
+    def get_chains(self) -> Generator[Chain, None, None]:
         """Return chains."""
         yield from self
 
-    def get_residues(self):
+    def get_residues(self) -> Generator[Residue, None, None]:
         """Return residues."""
         for c in self.get_chains():
             yield from c
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms."""
         for r in self.get_residues():
             yield from r

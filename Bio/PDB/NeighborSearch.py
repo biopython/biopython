@@ -84,7 +84,6 @@ class NeighborSearch:
          - center - Numeric array
          - radius - float
          - level - char (A, R, C, M, S)
-
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)

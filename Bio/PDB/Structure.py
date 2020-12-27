@@ -7,37 +7,42 @@
 
 """The structure class, representing a macromolecular structure."""
 
+from typing import Generator
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Model import Model
 
 
 class Structure(Entity):
     """The Structure class contains a collection of Model instances."""
 
-    def __init__(self, id):
+    def __init__(self, id) -> None:
         """Initialize the class."""
         self.level = "S"
         Entity.__init__(self, id)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return the structure identifier."""
         return "<Structure id=%s>" % self.get_id()
 
-    def get_models(self):
+    def get_models(self) -> Generator[Model, None, None]:
         """Return models."""
         yield from self
 
-    def get_chains(self):
+    def get_chains(self) -> Generator[Chain, None, None]:
         """Return chains from models."""
         for m in self.get_models():
             yield from m
 
-    def get_residues(self):
+    def get_residues(self) -> Generator[Residue, None, None]:
         """Return residues from chains."""
         for c in self.get_chains():
             yield from c
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms from residue."""
         for r in self.get_residues():
             yield from r
