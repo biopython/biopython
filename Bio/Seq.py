@@ -923,22 +923,19 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR*KGAR*L')
         >>> for pep in my_aa.split("*"):
         ...     pep
-        ...
         Seq('VMAIVMGR')
         Seq('KGAR')
         Seq('L')
         >>> for pep in my_aa.split("*", 1):
         ...     pep
-        ...
         Seq('VMAIVMGR')
         Seq('KGAR*L')
 
         See also the rsplit method, which splits the sequence starting from the
-        end::
+        end:
 
         >>> for pep in my_aa.rsplit("*", 1):
         ...     pep
-        ...
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
