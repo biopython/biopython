@@ -335,7 +335,8 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq1 == "ACGT"
         True
 
-        Note that the sequence objects are not identical to each other:
+        Note that the sequence objects themselves are not identical to each
+        other:
 
         >>> id(seq1) == id(seq2)
         False
@@ -400,7 +401,7 @@ class _SeqAbstractBaseClass(ABC):
         return len(self._data)
 
     def __getitem__(self, index):
-        """Return a subsequence of single letter or as a sequence object.
+        """Return a subsequence as a single letter or as a sequence object.
 
         If the index is an integer, a single letter is returned as a Python
         string:
@@ -425,11 +426,13 @@ class _SeqAbstractBaseClass(ABC):
             return self.__class__(self._data[index])
 
     def __add__(self, other):
-        """Add another sequence or string to this sequence.
+        """Add a sequence or string to this sequence.
 
-        >>> from Bio.Seq import Seq
+        >>> from Bio.Seq import Seq, MutableSeq
         >>> Seq("MELKI") + "LV"
         Seq('MELKILV')
+        >>> MutableSeq("MELKI") + "LV"
+        MutableSeq('MELKILV')
         """
         if isinstance(other, (Seq, MutableSeq)):
             return self.__class__(self._data + other._data)
@@ -445,34 +448,36 @@ class _SeqAbstractBaseClass(ABC):
             raise TypeError
 
     def __radd__(self, other):
-        """Add a sequence on the left.
+        """Add a sequence string on the left.
 
-        >>> from Bio.Seq import Seq
+        >>> from Bio.Seq import Seq, MutableSeq
         >>> "LV" + Seq("MELKI")
         Seq('LVMELKI')
+        >>> "LV" + MutableSeq("MELKI")
+        MutableSeq('LVMELKI')
 
-        Adding two Seq (like) objects is handled via the __add__ method.
+        Adding two sequence objects is handled via the __add__ method.
         """
-        if isinstance(other, (Seq, MutableSeq)):
-            return self.__class__(other._data + self._data)
-        elif isinstance(other, str):
+        if isinstance(other, str):
             return self.__class__(other.encode("ASCII") + self._data)
         else:
             raise TypeError
 
     def __mul__(self, other):
-        """Multiply Seq by integer.
+        """Multiply sequence by integer.
 
-        >>> from Bio.Seq import Seq
+        >>> from Bio.Seq import Seq, MutableSeq
         >>> Seq('ATG') * 2
         Seq('ATGATG')
+        >>> MutableSeq('ATG') * 2
+        MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self._data * other)
 
     def __rmul__(self, other):
-        """Multiply integer by Seq.
+        """Multiply integer by sequence.
 
         >>> from Bio.Seq import Seq
         >>> 2 * Seq('ATG')
@@ -483,13 +488,29 @@ class _SeqAbstractBaseClass(ABC):
         return self.__class__(self._data * other)
 
     def __imul__(self, other):
-        """Multiply Seq in-place.
+        """Multiply the sequence object by other and assign.
 
         >>> from Bio.Seq import Seq
         >>> seq = Seq('ATG')
         >>> seq *= 2
         >>> seq
         Seq('ATGATG')
+
+        Note that this is different from in-place multiplication. The ``seq``
+        variable is reassigned to the multiplication result, but any variable
+        pointing to ``seq`` will remain unchanged:
+
+        >>> seq = Seq('ATG')
+        >>> seq2 = seq
+        >>> id(seq) == id(seq2)
+        True
+        >>> seq *= 2
+        >>> seq
+        Seq('ATGATG')
+        >>> seq2
+        Seq('ATG')
+        >>> id(seq) == id(seq2)
+        False
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
@@ -498,13 +519,8 @@ class _SeqAbstractBaseClass(ABC):
     def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
 
-        This behaves like the python string method of the same name,
-        which does a non-overlapping count!
-
-        For an overlapping search use the newer count_overlap() method.
-
-        Returns an integer, the number of occurrences of substring
-        argument sub in the (sub)sequence given by [start:end].
+        The number of occurrences of substring argument sub in the
+        (sub)sequence given by [start:end] is returned as an integer.
         Optional arguments start and end are interpreted as in slice
         notation.
 
@@ -526,17 +542,19 @@ class _SeqAbstractBaseClass(ABC):
         >>> print(my_seq.count("AT", 2, -1))
         1
 
-        HOWEVER, please note because python strings and Seq objects (and
-        MutableSeq objects) do a non-overlapping search, this may not give
-        the answer you expect:
+        HOWEVER, please note because the ``count`` method of Seq and MutableSeq
+        objects, like that of Python strings, do a non-overlapping search, this
+        may not give the answer you expect:
 
         >>> "AAAA".count("AA")
         2
         >>> print(Seq("AAAA").count("AA"))
         2
 
-        An overlapping search, as implemented in .count_overlap(),
-        would give the answer as three!
+        For an overlapping search, use the ``count_overlap`` method:
+
+        >>> print(Seq("AAAA").count_overlap("AA"))
+        3
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -553,8 +571,6 @@ class _SeqAbstractBaseClass(ABC):
 
     def count_overlap(self, sub, start=None, end=None):
         """Return an overlapping count.
-
-        For a non-overlapping search use the count() method.
 
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
@@ -576,8 +592,13 @@ class _SeqAbstractBaseClass(ABC):
         >>> print(Seq("ATATATATA").count_overlap("ATA", 3, -1))
         1
 
-        Where substrings do not overlap, should behave the same as
-        the count() method:
+        For a non-overlapping search, use the ``count`` method:
+
+        >>> print(Seq("AAAA").count("AA"))
+        2
+
+        Where substrings do not overlap, ``count_overlap`` behaves the same as
+        the ``count`` method:
 
         >>> from Bio.Seq import Seq
         >>> my_seq = Seq("AAAATGA")
@@ -622,15 +643,17 @@ class _SeqAbstractBaseClass(ABC):
                 return overlap_count
 
     def __contains__(self, item):
-        """Implement the 'in' keyword, like a python string.
+        """Return True if item is a subsequence of the sequence, and False otherwise.
 
         e.g.
 
-        >>> from Bio.Seq import Seq
+        >>> from Bio.Seq import Seq, MutableSeq
         >>> my_dna = Seq("ATATGAAATTTGAAAA")
         >>> "AAA" in my_dna
         True
         >>> Seq("AAA") in my_dna
+        True
+        >>> MutableSeq("AAA") in my_dna
         True
         """
         if isinstance(item, (Seq, MutableSeq)):
@@ -640,15 +663,14 @@ class _SeqAbstractBaseClass(ABC):
         return item in self._data
 
     def find(self, sub, start=None, end=None):
-        """Find method, like that of a python string.
+        """Return the lowest index in the sequence where subsequence sub is found.
 
-        This behaves like the python string method of the same name.
-
-        Returns an integer, the index of the first occurrence of substring
-        argument sub in the (sub)sequence given by [start:end].
+        With optional arguments start and end, return the lowest index in the
+        sequence such that the subsequence sub is contained within the sequence
+        region [start:end].
 
         Arguments:
-         - sub - a string or another Seq object to look for
+         - sub - a string or another Seq or MutableSeq object to search for
          - start - optional integer, slice start
          - end - optional integer, slice end
 
@@ -660,6 +682,12 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
         >>> my_rna.find("AUG")
         3
+
+        The next typical start codon can then be found by starting the search
+        at position 4:
+
+        >>> my_rna.find("AUG", 4)
+        15
         """
         if isinstance(sub, (Seq, MutableSeq)):
             sub = bytes(sub)
@@ -673,15 +701,14 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.find(sub, start, end)
 
     def rfind(self, sub, start=None, end=None):
-        """Find from right method, like that of a python string.
+        """Return the highest index in the sequence where subsequence sub is found.
 
-        This behaves like the python string method of the same name.
-
-        Returns an integer, the index of the last (right most) occurrence of
-        substring argument sub in the (sub)sequence given by [start:end].
+        With optional arguments start and end, return the highest index in the
+        sequence such that the subsequence sub is contained within the sequence
+        region [start:end].
 
         Arguments:
-         - sub - a string or another Seq object to look for
+         - sub - a string or another Seq or MutableSeq object to search for
          - start - optional integer, slice start
          - end - optional integer, slice end
 
@@ -693,6 +720,12 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
         >>> my_rna.rfind("AUG")
         15
+
+        The location of the typical start codon before that can be found by
+        ending the search at positon 15:
+
+        >>> my_rna.rfind("AUG", end=15)
+        3
         """
         if isinstance(sub, (Seq, MutableSeq)):
             sub = bytes(sub)
@@ -706,16 +739,42 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.rfind(sub, start, end)
 
     def index(self, sub, start=None, end=None):
-        """Like find() but raise ValueError when the substring is not found.
+        """Return the lowest index in the sequence where subsequence sub is found.
+
+        With optional arguments start and end, return the lowest index in the
+        sequence such that the subsequence sub is contained within the sequence
+        region [start:end].
+
+        Arguments:
+         - sub - a string or another Seq or MutableSeq object to search for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Raises a ValueError if the subsequence is NOT found.
+
+        e.g. Locating the first typical start codon, AUG, in an RNA sequence:
 
         >>> from Bio.Seq import Seq
         >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
-        >>> my_rna.find("T")
-        -1
+        >>> my_rna.index("AUG")
+        3
+
+        The next typical start codon can then be found by starting the search
+        at position 4:
+
+        >>> my_rna.index("AUG", 4)
+        15
+
+        This method performs the same search as the ``find`` method.  However,
+        if the subsequence is not found, ``find`` returns -1 which ``index``
+        raises a ValueError:
+
         >>> my_rna.index("T")
         Traceback (most recent call last):
                    ...
         ValueError: ...
+        >>> my_rna.find("T")
+        -1
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -731,7 +790,43 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.index(sub, start, end)
 
     def rindex(self, sub, start=None, end=None):
-        """Like rfind() but raise ValueError when the substring is not found."""
+        """Return the highest index in the sequence where subsequence sub is found.
+
+        With optional arguments start and end, return the highest index in the
+        sequence such that the subsequence sub is contained within the sequence
+        region [start:end].
+
+        Arguments:
+         - sub - a string or another Seq or MutableSeq object to search for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the last typical start codon, AUG, in an RNA sequence:
+
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.rindex("AUG")
+        15
+
+        The location of the typical start codon before that can be found by
+        ending the search at positon 15:
+
+        >>> my_rna.rindex("AUG", end=15)
+        3
+
+        This method performs the same search as the ``rfind`` method.  However,
+        if the subsequence is not found, ``rfind`` returns -1 which ``rindex``
+        raises a ValueError:
+
+        >>> my_rna.rindex("T")
+        Traceback (most recent call last):
+                   ...
+        ValueError: ...
+        >>> my_rna.rfind("T")
+        -1
+        """
         if isinstance(sub, MutableSeq):
             sub = sub._data
         elif isinstance(sub, Seq):
@@ -746,9 +841,7 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.rindex(sub, start, end)
 
     def startswith(self, prefix, start=None, end=None):
-        """Return True if the Seq starts with the given prefix, False otherwise.
-
-        This behaves like the python string method of the same name.
+        """Return True if the sequence starts with the given prefix, False otherwise.
 
         Return True if the sequence starts with the specified prefix
         (a string or another Seq object), False otherwise.
@@ -779,9 +872,7 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.startswith(prefix, start, end)
 
     def endswith(self, suffix, start=None, end=None):
-        """Return True if the Seq ends with the given suffix, False otherwise.
-
-        This behaves like the python string method of the same name.
+        """Return True if the sequence ends with the given suffix, False otherwise.
 
         Return True if the sequence ends with the specified suffix
         (a string or another Seq object), False otherwise.
@@ -812,18 +903,16 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.endswith(suffix, start, end)
 
     def split(self, sep=None, maxsplit=-1):
-        """Split method, like that of a python string.
+        """Return a list of subsequences when splitting the sequence by separator sep.
 
-        This behaves like the python string method of the same name.
-
-        Return a list of the 'words' in the string (as Seq objects),
+        Return a list of the subsequences in the sequence (as Seq objects),
         using sep as the delimiter string.  If maxsplit is given, at
         most maxsplit splits are done.  If maxsplit is omitted, all
         splits are made.
 
-        Following the python string method, sep will by default be any
-        white space (tabs, spaces, newlines) but this is unlikely to
-        apply to biological sequences.
+        For consistency with the ``split`` method of Python strings, any
+        whitespace (tabs, spaces, newlines) is a separator if sep is None, the
+        default value
 
         e.g.
 
@@ -842,7 +931,8 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR')
         Seq('KGAR*L')
 
-        See also the rsplit method:
+        See also the rsplit method, which splits the sequence starting from the
+        end::
 
         >>> for pep in my_aa.rsplit("*", 1):
         ...     pep
@@ -856,22 +946,41 @@ class _SeqAbstractBaseClass(ABC):
         return [Seq(part) for part in self._data.split(sep, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
-        """Do a right split method, like that of a python string.
+        """Return a list of subsequences by splitting the sequence from the right.
 
-        This behaves like the python string method of the same name.
-
-        Return a list of the 'words' in the string (as Seq objects),
+        Return a list of the subsequences in the sequence (as Seq objects),
         using sep as the delimiter string.  If maxsplit is given, at
-        most maxsplit splits are done COUNTING FROM THE RIGHT.
-        If maxsplit is omitted, all splits are made.
+        most maxsplit splits are done.  If maxsplit is omitted, all
+        splits are made.
 
-        Following the python string method, sep will by default be any
-        white space (tabs, spaces, newlines) but this is unlikely to
-        apply to biological sequences.
+        For consistency with the ``rsplit`` method of Python strings, any
+        whitespace (tabs, spaces, newlines) is a separator if sep is None, the
+        default value
 
-        e.g. print(my_seq.rsplit("*",1))
+        e.g.
 
-        See also the split method.
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_aa = my_rna.translate()
+        >>> my_aa
+        Seq('VMAIVMGR*KGAR*L')
+        >>> for pep in my_aa.rsplit("*"):
+        ...     pep
+        Seq('VMAIVMGR')
+        Seq('KGAR')
+        Seq('L')
+        >>> for pep in my_aa.rsplit("*", 1):
+        ...     pep
+        Seq('VMAIVMGR*KGAR')
+        Seq('L')
+
+        See also the split method, which splits the sequence starting from the
+        beginning:
+
+        >>> for pep in my_aa.split("*", 1):
+        ...     pep
+        Seq('VMAIVMGR')
+        Seq('KGAR*L')
         """
         if isinstance(sep, (Seq, MutableSeq)):
             sep = bytes(sep)
@@ -882,46 +991,36 @@ class _SeqAbstractBaseClass(ABC):
     def strip(self, chars=None, inplace=False):
         """Return a sequence object with leading and trailing ends stripped.
 
-        This behaves like the python string method of the same name.
+        With default arguments, leading and trailing whitespace is removed:
 
-        A copy of the sequence is returned if ``inplace`` is `False` (the
-        default value). If ``inplace`` is `True`, the sequence is stripped
-        in-place and returned:
-
-        >>> seq = MutableSeq("ACGT ")
+        >>> seq = Seq(" ACGT ")
         >>> seq.strip()
+        Seq('ACGT')
+        >>> seq
+        Seq(' ACGT ')
+
+        If ``chars`` is given and not ``None``, remove characters in ``chars``
+        instead.  The order of the characters to be removed is not important:
+
+        >>> Seq("ACGTACGT").strip("TGCA")
+        Seq('')
+
+        A copy of the sequence is returned if ``inplace`` is ``False`` (the
+        default value).  If ``inplace`` is ``True``, the sequence is stripped
+        in-place and returned.
+
+        >>> seq = MutableSeq(" ACGT ")
+        >>> seq.strip(inplace=False)
         MutableSeq('ACGT')
         >>> seq
-        MutableSeq('ACGT ')
+        MutableSeq(' ACGT ')
         >>> seq.strip(inplace=True)
         MutableSeq('ACGT')
         >>> seq
         MutableSeq('ACGT')
 
-        Optional argument chars defines which characters to remove.  If
-        omitted or None (default) then as for the python string method,
-        this defaults to removing any white space.
-
-        e.g.
-
-        >>> MutableSeq("ACGT ").strip()
-        MutableSeq('ACGT')
-        >>> MutableSeq("ACGT ").strip(" ")
-        MutableSeq('ACGT')
-
-        Just like the Python string, the order of the characters to be
-        removed is not important:
-
-        >>> MutableSeq("ACGTACGT").strip("TGCA")
-        MutableSeq('')
-
-        As with the Python string, an inappropriate argument
-        will give a TypeError:
-
-        >>> MutableSeq("ACGT ").strip(7)
-        Traceback (most recent call last):
-           ...
-        TypeError: argument must be None or a string, Seq, MutableSeq, or bytes-like object
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if ``strip``
+        is called on a ``Seq`` object with ``inplace=True``.
 
         See also the lstrip and rstrip methods.
         """
@@ -946,16 +1045,29 @@ class _SeqAbstractBaseClass(ABC):
             return self.__class__(data)
 
     def lstrip(self, chars=None, inplace=False):
-        """Return a MutableSeq object with leading (left) end stripped.
+        """Return a sequence object with leading and trailing ends stripped.
 
-        This behaves like the python string method of the same name.
+        With default arguments, leading whitespace is removed:
 
-        A copy of the sequence is returned if ``inplace`` is `False` (the
-        default value). If ``inplace`` is `True`, the sequence is stripped
-        in-place and returned:
+        >>> seq = Seq(" ACGT ")
+        >>> seq.lstrip()
+        Seq('ACGT ')
+        >>> seq
+        Seq(' ACGT ')
+
+        If ``chars`` is given and not ``None``, remove characters in ``chars``
+        from the leading end instead.  The order of the characters to be removed
+        is not important:
+
+        >>> Seq("ACGACGTTACG").lstrip("GCA")
+        Seq('TTACG')
+
+        A copy of the sequence is returned if ``inplace`` is ``False`` (the
+        default value).  If ``inplace`` is ``True``, the sequence is stripped
+        in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.lstrip()
+        >>> seq.lstrip(inplace=False)
         MutableSeq('ACGT ')
         >>> seq
         MutableSeq(' ACGT ')
@@ -964,12 +1076,8 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq
         MutableSeq('ACGT ')
 
-        Optional argument chars defines which characters to remove.  If
-        omitted or None (default) then as for the python string method,
-        this defaults to removing any white space.
-
-        >>> MutableSeq("AAACGTA").lstrip("A")
-        MutableSeq('CGTA')
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``lstrip`` is called on a ``Seq`` object with ``inplace=True``.
 
         See also the strip and rstrip methods.
         """
@@ -994,16 +1102,29 @@ class _SeqAbstractBaseClass(ABC):
             return self.__class__(data)
 
     def rstrip(self, chars=None, inplace=False):
-        """Return a MutableSeq object with trailing (right) end stripped.
+        """Return a sequence object with trailing ends stripped.
 
-        This behaves like the python string method of the same name.
+        With default arguments, trailing whitespace is removed:
 
-        A copy of the sequence is returned if ``inplace`` is `False` (the
-        default value). If ``inplace`` is `True`, the sequence is stripped
-        in-place and returned:
+        >>> seq = Seq(" ACGT ")
+        >>> seq.rstrip()
+        Seq(' ACGT')
+        >>> seq
+        Seq(' ACGT ')
+
+        If ``chars`` is given and not ``None``, remove characters in ``chars``
+        from the trailing end instead.  The order of the characters to be
+        removed is not important:
+
+        >>> Seq("ACGACGTTACG").rstrip("GCA")
+        Seq('ACGACGTT')
+
+        A copy of the sequence is returned if ``inplace`` is ``False`` (the
+        default value).  If ``inplace`` is ``True``, the sequence is stripped
+        in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.rstrip()
+        >>> seq.rstrip(inplace=False)
         MutableSeq(' ACGT')
         >>> seq
         MutableSeq(' ACGT ')
@@ -1012,18 +1133,8 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq
         MutableSeq(' ACGT')
 
-        Optional argument chars defines which characters to remove.  If
-        omitted or None (default) then as for the python string method,
-        this defaults to removing any white space.
-
-        e.g. Removing a nucleotide sequence's polyadenylation (poly-A tail):
-
-        >>> from Bio.Seq import MutableSeq
-        >>> my_seq = MutableSeq("CGGTACGCTTATGTCACGTAGAAAAAA")
-        >>> my_seq
-        MutableSeq('CGGTACGCTTATGTCACGTAGAAAAAA')
-        >>> my_seq.rstrip("A")
-        MutableSeq('CGGTACGCTTATGTCACGTAG')
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``rstrip`` is called on a ``Seq`` object with ``inplace=True``.
 
         See also the strip and lstrip methods.
         """
@@ -1053,7 +1164,19 @@ class _SeqAbstractBaseClass(ABC):
         An upper-case copy of the sequence is returned if inplace is False,
         the default value:
 
-        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Seq import Seq, MutableSeq
+        >>> my_seq = Seq("VHLTPeeK*")
+        >>> my_seq
+        Seq('VHLTPeeK*')
+        >>> my_seq.lower()
+        Seq('vhltpeek*')
+        >>> my_seq.upper()
+        Seq('VHLTPEEK*')
+        >>> my_seq
+        Seq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
         >>> my_seq = MutableSeq("VHLTPeeK*")
         >>> my_seq
         MutableSeq('VHLTPeeK*')
@@ -1064,8 +1187,6 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_seq
         MutableSeq('VHLTPeeK*')
 
-        The sequence is modified in-place and returned if inplace is True:
-
         >>> my_seq.lower(inplace=True)
         MutableSeq('vhltpeek*')
         >>> my_seq
@@ -1074,6 +1195,11 @@ class _SeqAbstractBaseClass(ABC):
         MutableSeq('VHLTPEEK*')
         >>> my_seq
         MutableSeq('VHLTPEEK*')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``upper`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the ``lower`` method.
         """
         data = self._data.upper()
         if inplace:
@@ -1087,10 +1213,22 @@ class _SeqAbstractBaseClass(ABC):
     def lower(self, inplace=False):
         """Return the sequence in lower case.
 
-        A lower-case copy of the sequence is returned if inplace is False,
+        An lower-case copy of the sequence is returned if inplace is False,
         the default value:
 
-        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Seq import Seq, MutableSeq
+        >>> my_seq = Seq("VHLTPeeK*")
+        >>> my_seq
+        Seq('VHLTPeeK*')
+        >>> my_seq.lower()
+        Seq('vhltpeek*')
+        >>> my_seq.upper()
+        Seq('VHLTPEEK*')
+        >>> my_seq
+        Seq('VHLTPeeK*')
+
+        The sequence is modified in-place and returned if inplace is True:
+
         >>> my_seq = MutableSeq("VHLTPeeK*")
         >>> my_seq
         MutableSeq('VHLTPeeK*')
@@ -1101,8 +1239,6 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_seq
         MutableSeq('VHLTPeeK*')
 
-        The sequence is modified in-place and returned if inplace is True:
-
         >>> my_seq.lower(inplace=True)
         MutableSeq('vhltpeek*')
         >>> my_seq
@@ -1111,6 +1247,11 @@ class _SeqAbstractBaseClass(ABC):
         MutableSeq('VHLTPEEK*')
         >>> my_seq
         MutableSeq('VHLTPEEK*')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``lower`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the ``upper`` method.
         """
         data = self._data.lower()
         if inplace:
@@ -1124,7 +1265,7 @@ class _SeqAbstractBaseClass(ABC):
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
     ):
-        """Turn a nucleotide sequence into a protein sequence by creating a new MutableSeq object.
+        """Turn a nucleotide sequence into a protein sequence by creating a new sequence object.
 
         This method will translate DNA or RNA sequences. It should not
         be used on protein sequences as any result will be biologically
@@ -1152,28 +1293,32 @@ class _SeqAbstractBaseClass(ABC):
          - gap - Single character string to denote symbol used for gaps.
            Defaults to the minus sign.
 
+        A ``Seq`` object is returned if ``translate`` is called on a ``Seq``
+        object; a ``MutableSeq`` object is returned if ``translate`` is called
+        pn a ``MutableSeq`` object.
+
         e.g. Using the standard table:
 
-        >>> coding_dna = MutableSeq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> coding_dna = Seq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna.translate()
-        MutableSeq('VAIVMGR*KGAR*')
+        Seq('VAIVMGR*KGAR*')
         >>> coding_dna.translate(stop_symbol="@")
-        MutableSeq('VAIVMGR@KGAR@')
+        Seq('VAIVMGR@KGAR@')
         >>> coding_dna.translate(to_stop=True)
-        MutableSeq('VAIVMGR')
+        Seq('VAIVMGR')
 
         Now using NCBI table 2, where TGA is not a stop codon:
 
         >>> coding_dna.translate(table=2)
-        MutableSeq('VAIVMGRWKGAR*')
+        Seq('VAIVMGRWKGAR*')
         >>> coding_dna.translate(table=2, to_stop=True)
-        MutableSeq('VAIVMGRWKGAR')
+        Seq('VAIVMGRWKGAR')
 
         In fact, GTG is an alternative start codon under NCBI table 2, meaning
         this sequence could be a complete CDS:
 
         >>> coding_dna.translate(table=2, cds=True)
-        MutableSeq('MAIVMGRWKGAR')
+        Seq('MAIVMGRWKGAR')
 
         It isn't a valid CDS under NCBI table 1, due to both the start codon
         and also the in frame stop codons:
@@ -1186,11 +1331,11 @@ class _SeqAbstractBaseClass(ABC):
         If the sequence has no in-frame stop codon, then the to_stop argument
         has no effect:
 
-        >>> coding_dna2 = MutableSeq("TTGGCCATTGTAATGGGCCGC")
+        >>> coding_dna2 = Seq("TTGGCCATTGTAATGGGCCGC")
         >>> coding_dna2.translate()
-        MutableSeq('LAIVMGR')
+        Seq('LAIVMGR')
         >>> coding_dna2.translate(to_stop=True)
-        MutableSeq('LAIVMGR')
+        Seq('LAIVMGR')
 
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
@@ -1240,6 +1385,24 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> Seq("CGA").complement()
         Seq('GCT')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq = MutableSeq("CGA")
+        >>> my_seq
+        MutableSeq('CGA')
+        >>> my_seq.complement_rna()
+        MutableSeq('GCU')
+        >>> my_seq
+        MutableSeq('CGA')
+
+        >>> my_seq.complement_rna(inplace=True)
+        MutableSeq('GCU')
+        >>> my_seq
+        MutableSeq('GCU')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``complement_rna`` is called on a ``Seq`` object with ``inplace=True``.
         """
         try:
             data = self._data.translate(_rna_complement_table)
@@ -1257,9 +1420,37 @@ class _SeqAbstractBaseClass(ABC):
     def reverse_complement_rna(self, inplace=False):
         """Return the reverse complement as an RNA sequence.
 
-        >>> from Bio.Seq import Seq
-        >>> Seq("ACG").reverse_complement_rna()
-        Seq('CGU')
+        >>> Seq("CGA").reverse_complement_rna()
+        Seq('UCG')
+
+        Any T in the sequence is treated as a U:
+
+        >>> Seq("CGAUT").reverse_complement_rna()
+        Seq('AAUCG')
+
+        In contrast, ``reverse_complement`` returns a DNA sequence by default:
+
+        >>> Seq("CGA").reverse_complement()
+        Seq('TCG')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq = MutableSeq("CGA")
+        >>> my_seq
+        MutableSeq('CGA')
+        >>> my_seq.reverse_complement_rna()
+        MutableSeq('UCG')
+        >>> my_seq
+        MutableSeq('CGA')
+
+        >>> my_seq.reverse_complement_rna(inplace=True)
+        MutableSeq('UCG')
+        >>> my_seq
+        MutableSeq('UCG')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``reverse_complement_rna`` is called on a ``Seq`` object with
+        ``inplace=True``.
         """
         try:
             data = self._data.translate(_rna_complement_table)
@@ -1285,15 +1476,32 @@ class _SeqAbstractBaseClass(ABC):
         >>> coding_dna.transcribe()
         Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 
-        Trying to transcribe an RNA sequence should have no effect.
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> sequence = MutableSeq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> sequence
+        MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+        >>> sequence.transcribe()
+        MutableSeq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+        >>> sequence
+        MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+
+        >>> sequence.transcribe(inplace=True)
+        MutableSeq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+        >>> sequence
+        MutableSeq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``transcribe`` is called on a ``Seq`` object with ``inplace=True``.
+
+        Trying to transcribe an RNA sequence has no effect.
         If you have a nucleotide sequence which might be DNA or RNA
         (or even a mixture), calling the transcribe method will ensure
         any T becomes U.
 
         Trying to transcribe a protein sequence will replace any
         T for Threonine with U for Selenocysteine, which has no
-        biologically plausible rational. Older versions of Biopython
-        would throw an exception.
+        biologically plausible rational.
 
         >>> from Bio.Seq import Seq
         >>> my_protein = Seq("MAIVMGRT")
@@ -1323,13 +1531,30 @@ class _SeqAbstractBaseClass(ABC):
         >>> messenger_rna.back_transcribe()
         Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> sequence = MutableSeq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
+        >>> sequence
+        MutableSeq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+        >>> sequence.back_transcribe()
+        MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+        >>> sequence
+        MutableSeq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+
+        >>> sequence.back_transcribe(inplace=True)
+        MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+        >>> sequence
+        MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``transcribe`` is called on a ``Seq`` object with ``inplace=True``.
+
         Trying to back-transcribe DNA has no effect, If you have a nucleotide
         sequence which might be DNA or RNA (or even a mixture), calling the
-        back-transcribe method will ensure any T becomes U.
+        back-transcribe method will ensure any U becomes T.
 
         Trying to back-transcribe a protein sequence will replace any U for
         Selenocysteine with T for Threonine, which is biologically meaningless.
-        Older versions of Biopython would raise an exception here:
 
         >>> from Bio.Seq import Seq
         >>> my_protein = Seq("MAIVMGRU")
@@ -1352,9 +1577,10 @@ class _SeqAbstractBaseClass(ABC):
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts either a Seq or string (and iterates over the letters), or an
-        iterable containing Seq or string objects. These arguments will be
-        concatenated with the calling sequence as the spacer:
+        Accepts a Seq object, MutableSeq object, or string (and iterates over
+        the letters), or an iterable containing Seq, MutableSeq, or string
+        objects. These arguments will be concatenated with the calling sequence
+        as the spacer:
 
         >>> concatenated = Seq('NNNNN').join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
@@ -1381,7 +1607,7 @@ class _SeqAbstractBaseClass(ABC):
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif not isinstance(c, (str, Seq, MutableSeq)):
-                raise TypeError("Input must be an iterable of Seqs or Strings")
+                raise TypeError("Input must be an iterable of Seq objects, MutableSeq objects, or strings")
         return self.__class__(str(self).join([str(_) for _ in other]))
 
     def replace(self, old, new, inplace=False):
@@ -1409,6 +1635,9 @@ class _SeqAbstractBaseClass(ABC):
         MutableSeq('XYZGTAXYZCGGTT')
         >>> t
         MutableSeq('XYZGTAXYZCGGTT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``replace`` is called on a ``Seq`` object with ``inplace=True``.
         """
         if isinstance(old, (Seq, MutableSeq)):
             old = bytes(old)

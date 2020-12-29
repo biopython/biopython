@@ -240,11 +240,6 @@ class TestSeqStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.s + {}
 
-    def test_radd_method(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", self.s.__radd__(self.s)
-        )
-
     def test_radd_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
             self.s.__radd__({})
@@ -585,23 +580,6 @@ class TestMutableSeq(unittest.TestCase):
         """Test adding wrong type to MutableSeq."""
         with self.assertRaises(TypeError):
             self.mutable_s + 1234
-
-    def test_radd_method(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
-            self.mutable_s.__radd__(self.mutable_s),
-        )
-
-    def test_radd_method_using_mutableseq_object(self):
-        self.assertEqual(
-            "UCAAAAGGATCAAAAGGATGCATCATG",
-            self.mutable_s.__radd__(Seq.MutableSeq("UCAAAAGGA")),
-        )
-
-    def test_radd_method_using_seq_object(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", self.mutable_s.__radd__(self.s)
-        )
 
     def test_radd_method_wrong_type(self):
         with self.assertRaises(TypeError):
