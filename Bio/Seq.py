@@ -284,7 +284,7 @@ class SequenceDataAbstractBaseClass(ABC):
 
 
 class _SeqAbstractBaseClass(ABC):
-    """Abstract base class for the Seq and MutableSeq classes (PRIVATE)
+    """Abstract base class for the Seq and MutableSeq classes (PRIVATE).
 
     Most users will not need to use this class. It is used internally as an
     abstract base class for Seq and MutableSeq, as most of their methods are
@@ -923,11 +923,13 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR*KGAR*L')
         >>> for pep in my_aa.split("*"):
         ...     pep
+        ...
         Seq('VMAIVMGR')
         Seq('KGAR')
         Seq('L')
         >>> for pep in my_aa.split("*", 1):
         ...     pep
+        ...
         Seq('VMAIVMGR')
         Seq('KGAR*L')
 
@@ -936,6 +938,7 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> for pep in my_aa.rsplit("*", 1):
         ...     pep
+        ...
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
@@ -1607,7 +1610,9 @@ class _SeqAbstractBaseClass(ABC):
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif not isinstance(c, (str, Seq, MutableSeq)):
-                raise TypeError("Input must be an iterable of Seq objects, MutableSeq objects, or strings")
+                raise TypeError(
+                    "Input must be an iterable of Seq objects, MutableSeq objects, or strings"
+                )
         return self.__class__(str(self).join([str(_) for _ in other]))
 
     def replace(self, old, new, inplace=False):
