@@ -45,12 +45,12 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812
+    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
@@ -77,6 +77,8 @@ per-file-ignores =
 #             it is not any safer than normal property access
 #        B011 do not call assert False since python -O removes these calls;
 #             instead callers should raise AssertionError()
+#        B015 Pointless comparison. This comparison does nothing ...
+#             (Intended to trigger exceptions in our tests)
 #        C812 missing trailing comma
 
 # =======================
