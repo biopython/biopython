@@ -475,37 +475,37 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_lt_exception(self):
         def lt():
-            SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, lt)
 
     def test_le_exception(self):
         def le():
-            SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
-            SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, equality)
 
     def test_ne_exception(self):
         def notequality():
-            SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, notequality)
 
     def test_gt_exception(self):
         def gt():
-            SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, gt)
 
     def test_ge_exception(self):
         def ge():
-            SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, ge)
 
