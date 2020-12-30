@@ -36,12 +36,12 @@ repos:
         additional_dependencies: [black==19.10b0]
         exclude: ^.github/
 -   repo: https://github.com/myint/rstcheck
-    rev: ''
+    rev: 3f92957478422df87bd730abde66f089cc1ee19b
     hooks:
     -   id: rstcheck
         args: [--report=warning]
 -   repo: https://github.com/PyCQA/doc8
-    rev: ''
+    rev: 0.8.1
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
