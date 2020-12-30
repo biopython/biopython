@@ -75,6 +75,14 @@ class IQTreeTestCase(unittest.TestCase):
         self.assertGreater(len(out), 0)
         self.assertEqual(len(err), 0)
         # Check the output tree
-        outfname = Example_Phy = ".iqtree"
+        outfname = Example_Phy + ".iqtree"
         if not os.path.isfile(outfname):
+            outfname = outfname[:-4]
 
+    except Exception as exc:
+        self.fail("IQTree wrapper error: %s" % exc)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
