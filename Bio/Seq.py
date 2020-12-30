@@ -353,7 +353,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq1 == bytearray(b"ACGT")
         True
         """
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self._data == other._data
         elif isinstance(other, str):
             return self._data == other.encode("ASCII")
@@ -362,7 +362,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self._data < other._data
         elif isinstance(other, str):
             return self._data < other.encode("ASCII")
@@ -371,7 +371,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self._data <= other._data
         elif isinstance(other, str):
             return self._data <= other.encode("ASCII")
@@ -380,7 +380,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self._data > other._data
         elif isinstance(other, str):
             return self._data > other.encode("ASCII")
@@ -389,7 +389,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self._data >= other._data
         elif isinstance(other, str):
             return self._data >= other.encode("ASCII")
@@ -434,7 +434,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("MELKI") + "LV"
         MutableSeq('MELKILV')
         """
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self.__class__(self._data + other._data)
         elif isinstance(other, str):
             return self.__class__(self._data + other.encode("ASCII"))
@@ -656,7 +656,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("AAA") in my_dna
         True
         """
-        if isinstance(item, (Seq, MutableSeq)):
+        if isinstance(item, _SeqAbstractBaseClass):
             item = bytes(item)
         elif isinstance(item, str):
             item = item.encode("ASCII")
@@ -689,7 +689,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.find("AUG", 4)
         15
         """
-        if isinstance(sub, (Seq, MutableSeq)):
+        if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
@@ -727,7 +727,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.rfind("AUG", end=15)
         3
         """
-        if isinstance(sub, (Seq, MutableSeq)):
+        if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
@@ -862,10 +862,10 @@ class _SeqAbstractBaseClass(ABC):
         """
         if isinstance(prefix, tuple):
             prefix = tuple(
-                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in prefix
             )
-        elif isinstance(prefix, (Seq, MutableSeq)):
+        elif isinstance(prefix, _SeqAbstractBaseClass):
             prefix = bytes(prefix)
         elif isinstance(prefix, str):
             prefix = prefix.encode("ASCII")
@@ -893,10 +893,10 @@ class _SeqAbstractBaseClass(ABC):
         """
         if isinstance(suffix, tuple):
             suffix = tuple(
-                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in suffix
             )
-        elif isinstance(suffix, (Seq, MutableSeq)):
+        elif isinstance(suffix, _SeqAbstractBaseClass):
             suffix = bytes(suffix)
         elif isinstance(suffix, str):
             suffix = suffix.encode("ASCII")
@@ -939,7 +939,7 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
-        if isinstance(sep, (Seq, MutableSeq)):
+        if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
@@ -982,7 +982,7 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR')
         Seq('KGAR*L')
         """
-        if isinstance(sep, (Seq, MutableSeq)):
+        if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
@@ -1024,7 +1024,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the lstrip and rstrip methods.
         """
-        if isinstance(chars, (Seq, MutableSeq)):
+        if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
@@ -1081,7 +1081,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and rstrip methods.
         """
-        if isinstance(chars, (Seq, MutableSeq)):
+        if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
@@ -1138,7 +1138,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and lstrip methods.
         """
-        if isinstance(chars, (Seq, MutableSeq)):
+        if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
@@ -1593,7 +1593,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> Seq('NNNNN').join("ACGT")
         Seq('ANNNNNCNNNNNGNNNNNT')
         """
-        if isinstance(other, (Seq, MutableSeq)):
+        if isinstance(other, _SeqAbstractBaseClass):
             return self.__class__(str(self).join(str(other)))
         elif isinstance(other, str):
             return self.__class__(str(self).join(other))
@@ -1606,7 +1606,7 @@ class _SeqAbstractBaseClass(ABC):
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
-            elif not isinstance(c, (str, Seq, MutableSeq)):
+            elif not isinstance(c, (str, _SeqAbstractBaseClass)):
                 raise TypeError(
                     "Input must be an iterable of Seq objects, MutableSeq objects, or strings"
                 )
@@ -1641,11 +1641,11 @@ class _SeqAbstractBaseClass(ABC):
         As ``Seq`` objects are immutable, a ``TypeError`` is raised if
         ``replace`` is called on a ``Seq`` object with ``inplace=True``.
         """
-        if isinstance(old, (Seq, MutableSeq)):
+        if isinstance(old, _SeqAbstractBaseClass):
             old = bytes(old)
         elif isinstance(old, str):
             old = old.encode("ASCII")
-        if isinstance(new, (Seq, MutableSeq)):
+        if isinstance(new, _SeqAbstractBaseClass):
             new = bytes(new)
         elif isinstance(new, str):
             new = new.encode("ASCII")
@@ -1712,7 +1712,7 @@ class Seq(_SeqAbstractBaseClass):
         if length is None:
             if isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
                 self._data = data
-            elif isinstance(data, (bytearray, Seq, MutableSeq)):
+            elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
                 self._data = bytes(data)
             elif isinstance(data, str):
                 self._data = bytes(data, encoding="ASCII")
@@ -2162,7 +2162,7 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count("NNN")
         1
         """
-        if isinstance(sub, (Seq, MutableSeq)):
+        if isinstance(sub, _SeqAbstractBaseClass):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
@@ -2213,7 +2213,7 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
         True
         """
-        if isinstance(sub, (Seq, MutableSeq)):
+        if isinstance(sub, _SeqAbstractBaseClass):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
@@ -2473,7 +2473,7 @@ class UnknownSeq(Seq):
         """
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-        if isinstance(other, (str, Seq, MutableSeq)):
+        if isinstance(other, (str, _SeqAbstractBaseClass)):
             if isinstance(other, UnknownSeq) and self._character == other._character:
                 # Special case, can return an UnknownSeq
                 return self.__class__(
@@ -2486,7 +2486,7 @@ class UnknownSeq(Seq):
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
-            elif not isinstance(c, (str, Seq, MutableSeq)):
+            elif not isinstance(c, (str, _SeqAbstractBaseClass)):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
         temp_data = str(self).join([str(_) for _ in other])
         if temp_data.count(self._character) == len(temp_data):
