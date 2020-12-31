@@ -115,6 +115,17 @@ class DSSP_tool_test(unittest.TestCase):
         dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 24)
 
+    def test_dssp_with_mmcif_file_and_different_chain_ids(self):
+        """Test DSSP generation from MMCIF which has different label and author chain IDs."""
+        if self.dssp_version < StrictVersion("2.2.0"):
+            self.skipTest("Test requires DSSP version 2.2.0 or greater")
+
+        pdbfile = "PDB/1A7G.cif"
+        model = self.cifparser.get_structure("1A7G", pdbfile)[0]
+        dssp = DSSP(model, pdbfile)
+        self.assertEqual(len(dssp), 82)
+        self.assertEqual(dssp.keys()[0][0], "E")
+
 
 class DSSP_test(unittest.TestCase):
     """Tests for DSSP parsing etc which don't need the binary tool."""
