@@ -1365,6 +1365,10 @@ class PairwiseAlignments:
         return len(self.paths)
 
     def __getitem__(self, index):
+        if index < 0:
+            raise IndexError("index must be nonnegative")
+        if isinstance(index, int):
+            raise TypeError(" index must be integers")
         if index == self.index:
             return self.alignment
         if index < self.index:
