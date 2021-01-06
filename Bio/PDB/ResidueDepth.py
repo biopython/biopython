@@ -64,7 +64,6 @@ from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
 
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 
 # Table 1: Atom Type to radius
 _atomic_radii = {
@@ -579,18 +578,10 @@ def ca_depth(residue, surface):
 class ResidueDepth(AbstractPropertyMap):
     """Calculate residue and CA depth for all residues."""
 
-    def __init__(self, model, pdb_file=None, msms_exec=None):
+    def __init__(self, model, msms_exec=None):
         """Initialize the class."""
         if msms_exec is None:
             msms_exec = "msms"
-
-        # Issue warning if pdb_file is given
-        if pdb_file is not None:
-            warnings.warn(
-                "ResidueDepth no longer requires a pdb file. This argument will be "
-                "removed in a future release of Biopython.",
-                BiopythonDeprecationWarning,
-            )
 
         depth_dict = {}
         depth_list = []
