@@ -7,6 +7,9 @@
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg?logo=travis
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
+.. image:: https://img.shields.io/circleci/build/github/biopython/biopython.svg?logo=circleci
+   :alt: Linux testing with CircleCI
+   :target: https://app.circleci.com/pipelines/github/biopython/biopython
 .. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
