@@ -509,7 +509,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
         children = self.disordered_get_list()
 
         if not children:
-            raise ValueError("{} does not have children".format(self))
+            raise ValueError(f"{self} does not have children")
 
         coords = np.asarray([a.coord for a in children], dtype=np.float32)
         return np.average(coords, axis=0, weights=None)
