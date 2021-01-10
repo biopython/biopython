@@ -899,10 +899,7 @@ class BlastXmlWriter:
             if self._use_raw_hit_ids:
                 hit_id = hit.blast_id
                 hit_desc = " >".join(
-                    [
-                        f"{x} {y}"
-                        for x, y in zip(hit.id_all, hit.description_all)
-                    ]
+                    [f"{x} {y}" for x, y in zip(hit.id_all, hit.description_all)]
                 )
             else:
                 hit_id = hit.id
