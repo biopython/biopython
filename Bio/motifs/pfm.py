@@ -409,9 +409,7 @@ def write(motifs):
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
-            lines.append(
-                "{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts)
-            )
+            lines.append("{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts))
 
     # Finished; glue the lines together.
     text = "".join(lines)
