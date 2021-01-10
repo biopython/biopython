@@ -92,7 +92,7 @@ class CodonAlignment(MultipleSeqAlignment):
             return "".join(str(rec[col_index]) for rec in self._records[row_index])
         else:
             return MultipleSeqAlignment(
-                (rec[col_index] for rec in self._records[row_index])
+                rec[col_index] for rec in self._records[row_index]
             )
 
     def __add__(self, other):
