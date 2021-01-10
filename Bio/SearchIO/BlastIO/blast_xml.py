@@ -900,7 +900,7 @@ class BlastXmlWriter:
                 hit_id = hit.blast_id
                 hit_desc = " >".join(
                     [
-                        "{} {}".format(x, y)
+                        f"{x} {y}"
                         for x, y in zip(hit.id_all, hit.description_all)
                     ]
                 )
@@ -908,7 +908,7 @@ class BlastXmlWriter:
                 hit_id = hit.id
                 hit_desc = hit.description + " >".join(
                     [
-                        "{} {}".format(x, y)
+                        f"{x} {y}"
                         for x, y in zip(hit.id_all[1:], hit.description_all[1:])
                     ]
                 )
