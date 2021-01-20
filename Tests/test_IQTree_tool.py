@@ -1,3 +1,9 @@
+# Copyright 2021 by Cristian Ferrari.
+# Based on test_phyml_tool.py by Eric Talevich.
+#
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
 
 """Test for IQTree tool."""
 
@@ -7,13 +13,11 @@ import sys
 import os
 import unittest
 
-from Bio import SeqIO
-from Bio import AlignIO
+from subprocess import getoutput
 
-from Bio.Align.Applications import IQTreeCommandline
+from Bio import Phylo
+from Bio.Phylo.Applications import IQTreeCommandline
 from Bio.Application import ApplicationError
-
-#################################################################
 
 # Try to aboid problems when the OS is in another language
 os.environ["LANG"] = "C"
@@ -23,7 +27,7 @@ iqtree_exe = None
 if sys.platform == "Win32":
 
     try:
-        prog_files = os.environ["PROGRAMFILES"]
+        prog_files = r"C:\Program Files\iqtree-1.6.12-Windows\bin"
     except KeyError:
         prog_files = r"C:\Program Files"
 
@@ -32,8 +36,10 @@ if sys.platform == "Win32":
         "",
         "iqtree-1.6.12-Windows",
         r"iqtree-1.6.12-Windows\bin",
+        "iqtree2-1.6.12-Windows",
+        r"iqtree2-1.6.12-Windows\bin",
         ]
-    likely_exes = ["iqtree.exe"]
+    likely_exes = ["iqtree.exe", "iqtree2.exe"]
 
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
@@ -50,12 +56,12 @@ else:
 
     if "not found" not in output and "not recognized" not in output:
         if "IQ-TREE" in output:
-            iqtree_exe = "iqtree"
+            iqtree_exe = "iqtree.exe"
     if not iqtree_exe:
-        output = geoutput("iqtree2 -version")
+        output = getoutput("iqtree2 -version")
         if "not found" not in output and "not recognized" not in output:
             if "IQ-TREE" in output:
-                iqtree_exe = "iqtree2"
+                iqtree_exe = "iqtree2.exe"
 
 if not iqtree_exe:
     raise MissingExternalDependencyError(
@@ -64,23 +70,40 @@ if not iqtree_exe:
         )
 
 #Example Phylip file provided on IQ-Tree website
-Example_Phy = "example.phy"
+Example_Phy = "Phylip/example_iqtree.phy"
 
 class IQTreeTestCase(unittest.TestCase):
     """Tests for application wrappers"""
-    cmd = IQTreeCommandline(iqtree_exe, s=Example_Phy)
 
-    try:
-        out, err = cmd()
-        self.assertGreater(len(out), 0)
-        self.assertEqual(len(err), 0)
-        # Check the output tree
-        outfname = Example_Phy + ".iqtree"
-        if not os.path.isfile(outfname):
-            outfname = outfname[:-4]
+    def test_iqtree(self):
+        cmd = _IQtree.IQTreeCommandline(iqtree_exe, s=Example_Phy)
 
-    except Exception as exc:
-        self.fail("IQTree wrapper error: %s" % exc)
+        try:
+             out, err = cmd()
+             self.assertGreater(len(out), 0)
+             self.assertEqual(len(err), 0)
+             # Check the output tree
+             outfname = Example_Phy + ".iqtree"
+             print(outfname)
+             self.assertEqual(os.path.isfile(outfname), True)
+    
+        except Exception as exc:
+             self.fail("IQTree wrapper error: %s" % exc)
+
+        finally:
+          # Clean up generated files
+          for suffix in [
+              ".bionj",
+              ".ckp.gz",
+              ".iqtree",
+              ".log",
+              ".mldist",
+              ".model.gz",
+              ".treefile",
+              ]:
+              fname = Example_Phy + suffix
+              if os.path.isfile(fname):
+                  os.remove(fname)
 
 
 if __name__ == "__main__":
