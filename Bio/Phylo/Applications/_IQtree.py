@@ -1,11 +1,11 @@
-
+# Copyright 2021 by Cristian Ferrari.
 # Based on code in _Phyml.py by Eric Talevich.
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command-line wrapper for the phylogenomic inference IQ-Tree"""
+"""Command-line wrapper for the phylogenomic inference program IQ-Tree"""
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -111,7 +111,7 @@ class IQTreeCommandline(AbstractCommandline):
 				equate = False
 				),
 			_Option(
-				["-pre", "pre"],                        #This outputs the files in the project folder for some reason
+				["-pre", "pre"],                        
 				"""Specify a prefix for all output files
 
 				   Default: either alignment file name (-s) or partition file name
@@ -341,7 +341,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: 2
 				   """,
 				equate = False,
-				checker_function = _is_int,               #this should be int
+				checker_function = _is_int,               
 				),
 			_Option(
 				["-cmax", "cmax"],
@@ -351,7 +351,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: 10
 				   """,
 				equate = False,
-				checker_function = _is_int,              #this should be int
+				checker_function = _is_int,              
 				),
 			_Option(
 				["-merit", "merit"],
@@ -400,7 +400,7 @@ class IQTreeCommandline(AbstractCommandline):
 				""",
 				),
 			_Option(
-				["-a", "a"],                    #idk if this is always a number or what
+				["-a", "a"],                    
 				"""Specify the Gamma shape parameter
 				   Default: estimate""",
 				equate = False,
@@ -858,13 +858,13 @@ class IQTreeCommandline(AbstractCommandline):
 				   IQTree will create a random tree under Yule-Harding model with specified number of taxa
 				   """,
 				equate = False,
-				checker_function = _is_number  #not sure if it's supposed to be an int
+				checker_function = _is_number  
 				),
 			_Option(
 				["-ru", "ru"],
 				"""Like -r but a random tree is created under uniform model""",
 				equate = False,
-				checker_function = _is_number  #not sure if it's supposed to be an int
+				checker_function = _is_number  
 				),
 			_Option(
 				["-rcat", "rcat"],
@@ -997,7 +997,6 @@ class IQTreeCommandline(AbstractCommandline):
 				checker_function = lambda x: True if (all(y.isdigit() for y in x.split(","))) else False,
 				),
 
-			#These weren't on the documentation but are present on -h list of commands
 
 			_Switch(
 				["--show-lh", "showlh"],
