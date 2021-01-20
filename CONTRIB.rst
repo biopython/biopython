@@ -82,6 +82,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Claude Paroz <claude at two (as digit) xlibre dot net>
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
+- Cristian Ferrari <https://github.com/Erundil95>
 - Cymon J Cox <https://github.com/cymon>
 - Damien Goutte-Gattat <https://github.com/gouttegd>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
