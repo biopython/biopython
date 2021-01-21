@@ -224,7 +224,7 @@ file for other options.
   You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
 
   \item \emph{Why can't I run command line tools directly from the application wrappers?} \\
-  You need Biopython 1.55 or later. Alternatively, use the Python \verb|subprocess| module directly.
+  You need Biopython 1.55 or later, but these were deprecated in Biopython 1.78. Consider using the Python \verb|subprocess| module directly.
 
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
