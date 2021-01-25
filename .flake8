@@ -5,6 +5,7 @@
 # pydocstyle: D1## - Missing Docstrings
 #             D2## - Whitespace Issues
 #             D4## - Docstring Content issues
+# flake8-blind-except: B###
 # flake8-bugbear: B###
 # flake8-quotes: Q###
 # flake8-black : BLK###
@@ -34,6 +35,7 @@ ignore =
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
     E741, # ambiguous variable name 'l' (lots of these)
+    B902, # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
     # =========================================
