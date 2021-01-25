@@ -81,7 +81,7 @@ class Pathway:
                 '<?xml version="1.0"?>',
                 "<!DOCTYPE pathway SYSTEM "
                 '"http://www.genome.jp/kegg/xml/'
-                'KGML_v0.7.1_.dtd">',
+                'KGML_v0.7.2_.dtd">',
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
