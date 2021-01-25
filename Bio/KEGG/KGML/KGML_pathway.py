@@ -86,6 +86,7 @@ class Pathway:
             ]
         )
         rough_xml = header + ET.tostring(self.element, "utf-8").decode()
+        rough_xml = rough_xml.replace('compound=', 'name="compound" value=')
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 
