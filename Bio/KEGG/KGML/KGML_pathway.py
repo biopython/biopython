@@ -7,7 +7,7 @@
 
 """Classes to represent a KGML Pathway Map.
 
-The KGML definition is as of release KGML v0.7.1
+The KGML definition is as of release KGML v0.7.2
 (http://www.kegg.jp/kegg/xml/docs/)
 
 Classes:
@@ -33,7 +33,7 @@ class Pathway:
     """Represents a KGML pathway from KEGG.
 
     Specifies graph information for the pathway map, as described in
-    release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - name - KEGGID of the pathway map
@@ -79,9 +79,7 @@ class Pathway:
         header = "\n".join(
             [
                 '<?xml version="1.0"?>',
-                "<!DOCTYPE pathway SYSTEM "
-                '"http://www.genome.jp/kegg/xml/'
-                'KGML_v0.7.1_.dtd">',
+                "<!DOCTYPE pathway SYSTEM " '"http://www.genome.jp/kegg/xml/' 'KGML_v0.7.2_.dtd">',
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
@@ -93,18 +91,14 @@ class Pathway:
         """Add an Entry element to the pathway."""
         # We insist that the node ID is an integer
         if not isinstance(entry.id, int):
-            raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
-            )
+            raise TypeError("Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id))
         entry._pathway = self  # Let the entry know about the pathway
         self.entries[entry.id] = entry
 
     def remove_entry(self, entry):
         """Remove an Entry element from the pathway."""
         if not isinstance(entry.id, int):
-            raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
-            )
+            raise TypeError("Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id))
         # We need to remove the entry from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -114,10 +108,7 @@ class Pathway:
         """Add a Reaction element to the pathway."""
         # We insist that the node ID is an integer and corresponds to an entry
         if not isinstance(reaction.id, int):
-            raise ValueError(
-                "Node ID must be an integer, got %s (%s)"
-                % (type(reaction.id), reaction.id)
-            )
+            raise ValueError("Node ID must be an integer, got %s (%s)" % (type(reaction.id), reaction.id))
         if reaction.id not in self.entries:
             raise ValueError("Reaction ID %d has no corresponding entry" % reaction.id)
         reaction._pathway = self  # Let the reaction know about the pathway
@@ -126,10 +117,7 @@ class Pathway:
     def remove_reaction(self, reaction):
         """Remove a Reaction element from the pathway."""
         if not isinstance(reaction.id, int):
-            raise TypeError(
-                "Node ID must be an integer, got %s (%s)"
-                % (type(reaction.id), reaction.id)
-            )
+            raise TypeError("Node ID must be an integer, got %s (%s)" % (type(reaction.id), reaction.id))
         # We need to remove the reaction from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -262,7 +250,7 @@ class Entry:
     """Represent an Entry from KGML.
 
     Each Entry element is a node in the pathway graph, as described in
-    release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - id - The ID of the entry in the pathway map (integer)
@@ -314,9 +302,7 @@ class Entry:
         """
         if self._pathway is not None:
             if element.id not in self._pathway.entries:
-                raise ValueError(
-                    "Component %s is not an entry in the pathway" % element.id
-                )
+                raise ValueError("Component %s is not an entry in the pathway" % element.id)
         self.components.add(element)
 
     def remove_component(self, value):
@@ -341,9 +327,7 @@ class Entry:
     def _delname(self):
         self._names = []
 
-    name = property(
-        _getname, _setname, _delname, "List of KEGG identifiers for the Entry."
-    )
+    name = property(_getname, _setname, _delname, "List of KEGG identifiers for the Entry.")
 
     # Reactions may be given as a space-separated list of KEGG identifiers
     def _getreaction(self):
@@ -422,7 +406,7 @@ class Component:
     """An Entry subelement used to represents a complex node.
 
     A subelement of the Entry element, used when the Entry is a complex
-    node, as described in release KGML v0.7.1
+    node, as described in release KGML v0.7.2
     (http://www.kegg.jp/kegg/xml/docs/)
 
     The Component acts as a collection (with type 'group', and typically
@@ -460,7 +444,7 @@ class Graphics:
     """An Entry subelement used to represents the visual representation.
 
     A subelement of Entry, specifying its visual representation, as
-    described in release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    described in release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - name         Label for the graphics object
@@ -526,9 +510,7 @@ class Graphics:
     def _delwidth(self):
         del self._width
 
-    width = property(
-        _getwidth, _setwidth, _delwidth, "The width of the graphics element."
-    )
+    width = property(_getwidth, _setwidth, _delwidth, "The width of the graphics element.")
 
     def _getheight(self):
         return self._height
@@ -539,9 +521,7 @@ class Graphics:
     def _delheight(self):
         del self._height
 
-    height = property(
-        _getheight, _setheight, _delheight, "The height of the graphics element."
-    )
+    height = property(_getheight, _setheight, _delheight, "The height of the graphics element.")
 
     # We make sure that the polyline co-ordinates are integers, too
     def _getcoords(self):
@@ -618,9 +598,7 @@ class Graphics:
             if getattr(self, attr) is not None:
                 graphics.attrib[n] = str(getattr(self, attr))
         if self.type == "line":  # Need to write polycoords
-            graphics.attrib["coords"] = ",".join(
-                [str(e) for e in chain.from_iterable(self.coords)]
-            )
+            graphics.attrib["coords"] = ",".join([str(e) for e in chain.from_iterable(self.coords)])
         return graphics
 
     @property
@@ -691,19 +669,14 @@ class Reaction:
         """Add a substrate, identified by its node ID, to the reaction."""
         if self._pathway is not None:
             if int(substrate_id) not in self._pathway.entries:
-                raise ValueError(
-                    "Couldn't add substrate, no node ID %d in Pathway"
-                    % int(substrate_id)
-                )
+                raise ValueError("Couldn't add substrate, no node ID %d in Pathway" % int(substrate_id))
         self._substrates.add(substrate_id)
 
     def add_product(self, product_id):
         """Add a product, identified by its node ID, to the reaction."""
         if self._pathway is not None:
             if int(product_id) not in self._pathway.entries:
-                raise ValueError(
-                    "Couldn't add product, no node ID %d in Pathway" % product_id
-                )
+                raise ValueError("Couldn't add product, no node ID %d in Pathway" % product_id)
         self._products.add(int(product_id))
 
     # The node ID is also the node ID of the Entry that corresponds to the
@@ -730,9 +703,7 @@ class Reaction:
     def _delnames(self):
         del self.names
 
-    name = property(
-        _getnames, _setnames, _delnames, "List of KEGG identifiers for the reaction."
-    )
+    name = property(_getnames, _setnames, _delnames, "List of KEGG identifiers for the reaction.")
 
     # products and substrates are read-only properties, returning lists
     # of Entry objects
@@ -780,7 +751,7 @@ class Relation:
     """A relationship between to products, KOs, or protein and compound.
 
     This describes a relationship between two products, KOs, or protein
-    and compound, as described in release KGML v0.7.1
+    and compound, as described in release KGML v0.7.2
     (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
@@ -854,6 +825,6 @@ class Relation:
         }
         for (name, value) in self.subtypes:
             subtype = ET.Element("subtype")
-            subtype.attrib[name] = str(value)
+            subtype.attrib = {"name": name, "value": str(value)}
             relation.append(subtype)
         return relation
