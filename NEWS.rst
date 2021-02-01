@@ -32,6 +32,9 @@ string like methods (fixing a regression in Biopython 1.78).
 A parser for twoBit (.2bit) sequence data was added to ``Bio.SeqIO``. This is
 a lazy parser that allows fast access to genome-size DNA sequence files.
 
+The KEGG ``KGML_Pathway`` KGML output was fixed to produce output that complies
+with KGML v0.7.2.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -40,6 +43,7 @@ possible, especially the following contributors:
 - Markus Piotrowski
 - Suyash Gupta
 - Vini Salazar (first contribution)
+- Leighton Pritchard
 
 4 September 2020: Biopython 1.78
 ================================
