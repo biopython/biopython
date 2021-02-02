@@ -1244,7 +1244,7 @@ class EmblWriter(_InsdcWriter):
         # Get the molecule type
         # TODO - record this explicitly in the parser?
         # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
-        mol_type = record.annotations.get("molecule_type")
+        mol_type = record.annotations.get("molecule_type").upper()
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
         elif "DNA" in mol_type:
