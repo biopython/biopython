@@ -1247,12 +1247,12 @@ class EmblWriter(_InsdcWriter):
         mol_type = record.annotations.get("molecule_type")
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
-        mol_type = mol_type.upper()
-        if "DNA" in mol_type:
+        mol_type_upper = mol_type.upper()
+        if "DNA" in mol_type_upper:
             units = "BP"
-        elif "RNA" in mol_type:
+        elif "RNA" in mol_type_upper:
             units = "BP"
-        elif "PROTEIN" in mol_type:
+        elif "PROTEIN" in mol_type_upper:
             mol_type = "PROTEIN"
             units = "AA"
         else:
