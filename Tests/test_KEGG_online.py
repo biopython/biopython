@@ -8,6 +8,7 @@
 """Tests for online functionality of the KEGG module."""
 
 # Builtins
+import io
 import unittest
 
 from Bio.KEGG.KGML import KGML_parser
@@ -250,6 +251,17 @@ class KGMLPathwayTests(unittest.TestCase):
         with kegg_get("ko03070", "kgml") as handle:
             pathway = KGML_parser.read(handle)
         self.assertEqual(pathway.name, "path:ko03070")
+
+    def test_parser_roundtrip(self):
+        """Download a KEGG pathway, write local KGML and check roundtrip."""
+        with kegg_get("ko00680", "kgml") as remote_handle:
+            pathway = KGML_parser.read(remote_handle)
+
+        with io.StringIO(pathway.get_KGML()) as local_handle:
+            roundtrip = KGML_parser.read(local_handle)
+
+        self.assertEqual(pathway.name, roundtrip.name)
+        self.assertEqual(len(pathway.relations), len(roundtrip.relations))
 
 
 if __name__ == "__main__":
