@@ -7,7 +7,7 @@
 #
 # This module is for reading and writing FASTA format files as SeqRecord
 # objects.  The code is partly inspired  by earlier Biopython modules,
-# Bio.Fasta.* and the now deprecated Bio.SeqIO.FASTA
+# Bio.Fasta.* and the now removed module Bio.SeqIO.FASTA
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 

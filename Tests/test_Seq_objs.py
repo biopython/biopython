@@ -583,6 +583,21 @@ class StringMethodTests(unittest.TestCase):
                 example1 = example1.lower()
             self.assertEqual(example1, str1.lower())
 
+    def test_str_replace(self):
+        """Check matches the python string replace method."""
+        s = Seq("AAGTACGT")
+        m = MutableSeq("AAGTACGT")
+        t = s.replace("AC", "XYZ")
+        self.assertEqual(s, "AAGTACGT")
+        self.assertEqual(t, "AAGTXYZGT")
+        self.assertRaises(TypeError, s.replace, "AC", "XYZ", True)
+        t = m.replace("AC", "XYZ")
+        self.assertEqual(m, "AAGTACGT")
+        self.assertEqual(t, "AAGTXYZGT")
+        t = m.replace("AC", "XYZ", inplace=True)
+        self.assertEqual(m, "AAGTXYZGT")
+        self.assertEqual(t, "AAGTXYZGT")
+
     def test_str_encode(self):
         """Check matches the python string encode method."""
         for example1 in self._examples:
