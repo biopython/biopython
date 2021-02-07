@@ -240,11 +240,6 @@ class TestSeqStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.s + {}
 
-    def test_radd_method(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", self.s.__radd__(self.s)
-        )
-
     def test_radd_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
             self.s.__radd__({})
@@ -586,23 +581,6 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s + 1234
 
-    def test_radd_method(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
-            self.mutable_s.__radd__(self.mutable_s),
-        )
-
-    def test_radd_method_using_mutableseq_object(self):
-        self.assertEqual(
-            "UCAAAAGGATCAAAAGGATGCATCATG",
-            self.mutable_s.__radd__(Seq.MutableSeq("UCAAAAGGA")),
-        )
-
-    def test_radd_method_using_seq_object(self):
-        self.assertEqual(
-            "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", self.mutable_s.__radd__(self.s)
-        )
-
     def test_radd_method_wrong_type(self):
         with self.assertRaises(TypeError):
             self.mutable_s.__radd__(1234)
@@ -702,9 +680,42 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
 
     def test_complement_rna(self):
-        seq = Seq.MutableSeq("AUGaaaCUG")
-        seq.complement()
-        self.assertEqual("UACuuuGAC", seq)
+        m = self.mutable_s.complement_rna()
+        self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
+        self.assertIsInstance(m, Seq.MutableSeq)
+        self.assertEqual(m, "AGUUUUCCUACGUAGUAC")
+        m = self.mutable_s.complement_rna(inplace=True)
+        self.assertEqual(self.mutable_s, "AGUUUUCCUACGUAGUAC")
+        self.assertIsInstance(m, Seq.MutableSeq)
+        self.assertEqual(m, "AGUUUUCCUACGUAGUAC")
+
+    def test_reverse_complement_rna(self):
+        m = self.mutable_s.reverse_complement_rna()
+        self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
+        self.assertIsInstance(m, Seq.MutableSeq)
+        self.assertEqual(m, "CAUGAUGCAUCCUUUUGA")
+        m = self.mutable_s.reverse_complement_rna(inplace=True)
+        self.assertEqual(self.mutable_s, "CAUGAUGCAUCCUUUUGA")
+        self.assertIsInstance(m, Seq.MutableSeq)
+        self.assertEqual(m, "CAUGAUGCAUCCUUUUGA")
+
+    def test_transcribe(self):
+        r = self.mutable_s.transcribe()
+        self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
+        self.assertIsInstance(r, Seq.MutableSeq)
+        self.assertEqual(r, "UCAAAAGGAUGCAUCAUG")
+        r = self.mutable_s.transcribe(inplace=True)
+        self.assertEqual(self.mutable_s, "UCAAAAGGAUGCAUCAUG")
+        self.assertIsInstance(r, Seq.MutableSeq)
+        self.assertEqual(r, "UCAAAAGGAUGCAUCAUG")
+        d = self.mutable_s.back_transcribe()
+        self.assertEqual(self.mutable_s, "UCAAAAGGAUGCAUCAUG")
+        self.assertIsInstance(d, Seq.MutableSeq)
+        self.assertEqual(d, "TCAAAAGGATGCATCATG")
+        d = self.mutable_s.back_transcribe(inplace=True)
+        self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
+        self.assertIsInstance(d, Seq.MutableSeq)
+        self.assertEqual(d, "TCAAAAGGATGCATCATG")
 
     def test_complement_mixed_aphabets(self):
         seq = Seq.MutableSeq("AUGaaaCTG")
