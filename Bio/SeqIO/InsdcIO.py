@@ -1248,7 +1248,7 @@ class EmblWriter(_InsdcWriter):
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
         if mol_type not in ("DNA", "RNA", "protein"):
-            warnings.warn("Non-standard molecule type" % mol_type, BiopythonWarning)
+            warnings.warn("Non-standard molecule type: %s" % mol_type, BiopythonWarning)
         mol_type_upper = mol_type.upper()
         if "DNA" in mol_type_upper:
             units = "BP"
