@@ -1917,6 +1917,10 @@ class Seq(_SeqAbstractBaseClass):
         >>> my_dna.ungap("-")
         Seq('ATATGAAATTTGAAAA')
         """
+        warnings.warn(
+            "myseq.ungap(gap) is deprecated; please use myseq.replace(gap, '') instead.",
+            BiopythonDeprecationWarning,
+        )
         if not gap:
             raise ValueError("Gap character required.")
         elif len(gap) != 1 or not isinstance(gap, str):
@@ -2436,12 +2440,10 @@ class UnknownSeq(Seq):
         >>> my_gap.ungap("-")
         Seq('')
         """
-        # Offload the argument validation
-        s = Seq(self._character).ungap(gap)
-        if s:
-            return UnknownSeq(self._length, character=self._character)
-        else:
+        if self._character == gap:
             return Seq("")
+        else:
+            return UnknownSeq(self._length, character=self._character)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
