@@ -1904,7 +1904,7 @@ class Seq(_SeqAbstractBaseClass):
         return self.complement()[::-1]
 
     def ungap(self, gap="-"):
-        """Return a copy of the sequence without the gap character(s).
+        """Return a copy of the sequence without the gap character(s) (OBSOLETE).
 
         The gap character now defaults to the minus sign, and can only
         be specified via the method argument. This is no longer possible
@@ -1916,11 +1916,9 @@ class Seq(_SeqAbstractBaseClass):
         Seq('-ATA--TGAAAT-TTGAAAA')
         >>> my_dna.ungap("-")
         Seq('ATATGAAATTTGAAAA')
+
+        This method is OBSOLETE; please use my_dna.replace(gap, "") instead.
         """
-        warnings.warn(
-            "myseq.ungap(gap) is deprecated; please use myseq.replace(gap, '') instead.",
-            BiopythonDeprecationWarning,
-        )
         if not gap:
             raise ValueError("Gap character required.")
         elif len(gap) != 1 or not isinstance(gap, str):
