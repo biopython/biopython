@@ -1904,7 +1904,7 @@ class Seq(_SeqAbstractBaseClass):
         return self.complement()[::-1]
 
     def ungap(self, gap="-"):
-        """Return a copy of the sequence without the gap character(s).
+        """Return a copy of the sequence without the gap character(s) (OBSOLETE).
 
         The gap character now defaults to the minus sign, and can only
         be specified via the method argument. This is no longer possible
@@ -1916,6 +1916,8 @@ class Seq(_SeqAbstractBaseClass):
         Seq('-ATA--TGAAAT-TTGAAAA')
         >>> my_dna.ungap("-")
         Seq('ATATGAAATTTGAAAA')
+
+        This method is OBSOLETE; please use my_dna.replace(gap, "") instead.
         """
         if not gap:
             raise ValueError("Gap character required.")
@@ -2436,12 +2438,10 @@ class UnknownSeq(Seq):
         >>> my_gap.ungap("-")
         Seq('')
         """
-        # Offload the argument validation
-        s = Seq(self._character).ungap(gap)
-        if s:
-            return UnknownSeq(self._length, character=self._character)
-        else:
+        if self._character == gap:
             return Seq("")
+        else:
+            return UnknownSeq(self._length, character=self._character)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.

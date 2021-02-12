@@ -122,14 +122,8 @@ class TestSeq(unittest.TestCase):
         self.assertEqual(str(self.s) + "T", u)
         self.assertEqual(self.s + Seq.Seq("T"), "TCAAAAGGATGCATCATGT")
 
-    def test_ungap(self):
-        self.assertEqual("ATCCCA", Seq.Seq("ATC-CCA").ungap("-"))
-
-        with self.assertRaises(ValueError):
-            Seq.Seq("ATC-CCA").ungap("--")
-
-        with self.assertRaises(ValueError):
-            Seq.Seq("ATC-CCA").ungap(gap=None)
+    def test_replace(self):
+        self.assertEqual("ATCCCA", Seq.Seq("ATC-CCA").replace("-", ""))
 
 
 class TestSeqStringMethods(unittest.TestCase):
