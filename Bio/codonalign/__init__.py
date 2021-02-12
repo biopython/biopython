@@ -265,7 +265,7 @@ def _check_corr(
         if aa != gap_char:
             pro_re += aa2re[aa]
 
-    nucl_seq = str(nucl.seq.upper().ungap(gap_char))
+    nucl_seq = str(nucl.seq.upper().replace(gap_char, ""))
     match = re.search(pro_re, nucl_seq)
     if match:
         # mode = 0, direct match
@@ -588,12 +588,12 @@ def _get_codon_rec(
     import re
     from Bio.Seq import Seq
 
-    nucl_seq = nucl.seq.ungap(gap_char)
+    nucl_seq = nucl.seq.replace(gap_char, "")
     span = span_mode[0]
     mode = span_mode[1]
     aa2re = _get_aa_regex(codon_table)
     if mode in (0, 1):
-        if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
+        if len(pro.seq.replace(gap_char, "")) * 3 != (span[1] - span[0]):
             raise ValueError(
                 f"Protein Record {pro.id} and "
                 f"Nucleotide Record {nucl.id} do not match!"
@@ -684,7 +684,7 @@ def _get_codon_rec(
                     aa_num += 1
             else:
                 if (
-                    aa_num < len(pro.seq.ungap("-")) - 1
+                    aa_num < len(pro.seq.replace("-", "")) - 1
                     and rf_table[aa_num + 1] - rf_table[aa_num] - 3 < 0
                 ):
                     max_score -= 1

@@ -193,6 +193,11 @@ Deprecated in release 1.79.
 Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
 Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
+Bio.Seq.Seq.ungap()
+-------------------
+Declared obsolete in release 1.79.
+Instead of myseq.ungap(), please use myseq.replace("-", "").
+
 Bio.Seq.UnknownSeq
 ------------------
 Deprecated in release 1.79.
