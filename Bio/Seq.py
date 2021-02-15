@@ -322,11 +322,16 @@ class _SeqAbstractBaseClass(ABC):
                 pass
         raise AttributeError("sequence has no attribute '%s'" % key)
 
-    def __delattr(self, key):
+    def __delattr__(self, key):
         _data = super().__getattribute__("_data")
         if isinstance(_data, tuple):
             data, attributes = _data
-            del attributes[key]
+            try:
+                del attributes[key]
+            except KeyError:
+                pass
+            else:
+                return
         raise AttributeError("sequence has no attribute '%s'" % key)
 
     def __bytes__(self):
