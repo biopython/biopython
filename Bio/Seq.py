@@ -291,16 +291,57 @@ class _SeqAbstractBaseClass(ABC):
     identical.
     """
 
+    __slots__ = "_data",
+
     @abstractmethod
-    def __init__(self):
-        pass
+    def __init__(self, data):
+        super().__setattr__("_data", data)
+
+    def __setattr__(self, key, value):
+        if key == "_data":
+            # This happens when copying a Seq object
+            super().__setattr__(key, value)
+        else:
+            _data = super().__getattribute__("_data")
+            if isinstance(_data, tuple):
+                data, attributes = _data
+            else:
+                attributes = {}
+                super().__setattr__("_data", (_data, attributes))
+            attributes[key] = value
+
+    def __getattr__(self, key):
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+            try:
+                return attributes[key]
+            except KeyError:
+                pass
+        raise AttributeError("sequence has no attribute '%s'" % key)
+
+    def __delattr(self, key):
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+            del attributes[key]
+        raise AttributeError("sequence has no attribute '%s'" % key)
 
     def __bytes__(self):
-        return bytes(self._data)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return bytes(data)
 
     def __repr__(self):
         """Return (truncated) representation of the sequence."""
-        data = self._data
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(data, _UndefinedSequenceData):
             return f"Seq(None, length={len(self)})"
         if len(data) > 60:
@@ -316,7 +357,12 @@ class _SeqAbstractBaseClass(ABC):
 
     def __str__(self):
         """Return the full sequence as a python string."""
-        return self._data.decode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return data.decode("ASCII")
 
     def __eq__(self, other):
         """Compare the sequence to another sequence or a string.
@@ -353,52 +399,107 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq1 == bytearray(b"ACGT")
         True
         """
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self._data == other._data
-        elif isinstance(other, str):
-            return self._data == other.encode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
         else:
-            return self._data == other
+            data = _data
+        if isinstance(other, _SeqAbstractBaseClass):
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return data == other_data
+        elif isinstance(other, str):
+            return data == other.encode("ASCII")
+        else:
+            return data == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self._data < other._data
-        elif isinstance(other, str):
-            return self._data < other.encode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
         else:
-            return self._data < other
+            data = _data
+        if isinstance(other, _SeqAbstractBaseClass):
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return data < other_data
+        elif isinstance(other, str):
+            return data < other.encode("ASCII")
+        else:
+            return data < other
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self._data <= other._data
-        elif isinstance(other, str):
-            return self._data <= other.encode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
         else:
-            return self._data <= other
+            data = _data
+        if isinstance(other, _SeqAbstractBaseClass):
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return data <= other_data
+        elif isinstance(other, str):
+            return data <= other.encode("ASCII")
+        else:
+            return data <= other
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self._data > other._data
-        elif isinstance(other, str):
-            return self._data > other.encode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
         else:
-            return self._data > other
+            data = _data
+        if isinstance(other, _SeqAbstractBaseClass):
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return data > other_data
+        elif isinstance(other, str):
+            return data > other.encode("ASCII")
+        else:
+            return data > other
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self._data >= other._data
-        elif isinstance(other, str):
-            return self._data >= other.encode("ASCII")
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
         else:
-            return self._data >= other
+            data = _data
+        if isinstance(other, _SeqAbstractBaseClass):
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return data >= other_data
+        elif isinstance(other, str):
+            return data >= other.encode("ASCII")
+        else:
+            return data >= other
 
     def __len__(self):
         """Return the length of the sequence."""
-        return len(self._data)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return len(data)
 
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.
@@ -418,12 +519,17 @@ class _SeqAbstractBaseClass(ABC):
         >>> mutable_seq[5:8]
         MutableSeq('ACG')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(index, int):
             # Return a single letter as a string
-            return chr(self._data[index])
+            return chr(data[index])
         else:
             # Return the (sub)sequence as another Seq/MutableSeq object
-            return self.__class__(self._data[index])
+            return self.__class__(data[index])
 
     def __add__(self, other):
         """Add a sequence or string to this sequence.
@@ -434,10 +540,20 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("MELKI") + "LV"
         MutableSeq('MELKILV')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(other, _SeqAbstractBaseClass):
-            return self.__class__(self._data + other._data)
+            _other_data = super(ABC, other).__getattribute__("_data")
+            if isinstance(_other_data, tuple):
+                other_data, other_attributes = _other_data
+            else:
+                other_data = _other_data
+            return self.__class__(data + other_data)
         elif isinstance(other, str):
-            return self.__class__(self._data + other.encode("ASCII"))
+            return self.__class__(data + other.encode("ASCII"))
 
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
@@ -459,7 +575,12 @@ class _SeqAbstractBaseClass(ABC):
         Adding two sequence objects is handled via the __add__ method.
         """
         if isinstance(other, str):
-            return self.__class__(other.encode("ASCII") + self._data)
+            _data = super().__getattribute__("_data")
+            if isinstance(_data, tuple):
+                data, attributes = _data
+            else:
+                data = _data
+            return self.__class__(other.encode("ASCII") + data)
         else:
             raise TypeError
 
@@ -474,7 +595,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return self.__class__(data * other)
 
     def __rmul__(self, other):
         """Multiply integer by sequence.
@@ -485,7 +611,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return self.__class__(_data * other)
 
     def __imul__(self, other):
         """Multiply the sequence object by other and assign.
@@ -514,7 +645,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return self.__class__(data * other)
 
     def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
@@ -556,8 +692,17 @@ class _SeqAbstractBaseClass(ABC):
         >>> print(Seq("AAAA").count_overlap("AA"))
         3
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sub, MutableSeq):
-            sub = sub._data
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -567,7 +712,7 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        return self._data.count(sub, start, end)
+        return data.count(sub, start, end)
 
     def count_overlap(self, sub, start=None, end=None):
         """Return an overlapping count.
@@ -622,8 +767,17 @@ class _SeqAbstractBaseClass(ABC):
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sub, MutableSeq):
-            sub = sub._data
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -633,7 +787,6 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        data = self._data
         overlap_count = 0
         while True:
             start = data.find(sub, start, end) + 1
@@ -656,11 +809,22 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("AAA") in my_dna
         True
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        if isinstance(item, MutableSeq):
+            item_data = super(ABC, item).__getattribute__("_data")
+            if isinstance(item_data, tuple):
+                item, attributes = item_data
+            else:
+                item = item_data
         if isinstance(item, _SeqAbstractBaseClass):
             item = bytes(item)
         elif isinstance(item, str):
             item = item.encode("ASCII")
-        return item in self._data
+        return item in data
 
     def find(self, sub, start=None, end=None):
         """Return the lowest index in the sequence where subsequence sub is found.
@@ -689,7 +853,18 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.find("AUG", 4)
         15
         """
-        if isinstance(sub, _SeqAbstractBaseClass):
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        if isinstance(sub, MutableSeq):
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
+        elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
@@ -698,7 +873,7 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        return self._data.find(sub, start, end)
+        return data.find(sub, start, end)
 
     def rfind(self, sub, start=None, end=None):
         """Return the highest index in the sequence where subsequence sub is found.
@@ -727,7 +902,18 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.rfind("AUG", end=15)
         3
         """
-        if isinstance(sub, _SeqAbstractBaseClass):
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        if isinstance(sub, MutableSeq):
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
+        elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
@@ -736,7 +922,7 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        return self._data.rfind(sub, start, end)
+        return data.rfind(sub, start, end)
 
     def index(self, sub, start=None, end=None):
         """Return the lowest index in the sequence where subsequence sub is found.
@@ -776,8 +962,17 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.find("T")
         -1
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sub, MutableSeq):
-            sub = sub._data
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -787,7 +982,7 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        return self._data.index(sub, start, end)
+        return data.index(sub, start, end)
 
     def rindex(self, sub, start=None, end=None):
         """Return the highest index in the sequence where subsequence sub is found.
@@ -827,8 +1022,17 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.rfind("T")
         -1
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sub, MutableSeq):
-            sub = sub._data
+            sub_data = super(ABC, sub).__getattribute__("_data")
+            if isinstance(sub_data, tuple):
+                sub, attributes = sub_data
+            else:
+                sub = sub_data
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -838,7 +1042,7 @@ class _SeqAbstractBaseClass(ABC):
                 "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
                 % type(sub)
             )
-        return self._data.rindex(sub, start, end)
+        return data.rindex(sub, start, end)
 
     def startswith(self, prefix, start=None, end=None):
         """Return True if the sequence starts with the given prefix, False otherwise.
@@ -860,16 +1064,27 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
         True
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(prefix, tuple):
             prefix = tuple(
                 bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in prefix
             )
-        elif isinstance(prefix, _SeqAbstractBaseClass):
+        elif isinstance(prefix, MutableSeq):
+            prefix_data = super(ABC, prefix).__getattribute__("_data")
+            if isinstance(prefix_data, tuple):
+                prefix, attributes = prefix_data
+            else:
+                prefix = prefix_data
+        elif isinstance(prefix, Seq):
             prefix = bytes(prefix)
         elif isinstance(prefix, str):
             prefix = prefix.encode("ASCII")
-        return self._data.startswith(prefix, start, end)
+        return data.startswith(prefix, start, end)
 
     def endswith(self, suffix, start=None, end=None):
         """Return True if the sequence ends with the given suffix, False otherwise.
@@ -891,16 +1106,27 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.endswith(("UCC", "UCA", "UUG"))
         True
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(suffix, tuple):
             suffix = tuple(
                 bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in suffix
             )
-        elif isinstance(suffix, _SeqAbstractBaseClass):
+        elif isinstance(suffix, MutableSeq):
+            suffix_data = super(ABC, suffix).__getattribute__("_data")
+            if isinstance(suffix_data, tuple):
+                suffix, attributes = suffix_data
+            else:
+                suffix = suffix_data
+        elif isinstance(suffix, Seq):
             suffix = bytes(suffix)
         elif isinstance(suffix, str):
             suffix = suffix.encode("ASCII")
-        return self._data.endswith(suffix, start, end)
+        return data.endswith(suffix, start, end)
 
     def split(self, sep=None, maxsplit=-1):
         """Return a list of subsequences when splitting the sequence by separator sep.
@@ -939,11 +1165,16 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
-        return [Seq(part) for part in self._data.split(sep, maxsplit)]
+        return [Seq(part) for part in data.split(sep, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
         """Return a list of subsequences by splitting the sequence from the right.
@@ -982,11 +1213,16 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR')
         Seq('KGAR*L')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
             sep = sep.encode("ASCII")
-        return [Seq(part) for part in self._data.rsplit(sep, maxsplit)]
+        return [Seq(part) for part in data.rsplit(sep, maxsplit)]
 
     def strip(self, chars=None, inplace=False):
         """Return a sequence object with leading and trailing ends stripped.
@@ -1024,25 +1260,30 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the lstrip and rstrip methods.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
         try:
-            data = self._data.strip(chars)
+            stripped_data = data.strip(chars)
         except TypeError:
             raise TypeError(
                 "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
             ) from None
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = stripped_data
             return self
         elif isinstance(self, UnknownSeq):
-            return Seq(data)
+            return Seq(stripped_data)
         else:
-            return self.__class__(data)
+            return self.__class__(stripped_data)
 
     def lstrip(self, chars=None, inplace=False):
         """Return a sequence object with leading and trailing ends stripped.
@@ -1081,25 +1322,30 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and rstrip methods.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
         try:
-            data = self._data.lstrip(chars)
+            stripped_data = data.lstrip(chars)
         except TypeError:
             raise TypeError(
                 "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
             ) from None
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = stripped_data
             return self
         elif isinstance(self, UnknownSeq):
-            return Seq(data)
+            return Seq(stripped_data)
         else:
-            return self.__class__(data)
+            return self.__class__(stripped_data)
 
     def rstrip(self, chars=None, inplace=False):
         """Return a sequence object with trailing ends stripped.
@@ -1138,25 +1384,30 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and lstrip methods.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
             chars = chars.encode("ASCII")
         try:
-            data = self._data.rstrip(chars)
+            stripped_data = data.rstrip(chars)
         except TypeError:
             raise TypeError(
                 "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
             ) from None
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = stripped_data
             return self
         elif isinstance(self, UnknownSeq):
-            return Seq(data)
+            return Seq(stripped_data)
         else:
-            return self.__class__(data)
+            return self.__class__(stripped_data)
 
     def upper(self, inplace=False):
         """Return the sequence in upper case.
@@ -1201,14 +1452,19 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the ``lower`` method.
         """
-        data = self._data.upper()
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        upper_data = data.upper()
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = upper_data
             return self
         else:
-            return self.__class__(data)
+            return self.__class__(upper_data)
 
     def lower(self, inplace=False):
         """Return the sequence in lower case.
@@ -1253,14 +1509,19 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the ``upper`` method.
         """
-        data = self._data.lower()
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        lower_data = data.lower()
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = lower_data
             return self
         else:
-            return self.__class__(data)
+            return self.__class__(lower_data)
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -1367,7 +1628,7 @@ class _SeqAbstractBaseClass(ABC):
             return Seq(None, n // 3)
 
         return self.__class__(
-            _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
+            _translate_str(data, table, stop_symbol, to_stop, cds, gap=gap)
         )
 
     def complement_rna(self, inplace=False):
@@ -1404,18 +1665,23 @@ class _SeqAbstractBaseClass(ABC):
         As ``Seq`` objects are immutable, a ``TypeError`` is raised if
         ``complement_rna`` is called on a ``Seq`` object with ``inplace=True``.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         try:
-            data = self._data.translate(_rna_complement_table)
+            translated_data = data.translate(_rna_complement_table)
         except UndefinedSequenceError:
             # complement of an undefined sequence is an undefined sequence
             # of the same length
             return self
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = translated_data
             return self
-        return self.__class__(data)
+        return self.__class__(translated_data)
 
     def reverse_complement_rna(self, inplace=False):
         """Return the reverse complement as an RNA sequence.
@@ -1452,19 +1718,23 @@ class _SeqAbstractBaseClass(ABC):
         ``reverse_complement_rna`` is called on a ``Seq`` object with
         ``inplace=True``.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         try:
-            data = self._data.translate(_rna_complement_table)
+            complemented_data = data.translate(_rna_complement_table)
         except UndefinedSequenceError:
             # reverse complement of an undefined sequence is an undefined sequence
             # of the same length
             return self
-        data = self._data.translate(_rna_complement_table)
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[::-1] = data
+            data[::-1] = complemented_data
             return self
-        return self.__class__(data[::-1])
+        return self.__class__(complemented_data[::-1])
 
     def transcribe(self, inplace=False):
         """Transcribe a DNA sequence into RNA and return the RNA sequence as a new Seq object.
@@ -1508,18 +1778,23 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         try:
-            data = self._data.replace(b"T", b"U").replace(b"t", b"u")
+            transcribed_data = data.replace(b"T", b"U").replace(b"t", b"u")
         except UndefinedSequenceError:
             # transcribing an undefined sequence yields an undefined sequence
             # of the same length
             return self
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = transcribed_data
             return self
-        return self.__class__(data)
+        return self.__class__(transcribed_data)
 
     def back_transcribe(self, inplace=False):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
@@ -1561,18 +1836,23 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         try:
-            data = self._data.replace(b"U", b"T").replace(b"u", b"t")
+            backtranscribed_data = data.replace(b"U", b"T").replace(b"u", b"t")
         except UndefinedSequenceError:
             # back-transcribing an undefined sequence yields an undefined
             # sequence of the same length
             return self
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(_data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = backtranscribed_data
             return self
-        return self.__class__(data)
+        return self.__class__(backtranscribed_data)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
@@ -1649,13 +1929,18 @@ class _SeqAbstractBaseClass(ABC):
             new = bytes(new)
         elif isinstance(new, str):
             new = new.encode("ASCII")
-        data = self._data.replace(old, new)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        replaced_data = data.replace(old, new)
         if inplace:
-            if not isinstance(self._data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
-            self._data[:] = data
+            data[:] = replaced_data
             return self
-        return self.__class__(data)
+        return self.__class__(replaced_data)
 
 
 class Seq(_SeqAbstractBaseClass):
@@ -1672,6 +1957,8 @@ class Seq(_SeqAbstractBaseClass):
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to protein sequences).
     """
+
+    __slots__ = ()
 
     def __init__(self, data, length=None):
         """Create a Seq object.
@@ -1711,11 +1998,11 @@ class Seq(_SeqAbstractBaseClass):
         """
         if length is None:
             if isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
-                self._data = data
+                _data = data
             elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-                self._data = bytes(data)
+                _data = bytes(data)
             elif isinstance(data, str):
-                self._data = bytes(data, encoding="ASCII")
+                _data = bytes(data, encoding="ASCII")
             else:
                 raise TypeError(
                     "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
@@ -1723,7 +2010,8 @@ class Seq(_SeqAbstractBaseClass):
         else:
             if data is not None:
                 raise ValueError("length should be None if data is None")
-            self._data = _UndefinedSequenceData(length)
+            _data = _UndefinedSequenceData(length)
+        super().__init__(_data)
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -1732,7 +2020,12 @@ class Seq(_SeqAbstractBaseClass):
         particular) as this has changed in Biopython 1.65. Older versions
         would hash on object identity.
         """
-        return hash(self._data)
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return hash(data)
 
     def tomutable(self):
         """Return the full sequence as a MutableSeq object.
@@ -1829,22 +2122,25 @@ class Seq(_SeqAbstractBaseClass):
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
-        if isinstance(self._data, _UndefinedSequenceData):
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        if isinstance(data, _UndefinedSequenceData):
             # complement of an undefined sequence is an undefined sequence
             # of the same length
             return self
-        if (b"U" in self._data or b"u" in self._data) and (
-            b"T" in self._data or b"t" in self._data
-        ):
+        if (b"U" in data or b"u" in data) and (b"T" in data or b"t" in data):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif b"U" in self._data or b"u" in self._data:
+        elif b"U" in data or b"u" in data:
             ttable = _rna_complement_table
         else:
             ttable = _dna_complement_table
         # Much faster on really long sequences than the previous loop based
         # one. Thanks to Michael Palmer, University of Waterloo.
-        return Seq(self._data.translate(ttable))
+        return Seq(data.translate(ttable))
 
     def reverse_complement(self):
         """Return the reverse complement sequence by creating a new Seq object.
@@ -2004,13 +2300,14 @@ class UnknownSeq(Seq):
         )
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        self._length = int(length)
-        if self._length < 0:
+        length = int(length)
+        if length < 0:
             # TODO - Block zero length UnknownSeq?  You can just use a Seq!
             raise ValueError("Length must not be negative.")
         if not character or len(character) != 1:
             raise ValueError("character argument should be a single letter string.")
-        self._character = character
+        super(ABC, self).__setattr__("_length", length)
+        super(ABC, self).__setattr__("_character", character)
 
     def __len__(self):
         """Return the stated length of the unknown sequence."""
@@ -2018,19 +2315,23 @@ class UnknownSeq(Seq):
 
     def __bytes__(self):
         """Return the unknown sequence as full string of the given length."""
-        return self._character.encode("ASCII") * self._length
+        character = super().__getattribute__("_character")
+        return character.encode("ASCII") * self._length
 
     @property
     def _data(self):
-        return self._character.encode("ASCII") * self._length
+        character = super().__getattribute__("_character")
+        return character.encode("ASCII") * self._length
 
     def __str__(self):
         """Return the unknown sequence as full string of the given length."""
-        return self._character * self._length
+        character = super().__getattribute__("_character")
+        return character * self._length
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
-        return f"UnknownSeq({self._length}, character={self._character!r})"
+        character = super().__getattribute__("_character")
+        return f"UnknownSeq({self._length}, character={character!r})"
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -2055,8 +2356,11 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(5, character='X') + "LV"
         Seq('XXXXXLV')
         """
-        if isinstance(other, UnknownSeq) and other._character == self._character:
-            return UnknownSeq(len(self) + len(other), character=self._character)
+        if isinstance(other, UnknownSeq):
+            character = super().__getattribute__("_character")
+            other_character = super(ABC, other).__getattribute__("_character")
+            if character == other_character:
+                return UnknownSeq(len(self) + len(other), character=character)
         # Offload to the base class...
         return Seq(bytes(self)) + other
 
@@ -2077,7 +2381,8 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
+        character = super().__getattribute__("_character")
+        return self.__class__(len(self) * other, character=character)
 
     def __rmul__(self, other):
         """Multiply integer by UnknownSeq.
@@ -2090,7 +2395,8 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
+        character = super().__getattribute__("_character")
+        return self.__class__(len(self) * other, character=character)
 
     def __imul__(self, other):
         """Multiply UnknownSeq in-place.
@@ -2103,7 +2409,8 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
+        character = super().__getattribute__("_character")
+        return self.__class__(len(self) * other, character=character)
 
     def __getitem__(self, index):
         """Get a subsequence from the UnknownSeq object.
@@ -2118,13 +2425,14 @@ class UnknownSeq(Seq):
         >>> print(unk[1:-1:2])
         NNN
         """
+        character = super().__getattribute__("_character")
         if isinstance(index, int):
             if index >= -self._length and index < self._length:
-                return self._character
+                return character
             raise IndexError("sequence index out of range")
         start, stop, stride = index.indices(self._length)
         length = len(range(start, stop, stride))
-        return UnknownSeq(length, character=self._character)
+        return UnknownSeq(length, character=character)
 
     def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
@@ -2170,8 +2478,9 @@ class UnknownSeq(Seq):
             raise TypeError(
                 "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
             )
+        character = super().__getattribute__("_character")
         # Handling case where subsequence not in self
-        if set(sub) != set(self._character):
+        if set(sub) != set(character):
             return 0
         start, stop, stride = slice(start, end, len(sub)).indices(self._length)
         return len(range(start, stop - len(sub) + 1, stride))
@@ -2221,8 +2530,9 @@ class UnknownSeq(Seq):
             raise TypeError(
                 "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
             )
+        character = super().__getattribute__("_character")
         # Handling case where subsequence not in self
-        if set(sub) != set(self._character):
+        if set(sub) != set(character):
             return 0
         start, stop, stride = slice(start, end).indices(self._length)
         return len(range(start, stop - len(sub) + 1, stride))
@@ -2248,7 +2558,8 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(8, character="A").complement()
         UnknownSeq(8, character='T')
         """
-        s = complement(self._character)
+        character = super().__getattribute__("_character")
+        s = complement(character)
         return UnknownSeq(self._length, character=s)
 
     def complement_rna(self):
@@ -2261,7 +2572,8 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(8, character="A").complement_rna()
         UnknownSeq(8, character='U')
         """
-        s = complement_rna(self._character)
+        character = super().__getattribute__("_character")
+        s = complement_rna(character)
         return UnknownSeq(self._length, character=s)
 
     def reverse_complement(self):
@@ -2317,7 +2629,8 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(9, character="t").transcribe()
         UnknownSeq(9, character='u')
         """
-        s = transcribe(self._character)
+        character = super().__getattribute__("_character")
+        s = transcribe(character)
         return UnknownSeq(self._length, character=s)
 
     def back_transcribe(self):
@@ -2341,7 +2654,8 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(9, character="U").back_transcribe()
         UnknownSeq(9, character='T')
         """
-        s = back_transcribe(self._character)
+        character = super().__getattribute__("_character")
+        s = back_transcribe(character)
         return UnknownSeq(self._length, character=s)
 
     def upper(self):
@@ -2360,7 +2674,8 @@ class UnknownSeq(Seq):
 
         See also the lower method.
         """
-        return UnknownSeq(self._length, character=self._character.upper())
+        character = super().__getattribute__("_character")
+        return UnknownSeq(self._length, character=character.upper())
 
     def lower(self):
         """Return a lower case copy of the sequence.
@@ -2378,7 +2693,8 @@ class UnknownSeq(Seq):
 
         See also the upper method.
         """
-        return UnknownSeq(self._length, character=self._character.lower())
+        character = super().__getattribute__("_character")
+        return UnknownSeq(self._length, character=character.lower())
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -2396,9 +2712,10 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(7).translate()
         UnknownSeq(2, character='X')
         """
+        character = super().__getattribute__("_character")
         try:
             s = translate(
-                self._character * 3,
+                character * 3,
                 table=table,
                 stop_symbol=stop_symbol,
                 to_stop=to_stop,
@@ -2438,10 +2755,11 @@ class UnknownSeq(Seq):
         >>> my_gap.ungap("-")
         Seq('')
         """
-        if self._character == gap:
+        character = super().__getattribute__("_character")
+        if character == gap:
             return Seq("")
         else:
-            return UnknownSeq(self._length, character=self._character)
+            return UnknownSeq(self._length, character=character)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
@@ -2473,12 +2791,15 @@ class UnknownSeq(Seq):
         """
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
+        character = super().__getattribute__("_character")
         if isinstance(other, (str, _SeqAbstractBaseClass)):
-            if isinstance(other, UnknownSeq) and self._character == other._character:
-                # Special case, can return an UnknownSeq
-                return self.__class__(
-                    len(other) + len(self) * (len(other) - 1), character=self._character
-                )
+            if isinstance(other, UnknownSeq):
+                other_character = super(ABC, other).__getattribute__("_character")
+                if character == other_character:
+                    # Special case, can return an UnknownSeq
+                    return self.__class__(
+                        len(other) + len(self) * (len(other) - 1), character=character
+                    )
             return Seq(str(self).join(str(other)))
         if isinstance(other, SeqRecord):
             raise TypeError("Iterable cannot be a SeqRecord")
@@ -2489,9 +2810,9 @@ class UnknownSeq(Seq):
             elif not isinstance(c, (str, _SeqAbstractBaseClass)):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
         temp_data = str(self).join([str(_) for _ in other])
-        if temp_data.count(self._character) == len(temp_data):
+        if temp_data.count(character) == len(temp_data):
             # Can return an UnknownSeq
-            return self.__class__(len(temp_data), character=self._character)
+            return self.__class__(len(temp_data), character=character)
         return Seq(temp_data)
 
 
@@ -2523,6 +2844,8 @@ class MutableSeq(_SeqAbstractBaseClass):
     or biological methods as the Seq object.
     """
 
+    __slots__ = ()
+
     def __init__(self, data):
         """Create a MutableSeq object."""
         if isinstance(data, array.array):
@@ -2538,21 +2861,26 @@ class MutableSeq(_SeqAbstractBaseClass):
             )
             data = data.tounicode()
         if isinstance(data, bytearray):
-            self._data = data
+            pass
         elif isinstance(data, bytes):
-            self._data = bytearray(data)
+            data = bytearray(data)
         elif isinstance(data, str):
-            self._data = bytearray(data, "ASCII")
+            data = bytearray(data, "ASCII")
         elif isinstance(data, MutableSeq):
-            self._data = data._data[:]  # Take a copy
+            _data = super(ABC, data).__getattribute__("_data")
+            if isinstance(_data, tuple):
+                data, attributes = _data
+            else:
+                data = _data
         elif isinstance(data, Seq):
             # Make no assumptions about the Seq subclass internal storage
-            self._data = bytearray(bytes(data))
+            data = bytearray(bytes(data))
         else:
             raise TypeError(
                 "data should be a string, bytearray object, Seq object, or a "
                 "MutableSeq object"
             )
+        super().__init__(data)
 
     @property
     def data(self):
@@ -2563,7 +2891,12 @@ class MutableSeq(_SeqAbstractBaseClass):
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
         )
-        return array.array("u", self._data.decode("ASCII"))
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        return array.array("u", data.decode("ASCII"))
 
     @data.setter
     def data(self, value):
@@ -2584,17 +2917,20 @@ class MutableSeq(_SeqAbstractBaseClass):
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(index, int):
             # Replacing a single letter with a new string
-            self._data[index] = ord(value)
+            data[index] = ord(value)
         else:
             # Replacing a sub-sequence
-            if isinstance(value, MutableSeq):
-                self._data[index] = value._data
-            elif isinstance(value, Seq):
-                self._data[index] = bytes(value)
+            if isinstance(value, _SeqAbstractBaseClass):
+                data[index] = bytes(value)
             elif isinstance(value, str):
-                self._data[index] = value.encode("ASCII")
+                data[index] = value.encode("ASCII")
             else:
                 raise TypeError("received unexpected type %s" % type(value))
 
@@ -2607,7 +2943,12 @@ class MutableSeq(_SeqAbstractBaseClass):
         MutableSeq('CTCGACGTCG')
         """
         # Could be deleting a single letter, or a slice
-        del self._data[index]
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        del data[index]
 
     def append(self, c):
         """Add a subsequence to the mutable sequence object.
@@ -2619,7 +2960,12 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        self._data.append(ord(c.encode("ASCII")))
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        data.append(ord(c.encode("ASCII")))
 
     def insert(self, i, c):
         """Add a subsequence to the mutable sequence object at a given index.
@@ -2634,7 +2980,12 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        self._data.insert(i, ord(c.encode("ASCII")))
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        data.insert(i, ord(c.encode("ASCII")))
 
     def pop(self, i=(-1)):
         """Remove a subsequence of a single letter at given index.
@@ -2651,8 +3002,13 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         Returns the last character of the sequence.
         """
-        c = self._data[i]
-        del self._data[i]
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        c = data[i]
+        del data[i]
         return chr(c)
 
     def remove(self, item):
@@ -2668,9 +3024,14 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         codepoint = ord(item)
         try:
-            self._data.remove(codepoint)
+            data.remove(codepoint)
         except ValueError:
             raise ValueError("value not found in MutableSeq") from None
 
@@ -2679,7 +3040,12 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        self._data.reverse()
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        data.reverse()
 
     def complement(self):
         """Modify the mutable sequence to take on its complement.
@@ -2691,21 +3057,31 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         If the sequence contains both T and U, an exception is raised.
         """
-        if ord("U") in self._data and ord("T") in self._data:
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
+        if ord("U") in data and ord("T") in data:
             raise ValueError("Mixed RNA/DNA found")
-        elif ord("U") in self._data:
+        elif ord("U") in data:
             table = _rna_complement_table
         else:
             table = _dna_complement_table
-        self._data = self._data.translate(table)
+        data[:] = data.translate(table)
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
 
         No return value.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         self.complement()
-        self._data.reverse()
+        data.reverse()
 
     def extend(self, other):
         """Add a sequence to the original mutable sequence object.
@@ -2720,12 +3096,17 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
+        _data = super().__getattribute__("_data")
+        if isinstance(_data, tuple):
+            data, attributes = _data
+        else:
+            data = _data
         if isinstance(other, MutableSeq):
-            self._data.extend(other._data)
+            data.extend(other._data)
         elif isinstance(other, Seq):
-            self._data.extend(bytes(other))
+            data.extend(bytes(other))
         elif isinstance(other, str):
-            self._data.extend(other.encode("ASCII"))
+            data.extend(other.encode("ASCII"))
         else:
             raise TypeError("expected a string, Seq or MutableSeq")
 
