@@ -293,7 +293,7 @@ class _SeqAbstractBaseClass(ABC):
     identical.
     """
 
-    __slots__ = "_data",
+    __slots__ = ("_data",)
 
     @abstractmethod
     def __init__(self, data):
@@ -3148,7 +3148,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     bytes object.
     """
 
-    __slots__ = ("_length", )
+    __slots__ = ("_length",)
 
     def __init__(self, length):
         """Initialize the object with the sequence length."""
