@@ -88,6 +88,8 @@ class SequenceDataAbstractBaseClass(ABC):
     as part of their ``__init__`` method.
     """
 
+    __slots__ = ()
+
     def __init__(self):
         """Check if ``__getitem__`` returns a bytes-like object."""
         assert self[:0] == b""
@@ -3140,6 +3142,8 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     ValueError except for requests of zero size, for which it returns an empty
     bytes object.
     """
+
+    __slots__ = ("_length", )
 
     def __init__(self, length):
         """Initialize the object with the sequence length."""
