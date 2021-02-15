@@ -293,62 +293,43 @@ class _SeqAbstractBaseClass(ABC):
     identical.
     """
 
-    __slots__ = ("_data",)
+    __slots__ = ("_data", "_attributes")
 
     @abstractmethod
     def __init__(self, data):
         super().__setattr__("_data", data)
+        super().__setattr__("_attributes", None)
 
     def __setattr__(self, key, value):
-        if key == "_data":
+        if key in _SeqAbstractBaseClass.__slots__:
             # This happens when copying a Seq object
             super().__setattr__(key, value)
         else:
-            _data = super().__getattribute__("_data")
-            if isinstance(_data, tuple):
-                data, attributes = _data
-            else:
+            attributes = super().__getattribute__("_attributes")
+            if attributes is None:
                 attributes = {}
-                super().__setattr__("_data", (_data, attributes))
+                super().__setattr__("_attributes", attributes)
             attributes[key] = value
 
     def __getattr__(self, key):
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-            try:
-                return attributes[key]
-            except KeyError:
-                pass
-        raise AttributeError("sequence has no attribute '%s'" % key)
+        attributes = super().__getattribute__("_attributes")
+        if attributes is None:
+            raise AttributeError("sequence has no attribute '%s'" % key)
+        return attributes[key]
 
     def __delattr__(self, key):
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-            try:
-                del attributes[key]
-            except KeyError:
-                pass
-            else:
-                return
-        raise AttributeError("sequence has no attribute '%s'" % key)
+        attributes = super().__getattribute__("_attributes")
+        if attributes is None:
+            raise AttributeError("sequence has no attribute '%s'" % key)
+        del attributes[key]
 
     def __bytes__(self):
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return bytes(data)
 
     def __repr__(self):
         """Return (truncated) representation of the sequence."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(data, _UndefinedSequenceData):
             return f"Seq(None, length={len(self)})"
         if len(data) > 60:
@@ -364,11 +345,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __str__(self):
         """Return the full sequence as a python string."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return data.decode("ASCII")
 
     def __eq__(self, other):
@@ -406,17 +383,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> seq1 == bytearray(b"ACGT")
         True
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return data == other_data
         elif isinstance(other, str):
             return data == other.encode("ASCII")
@@ -425,17 +394,9 @@ class _SeqAbstractBaseClass(ABC):
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return data < other_data
         elif isinstance(other, str):
             return data < other.encode("ASCII")
@@ -444,17 +405,9 @@ class _SeqAbstractBaseClass(ABC):
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return data <= other_data
         elif isinstance(other, str):
             return data <= other.encode("ASCII")
@@ -463,17 +416,9 @@ class _SeqAbstractBaseClass(ABC):
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return data > other_data
         elif isinstance(other, str):
             return data > other.encode("ASCII")
@@ -482,17 +427,9 @@ class _SeqAbstractBaseClass(ABC):
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return data >= other_data
         elif isinstance(other, str):
             return data >= other.encode("ASCII")
@@ -501,11 +438,7 @@ class _SeqAbstractBaseClass(ABC):
 
     def __len__(self):
         """Return the length of the sequence."""
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return len(data)
 
     def __getitem__(self, index):
@@ -526,11 +459,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> mutable_seq[5:8]
         MutableSeq('ACG')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(index, int):
             # Return a single letter as a string
             return chr(data[index])
@@ -547,17 +476,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("MELKI") + "LV"
         MutableSeq('MELKILV')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, _SeqAbstractBaseClass):
-            _other_data = super(ABC, other).__getattribute__("_data")
-            if isinstance(_other_data, tuple):
-                other_data, other_attributes = _other_data
-            else:
-                other_data = _other_data
+            other_data = super(ABC, other).__getattribute__("_data")
             return self.__class__(data + other_data)
         elif isinstance(other, str):
             return self.__class__(data + other.encode("ASCII"))
@@ -582,11 +503,7 @@ class _SeqAbstractBaseClass(ABC):
         Adding two sequence objects is handled via the __add__ method.
         """
         if isinstance(other, str):
-            _data = super().__getattribute__("_data")
-            if isinstance(_data, tuple):
-                data, attributes = _data
-            else:
-                data = _data
+            data = super().__getattribute__("_data")
             return self.__class__(other.encode("ASCII") + data)
         else:
             raise TypeError
@@ -602,11 +519,7 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return self.__class__(data * other)
 
     def __rmul__(self, other):
@@ -618,12 +531,8 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
-        return self.__class__(_data * other)
+        data = super().__getattribute__("_data")
+        return self.__class__(data * other)
 
     def __imul__(self, other):
         """Multiply the sequence object by other and assign.
@@ -652,11 +561,7 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return self.__class__(data * other)
 
     def count(self, sub, start=None, end=None):
@@ -699,17 +604,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> print(Seq("AAAA").count_overlap("AA"))
         3
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -774,17 +671,9 @@ class _SeqAbstractBaseClass(ABC):
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -816,18 +705,10 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq("AAA") in my_dna
         True
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(item, MutableSeq):
-            item_data = super(ABC, item).__getattribute__("_data")
-            if isinstance(item_data, tuple):
-                item, attributes = item_data
-            else:
-                item = item_data
-        if isinstance(item, _SeqAbstractBaseClass):
+            item = super(ABC, item).__getattribute__("_data")
+        elif isinstance(item, _SeqAbstractBaseClass):
             item = bytes(item)
         elif isinstance(item, str):
             item = item.encode("ASCII")
@@ -860,17 +741,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.find("AUG", 4)
         15
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -909,17 +782,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.rfind("AUG", end=15)
         3
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -969,17 +834,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.find("T")
         -1
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -1029,17 +886,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.rfind("T")
         -1
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sub, MutableSeq):
-            sub_data = super(ABC, sub).__getattribute__("_data")
-            if isinstance(sub_data, tuple):
-                sub, attributes = sub_data
-            else:
-                sub = sub_data
+            sub = super(ABC, sub).__getattribute__("_data")
         elif isinstance(sub, Seq):
             sub = bytes(sub)
         elif isinstance(sub, str):
@@ -1071,22 +920,14 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
         True
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(prefix, tuple):
             prefix = tuple(
                 bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in prefix
             )
         elif isinstance(prefix, MutableSeq):
-            prefix_data = super(ABC, prefix).__getattribute__("_data")
-            if isinstance(prefix_data, tuple):
-                prefix, attributes = prefix_data
-            else:
-                prefix = prefix_data
+            prefix = super(ABC, prefix).__getattribute__("_data")
         elif isinstance(prefix, Seq):
             prefix = bytes(prefix)
         elif isinstance(prefix, str):
@@ -1113,22 +954,14 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_rna.endswith(("UCC", "UCA", "UUG"))
         True
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(suffix, tuple):
             suffix = tuple(
                 bytes(p) if isinstance(p, _SeqAbstractBaseClass) else p.encode("ASCII")
                 for p in suffix
             )
         elif isinstance(suffix, MutableSeq):
-            suffix_data = super(ABC, suffix).__getattribute__("_data")
-            if isinstance(suffix_data, tuple):
-                suffix, attributes = suffix_data
-            else:
-                suffix = suffix_data
+            suffix = super(ABC, suffix).__getattribute__("_data")
         elif isinstance(suffix, Seq):
             suffix = bytes(suffix)
         elif isinstance(suffix, str):
@@ -1172,11 +1005,7 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
@@ -1220,11 +1049,7 @@ class _SeqAbstractBaseClass(ABC):
         Seq('VMAIVMGR')
         Seq('KGAR*L')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(sep, _SeqAbstractBaseClass):
             sep = bytes(sep)
         elif isinstance(sep, str):
@@ -1267,11 +1092,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the lstrip and rstrip methods.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
@@ -1329,11 +1150,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and rstrip methods.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
@@ -1391,11 +1208,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the strip and lstrip methods.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(chars, _SeqAbstractBaseClass):
             chars = bytes(chars)
         elif isinstance(chars, str):
@@ -1459,11 +1272,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the ``lower`` method.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         upper_data = data.upper()
         if inplace:
             if not isinstance(data, bytearray):
@@ -1516,11 +1325,7 @@ class _SeqAbstractBaseClass(ABC):
 
         See also the ``upper`` method.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         lower_data = data.lower()
         if inplace:
             if not isinstance(data, bytearray):
@@ -1672,11 +1477,7 @@ class _SeqAbstractBaseClass(ABC):
         As ``Seq`` objects are immutable, a ``TypeError`` is raised if
         ``complement_rna`` is called on a ``Seq`` object with ``inplace=True``.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         try:
             translated_data = data.translate(_rna_complement_table)
         except UndefinedSequenceError:
@@ -1725,11 +1526,7 @@ class _SeqAbstractBaseClass(ABC):
         ``reverse_complement_rna`` is called on a ``Seq`` object with
         ``inplace=True``.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         try:
             complemented_data = data.translate(_rna_complement_table)
         except UndefinedSequenceError:
@@ -1785,11 +1582,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         try:
             transcribed_data = data.replace(b"T", b"U").replace(b"t", b"u")
         except UndefinedSequenceError:
@@ -1843,11 +1636,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         try:
             backtranscribed_data = data.replace(b"U", b"T").replace(b"u", b"t")
         except UndefinedSequenceError:
@@ -1855,7 +1644,7 @@ class _SeqAbstractBaseClass(ABC):
             # sequence of the same length
             return self
         if inplace:
-            if not isinstance(_data, bytearray):
+            if not isinstance(data, bytearray):
                 raise TypeError("Sequence is immutable")
             data[:] = backtranscribed_data
             return self
@@ -1936,11 +1725,7 @@ class _SeqAbstractBaseClass(ABC):
             new = bytes(new)
         elif isinstance(new, str):
             new = new.encode("ASCII")
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         replaced_data = data.replace(old, new)
         if inplace:
             if not isinstance(data, bytearray):
@@ -2027,11 +1812,7 @@ class Seq(_SeqAbstractBaseClass):
         particular) as this has changed in Biopython 1.65. Older versions
         would hash on object identity.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return hash(data)
 
     def tomutable(self):
@@ -2129,11 +1910,7 @@ class Seq(_SeqAbstractBaseClass):
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(data, _UndefinedSequenceData):
             # complement of an undefined sequence is an undefined sequence
             # of the same length
@@ -2874,11 +2651,7 @@ class MutableSeq(_SeqAbstractBaseClass):
         elif isinstance(data, str):
             data = bytearray(data, "ASCII")
         elif isinstance(data, MutableSeq):
-            _data = super(ABC, data).__getattribute__("_data")
-            if isinstance(_data, tuple):
-                data, attributes = _data
-            else:
-                data = _data
+            data = super(ABC, data).__getattribute__("_data")
         elif isinstance(data, Seq):
             # Make no assumptions about the Seq subclass internal storage
             data = bytearray(bytes(data))
@@ -2898,11 +2671,7 @@ class MutableSeq(_SeqAbstractBaseClass):
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
         )
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         return array.array("u", data.decode("ASCII"))
 
     @data.setter
@@ -2924,11 +2693,7 @@ class MutableSeq(_SeqAbstractBaseClass):
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(index, int):
             # Replacing a single letter with a new string
             data[index] = ord(value)
@@ -2950,11 +2715,7 @@ class MutableSeq(_SeqAbstractBaseClass):
         MutableSeq('CTCGACGTCG')
         """
         # Could be deleting a single letter, or a slice
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         del data[index]
 
     def append(self, c):
@@ -2967,11 +2728,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         data.append(ord(c.encode("ASCII")))
 
     def insert(self, i, c):
@@ -2987,11 +2744,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         data.insert(i, ord(c.encode("ASCII")))
 
     def pop(self, i=(-1)):
@@ -3009,11 +2762,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         Returns the last character of the sequence.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         c = data[i]
         del data[i]
         return chr(c)
@@ -3031,11 +2780,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         codepoint = ord(item)
         try:
             data.remove(codepoint)
@@ -3047,11 +2792,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         data.reverse()
 
     def complement(self):
@@ -3064,11 +2805,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         If the sequence contains both T and U, an exception is raised.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if ord("U") in data and ord("T") in data:
             raise ValueError("Mixed RNA/DNA found")
         elif ord("U") in data:
@@ -3082,11 +2819,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         self.complement()
         data.reverse()
 
@@ -3103,11 +2836,7 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        _data = super().__getattribute__("_data")
-        if isinstance(_data, tuple):
-            data, attributes = _data
-        else:
-            data = _data
+        data = super().__getattribute__("_data")
         if isinstance(other, MutableSeq):
             data.extend(other._data)
         elif isinstance(other, Seq):
