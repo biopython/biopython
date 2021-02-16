@@ -24,7 +24,9 @@ from Bio import SeqFeature
 
 
 class _BioSQLSequenceData(SequenceDataAbstractBaseClass):
-    """Retrieves sequence data from a BioSQL database (PRIVATE).."""
+    """Retrieves sequence data from a BioSQL database (PRIVATE)."""
+
+    __slots__ = ("primary_id", "adaptor", "_length", "start")
 
     def __init__(self, primary_id, adaptor, start=0, length=0):
         """Create a new _BioSQLSequenceData object referring to a BioSQL entry.

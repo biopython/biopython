@@ -8,7 +8,7 @@
 """Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format.
 
 This parser reads the index stored in the twoBit file, as well as the masked
-regions and the N's for ean sequence. It also creates sequence data objects
+regions and the N's for each sequence. It also creates sequence data objects
 (_TwoBitSequenceData objects), which support only two methods: __len__ and
 __getitem__. The former will return the length of the sequence, while the
 latter returns the sequence (as a bytes object) for the requested region.
@@ -96,6 +96,8 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
     (as a bytes object) for the requested region. The full sequence of a record
     is loaded only if explicitly requested.
     """
+
+    __slots__ = ("stream", "offset", "length", "nBlocks", "maskBlocks")
 
     def __init__(self, stream, offset, length):
         """Initialize the file stream and file position of the sequence data."""
