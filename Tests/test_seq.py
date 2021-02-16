@@ -1203,7 +1203,6 @@ class TestStopCodons(unittest.TestCase):
 
 
 class TestAttributes(unittest.TestCase):
-
     def test_seq(self):
         s = Seq.Seq("ACGT")
         with self.assertRaises(AttributeError):
