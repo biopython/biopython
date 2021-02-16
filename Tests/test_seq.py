@@ -1202,6 +1202,84 @@ class TestStopCodons(unittest.TestCase):
         self.assertEqual(Seq.translate("nnn"), "X")
 
 
+class TestAttributes(unittest.TestCase):
+    def test_seq(self):
+        s = Seq.Seq("ACGT")
+        with self.assertRaises(AttributeError):
+            s.dog
+        s.dog = "woof"
+        self.assertIn("dog", dir(s))
+        self.assertEqual(s.dog, "woof")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+        with self.assertRaises(AttributeError):
+            s.cat
+        s.dog = "woof"
+        s.cat = "meow"
+        self.assertIn("dog", dir(s))
+        self.assertIn("cat", dir(s))
+        self.assertEqual(s.dog, "woof")
+        self.assertEqual(s.cat, "meow")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+        self.assertIn("cat", dir(s))
+        self.assertEqual(s.cat, "meow")
+        del s.cat
+        with self.assertRaises(AttributeError):
+            s.cat
+        self.assertNotIn("cat", dir(s))
+        s.dog = "woof"
+        s.dog = "bark"
+        self.assertIn("dog", dir(s))
+        self.assertEqual(s.dog, "bark")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+
+    def test_mutable_seq(self):
+        s = Seq.MutableSeq("ACGT")
+        with self.assertRaises(AttributeError):
+            s.dog
+        s.dog = "woof"
+        self.assertIn("dog", dir(s))
+        self.assertEqual(s.dog, "woof")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+        with self.assertRaises(AttributeError):
+            s.cat
+        s.dog = "woof"
+        s.cat = "meow"
+        self.assertIn("dog", dir(s))
+        self.assertIn("cat", dir(s))
+        self.assertEqual(s.dog, "woof")
+        self.assertEqual(s.cat, "meow")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+        self.assertIn("cat", dir(s))
+        self.assertEqual(s.cat, "meow")
+        del s.cat
+        with self.assertRaises(AttributeError):
+            s.cat
+        self.assertNotIn("cat", dir(s))
+        s.dog = "woof"
+        s.dog = "bark"
+        self.assertIn("dog", dir(s))
+        self.assertEqual(s.dog, "bark")
+        del s.dog
+        with self.assertRaises(AttributeError):
+            s.dog
+        self.assertNotIn("dog", dir(s))
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
