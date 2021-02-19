@@ -22,12 +22,27 @@ to Python3. However, a Python2 string object corresponds to a ``bytes`` object
 in Python3, storing the string as a series of 256-bit characters. While non-
 ASCII characters could be stored in Python2 strings, they were not treated as
 such. For example:
-In Python2:               In Python3:
->>> s = "Генетика"        >>> s = "Генетика"
->>> type(s)               >>> type(s)
-<class 'str'>             <class 'str'>
->>> len(s)                >>> len(s)
-16                        8
+
+In Python2:
+
+.. code-block:: python
+
+>>> s = "Генетика"
+>>> type(s)
+<class 'str'>
+>>> len(s)
+16
+
+In Python3:
+
+.. code-block:: python
+
+>>> s = "Генетика"
+>>> type(s)
+<class 'str'>
+>>> len(s)
+8
+
 In Python3, storing the sequence contents as ``bytes`` and ``bytearray`` objects
 has the further advantage that both support the buffer protocol.
 
@@ -63,20 +78,21 @@ length but unknown sequence contents. This provides an alternative to
 example, in these examples the ``UnknownSeq`` is interpreted as a sequence with 
 a well-defined sequence contents:
 
-```
+.. code-block:: python
+
 >>> s = UnknownSeq(3, character="A")
 >>> s.translate()
 UnknownSeq(1, character='K')
 >>> s + "A"
 Seq("AAAA")
-```
 
 A sequence object with an undefined sequence contents can now be created by
 using ``None`` when creating the ``Seq`` object, together with the sequence
 length. Trying to access its sequence contents raises an
 ``UndefinedSequenceError``:
 
-```
+.. code-block:: python
+
 >>> s = Seq(None, length=6)
 >>> s
 Seq(None, length=6)
@@ -90,7 +106,6 @@ Bio.Seq.UndefinedSequenceError: Sequence content is undefined
 Traceback (most recent call last):
 ....
 Bio.Seq.UndefinedSequenceError: Sequence content is undefined
-```
 
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
