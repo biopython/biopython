@@ -27,35 +27,36 @@ In Python2:
 
 .. code-block:: python
 
->>> s = "Генетика"
->>> type(s)
-<class 'str'>
->>> len(s)
-16
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    16
 
 In Python3:
 
 .. code-block:: python
 
->>> s = "Генетика"
->>> type(s)
-<class 'str'>
->>> len(s)
-8
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    8
 
-In Python3, storing the sequence contents as ``bytes`` and ``bytearray`` objects
-has the further advantage that both support the buffer protocol.
+In Python3, storing the sequence contents as ``bytes`` and ``bytearray``
+objects has the further advantage that both support the buffer protocol.
 
 Taking advantage of the similarity between ``bytes`` and ``bytearray``, the
 ``Seq`` and ``MutableSeq`` classes now inherit from an abstract base class
-``_SeqAbstractBaseClass`` in ``Bio.Seq`` that implements most of the ``Seq`` and
-``MutableSeq`` methods, ensuring their consistency with each other. For methods
-that modify the sequence contents, an optional ``inplace`` argument to specify
-if a new sequence object should be returned with the new sequence contents (if
-``inplace`` is ``False``, the default) or if the sequence object itself should
-be modified (if ``inplace`` is ``True``). For ``Seq`` objects, which are
-immutable, using ``inplace=True`` raises an exception. For ``inplace=False``,
-the default, ``Seq`` objects and ``MutableSeq`` behave consistently.
+``_SeqAbstractBaseClass`` in ``Bio.Seq`` that implements most of the ``Seq``
+and ``MutableSeq`` methods, ensuring their consistency with each other. For
+methods that modify the sequence contents, an optional ``inplace`` argument to
+specify if a new sequence object should be returned with the new sequence
+contents (if ``inplace`` is ``False``, the default) or if the sequence object
+itself should be modified (if ``inplace`` is ``True``). For ``Seq`` objects,
+which are immutable, using ``inplace=True`` raises an exception. For 
+``inplace=False``, the default, ``Seq`` objects and ``MutableSeq`` behave
+consistently.
 
 As before, ``Seq`` and ``MutableSeq`` objects can be initialized using a string
 object, which will be converted to a ``bytes`` or ``bytearray`` object assuming
@@ -67,7 +68,7 @@ that return the sequence length and sequence contents on demand. Initialzing a
 ``Seq`` instance using an instance of a class inheriting from
 ``SequenceDataAbstractBaseClass`` allows the ``Seq`` object to be lazy, meaning
 that its sequence is provided on demand only, without requiring to initialize
-the full sequence. This feature is now used in `BioSQL`, providing on-demand
+the full sequence. This feature is now used in ``BioSQL``, providing on-demand
 sequence loading from an SQL database, as well as in a new parser for twoBit
 (.2bit) sequence data added to ``Bio.SeqIO``. This is a lazy parser that allows
 fast access to genome-size DNA sequence files by not having to read the full
@@ -75,7 +76,7 @@ genome sequence. The new ``_UndefinedSequenceData`` class in ``Bio.Seq``  also
 inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
 length but unknown sequence contents. This provides an alternative to
 ``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
-example, in these examples the ``UnknownSeq`` is interpreted as a sequence with 
+example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
 a well-defined sequence contents:
 
 .. code-block:: python
