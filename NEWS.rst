@@ -23,9 +23,7 @@ in Python3, storing the string as a series of 256-bit characters. While non-
 ASCII characters could be stored in Python2 strings, they were not treated as
 such. For example:
 
-In Python2:
-
-.. code-block:: python
+In Python2::
 
     >>> s = "Генетика"
     >>> type(s)
@@ -33,9 +31,7 @@ In Python2:
     >>> len(s)
     16
 
-In Python3:
-
-.. code-block:: python
+In Python3::
 
     >>> s = "Генетика"
     >>> type(s)
@@ -77,9 +73,7 @@ inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
 length but unknown sequence contents. This provides an alternative to
 ``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
 example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
-a well-defined sequence contents:
-
-.. code-block:: python
+a well-defined sequence contents::
 
     >>> s = UnknownSeq(3, character="A")
     >>> s.translate()
@@ -90,9 +84,7 @@ a well-defined sequence contents:
 A sequence object with an undefined sequence contents can now be created by
 using ``None`` when creating the ``Seq`` object, together with the sequence
 length. Trying to access its sequence contents raises an
-``UndefinedSequenceError``:
-
-.. code-block:: python
+``UndefinedSequenceError``::
 
     >>> s = Seq(None, length=6)
     >>> s
