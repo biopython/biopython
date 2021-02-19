@@ -54,7 +54,7 @@ methods that modify the sequence contents, an optional ``inplace`` argument to
 specify if a new sequence object should be returned with the new sequence
 contents (if ``inplace`` is ``False``, the default) or if the sequence object
 itself should be modified (if ``inplace`` is ``True``). For ``Seq`` objects,
-which are immutable, using ``inplace=True`` raises an exception. For 
+which are immutable, using ``inplace=True`` raises an exception. For
 ``inplace=False``, the default, ``Seq`` objects and ``MutableSeq`` behave
 consistently.
 
@@ -81,11 +81,11 @@ a well-defined sequence contents:
 
 .. code-block:: python
 
->>> s = UnknownSeq(3, character="A")
->>> s.translate()
-UnknownSeq(1, character='K')
->>> s + "A"
-Seq("AAAA")
+    >>> s = UnknownSeq(3, character="A")
+    >>> s.translate()
+    UnknownSeq(1, character='K')
+    >>> s + "A"
+    Seq("AAAA")
 
 A sequence object with an undefined sequence contents can now be created by
 using ``None`` when creating the ``Seq`` object, together with the sequence
@@ -94,19 +94,19 @@ length. Trying to access its sequence contents raises an
 
 .. code-block:: python
 
->>> s = Seq(None, length=6)
->>> s
-Seq(None, length=6)
->>> len(s)
-6
->>> "A" in s
-Traceback (most recent call last):
-...
-Bio.Seq.UndefinedSequenceError: Sequence content is undefined
->>> print(s)
-Traceback (most recent call last):
-....
-Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+    >>> s = Seq(None, length=6)
+    >>> s
+    Seq(None, length=6)
+    >>> len(s)
+    6
+    >>> "A" in s
+    Traceback (most recent call last):
+    ...
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+    >>> print(s)
+    Traceback (most recent call last):
+    ....
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
 
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
