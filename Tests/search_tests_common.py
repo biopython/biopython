@@ -156,5 +156,3 @@ def _num_difference(obj_a, obj_b):
     diff = attrs_a.symmetric_difference(attrs_b)
     privates = len([x for x in diff if x.startswith("_")])
     return len(diff) - privates
-
-
