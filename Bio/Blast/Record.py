@@ -243,35 +243,21 @@ class HSP:
             return "\n".join(lines)
         if self.align_length < 50:
             lines.append(
-                "Query:%s %s %s"
-                % (str(self.query_start).rjust(8), str(self.query), str(self.query_end))
+                "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
             )
-            lines.append("               %s" % (str(self.match)))
+            lines.append("               %s" % self.match)
             lines.append(
-                "Sbjct:%s %s %s"
-                % (str(self.sbjct_start).rjust(8), str(self.sbjct), str(self.sbjct_end))
+                "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
             )
         else:
             lines.append(
-                "Query:%s %s...%s %s"
-                % (
-                    str(self.query_start).rjust(8),
-                    str(self.query)[:45],
-                    str(self.query)[-3:],
-                    str(self.query_end),
-                )
+                "Query:%8s %s...%s %s"
+                % (self.query_start, self.query[:45], self.query[-3:], self.query_end,)
             )
+            lines.append("               %s...%s" % (self.match[:45], self.match[-3:]))
             lines.append(
-                "               %s...%s" % (str(self.match)[:45], str(self.match)[-3:])
-            )
-            lines.append(
-                "Sbjct:%s %s...%s %s"
-                % (
-                    str(self.sbjct_start).rjust(8),
-                    str(self.sbjct)[:45],
-                    str(self.sbjct)[-3:],
-                    str(self.sbjct_end),
-                )
+                "Sbjct:%8s %s...%s %s"
+                % (self.sbjct_start, self.sbjct[:45], self.sbjct[-3:], self.sbjct_end)
             )
         return "\n".join(lines)
 

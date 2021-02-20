@@ -228,7 +228,7 @@ class Instances(list):
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos : pos + self.length]):
+                if instance == sequence[pos : pos + self.length]:
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 

@@ -11,11 +11,19 @@ and confirms they are consistent using our different parsers.
 
 import os
 import unittest
+import warnings
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
-from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
+from Bio.Seq import (
+    Seq,
+    UnknownSeq,
+    MutableSeq,
+    UndefinedSequenceError,
+    reverse_complement,
+)
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
@@ -126,12 +134,27 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             )
         self.assertEqual(len(old.seq), len(new.seq), msg=msg)
         if len(old.seq) < 200:
-            err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            old_seq = old.seq
         else:
-            err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            old_seq = old.seq[:100]
+        if len(new.seq) < 200:
+            new_seq = new.seq
+        else:
+            new_seq = new.seq[:100]
+        try:
+            old_seq_upper = old.seq.upper()
+        except UndefinedSequenceError:
+            old_seq_upper = None
+            old_seq = None
+        try:
+            new_seq_upper = new.seq.upper()
+        except UndefinedSequenceError:
+            new_seq_upper = None
+            new_seq = None
+        err_msg = "'%s' vs '%s'" % (old_seq, new_seq)
         if msg:
             err_msg = "%s; %s" % (msg, err_msg)
-        self.assertEqual(str(old.seq).upper(), str(new.seq).upper(), msg=err_msg)
+        self.assertEqual(old_seq_upper, new_seq_upper, msg=err_msg)
         if old.features and new.features:
             self.assertEqual(len(old.features), len(new.features), msg=msg)
             for old_feature, new_feature in zip(old.features, new.features):
@@ -251,7 +274,7 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
 
         new = feature.extract(parent_seq)
         self.assertIsInstance(new, Seq)
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
         new = feature.extract(str(parent_seq))
         self.assertIsInstance(new, str)
@@ -259,11 +282,13 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
 
         new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
-        self.assertIsInstance(new, UnknownSeq)
+        new = feature.extract(Seq(None, len(parent_seq)))
+        self.assertIsInstance(new, Seq)
         self.assertEqual(len(new), len(answer_str))
+        if len(answer_str) > 0:
+            self.assertRaises(UndefinedSequenceError, str, new)
 
         if _get_location_string(feature, 1326) != location_str:
             # This is to avoid issues with the N^1 between feature which only
@@ -1071,9 +1096,9 @@ class NC_000932(SeqIOFeatureTestBaseClass):
                 msg = "%s\n%r, %r, %r\n%s" % (e, r.id, nuc, self.table, f)
                 self.fail(msg)
             if pro[-1] == "*":
-                self.assertEqual(str(pro)[:-1], str(r.seq))
+                self.assertEqual(pro[:-1], r.seq)
             else:
-                self.assertEqual(str(pro), str(r.seq))
+                self.assertEqual(pro, r.seq)
 
 
 class NC_005816(NC_000932):
@@ -1116,10 +1141,7 @@ class NC_005816(NC_000932):
                 t.format("fasta"),
                 faa.format("fasta"),
             )
-            self.assertTrue(
-                str(translation) == str(faa.seq)
-                or str(translation) != str(faa.seq) + "*"
-            )
+            self.assertTrue(translation == faa.seq or translation != faa.seq + "*")
 
     def test_Genome(self):
         """Checking GenBank sequence vs FASTA fna file."""
@@ -1149,8 +1171,7 @@ class NC_005816(NC_000932):
         for fa_record, f in zip(fa_records, features):
             # TODO - check the FASTA ID line against the co-ordinates?
             f_seq = f.extract(gb_record.seq)
-            self.assertEqual(len(fa_record.seq), len(f_seq))
-            self.assertEqual(str(fa_record.seq), str(f_seq))
+            self.assertEqual(fa_record.seq, f_seq)
             self.assertEqual(len(f_seq), len(f))
 
 

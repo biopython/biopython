@@ -64,18 +64,7 @@ from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
 
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 
-# PDB_TO_XYZR is a BASH script and will not run on Windows
-# Since it only reads atmtypenumbers to a mapping structure we can replicate
-# that functionality here and avoid this dependency altogether.
-#
-# Description of PDB_TO_XYZR
-# Maps residue type and atom name pairs into Connolly ".atm" numeric codes
-#  as used in MS and AMS, and into actual radius values
-#
-# In case of missing radius, use 0.01
-#
 # Table 1: Atom Type to radius
 _atomic_radii = {
     #   atom num dist  Rexplicit Runited-atom
@@ -518,25 +507,16 @@ def _read_vertex_array(filename):
     return numpy.array(vertex_list)
 
 
-def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
+def get_surface(model, MSMS="msms"):
     """Represent molecular surface as a vertex list array.
 
     Return a Numpy array that represents the vertex list of the
     molecular surface.
 
     Arguments:
-     - PDB_TO_XYZR - deprecated, ignore this.
      - MSMS - msms executable (used as argument to subprocess.call)
 
     """
-    # Issue warning if PDB_TO_XYZR is given
-    if PDB_TO_XYZR is not None:
-        warnings.warn(
-            "PDB_TO_XYZR argument will be deprecated soon in favor of an internal "
-            "mapping algorithm.",
-            BiopythonDeprecationWarning,
-        )
-
     # Replace pdb_to_xyzr
     # Make x,y,z,radius file
     atom_list = Selection.unfold_entities(model, "A")
@@ -598,18 +578,10 @@ def ca_depth(residue, surface):
 class ResidueDepth(AbstractPropertyMap):
     """Calculate residue and CA depth for all residues."""
 
-    def __init__(self, model, pdb_file=None, msms_exec=None):
+    def __init__(self, model, msms_exec=None):
         """Initialize the class."""
         if msms_exec is None:
             msms_exec = "msms"
-
-        # Issue warning if pdb_file is given
-        if pdb_file is not None:
-            warnings.warn(
-                "ResidueDepth no longer requires a pdb file. This argument will be "
-                "removed in a future release of Biopython.",
-                BiopythonDeprecationWarning,
-            )
 
         depth_dict = {}
         depth_list = []

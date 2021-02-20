@@ -175,7 +175,7 @@ def MafIterator(handle, seq_count=None):
                             "Found dot/period in first sequence of alignment"
                         )
 
-                    ref = str(records[0].seq)
+                    ref = records[0].seq
                     new = []
 
                     for (letter, ref_letter) in zip(sequence, ref):
@@ -642,7 +642,7 @@ class MafIndex:
         """
         # validate strand
         if strand not in (1, -1):
-            raise ValueError("Strand must be 1 or -1, got %s" % str(strand))
+            raise ValueError("Strand must be 1 or -1, got %s" % strand)
 
         # pull all alignments that span the desired intervals
         fetched = list(self.search(starts, ends))

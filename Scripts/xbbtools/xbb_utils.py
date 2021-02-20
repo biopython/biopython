@@ -46,7 +46,7 @@ class NotePad(tk.Toplevel):
 
     def save(self):
         """Save text from notepad to file."""
-        file = filedialog.asksaveasfilename()
-        if file:
-            with open(file, "w") as fid:
+        filename = filedialog.asksaveasfilename()
+        if filename:
+            with open(filename, "w") as fid:
                 fid.write(self.tid.get(0.0, "end"))

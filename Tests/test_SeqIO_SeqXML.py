@@ -53,10 +53,10 @@ class TestDetailedRead(unittest.TestCase):
 
     def test_full_characters_set_read(self):
         """Read full characters set for each type."""
-        self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-")
-        self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-")
+        self.assertEqual(self.records["dna"][1].seq, "ACGTMRWSYKVHDBXN.-")
+        self.assertEqual(self.records["rna"][1].seq, "ACGUMRWSYKVHDBXN.-")
         self.assertEqual(
-            str(self.records["protein"][1].seq), "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*"
+            self.records["protein"][1].seq, "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*"
         )
 
     def test_duplicated_property(self):
@@ -206,11 +206,11 @@ class TestReadAndWrite(unittest.TestCase):
         text = output.decode("UTF-8")
         self.assertIn("Homo sapiens (Human)", text)
         self.assertIn("9606", text)
-        if (
-            '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>'
-            not in text
-        ):
-            raise ValueError("Missing expected <species> tag: %r" % text)
+        self.assertIn(
+            '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>',
+            text,
+            msg="Missing expected <species> tag: %r" % text,
+        )
 
 
 class TestReadCorruptFiles(unittest.TestCase):

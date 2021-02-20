@@ -130,7 +130,6 @@ class ContentHandler(handler.ContentHandler):
     def endElement(self, name):
         """Define the end of the search record."""
         assert name == self.element.pop()
-        name = str(name)
         if self.element == ["matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:

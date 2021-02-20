@@ -63,20 +63,6 @@ if len(exes) < len(exes_wanted):
 
 
 # A few top level functions that are called repeatedly in the test cases
-def write_AlignIO_dna():
-    """Convert opuntia.aln to a phylip file."""
-    assert 1 == AlignIO.convert(
-        "Clustalw/opuntia.aln", "clustal", "Phylip/opuntia.phy", "phylip"
-    )
-
-
-def write_AlignIO_protein():
-    """Convert hedgehog.aln to a phylip file."""
-    assert 1 == AlignIO.convert(
-        "Clustalw/hedgehog.aln", "clustal", "Phylip/hedgehog.phy", "phylip"
-    )
-
-
 def clean_up():
     """Delete tests files (to be used as tearDown() function in test fixtures)."""
     for filename in ["test_file", "Phylip/opuntia.phy", "Phylip/hedgehog.phy"]:
@@ -160,7 +146,10 @@ class DistanceTests(unittest.TestCase):
 
     def test_distances_from_AlignIO_DNA(self):
         """Calculate a distance matrix from an alignment written by AlignIO."""
-        write_AlignIO_dna()
+        n = AlignIO.convert(
+            "Clustalw/opuntia.aln", "clustal", "Phylip/opuntia.phy", "phylip"
+        )
+        self.assertEqual(n, 1)
         self.distances_from_alignment("Phylip/opuntia.phy")
 
     # def test_distances_from_bootstrapped_phylip_DNA(self):
@@ -174,7 +163,10 @@ class DistanceTests(unittest.TestCase):
 
     def test_distances_from_protein_AlignIO(self):
         """Calculate distance matrix from an AlignIO written protein alignment."""
-        write_AlignIO_protein()
+        n = AlignIO.convert(
+            "Clustalw/hedgehog.aln", "clustal", "Phylip/hedgehog.phy", "phylip"
+        )
+        self.assertEqual(n, 1)
         self.distances_from_alignment("Phylip/hedgehog.phy", DNA=False)
 
     # def test_distances_from_bootstrapped_phylip_protein(self):
@@ -233,7 +225,10 @@ class ParsimonyTests(unittest.TestCase):
 
     def test_parsimony_tree_from_AlignIO_DNA(self):
         """Make a parsimony tree from an alignment written with AlignIO."""
-        write_AlignIO_dna()
+        n = AlignIO.convert(
+            "Clustalw/opuntia.aln", "clustal", "Phylip/opuntia.phy", "phylip"
+        )
+        self.assertEqual(n, 1)
         self.parsimony_tree("Phylip/opuntia.phy", "phylip")
 
     # def test_parsimony_bootstrapped_phylip_DNA(self):
@@ -247,7 +242,9 @@ class ParsimonyTests(unittest.TestCase):
 
     def test_parsimony_from_AlignIO_protein(self):
         """Make a parsimony tree from protein alignment written with AlignIO."""
-        write_AlignIO_protein()
+        n = AlignIO.convert(
+            "Clustalw/hedgehog.aln", "clustal", "Phylip/hedgehog.phy", "phylip"
+        )
         self.parsimony_tree("Phylip/interlaced.phy", "phylip", DNA=False)
 
     # def test_parsimony_tree_bootstrapped_phylip_protein(self):
@@ -295,7 +292,10 @@ class BootstrapTests(unittest.TestCase):
 
     def test_bootstrap_AlignIO_DNA(self):
         """Pseudosample a phylip DNA alignment written with AlignIO."""
-        write_AlignIO_dna()
+        n = AlignIO.convert(
+            "Clustalw/opuntia.aln", "clustal", "Phylip/opuntia.phy", "phylip"
+        )
+        self.assertEqual(n, 1)
         self.check_bootstrap("Phylip/opuntia.phy", "phylip")
 
     def test_bootstrap_phylip_protein(self):
@@ -304,7 +304,9 @@ class BootstrapTests(unittest.TestCase):
 
     def test_bootstrap_AlignIO_protein(self):
         """Pseudosample a phylip protein alignment written with AlignIO."""
-        write_AlignIO_protein()
+        n = AlignIO.convert(
+            "Clustalw/hedgehog.aln", "clustal", "Phylip/hedgehog.phy", "phylip"
+        )
         self.check_bootstrap("Phylip/hedgehog.phy", "phylip", "p")
 
 

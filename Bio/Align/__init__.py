@@ -15,7 +15,7 @@ class, used in the Bio.AlignIO module.
 
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq
+from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -803,7 +803,7 @@ class MultipleSeqAlignment:
         else:
             # e.g. sub_align = align[1:4, 5:7], gives another alignment
             new = MultipleSeqAlignment(
-                (rec[col_index] for rec in self._records[row_index])
+                rec[col_index] for rec in self._records[row_index]
             )
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
@@ -1011,6 +1011,8 @@ class PairwiseAlignment:
         return self.path >= other.path
 
     def _convert_sequence_string(self, sequence):
+        if isinstance(sequence, (bytes, bytearray)):
+            return sequence.decode()
         if isinstance(sequence, str):
             return sequence
         if isinstance(sequence, Seq):
@@ -1553,20 +1555,20 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, Seq):
-            seqA = str(seqA)
-        if isinstance(seqB, Seq):
-            seqB = str(seqB)
+        if isinstance(seqA, (Seq, MutableSeq)):
+            seqA = bytes(seqA)
+        if isinstance(seqB, (Seq, MutableSeq)):
+            seqB = bytes(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB):
         """Return the alignments score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, Seq):
-            seqA = str(seqA)
-        if isinstance(seqB, Seq):
-            seqB = str(seqB)
+        if isinstance(seqA, (Seq, MutableSeq)):
+            seqA = bytes(seqA)
+        if isinstance(seqB, (Seq, MutableSeq)):
+            seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 

@@ -21,7 +21,7 @@ from Bio import AlignIO
 from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq, UnknownSeq, UndefinedSequenceError
 from Bio.Align import MultipleSeqAlignment
 from Bio import StreamModeError
 
@@ -87,14 +87,22 @@ class SeqIOTestBaseClass(unittest.TestCase):
         self.assertEqual(len(old.seq), len(new.seq))
         if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
             pass
+        elif len(old.seq) == 0:
+            pass
         else:
-            if len(old.seq) < 200:
-                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            try:
+                bytes(old.seq)
+                bytes(new.seq)
+            except UndefinedSequenceError:
+                pass
             else:
-                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
-            if msg is not None:
-                err_msg = "%s: %s" % (msg, err_msg)
-            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
+                if len(old.seq) < 200:
+                    err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+                else:
+                    err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+                if msg is not None:
+                    err_msg = "%s: %s" % (msg, err_msg)
+                self.assertEqual(old.seq, new.seq, msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
@@ -252,7 +260,17 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(record_one.name, record_two.name, msg=msg)
         self.assertEqual(record_one.description, record_two.description, msg=msg)
         self.assertEqual(len(record_one), len(record_two), msg=msg)
-        self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+        seq_one = record_one.seq
+        try:
+            bytes(seq_one)
+        except UndefinedSequenceError:
+            seq_one = None
+        seq_two = record_two.seq
+        try:
+            bytes(seq_two)
+        except UndefinedSequenceError:
+            seq_two = None
+        self.assertEqual(seq_one, seq_two, msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
@@ -281,14 +299,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             debug = False
         unequal_length = len({len(_) for _ in records}) != 1
         for fmt in test_write_read_alignment_formats:
-            if (
-                fmt not in possible_unknown_seq_formats
-                and isinstance(records[0].seq, UnknownSeq)
-                and len(records[0].seq) > 100
-            ):
-                # Skipping for speed.  Some of the unknown sequences are
-                # rather long, and it seems a bit pointless to record them.
-                continue
+            if fmt not in possible_unknown_seq_formats and len(records[0].seq) > 100:
+                try:
+                    bytes(records[0].seq)
+                except UndefinedSequenceError:
+                    # Skipping for speed.  Some of the unknown sequences are
+                    # rather long, and it seems a bit pointless to record them.
+                    continue
             # Set the molecule type if the source format does not define it
             # while the destination format does require it, or if the molecule
             # type defined by the source format is not compatible with the
@@ -316,24 +333,22 @@ class TestSeqIO(SeqIOTestBaseClass):
 
             if msg:
                 # Should fail.
-                # Can't use assertRaisesRegex with some of our msg strings
-                try:
-                    with warnings.catch_warnings():
-                        # e.g. data loss
-                        warnings.simplefilter("ignore", BiopythonWarning)
+                if debug:
+                    try:
                         SeqIO.write(sequences=records1, handle=handle, format=fmt)
-                except (ValueError, TypeError) as e:
-                    if debug:
+                    except (ValueError, TypeError) as e:
                         messages[fmt] = str(e)
-                    else:
-                        self.assertEqual(
-                            str(e), msg, "Wrong error on %s -> %s" % (t_format, fmt)
-                        )
                 else:
-                    if not debug:
-                        raise ValueError(
-                            "Expected following error writing to %s:\n%s" % (fmt, msg)
-                        )
+                    message = "%s -> %s" % (t_format, fmt)
+                    with self.assertRaises(Exception, msg=message) as cm:
+                        with warnings.catch_warnings():
+                            # e.g. data loss
+                            warnings.simplefilter("ignore", BiopythonWarning)
+                            SeqIO.write(sequences=records1, handle=handle, format=fmt)
+                    self.assertTrue(
+                        isinstance(cm.exception, (ValueError, TypeError)), msg=message
+                    )
+                    self.assertEqual(str(cm.exception), msg, msg=message)
 
                 # Carry on to the next format:
                 continue
@@ -355,25 +370,27 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError(
-                    "%s\n\n%r\n\n%r" % (str(e), handle.read(), records1)
-                ) from None
+                message = "%s\n\n%r\n\n%r" % (str(e), handle.read(), records1)
+                self.fail(message)
 
             self.assertEqual(len(records2), t_count)
             for r1, r2 in zip(records1, records2):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 self.assertEqual(len(r1), len(r2))
-
                 # Check the sequence
-                if fmt in ["gb", "genbank", "embl", "imgt"]:
-                    # The GenBank/EMBL parsers will convert to upper case.
-                    self.assertEqual(str(r1.seq).upper(), str(r2.seq))
-                elif fmt == "qual":
-                    self.assertIsInstance(r2.seq, UnknownSeq)
-                    self.assertEqual(len(r2), len(r1))
+                try:
+                    bytes(r1.seq)
+                except UndefinedSequenceError:
+                    self.assertRaises(UndefinedSequenceError, bytes, r2.seq)
                 else:
-                    self.assertEqual(str(r1.seq), str(r2.seq))
+                    if fmt in ["gb", "genbank", "embl", "imgt"]:
+                        # The GenBank/EMBL parsers will convert to upper case.
+                        self.assertEqual(r1.seq.upper(), r2.seq)
+                    elif fmt == "qual":
+                        self.assertRaises(UndefinedSequenceError, bytes, r2.seq)
+                    else:
+                        self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -527,9 +544,8 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check returned expected object type
                 self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
-                    if (not isinstance(record.seq, Seq)) and (
-                        not isinstance(record.seq, UnknownSeq)
-                    ):
+                    if not isinstance(record.seq, Seq):
+                        # UnknownSeq is a subclass of Seq
                         self.failureException("Expected a Seq or UnknownSeq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
@@ -573,15 +589,14 @@ class TestSeqIO(SeqIOTestBaseClass):
                 if i < 3:
                     self.assertEqual(record.id, expected_ids[i])
                     self.assertEqual(record.name, expected_names[i])
-                    if record.seq is None:
-                        length = None
-                        seq = record.seq
+                    seq = record.seq
+                    length = len(seq)
+                    if expected_sequences[i] is None:
+                        self.assertRaises(UndefinedSequenceError, bytes, seq)
                     else:
-                        seq = str(record.seq)
-                        length = len(seq)
                         if length > 50:
                             seq = str(seq[:40]) + "..." + str(seq[-7:])
-                    self.assertEqual(seq, expected_sequences[i])
+                        self.assertEqual(seq, expected_sequences[i])
                     self.assertEqual(length, expected_lengths[i])
 
             # Check Bio.SeqIO.read(...)
@@ -2842,7 +2857,7 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_genbank10(self):
         # contig, no sequence
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["NT_019265.6"]
         names = ["NT_019265"]
         lengths = [1250660]
@@ -3155,7 +3170,7 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_genbank21(self):
         # This and the next one are a pair, and should be roughly equivalent.
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["DS830848.1"]
         names = ["DS830848"]
         lengths = [1311]
@@ -3176,8 +3191,20 @@ class TestSeqIO(SeqIOTestBaseClass):
             messages,
         )
 
+    def test_genbank22(self):
+        """Test that genbank format write doesn't destroy db_source in annotations."""
+        record = SeqIO.read("GenBank/protein_refseq.gb", "genbank")
+        db_source = record.annotations.get("db_source")
+        handle = StringIO()
+        SeqIO.write(record, handle, "genbank")
+        handle.seek(0)
+        read_record = SeqIO.read(handle, "genbank")
+        read_db_source = read_record.annotations.get("db_source")
+
+        self.assertEqual(db_source, read_db_source)
+
     def test_embl1(self):
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["DS830848.1"]
         names = ["DS830848"]
         lengths = [1311]
@@ -3233,25 +3260,24 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_embl3(self):
-        sequences = [
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXX",
-        ]
+        sequences = [None, None, None, None]
         ids = ["NRP00000001", "NRP00000002", "NRP00210944", "NRP00210945"]
         names = ["NRP00000001", "NRP00000002", "NRP00210944", "NRP00210945"]
         lengths = [358, 65, 25, 25]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "fasta": "Sequence content is undefined",
+            "fasta-2line": "Sequence content is undefined",
+            "fastq": "Sequence content is undefined",
+            "fastq-illumina": "Sequence content is undefined",
+            "fastq-solexa": "Sequence content is undefined",
+            "nib": "Sequence content is undefined",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
+            "pir": "Sequence content is undefined",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
+            "seqxml": "Sequence content is undefined",
             "sff": "Missing SFF flow information",
+            "tab": "Sequence content is undefined",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -3467,10 +3493,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_embl11(self):
-        sequences = [
-            "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN",
-            "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN",
-        ]
+        sequences = [None, None]
         ids = ["AJ229040.1", "AL954800.2"]
         names = ["AJ229040", "AL954800"]
         lengths = [958952, 87191216]
@@ -4814,11 +4837,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_qual1(self):
-        sequences = [
-            "?????????????????????????",
-            "?????????????????????????",
-            "?????????????????????????",
-        ]
+        sequences = [None, None, None]
         ids = [
             "EAS54_6_R1_2_1_413_324",
             "EAS54_6_R1_2_1_540_792",
@@ -4832,16 +4851,29 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [25, 25, 25]
         alignment = None
         messages = {
-            "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
+            "fasta": "Sequence content is undefined",
+            "fasta-2line": "Sequence content is undefined",
+            "fastq": "Sequence content is undefined",
+            "fastq-illumina": "Sequence content is undefined",
+            "fastq-solexa": "Sequence content is undefined",
+            "clustal": "Sequence content is undefined",
+            "phylip": "Sequence content is undefined",
+            "phylip-relaxed": "Sequence content is undefined",
+            "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
+            "stockholm": "Sequence content is undefined",
             "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
             "imgt": "missing molecule_type in annotations",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
+            "maf": "Sequence content is undefined",
+            "mauve": "Sequence content is undefined",
+            "nib": "Sequence content is undefined",
+            "phd": "Sequence content is undefined",
+            "pir": "Sequence content is undefined",
+            "seqxml": "Sequence content is undefined",
             "sff": "Missing SFF flow information",
+            "tab": "Sequence content is undefined",
             "xdna": "More than one sequence found",
             "nexus": "Need the molecule type to be defined",
-            "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
             "qual",

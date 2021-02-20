@@ -87,7 +87,7 @@ class Array(numpy.ndarray):
             if dims is None:
                 dims = 1
             elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %s)" % str(dims))
+                raise ValueError("dims should be 1 or 2 (found %s)" % dims)
             shape = (n,) * dims
         else:
             if dims is None:
@@ -232,6 +232,22 @@ class Array(numpy.ndarray):
             results.append(result)
 
         return results[0] if len(results) == 1 else results
+
+    def __reduce__(self):
+        import pickle
+
+        values = numpy.array(self)
+        state = pickle.dumps(values)
+        alphabet = self._alphabet
+        dims = len(self.shape)
+        dtype = self.dtype
+        arguments = (Array, alphabet, dims, None, dtype)
+        return (Array.__new__, arguments, state)
+
+    def __setstate__(self, state):
+        import pickle
+
+        self[:, :] = pickle.loads(state)
 
     def transpose(self, axes=None):
         """Transpose the array."""

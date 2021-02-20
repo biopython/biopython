@@ -134,6 +134,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
+- Jared Lumpe <https://github.com/jlumpe>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
@@ -224,6 +225,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
+- Osvaldo Zagordi <https://github.com/ozagordi>
 - Owen Solberg <https://github.com/odoublewen>
 - Pamela Russell <https://github.com/pamelarussell>
 - Patrick Kunzmann <https://github.com/padix-key>
@@ -233,6 +235,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Peter Kerpedjiev <https://github.com/pkerpedjiev>
 - Peter Slickers <piet at domain clondiag.com>
 - Philip Bergstrom <https://github.com/phber>
+- Philip Capel <https://github.com/pcapel>
 - Phillip Garland <pgarland at gmail>
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>

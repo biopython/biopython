@@ -11,12 +11,12 @@
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
-# need to be in sync (this is the BioSQL "Database SeqRecord", see
-# also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
+# need to be in sync (this is the BioSQL "Database SeqRecord").
 
 
 from io import StringIO
 from Bio import StreamModeError
+from Bio.Seq import UndefinedSequenceError
 
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
@@ -171,7 +171,7 @@ class SeqRecord:
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
+         - seq         - Sequence, required (Seq or MutableSeq)
          - id          - Sequence identifier, recommended (string)
          - name        - Sequence name, optional (string)
          - description - Sequence description, optional (string)
@@ -189,9 +189,6 @@ class SeqRecord:
         Note that while an id is optional, we strongly recommend you supply a
         unique id string for each record.  This is especially important
         if you wish to write your sequences to a file.
-
-        If you don't have the actual sequence, but you do know its length,
-        then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
         attributes later.
@@ -355,8 +352,9 @@ class SeqRecord:
           adjusted accordingly). If you want to preserve any truncated
           features (e.g. GenBank/EMBL source features), you must
           explicitly add them to the new SeqRecord yourself.
-        * The annotations dictionary and the dbxrefs list are not used
-          for the new SeqRecord, as in general they may not apply to the
+        * With the exception of any molecule type, the annotations
+          dictionary and the dbxrefs list are not used for the new
+          SeqRecord, as in general they may not apply to the
           subsequence. If you want to preserve them, you must explicitly
           copy them to the new SeqRecord yourself.
 
@@ -488,6 +486,10 @@ class SeqRecord:
             # answer.annotations = dict(self.annotations.items())
             # answer.dbxrefs = self.dbxrefs[:]
             # TODO - Review this in light of adding SeqRecord objects?
+
+            if "molecule_type" in self.annotations:
+                # This will still apply, and we need it for GenBank/EMBL etc output
+                answer.annotations["molecule_type"] = self.annotations["molecule_type"]
 
             # TODO - Cope with strides by generating ambiguous locations?
             start, stop, step = index.indices(parent_length)
@@ -648,8 +650,14 @@ class SeqRecord:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)
             )
-        # Don't want to include the entire sequence
-        lines.append(repr(self.seq))
+        try:
+            bytes(self.seq)
+        except UndefinedSequenceError:
+            lines.append(f"Undefined sequence of length {len(self.seq)}")
+        else:
+            # Don't want to include the entire sequence
+            seq = repr(self.seq)
+            lines.append(seq)
         return "\n".join(lines)
 
     def __repr__(self):

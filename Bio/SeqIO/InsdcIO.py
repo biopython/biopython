@@ -35,11 +35,11 @@ import warnings
 from datetime import datetime
 from Bio import BiopythonWarning
 
-from Bio.Seq import UnknownSeq
+from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import SeqIO
 from Bio import SeqFeature
-from .Interfaces import SequenceIterator, SequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
 
 
 # NOTE
@@ -955,6 +955,14 @@ class GenBankWriter(_InsdcWriter):
         # TODO - Force lower case?
 
         if isinstance(record.seq, UnknownSeq):
+            data = None
+        else:
+            try:
+                data = _get_seq_string(record)
+            except UndefinedSequenceError:
+                data = None
+
+        if data is None:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -964,7 +972,7 @@ class GenBankWriter(_InsdcWriter):
             return
 
         # Catches sequence being None:
-        data = self._get_seq_string(record).lower()
+        data = data.lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
         for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
@@ -1085,6 +1093,13 @@ class GenBankWriter(_InsdcWriter):
             taxonomy = "."
         self._write_multi_line("", taxonomy)
 
+        if "db_source" in record.annotations:
+            # Hack around the issue of BioSQL loading a list for the db_source
+            db_source = record.annotations["db_source"]
+            if isinstance(db_source, list):
+                db_source = db_source[0]
+            self._write_single_line("DBSOURCE", db_source)
+
         if "references" in record.annotations:
             self._write_references(record)
 
@@ -1127,6 +1142,14 @@ class EmblWriter(_InsdcWriter):
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
+            data = None
+        else:
+            try:
+                data = _get_seq_string(record)
+            except UndefinedSequenceError:
+                data = None
+
+        if data is None:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1137,7 +1160,7 @@ class EmblWriter(_InsdcWriter):
             return
 
         # Catches sequence being None
-        data = self._get_seq_string(record).lower()
+        data = data.lower()
         seq_len = len(data)
 
         molecule_type = record.annotations.get("molecule_type")
@@ -1224,11 +1247,14 @@ class EmblWriter(_InsdcWriter):
         mol_type = record.annotations.get("molecule_type")
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
-        elif "DNA" in mol_type:
+        if mol_type not in ("DNA", "RNA", "protein"):
+            warnings.warn("Non-standard molecule type: %s" % mol_type, BiopythonWarning)
+        mol_type_upper = mol_type.upper()
+        if "DNA" in mol_type_upper:
             units = "BP"
-        elif "RNA" in mol_type:
+        elif "RNA" in mol_type_upper:
             units = "BP"
-        elif "PROTEIN" in mol_type.upper():
+        elif "PROTEIN" in mol_type_upper:
             mol_type = "PROTEIN"
             units = "AA"
         else:

@@ -62,9 +62,9 @@ class SeqUtilsTests(unittest.TestCase):
                     seq = record.seq[start:end]
                 # Double check we have the CDS sequence expected
                 # TODO - Use any cds_start option if/when added to deal with the met
-                a = "M" + str(seq[3:].translate(table))
+                a = "M" + seq[3:].translate(table)
                 b = feature.qualifiers["translation"][0] + "*"
-                self.assertEqual(a, b, "%r vs %r" % (a, b))
+                self.assertEqual(a, b)
                 records.append(
                     SeqRecord(
                         seq,

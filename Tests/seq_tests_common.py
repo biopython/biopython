@@ -6,7 +6,7 @@
 
 import unittest
 
-from Bio.Seq import UnknownSeq
+from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
 from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
@@ -104,8 +104,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             self.assertEqual(old_sub.nofuzzy_end, new_sub.nofuzzy_end)
             self.assertEqual(old_sub.strand, new_sub.strand)
 
-        self.assertEqual(len(old_f.qualifiers), len(new_f.qualifiers))
-        self.assertEqual(set(old_f.qualifiers), set(new_f.qualifiers))
+        self.assertCountEqual(old_f.qualifiers, new_f.qualifiers)
         for key in old_f.qualifiers:
             if isinstance(old_f.qualifiers[key], str):
                 if isinstance(new_f.qualifiers[key], str):
@@ -128,14 +127,22 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             self.compare_feature(old_f, new_f)
 
     def compare_sequence(self, old, new):
-        """Compare two Seq or DBSeq objects."""
+        """Compare two Seq objects."""
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old), str(new))
 
         if isinstance(old, UnknownSeq):
             self.assertIsInstance(new, UnknownSeq)
         else:
             self.assertNotIsInstance(new, UnknownSeq)
+
+        self.assertEqual(len(old), len(new))
+        try:
+            bytes(old)
+        except UndefinedSequenceError:
+            self.assertRaises(UndefinedSequenceError, bytes, new)
+            return
+
+        self.assertEqual(old, new)
 
         ln = len(old)
         s = str(old)
@@ -161,27 +168,27 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         for i in indices:
             for j in indices:
                 expected = s[i:j]
-                self.assertEqual(expected, str(old[i:j]))
-                self.assertEqual(expected, str(new[i:j]))
+                self.assertEqual(expected, old[i:j])
+                self.assertEqual(expected, new[i:j])
                 # Slicing with step of 1 should make no difference.
                 # Slicing with step 3 might be useful for codons.
                 for step in [1, 3]:
                     expected = s[i:j:step]
-                    self.assertEqual(expected, str(old[i:j:step]))
-                    self.assertEqual(expected, str(new[i:j:step]))
+                    self.assertEqual(expected, old[i:j:step])
+                    self.assertEqual(expected, new[i:j:step])
 
             # Check automatic end points
             expected = s[i:]
-            self.assertEqual(expected, str(old[i:]))
-            self.assertEqual(expected, str(new[i:]))
+            self.assertEqual(expected, old[i:])
+            self.assertEqual(expected, new[i:])
 
             expected = s[:i]
-            self.assertEqual(expected, str(old[:i]))
-            self.assertEqual(expected, str(new[:i]))
+            self.assertEqual(expected, old[:i])
+            self.assertEqual(expected, new[:i])
 
         # Check "copy" splice
-        self.assertEqual(s, str(old[:]))
-        self.assertEqual(s, str(new[:]))
+        self.assertEqual(s, old[:])
+        self.assertEqual(s, new[:])
 
     def compare_record(self, old, new):
         """Compare two SeqRecord or DBSeqRecord objects."""

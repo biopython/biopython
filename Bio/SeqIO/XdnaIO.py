@@ -286,7 +286,7 @@ class XdnaWriter(SequenceWriter):
         )
 
         # Actual sequence and comment
-        self.handle.write(str(record.seq).encode("ASCII"))
+        self.handle.write(bytes(record.seq))
         self.handle.write(comment.encode("ASCII"))
 
         self.handle.write(pack(">B", 0))  # Annotation section marker

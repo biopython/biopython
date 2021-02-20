@@ -1,0 +1,69 @@
+# This is a special configuration file to run tests on Circle-CI via
+# GitHub notifications when changes are committed.
+#
+# This file is not intended for end users of Biopython.
+#
+# This uses a CircleCI provided Python image, see
+# https://circleci.com/developer/images/image/cimg/python
+
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Combine precommit config and python versions for caching
+          command: |
+            cat .pre-commit-config.yaml > pre-commit-deps.txt
+            python -VV >> pre-commit-deps.txt
+      - restore_cache:
+          keys:
+          - v1-precommit-deps-{{ checksum "pre-commit-deps.txt" }}
+      - run:
+          name: Style install
+          command: |
+            python --version
+            pip install pre-commit
+            pre-commit install
+            pre-commit install-hooks
+      - save_cache:
+          paths:
+            - ~/.cache/pre-commit
+            - ./venv
+          key: v1-precommit-deps-{{ checksum "pre-commit-deps.txt" }}
+      - run:
+          name: Style checks
+          command: |
+            pre-commit run -a
+      - run:
+          name: Dependencies
+          command: |
+            python --version
+            pip install coverage codecov numpy scipy mmtf-python mysqlclient mysql-connector-python rdflib networkx matplotlib reportlab
+            echo "Python dependencies installed"
+      - run:
+          name: Installation
+          command: |
+            python setup.py sdist --formats=gztar
+            echo "Built tar-ball, will now use that to test manifest..."
+            tar -zxvf dist/biopython-*.tar.gz
+            cd biopython-*/
+            python setup.py bdist_wheel
+            echo "Built wheel and installing it..."
+            python -m pip install dist/biopython-*.whl
+            echo "Biopython should now be installed"
+      - run:
+          name: Test
+          command: |
+            # Use the unzipped tar-ball where built wheel
+            cd biopython-*/Tests/
+            rm -rf coverage.xml
+            coverage run run_tests.py --offline
+            echo "Tests run"
+            coverage xml
+      - codecov/upload:
+          file: biopython-*/Tests/coverage.xml

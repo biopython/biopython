@@ -7,10 +7,13 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code to interact with and run various EMBOSS programs.
+"""Code to interact with and run various EMBOSS programs (OBSOLETE).
 
 These classes follow the AbstractCommandline interfaces for running
 programs.
+
+We have decided to remove this module in future, and instead recommend
+building your command and invoking it via the subprocess module directly.
 """
 
 

@@ -67,7 +67,7 @@ class InterproscanXmlCases(unittest.TestCase):
             "MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEH"
             "VLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEH"
             "PETDQRSPQS",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
         # parse last hit

@@ -125,10 +125,10 @@ class ParseReal(unittest.TestCase):
         for atoms in [s_atoms, f_atoms]:
             self.assertEqual(len(atoms), 644)
             atom_names = ["N", "CA", "C", "O", "CB"]
-            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual(
+            self.assertEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
@@ -156,10 +156,10 @@ class ParseReal(unittest.TestCase):
 
         for atoms in [s_atoms, f_atoms]:
             atom_names = ["N", "CA", "C", "O", "CB"]
-            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual(
+            self.assertEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
@@ -288,12 +288,12 @@ class ParseReal(unittest.TestCase):
         )
 
         # Check that the residue types were parsed correctly.
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_1.disordered_get_id_list()),
             {"PRO", "SER"},
             "Residue 1 is proline/serine",
         )
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_15.disordered_get_id_list()),
             {"ARG", "GLN", "GLU"},
             "Residue 15 is arginine/glutamine/glutamic acid",
@@ -357,12 +357,11 @@ class CIFtoPDB(unittest.TestCase):
 
         pdb_atom_names = [a.name for a in pdb_struct.get_atoms()]
         cif_atom_names = [a.name for a in cif_struct.get_atoms()]
-        self.assertEqual(len(pdb_atom_names), len(cif_atom_names))
-        self.assertSequenceEqual(pdb_atom_names, cif_atom_names)
+        self.assertEqual(pdb_atom_names, cif_atom_names)
 
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
         cif_atom_elems = [a.element for a in cif_struct.get_atoms()]
-        self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
+        self.assertEqual(pdb_atom_elems, cif_atom_elems)
 
     def test_conversion_not_preserve_numbering(self):
         """Convert mmCIF to PDB and renumber atom serials."""

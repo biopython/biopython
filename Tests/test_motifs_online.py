@@ -20,7 +20,7 @@ import requires_internet
 requires_internet.check()
 
 
-class TestotifWeblogo(unittest.TestCase):
+class TestMotifWeblogo(unittest.TestCase):
     """Tests Bio.motifs online code."""
 
     def check(self, seqs_as_strs, alpha):
