@@ -2626,7 +2626,8 @@ class TestAlignerPickling(unittest.TestCase):
         self.assertIsNone(pickled_aligner.match_score)
         self.assertIsNone(pickled_aligner.mismatch_score)
         self.assertTrue(
-            (aligner.substitution_matrix == pickled_aligner.substitution_matrix).all())
+            (aligner.substitution_matrix == pickled_aligner.substitution_matrix).all()
+        )
         self.assertEqual(
             aligner.substitution_matrix.alphabet,
             pickled_aligner.substitution_matrix.alphabet,
