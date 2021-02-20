@@ -14,6 +14,92 @@ The latest news is at the top of this file.
 This is intended to be our final release supporting Python 3.6. It also
 supports Python 3.7 and 3.8, and has also been tested on PyPy3.6.1 v7.1.1.
 
+The ``Seq`` and ``MutableSeq`` classes in ``Bio.Seq`` now store their sequence
+contents as ``bytes` ` and ``bytearray`` objects, respectively. Previously, for
+``Seq`` objects a string object was used, and a Unicode array object for
+``MutableSeq`` objects. This was maintained during the transition from Python2
+to Python3. However, a Python2 string object corresponds to a ``bytes`` object
+in Python3, storing the string as a series of 256-bit characters. While non-
+ASCII characters could be stored in Python2 strings, they were not treated as
+such. For example:
+
+In Python2::
+
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    16
+
+In Python3::
+
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    8
+
+In Python3, storing the sequence contents as ``bytes`` and ``bytearray``
+objects has the further advantage that both support the buffer protocol.
+
+Taking advantage of the similarity between ``bytes`` and ``bytearray``, the
+``Seq`` and ``MutableSeq`` classes now inherit from an abstract base class
+``_SeqAbstractBaseClass`` in ``Bio.Seq`` that implements most of the ``Seq``
+and ``MutableSeq`` methods, ensuring their consistency with each other. For
+methods that modify the sequence contents, an optional ``inplace`` argument to
+specify if a new sequence object should be returned with the new sequence
+contents (if ``inplace`` is ``False``, the default) or if the sequence object
+itself should be modified (if ``inplace`` is ``True``). For ``Seq`` objects,
+which are immutable, using ``inplace=True`` raises an exception. For
+``inplace=False``, the default, ``Seq`` objects and ``MutableSeq`` behave
+consistently.
+
+As before, ``Seq`` and ``MutableSeq`` objects can be initialized using a string
+object, which will be converted to a ``bytes`` or ``bytearray`` object assuming
+an ASCII encoding. Alternatively, a ``bytes`` or ``bytearray`` object can be
+used, or an instance of any class inheriting from the new
+``SequenceDataAbstractBaseClass`` abstract base class in ``Bio.Seq``. This
+requires that the class implements the ``__len__`` and ``__getitem`` methods
+that return the sequence length and sequence contents on demand. Initialzing a
+``Seq`` instance using an instance of a class inheriting from
+``SequenceDataAbstractBaseClass`` allows the ``Seq`` object to be lazy, meaning
+that its sequence is provided on demand only, without requiring to initialize
+the full sequence. This feature is now used in ``BioSQL``, providing on-demand
+sequence loading from an SQL database, as well as in a new parser for twoBit
+(.2bit) sequence data added to ``Bio.SeqIO``. This is a lazy parser that allows
+fast access to genome-size DNA sequence files by not having to read the full
+genome sequence. The new ``_UndefinedSequenceData`` class in ``Bio.Seq``  also
+inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
+length but unknown sequence contents. This provides an alternative to
+``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
+example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
+a well-defined sequence contents::
+
+    >>> s = UnknownSeq(3, character="A")
+    >>> s.translate()
+    UnknownSeq(1, character='K')
+    >>> s + "A"
+    Seq("AAAA")
+
+A sequence object with an undefined sequence contents can now be created by
+using ``None`` when creating the ``Seq`` object, together with the sequence
+length. Trying to access its sequence contents raises an
+``UndefinedSequenceError``::
+
+    >>> s = Seq(None, length=6)
+    >>> s
+    Seq(None, length=6)
+    >>> len(s)
+    6
+    >>> "A" in s
+    Traceback (most recent call last):
+    ...
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+    >>> print(s)
+    Traceback (most recent call last):
+    ....
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
 
@@ -28,9 +114,6 @@ atomic solvent accessible areas without third-party tools.
 
 Expected ``TypeError`` behaviour has been restored to the ``Seq`` object's
 string like methods (fixing a regression in Biopython 1.78).
-
-A parser for twoBit (.2bit) sequence data was added to ``Bio.SeqIO``. This is
-a lazy parser that allows fast access to genome-size DNA sequence files.
 
 The KEGG ``KGML_Pathway`` KGML output was fixed to produce output that complies
 with KGML v0.7.2.
