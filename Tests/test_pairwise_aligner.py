@@ -2522,6 +2522,7 @@ class TestUnicodeStrings(unittest.TestCase):
 class TestAlignerPickling(unittest.TestCase):
     def test_pickle_aligner_match_mismatch(self):
         import pickle
+
         aligner = Align.PairwiseAligner()
         aligner.wildcard = "X"
         aligner.match_score = 3
@@ -2545,18 +2546,54 @@ class TestAlignerPickling(unittest.TestCase):
         self.assertAlmostEqual(aligner.match_score, pickled_aligner.match_score)
         self.assertAlmostEqual(aligner.mismatch_score, pickled_aligner.mismatch_score)
         self.assertIsNone(pickled_aligner.substitution_matrix)
-        self.assertAlmostEqual(aligner.target_internal_open_gap_score, pickled_aligner.target_internal_open_gap_score)
-        self.assertAlmostEqual(aligner.target_internal_extend_gap_score, pickled_aligner.target_internal_extend_gap_score)
-        self.assertAlmostEqual(aligner.target_left_open_gap_score, pickled_aligner.target_left_open_gap_score)
-        self.assertAlmostEqual(aligner.target_left_extend_gap_score, pickled_aligner.target_left_extend_gap_score)
-        self.assertAlmostEqual(aligner.target_right_open_gap_score, pickled_aligner.target_right_open_gap_score)
-        self.assertAlmostEqual(aligner.target_right_extend_gap_score, pickled_aligner.target_right_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_internal_open_gap_score, pickled_aligner.query_internal_open_gap_score)
-        self.assertAlmostEqual(aligner.query_internal_extend_gap_score, pickled_aligner.query_internal_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score)
-        self.assertAlmostEqual(aligner.query_left_extend_gap_score, pickled_aligner.query_left_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_right_open_gap_score, pickled_aligner.query_right_open_gap_score)
-        self.assertAlmostEqual(aligner.query_right_extend_gap_score, pickled_aligner.query_right_extend_gap_score)
+        self.assertAlmostEqual(
+            aligner.target_internal_open_gap_score,
+            pickled_aligner.target_internal_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_internal_extend_gap_score,
+            pickled_aligner.target_internal_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_left_open_gap_score,
+            pickled_aligner.target_left_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_left_extend_gap_score,
+            pickled_aligner.target_left_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_right_open_gap_score,
+            pickled_aligner.target_right_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_right_extend_gap_score,
+            pickled_aligner.target_right_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_internal_open_gap_score,
+            pickled_aligner.query_internal_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_internal_extend_gap_score,
+            pickled_aligner.query_internal_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_left_open_gap_score,
+            pickled_aligner.query_left_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_left_extend_gap_score,
+            pickled_aligner.query_left_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_right_open_gap_score,
+            pickled_aligner.query_right_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_right_extend_gap_score,
+            pickled_aligner.query_right_extend_gap_score
+        )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
 
     def test_pickle_aligner_substitution_matrix(self):
@@ -2586,22 +2623,61 @@ class TestAlignerPickling(unittest.TestCase):
         self.assertEqual(aligner.wildcard, pickled_aligner.wildcard)
         self.assertIsNone(pickled_aligner.match_score)
         self.assertIsNone(pickled_aligner.mismatch_score)
-        self.assertTrue((aligner.substitution_matrix == pickled_aligner.substitution_matrix).all())
-        self.assertEqual(aligner.substitution_matrix.alphabet, pickled_aligner.substitution_matrix.alphabet)
-        self.assertAlmostEqual(aligner.target_internal_open_gap_score, pickled_aligner.target_internal_open_gap_score)
-        self.assertAlmostEqual(aligner.target_internal_extend_gap_score, pickled_aligner.target_internal_extend_gap_score)
-        self.assertAlmostEqual(aligner.target_left_open_gap_score, pickled_aligner.target_left_open_gap_score)
-        self.assertAlmostEqual(aligner.target_left_extend_gap_score, pickled_aligner.target_left_extend_gap_score)
-        self.assertAlmostEqual(aligner.target_right_open_gap_score, pickled_aligner.target_right_open_gap_score)
-        self.assertAlmostEqual(aligner.target_right_extend_gap_score, pickled_aligner.target_right_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_internal_open_gap_score, pickled_aligner.query_internal_open_gap_score)
-        self.assertAlmostEqual(aligner.query_internal_extend_gap_score, pickled_aligner.query_internal_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score)
-        self.assertAlmostEqual(aligner.query_left_extend_gap_score, pickled_aligner.query_left_extend_gap_score)
-        self.assertAlmostEqual(aligner.query_right_open_gap_score, pickled_aligner.query_right_open_gap_score)
-        self.assertAlmostEqual(aligner.query_right_extend_gap_score, pickled_aligner.query_right_extend_gap_score)
+        self.assertTrue(
+            (aligner.substitution_matrix == pickled_aligner.substitution_matrix).all())
+        self.assertEqual(
+            aligner.substitution_matrix.alphabet,
+            pickled_aligner.substitution_matrix.alphabet
+        )
+        self.assertAlmostEqual(
+            aligner.target_internal_open_gap_score,
+            pickled_aligner.target_internal_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_internal_extend_gap_score,
+            pickled_aligner.target_internal_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_left_open_gap_score,
+            pickled_aligner.target_left_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_left_extend_gap_score,
+            pickled_aligner.target_left_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_right_open_gap_score,
+            pickled_aligner.target_right_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.target_right_extend_gap_score,
+            pickled_aligner.target_right_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_internal_open_gap_score,
+            pickled_aligner.query_internal_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_internal_extend_gap_score,
+            pickled_aligner.query_internal_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_left_open_gap_score,
+            pickled_aligner.query_left_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_left_extend_gap_score,
+            pickled_aligner.query_left_extend_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_right_open_gap_score,
+            pickled_aligner.query_right_open_gap_score
+        )
+        self.assertAlmostEqual(
+            aligner.query_right_extend_gap_score,
+            pickled_aligner.query_right_extend_gap_score
+        )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
-
 
 
 if __name__ == "__main__":

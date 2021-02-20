@@ -1598,7 +1598,9 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def __setstate__(self, state):
         self.wildcard = state["wildcard"]
         self.target_internal_open_gap_score = state["target_internal_open_gap_score"]
-        self.target_internal_extend_gap_score = state["target_internal_extend_gap_score"]
+        self.target_internal_extend_gap_score = state[
+            "target_internal_extend_gap_score"
+        ]
         self.target_left_open_gap_score = state["target_left_open_gap_score"]
         self.target_left_extend_gap_score = state["target_left_extend_gap_score"]
         self.target_right_open_gap_score = state["target_right_open_gap_score"]
