@@ -1571,6 +1571,52 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
+    def __getstate__(self):
+        state = {
+            "wildcard": self.wildcard,
+            "target_internal_open_gap_score": self.target_internal_open_gap_score,
+            "target_internal_extend_gap_score": self.target_internal_extend_gap_score,
+            "target_left_open_gap_score": self.target_left_open_gap_score,
+            "target_left_extend_gap_score": self.target_left_extend_gap_score,
+            "target_right_open_gap_score": self.target_right_open_gap_score,
+            "target_right_extend_gap_score": self.target_right_extend_gap_score,
+            "query_internal_open_gap_score": self.query_internal_open_gap_score,
+            "query_internal_extend_gap_score": self.query_internal_extend_gap_score,
+            "query_left_open_gap_score": self.query_left_open_gap_score,
+            "query_left_extend_gap_score": self.query_left_extend_gap_score,
+            "query_right_open_gap_score": self.query_right_open_gap_score,
+            "query_right_extend_gap_score": self.query_right_extend_gap_score,
+            "mode": self.mode,
+        }
+        if self.substitution_matrix is None:
+            state["match_score"] = self.match_score
+            state["mismatch_score"] = self.mismatch_score
+        else:
+            state["substitution_matrix"] = self.substitution_matrix
+        return state
+
+    def __setstate__(self, state):
+        self.wildcard = state["wildcard"]
+        self.target_internal_open_gap_score = state["target_internal_open_gap_score"]
+        self.target_internal_extend_gap_score = state["target_internal_extend_gap_score"]
+        self.target_left_open_gap_score = state["target_left_open_gap_score"]
+        self.target_left_extend_gap_score = state["target_left_extend_gap_score"]
+        self.target_right_open_gap_score = state["target_right_open_gap_score"]
+        self.target_right_extend_gap_score = state["target_right_extend_gap_score"]
+        self.query_internal_open_gap_score = state["query_internal_open_gap_score"]
+        self.query_internal_extend_gap_score = state["query_internal_extend_gap_score"]
+        self.query_left_open_gap_score = state["query_left_open_gap_score"]
+        self.query_left_extend_gap_score = state["query_left_extend_gap_score"]
+        self.query_right_open_gap_score = state["query_right_open_gap_score"]
+        self.query_right_extend_gap_score = state["query_right_extend_gap_score"]
+        self.mode = state["mode"]
+        substitution_matrix = state.get("substitution_matrix")
+        if substitution_matrix is None:
+            self.match_score = state["match_score"]
+            self.mismatch_score = state["mismatch_score"]
+        else:
+            self.substitution_matrix = substitution_matrix
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
