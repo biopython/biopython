@@ -12,7 +12,7 @@ The latest news is at the top of this file.
 ===============================================
 
 This is intended to be our final release supporting Python 3.6. It also
-supports Python 3.7 and 3.8, and has also been tested on PyPy3.6.1 v7.1.1.
+supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.
 
 The ``Seq`` and ``MutableSeq`` classes in ``Bio.Seq`` now store their sequence
 contents as ``bytes` ` and ``bytearray`` objects, respectively. Previously, for
