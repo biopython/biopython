@@ -83,6 +83,14 @@ matrix:
             - *amd64_only_packages
             - *default_packages
     - stage: test
+      python: 3.9
+      env: TOXENV=py39-cover
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
+    - stage: test
       python: 3.8
       env: TOXENV=py38-nocov
       arch: arm64
