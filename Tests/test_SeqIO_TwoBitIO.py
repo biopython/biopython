@@ -343,7 +343,7 @@ class TestBaseClassMethods(unittest.TestCase):
         )
         self.assertEqual(
             self.seq1_twobit.count("CT", 125, 250),
-            self.seq1_fasta.count("CT", 125, 250)
+            self.seq1_fasta.count("CT", 125, 250),
         )
 
     def test_find(self):
@@ -352,12 +352,11 @@ class TestBaseClassMethods(unittest.TestCase):
             self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75)
         )
         self.assertEqual(
-            self.seq1_twobit.find("CT", 75, 100),
-            self.seq1_fasta.find("CT", 75, 100),
+            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100),
         )
         self.assertEqual(
             self.seq1_twobit.find("CT", None, 100),
-            self.seq1_fasta.find("CT", None, 100)
+            self.seq1_fasta.find("CT", None, 100),
         )
 
     def test_rfind(self):
@@ -367,7 +366,7 @@ class TestBaseClassMethods(unittest.TestCase):
         )
         self.assertEqual(
             self.seq1_twobit.rfind("CT", None, 100),
-            self.seq1_fasta.rfind("CT", None, 100)
+            self.seq1_fasta.rfind("CT", None, 100),
         )
         self.assertEqual(
             self.seq1_twobit.rfind("CT", 75, 100), self.seq1_fasta.rfind("CT", 75, 100)
