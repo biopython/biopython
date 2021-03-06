@@ -338,32 +338,49 @@ class TestBaseClassMethods(unittest.TestCase):
 
     def test_count(self):
         self.assertEqual(self.seq1_twobit.count("CT"), self.seq1_fasta.count("CT"))
-        self.assertEqual(self.seq1_twobit.count("CT", 75), self.seq1_fasta.count("CT", 75))
         self.assertEqual(
-            self.seq1_twobit.count("CT", 125, 250), self.seq1_fasta.count("CT", 125, 250)
+            self.seq1_twobit.count("CT", 75), self.seq1_fasta.count("CT", 75)
+        )
+        self.assertEqual(
+            self.seq1_twobit.count("CT", 125, 250),
+            self.seq1_fasta.count("CT", 125, 250)
         )
 
     def test_find(self):
         self.assertEqual(self.seq1_twobit.find("CT"), self.seq1_fasta.find("CT"))
-        self.assertEqual(self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75))
-        self.assertEqual(self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100))
         self.assertEqual(
-            self.seq1_twobit.find("CT", None, 100), self.seq1_fasta.find("CT", None, 100)
+            self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75)
+        )
+        self.assertEqual(
+            self.seq1_twobit.find("CT", 75, 100),
+            self.seq1_fasta.find("CT", 75, 100),
+        )
+        self.assertEqual(
+            self.seq1_twobit.find("CT", None, 100),
+            self.seq1_fasta.find("CT", None, 100)
         )
 
     def test_rfind(self):
         self.assertEqual(self.seq1_twobit.rfind("CT"), self.seq1_fasta.rfind("CT"))
-        self.assertEqual(self.seq1_twobit.rfind("CT", 450), self.seq1_fasta.rfind("CT", 450))
         self.assertEqual(
-            self.seq1_twobit.rfind("CT", None, 100), self.seq1_fasta.rfind("CT", None, 100)
+            self.seq1_twobit.rfind("CT", 450), self.seq1_fasta.rfind("CT", 450)
         )
-        self.assertEqual(self.seq1_twobit.rfind("CT", 75, 100), self.seq1_fasta.rfind("CT", 75, 100))
+        self.assertEqual(
+            self.seq1_twobit.rfind("CT", None, 100),
+            self.seq1_fasta.rfind("CT", None, 100)
+        )
+        self.assertEqual(
+            self.seq1_twobit.rfind("CT", 75, 100), self.seq1_fasta.rfind("CT", 75, 100)
+        )
 
     def test_index(self):
         self.assertEqual(self.seq1_twobit.index("CT"), self.seq1_fasta.index("CT"))
-        self.assertEqual(self.seq1_twobit.index("CT", 75), self.seq1_fasta.index("CT", 75))
         self.assertEqual(
-            self.seq1_twobit.index("CT", None, 100), self.seq1_fasta.index("CT", None, 100)
+            self.seq1_twobit.index("CT", 75), self.seq1_fasta.index("CT", 75)
+        )
+        self.assertEqual(
+            self.seq1_twobit.index("CT", None, 100),
+            self.seq1_fasta.index("CT", None, 100),
         )
         for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertRaises(ValueError, seq.index, "CT", 75, 100)
@@ -371,7 +388,8 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_rindex(self):
         self.assertEqual(self.seq1_twobit.rindex("CT"), self.seq1_fasta.rindex("CT"))
         self.assertEqual(
-            self.seq1_twobit.rindex("CT", None, 100), self.seq1_fasta.rindex("CT", None, 100)
+            self.seq1_twobit.rindex("CT", None, 100),
+            self.seq1_fasta.rindex("CT", None, 100),
         )
         for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertRaises(ValueError, seq.rindex, "CT", 450)
@@ -399,7 +417,9 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_rsplit(self):
         self.assertEqual(self.seq1_twobit.rsplit(), self.seq1_fasta.rsplit())
         self.assertEqual(self.seq1_twobit.rsplit("C"), self.seq1_fasta.rsplit("C"))
-        self.assertEqual(self.seq1_twobit.rsplit("C", 1), self.seq1_fasta.rsplit("C", 1))
+        self.assertEqual(
+            self.seq1_twobit.rsplit("C", 1), self.seq1_fasta.rsplit("C", 1)
+        )
 
     def test_strip(self):
         self.assertEqual(self.seq1_twobit.strip("G"), self.seq1_fasta.strip("G"))
