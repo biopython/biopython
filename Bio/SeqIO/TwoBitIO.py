@@ -137,6 +137,20 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
     def __len__(self):
         return self.length
 
+    def upper(self):
+        """Remove the sequence mask."""
+        data = _TwoBitSequenceData(self.stream, self.offset, self.length)
+        data.nBlocks = self.nBlocks[:, :]
+        data.maskBlocks = numpy.empty((0, 2), dtype="uint32")
+        return data
+
+    def lower(self):
+        """Extend the sequence mask to the full sequence."""
+        data = _TwoBitSequenceData(self.stream, self.offset, self.length)
+        data.nBlocks = self.nBlocks[:, :]
+        data.maskBlocks = numpy.array([[0, self.length]], dtype="uint32")
+        return data
+
 
 class TwoBitIterator(SequenceIterator):
     """Parser for UCSC twoBit (.2bit) files."""
