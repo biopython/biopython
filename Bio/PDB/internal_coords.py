@@ -1128,6 +1128,12 @@ class IC_Chain:
 class IC_Residue:
     """Class to extend Biopython Residue with internal coordinate data.
 
+    Parameters
+    ----------
+    parent: biopython Residue object this class extends
+    NO_ALTLOC: bool default False
+    Disable processing of ALTLOC atoms if True, use only selected atoms.
+
     Attributes
     ----------
     residue: Biopython Residue object reference
@@ -1196,13 +1202,6 @@ class IC_Residue:
 
     scale: optional float
         used for OpenSCAD output to generate gly_Cbeta bond length
-
-    Parameters (__init__)
-    ---------------------
-    parent: biopython Residue object this class extends
-    NO_ALTLOC: bool default False
-    Disable processing of ALTLOC atoms if True, use only selected atoms.
-
 
     Methods
     -------
