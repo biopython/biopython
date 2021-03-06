@@ -383,7 +383,7 @@ class PDBParser:
                     float(x)
                     for x in (
                         line[30:38],
-                        line[38:45],
+                        line[38:46],
                         line[46:54],
                         line[54:60],
                         line[60:66],
