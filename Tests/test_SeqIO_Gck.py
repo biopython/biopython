@@ -5,16 +5,19 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Gck module."""
-
-from io import BytesIO
 import os.path
 import shutil
 import unittest
+
+from io import BytesIO
+from urllib.request import HTTPError
+from urllib.request import urlopen
 from zipfile import ZipFile
 
-from Bio import SeqIO, MissingExternalDependencyError
-from urllib.request import urlopen, HTTPError
 import requires_internet
+
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
 
 
 class TestGckWithDGVC(unittest.TestCase):

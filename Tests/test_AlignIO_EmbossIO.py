@@ -4,7 +4,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.AlignIO.EmbossIO module."""
-
 import unittest
 
 from io import StringIO

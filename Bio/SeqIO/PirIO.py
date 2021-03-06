@@ -86,10 +86,12 @@ Sequence codes and their meanings:
  - XX - Unknown
 
 """
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
+
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 _pir_mol_type = {

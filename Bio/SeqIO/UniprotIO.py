@@ -6,7 +6,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
 See Also:
@@ -19,8 +18,8 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 
-from Bio.Seq import Seq
 from Bio import SeqFeature
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 

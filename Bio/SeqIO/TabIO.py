@@ -31,10 +31,13 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 .id and .seq (and not the description or any other information) as in the
 example above.
 """
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
+
+from .Interfaces import _clean
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 class TabIterator(SequenceIterator):

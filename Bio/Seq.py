@@ -19,13 +19,16 @@ See also the Seq_ wiki and the chapter in our tutorial:
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 """
-
 import array
 import warnings
-from abc import ABC, abstractmethod
 
-from Bio import BiopythonWarning, BiopythonDeprecationWarning
-from Bio.Data import IUPACData, CodonTable
+from abc import ABC
+from abc import abstractmethod
+
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
+from Bio.Data import CodonTable
+from Bio.Data import IUPACData
 
 
 def _maketrans(complement_mapping):

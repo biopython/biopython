@@ -357,16 +357,21 @@ the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
 are approximately equal.
 
 """
+import warnings
 
+from math import log
+
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
+from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
-from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
-from math import log
-import warnings
-from Bio import BiopythonWarning, BiopythonParserWarning
+from .Interfaces import _clean
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 # define score offsets. See discussion for differences between Sanger and

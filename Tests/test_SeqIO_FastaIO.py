@@ -4,14 +4,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.SeqIO.FastaIO module."""
-
-
 import unittest
+
 from io import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
-from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
+from Bio.SeqIO.FastaIO import FastaTwoLineParser
+from Bio.SeqIO.FastaIO import SimpleFastaParser
 
 
 def title_to_ids(title):

@@ -3,16 +3,15 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for Bio.AlignIO.MauveIO module."""
-
-import unittest
 import os
+import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.MauveIO import MauveIterator, MauveWriter
 from Bio import SeqIO
+from Bio.AlignIO.MauveIO import MauveIterator
+from Bio.AlignIO.MauveIO import MauveWriter
 
 
 class TestMauveIO(unittest.TestCase):

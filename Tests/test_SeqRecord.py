@@ -2,7 +2,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
@@ -11,10 +10,16 @@ and confirms they are consistent using our different parsers.
 import unittest
 
 from Bio import SeqIO
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import WithinPosition
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
-from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
 
 class SeqRecordCreation(unittest.TestCase):

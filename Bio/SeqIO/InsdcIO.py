@@ -29,17 +29,22 @@ http://imgt.cines.fr/download/LIGM-DB/ftable_doc.html
 http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
-
-
 import warnings
-from datetime import datetime
-from Bio import BiopythonWarning
 
-from Bio.Seq import UnknownSeq, UndefinedSequenceError
-from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
-from Bio import SeqIO
+from datetime import datetime
+
+from Bio import BiopythonWarning
 from Bio import SeqFeature
-from .Interfaces import SequenceIterator, SequenceWriter, _get_seq_string
+from Bio import SeqIO
+from Bio.GenBank.Scanner import _ImgtScanner
+from Bio.GenBank.Scanner import EmblScanner
+from Bio.GenBank.Scanner import GenBankScanner
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
+
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 # NOTE

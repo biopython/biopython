@@ -5,7 +5,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests Bio.SeqFeature."""
-
 import unittest
 
 from os import path
@@ -14,10 +13,16 @@ from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
 from Bio.Data.CodonTable import TranslationError
-from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
-from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
-from Bio.SeqFeature import ExactPosition, WithinPosition, BetweenPosition
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import BetweenPosition
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqFeature import WithinPosition
 
 
 class TestReference(unittest.TestCase):

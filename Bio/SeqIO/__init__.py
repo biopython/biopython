@@ -330,7 +330,6 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phylip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
-
 # TODO
 # - define policy on reading aligned sequences with more than
 #   one gap character (see also AlignIO)
@@ -372,11 +371,8 @@ making up each alignment as SeqRecords.
 # See also http://biopython.org/wiki/SeqIO_dev
 #
 # --Peter
-
-from Bio.File import as_handle
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-
+from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
@@ -387,15 +383,16 @@ from Bio.SeqIO import NibIO
 from Bio.SeqIO import PdbIO
 from Bio.SeqIO import PhdIO
 from Bio.SeqIO import PirIO
+from Bio.SeqIO import QualityIO  # FastQ and qual files
 from Bio.SeqIO import SeqXmlIO
 from Bio.SeqIO import SffIO
 from Bio.SeqIO import SnapGeneIO
 from Bio.SeqIO import SwissIO
 from Bio.SeqIO import TabIO
 from Bio.SeqIO import TwoBitIO
-from Bio.SeqIO import QualityIO  # FastQ and qual files
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
+from Bio.SeqRecord import SeqRecord
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.

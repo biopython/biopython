@@ -2,21 +2,19 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for AlignIO module."""
-
-
 import unittest
 import warnings
 
-
 from io import StringIO
-from Bio import SeqIO
+
 from Bio import AlignIO
-from Bio.Align import AlignInfo, MultipleSeqAlignment
+from Bio import SeqIO
+from Bio.Align import AlignInfo
+from Bio.Align import MultipleSeqAlignment
+from Bio.Data import IUPACData
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Data import IUPACData
 
 test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter)
 test_write_read_align_with_seq_count = test_write_read_alignment_formats + [
