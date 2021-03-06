@@ -283,142 +283,179 @@ class TestBaseClassMethods(unittest.TestCase):
         self.stream = open(path, "rb")
         records = SeqIO.parse(self.stream, "twobit")
         record = next(records)
-        self.seq1 = record.seq
+        self.seq1_twobit = record.seq
+        record = next(records)
+        self.seq2_twobit = record.seq
         path = "TwoBit/sequence.fa"
         records = SeqIO.parse(path, "fasta")
         record = next(records)
-        self.seq2 = record.seq
+        self.seq1_fasta = record.seq
+        record = next(records)
+        self.seq2_fasta = record.seq
 
     def tearDown(self):
         self.stream.close()
 
     def test_bytes(self):
-        b = bytes(self.seq1)
+        b = bytes(self.seq1_twobit)
         self.assertIsInstance(b, bytes)
         self.assertEqual(len(b), 480)
-        self.assertEqual(b, bytes(self.seq2))
-        b = bytes(self.seq1[:10])
+        self.assertEqual(b, bytes(self.seq1_fasta))
+        b = bytes(self.seq1_twobit[:10])
         self.assertEqual(len(b), 10)
         self.assertIsInstance(b, bytes)
         self.assertEqual(b, b"GTATACCCCT")
 
     def test_hash(self):
-        self.assertEqual(hash(self.seq1), hash(self.seq2))
+        self.assertEqual(hash(self.seq1_twobit), hash(self.seq1_fasta))
 
     def test_add(self):
-        self.assertIsInstance(self.seq1 + "ABCD", Seq)
-        self.assertEqual(self.seq1 + "ABCD", self.seq2 + "ABCD")
+        self.assertIsInstance(self.seq1_twobit + "ABCD", Seq)
+        self.assertEqual(self.seq1_twobit + "ABCD", self.seq1_fasta + "ABCD")
 
     def test_radd(self):
-        self.assertIsInstance("ABCD" + self.seq1, Seq)
-        self.assertEqual("ABCD" + self.seq1, "ABCD" + self.seq2)
+        self.assertIsInstance("ABCD" + self.seq1_twobit, Seq)
+        self.assertEqual("ABCD" + self.seq1_twobit, "ABCD" + self.seq1_fasta)
 
     def test_mul(self):
-        self.assertIsInstance(2 * self.seq1, Seq)
-        self.assertEqual(2 * self.seq1, 2 * self.seq2)
-        self.assertIsInstance(self.seq1 * 2, Seq)
-        self.assertEqual(self.seq1 * 2, self.seq2 * 2)
+        self.assertIsInstance(2 * self.seq1_twobit, Seq)
+        self.assertEqual(2 * self.seq1_twobit, 2 * self.seq1_fasta)
+        self.assertIsInstance(self.seq1_twobit * 2, Seq)
+        self.assertEqual(self.seq1_twobit * 2, self.seq1_fasta * 2)
 
     def test_contains(self):
-        for seq in (self.seq1, self.seq2):
+        for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertIn("ACCCCT", seq)
             self.assertNotIn("ACGTACGT", seq)
 
     def test_repr(self):
-        self.assertIsInstance(repr(self.seq1), str)
-        self.assertEqual(repr(self.seq1), repr(self.seq2))
+        self.assertIsInstance(repr(self.seq1_twobit), str)
+        self.assertEqual(repr(self.seq1_twobit), repr(self.seq1_fasta))
 
     def test_str(self):
-        self.assertIsInstance(str(self.seq1), str)
-        self.assertEqual(str(self.seq1), str(self.seq2))
+        self.assertIsInstance(str(self.seq1_twobit), str)
+        self.assertEqual(str(self.seq1_twobit), str(self.seq1_fasta))
 
     def test_count(self):
-        self.assertEqual(self.seq1.count("CT"), self.seq2.count("CT"))
-        self.assertEqual(self.seq1.count("CT", 75), self.seq2.count("CT", 75))
+        self.assertEqual(self.seq1_twobit.count("CT"), self.seq1_fasta.count("CT"))
         self.assertEqual(
-            self.seq1.count("CT", 125, 250), self.seq2.count("CT", 125, 250)
+            self.seq1_twobit.count("CT", 75), self.seq1_fasta.count("CT", 75)
+        )
+        self.assertEqual(
+            self.seq1_twobit.count("CT", 125, 250),
+            self.seq1_fasta.count("CT", 125, 250),
         )
 
     def test_find(self):
-        self.assertEqual(self.seq1.find("CT"), self.seq2.find("CT"))
-        self.assertEqual(self.seq1.find("CT", 75), self.seq2.find("CT", 75))
-        self.assertEqual(self.seq1.find("CT", 75, 100), self.seq2.find("CT", 75, 100))
+        self.assertEqual(self.seq1_twobit.find("CT"), self.seq1_fasta.find("CT"))
         self.assertEqual(
-            self.seq1.find("CT", None, 100), self.seq2.find("CT", None, 100)
+            self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75)
+        )
+        self.assertEqual(
+            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100),
+        )
+        self.assertEqual(
+            self.seq1_twobit.find("CT", None, 100),
+            self.seq1_fasta.find("CT", None, 100),
         )
 
     def test_rfind(self):
-        self.assertEqual(self.seq1.rfind("CT"), self.seq2.rfind("CT"))
-        self.assertEqual(self.seq1.rfind("CT", 450), self.seq2.rfind("CT", 450))
+        self.assertEqual(self.seq1_twobit.rfind("CT"), self.seq1_fasta.rfind("CT"))
         self.assertEqual(
-            self.seq1.rfind("CT", None, 100), self.seq2.rfind("CT", None, 100)
+            self.seq1_twobit.rfind("CT", 450), self.seq1_fasta.rfind("CT", 450)
         )
-        self.assertEqual(self.seq1.rfind("CT", 75, 100), self.seq2.rfind("CT", 75, 100))
+        self.assertEqual(
+            self.seq1_twobit.rfind("CT", None, 100),
+            self.seq1_fasta.rfind("CT", None, 100),
+        )
+        self.assertEqual(
+            self.seq1_twobit.rfind("CT", 75, 100), self.seq1_fasta.rfind("CT", 75, 100)
+        )
 
     def test_index(self):
-        self.assertEqual(self.seq1.index("CT"), self.seq2.index("CT"))
-        self.assertEqual(self.seq1.index("CT", 75), self.seq2.index("CT", 75))
+        self.assertEqual(self.seq1_twobit.index("CT"), self.seq1_fasta.index("CT"))
         self.assertEqual(
-            self.seq1.index("CT", None, 100), self.seq2.index("CT", None, 100)
+            self.seq1_twobit.index("CT", 75), self.seq1_fasta.index("CT", 75)
         )
-        for seq in (self.seq1, self.seq2):
+        self.assertEqual(
+            self.seq1_twobit.index("CT", None, 100),
+            self.seq1_fasta.index("CT", None, 100),
+        )
+        for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertRaises(ValueError, seq.index, "CT", 75, 100)
 
     def test_rindex(self):
-        self.assertEqual(self.seq1.rindex("CT"), self.seq2.rindex("CT"))
+        self.assertEqual(self.seq1_twobit.rindex("CT"), self.seq1_fasta.rindex("CT"))
         self.assertEqual(
-            self.seq1.rindex("CT", None, 100), self.seq2.rindex("CT", None, 100)
+            self.seq1_twobit.rindex("CT", None, 100),
+            self.seq1_fasta.rindex("CT", None, 100),
         )
-        for seq in (self.seq1, self.seq2):
+        for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertRaises(ValueError, seq.rindex, "CT", 450)
             self.assertRaises(ValueError, seq.rindex, "CT", 75, 100)
 
     def test_startswith(self):
-        for seq in (self.seq1, self.seq2):
+        for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertTrue(seq.startswith("GTAT"))
             self.assertTrue(seq.startswith("TGGG", start=10))
             self.assertTrue(seq.startswith("TGGG", start=10, end=14))
             self.assertFalse(seq.startswith("TGGG", start=10, end=12))
 
     def test_endswith(self):
-        for seq in (self.seq1, self.seq2):
+        for seq in (self.seq1_twobit, self.seq1_fasta):
             self.assertTrue(seq.endswith("ACCG"))
             self.assertTrue(seq.endswith("ACCG", 476))
             self.assertTrue(seq.endswith("GCAC", 472, 478))
             self.assertFalse(seq.endswith("GCAC", 476, 478))
 
     def test_split(self):
-        self.assertEqual(self.seq1.split(), self.seq2.split())
-        self.assertEqual(self.seq1.split("C"), self.seq2.split("C"))
-        self.assertEqual(self.seq1.split("C", 1), self.seq2.split("C", 1))
+        self.assertEqual(self.seq1_twobit.split(), self.seq1_fasta.split())
+        self.assertEqual(self.seq1_twobit.split("C"), self.seq1_fasta.split("C"))
+        self.assertEqual(self.seq1_twobit.split("C", 1), self.seq1_fasta.split("C", 1))
 
     def test_rsplit(self):
-        self.assertEqual(self.seq1.rsplit(), self.seq2.rsplit())
-        self.assertEqual(self.seq1.rsplit("C"), self.seq2.rsplit("C"))
-        self.assertEqual(self.seq1.rsplit("C", 1), self.seq2.rsplit("C", 1))
+        self.assertEqual(self.seq1_twobit.rsplit(), self.seq1_fasta.rsplit())
+        self.assertEqual(self.seq1_twobit.rsplit("C"), self.seq1_fasta.rsplit("C"))
+        self.assertEqual(
+            self.seq1_twobit.rsplit("C", 1), self.seq1_fasta.rsplit("C", 1)
+        )
 
     def test_strip(self):
-        self.assertEqual(self.seq1.strip("G"), self.seq2.strip("G"))
+        self.assertEqual(self.seq1_twobit.strip("G"), self.seq1_fasta.strip("G"))
 
     def test_lstrip(self, chars=None):
-        self.assertEqual(self.seq1.lstrip("G"), self.seq2.lstrip("G"))
+        self.assertEqual(self.seq1_twobit.lstrip("G"), self.seq1_fasta.lstrip("G"))
 
     def test_rstrip(self, chars=None):
-        self.assertEqual(self.seq1.rstrip("G"), self.seq2.rstrip("G"))
+        self.assertEqual(self.seq1_twobit.rstrip("G"), self.seq1_fasta.rstrip("G"))
 
     def test_upper(self):
-        self.assertEqual(self.seq1.upper(), self.seq2.upper())
+        seq1_twobit_upper = self.seq1_twobit.upper()
+        seq1_fasta_upper = self.seq1_fasta.upper()
+        self.assertEqual(seq1_twobit_upper, seq1_fasta_upper)
+        self.assertEqual(seq1_twobit_upper[140:210], seq1_fasta_upper[140:210])
+        seq2_twobit_upper = self.seq2_twobit.upper()
+        seq2_fasta_upper = self.seq2_fasta.upper()
+        self.assertEqual(seq2_twobit_upper, seq2_fasta_upper)
+        self.assertEqual(seq2_twobit_upper[140:210], seq2_fasta_upper[140:210])
 
     def test_lower(self):
-        self.assertEqual(self.seq1.lower(), self.seq2.lower())
+        seq1_twobit_lower = self.seq1_twobit.lower()
+        seq1_fasta_lower = self.seq1_fasta.lower()
+        self.assertEqual(seq1_twobit_lower, seq1_fasta_lower)
+        self.assertEqual(seq1_twobit_lower[140:210], seq1_fasta_lower[140:210])
+        seq2_twobit_lower = self.seq2_twobit.lower()
+        seq2_fasta_lower = self.seq2_fasta.lower()
+        self.assertEqual(seq2_twobit_lower, seq2_fasta_lower)
+        self.assertEqual(seq2_twobit_lower[140:210], seq2_fasta_lower[140:210])
 
     def test_replace(self):
         # seq.transcribe uses seq._data.replace
-        self.assertEqual(self.seq1.transcribe(), self.seq2.transcribe())
+        self.assertEqual(self.seq1_twobit.transcribe(), self.seq1_fasta.transcribe())
 
     def test_translate(self):
         # seq.complement uses seq._data.translate
-        self.assertEqual(self.seq1.complement(), self.seq2.complement())
+        self.assertEqual(self.seq1_twobit.complement(), self.seq1_fasta.complement())
 
 
 if __name__ == "__main__":
