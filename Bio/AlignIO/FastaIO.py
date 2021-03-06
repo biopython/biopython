@@ -19,11 +19,9 @@ developed as an input format to the FASTA tools.  The Bio.AlignIO and
 Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
-
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):

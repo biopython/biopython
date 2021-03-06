@@ -51,12 +51,13 @@ Classes:
  - UnknownPosition - Represents missing information like '?' in UniProt.
 
 """
-
-
-from collections import OrderedDict
 import functools
 
-from Bio.Seq import Seq, MutableSeq, reverse_complement
+from collections import OrderedDict
+
+from Bio.Seq import MutableSeq
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
 
 
 class SeqFeature:

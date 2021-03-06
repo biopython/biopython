@@ -4,7 +4,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format.
 
 This parser reads the index stored in the twoBit file, as well as the masked
@@ -21,7 +20,6 @@ specifically requested, making the parser memory-efficient.
 The TwoBitIterator object implements the __getitem__, keys, and __len__
 methods that allow it to be used as a dictionary.
 """
-
 # The .2bit file format is defined by UCSC as follows
 # (see http://genome.ucsc.edu/FAQ/FAQformat.html#format7):
 #
@@ -73,15 +71,14 @@ methods that allow it to be used as a dictionary.
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
 #             significant 2-bit byte; the last base is in the least significan
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-
-
 import numpy
 
-from Bio.Seq import Seq, SequenceDataAbstractBaseClass
+from Bio.Seq import Seq
+from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import SequenceIterator
 from . import _twoBitIO
+from .Interfaces import SequenceIterator
 
 
 class _TwoBitSequenceData(SequenceDataAbstractBaseClass):

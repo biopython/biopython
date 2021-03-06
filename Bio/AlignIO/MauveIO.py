@@ -76,12 +76,12 @@ the annotation attribute of each record::
       start: 9475, end: 10076, strand: -1
 
 """
-
-
 import re
+
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 

@@ -2,23 +2,22 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Unittests for the Seq objects."""
-
-import warnings
 import unittest
+import warnings
 
-from Bio import BiopythonWarning, BiopythonDeprecationWarning
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 from Bio import SeqIO
-from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
-from Bio.Seq import (
-    Seq,
-    UnknownSeq,
-    MutableSeq,
-    UndefinedSequenceError,
-    translate,
-)
-from Bio.Data.CodonTable import TranslationError, CodonTable
+from Bio.Data.CodonTable import CodonTable
+from Bio.Data.CodonTable import TranslationError
+from Bio.Data.IUPACData import ambiguous_dna_values
+from Bio.Data.IUPACData import ambiguous_rna_values
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import translate
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
 
 
 # This is just the standard table with less stop codons

@@ -1,13 +1,13 @@
 """Tests for SeqIO TwoBitIO module."""
-
-
 import os
 import random
 import unittest
 
-from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
-from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqRecord import SeqRecord
 
 
 class Parsing(unittest.TestCase):

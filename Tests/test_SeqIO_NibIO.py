@@ -1,8 +1,8 @@
 """Tests for SeqIO NibIO module."""
-
 import unittest
 
 from io import BytesIO
+
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

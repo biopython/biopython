@@ -2,25 +2,26 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
-
-
 import os
 import unittest
 import warnings
 
-from io import StringIO
 from io import BytesIO
+from io import StringIO
 
-from Bio import BiopythonWarning, BiopythonParserWarning
-from Bio.SeqIO import QualityIO
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
 from Bio import SeqIO
-from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
+from Bio.Data.IUPACData import ambiguous_dna_letters
+from Bio.Data.IUPACData import ambiguous_rna_letters
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqIO import QualityIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
-
-from test_SeqIO import SeqIOTestBaseClass, SeqIOConverterTestBaseClass
+from test_SeqIO import SeqIOConverterTestBaseClass
+from test_SeqIO import SeqIOTestBaseClass
 
 
 class QualityIOTestBaseClass(SeqIOTestBaseClass):

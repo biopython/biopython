@@ -12,12 +12,10 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
-
-
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentIterator
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class EmbossIterator(AlignmentIterator):

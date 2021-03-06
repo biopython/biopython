@@ -3,14 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO SeqXML module."""
-
-import unittest
 import sys
+import unittest
+
+from io import BytesIO
 
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from io import BytesIO
 
 
 class TestSimpleRead(unittest.TestCase):
