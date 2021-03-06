@@ -8,17 +8,17 @@
 # This module is for reading and writing FASTA format files as SeqRecord
 # objects.  The code is partly inspired  by earlier Biopython modules,
 # Bio.Fasta.* and the now removed module Bio.SeqIO.FASTA
-
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
-
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
-from .Interfaces import _clean, _get_seq_string
+
+from .Interfaces import _clean
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 def SimpleFastaParser(handle):

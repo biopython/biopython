@@ -3,14 +3,13 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for Bio.AlignIO.PhylipIO module."""
-
 import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.PhylipIO import PhylipIterator, PhylipWriter
+from Bio.AlignIO.PhylipIO import PhylipIterator
+from Bio.AlignIO.PhylipIO import PhylipWriter
 
 phylip_text = """     8    286
 V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG

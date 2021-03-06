@@ -4,21 +4,21 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for the SnapGene file format.
 
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
-
 from datetime import datetime
 from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 

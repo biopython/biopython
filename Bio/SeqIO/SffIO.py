@@ -230,14 +230,15 @@ For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
-
-import struct
 import re
+import struct
 
+from Bio import StreamModeError
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 _null = b"\0"

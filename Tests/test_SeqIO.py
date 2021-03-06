@@ -2,28 +2,28 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO module."""
-
-
 import copy
 import gzip
 import sys
 import unittest
 import warnings
 
-from io import StringIO
 from io import BytesIO
+from io import StringIO
 
-from Bio import BiopythonWarning, BiopythonParserWarning
-from Bio import SeqIO
 from Bio import AlignIO
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
+from Bio import StreamModeError
+from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UnknownSeq, UndefinedSequenceError
-from Bio.Align import MultipleSeqAlignment
-from Bio import StreamModeError
 
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing

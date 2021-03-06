@@ -5,7 +5,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -153,13 +152,14 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
-
 from collections import OrderedDict
 
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+
+from .Interfaces import AlignmentIterator
+from .Interfaces import SequentialAlignmentWriter
 
 
 class StockholmWriter(SequentialAlignmentWriter):

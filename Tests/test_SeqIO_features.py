@@ -2,34 +2,36 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-
 import os
 import unittest
 import warnings
+
 from io import StringIO
 
 from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
-from Bio.Seq import (
-    Seq,
-    UnknownSeq,
-    MutableSeq,
-    UndefinedSequenceError,
-    reverse_complement,
-)
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
-from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
-from Bio.SeqFeature import OneOfPosition, WithinPosition, UnknownPosition
+from Bio.Seq import MutableSeq
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqFeature import WithinPosition
 from Bio.SeqIO.InsdcIO import _insdc_location_string
-
+from Bio.SeqRecord import SeqRecord
 from test_SeqIO import SeqIOTestBaseClass
 
 

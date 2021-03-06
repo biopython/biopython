@@ -33,12 +33,14 @@ For an inclusive end coordinate, we need to use ``end = start + size - 1``.
 A 1-column wide alignment would have ``start == end``.
 """
 import os
-from itertools import islice
 
+from itertools import islice
 from sqlite3 import dbapi2
+
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+
 from .Interfaces import SequentialAlignmentWriter
 
 MAFINDEX_VERSION = 2
