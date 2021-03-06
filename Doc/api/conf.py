@@ -19,8 +19,7 @@ from Bio import __version__, Application
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
-needs_sphinx = "1.8"
+needs_sphinx = "3.5"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -109,6 +108,10 @@ autodoc_default_options = {
     "member-order": "bysource",
     "exclude-members": "__dict__,__weakref__,__module__",
 }
+
+# Experimental feature to preserve the default argument values of
+# functions in source code and keep them not evaluated for readability:
+autodoc_preserve_defaults = True
 
 # To avoid import errors.
 autodoc_mock_imports = ["MySQLdb", "Bio.Restriction.Restriction"]
