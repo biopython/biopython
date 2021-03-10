@@ -8,7 +8,7 @@
 """Turn an mmCIF file into a dictionary."""
 
 
-from Bio.File import as_handle
+from Bio.File import as_handle_gzip
 
 
 class MMCIF2Dict(dict):
@@ -23,7 +23,7 @@ class MMCIF2Dict(dict):
         """
         self.quote_chars = ["'", '"']
         self.whitespace_chars = [" ", "\t"]
-        with as_handle(filename) as handle:
+        with as_handle_gzip(filename) as handle:
             loop_flag = False
             key = None
             tokens = self._tokenize(handle)
@@ -105,6 +105,11 @@ class MMCIF2Dict(dict):
         empty = True
         for line in handle:
             empty = False
+            # try decoding in case it is gzipped
+            try:
+                line = line.decode("utf-8")
+            except (UnicodeDecodeError, AttributeError):
+                pass
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
@@ -113,6 +118,11 @@ class MMCIF2Dict(dict):
                 # trailing newline must be stripped.
                 token_buffer = [line[1:].rstrip()]
                 for line in handle:
+                    # try decoding in case it is gzipped
+                    try:
+                        line = line.decode("utf-8")
+                    except (UnicodeDecodeError, AttributeError):
+                        pass
                     line = line.rstrip()
                     if line.startswith(";"):
                         yield "\n".join(token_buffer)

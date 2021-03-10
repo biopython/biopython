@@ -9,7 +9,7 @@
 import numpy
 import warnings
 
-from Bio.File import as_handle
+from Bio.File import as_handle_gzip
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -346,7 +346,7 @@ class FastMMCIFParser:
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
-            with as_handle(filename) as handle:
+            with as_handle_gzip(filename) as handle:
                 self._build_structure(structure_id, handle)
 
         return self._structure_builder.get_structure()
@@ -364,7 +364,14 @@ class FastMMCIFParser:
         read_atom, read_aniso = False, False
         _fields, _records = [], []
         _anisof, _anisors = [], []
-        for line in filehandle:
+
+        lines = filehandle.readlines()
+        # try decoding in case it is gzipped
+        try:
+            lines = [line.decode("utf-8") for line in lines]
+        except (UnicodeDecodeError, AttributeError):
+            pass
+        for line in lines:
             if line.startswith("_atom_site."):
                 read_atom = True
                 _fields.append(line.strip())

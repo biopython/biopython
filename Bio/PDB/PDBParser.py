@@ -17,7 +17,7 @@ except ImportError:
         "Install NumPy if you want to use the PDB parser."
     ) from None
 
-from Bio.File import as_handle
+from Bio.File import as_handle_gzip
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -93,8 +93,13 @@ class PDBParser:
             # Make a StructureBuilder instance (pass id of structure as parameter)
             self.structure_builder.init_structure(id)
 
-            with as_handle(file) as handle:
+            with as_handle_gzip(file) as handle:
                 lines = handle.readlines()
+                # Check if need to decode in case file is gzip
+                try:
+                    lines = [line.decode("utf-8") for line in lines]
+                except (UnicodeDecodeError, AttributeError):
+                    pass
                 if not lines:
                     raise ValueError("Empty file.")
                 self._parse(lines)

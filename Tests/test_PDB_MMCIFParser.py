@@ -260,6 +260,13 @@ class ParseReal(unittest.TestCase):
             structure = parser.get_structure("example", handle)
         self.assertEqual(len(structure), 1)
 
+    def test_1a8o_1a8o_gzip(self):
+        """Test if the parser can handle gzipped and non gzip files."""
+        parser = MMCIFParser()
+        structure_nongzip = parser.get_structure("example", "PDB/1A8O.cif")
+        structure_gzip = parser.get_structure("example", "PDB/1A8O.cif.gz")
+        self.assertEqual(structure_nongzip, structure_gzip)
+
     def test_point_mutations_main(self):
         """Test if MMCIFParser parse point mutations correctly."""
         self._run_point_mutation_tests(MMCIFParser(QUIET=True))

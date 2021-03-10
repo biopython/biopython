@@ -516,6 +516,12 @@ class ParseRealPDB_tests(unittest.TestCase):
                         p = a.get_parent()
                         self.assertEqual(r.get_resname(), p.get_resname())
 
+    def test_1A8Opdb_1A80pdbgz(self):
+        """Parse 1A8O.pdb.gz and 1A8O pdb file in permissive mode."""
+        structure_nongzip = self.permissive.get_structure("example", "PDB/1A8O.pdb")
+        structure_gzip = self.permissive.get_structure("example", "PDB/1A8O.pdb.gz")
+        self.assertEqual(structure_nongzip, structure_gzip)
+
     def test_1A8O_strict(self):
         """Parse 1A8O.pdb file in strict mode."""
         structure = self.strict.get_structure("example", "PDB/1A8O.pdb")
