@@ -106,6 +106,9 @@ unambiguously guessed from the atom name, in accordance with PDB structures.
 Bio.PDB entities now have a ``center_of_mass()`` method that calculates either
 centers of gravity or geometry.
 
+Bio.PDB.PDBParser and Bio.PDB.MMCIFParser now also read `pdb.gz` and `cif.gz`
+files.
+
 New method ``disordered_remove()`` implemented in Bio.PDB DisorderedAtom and
 DisorderedResidue to remove children.
 
@@ -127,6 +130,7 @@ possible, especially the following contributors:
 - Suyash Gupta
 - Vini Salazar (first contribution)
 - Leighton Pritchard
+- Simon Duerr (first contribution)
 
 4 September 2020: Biopython 1.78
 ================================
