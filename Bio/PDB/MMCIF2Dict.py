@@ -105,11 +105,6 @@ class MMCIF2Dict(dict):
         empty = True
         for line in handle:
             empty = False
-            # try decoding in case it is gzipped
-            try:
-                line = line.decode("utf-8")
-            except (UnicodeDecodeError, AttributeError):
-                pass
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
@@ -118,11 +113,6 @@ class MMCIF2Dict(dict):
                 # trailing newline must be stripped.
                 token_buffer = [line[1:].rstrip()]
                 for line in handle:
-                    # try decoding in case it is gzipped
-                    try:
-                        line = line.decode("utf-8")
-                    except (UnicodeDecodeError, AttributeError):
-                        pass
                     line = line.rstrip()
                     if line.startswith(";"):
                         yield "\n".join(token_buffer)

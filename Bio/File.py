@@ -99,7 +99,7 @@ def as_handle_gzip(handleish, mode="r", **kwargs):
         magic = handle.read(2)
         if magic == b"\x1f\x8b":
             # this is a gzipped file
-            with gzip.open(handleish, mode, **kwargs) as fp:
+            with gzip.open(handleish, "rt", **kwargs) as fp:
                 yield fp
         else:
             with open(handleish, mode, **kwargs) as fp:

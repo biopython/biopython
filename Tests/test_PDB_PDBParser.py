@@ -2,6 +2,7 @@
 # Revisions copyright 2009-2013 by Peter Cock.  All rights reserved.
 # Revisions copyright 2013 Lenna X. Peterson. All rights reserved.
 # Revisions copyright 2020 Joao Rodrigues. All rights reserved.
+# Revisions copyright 2021 Simon Duerr. All rights reserved.
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.

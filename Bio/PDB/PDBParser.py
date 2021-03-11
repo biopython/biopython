@@ -95,11 +95,6 @@ class PDBParser:
 
             with as_handle_gzip(file) as handle:
                 lines = handle.readlines()
-                # Check if need to decode in case file is gzip
-                try:
-                    lines = [line.decode("utf-8") for line in lines]
-                except (UnicodeDecodeError, AttributeError):
-                    pass
                 if not lines:
                     raise ValueError("Empty file.")
                 self._parse(lines)
