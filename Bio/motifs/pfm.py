@@ -42,8 +42,6 @@ def read(handle, pfm_format):
 def _read_pfm_four_columns(handle):
     """Read motifs in Cluster Buster position frequency matrix format from a file handle.
 
-    Cluster Buster motif format: http://zlab.bu.edu/cluster-buster/help/cis-format.html
-
     #cisbp
     Pos A   C   G   T
     1   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
@@ -276,8 +274,6 @@ def _read_pfm_four_columns(handle):
 
 def _read_pfm_four_rows(handle):
     """Read motifs in position frequency matrix format from a file handle.
-
-    Cluster Buster motif format: http://zlab.bu.edu/cluster-buster/help/cis-format.html
 
     #hdpi
     A   0   5   6   5   1   0
