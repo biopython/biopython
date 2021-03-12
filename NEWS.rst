@@ -118,10 +118,14 @@ string like methods (fixing a regression in Biopython 1.78).
 The KEGG ``KGML_Pathway`` KGML output was fixed to produce output that complies
 with KGML v0.7.2.
 
+Parsing motifs in ``pfm-four-rows`` format can now handle motifs with values
+in scientific notation.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Damien Goutte-Gattat
+- Gert Hulselmans
 - João Rodrigues
 - Markus Piotrowski
 - Suyash Gupta
