@@ -335,9 +335,9 @@ def _read_pfm_four_rows(handle):
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
     row_pattern_with_nucleotide_letter = re.compile(
-        r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*"
+        r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\-eE\s]+)\s*[]]*\s*"
     )
-    row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\s]+)\s*")
+    row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\-eE\s]+)\s*")
 
     motif_name = None
     nucleotide_counts = {}
