@@ -24,6 +24,8 @@ class MotifTestsBasic(unittest.TestCase):
         self.SITESin = open("motifs/Arnt.sites")
         self.CLUSTERBUSTERin = open("motifs/clusterbuster.pfm")
         self.XMSin = open("motifs/abdb.xms")
+        self.PFMFOURCOLUMNSin = open("motifs/fourcolumns.pfm")
+        self.PFMFOURROWSin = open("motifs/fourrows.pfm")
         self.TFout = "motifs/tf.out"
         self.FAout = "motifs/fa.out"
         self.PFMout = "motifs/fa.out"
@@ -453,6 +455,38 @@ class MotifTestsBasic(unittest.TestCase):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
         m = motifs.read(self.PFMin, "pfm")
         self.assertEqual(m.length, 12)
+
+    def test_pfm_four_columns_parsing(self):
+        """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 columns)."""
+        record = motifs.parse(self.PFMFOURCOLUMNSin, "pfm-four-columns")
+        self.assertEqual(len(record), 8)
+        self.assertEqual(record[0].length, 8)
+        self.assertEqual(record[1].length, 20)
+        self.assertEqual(record[2].name, "M1734_0.90")
+        self.assertEqual(record[2].length, 11)
+        self.assertEqual(record[3].name, "AbdA_Cell_FBgn0000014")
+        self.assertEqual(record[3].length, 7)
+        self.assertEqual(record[4].length, 10)
+        self.assertEqual(record[5].name, "AHR_si")
+        self.assertEqual(record[5].length, 9)
+        self.assertEqual(record[6].length, 8)
+        self.assertEqual(record[7].length, 11)
+
+    def test_pfm_four_rows_parsing(self):
+        """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 rows)."""
+        record = motifs.parse(self.PFMFOURROWSin, "pfm-four-rows")
+        self.assertEqual(len(record), 8)
+        self.assertEqual(record[0].length, 6)
+        self.assertEqual(record[1].length, 15)
+        self.assertEqual(record[2].length, 15)
+        self.assertEqual(record[3].length, 6)
+        self.assertEqual(record[4].length, 6)
+        self.assertEqual(record[5].name, "abd-A")
+        self.assertEqual(record[5].length, 8)
+        self.assertEqual(record[6].name, "MA0001.1 AGL3")
+        self.assertEqual(record[6].length, 10)
+        self.assertEqual(record[7].name, "MA0001.1 AGL3")
+        self.assertEqual(record[7].length, 10)
 
     def test_sites_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style sites files."""
