@@ -1,4 +1,4 @@
-# Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+# Copyright (C) 2002,2020 Thomas Hamelryck (thamelry@binf.ku.dk), Simon Duerr
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -19,14 +19,23 @@ Contributions by:
 - Joao Rodrigues
 - Kristian Rother
 - Eric Talevich
+- Simon Duerr
 - and many others.
 """
 
-# Get a Structure object from a PDB file
-from .PDBParser import PDBParser
+import gzip
+from pathlib import Path
+from mimetypes import guess_type
+from functools import partial
 
+
+# Get a Structure object from a PDB file using available parsers
+from .PDBParser import PDBParser
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
+from .mmtf import MMTFParser
+
+from Bio.File import as_handle
 
 # Download from the PDB
 from .PDBList import PDBList
@@ -88,3 +97,67 @@ try:
     from .SASA import ShrakeRupley
 except ImportError:
     pass
+
+_FormatToParser = {"pdb": PDBParser(), "cif": MMCIFParser()}
+
+
+def read(handle, format, id=None):
+    """Parse a file or handle using one of the available parsers to generate a structure.
+
+    Arguments:
+     - handle    - handle to the file, or the filename as a string
+     - format    - string describing the file format. can be [pdb, cif, mmtf]
+     - id        - optional id of the structure, if None header information or then base name is used
+
+    If you have the file name in a string 'filename', use:
+
+    >>> from Bio import PDB
+    >>> filename = "1A8O.pdb"
+    >>> PDB.read(filename, format="pdb")
+
+    The function also supports file handles and gzip files
+
+    >>> from Bio import PDB
+    >>> PDB.read("1A8O.pdb.gz", format="pdb")
+    """
+    # TODO *kwargs for the parser to allow QUIET or permissive mode
+
+    # Try and give helpful error messages:
+    if not isinstance(format, str):
+        raise TypeError("Need a string for the file format (lower case)")
+    if not format:
+        raise ValueError("Format required (lower case string)")
+    if format != format.lower():
+        raise ValueError("Format string '%s' should be lower case" % format)
+
+    # need to use different parser for mmtf versus pdb,cif
+    if format == "mmtf":
+        # TODO: Raise warning if ID is set. MMTFParser does not support passing an id
+        # MMTF needs a seperate parser as get_structure does only take 1 positional argument and does not support file handles
+        if isinstance(handle, str):
+            parser = MMTFParser()
+            return parser.get_structure(handle)
+        else:
+            raise TypeError("'%s' parser only accepts str not handle" % format)
+
+    elif format in _FormatToParser:  # Map the file format to a parser
+        # if we are provided a path to a file, check if gzipped,
+        # else open handle directly
+        if isinstance(handle, str):
+            encoding = guess_type(handle)[1]  # uses file extension
+            _open = partial(gzip.open, mode="rt") if encoding == "gzip" else as_handle
+        else:
+            _open = as_handle
+
+        with _open(handle) as fp:
+            parser = _FormatToParser[format]
+            structure = parser.get_structure(id, fp)
+            # set id from header if given, else use basename
+            if structure.header["idcode"] != "" and id is None:
+                structure.id = structure.header["idcode"]
+            elif isinstance(handle, str) and id is None:
+                structure.id = Path(handle).stem
+            # TODO set id if filehandle without header is passed
+            return structure
+    else:
+        raise ValueError("Unknown format '%s'" % format)

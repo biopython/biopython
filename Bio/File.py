@@ -11,7 +11,6 @@ Bio.File defines private classes used in Bio.SeqIO and Bio.SearchIO for
 indexing files. These are not intended for direct use.
 """
 
-import gzip
 import os
 import contextlib
 import itertools
@@ -72,38 +71,6 @@ def as_handle(handleish, mode="r", **kwargs):
     try:
         with open(handleish, mode, **kwargs) as fp:
             yield fp
-    except TypeError:
-        yield handleish
-
-
-@contextlib.contextmanager
-def as_handle_gzip(handleish, mode="r", **kwargs):
-    r"""Context manager to ensure we are using a handle.
-
-    Detects if file is gzip encoded.
-    When given a path-like object, returns an open file handle to that path, with provided
-    mode, which will be closed when the manager exits.
-
-    All other inputs are returned, and are *not* closed.
-
-    Arguments:
-     - handleish  - Either a file handle or path-like object (anything which can be
-                    passed to the builtin 'open' function, such as str, bytes,
-                    pathlib.Path, and os.DirEntry objects)
-     - mode       - Mode to open handleish (used only if handleish is a string)
-     - kwargs     - Further arguments to pass to open(...)
-
-    """
-    try:
-        handle = open(handleish, "rb")
-        magic = handle.read(2)
-        if magic == b"\x1f\x8b":
-            # this is a gzipped file
-            with gzip.open(handleish, "rt", **kwargs) as fp:
-                yield fp
-        else:
-            with open(handleish, mode, **kwargs) as fp:
-                yield fp
     except TypeError:
         yield handleish
 

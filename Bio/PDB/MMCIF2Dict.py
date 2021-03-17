@@ -8,7 +8,7 @@
 """Turn an mmCIF file into a dictionary."""
 
 
-from Bio.File import as_handle_gzip
+from Bio.File import as_handle
 
 
 class MMCIF2Dict(dict):
@@ -23,7 +23,7 @@ class MMCIF2Dict(dict):
         """
         self.quote_chars = ["'", '"']
         self.whitespace_chars = [" ", "\t"]
-        with as_handle_gzip(filename) as handle:
+        with as_handle(filename) as handle:
             loop_flag = False
             key = None
             tokens = self._tokenize(handle)
