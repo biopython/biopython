@@ -33,7 +33,12 @@ from functools import partial
 from .PDBParser import PDBParser
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
-from .mmtf import MMTFParser
+
+try:
+    from .mmtf import MMTFParser
+except ImportError:
+    pass
+
 
 from Bio.File import as_handle
 
@@ -112,13 +117,13 @@ def read(handle, format, id=None):
     If you have the file name in a string 'filename', use:
 
     >>> from Bio import PDB
-    >>> filename = "1A8O.pdb"
-    >>> PDB.read(filename, format="pdb")
+    >>> filename = "../Tests/PDB/1A8O.pdb"
+    >>> structure = PDB.read(filename, format="pdb")
 
     The function also supports file handles and gzip files
 
     >>> from Bio import PDB
-    >>> PDB.read("1A8O.pdb.gz", format="pdb")
+    >>> structure = PDB.read("../Tests/PDB/1A8O.pdb.gz", format="pdb")
     """
     # TODO *kwargs for the parser to allow QUIET or permissive mode
 

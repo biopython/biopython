@@ -12,11 +12,47 @@ import unittest
 import warnings
 import os
 import tempfile
+from Bio import PDB
 from Bio.PDB import PDBParser, Select
 from Bio.PDB.mmtf import MMTFParser, MMTFIO
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 import mmtf
+
+
+class PDBread(unittest.TestCase):
+    """Base class for Bio.PDB.read unit tests related to mmtf."""
+
+    def setUp(self):
+        self.MMTFParser = MMTFParser()
+        pass
+
+    def test_PDB_read_mmtf_handle(self):
+        """Test mmtf error when using handle."""
+        # MMTF reader does not accept handles
+        with self.assertRaises(TypeError):
+            with open("PDB/1A8O.mmtf") as handle:
+                _ = PDB.read(handle, format="mmtf")
+
+    @unittest.skip("warning not implemented yet")
+    def test_PDB_read_mmtf_id(self):
+        """Test mmtf error when setting id."""
+        # MMTF reader does not accept ids, so a warning should show that it id is ignored
+        _ = PDB.read("PDB/1A8O.mmtf", format="mmtf", id="test")
+
+    def test_PDB_read(self):
+        """Test reading using read function and MMTFParser()."""
+        # ID is read from PDB header
+        structure_read = PDB.read("PDB/1A8O.mmtf", format="mmtf")
+        structure_mmtf = MMTFParser.get_structure("PDB/1A8O.mmtf")
+
+        read_atoms = structure_read.get_atoms()
+        mmtf_atoms = structure_mmtf.get_atoms()
+        self.assertEqual(len(read_atoms), len(mmtf_atoms))
+        for i, e in enumerate(self.mmtf_atoms):
+            mmtf_atom = self.mmtf_atoms[i]
+            read_atom = self.read_atoms[i]
+            self.assertEqual(read_atom.name, mmtf_atom.name)
 
 
 class ParseMMTF(unittest.TestCase):

@@ -11,7 +11,7 @@ import warnings
 
 from Bio import PDB
 
-from Bio.PDB import PDBParser, MMCIFParser, MMTFParser
+from Bio.PDB import PDBParser, MMCIFParser
 
 
 class PDBTestBaseClass(unittest.TestCase):
@@ -20,7 +20,6 @@ class PDBTestBaseClass(unittest.TestCase):
     def setUp(self):
         self.PDBParser = PDBParser()
         self.MMCIFParser = MMCIFParser()
-        self.MMTFParser = MMTFParser()
         pass
 
     def test_PDB_read_pdb_pdbgz(self):
@@ -44,19 +43,6 @@ class PDBTestBaseClass(unittest.TestCase):
         self.assertEqual(structure, structure_handle)
         self.assertEqual(structure, structure_parser)
 
-    def test_PDB_read_mmtf_handle(self):
-        """Test mmtf error when using handle."""
-        # MMTF reader does not accept handles
-        with self.assertRaises(TypeError):
-            with open("PDB/1A8O.mmtf") as handle:
-                _ = PDB.read(handle, format="mmtf")
-
-    @unittest.skip("warning not implemented yet")
-    def test_PDB_read_mmtf_id(self):
-        """Test mmtf error when setting id."""
-        # MMTF reader does not accept ids, so a warning should show that it id is ignored
-        _ = PDB.read("PDB/1A8O.mmtf", format="mmtf", id="test")
-
     def test_PDB_read_format(self):
         """Test format errors."""
         with self.assertRaises(TypeError):
@@ -78,8 +64,6 @@ class PDBTestBaseClass(unittest.TestCase):
 
         structure_cif = PDB.read("PDB/1A8O.cif", format="cif")
 
-        structure_mmtf = PDB.read("PDB/1A8O.mmtf", format="mmtf")
-
         with open("PDB/1A8O.pdb") as handle:
             structure_handle = PDB.read(handle, format="pdb")
 
@@ -89,11 +73,9 @@ class PDBTestBaseClass(unittest.TestCase):
         self.assertEqual(structure_handle.id, "1A8O")
         self.assertEqual(structure_cif.id, "1A8O")
         self.assertEqual(structure_parser.id, "1A8O")
-        self.assertEqual(structure_mmtf.id, "1A8O")
 
         # PDB file with no header, id is read from file name
         structure = PDB.read("PDB/ions.pdb", format="pdb")
-
         self.assertEqual(structure.id, "ions")
 
         # check if setting id works
