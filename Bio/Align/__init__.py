@@ -1173,8 +1173,14 @@ class PairwiseAlignment:
             tName = "target"
         else:
             target = target.seq
-        seq1 = bytes(target)
-        seq2 = bytes(query)
+        try:
+            seq1 = bytes(target)
+        except TypeError:  # string
+            seq1 = target
+        try:
+            seq2 = bytes(query)
+        except TypeError:  # string
+            seq2 = query
         n1 = len(seq1)
         n2 = len(seq2)
         # variable names follow those in the PSL file format specification
