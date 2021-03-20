@@ -1192,36 +1192,36 @@ class PairwiseAlignment:
         qStarts = []
         tStarts = []
         strand = "+"
-        start1, start2 = self.path[0]
-        tStart = start1
-        qStart = start2
-        for end1, end2 in self.path[1:]:
-            count1 = end1 - start1
-            count2 = end2 - start2
-            if count1 == 0:
+        tStart, qStart = self.path[0]
+        for tEnd, qEnd in self.path[1:]:
+            tCount = tEnd - tStart
+            qCount = qEnd - qStart
+            if tCount == 0:
                 qNumInsert += 1
-                qBaseInsert += count2
-                start2 = end2
-            elif count2 == 0:
+                qBaseInsert += qCount
+                qStart = qEnd
+            elif qCount == 0:
                 tNumInsert += 1
-                tBaseInsert += count1
-                start1 = end1
+                tBaseInsert += tCount
+                tStart = tEnd
             else:
-                assert count1 == count2
-                tStarts.append(start1)
-                qStarts.append(start2)
-                blockSizes.append(count1)
-                for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
+                assert tCount == qCount
+                tStarts.append(tStart)
+                qStarts.append(qStart)
+                blockSizes.append(tCount)
+                for c1, c2 in zip(seq1[tStart:tEnd], seq2[qStart:qEnd]):
                     if c1 == "N" or c2 == "N":
                         nCount += 1
                     elif c1 == c2:
                         matches += 1
                     else:
                         misMatches += 1
-                start1 = end1
-                start2 = end2
-        tEnd = end1
-        qEnd = end2
+                tStart = tEnd
+                qStart = qEnd
+        tStart = tStarts[0]  # start of alignment in target
+        qStart = qStarts[0]  # start of alignment in query
+        tEnd = tStarts[-1] + blockSizes[-1]  # end of alignment in target
+        qEnd = qStarts[-1] + blockSizes[-1]  # end of alignment in query
         blockcount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
