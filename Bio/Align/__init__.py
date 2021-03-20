@@ -1173,8 +1173,8 @@ class PairwiseAlignment:
             tName = "target"
         else:
             target = target.seq
-        seq1 = str(target)
-        seq2 = str(query)
+        seq1 = bytes(target)
+        seq2 = bytes(query)
         n1 = len(seq1)
         n2 = len(seq2)
         # variable names follow those in the PSL file format specification
@@ -1197,12 +1197,14 @@ class PairwiseAlignment:
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
-                qNumInsert += 1
-                qBaseInsert += qCount
+                if qStart > 0 and qEnd < qSize:
+                    qNumInsert += 1
+                    qBaseInsert += qCount
                 qStart = qEnd
             elif qCount == 0:
-                tNumInsert += 1
-                tBaseInsert += tCount
+                if tStart > 0 and tEnd < tSize:
+                    tNumInsert += 1
+                    tBaseInsert += tCount
                 tStart = tEnd
             else:
                 assert tCount == qCount
@@ -1556,10 +1558,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
-            seqA = bytes(seqA)
+            sA = bytes(seqA)
+        else:
+            sA = seqA
         if isinstance(seqB, (Seq, MutableSeq)):
-            seqB = bytes(seqB)
-        score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
+            sB = bytes(seqB)
+        else:
+            sB = seqB
+        score, paths = _aligners.PairwiseAligner.align(self, sA, sB)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
