@@ -30,4 +30,4 @@ if __name__ == "__main__":
         # To avoid interfering with the remaining pairwise2 tests,
         # restore the original functions
         pairwise2._make_score_matrix_fast = orig_make_score_matrix_fast
-        pairwise2.rint = orig_python_rint
+        pairwise2.rint = orig_rint
