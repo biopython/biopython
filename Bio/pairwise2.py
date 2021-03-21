@@ -73,9 +73,9 @@ start and end positions of the alignment:
 You can access each element of an alignment by index or name:
 
    >>> alignments[0][2]
-   3
+   3.0
    >>> alignments[0].score
-   3
+   3.0
 
 For a nice printout of an alignment, use the ``format_alignment`` method of
 the module:
