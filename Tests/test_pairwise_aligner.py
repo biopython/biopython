@@ -2698,12 +2698,14 @@ class TestAlignmentFormat(unittest.TestCase):
 GAACT
 |--||
 G--CT
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 3	0	0	0	0	0	1	2	+	query	3	0	3	target	5	0	5	2	1,2,	0,1,	0,3,
-""")
+""",
+        )
         alignments = aligner.align("GCT", "GAACT")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2713,12 +2715,14 @@ G--CT
 G--CT
 |--||
 GAACT
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 3	0	0	0	1	2	0	0	+	query	5	0	5	target	3	0	3	2	1,2,	0,3,	0,1,
-""")
+""",
+        )
 
     def test_alignment_end_gap(self):
         aligner = Align.PairwiseAligner()
@@ -2734,12 +2738,14 @@ GAACT
 ----ACGTAGCATCAGC
 ----|||||||||||||
 CCCCACGTAGCATCAGC
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	17	4	17	target	13	0	13	1	13,	4,	0,
-""")
+""",
+        )
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2749,12 +2755,14 @@ CCCCACGTAGCATCAGC
 CCCCACGTAGCATCAGC
 ----|||||||||||||
 ----ACGTAGCATCAGC
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	4	17	1	13,	0,	4,
-""")
+""",
+        )
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2764,12 +2772,14 @@ CCCCACGTAGCATCAGC
 ACGTAGCATCAGC----
 |||||||||||||----
 ACGTAGCATCAGCGGGG
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	17	0	13	target	13	0	13	1	13,	0,	0,
-""")
+""",
+        )
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2779,17 +2789,16 @@ ACGTAGCATCAGCGGGG
 ACGTAGCATCAGCGGGG
 |||||||||||||----
 ACGTAGCATCAGC----
-""")
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	0	13	1	13,	0,	0,
-""")
+""",
+        )
 
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
-
-
