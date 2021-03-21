@@ -2683,6 +2683,122 @@ class TestAlignerPickling(unittest.TestCase):
         self.assertEqual(aligner.mode, pickled_aligner.mode)
 
 
+class TestAlignmentFormat(unittest.TestCase):
+    def test_alignment_simple(self):
+        aligner = Align.PairwiseAligner()
+        aligner.extend_gap_score = -1
+        aligner.open_gap_score = -3
+        aligner.mismatch = -10
+        alignments = aligner.align("GAACT", "GCT")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+GAACT
+|--||
+G--CT
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+3	0	0	0	0	0	1	2	+	query	3	0	3	target	5	0	5	2	1,2,	0,1,	0,3,
+""",
+        )
+        alignments = aligner.align("GCT", "GAACT")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+G--CT
+|--||
+GAACT
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+3	0	0	0	1	2	0	0	+	query	5	0	5	target	3	0	3	2	1,2,	0,3,	0,1,
+""",
+        )
+
+    def test_alignment_end_gap(self):
+        aligner = Align.PairwiseAligner()
+        aligner.gap_score = -1
+        aligner.end_gap_score = 0
+        aligner.mismatch = -10
+        alignments = aligner.align("ACGTAGCATCAGC", "CCCCACGTAGCATCAGC")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+----ACGTAGCATCAGC
+----|||||||||||||
+CCCCACGTAGCATCAGC
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+13	0	0	0	0	0	0	0	+	query	17	4	17	target	13	0	13	1	13,	4,	0,
+""",
+        )
+        alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+CCCCACGTAGCATCAGC
+----|||||||||||||
+----ACGTAGCATCAGC
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	4	17	1	13,	0,	4,
+""",
+        )
+        alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+ACGTAGCATCAGC----
+|||||||||||||----
+ACGTAGCATCAGCGGGG
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+13	0	0	0	0	0	0	0	+	query	17	0	13	target	13	0	13	1	13,	0,	0,
+""",
+        )
+        alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+ACGTAGCATCAGCGGGG
+|||||||||||||----
+ACGTAGCATCAGC----
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	0	13	1	13,	0,	0,
+""",
+        )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
