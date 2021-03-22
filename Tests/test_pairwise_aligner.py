@@ -2836,7 +2836,7 @@ TTTTTNACGCTCGAGCAGCTACG-----
 ------|||.||||||.||||||-----
 ------ACGATCGAGCNGCTACGCCCNC
 """,
-            )
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
