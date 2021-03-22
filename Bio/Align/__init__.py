@@ -1176,13 +1176,14 @@ class PairwiseAlignment:
         try:
             seq1 = bytes(target)
         except TypeError:  # string
-            seq1 = target
+            seq1 = bytes(target, "ASCII")
         try:
             seq2 = bytes(query)
         except TypeError:  # string
-            seq2 = query
+            seq2 = bytes(query, "ASCII")
         n1 = len(seq1)
         n2 = len(seq2)
+        wildcard = ord("N")
         # variable names follow those in the PSL file format specification
         matches = 0
         misMatches = 0
@@ -1218,7 +1219,7 @@ class PairwiseAlignment:
                 qStarts.append(qStart)
                 blockSizes.append(tCount)
                 for c1, c2 in zip(seq1[tStart:tEnd], seq2[qStart:qEnd]):
-                    if c1 == "N" or c2 == "N":
+                    if c1 == wildcard or c2 == wildcard:
                         nCount += 1
                     elif c1 == c2:
                         matches += 1
