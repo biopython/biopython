@@ -1404,19 +1404,21 @@ additional argument of \verb|usehistory="y"|,
 >>> search_handle.close()
 \end{minted}
 
-\noindent When you get the XML output back, it will still include the usual search results.
+\noindent As before (see Section~\ref{sec:entrez_example_genbank}), the XML output includes the first \verb+retmax+ search results, with \verb+retmax+ defaulting to 20:
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> acc_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
->>> count == len(acc_list)
-True
+>>> len(acc_list)
+20
+\end{minted}
+\begin{minted}{pycon}
+>>> count
+28
 \end{minted}
 
-\noindent (Remember from Section~\ref{sec:entrez_example_genbank} that the number of records retrieved will not necessarily be the same as the \verb+Count+, especially if the argument \verb+retmax+ is used.)
-
-\noindent However, you also get given two additional pieces of information, the \texttt{WebEnv} session cookie, and the \texttt{QueryKey}:
+\noindent You also get given two additional pieces of information, the \texttt{WebEnv} session cookie, and the \texttt{QueryKey}:
 
 %cont-doctest
 \begin{minted}{pycon}
