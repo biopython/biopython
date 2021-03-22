@@ -10,6 +10,7 @@ import os
 import unittest
 
 from Bio import Align, SeqIO
+from Bio.Seq import Seq
 
 
 class TestAlignerProperties(unittest.TestCase):
@@ -2795,6 +2796,51 @@ ACGTAGCATCAGC----
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	0	13	1	13,	0,	0,
+""",
+        )
+
+    def test_alignment_wildcard(self):
+        aligner = Align.PairwiseAligner()
+        aligner.gap_score = -10
+        aligner.end_gap_score = 0
+        aligner.mismatch = -2
+        aligner.wildcard = "N"
+        target = "TTTTTNACGCTCGAGCAGCTACG"
+        query = "ACGATCGAGCNGCTACGCCCNC"
+        # use strings for target and query
+        alignments = aligner.align(target, query)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG-----
+------|||.||||||.||||||-----
+------ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        # use Seq objects for target and query
+        alignments = aligner.align(Seq(target), Seq(query))
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG-----
+------|||.||||||.||||||-----
+------ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
 """,
         )
 
