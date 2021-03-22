@@ -86,7 +86,7 @@ def get_prosite_raw(id, cgi=None):
 
     """
     handle = _open("https://prosite.expasy.org/%s.txt" % id)
-    if handle.url == 'https://www.expasy.org/':
+    if handle.url == "https://www.expasy.org/":
         raise ValueError("Failed to find entry '%s' on ExPASy" % id) from None
     return handle
 
