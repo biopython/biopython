@@ -2811,11 +2811,14 @@ ACGTAGCATCAGC----
         alignments = aligner.align(target, query)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTTTTNACGCTCGAGCAGCTACG-----
 ------|||.||||||.||||||-----
 ------ACGATCGAGCNGCTACGCCCNC
-""")
+            """,
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
@@ -2826,11 +2829,14 @@ TTTTTNACGCTCGAGCAGCTACG-----
         alignments = aligner.align(Seq(target), Seq(query))
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTTTTNACGCTCGAGCAGCTACG-----
 ------|||.||||||.||||||-----
 ------ACGATCGAGCNGCTACGCCCNC
-""")
+""",
+            )
         self.assertEqual(
             format(alignment, "psl"),
             """\
