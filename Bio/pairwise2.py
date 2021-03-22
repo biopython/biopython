@@ -68,7 +68,7 @@ is a named tuple consisting of the two aligned sequences, the score and the
 start and end positions of the alignment:
 
    >>> print(alignments)
-   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3, start=0, end=5), ...
+   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3.0, start=0, end=5), ...
 
 You can access each element of an alignment by index or name:
 
@@ -662,13 +662,13 @@ def _make_score_matrix_generic(
         if penalize_end_gaps[1]:  # [1]:gap in sequence B
             score = gap_B_fn(0, i)
         else:
-            score = 0
+            score = 0.0
         score_matrix[i][0] = score
     for i in range(lenB + 1):
         if penalize_end_gaps[0]:  # [0]:gap in sequence A
             score = gap_A_fn(0, i)
         else:
-            score = 0
+            score = 0.0
         score_matrix[0][i] = score
 
     # Fill in the score matrix.  Each position in the matrix
@@ -717,7 +717,7 @@ def _make_score_matrix_generic(
             best_score = max(nogap_score, row_open, row_extend, col_open, col_extend)
             local_max_score = max(local_max_score, best_score)
             if not align_globally and best_score < 0:
-                score_matrix[row][col] = 0
+                score_matrix[row][col] = 0.0
             else:
                 score_matrix[row][col] = best_score
 
@@ -1313,7 +1313,7 @@ class affine_penalty:
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
     """Calculate a penality score for the gap function."""
     if length <= 0:
-        return 0
+        return 0.0
     penalty = open + extend * length
     if not penalize_extend_when_opening:
         penalty -= extend
