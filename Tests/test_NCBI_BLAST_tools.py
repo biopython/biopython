@@ -385,7 +385,7 @@ class CheckCompleteArgList(unittest.TestCase):
             shell=(sys.platform != "win32"),
         )
         stdoutdata, stderrdata = child.communicate()
-        self.assertEqual(stderrdata, "", "%s\n%s" % (str(cline), stderrdata))
+        self.assertEqual(stderrdata, "", "%s\n%s" % (cline, stderrdata))
         names_in_tool = set()
         while stdoutdata:
             index = stdoutdata.find("[")
@@ -399,134 +399,6 @@ class CheckCompleteArgList(unittest.TestCase):
                 name = name.split(None, 1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index + 1 :]
-
-        extra = names.difference(names_in_tool)
-        missing = names_in_tool.difference(names)
-        if "-verbose" in missing:
-            # Known issue, seems to be present in some builds (Bug 3043)
-            missing.remove("-verbose")
-        if "-remote_verbose" in missing:
-            # Known issue, seems to be present in some builds (Bug 3043)
-            missing.remove("-remote_verbose")
-        if "-use_test_remote_service" in missing:
-            # Known issue, seems to be present in some builds (Bug 3043)
-            missing.remove("-use_test_remote_service")
-        if exe_name == "blastn" and "-off_diagonal_range" in extra:
-            # Added in BLAST 2.2.23+
-            extra.remove("-off_diagonal_range")
-        if exe_name == "tblastx":
-            # These appear to have been removed in BLAST 2.2.23+
-            # (which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(
-                ["-gapextend", "-gapopen", "-xdrop_gap", "-xdrop_gap_final"]
-            )
-        if exe_name in ["rpsblast", "rpstblastn"]:
-            # These appear to have been removed in BLAST 2.2.24+
-            # (which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(["-num_threads"])
-        if exe_name in ["tblastn", "tblastx"]:
-            # These appear to have been removed in BLAST 2.2.24+
-            extra = extra.difference(["-db_soft_mask"])
-        # This was added in BLAST 2.2.24+ to most/all the tools, so
-        # will be seen as an extra argument on older versions:
-        if "-seqidlist" in extra:
-            extra.remove("-seqidlist")
-        if "-db_hard_mask" in extra and exe_name in [
-            "blastn",
-            "blastp",
-            "blastx",
-            "tblastx",
-            "tblastn",
-        ]:
-            # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
-            extra.remove("-db_hard_mask")
-        if "-msa_master_idx" in extra and exe_name == "psiblast":
-            # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
-            extra.remove("-msa_master_idx")
-        if exe_name == "rpsblast":
-            # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
-            extra = extra.difference(
-                ["-best_hit_overhang", "-best_hit_score_edge", "-culling_limit"]
-            )
-        if "-max_hsps_per_subject" in extra:
-            # New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
-            extra.remove("-max_hsps_per_subject")
-        if "-ignore_msa_master" in extra and exe_name == "psiblast":
-            # New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
-            extra.remove("-ignore_msa_master")
-        if exe_name == "blastx":
-            # New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
-            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
-        if exe_name in ["blastx", "tblastn"]:
-            # Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
-            extra = extra.difference(["-frame_shift_penalty"])
-        if exe_name in [
-            "blastn",
-            "blastp",
-            "blastx",
-            "tblastn",
-            "tblastx",
-            "psiblast",
-            "rpstblastn",
-            "rpsblast",
-        ]:
-            # New in BLAST 2.2.29+ so will look like extra args on old BLAST:
-            extra = extra.difference(["-max_hsps", "-sum_statistics"])
-        if exe_name in ["rpstblastn", "rpsblast"]:
-            # Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
-            extra = extra.difference(["-gilist", "-negative_gilist"])
-            # Removed in BLAST 2.2.30 so will look like extra args on new BLAST
-            # Apparently -word_size should never have been added to these tools.
-            extra = extra.difference(["-word_size"])
-            # New in BLAST 2.2.28+ (for rpsblast) and BLAST 2.6+ (for rpstblastn)
-            # so will look like extra args on old BLAST:
-            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
-        if exe_name == "deltablast":
-            # New in BLAST+ 2.2.29 so will look like extra args on BLAST+ 2.2.28
-            extra = extra.difference(["-entrez_query", "-max_hsps", "-sum_statistics"])
-            # New in BLAST+ 2.2.27 so looks like extra arg on BLAST+ 2.2.26
-            extra = extra.difference(["-remote"])
-        if exe_name in ["blastx", "tblastn"]:
-            # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
-            extra = extra.difference(["-task"])
-        if exe_name in [
-            "blastn",
-            "blastp",
-            "blastx",
-            "deltablast",
-            "psiblast",
-            "rpstblastn",
-            "rpsblast",
-            "tblastn",
-            "tblastx",
-        ]:
-            # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
-            extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
-        if exe_name in ["deltablast", "psiblast"]:
-            # New in BLAST+ 2.3.0 so will look like extra args on older verions
-            extra = extra.difference(["-save_each_pssm", "-save_pssm_after_last_round"])
-        if exe_name == "makeblastdb":
-            # -input_type is new in BLAST+ 2.2.26+ so will look like extra
-            # arg on older versions. -mask_desc and -mask_id were added after
-            # 2.2.28+, but not documented in changelog.
-            # -dbtype also ignored here, as it was set to initialize class.
-            extra = extra.difference(
-                ["-input_type", "-mask_desc", "-mask_id", "-dbtype"]
-            )
-        # This was added in BLAST+ 2.7.1 (or maybe 2.7.0) to most/all the tools,
-        # so will be seen as an extra argument on older versions:
-        if "-negative_seqidlist" in extra:
-            extra.remove("-negative_seqidlist")
-
-        if extra or missing:
-            import warnings
-
-            warnings.warn(
-                "NCBI BLAST+ %s and Biopython out sync. Please update Biopython, "
-                "or report this issue if you are already using the latest version. "
-                "(Extra args: %s; Missing: %s)"
-                % (exe_name, ",".join(sorted(extra)), ",".join(sorted(missing)))
-            )
 
         # An almost trivial example to test any validation
         if "-query" in names:

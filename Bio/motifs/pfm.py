@@ -40,11 +40,9 @@ def read(handle, pfm_format):
 
 
 def _read_pfm_four_columns(handle):
-    """Read motifs in Cluster Buster position frequency matrix format from a file handle.
+    """Read motifs in position frequency matrix format (4 columns) from a file handle.
 
-    Cluster Buster motif format: http://zlab.bu.edu/cluster-buster/help/cis-format.html
-
-    #cisbp
+    # cisbp
     Pos A   C   G   T
     1   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
     2   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
@@ -55,7 +53,7 @@ def _read_pfm_four_columns(handle):
     7   0.00961538461538462 0.971153846153846   0.00961538461538462 0.00961538461538462
     8   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
 
-    #c2h2 zfs
+    # c2h2 zfs
     Gene    ENSG00000197372
     Pos A   C   G   T
     1   0.341303    0.132427    0.117054    0.409215
@@ -79,7 +77,7 @@ def _read_pfm_four_columns(handle):
     19  0.000000    1.000000    0.000000    0.000000
     20  1.000000    0.000000    0.000000    0.000000
 
-    #c2h2 zfs
+    # c2h2 zfs
     Gene    FBgn0000210
     Motif   M1734_0.90
     Pos A   C   G   T
@@ -275,11 +273,9 @@ def _read_pfm_four_columns(handle):
 
 
 def _read_pfm_four_rows(handle):
-    """Read motifs in position frequency matrix format from a file handle.
+    """Read motifs in position frequency matrix format (4 rows) from a file handle.
 
-    Cluster Buster motif format: http://zlab.bu.edu/cluster-buster/help/cis-format.html
-
-    #hdpi
+    # hdpi
     A   0   5   6   5   1   0
     C   1   1   0   0   0   4
     G   5   0   0   0   3   0
@@ -291,7 +287,7 @@ def _read_pfm_four_rows(handle):
     G   0.0 1.0 0.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.0 1.0 0.249999999875
     C   0.5 0.0 1.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.5 0.0 0.583333333208333
 
-    #flyfactorsurvey ZFP finger
+    # flyfactorsurvey ZFP finger
     A |     92    106    231    135      0      1    780     28      0    700    739     94     60    127    130
     C |    138     82    129     81    774      1      3      1      0      6     17     49    193    122    148
     G |    270    398     54    164      7    659      1    750    755     65      1     41    202    234    205
@@ -309,7 +305,7 @@ def _read_pfm_four_rows(handle):
     G | 0.020 0.010 0.010 0.010 0.970 0.020
     T | 0.800 0.010 0.970 0.010 0.010 0.020
 
-    #idmmpmm
+    # idmmpmm
     > abd-A
     0.218451749734889 0.0230646871686108 0.656680805938494 0.898197242841994 0.040694591728526 0.132953340402969 0.74907211028632 0.628313891834571
     0.0896076352067868 0.317338282078473 0.321580063626723 0.0461293743372216 0.0502386002120891 0.040694591728526 0.0284994697773065 0.0339342523860021
@@ -335,9 +331,9 @@ def _read_pfm_four_rows(handle):
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
     row_pattern_with_nucleotide_letter = re.compile(
-        r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*"
+        r"\s*([ACGT])\s*[\[|]*\s*([0-9.\-eE\s]+)\s*\]*\s*"
     )
-    row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\s]+)\s*")
+    row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\-eE\s]+)\s*")
 
     motif_name = None
     nucleotide_counts = {}
@@ -409,9 +405,7 @@ def write(motifs):
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
-            lines.append(
-                "{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts)
-            )
+            lines.append("{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts))
 
     # Finished; glue the lines together.
     text = "".join(lines)

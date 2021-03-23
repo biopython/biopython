@@ -5,13 +5,16 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Xdna module."""
-
 import unittest
+
 from io import BytesIO
 
-from Bio import SeqIO, BiopythonWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 

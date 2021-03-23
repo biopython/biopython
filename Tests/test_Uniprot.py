@@ -11,10 +11,10 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-from seq_tests_common import compare_reference, compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 
 
-class TestUniprot(unittest.TestCase):
+class TestUniprot(SeqRecordTestBaseClass):
     """Tests Uniprot XML parser."""
 
     def test_uni001(self):
@@ -457,8 +457,14 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old.seq), str(new.seq))
+        self.assertEqual(old.seq, new.seq)
         for key in set(old.annotations).intersection(new.annotations):
+            if key in ["date"]:
+                # TODO - Why is this a list vs str?
+                continue
+            self.assertIsInstance(
+                old.annotations[key], type(new.annotations[key]), msg="key=%s" % key
+            )
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
@@ -472,32 +478,19 @@ class TestUniprot(unittest.TestCase):
                     r2.comment = ""
                     if not r2.journal:
                         r1.journal = ""
-                    compare_reference(r1, r2)
-            elif old.annotations[key] == new.annotations[key]:
-                pass
-            elif key in ["date"]:
-                # TODO - Why is this a list vs str?
-                pass
-            elif not isinstance(old.annotations[key], type(new.annotations[key])):
-                raise TypeError(
-                    "%s gives %s vs %s"
-                    % (key, old.annotations[key], new.annotations[key])
-                )
+                    self.compare_reference(r1, r2)
             elif key in ["organism"]:
-                if old.annotations[key] == new.annotations[key]:
-                    pass
-                elif old.annotations[key].startswith(new.annotations[key] + " "):
-                    pass
-                else:
-                    raise ValueError(key)
-            elif isinstance(old.annotations[key], list) and sorted(
-                old.annotations[key]
-            ) == sorted(new.annotations[key]):
-                pass
+                self.assertTrue(
+                    old.annotations[key] == new.annotations[key]
+                    or old.annotations[key].startswith(new.annotations[key] + " ")
+                )
+            elif isinstance(old.annotations[key], list):
+                self.assertEqual(
+                    sorted(old.annotations[key]), sorted(new.annotations[key])
+                )
             else:
-                raise ValueError(
-                    "%s gives %s vs %s"
-                    % (key, old.annotations[key], new.annotations[key])
+                self.assertEqual(
+                    old.annotations[key], new.annotations[key], msg="key=%s" % key
                 )
         self.assertEqual(
             len(old.features),
@@ -571,7 +564,7 @@ class TestUniprot(unittest.TestCase):
         for txt, xml, fas, id in zip(txt_list, xml_list, fas_list, ids):
             self.assertEqual(txt.id, id)
             self.assertIn(txt.id, fas.id.split("|"))
-            self.assertEqual(str(txt.seq), str(fas.seq))
+            self.assertEqual(txt.seq, fas.seq)
             self.compare_txt_xml(txt, xml)
 
     def test_multi_ex_index(self):
@@ -587,11 +580,11 @@ class TestUniprot(unittest.TestCase):
         # Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
         for old in txt_list:
             new = txt_index[old.id]
-            compare_record(old, new)
+            self.compare_record(old, new)
         # Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
         for old in xml_list:
             new = xml_index[old.id]
-            compare_record(old, new)
+            self.compare_record(old, new)
         txt_index.close()
         xml_index.close()
 

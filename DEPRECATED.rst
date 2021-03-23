@@ -54,6 +54,7 @@ No longer supported as of Release 1.77. First supported in release 1.66.
 
 Python 3.6
 ----------
+Triggers a deprecation warning as of release 1.79.
 First supported in release 1.69.
 
 Python 3.7
@@ -73,6 +74,11 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.Application and the command line wrappers using it
+------------------------------------------------------
+Declared obsolete in release 1.79. Please use the standard library subprocess
+module directly instead.
+
 Bio.Index
 ---------
 Deprecated in release 1.75, removed in release 1.77. Was not used anywhere in
@@ -80,8 +86,8 @@ Biopython.
 
 Bio.Crystal
 -----------
-Declared obsolete in release 1.75, deprecated in release 1.76. PDB NDB files
-can be opened with Bio.PDB.
+Declared obsolete in release 1.75, deprecated in release 1.76, removed in
+release 1.79. PDB NDB files can be opened with Bio.PDB.
 
 Bio.motifs
 ----------
@@ -94,7 +100,7 @@ in release 1.77, in favor of a ``__format__`` method that can be used from the
 
 Bio.Restriction.RanaConfig
 --------------------------
-Removed in Biopython 1.74 without explicit depreciation period. RanaConfig was
+Removed in Biopython 1.74 without explicit deprecation period. RanaConfig was
 a configuration file containing some constants for Bio.Restriction.PrintFormat
 and ranacompiler.py, a script to update Bio.Restriction.Restriction_Dictionary,
 and which is not part of the Biopython installation. The constants were
@@ -181,6 +187,26 @@ Deprecated in release 1.64, and removed in release 1.73.
 You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
 the tostring() methods.
 
+Bio.Seq.Seq.tomutable() and Bio.Seq.MutableSeq.toseq()
+------------------------------------------------------
+Deprecated in release 1.79.
+Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
+Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
+
+Bio.Seq.Seq.ungap()
+-------------------
+Declared obsolete in release 1.79.
+Instead of myseq.ungap(), please use myseq.replace("-", "").
+
+Bio.Seq.UnknownSeq
+------------------
+Deprecated in release 1.79.
+Instead of ``UnknownSeq(length)``, please use ``Seq(None, length=length)``.
+Note that the sequence contents of a ``Seq`` object constructed in this way
+is considered to be unknown, and any attempt to access the sequence contents
+(for example, by calling ``print`` on the object) will result in an
+``UndefinedSequenceError``.
+
 Iterator .next() methods
 ------------------------
 The .next() method defined for any Biopython iterator is deprecated as of
@@ -226,6 +252,16 @@ Bio.PDB.mmCIF
 This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
 from the standard library instead. This had required manual intervention to
 include when installing Biopython from source due to a dependency on flex.
+
+Bio.PDB.Residue
+---------------
+The ``sort`` and ``get_atom`` methods of the ``Residue`` class were removed in
+Release 1.79.
+
+Bio.PDB.ResidueDepth
+--------------------
+Use of the ``PDB_TO_XYZR`` bash script was removed from ``get_surface`` in
+Release 1.79.
 
 Bio.SeqFeature
 --------------
@@ -364,6 +400,13 @@ BioSQL and psycopg
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
 in Release 1.51, and removed in Release 1.55. Please use psycopg2 instead.
 
+BioSQL.BioSeqDatabase
+---------------------
+The ``remove_database`` and ``get_all_primary_ids`` methods were removed from
+the ``DBServer`` class in Release 1.79.
+The ``get_Seq_by_primary_id`` method was removed from the ``BioSeqDatabase``
+class in Release 1.79.
+
 Bio.Application.generic_run and ApplicationResult
 -------------------------------------------------
 Declared obsolete in Release 1.51, deprecated in Release 1.53, and removed in
@@ -427,13 +470,15 @@ Numeric support
 Following the Release of 1.48, Numeric support in Biopython is discontinued.
 Please move to NumPy for Biopython 1.49 or later.
 
-Bio.Seq and the data property
------------------------------
+Bio.Seq, Bio.MutableSeq and the data property
+---------------------------------------------
 Direct use of the Seq object (and MutableSeq object) .data property is
 deprecated.  As of Release 1.49, writing to the Seq object's .data property
 triggered a warning, and this property was made read only in Release 1.53. In
-Release 1.55 final, accessing the .data property gives a DeprecationWarning.
-The Seq object's .data property was removed in Release 1.61.
+Release 1.55 final, accessing the .data property of a Seq object gives a
+DeprecationWarning. The Seq object's .data property was removed in Release
+1.61.  Starting from Release 1.78, accessing the .data property of a MutableSeq
+object similarly gives a deprecation warning.
 
 Bio.Transcribe and Bio.Translate
 --------------------------------
@@ -806,8 +851,10 @@ in Release 1.59, deprecated in Release 1.61, and removed in Release 1.64.
 
 Bio.SubsMat
 -----------
-The methods letter_sum and all_letters_sum were removed from the SeqMat class
-in Bio.SubsMat in Release 1.57.
+The methods ``letter_sum`` and ``all_letters_sum`` were removed from the
+``SeqMat`` class in Bio.SubsMat in Release 1.57.
+The methods ``print_full_mat`` and ``print_mat`` were removed from the
+`SeqMat`` class in Bio.SubsMat in Release 1.79.
 The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
 please consider using Bio.Align.substitution_matrices.
 
@@ -816,7 +863,7 @@ Bio.Align
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57 and removed in Release 1.69.
 The format method of the MultipleSeqAlignment class and the PairwiseAlignment
-class were deprecated in Release 1.76.
+class were deprecated in Release 1.76, and removed in Release 1.79.
 
 Bio.Align.Generic
 -----------------
@@ -847,8 +894,8 @@ implementing a trie data structure.
 
 Bio.Statistics
 --------------
-This module was declared obsolete in Release 1.74, and deprecated in Release
-1.76.
+This module was declared obsolete in Release 1.74, deprecated in Release 1.76,
+and removed in Release 1.79.
 
 Bio.File
 --------
@@ -859,3 +906,16 @@ Biopython still using this class.
 Bio.FSSP
 -----------
 Deprecated in release 1.77.
+
+Bio.Phylo.BaseTree.Tree
+-----------------------
+The format method was deprecated in Release 1.79 in favor of the __format__
+method, which supports Python's built-in format function.
+
+Bio.Phylo._utils
+----------------
+The ``draw_graphviz`` function was removed in Release 1.79.
+
+Scripts/Restriction/ranacompiler.py
+-----------------------------------
+The ``is_palindrom`` function was removed in Release 1.79.

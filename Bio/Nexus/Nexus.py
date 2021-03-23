@@ -869,8 +869,8 @@ class Nexus:
         if "labels" in options:
             self.labels = options["labels"]
         if "transpose" in options:
+            # self.transpose = True
             raise NexusError("TRANSPOSE is not supported!")
-            self.transpose = True
         if "interleave" in options:
             if options["interleave"] is None or options["interleave"].lower() == "yes":
                 self.interleave = True
@@ -1060,17 +1060,15 @@ class Nexus:
                 else:
                     if self.matchchar:
                         while True:
-                            p = str(iupac_seq).find(self.matchchar)
+                            p = iupac_seq.find(self.matchchar)
                             if p == -1:
                                 break
                             iupac_seq = Seq(
-                                str(iupac_seq)[:p]
-                                + refseq[p]
-                                + str(iupac_seq)[p + 1 :],
+                                iupac_seq[:p] + refseq[p] + iupac_seq[p + 1 :]
                             )
 
                 # Check for invalid characters
-                for i, c in enumerate(str(iupac_seq)):
+                for i, c in enumerate(iupac_seq):
                     if (
                         c not in self.valid_characters
                         and c != self.gap
@@ -1978,7 +1976,7 @@ class Nexus:
         else:
             sitesm = list(zip(*[cm[t] for t in undelete]))
         bootstrapsitesm = [
-            sitesm[random.randint(0, len(sitesm) - 1)] for i in range(len(sitesm))
+            sitesm[random.randint(0, len(sitesm) - 1)] for _ in range(len(sitesm))
         ]
         bootstrapseqs = ["".join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:

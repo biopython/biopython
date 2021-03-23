@@ -192,7 +192,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-",""), old.seq)
     """
 
     def test_simple_msf(self):
@@ -225,7 +225,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
 
     def test_simple_clustal(self):
         """Simple muscle call using Clustal output with a MUSCLE header."""
@@ -258,7 +258,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
 
     def test_simple_clustal_strict(self):
         """Simple muscle call using strict Clustal output."""
@@ -290,7 +290,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         return_code = child.wait()
         self.assertEqual(return_code, 0)
         child.stdout.close()
@@ -335,7 +335,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         # See if quiet worked:
         self.assertEqual("", child.stderr.read().strip())
         return_code = child.wait()
@@ -371,7 +371,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         self.assertEqual(0, child.wait())
         child.stdout.close()
         child.stderr.close()

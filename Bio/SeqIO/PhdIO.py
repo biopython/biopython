@@ -51,11 +51,10 @@ Or,
 
 Note these examples only show the first 50 bases to keep the output short.
 """
-
-
+from Bio.SeqIO import QualityIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
-from Bio.SeqIO import QualityIO
+
 from .Interfaces import SequenceWriter
 
 

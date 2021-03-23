@@ -9,12 +9,11 @@
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
-
-
+from Bio.Align import MultipleSeqAlignment
+from Bio.AlignIO.Interfaces import AlignmentIterator
+from Bio.AlignIO.Interfaces import SequentialAlignmentWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from Bio.AlignIO.Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class ClustalWriter(SequentialAlignmentWriter):

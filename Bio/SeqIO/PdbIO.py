@@ -4,17 +4,16 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for accessing sequences in PDB and mmCIF files."""
-
 import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
 from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
+from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 

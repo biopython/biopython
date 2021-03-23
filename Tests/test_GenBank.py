@@ -23,7 +23,7 @@ from Bio import BiopythonParserWarning
 
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
+from Bio.Seq import Seq, UndefinedSequenceError
 
 # GenBank stuff to test:
 from Bio import GenBank
@@ -3337,10 +3337,14 @@ class TestFeatureParser(unittest.TestCase):
         cls.feat_parser = GenBank.FeatureParser(debug_level=0)
 
     def shorten(self, seq):
-        if len(seq) <= 60:
-            return seq
+        try:
+            s = str(seq)
+        except UndefinedSequenceError:
+            return None
+        if len(s) <= 60:
+            return s
         else:
-            return seq[:54] + "..." + seq[-3:]
+            return s[:54] + "..." + s[-3:]
 
     def perform_feature_parser_test(
         self,
@@ -5451,7 +5455,7 @@ qualifiers:
         with open(path) as handle:
             records = GenBank.Iterator(handle, self.feat_parser)
             record = next(records)
-        seq = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNN"
+        seq = None
         id = "NT_019265.6"
         name = "NT_019265"
         description = "Homo sapiens chromosome 1 working draft sequence segment"
@@ -7496,20 +7500,19 @@ class GenBankTests(unittest.TestCase):
                 seq_record = SeqIO.read(handle, "genbank")
         seq_features = seq_record.features
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.lower()),
+            seq_features[1].extract(seq_record).seq.lower(),
             "atgccctataaaacccagggctgccttggaaaaggcgcaaccccaaccccctcgagccgcggcatataa",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.lower()),
+            seq_features[2].extract(seq_record).seq.lower(),
             "atgccgcggctcgagggggttggggttgcgccttttccaaggcagccctgggttttatag",
         )
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.translate()),
+            seq_features[1].extract(seq_record).seq.translate(),
             "MPYKTQGCLGKGATPTPSSRGI*",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.translate()),
-            "MPRLEGVGVAPFPRQPWVL*",
+            seq_features[2].extract(seq_record).seq.translate(), "MPRLEGVGVAPFPRQPWVL*",
         )
 
     def test_fuzzy_origin_wrap(self):

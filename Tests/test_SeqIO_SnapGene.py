@@ -5,10 +5,10 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO SnapGene module."""
-
 import datetime
-from io import BytesIO
 import unittest
+
+from io import BytesIO
 
 from Bio import SeqIO
 

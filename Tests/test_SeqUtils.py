@@ -3,20 +3,25 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-
 """Tests for SeqUtils module."""
-
 import os
 import unittest
 
 from Bio import SeqIO
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC, seq1, seq3, GC_skew
-from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
-from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
+from Bio.SeqUtils import GC
+from Bio.SeqUtils import GC_skew
+from Bio.SeqUtils import seq1
+from Bio.SeqUtils import seq3
+from Bio.SeqUtils.CheckSum import crc32
+from Bio.SeqUtils.CheckSum import crc64
+from Bio.SeqUtils.CheckSum import gcg
+from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+from Bio.SeqUtils.lcc import lcc_mult
+from Bio.SeqUtils.lcc import lcc_simp
 
 
 class SeqUtilsTests(unittest.TestCase):
@@ -62,9 +67,9 @@ class SeqUtilsTests(unittest.TestCase):
                     seq = record.seq[start:end]
                 # Double check we have the CDS sequence expected
                 # TODO - Use any cds_start option if/when added to deal with the met
-                a = "M" + str(seq[3:].translate(table))
+                a = "M" + seq[3:].translate(table)
                 b = feature.qualifiers["translation"][0] + "*"
-                self.assertEqual(a, b, "%r vs %r" % (a, b))
+                self.assertEqual(a, b)
                 records.append(
                     SeqRecord(
                         seq,

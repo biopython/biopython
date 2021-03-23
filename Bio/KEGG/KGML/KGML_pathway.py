@@ -7,7 +7,7 @@
 
 """Classes to represent a KGML Pathway Map.
 
-The KGML definition is as of release KGML v0.7.1
+The KGML definition is as of release KGML v0.7.2
 (http://www.kegg.jp/kegg/xml/docs/)
 
 Classes:
@@ -33,7 +33,7 @@ class Pathway:
     """Represents a KGML pathway from KEGG.
 
     Specifies graph information for the pathway map, as described in
-    release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - name - KEGGID of the pathway map
@@ -81,7 +81,7 @@ class Pathway:
                 '<?xml version="1.0"?>',
                 "<!DOCTYPE pathway SYSTEM "
                 '"http://www.genome.jp/kegg/xml/'
-                'KGML_v0.7.1_.dtd">',
+                'KGML_v0.7.2_.dtd">',
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
@@ -262,7 +262,7 @@ class Entry:
     """Represent an Entry from KGML.
 
     Each Entry element is a node in the pathway graph, as described in
-    release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - id - The ID of the entry in the pathway map (integer)
@@ -422,7 +422,7 @@ class Component:
     """An Entry subelement used to represents a complex node.
 
     A subelement of the Entry element, used when the Entry is a complex
-    node, as described in release KGML v0.7.1
+    node, as described in release KGML v0.7.2
     (http://www.kegg.jp/kegg/xml/docs/)
 
     The Component acts as a collection (with type 'group', and typically
@@ -460,7 +460,7 @@ class Graphics:
     """An Entry subelement used to represents the visual representation.
 
     A subelement of Entry, specifying its visual representation, as
-    described in release KGML v0.7.1 (http://www.kegg.jp/kegg/xml/docs/)
+    described in release KGML v0.7.2 (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
      - name         Label for the graphics object
@@ -780,7 +780,7 @@ class Relation:
     """A relationship between to products, KOs, or protein and compound.
 
     This describes a relationship between two products, KOs, or protein
-    and compound, as described in release KGML v0.7.1
+    and compound, as described in release KGML v0.7.2
     (http://www.kegg.jp/kegg/xml/docs/)
 
     Attributes:
@@ -854,6 +854,6 @@ class Relation:
         }
         for (name, value) in self.subtypes:
             subtype = ET.Element("subtype")
-            subtype.attrib[name] = str(value)
+            subtype.attrib = {"name": name, "value": str(value)}
             relation.append(subtype)
         return relation

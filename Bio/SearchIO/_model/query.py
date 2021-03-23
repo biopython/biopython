@@ -291,12 +291,12 @@ class QueryResult(_BaseSearchObject):
                     hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx > len(self.hits) - 4:
                     hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx == 30:
                     lines.append("%14s" % "~~~")
 
@@ -403,7 +403,6 @@ class QueryResult(_BaseSearchObject):
                 deleted = True
             if not deleted:
                 raise KeyError(repr(key))
-        return
 
     # properties #
     id = optionalcascade("_id", "query_id", """QueryResult ID string""")

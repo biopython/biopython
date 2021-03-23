@@ -25,14 +25,14 @@ sequencing. If memory is an issue, the index_db(...) interface stores the
 keys and offsets in an SQLite database - which can be re-used to avoid
 re-indexing the file for use another time.
 """
-
-
 import re
+
 from io import BytesIO
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
+from Bio.File import _IndexedSeqFileProxy
+from Bio.File import _open_for_random_access
 
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
@@ -560,7 +560,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 break  # End of file
             try:
                 key = line.split(tab_char)[0]
-            except ValueError as err:
+            except ValueError:
                 if not line.strip():
                     # Ignore blank lines
                     continue

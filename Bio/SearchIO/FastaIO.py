@@ -532,7 +532,6 @@ class FastaM10Indexer(SearchIndexer):
     def __init__(self, filename):
         """Initialize the class."""
         SearchIndexer.__init__(self, filename)
-        self._handle = self._handle
 
     def __iter__(self):
         """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""

@@ -150,7 +150,7 @@ def _parse_remark_465(line):
         (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
             [A-Z]{1,3})               # Or only residue name with 1 (RNA) to 3 letters
         \s ([A-Za-z0-9])              # A single character chain
-        \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed by an optional
+        \s+(-?\d+[A-Za-z]?)$          # Residue number: A digit followed by an optional
                                       # insertion code (Hetero-flags make no sense in
                                       # context with missing res)
         """,

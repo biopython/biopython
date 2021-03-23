@@ -482,10 +482,7 @@ class Tree(Nodes.Chain):
 
         result = is_monophyletic(self,taxon_list)
         """
-        if isinstance(taxon_list, str):
-            taxon_set = set(taxon_list)
-        else:
-            taxon_set = set(taxon_list)
+        taxon_set = set(taxon_list)
         node_id = self.root
         while True:
             subclade_taxa = set(self.get_taxa(node_id))
@@ -597,8 +594,7 @@ class Tree(Nodes.Chain):
         table = [
             ("#", "taxon", "prev", "succ", "brlen", "blen (sum)", "support", "comment")
         ]
-        # Sort this to be consistent across CPython, Jython, etc
-        for i in sorted(self.all_ids()):
+        for i in self.all_ids():
             n = self.node(i)
             if not n.data:
                 table.append(

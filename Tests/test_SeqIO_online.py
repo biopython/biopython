@@ -3,7 +3,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Testing online code for fetching sequences, and parsing them.
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
@@ -16,16 +15,13 @@ Goals:
 """
 import unittest
 
-# We want to test these:
-from Bio import Entrez
-from Bio import ExPASy
+import requires_internet
 
-# In order to check any sequences returned
+from Bio import Entrez  # Testing this
+from Bio import ExPASy  # Testing this
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SwissProt import SwissProtParserError
-
-import requires_internet
 
 requires_internet.check()
 

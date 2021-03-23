@@ -2,7 +2,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
@@ -11,10 +10,16 @@ and confirms they are consistent using our different parsers.
 import unittest
 
 from Bio import SeqIO
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import WithinPosition
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
-from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
 
 class SeqRecordCreation(unittest.TestCase):
@@ -88,10 +93,10 @@ class SeqRecordCreation(unittest.TestCase):
         except ValueError as e:
             self.assertEqual(str(e), "You must empty the letter annotations first!")
         # Check we can replace IF the length is the same
-        self.assertEqual(str(rec.seq), "ACGT")
+        self.assertEqual(rec.seq, "ACGT")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
         rec.seq = Seq("NNNN")
-        self.assertEqual(str(rec.seq), "NNNN")
+        self.assertEqual(rec.seq, "NNNN")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
 
     def test_valid_id(self):
@@ -202,12 +207,10 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual(expected, rec.format("fasta"))
 
     def test_upper(self):
-        self.assertEqual(
-            "ABCDEFGHIJKLMNOPQRSTUVWZYX", str(self.record.lower().upper().seq)
-        )
+        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", self.record.lower().upper().seq)
 
     def test_lower(self):
-        self.assertEqual("abcdefghijklmnopqrstuvwzyx", str(self.record.lower().seq))
+        self.assertEqual("abcdefghijklmnopqrstuvwzyx", self.record.lower().seq)
 
     def test_slicing(self):
         self.assertEqual("B", self.record[1])
@@ -233,11 +236,11 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         rec = self.record
         self.assertEqual(len(rec), 26)
         left = rec[:10]
-        self.assertEqual(str(left.seq), str(rec.seq[:10]))
+        self.assertEqual(left.seq, rec.seq[:10])
         right = rec[-10:]
-        self.assertEqual(str(right.seq), str(rec.seq[-10:]))
+        self.assertEqual(right.seq, rec.seq[-10:])
         mid = rec[12:22]
-        self.assertEqual(str(mid.seq), str(rec.seq[12:22]))
+        self.assertEqual(mid.seq, rec.seq[12:22])
         for sub in [left, right, mid]:
             self.assertEqual(len(sub), 10)
             self.assertEqual(sub.id, "TestID")
@@ -248,8 +251,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             self.assertEqual(sub.annotations, {})  # May change this...
             self.assertEqual(len(sub.features), 1)
             # By construction, each feature matches the full sliced region:
-            self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
-            self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
+            self.assertEqual(sub.features[0].extract(sub.seq), sub.seq)
+            self.assertEqual(sub.features[0].extract(sub.seq), sub.seq)
 
     def test_slice_zero(self):
         """Zero slice."""
@@ -276,7 +279,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         for other in [Seq("BIO"), "BIO"]:
             rec = self.record + other  # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26 + 3)
-            self.assertEqual(str(rec.seq), str(self.record.seq) + "BIO")
+            self.assertEqual(rec.seq, str(self.record.seq) + "BIO")
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
@@ -294,7 +297,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         other.dbxrefs = ["dummy"]
         rec = self.record + other
         self.assertEqual(len(rec), len(self.record) + len(other))
-        self.assertEqual(str(rec.seq), str(self.record.seq) + str(other.seq))
+        self.assertEqual(rec.seq, self.record.seq + other.seq)
         self.assertEqual(rec.id, "<unknown id>")
         self.assertEqual(rec.name, "<unknown name>")
         self.assertEqual(rec.description, "<unknown description>")
@@ -319,7 +322,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         for other in [Seq("BIO"), "BIO"]:
             rec = other + self.record  # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26 + 3)
-            self.assertEqual(str(rec.seq), "BIO" + str(self.record.seq))
+            self.assertEqual(rec.seq, "BIO" + self.record.seq)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
@@ -335,7 +338,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         """Simple slice and add."""
         for cut in range(27):
             rec = self.record[:cut] + self.record[cut:]
-            self.assertEqual(str(rec.seq), str(self.record.seq))
+            self.assertEqual(rec.seq, self.record.seq)
             self.assertEqual(len(rec), 26)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
@@ -349,9 +352,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         """Simple slice and add to shift."""
         for cut in range(27):
             rec = self.record[cut:] + self.record[:cut]
-            self.assertEqual(
-                str(rec.seq), str(self.record.seq[cut:] + self.record.seq[:cut])
-            )
+            self.assertEqual(rec.seq, self.record.seq[cut:] + self.record.seq[:cut])
             self.assertEqual(len(rec), 26)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
@@ -388,7 +389,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
             letter_annotations=True,
         )
 
-        self.assertEqual("CAGT", str(rc.seq))
+        self.assertEqual("CAGT", rc.seq)
         self.assertEqual("TestID", rc.id)
         self.assertEqual("TestID", s.reverse_complement(id="TestID").id)
 
@@ -434,7 +435,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_reverse_complement_mutable_seq(self):
         s = SeqRecord(MutableSeq("ACTG"))
-        self.assertEqual("CAGT", str(s.reverse_complement().seq))
+        self.assertEqual("CAGT", s.reverse_complement().seq)
 
     def test_translate(self):
         s = SeqRecord(
@@ -479,37 +480,37 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_lt_exception(self):
         def lt():
-            SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, lt)
 
     def test_le_exception(self):
         def le():
-            SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
-            SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, equality)
 
     def test_ne_exception(self):
         def notequality():
-            SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, notequality)
 
     def test_gt_exception(self):
         def gt():
-            SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, gt)
 
     def test_ge_exception(self):
         def ge():
-            SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, ge)
 

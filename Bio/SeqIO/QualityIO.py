@@ -203,10 +203,10 @@ You can of course read in a QUAL file, such as the one we just created:
 
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("Quality/temp.qual", "qual"):
-...     print("%s %s" % (record.id, record.seq))
-EAS54_6_R1_2_1_413_324 ?????????????????????????
-EAS54_6_R1_2_1_540_792 ?????????????????????????
-EAS54_6_R1_2_1_443_348 ?????????????????????????
+...     print("%s read of length %d" % (record.id, len(record.seq)))
+EAS54_6_R1_2_1_413_324 read of length 25
+EAS54_6_R1_2_1_540_792 read of length 25
+EAS54_6_R1_2_1_443_348 read of length 25
 
 Notice that QUAL files don't have a proper sequence present!  But the quality
 information is there:
@@ -217,7 +217,7 @@ Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-UnknownSeq(25, character='?')
+Undefined sequence of length 25
 >>> print(record.letter_annotations["phred_quality"])
 [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
@@ -357,16 +357,21 @@ the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
 are approximately equal.
 
 """
-
-from Bio.File import as_handle
-from Bio.Seq import Seq, UnknownSeq
-from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
-from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
+import warnings
 
 from math import log
-import warnings
-from Bio import BiopythonWarning, BiopythonParserWarning
+
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
+from Bio import StreamModeError
+from Bio.File import as_handle
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+from .Interfaces import _clean
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 # define score offsets. See discussion for differences between Sanger and
@@ -1336,10 +1341,10 @@ class QualPhredIterator(SequenceIterator):
 
         >>> with open("Quality/example.qual") as handle:
         ...     for record in QualPhredIterator(handle):
-        ...         print("%s %s" % (record.id, record.seq))
-        EAS54_6_R1_2_1_413_324 ?????????????????????????
-        EAS54_6_R1_2_1_540_792 ?????????????????????????
-        EAS54_6_R1_2_1_443_348 ?????????????????????????
+        ...         print("%s read of length %d" % (record.id, len(record.seq)))
+        EAS54_6_R1_2_1_413_324 read of length 25
+        EAS54_6_R1_2_1_540_792 read of length 25
+        EAS54_6_R1_2_1_443_348 read of length 25
 
         Typically however, you would call this via Bio.SeqIO instead with "qual"
         as the format:
@@ -1347,15 +1352,13 @@ class QualPhredIterator(SequenceIterator):
         >>> from Bio import SeqIO
         >>> with open("Quality/example.qual") as handle:
         ...     for record in SeqIO.parse(handle, "qual"):
-        ...         print("%s %s" % (record.id, record.seq))
-        EAS54_6_R1_2_1_413_324 ?????????????????????????
-        EAS54_6_R1_2_1_540_792 ?????????????????????????
-        EAS54_6_R1_2_1_443_348 ?????????????????????????
+        ...         print("%s read of length %d" % (record.id, len(record.seq)))
+        EAS54_6_R1_2_1_413_324 read of length 25
+        EAS54_6_R1_2_1_540_792 read of length 25
+        EAS54_6_R1_2_1_443_348 read of length 25
 
-        Becase QUAL files don't contain the sequence string itself, the seq
-        property is set to an UnknownSeq object.  Although the sequence is
-        almost certainly DNA we can't be sure, so the character "?" is used
-        rather than "N".
+        Only the sequence length is known, as the QUAL file does not contain
+        the sequence string itself.
 
         The quality scores themselves are available as a list of integers
         in each record's per-letter-annotation:
@@ -1363,7 +1366,7 @@ class QualPhredIterator(SequenceIterator):
         >>> print(record.letter_annotations["phred_quality"])
         [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-        You can still slice one of these SeqRecord objects with an UnknownSeq:
+        You can still slice one of these SeqRecord objects:
 
         >>> sub_record = record[5:10]
         >>> print("%s %s" % (sub_record.id, sub_record.letter_annotations["phred_quality"]))
@@ -1422,9 +1425,8 @@ class QualPhredIterator(SequenceIterator):
                 qualities = [max(0, q) for q in qualities]
 
             # Return the record and then continue...
-            record = SeqRecord(
-                UnknownSeq(len(qualities)), id=id, name=name, description=descr,
-            )
+            sequence = Seq(None, length=len(qualities))
+            record = SeqRecord(sequence, id=id, name=name, description=descr)
             # Dirty trick to speed up this line:
             # record.letter_annotations["phred_quality"] = qualities
             dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
@@ -1620,7 +1622,7 @@ class QualPhredWriter(SequenceWriter):
             # This rounds to the nearest integer.
             # TODO - can we record a float in a qual file?
             qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-        except TypeError as e:
+        except TypeError:
             if None in qualities:
                 raise TypeError("A quality value of None was found") from None
             else:
@@ -1673,7 +1675,7 @@ def as_qual(record):
         # This rounds to the nearest integer.
         # TODO - can we record a float in a qual file?
         qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-    except TypeError as e:
+    except TypeError:
         if None in qualities:
             raise TypeError("A quality value of None was found") from None
         else:

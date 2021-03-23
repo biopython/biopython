@@ -352,7 +352,7 @@ with open("sorted.fasta", "wb") as out_handle:
 \end{minted}
 
 Note with Python 3 onwards, we have to open the file for writing in
-binary mode because the \verb|get_raw()| method returns bytes strings.
+binary mode because the \verb|get_raw()| method returns \verb|bytes| objects.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
 a second time it should be faster. If you only want to use this with FASTA
@@ -966,7 +966,7 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length):
     seq_len = len(seq)
     for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())]:
         for frame in range(3):
-            trans = str(nuc[frame:].translate(trans_table))
+            trans = nuc[frame:].translate(trans_table)
             trans_len = len(trans)
             aa_start = 0
             aa_end = 0
@@ -1222,8 +1222,8 @@ comprehension:
 
 \begin{minted}{python}
 window = 7
-seq_one = str(rec_one.seq).upper()
-seq_two = str(rec_two.seq).upper()
+seq_one = rec_one.seq.upper()
+seq_two = rec_two.seq.upper()
 data = [
     [
         (seq_one[i : i + window] != seq_two[j : j + window])
@@ -1287,8 +1287,8 @@ window = 7
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [
-    (str(rec_one.seq).upper(), dict_one),
-    (str(rec_two.seq).upper(), dict_two),
+    (rec_one.seq.upper(), dict_one),
+    (rec_two.seq.upper(), dict_two),
 ]:
     for i in range(len(seq) - window):
         section = seq[i : i + window]
@@ -1325,8 +1325,8 @@ pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
 pylab.show()
 \end{minted}
-%pylab.savefig("dot_plot.png", dpi=75)
-%pylab.savefig("dot_plot.pdf")
+%pylab.savefig("dot_plot_scatter.png", dpi=75)
+%pylab.savefig("dot_plot_scatter.pdf")
 %
 % Have a HTML version and a PDF version to display nicely...
 %

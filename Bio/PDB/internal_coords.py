@@ -630,7 +630,6 @@ class IC_Chain:
         self.dAtoms[:, 3][mdRev] = a4rot[udRev]  # [self.dRev]
 
         self.dAtoms_needs_update[...] = False
-        pass
 
     def internal_to_atom_coordinates(
         self,
@@ -909,7 +908,7 @@ class IC_Chain:
 
         All ALTLOC (disordered) residues and atoms are written to the output model.
         """
-        fp.write('   "{}", // chain id\n'.format(self.chain.id))
+        fp.write(f'   "{self.chain.id}", // chain id\n')
 
         # generate dict for all hedra to eliminate redundant references
         hedra = {}
@@ -1126,7 +1125,7 @@ class IC_Chain:
         fp.write("\n   ]\n")
 
 
-class IC_Residue(object):
+class IC_Residue:
     """Class to extend Biopython Residue with internal coordinate data.
 
     Attributes
@@ -2185,7 +2184,7 @@ class IC_Residue(object):
         ak = self.rak(atm)
         if 0 == col % 5:
             s += "BFAC:"
-        s += " " + ak.id + " " + "{:6.2f}".format(atm.get_bfactor())
+        s += " " + ak.id + " " + f"{atm.get_bfactor():6.2f}"
         col += 1
         if 0 == col % 5:
             s += "\n"
@@ -2578,7 +2577,7 @@ class IC_Residue(object):
             self.atom_coords[ak] = mtx.dot(ac)
 
 
-class Edron(object):
+class Edron:
     """Base class for Hedron and Dihedron classes.
 
     Supports rich comparison based on lists of AtomKeys.
@@ -2829,7 +2828,7 @@ class Hedron(Edron):
             As for Edron, plus optional 'len12', 'angle', 'len23'
             keyworded values.
         """
-        super(Hedron, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # print('initialising', self.id)
 
@@ -2979,7 +2978,7 @@ class Dihedron(Edron):
         Acceptable input:
             As for Edron, plus optional 'dihedral' keyworded angle value.
         """
-        super(Dihedron, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # hedra making up this dihedron; set by self:set_hedra()
         self.hedron1: Hedron  # = None
@@ -3108,7 +3107,7 @@ class Dihedron(Edron):
             pass
 
 
-class AtomKey(object):
+class AtomKey:
     """Class for dict keys to reference atom coordinates.
 
     AtomKeys capture residue and disorder information together, and
@@ -3466,7 +3465,7 @@ def set_accuracy_95(num: float) -> float:
     :returns: float with specified accuracy
     """
     # return round(num, 5)  # much slower
-    return float("{:9.5f}".format(num))
+    return float(f"{num:9.5f}")
 
 
 # only used for writing PDB atoms so inline in

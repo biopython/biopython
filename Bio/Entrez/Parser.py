@@ -256,7 +256,39 @@ class ValidationError(ValueError):
         )
 
 
-class DataHandler:
+class DataHandlerMeta(type):
+    """A metaclass is needed until Python supports @classproperty."""
+
+    def __init__(cls, *args, **kwargs):
+        """Initialize."""
+        cls._directory = None
+
+    @property
+    def directory(cls):
+        """Directory for caching XSD and DTD files."""
+        return cls._directory
+
+    @directory.setter
+    def directory(cls, value):
+        """Set a custom directory for the local DTD/XSD directories."""
+        if value is None:
+            import platform
+
+            if platform.system() == "Windows":
+                value = os.path.join(os.getenv("APPDATA"), "biopython")
+            else:  # Unix/Linux/Mac
+                home = os.path.expanduser("~")
+                value = os.path.join(home, ".config", "biopython")
+        cls._directory = value
+        # Create DTD local directory
+        cls.local_dtd_dir = os.path.join(cls._directory, "Bio", "Entrez", "DTDs")
+        os.makedirs(cls.local_dtd_dir, exist_ok=True)
+        # Create XSD local directory
+        cls.local_xsd_dir = os.path.join(cls._directory, "Bio", "Entrez", "XSDs")
+        os.makedirs(cls.local_xsd_dir, exist_ok=True)
+
+
+class DataHandler(metaclass=DataHandlerMeta):
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
@@ -288,7 +320,6 @@ class DataHandler:
         self.schema_namespace = None
         self.namespace_level = Counter()
         self.namespace_prefix = {}
-        self._directory = None
         if escape:
             self.characterDataHandler = self.characterDataHandlerEscape
         else:
@@ -716,7 +747,6 @@ class DataHandler:
 
     def skipCharacterDataHandler(self, content):
         """Handle character data by skipping it."""
-        return
 
     def parse_xsd(self, root):
         """Parse an XSD file."""
@@ -864,15 +894,14 @@ class DataHandler:
 
     def open_dtd_file(self, filename):
         """Open specified DTD file."""
-        self._initialize_directory()
-        path = os.path.join(self.local_dtd_dir, filename)
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
             pass
         else:
             return handle
-        path = os.path.join(self.global_dtd_dir, filename)
+        path = os.path.join(DataHandler.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
@@ -883,15 +912,14 @@ class DataHandler:
 
     def open_xsd_file(self, filename):
         """Open specified XSD file."""
-        self._initialize_directory()
-        path = os.path.join(self.local_xsd_dir, filename)
+        path = os.path.join(DataHandler.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
             pass
         else:
             return handle
-        path = os.path.join(self.global_xsd_dir, filename)
+        path = os.path.join(DataHandler.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
@@ -902,8 +930,7 @@ class DataHandler:
 
     def save_dtd_file(self, filename, text):
         """Save DTD file to cache."""
-        self._initialize_directory()
-        path = os.path.join(self.local_dtd_dir, filename)
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
         except OSError:
@@ -914,8 +941,7 @@ class DataHandler:
 
     def save_xsd_file(self, filename, text):
         """Save XSD file to cache."""
-        self._initialize_directory()
-        path = os.path.join(self.local_xsd_dir, filename)
+        path = os.path.join(DataHandler.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
         except OSError:
@@ -977,38 +1003,3 @@ class DataHandler:
         self.dtd_urls.pop()
         self.parser.StartElementHandler = self.startElementHandler
         return 1
-
-    def _initialize_directory(self):
-        """Initialize the local DTD/XSD directories (PRIVATE).
-
-        Added to allow for custom directory (cache) locations,
-        for example when code is deployed on AWS Lambda.
-        """
-        # If user hasn't set a custom cache location, initialize it.
-        if self.directory is None:
-            import platform
-
-            if platform.system() == "Windows":
-                self.directory = os.path.join(os.getenv("APPDATA"), "biopython")
-            else:  # Unix/Linux/Mac
-                home = os.path.expanduser("~")
-                self.directory = os.path.join(home, ".config", "biopython")
-                del home
-            del platform
-        # Create DTD local directory
-        self.local_dtd_dir = os.path.join(self.directory, "Bio", "Entrez", "DTDs")
-        os.makedirs(self.local_dtd_dir, exist_ok=True)
-        # Create XSD local directory
-        self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
-        os.makedirs(self.local_xsd_dir, exist_ok=True)
-
-    @property
-    def directory(self):
-        """Directory for caching XSD and DTD files."""
-        return self._directory
-
-    @directory.setter
-    def directory(self, directory):
-        """Allow user to set a custom directory, also triggering subdirectory initialization."""
-        self._directory = directory
-        self._initialize_directory()

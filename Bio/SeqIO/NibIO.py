@@ -38,15 +38,15 @@ the format name "nib":
 For detailed information on the file format, please see the UCSC
 description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
-
+import binascii
+import struct
+import sys
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
 
-
-import struct
-import sys
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 class NibIterator(SequenceIterator):
@@ -100,7 +100,7 @@ class NibIterator(SequenceIterator):
         number = handle.read(4)
         length = int.from_bytes(number, byteorder)
         data = handle.read()
-        indices = data.hex()
+        indices = binascii.hexlify(data)
         if length % 2 == 0:
             if len(indices) != length:
                 raise ValueError("Unexpected file size")
@@ -108,9 +108,9 @@ class NibIterator(SequenceIterator):
             if len(indices) != length + 1:
                 raise ValueError("Unexpected file size")
             indices = indices[:length]
-        if not set(indices).issubset("0123489abc"):
+        if not set(indices).issubset(b"0123489abc"):
             raise ValueError("Unexpected sequence data found in file")
-        table = str.maketrans("0123489abc", "TCAGNtcagn")
+        table = bytes.maketrans(b"0123489abc", b"TCAGNtcagn")
         nucleotides = indices.translate(table)
         sequence = Seq(nucleotides)
         record = SeqRecord(sequence)
@@ -146,17 +146,17 @@ class NibWriter(SequenceWriter):
         """Write a single record to the output file."""
         handle = self.handle
         sequence = record.seq
-        nucleotides = str(sequence)
+        nucleotides = bytes(sequence)
         length = len(sequence)
         handle.write(struct.pack("i", length))
-        table = str.maketrans("TCAGNtcagn", "0123489abc")
+        table = bytes.maketrans(b"TCAGNtcagn", b"0123489abc")
         padding = length % 2
-        suffix = padding * "T"
+        suffix = padding * b"T"
         nucleotides += suffix
-        if not set(nucleotides).issubset("ACGTNacgtn"):
+        if not set(nucleotides).issubset(b"ACGTNacgtn"):
             raise ValueError("Sequence should contain A,C,G,T,N,a,c,g,t,n only")
         indices = nucleotides.translate(table)
-        handle.write(bytes.fromhex(indices))
+        handle.write(binascii.unhexlify(indices))
 
     def write_file(self, records):
         """Write the complete file with the records, and return the number of records."""

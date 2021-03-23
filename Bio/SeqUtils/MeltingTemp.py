@@ -137,7 +137,7 @@ The same for RNA:
     73.00
 
 Note, that thermodynamic data are not available for all kind of mismatches,
-e.g. most double mismatches or terminal mismaches combined with danglind ends:
+e.g. most double mismatches or terminal mismatches combined with dangling ends:
 
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
     ...                   c_seq='TtCAAGGcTTCTACACCCGTACTCGAATGC',
@@ -391,9 +391,9 @@ RNA_DE1 = {
 def make_table(oldtable=None, values=None):
     """Return a table with thermodynamic parameters (as dictionary).
 
-    Parameters:
-    oldtable: An existing dictionary with thermodynamic parameters.
-    values: A dictionary with new or updated values.
+    Arguments:
+     - oldtable: An existing dictionary with thermodynamic parameters.
+     - values: A dictionary with new or updated values.
 
     E.g., to replace the initiation parameters in the Sugimoto '96 dataset with
     the initiation parameters from Allawi & SantaLucia '97:
@@ -446,8 +446,8 @@ def _check(seq, method):
     backtranscribed to DNA. This method is PRIVATE.
 
     Arguments:
-    seq: The sequence as given by the user (passed as string).
-    method: Tm_Wallace, Tm_GC or Tm_NN.
+     - seq: The sequence as given by the user (passed as string).
+     - method: Tm_Wallace, Tm_GC or Tm_NN.
 
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> mt._check('10 ACGTTGCAAG tccatggtac', 'Tm_NN')
@@ -494,7 +494,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
      - method 5: deltaS(new) = deltaS(old) + corr
      - methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
 
-    Parameters:
+    Arguments:
      - Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To
        have a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
        dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated

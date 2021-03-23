@@ -3,12 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.AlignIO.ClustalIO module."""
-
 import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.ClustalIO import ClustalIterator, ClustalWriter
+from Bio.AlignIO.ClustalIO import ClustalIterator
+from Bio.AlignIO.ClustalIO import ClustalWriter
 
 # This is a truncated version of the example in Tests/cw02.aln
 # Notice the inclusion of sequence numbers (right hand side)
@@ -164,7 +164,7 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(alignment[0].id, "gi|4959044|gb|AAD34209.1|AF069")
         self.assertEqual(alignment[1].id, "gi|671626|emb|CAA85685.1|")
         self.assertEqual(
-            str(alignment[0].seq),
+            alignment[0].seq,
             "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN"
             "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW"
             "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT"
@@ -180,7 +180,7 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(9, len(alignment))
         self.assertEqual(alignment[-1].id, "HISJ_E_COLI")
         self.assertEqual(
-            str(alignment[-1].seq),
+            alignment[-1].seq,
             "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG"
             "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS"
             "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV",

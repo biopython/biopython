@@ -540,7 +540,27 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-We're now going to introduce three related functions in the \verb|Bio.SeqIO|
+Looping over the iterator returned by \verb|SeqIO.parse| once will exhaust the file. For self-indexed files, such as files in the twoBit format, the return value of \verb|SeqIO.parse| can also be used as a dictionary, allowing random access to the sequence contents. As in this case parsing is done on demand, the file must remain open as long as the sequence data is being accessed:
+
+%doctest ../Tests/TwoBit
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> handle = open("sequence.bigendian.2bit", "rb")
+>>> records = SeqIO.parse(handle, "twobit")
+>>> records.keys()
+dict_keys(['seq11111', 'seq222', 'seq3333', 'seq4', 'seq555', 'seq6'])
+>>> records['seq222']
+SeqRecord(seq=Seq('TTGATCGGTGACAAATTTTTTACAAAGAACTGTAGGACTTGCTACTTCTCCCTC...ACA'), id='seq222', name='<unknown name>', description='<unknown description>', dbxrefs=[])
+>>> records['seq222'].seq
+Seq('TTGATCGGTGACAAATTTTTTACAAAGAACTGTAGGACTTGCTACTTCTCCCTC...ACA')
+>>> handle.close()
+>>> records['seq222'].seq
+Traceback (most recent call last):
+...
+ValueError: cannot retrieve sequence: file is closed
+\end{minted}
+
+For other file formats, \verb|Bio.SeqIO| provides three related functions
 module which allow dictionary like random access to a multi-sequence file.
 There is a trade off here between flexibility and memory usage. In summary:
 \begin{itemize}

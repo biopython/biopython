@@ -7,6 +7,9 @@
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg?logo=travis
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
+.. image:: https://img.shields.io/circleci/build/github/biopython/biopython.svg?logo=circleci
+   :alt: Linux testing with CircleCI
+   :target: https://app.circleci.com/pipelines/github/biopython/biopython
 .. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
@@ -77,14 +80,14 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.8 from http://www.python.org
+We currently recommend using Python 3.9 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.6, 3.7, 3.8 -- see http://www.python.org
+- Python 3.6, 3.7, 3.8, 3.9 -- see http://www.python.org
 
-- PyPy3.6 v7.3.1 -- see http://www.pypy.org
+- PyPy3.6 v7.3.1 -- or later, see http://www.pypy.org
 
 Biopython 1.68 was our final release to support Python 2.6, while Biopython
 1.76 was our final release to support Python 2.7 and Python 3.5.

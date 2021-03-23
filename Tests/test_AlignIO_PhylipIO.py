@@ -3,14 +3,13 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for Bio.AlignIO.PhylipIO module."""
-
 import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.PhylipIO import PhylipIterator, PhylipWriter
+from Bio.AlignIO.PhylipIO import PhylipIterator
+from Bio.AlignIO.PhylipIO import PhylipWriter
 
 phylip_text = """     8    286
 V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
@@ -177,7 +176,7 @@ class TestPhylipIO(unittest.TestCase):
 
         for i in range(0, 5):
             self.assertEqual(list2[0][i].id, list3[0][i].id)
-            self.assertEqual(str(list2[0][i].seq), str(list3[0][i].seq))
+            self.assertEqual(list2[0][i].seq, list3[0][i].seq)
 
     def test_four(self):
         handle = StringIO(phylip_text4)
@@ -219,7 +218,7 @@ class TestPhylipIO(unittest.TestCase):
             self.assertEqual(len(a1), len(a2))
             for r1, r2 in zip(a1, a2):
                 self.assertEqual(r1.id, r2.id)
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1.seq, r2.seq)
 
 
 if __name__ == "__main__":

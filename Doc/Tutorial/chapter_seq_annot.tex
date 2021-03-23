@@ -776,18 +776,29 @@ qualifiers:
 
 \noindent Notice that their locations have been adjusted to reflect the new parent sequence!
 
-While Biopython has done something sensible and hopefully intuitive with the features
-(and any per-letter annotation), for the other annotation it is impossible to know if
-this still applies to the sub-sequence or not. To avoid guessing, the \texttt{annotations}
-and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
-any relevant information as appropriate.
+While Biopython has done something sensible and hopefully intuitive with the
+features (and any per-letter annotation), for the other annotation it is
+impossible to know if this still applies to the sub-sequence or not. To avoid
+guessing, with the exception of the molecule type, the \texttt{.annotations}
+and \texttt{.dbxrefs} are omitted from the sub-record, and it is up to you to
+transfer any relevant information as appropriate.
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.annotations
-{}
+{'molecule_type': 'DNA'}
 >>> sub_record.dbxrefs
 []
+\end{minted}
+
+\noindent
+You may wish to preserve other entries like the organism? Beware of copying
+the entire annotations dictionary as in this case your partial sequence is no
+longer circular DNA - it is now linear:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> sub_record.annotations['topology'] = 'linear'
 \end{minted}
 
 The same point could be made about the record \texttt{id}, \texttt{name}
@@ -808,10 +819,14 @@ and \texttt{description}, but for practicality these are preserved:
 Let's fix this and then view the sub-record as a reduced GenBank file using
 the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}:
 
+%cont-doctest
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
->>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
->>> print(sub_record.format("genbank"))
-...
+>>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial"
+>>> print(sub_record.format("genbank")[:200] + "...")
+LOCUS       NC_005816                500 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial.
+ACCESSION   NC_005816
+VERSION     NC_0058...
 \end{minted}
 
 See Sections~\ref{sec:FASTQ-slicing-off-primer}
@@ -911,8 +926,9 @@ SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'
 9609
 \end{minted}
 
-Note that this isn't perfect in that some annotation like the database cross references
-and one of the features (the source feature) have been lost:
+Note that this isn't perfect in that some annotation like the database cross
+references, all the annotations except molecule type, and one of the features
+(the source feature) have been lost:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -921,7 +937,7 @@ and one of the features (the source feature) have been lost:
 >>> shifted.dbxrefs
 []
 >>> shifted.annotations.keys()
-dict_keys([])
+dict_keys(['molecule_type'])
 \end{minted}
 
 This is because the \verb|SeqRecord| slicing step is cautious in what annotation

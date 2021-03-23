@@ -2,19 +2,19 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO write module."""
-
 import os
 import unittest
 import warnings
+
 from io import BytesIO
 from io import StringIO
+
+from Bio import AlignIO
 from Bio import BiopythonWarning
 from Bio import SeqIO
-from Bio import AlignIO
-from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from test_SeqIO import SeqIOTestBaseClass
 
 
@@ -263,7 +263,7 @@ class WriterTests(SeqIOTestBaseClass):
                 )
             else:
                 self.assertEqual(record.id, new_record.id, msg=msg)
-            self.assertEqual(str(record.seq), str(new_record.seq), msg=msg)
+            self.assertEqual(record.seq, new_record.seq, msg=msg)
         handle.close()
 
     def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):

@@ -2,21 +2,19 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for AlignIO module."""
-
-
 import unittest
 import warnings
 
-
 from io import StringIO
-from Bio import SeqIO
+
 from Bio import AlignIO
-from Bio.Align import AlignInfo, MultipleSeqAlignment
+from Bio import SeqIO
+from Bio.Align import AlignInfo
+from Bio.Align import MultipleSeqAlignment
+from Bio.Data import IUPACData
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Data import IUPACData
 
 test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter)
 test_write_read_align_with_seq_count = test_write_read_alignment_formats + [
@@ -78,7 +76,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 # Check the sequence:
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -224,7 +222,7 @@ class TestAlignIO_reading(unittest.TestCase):
         items = []
         for record in alignment:
             name = record.id
-            sequence = str(record.seq)
+            sequence = record.seq
             if len(sequence) > max_len:
                 sequence = sequence[: max_len - 6] + "..." + sequence[-3:]
             item = (name, sequence)

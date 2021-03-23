@@ -34,13 +34,14 @@ because it sometimes is used in different senses in other programs"
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
-
 import string
 
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+
+from .Interfaces import AlignmentIterator
+from .Interfaces import SequentialAlignmentWriter
 
 
 _PHYLIP_ID_WIDTH = 10

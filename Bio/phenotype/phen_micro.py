@@ -527,7 +527,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())[:3]
                     ]
                 ),
@@ -542,7 +542,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())
                     ]
                 ),
@@ -1107,7 +1107,7 @@ def CsvIterator(handle):
                 continue
             qualifiers[_csvData][_position] = line[1].strip()
 
-        elif _other in line[0].strip():
+        elif _setupTime in line[0].strip():
             if plate is None:
                 continue
             qualifiers[_csvData][_setupTime] = line[1].strip()

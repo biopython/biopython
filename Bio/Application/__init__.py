@@ -6,7 +6,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""General mechanisms to access applications in Biopython.
+"""General mechanisms to access applications in Biopython (OBSOLETE).
 
 This module is not intended for direct use. It provides the basic objects which
 are subclassed by our command line wrappers, such as:
@@ -20,6 +20,11 @@ These modules provide wrapper classes for command line tools to help you
 construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
+
+Due to the on going maintainance burden or keeping command line application
+wrappers up to date, we have decided to deprecate and eventually remove them.
+We instead now recommend building your command line and invoking it directly
+with the subprocess module.
 """
 import os
 import platform
@@ -78,7 +83,7 @@ _local_reserved_names = ["set_parameter"]
 
 
 class ApplicationError(subprocess.CalledProcessError):
-    """Raised when an application returns a non-zero exit status.
+    """Raised when an application returns a non-zero exit status (OBSOLETE).
 
     The exit status will be stored in the returncode attribute, similarly
     the command line string used in the cmd attribute, and (if captured)
@@ -128,7 +133,7 @@ class ApplicationError(subprocess.CalledProcessError):
 
 
 class AbstractCommandline:
-    r"""Generic interface for constructing command line strings.
+    r"""Generic interface for constructing command line strings (OBSOLETE).
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.

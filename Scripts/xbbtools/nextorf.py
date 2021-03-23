@@ -47,23 +47,23 @@ def makeTableX(table):
 
 
 class NextOrf:
-    def __init__(self, file, options):
+    def __init__(self, filename, options):
         self.options = options
-        self.file = file
+        self.filename = filename
         self.genetic_code = int(self.options["table"])
         self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
         self.counter = 0
         self.ReadFile()
 
     def ReadFile(self):
-        handle = open(self.file)
+        handle = open(self.filename)
         for record in SeqIO.parse(handle, "fasta"):
             self.header = record.id
-            dir = self.options["strand"]
-            plus = dir in ["both", "plus"]
-            minus = dir in ["both", "minus"]
+            direction = self.options["strand"]
+            plus = direction in ["both", "plus"]
+            minus = direction in ["both", "minus"]
             start, stop = int(self.options["start"]), int(self.options["stop"])
-            s = str(record.seq).upper()
+            s = record.seq.upper()
             if stop > 0:
                 s = s[start:stop]
             else:
@@ -129,7 +129,6 @@ class NextOrf:
         return res
 
     def GetOrfCoordinates(self, seq):
-        s = str(seq)
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
@@ -139,7 +138,7 @@ class NextOrf:
         for frame in range(0, 3):
             coordinates = []
             for i in range(0 + frame, n - n % 3, 3):
-                codon = s[i : i + 3]
+                codon = seq[i : i + 3]
                 if codon in start_codons:
                     coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
@@ -283,5 +282,5 @@ if __name__ == "__main__":
         if arg[0] == "-v":
             print(f"OPTIONS {options}")
 
-    file = args[0]
-    nextorf = NextOrf(file, options)
+    filename = args[0]
+    nextorf = NextOrf(filename, options)

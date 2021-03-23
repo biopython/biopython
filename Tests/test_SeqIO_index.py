@@ -2,14 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Unit tests for Bio.SeqIO.index(...) and index_db() functions."""
 
 try:
     import sqlite3
 except ImportError:
-    # Try to run what tests we can on Jython
-    # where we don't expect this to be installed.
+    # Try to run what tests we can in case sqlite3 was not installed
     sqlite3 = None
 
 import os
@@ -28,7 +26,7 @@ from Bio.SeqIO._index import _FormatToRandomAccess
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass
 
 
@@ -332,7 +330,7 @@ if sqlite3:
             )
 
 
-class IndexDictTests(SeqIOTestBaseClass):
+class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     tests = [
         ("Ace/contig1.ace", "ace"),
@@ -406,7 +404,7 @@ class IndexDictTests(SeqIOTestBaseClass):
             os.remove(self.index_tmp)
 
     def check_dict_methods(self, rec_dict, keys, ids, msg):
-        self.assertEqual(set(keys), set(rec_dict), msg=msg)
+        self.assertCountEqual(keys, rec_dict.keys(), msg=msg)
         # This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict), msg=msg)
         # Make sure boolean evaluation works
@@ -601,10 +599,9 @@ class IndexDictTests(SeqIOTestBaseClass):
                     ":memory:", filename, fmt, key_function=str.lower,
                 )
 
-        self.assertEqual(set(id_list), set(rec_dict), msg=msg)
+        self.assertCountEqual(id_list, rec_dict.keys(), msg=msg)
         if sqlite3:
-            self.assertEqual(set(id_list), set(rec_dict_db), msg=msg)
-        self.assertEqual(len(id_list), len(rec_dict), msg=msg)
+            self.assertCountEqual(id_list, rec_dict_db.keys(), msg=msg)
         for key in id_list:
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(key, rec_dict[key].id.lower(), msg=msg)
@@ -666,7 +663,7 @@ class IndexDictTests(SeqIOTestBaseClass):
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
-            self.assertTrue(compare_record(rec1, rec2))
+            self.compare_record(rec1, rec2)
         rec_dict.close()
         del rec_dict
 

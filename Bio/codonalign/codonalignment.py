@@ -92,7 +92,7 @@ class CodonAlignment(MultipleSeqAlignment):
             return "".join(str(rec[col_index]) for rec in self._records[row_index])
         else:
             return MultipleSeqAlignment(
-                (rec[col_index] for rec in self._records[row_index])
+                rec[col_index] for rec in self._records[row_index]
             )
 
     def __add__(self, other):
@@ -115,7 +115,7 @@ class CodonAlignment(MultipleSeqAlignment):
                 BiopythonWarning,
             )
             merged = (
-                SeqRecord(seq=CodonSeq(str(left.seq) + str(right.seq)))
+                SeqRecord(seq=CodonSeq(left.seq + right.seq))
                 for left, right in zip(self, other)
             )
             return CodonAlignment(merged)

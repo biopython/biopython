@@ -50,10 +50,12 @@ if "bdist_wheel" in sys.argv:
 MIN_PY_VER = (3, 6)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
-        ("Biopython requires Python %i.%i or later. " % MIN_PY_VER)
+        ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
+elif sys.version_info[:2] == (3, 6):
+    sys.stderr.write("WARNING: Biopython will soon drop support for Python 3.6\n")
 
 
 class test_biopython(Command):
@@ -127,7 +129,6 @@ PACKAGES = [
     "Bio.Cluster",
     "Bio.codonalign",
     "Bio.Compass",
-    "Bio.Crystal",
     "Bio.Data",
     "Bio.Emboss",
     "Bio.Entrez",
@@ -171,7 +172,6 @@ PACKAGES = [
     "Bio.SeqUtils",
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
-    "Bio.Statistics",
     "Bio.SubsMat",
     "Bio.SVDSuperimposer",
     "Bio.PDB.QCPSuperimposer",
@@ -200,6 +200,7 @@ EXTENSIONS = [
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
 # We now define the Biopython version number in Bio/__init__.py

@@ -75,44 +75,45 @@ Gene pair & Intergene distance ($x_1$) & Gene expression score ($x_2$) & Class\\
 Table \ref{table:training} lists some of the \textit{Bacillus subtilis} gene pairs for which the operon structure is known.
 Let's calculate the logistic regression model from these data:
 
-%NOTE - can't use this as a doctest in case NumPy is missing (Jython).
-%Also the ... are missing but that means the user can copy/paste the example.
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import LogisticRegression
 >>> xs = [[-53, -200.78],
-          [117, -267.14],
-          [57, -163.47],
-          [16, -190.30],
-          [11, -220.94],
-          [85, -193.94],
-          [16, -182.71],
-          [15, -180.41],
-          [-26, -181.73],
-          [58, -259.87],
-          [126, -414.53],
-          [191, -249.57],
-          [113, -265.28],
-          [145, -312.99],
-          [154, -213.83],
-          [147, -380.85],
-          [93, -291.13]]
+...       [117, -267.14],
+...       [57, -163.47],
+...       [16, -190.30],
+...       [11, -220.94],
+...       [85, -193.94],
+...       [16, -182.71],
+...       [15, -180.41],
+...       [-26, -181.73],
+...       [58, -259.87],
+...       [126, -414.53],
+...       [191, -249.57],
+...       [113, -265.28],
+...       [145, -312.99],
+...       [154, -213.83],
+...       [147, -380.85],
+...       [93, -291.13]]
+...
 >>> ys = [1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0]
+...       1,
+...       1,
+...       1,
+...       1,
+...       1,
+...       1,
+...       1,
+...       1,
+...       1,
+...       0,
+...       0,
+...       0,
+...       0,
+...       0,
+...       0,
+...       0]
+...
 >>> model = LogisticRegression.train(xs, ys)
 \end{minted}
 
@@ -410,7 +411,7 @@ This section will describe the \verb|Bio.NaiveBayes| module.
 
 \section{Maximum Entropy}
 
-This section will describe the \verb|Bio.MaximumEntropy| module.
+This section will describe the \verb|Bio.MaxEntropy| module.
 
 \section{Markov Models}
 

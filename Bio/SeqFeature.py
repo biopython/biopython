@@ -51,12 +51,13 @@ Classes:
  - UnknownPosition - Represents missing information like '?' in UniProt.
 
 """
-
-
-from collections import OrderedDict
 import functools
 
-from Bio.Seq import MutableSeq, reverse_complement
+from collections import OrderedDict
+
+from Bio.Seq import MutableSeq
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
 
 
 class SeqFeature:
@@ -1137,7 +1138,7 @@ class FeatureLocation:
         if isinstance(parent_sequence, MutableSeq):
             # This avoids complications with reverse complements
             # (the MutableSeq reverse complement acts in situ)
-            parent_sequence = parent_sequence.toseq()
+            parent_sequence = Seq(parent_sequence)
         f_seq = parent_sequence[self.nofuzzy_start : self.nofuzzy_end]
         if self.strand == -1:
             try:

@@ -230,14 +230,15 @@ For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
-
-import struct
 import re
+import struct
 
+from Bio import StreamModeError
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 _null = b"\0"
@@ -324,8 +325,8 @@ def _sff_file_header(handle):
         raise ValueError(
             "Index offset %i but index length %i" % (index_offset, index_length)
         )
-    flow_chars = handle.read(number_of_flows_per_read).decode()
-    key_sequence = handle.read(key_length).decode()
+    flow_chars = handle.read(number_of_flows_per_read).decode("ASCII")
+    key_sequence = handle.read(key_length).decode("ASCII")
     # According to the spec, the header_length field should be the total number
     # of bytes required by this set of header fields, and should be equal to
     # "31 + number_of_flows_per_read + key_length" rounded up to the next value
@@ -465,7 +466,7 @@ def _sff_find_roche_index(handle):
         key_sequence,
     ) = _sff_file_header(handle)
     assert handle.tell() == header_length
-    if not index_offset or not index_offset:
+    if not index_offset or not index_length:
         raise ValueError("No index present in this SFF file")
     # Now jump to the header...
     handle.seek(index_offset)
@@ -693,7 +694,7 @@ def _sff_read_seq_record(
     flow_values = handle.read(read_flow_size)  # unpack later if needed
     temp_fmt = ">%iB" % seq_len  # used for flow index and quals
     flow_index = handle.read(seq_len)  # unpack later if needed
-    seq = handle.read(seq_len).decode()  # TODO - Use bytes in Seq?
+    seq = handle.read(seq_len)  # Leave as bytes for Seq object
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
     # now any padding...
     padding = (read_flow_size + seq_len * 3) % 8
@@ -1193,8 +1194,8 @@ class SffWriter(SequenceWriter):
             # return 0
             raise ValueError("Must have at least one sequence")
         try:
-            self._key_sequence = record.annotations["flow_key"].encode()
-            self._flow_chars = record.annotations["flow_chars"].encode()
+            self._key_sequence = record.annotations["flow_key"].encode("ASCII")
+            self._flow_chars = record.annotations["flow_chars"].encode("ASCII")
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
             raise ValueError("Missing SFF flow information") from None
@@ -1360,7 +1361,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = record.seq.upper().encode()
+        seq = bytes(record.seq).upper()
         seq_len = len(seq)
         # Qualities
         try:

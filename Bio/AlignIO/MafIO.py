@@ -33,19 +33,14 @@ For an inclusive end coordinate, we need to use ``end = start + size - 1``.
 A 1-column wide alignment would have ``start == end``.
 """
 import os
+
 from itertools import islice
+from sqlite3 import dbapi2
 
-try:
-    from sqlite3 import dbapi2 as _sqlite
-except ImportError:
-    # Not present on Jython, but should be included in Python 2.5
-    # or later (unless compiled from source without its dependencies)
-    # Still want to offer simple parsing/output
-    _sqlite = None
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+
 from .Interfaces import SequentialAlignmentWriter
 
 MAFINDEX_VERSION = 2
@@ -182,7 +177,7 @@ def MafIterator(handle, seq_count=None):
                             "Found dot/period in first sequence of alignment"
                         )
 
-                    ref = str(records[0].seq)
+                    ref = records[0].seq
                     new = []
 
                     for (letter, ref_letter) in zip(sequence, ref):
@@ -275,10 +270,10 @@ class MafIndex:
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
-            self._con = _sqlite.connect(sqlite_file)
+            self._con = dbapi2.connect(sqlite_file)
             self._record_count = self.__check_existing_db()
         else:
-            self._con = _sqlite.connect(sqlite_file)
+            self._con = dbapi2.connect(sqlite_file)
             self._record_count = self.__make_new_index()
 
         # lastly, setup a MafIterator pointing at the open maf_file
@@ -352,7 +347,7 @@ class MafIndex:
 
             return records_found
 
-        except (_sqlite.OperationalError, _sqlite.DatabaseError) as err:
+        except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err) from None
 
     def __make_new_index(self):
@@ -649,7 +644,7 @@ class MafIndex:
         """
         # validate strand
         if strand not in (1, -1):
-            raise ValueError("Strand must be 1 or -1, got %s" % str(strand))
+            raise ValueError("Strand must be 1 or -1, got %s" % strand)
 
         # pull all alignments that span the desired intervals
         fetched = list(self.search(starts, ends))

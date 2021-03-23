@@ -13,17 +13,17 @@ SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
-
+from xml import sax
+from xml.sax import handler
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
-from xml.sax import handler
-from xml import sax
-
 
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -553,7 +553,7 @@ class SeqXmlWriter(SequenceWriter):
                 elif len(local_ncbi_taxid) == 0:
                     local_ncbi_taxid = None
                 else:
-                    ValueError(
+                    raise ValueError(
                         "Multiple entries for record.annotations['ncbi_taxid'], %r"
                         % local_ncbi_taxid
                     )
@@ -598,7 +598,7 @@ class SeqXmlWriter(SequenceWriter):
         if isinstance(record.seq, UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
 
-        seq = str(record.seq)
+        seq = bytes(record.seq)
 
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
@@ -653,12 +653,14 @@ class SeqXmlWriter(SequenceWriter):
                 elif isinstance(value, list):
 
                     for v in value:
-                        if isinstance(value, (int, float, str)):
-                            attr = {"name": key, "value": v}
-                            self.xml_generator.startElement(
-                                "property", AttributesImpl(attr)
-                            )
-                            self.xml_generator.endElement("property")
+                        if v is None:
+                            attr = {"name": key}
+                        else:
+                            attr = {"name": key, "value": str(v)}
+                        self.xml_generator.startElement(
+                            "property", AttributesImpl(attr)
+                        )
+                        self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, str)):
 

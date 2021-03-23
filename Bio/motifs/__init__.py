@@ -183,23 +183,24 @@ class Instances(list):
         """Initialize the class."""
         from Bio.Seq import Seq
 
-        if instances is None:
-            instances = []
-        self.length = None
-        for instance in instances:
-            if self.length is None:
-                self.length = len(instance)
-            elif self.length != len(instance):
-                message = (
-                    "All instances should have the same length (%d found, %d expected)"
-                    % (len(instance), self.length)
-                )
-                raise ValueError(message)
-        for instance in instances:
-            if not isinstance(instance, Seq):
-                sequence = str(instance)
-                instance = Seq(sequence)
-            self.append(instance)
+        length = None
+        if instances is not None:
+            sequences = []
+            for instance in instances:
+                if length is None:
+                    length = len(instance)
+                elif length != len(instance):
+                    message = (
+                        "All instances should have the same length (%d found, %d expected)"
+                        % (len(instance), length)
+                    )
+                    raise ValueError(message)
+                if not isinstance(instance, Seq):
+                    instance = Seq(str(instance))
+                sequences.append(instance)
+            # no errors were raised; store the instances:
+            self.extend(sequences)
+        self.length = length
         self.alphabet = alphabet
 
     def __str__(self):
@@ -227,7 +228,7 @@ class Instances(list):
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos : pos + self.length]):
+                if instance == sequence[pos : pos + self.length]:
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
