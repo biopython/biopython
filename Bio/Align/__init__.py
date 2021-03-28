@@ -1036,6 +1036,11 @@ class PairwiseAlignment:
         """Create a human-readable representation of the alignment."""
         if format_spec == "psl":
             return self._format_psl()
+        if format_spec == "bed":
+            return self._format_bed()
+        return self._format_pretty()
+
+    def _format_pretty(self):
         seq1 = self._convert_sequence_string(self.target)
         if seq1 is None:
             return self._format_generalized()
@@ -1158,6 +1163,62 @@ class PairwiseAlignment:
         pattern = " ".join(pattern)
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
+    def _format_bed(self):
+        query = self.query
+        target = self.target
+        # variable names follow those in the BED file format specification
+        try:
+            chrom = target.id
+        except AttributeError:
+            chrom = "target"
+        try:
+            name = query.id
+        except AttributeError:
+            name = "query"
+        score = self.score
+        blockSizes = []
+        tStarts = []
+        strand = "+"
+        tStart, qStart = self.path[0]
+        for tEnd, qEnd in self.path[1:]:
+            tCount = tEnd - tStart
+            qCount = qEnd - qStart
+            if tCount == 0:
+                qStart = qEnd
+            elif qCount == 0:
+                tStart = tEnd
+            else:
+                assert tCount == qCount
+                tStarts.append(tStart)
+                blockSizes.append(tCount)
+                tStart = tEnd
+                qStart = qEnd
+        chromStart = tStarts[0]
+        chromEnd = tStarts[-1] + blockSizes[-1]
+        blockStarts = [tStart - chromStart for tStart in tStarts]
+        blockCount = len(blockSizes)
+        blockSizes = ",".join(map(str, blockSizes)) + ","
+        blockStarts = ",".join(map(str, blockStarts)) + ","
+        thickStart = chromStart
+        thickEnd = chromEnd
+        itemRgb = "0"
+        words = [
+            chrom,
+            str(chromStart),
+            str(chromEnd),
+            name,
+            str(score),
+            strand,
+            str(thickStart),
+            str(thickEnd),
+            itemRgb,
+            str(blockCount),
+            blockSizes,
+            blockStarts,
+        ]
+        line = "\t".join(words) + "\n"
+        return line
+
     def _format_psl(self):
         query = self.query
         target = self.target
@@ -1231,7 +1292,7 @@ class PairwiseAlignment:
         qStart = qStarts[0]  # start of alignment in query
         tEnd = tStarts[-1] + blockSizes[-1]  # end of alignment in target
         qEnd = qStarts[-1] + blockSizes[-1]  # end of alignment in query
-        blockcount = len(blockSizes)
+        blockCount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
         tStarts = ",".join(map(str, tStarts)) + ","
@@ -1253,7 +1314,7 @@ class PairwiseAlignment:
             str(tSize),
             str(tStart),
             str(tEnd),
-            str(blockcount),
+            str(blockCount),
             blockSizes,
             qStarts,
             tStarts,
