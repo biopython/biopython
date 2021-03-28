@@ -2693,6 +2693,7 @@ class TestAlignmentFormat(unittest.TestCase):
         alignments = aligner.align("GAACT", "GCT")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -2705,6 +2706,12 @@ G--CT
             format(alignment, "psl"),
             """\
 3	0	0	0	0	0	1	2	+	query	3	0	3	target	5	0	5	2	1,2,	0,1,	0,3,
+""",
+        )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	0	5	query	-1.0	+	0	5	0	2	1,2,	0,3,
 """,
         )
         alignments = aligner.align("GCT", "GAACT")
@@ -2724,6 +2731,12 @@ GAACT
 3	0	0	0	1	2	0	0	+	query	5	0	5	target	3	0	3	2	1,2,	0,3,	0,1,
 """,
         )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	0	3	query	-1.0	+	0	3	0	2	1,2,	0,1,
+""",
+        )
 
     def test_alignment_end_gap(self):
         aligner = Align.PairwiseAligner()
@@ -2732,6 +2745,7 @@ GAACT
         aligner.mismatch = -10
         alignments = aligner.align("ACGTAGCATCAGC", "CCCCACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 13.0)
         alignment = alignments[0]
         self.assertEqual(
             str(alignment),
@@ -2747,9 +2761,16 @@ CCCCACGTAGCATCAGC
 13	0	0	0	0	0	0	0	+	query	17	4	17	target	13	0	13	1	13,	4,	0,
 """,
         )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	0	13	query	13.0	+	0	13	0	1	13,	0,
+""",
+        )
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -2762,6 +2783,12 @@ CCCCACGTAGCATCAGC
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	4	17	1	13,	0,	4,
+""",
+        )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	4	17	query	13.0	+	4	17	0	1	13,	0,
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
@@ -2781,9 +2808,16 @@ ACGTAGCATCAGCGGGG
 13	0	0	0	0	0	0	0	+	query	17	0	13	target	13	0	13	1	13,	0,	0,
 """,
         )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	0	13	query	13.0	+	0	13	0	1	13,	0,
+""",
+        )
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -2796,6 +2830,12 @@ ACGTAGCATCAGC----
             format(alignment, "psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	0	13	1	13,	0,	0,
+""",
+        )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	0	13	query	13.0	+	0	13	0	1	13,	0,
 """,
         )
 
@@ -2825,6 +2865,12 @@ TTTTTNACGCTCGAGCAGCTACG-----
 15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
 """,
         )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	6	23	query	13.0	+	6	23	0	1	17,	0,
+""",
+        )
         # use Seq objects for target and query
         alignments = aligner.align(Seq(target), Seq(query))
         self.assertEqual(len(alignments), 1)
@@ -2841,6 +2887,12 @@ TTTTTNACGCTCGAGCAGCTACG-----
             format(alignment, "psl"),
             """\
 15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+target	6	23	query	13.0	+	6	23	0	1	17,	0,
 """,
         )
 
