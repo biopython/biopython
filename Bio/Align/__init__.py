@@ -1034,11 +1034,16 @@ class PairwiseAlignment:
 
     def __format__(self, format_spec):
         """Create a human-readable representation of the alignment."""
-        if format_spec == "psl":
+        if format_spec == "":
+            return self._format_pretty()
+        elif format_spec == "psl":
             return self._format_psl()
-        if format_spec == "bed":
+        elif format_spec == "bed":
             return self._format_bed()
-        return self._format_pretty()
+        elif format_spec == "sam":
+            return self._format_sam()
+        else:
+            raise ValueError("Unknown format %s" % format_spec)
 
     def _format_pretty(self):
         seq1 = self._convert_sequence_string(self.target)
@@ -1322,8 +1327,88 @@ class PairwiseAlignment:
         line = "\t".join(words) + "\n"
         return line
 
+    def _format_sam(self):
+        query = self.query
+        target = self.target
+        try:
+            qName = query.id
+        except AttributeError:
+            qName = "query"
+        else:
+            query = query.seq
+        try:
+            rName = target.id
+        except AttributeError:
+            rName = "target"
+        else:
+            target = target.seq
+        n1 = len(target)
+        n2 = len(query)
+        try:
+            seq = bytes(query)
+        except TypeError:  # stri
+            seq = query
+        else:
+            seq = str(seq, "ASCII")
+        pos = None
+        flag = 0
+        qSize = n2
+        tSize = n1
+        cigar = []
+        tStart, qStart = self.path[0]
+        for tEnd, qEnd in self.path[1:]:
+            tCount = tEnd - tStart
+            qCount = qEnd - qStart
+            if tCount == 0:
+                length = qCount
+                if pos is None or tEnd == tSize:
+                    operation = "S"
+                else:
+                    operation = "I"
+                qStart = qEnd
+            elif qCount == 0:
+                if tStart > 0 and tEnd < tSize:
+                    length = tCount
+                    operation = "D"
+                else:
+                    operation = None
+                tStart = tEnd
+            else:
+                assert tCount == qCount
+                if pos is None:
+                    pos = tStart
+                tStart = tEnd
+                qStart = qEnd
+                operation = "M"
+                length = tCount
+            if operation is not None:
+                cigar.append(str(length) + operation)
+        mapQ = 255  # not available
+        rNext = "*"
+        pNext = 0
+        tLen = 0
+        qual = "*"
+        cigar = "".join(cigar)
+        tag = "AS:i:%d" % int(round(self.score))
+        words = [
+            qName,
+            str(flag),
+            rName,
+            str(pos + 1),  # 1-based coordinates
+            str(mapQ),
+            cigar,
+            rNext,
+            str(pNext),
+            str(tLen),
+            seq,
+            qual,
+            tag,
+        ]
+        line = "\t".join(words) + "\n"
+        return line
+
     def __str__(self):
-        return self.__format__(None)
+        return self.__format__("")
 
     @property
     def aligned(self):
