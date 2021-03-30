@@ -2201,6 +2201,12 @@ or in BED (Browser Extensible Data) format:
 >>> format(alignment, 'bed')
 'target\t0\t5\tquery\t3.0\t+\t0\t5\t0\t2\t2,1,\t0,4,\n'
 \end{minted}
+or in SAM (Sequence Alignment/Map \cite{li2009}) format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> format(alignment, 'sam')
+'query\t0\ttarget\t1\t255\t2M2D1M\t*\t0\t0\tGAT\t*\tAS:i:3\n'
+\end{minted}
 
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
