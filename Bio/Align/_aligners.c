@@ -6666,6 +6666,7 @@ sequence_converter(PyObject* argument, void* pointer)
             }
             indices = convert_1bytes_to_ints(aligner->mapping, n, view->buf);
             if (!indices) return 0;
+            PyBuffer_Release(view);
             view->itemsize = 1;
             view->len = n;
             view->buf = indices;
