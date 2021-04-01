@@ -1722,13 +1722,13 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
-    def score(self, seqA, seqB):
+    def score(self, seqA, seqB, strand="+"):
         """Return the alignments score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
             seqA = bytes(seqA)
         if isinstance(seqB, (Seq, MutableSeq)):
             seqB = bytes(seqB)
-        return _aligners.PairwiseAligner.score(self, seqA, seqB)
+        return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
 
     def __getstate__(self):
         state = {
