@@ -2015,6 +2015,37 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \label{table:align-meta-attributes}
 \end{table}
 
+\subsubsection{Aligning to the reverse strand}
+\label{sec:pairwise-general-gapscores}
+
+By default, the pairwise aligner aligns the forward strand of the query to the forward strand of the target. To calculate the alignment score for \verb+seq2+ to the reverse strand of \verb+seq1+, use \verb+strand='-'+:
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> from Bio.Seq import reverse_complement
+>>> seq1 = "AAAACCC"
+>>> seq2 = "AACC"
+>>> aligner = Align.PairwiseAligner()
+>>> aligner.score(seq1, seq2)
+4.0
+>>> aligner.score(seq1, seq2, strand="+")
+4.0
+>>> aligner.score(seq1, reverse_complement(seq2), strand="-")
+4.0
+\end{minted}
+Note that the score for aligning \verb+seq2+ to the reverse strand of \verb+seq1+ may be different from the score for aligning the reverse complement of \verb+seq2+ to the forward strand of \verb+seq1+ if the left and right gap scores are different:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.internal_gap_score = -1
+>>> aligner.left_gap_score = -0.5
+>>> aligner.right_gap_score = -0.2
+>>> aligner.score(seq1, seq2)
+2.8
+>>> aligner.score(seq1, reverse_complement(seq2), strand="-")
+3.1
+\end{minted}
+
+
 \subsubsection{General gap scores}
 \label{sec:pairwise-general-gapscores}
 

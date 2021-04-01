@@ -10,7 +10,7 @@ import os
 import unittest
 
 from Bio import Align, SeqIO
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement
 
 
 class TestAlignerProperties(unittest.TestCase):
@@ -214,6 +214,8 @@ Pairwise sequence aligner with parameters
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), "-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -242,6 +244,8 @@ G-A-T
         )
 
     def test_align_affine1_score(self):
+        seq1 = "CC"
+        seq2 = "ACCT"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 0
@@ -271,7 +275,9 @@ Pairwise sequence aligner with parameters
   mode: global
 """,
         )
-        score = aligner.score("CC", "ACCT")
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -7.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -7.0)
 
 
@@ -375,6 +381,8 @@ class TestUnknownCharacter(unittest.TestCase):
         aligner.wildcard = "?"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -392,6 +400,8 @@ GA?T
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -407,6 +417,8 @@ GAXT
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 2.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
@@ -430,6 +442,8 @@ GAXT
         aligner.wildcard = "?"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 4.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -449,6 +463,8 @@ GA-A?T
         seq2 = "GAAXT"
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
@@ -501,6 +517,8 @@ Pairwise sequence aligner with parameters
         seq1 = "AA"
         seq2 = "A"
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 1.9)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -561,6 +579,8 @@ Pairwise sequence aligner with parameters
         seq2 = "GA"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.9)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -618,6 +638,8 @@ Pairwise sequence aligner with parameters
         seq2 = "GAT"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.9)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -664,6 +686,8 @@ Pairwise sequence aligner with parameters
         seq1 = "GCT"
         seq2 = "GATA"
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 1.7)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -724,6 +748,8 @@ Pairwise sequence aligner with parameters
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.3)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 1.3)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -769,6 +795,8 @@ Pairwise sequence aligner with parameters
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 0.6)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 0.6)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -829,6 +857,8 @@ Pairwise sequence aligner with parameters
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -1.2)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, -1.2)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -879,6 +909,8 @@ Pairwise sequence aligner with parameters
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 1.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 3)
@@ -958,6 +990,8 @@ Pairwise sequence aligner with parameters
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.7)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -1017,6 +1051,8 @@ Pairwise sequence aligner with parameters
         seq2 = "GTCT"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.8)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 1.8)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1070,6 +1106,8 @@ Pairwise sequence aligner with parameters
 """,
         )
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 1.9)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 3)
@@ -1185,6 +1223,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -1247,6 +1287,8 @@ AT-T
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1297,6 +1339,8 @@ ATT
         self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
@@ -1351,6 +1395,8 @@ ATAT
         self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -1416,6 +1462,8 @@ AT-T
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1468,6 +1516,8 @@ ATT
         self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
         self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
@@ -1703,6 +1753,8 @@ Pairwise sequence aligner with parameters
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1755,6 +1807,8 @@ Pairwise sequence aligner with parameters
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
         )
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -10)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -10)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -1821,6 +1875,8 @@ Pairwise sequence aligner with parameters
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1849,6 +1905,8 @@ Pairwise sequence aligner with parameters
             % (gap_score, gap_score),
         )
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -8.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -8.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 4)
@@ -1935,6 +1993,8 @@ Pairwise sequence aligner with parameters
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -1998,6 +2058,8 @@ Pairwise sequence aligner with parameters
             aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
         )
         score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 13)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
@@ -2064,6 +2126,8 @@ Pairwise sequence aligner with parameters
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
@@ -2105,6 +2169,8 @@ Pairwise sequence aligner with parameters
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.0)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2144,11 +2210,15 @@ TTGGAA
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
+            aligner.score(seq1, reverse_complement(seq2), strand="-")
+        with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
         aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
+        with self.assertRaises(RuntimeError):
+            aligner.score(seq1, reverse_complement(seq2), strand="-")
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
@@ -2158,11 +2228,15 @@ TTGGAA
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
+            aligner.score(seq1, reverse_complement(seq2), strand="-")
+        with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
         aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
+        with self.assertRaises(RuntimeError):
+            aligner.score(seq1, reverse_complement(seq2), strand="-")
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
@@ -2275,9 +2349,13 @@ class TestArgumentErrors(unittest.TestCase):
         message = "^argument should support the sequence protocol$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
+        with self.assertRaisesRegex(TypeError, message):
+            aligner.score("AAA", 3, strand="-")
         message = "^sequence has zero length$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "")
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.score("AAA", "", strand="-")
         message = "^sequence contains letters not in the alphabet$"
         aligner.alphabet = "ABCD"
         with self.assertRaisesRegex(ValueError, message):
