@@ -6467,6 +6467,162 @@ exit:
 }
 
 static int
+reverse_complement(Py_buffer* view)
+{
+    Py_ssize_t i;
+    const Py_ssize_t n = view->len;
+    int* indices;
+
+    if (view->obj) {
+        int* rc_indices = PyMem_Malloc(n*sizeof(int));
+        if (!rc_indices) {
+            PyErr_NoMemory();
+            return 0;
+        }
+        indices = view->buf;
+        for (i = 0; i < n; i++) {
+            switch(indices[i]) {
+                case 'A': rc_indices[i] = 'T'; break;
+                case 'C': rc_indices[i] = 'G'; break;
+                case 'G': rc_indices[i] = 'C'; break;
+                case 'T': rc_indices[i] = 'A'; break;
+                case 'M': rc_indices[i] = 'K'; break;
+                case 'R': rc_indices[i] = 'Y'; break;
+                case 'W': rc_indices[i] = 'W'; break;
+                case 'S': rc_indices[i] = 'S'; break;
+                case 'Y': rc_indices[i] = 'R'; break;
+                case 'K': rc_indices[i] = 'M'; break;
+                case 'V': rc_indices[i] = 'B'; break;
+                case 'H': rc_indices[i] = 'D'; break;
+                case 'D': rc_indices[i] = 'H'; break;
+                case 'B': rc_indices[i] = 'V'; break;
+                case 'a': rc_indices[i] = 't'; break;
+                case 'c': rc_indices[i] = 'g'; break;
+                case 'g': rc_indices[i] = 'c'; break;
+                case 't': rc_indices[i] = 'a'; break;
+                case 'm': rc_indices[i] = 'k'; break;
+                case 'r': rc_indices[i] = 'y'; break;
+                case 'w': rc_indices[i] = 'w'; break;
+                case 's': rc_indices[i] = 's'; break;
+                case 'y': rc_indices[i] = 'r'; break;
+                case 'k': rc_indices[i] = 'm'; break;
+                case 'v': rc_indices[i] = 'b'; break;
+                case 'h': rc_indices[i] = 'd'; break;
+                case 'd': rc_indices[i] = 'h'; break;
+                case 'b': rc_indices[i] = 'v'; break;
+                default: rc_indices[i] = indices[i];
+            }
+        }
+        PyBuffer_Release(view);  /* also sets view->obj to NULL */
+        view->buf = rc_indices;
+    }
+    else {
+        int index;
+        indices = view->buf;
+        for (i = 0; i < n/2; i++) {
+            index = indices[n-i-1];
+            switch (indices[i]) {
+                case 'A': indices[n-1-i] = 'T'; break;
+                case 'C': indices[n-1-i] = 'G'; break;
+                case 'G': indices[n-1-i] = 'C'; break;
+                case 'T': indices[n-1-i] = 'A'; break;
+                case 'M': indices[n-1-i] = 'K'; break;
+                case 'R': indices[n-1-i] = 'Y'; break;
+                case 'W': indices[n-1-i] = 'W'; break;
+                case 'S': indices[n-1-i] = 'S'; break;
+                case 'Y': indices[n-1-i] = 'R'; break;
+                case 'K': indices[n-1-i] = 'M'; break;
+                case 'V': indices[n-1-i] = 'B'; break;
+                case 'H': indices[n-1-i] = 'D'; break;
+                case 'D': indices[n-1-i] = 'H'; break;
+                case 'B': indices[n-1-i] = 'V'; break;
+                case 'a': indices[n-1-i] = 't'; break;
+                case 'c': indices[n-1-i] = 'g'; break;
+                case 'g': indices[n-1-i] = 'c'; break;
+                case 't': indices[n-1-i] = 'a'; break;
+                case 'm': indices[n-1-i] = 'k'; break;
+                case 'r': indices[n-1-i] = 'y'; break;
+                case 'w': indices[n-1-i] = 'w'; break;
+                case 's': indices[n-1-i] = 's'; break;
+                case 'y': indices[n-1-i] = 'r'; break;
+                case 'k': indices[n-1-i] = 'm'; break;
+                case 'v': indices[n-1-i] = 'b'; break;
+                case 'h': indices[n-1-i] = 'd'; break;
+                case 'd': indices[n-1-i] = 'h'; break;
+                case 'b': indices[n-1-i] = 'v'; break;
+                default: indices[n-1-i] = indices[i];
+            }
+            switch (index) {
+                case 'A': indices[i] = 'T'; break;
+                case 'C': indices[i] = 'G'; break;
+                case 'G': indices[i] = 'C'; break;
+                case 'T': indices[i] = 'A'; break;
+                case 'M': indices[i] = 'K'; break;
+                case 'R': indices[i] = 'Y'; break;
+                case 'W': indices[i] = 'W'; break;
+                case 'S': indices[i] = 'S'; break;
+                case 'Y': indices[i] = 'R'; break;
+                case 'K': indices[i] = 'M'; break;
+                case 'V': indices[i] = 'B'; break;
+                case 'H': indices[i] = 'D'; break;
+                case 'D': indices[i] = 'H'; break;
+                case 'B': indices[i] = 'V'; break;
+                case 'a': indices[i] = 't'; break;
+                case 'c': indices[i] = 'g'; break;
+                case 'g': indices[i] = 'c'; break;
+                case 't': indices[i] = 'a'; break;
+                case 'm': indices[i] = 'k'; break;
+                case 'r': indices[i] = 'y'; break;
+                case 'w': indices[i] = 'w'; break;
+                case 's': indices[i] = 's'; break;
+                case 'y': indices[i] = 'r'; break;
+                case 'k': indices[i] = 'm'; break;
+                case 'v': indices[i] = 'b'; break;
+                case 'h': indices[i] = 'd'; break;
+                case 'd': indices[i] = 'h'; break;
+                case 'b': indices[i] = 'v'; break;
+                default: indices[i] = index;
+            }
+        }
+        if (i != n-i) {
+            index = indices[i];
+            switch (index) {
+                case 'A': indices[i] = 'T'; break;
+                case 'C': indices[i] = 'G'; break;
+                case 'G': indices[i] = 'C'; break;
+                case 'T': indices[i] = 'A'; break;
+                case 'M': indices[i] = 'K'; break;
+                case 'R': indices[i] = 'Y'; break;
+                case 'W': indices[i] = 'W'; break;
+                case 'S': indices[i] = 'S'; break;
+                case 'Y': indices[i] = 'R'; break;
+                case 'K': indices[i] = 'M'; break;
+                case 'V': indices[i] = 'B'; break;
+                case 'H': indices[i] = 'D'; break;
+                case 'D': indices[i] = 'H'; break;
+                case 'B': indices[i] = 'V'; break;
+                case 'a': indices[i] = 't'; break;
+                case 'c': indices[i] = 'g'; break;
+                case 'g': indices[i] = 'c'; break;
+                case 't': indices[i] = 'a'; break;
+                case 'm': indices[i] = 'k'; break;
+                case 'r': indices[i] = 'y'; break;
+                case 'w': indices[i] = 'w'; break;
+                case 's': indices[i] = 's'; break;
+                case 'y': indices[i] = 'r'; break;
+                case 'k': indices[i] = 'm'; break;
+                case 'v': indices[i] = 'b'; break;
+                case 'h': indices[i] = 'd'; break;
+                case 'd': indices[i] = 'h'; break;
+                case 'b': indices[i] = 'v'; break;
+                default: indices[i] = index;
+            }
+        }
+    }
+    return 1;
+}
+ 
+static int
 sequence_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
@@ -6636,7 +6792,9 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
-    // if (strand == '-') reverse_complement(&bB);
+    if (strand == '-') {
+        if (!reverse_complement(&bB)) goto error;
+    }
 
     sA = bA.buf;
     nA = bA.len / bA.itemsize;
@@ -6698,6 +6856,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
             break;
     }
 
+error:
     sequence_converter(NULL, &bA);
     sequence_converter(NULL, &bB);
 
