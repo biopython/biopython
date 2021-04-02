@@ -429,6 +429,13 @@ instead of ``format(matrix, fmt)``.
         return self.format(fmt)
 
     def format(self, fmt=None):
+        """Return a string representation of the array.
+
+        The argument ``fmt`` specifies the number format to be used.
+        By default, the number format is "%i" if the array contains integer
+        numbers, and "%.1f" otherwise.
+
+        """
         if fmt is None:
             if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
