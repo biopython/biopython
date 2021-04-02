@@ -1036,7 +1036,6 @@ class PairwiseAlignment:
         return None
 
     def __format__(self, format_spec):
-        raise Exception("Vervelend hee")
         warnings.warn(
             """\
 The ``__format__`` method is deprecated. Please use ``alignment.format(fmt)``

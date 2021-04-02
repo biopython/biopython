@@ -546,7 +546,6 @@ class Motif:
          - transfac : TRANSFAC like files
 
         """
-        raise Exception("Vervelend hee")
         return self.format(format_spec)
 
     def format(self, format_spec):

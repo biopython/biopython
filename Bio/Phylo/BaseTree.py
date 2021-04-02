@@ -984,7 +984,6 @@ class Tree(TreeElement, TreeMixin):
         if format is not None:
             if fmt is not None:
                 raise ValueError("The ``format`` argument has been renamed to ``fmt``.")
-            raise Exception("Vervelend hee")
             warnings.warn(
                 "The ``format`` argument has been renamed to ``fmt``.",
                 BiopythonDeprecationWarning,

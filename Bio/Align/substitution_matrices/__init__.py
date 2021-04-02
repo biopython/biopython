@@ -419,7 +419,6 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
-        raise Exception("Vervelend hee")
         warnings.warn(
             """\
 The ``__format__`` method is deprecated. Please use ``matrix.format(fmt)``
