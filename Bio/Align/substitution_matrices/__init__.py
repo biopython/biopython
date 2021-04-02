@@ -10,6 +10,9 @@
 import os
 import string
 import numpy
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 class Array(numpy.ndarray):
@@ -416,7 +419,18 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
-        if fmt == "":
+        raise Exception("Vervelend hee")
+        warnings.warn(
+            """\
+The ``__format__`` method is deprecated. Please use ``matrix.format(fmt)``
+instead of ``format(matrix, fmt)``.
+""",
+            BiopythonDeprecationWarning,
+        )
+        return self.format(fmt)
+
+    def format(self, fmt=None):
+        if fmt is None:
             if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
             else:
@@ -430,7 +444,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("Array has unexpected rank %d" % n)
 
     def __str__(self):
-        return self.__format__("")
+        return self.format()
 
     def __repr__(self):
         text = numpy.ndarray.__repr__(self)

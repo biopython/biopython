@@ -1669,7 +1669,7 @@ each residue:
 %cont-doctest
 \begin{minted}{pycon}
 >>> residue_frequencies = numpy.sum(observed_frequencies, 0)
->>> print(format(residue_frequencies, "%.4f"))
+>>> print(residue_frequencies.format("%.4f"))
 D 0.2015
 E 0.2743
 H 0.0976
@@ -1684,7 +1684,7 @@ The expected frequency of residue pairs is then
 %cont-doctest
 \begin{minted}{pycon}
 >>> expected_frequencies = numpy.dot(residue_frequencies[:, None], residue_frequencies[None, :])
->>> print(format(expected_frequencies, "%.4f"))
+>>> print(expected_frequencies.format("%.4f"))
        D      E      H      K      R
 D 0.0406 0.0553 0.0197 0.0518 0.0342
 E 0.0553 0.0752 0.0268 0.0705 0.0465

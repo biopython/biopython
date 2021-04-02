@@ -96,7 +96,7 @@ release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
 ``mast`` format.
 The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
 in release 1.77, in favor of a ``__format__`` method that can be used from the
-``format`` built-in function.
+``format`` built-in function. This decision was reversed in release 1.79.
 
 Bio.Restriction.RanaConfig
 --------------------------
@@ -863,7 +863,11 @@ Bio.Align
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57 and removed in Release 1.69.
 The format method of the MultipleSeqAlignment class and the PairwiseAlignment
-class were deprecated in Release 1.76, and removed in Release 1.79.
+class were deprecated in Release 1.76. This decision was reversed in
+Release 1.79. Instead, the __format__ method of the PairwiseAlignment class was
+deprecated in Release 1.79.
+The __format__ method of the Array class in Bio.Align.substitution_matrices was
+deprecated in Release 1.79.
 
 Bio.Align.Generic
 -----------------
@@ -906,11 +910,6 @@ Biopython still using this class.
 Bio.FSSP
 -----------
 Deprecated in release 1.77.
-
-Bio.Phylo.BaseTree.Tree
------------------------
-The format method was deprecated in Release 1.79 in favor of the __format__
-method, which supports Python's built-in format function.
 
 Bio.Phylo._utils
 ----------------

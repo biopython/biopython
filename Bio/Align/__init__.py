@@ -13,10 +13,13 @@ class, used in the Bio.AlignIO module.
 
 """
 
+import warnings
+
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
+from Bio import BiopythonDeprecationWarning
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -1033,17 +1036,28 @@ class PairwiseAlignment:
         return None
 
     def __format__(self, format_spec):
+        raise Exception("Vervelend hee")
+        warnings.warn(
+            """\
+The ``__format__`` method is deprecated. Please use ``alignment.format(fmt)``
+instead of ``alignment(matrix, fmt)``.
+""",
+            BiopythonDeprecationWarning,
+        )
+        return self.format(format_spec)
+
+    def format(self, fmt=None):
         """Create a human-readable representation of the alignment."""
-        if format_spec == "":
+        if fmt is None:
             return self._format_pretty()
-        elif format_spec == "psl":
+        elif fmt == "psl":
             return self._format_psl()
-        elif format_spec == "bed":
+        elif fmt == "bed":
             return self._format_bed()
-        elif format_spec == "sam":
+        elif fmt == "sam":
             return self._format_sam()
         else:
-            raise ValueError("Unknown format %s" % format_spec)
+            raise ValueError("Unknown format %s" % fmt)
 
     def _format_pretty(self):
         seq1 = self._convert_sequence_string(self.target)
@@ -1408,7 +1422,7 @@ class PairwiseAlignment:
         return line
 
     def __str__(self):
-        return self.__format__("")
+        return self.format()
 
     @property
     def aligned(self):
