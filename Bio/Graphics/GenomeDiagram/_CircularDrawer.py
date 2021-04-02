@@ -1074,47 +1074,46 @@ class CircularDrawer(AbstractDrawer):
         return (angle, cos(angle), sin(angle))
 
     def _arc_center_radius_angles(self, xA, yA, xB, yB):
-        """
-            Gives the center and angles for an arc between the two points.
+        """Give the center and angles for an arc between the two points.
 
-            A third point is assumed between the middle of two points (0.9) and
-            the point self.xcenter, self.ycenter (0.1).
+        A third point is assumed between the middle of two points (0.9) and
+        the point self.xcenter, self.ycenter (0.1).
         """
-        mtp_x = xA*0.5 + xB*0.5
-        mtp_y = yA*0.5 + yB*0.5
+        mtp_x = xA * 0.5 + xB * 0.5
+        mtp_y = yA * 0.5 + yB * 0.5
 
         # MAximal point of arch
         x0, y0 = self.xcenter, self.ycenter
 
         # Calculate third point on the circle
-        xM = mtp_x*0.9+x0*0.1
-        yM = mtp_y*0.9+y0*0.1
+        xM = mtp_x * 0.9 + x0 * 0.1
+        yM = mtp_y * 0.9 + y0 * 0.1
 
         # midpoints
-        xAM = 0.5*(xA+xM)
-        yAM = 0.5*(yA+yM)
+        xAM = 0.5 * (xA + xM)
+        yAM = 0.5 * (yA + yM)
 
-        xMB = 0.5*(xB+xM)
-        yMB = 0.5*(yB+yM)
+        xMB = 0.5 * (xB + xM)
+        yMB = 0.5 * (yB + yM)
 
         # Calulate slope of AM and BM
-        mA = (yA-yM)/(xA-xM)
-        mB = (yB-yM)/(xB-xM)
+        mA = (yA - yM) / (xA - xM)
+        mB = (yB - yM) / (xB - xM)
 
         # Y-Achsen Abschnitt
-        bAM = yAM + xAM/mA
-        bMB = yMB + xMB/mB
+        bAM = yAM + xAM / mA
+        bMB = yMB + xMB / mB
 
         # The center
-        xC = (bMB - bAM) / (1/mB - 1/mA)
-        yC = -1/mB*xC + bMB
+        xC = (bMB - bAM) / (1 / mB - 1 / mA)
+        yC = -1 / mB * xC + bMB
 
         # The radius
-        r = sqrt( (xB-xC)**2 + (yB-yC)**2 )
+        r = sqrt((xB - xC)**2 + (yB - yC)**2)
 
         # Calculate beginning and ending angles
-        angleA = atan2(yA-yC, xA-xC)
-        angleB = atan2(yB-yC, xB-xC)
+        angleA = atan2(yA - yC, xA - xC)
+        angleB = atan2(yB - yC, xB - xC)
 
         return xC, yC, r, angleA, angleB
 
@@ -1221,7 +1220,6 @@ class CircularDrawer(AbstractDrawer):
 
         Represents what would be a straight line on a linear diagram.
         """
-
         radius_diff = end_radius - start_radius
         angle_diff = end_angle - start_angle
         dx = 0.01  # heuristic
@@ -1344,7 +1342,7 @@ class CircularDrawer(AbstractDrawer):
         flip=False,
         **kwargs
     ):
-        """ Returns polygon path describing an arc """
+        """Return polygon path describing an arc."""
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
@@ -1355,15 +1353,15 @@ class CircularDrawer(AbstractDrawer):
         btm, ctr, top = self.track_radii[track]
         x0, y0 = self.xcenter, self.ycenter
 
-        startyA = startcosA*btm + y0
-        startxA = startsinA*btm + x0
-        endyA = endcosA*btm + y0
-        endxA = endsinA*btm + x0
+        startyA = startcosA * btm + y0
+        startxA = startsinA * btm + x0
+        endyA = endcosA * btm + y0
+        endxA = endsinA * btm + x0
 
-        startyB = startcosB*btm + y0
-        startxB = startsinB*btm + x0
-        endyB = endcosB*btm + y0
-        endxB = endsinB*btm + x0
+        startyB = startcosB * btm + y0
+        startxB = startsinB * btm + x0
+        endyB = endcosB * btm + y0
+        endxB = endsinB * btm + x0
 
         p = ArcPath(
             strokeColor=strokecolor,
