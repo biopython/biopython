@@ -419,16 +419,9 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
-        warnings.warn(
-            """\
-The ``__format__`` method is deprecated. Please use ``matrix.format(fmt)``
-instead of ``format(matrix, fmt)``.
-""",
-            BiopythonDeprecationWarning,
-        )
         return self.format(fmt)
 
-    def format(self, fmt=None):
+    def format(self, fmt=""):
         """Return a string representation of the array.
 
         The argument ``fmt`` specifies the number format to be used.
@@ -436,7 +429,7 @@ instead of ``format(matrix, fmt)``.
         numbers, and "%.1f" otherwise.
 
         """
-        if fmt is None:
+        if fmt == "":
             if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
             else:

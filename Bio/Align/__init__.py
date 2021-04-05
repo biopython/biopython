@@ -1036,18 +1036,11 @@ class PairwiseAlignment:
         return None
 
     def __format__(self, format_spec):
-        warnings.warn(
-            """\
-The ``__format__`` method is deprecated. Please use ``alignment.format(fmt)``
-instead of ``alignment(matrix, fmt)``.
-""",
-            BiopythonDeprecationWarning,
-        )
         return self.format(format_spec)
 
-    def format(self, fmt=None):
+    def format(self, fmt=""):
         """Create a human-readable representation of the alignment."""
-        if fmt is None:
+        if fmt == "":
             return self._format_pretty()
         elif fmt == "psl":
             return self._format_psl()
