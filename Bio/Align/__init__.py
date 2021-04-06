@@ -19,7 +19,6 @@ from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
-from Bio import BiopythonDeprecationWarning
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is

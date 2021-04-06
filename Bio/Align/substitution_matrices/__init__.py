@@ -12,8 +12,6 @@ import string
 import numpy
 import warnings
 
-from Bio import BiopythonDeprecationWarning
-
 
 class Array(numpy.ndarray):
     """numpy array subclass indexed by integers and by letters."""
