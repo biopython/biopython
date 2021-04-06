@@ -189,9 +189,14 @@ class ProteinAnalysis:
 
         return scores
 
-    def gravy(self):
+    def gravy(self, scale="KyteDoolitle"):
         """Calculate the gravy according to Kyte and Doolittle."""
-        total_gravy = sum(ProtParamData.kd[aa] for aa in self.sequence)
+        selected_scale = ProtParamData.gravy_scales.get(scale, -1)
+
+        if selected_scale == -1:
+            raise ValueError("scale: {} not know".format(scale))
+
+        total_gravy = sum(selected_scale[aa] for aa in self.sequence)
 
         return total_gravy / self.length
 
