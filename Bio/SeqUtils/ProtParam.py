@@ -190,7 +190,14 @@ class ProteinAnalysis:
         return scores
 
     def gravy(self, scale="KyteDoolitle"):
-        """Calculate the gravy according to Kyte and Doolittle."""
+        """Calculate the GRAVY (GRand Average of hYdropathy).
+
+        Utilizes the given Hidrophobicity scale, by default uses the one by Kyte and
+        Doolittle (KyteDoolitle). Other options are: Aboderin, AbrahamLeo, Argos,
+        BlackMould, BullBreese, Casari, Cid, Cowan3.4, Cowan7.5, Eisenberg, Engelman,
+        Fasman, Fauchere, GoldSack, Guy, Jones, Juretic, Kidera, Miyazawa, Parker,
+        Ponnuswamy, Rose, Roseman, Sweet, Tanford, Wilson and Zimmerman.
+        """
         selected_scale = ProtParamData.gravy_scales.get(scale, -1)
 
         if selected_scale == -1:
