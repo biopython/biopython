@@ -119,7 +119,7 @@ Z  0.0
         self.assertEqual(sizes["chr4"], 190214555)
         self.assertEqual(sizes["chr5"], 181538259)
         self.assertEqual(sum(sizes), 3209286105)
-        text = format(sizes)
+        text = str(sizes)
         lines = text.split("\n")
         self.assertEqual(lines[0], "chr1 248956422")
         self.assertEqual(lines[1], "chr2 242193529")
@@ -144,7 +144,7 @@ Z  0.0
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
             text = handle.read()
-        self.assertEqual(format(frequencies, "%d"), text)
+        self.assertEqual(frequencies.format("%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
         frequencies /= total
@@ -169,7 +169,7 @@ Z  0.0
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
             text = handle.read()
-        self.assertEqual(format(frequencies, "%d"), text)
+        self.assertEqual(frequencies.format("%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
         frequencies /= total
@@ -196,7 +196,7 @@ Z  0.0
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
             text = handle.read()
-        self.assertEqual(format(frequencies, "%d"), text)
+        self.assertEqual(frequencies.format("%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
         frequencies /= total
@@ -237,7 +237,7 @@ Z  0.0
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
             text = handle.read()
-        self.assertEqual(format(frequencies, "%d"), text)
+        self.assertEqual(frequencies.format("%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
         frequencies /= total

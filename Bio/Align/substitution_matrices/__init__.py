@@ -416,6 +416,16 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
+        return self.format(fmt)
+
+    def format(self, fmt=""):
+        """Return a string representation of the array.
+
+        The argument ``fmt`` specifies the number format to be used.
+        By default, the number format is "%i" if the array contains integer
+        numbers, and "%.1f" otherwise.
+
+        """
         if fmt == "":
             if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
@@ -430,7 +440,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("Array has unexpected rank %d" % n)
 
     def __str__(self):
-        return self.__format__("")
+        return self.format()
 
     def __repr__(self):
         text = numpy.ndarray.__repr__(self)
