@@ -1693,23 +1693,16 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     """
 
+    __slots__ = ()  # To prevent confusion, don't allow users to create new attributes.
+
     def __init__(self, **kwargs):
         """Initialize a new PairwiseAligner with the keyword arguments as attributes.
 
-        This function subclasses `_aligners.PairwiseAligner` and loops over all
-        the keyword arguments that are given in the constructor to set them
-        as attributes on the object. This will call the `__setattr__` method to
-        do that.
+        Loops over the keyword arguments and sets them as attributes on the object.
         """
         super().__init__()
         for name, value in kwargs.items():
             setattr(self, name, value)
-
-    def __setattr__(self, key, value):
-        if key not in dir(_aligners.PairwiseAligner):
-            # To prevent confusion, don't allow users to create new attributes
-            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
-        _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
