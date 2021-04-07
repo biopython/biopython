@@ -20,8 +20,6 @@ import warnings
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
-from Bio import BiopythonDeprecationWarning
-
 
 def create(instances, alphabet="ACGT"):
     """Create a Motif object."""
@@ -548,6 +546,18 @@ class Motif:
          - transfac : TRANSFAC like files
 
         """
+        return self.format(format_spec)
+
+    def format(self, format_spec):
+        """Return a string representation of the Motif in the given format.
+
+        Currently supported formats:
+         - clusterbuster: Cluster Buster position frequency matrix format
+         - pfm : JASPAR single Position Frequency Matrix
+         - jaspar : JASPAR multiple Position Frequency Matrix
+         - transfac : TRANSFAC like files
+
+        """
         if format_spec in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
 
@@ -565,20 +575,6 @@ class Motif:
             return clusterbuster.write(motifs)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
-
-    def format(self, format_spec):
-        """Return a string representation of the Motif in the given format [DEPRECATED].
-
-        This method is deprecated; instead of motif.format(format_spec),
-        please use format(motif, format_spec).
-        """
-        warnings.warn(
-            "Motif.format has been deprecated, and we intend to remove it in a "
-            "future release of Biopython. Instead of motif.format(format_spec), "
-            "please use format(motif, format_spec).",
-            BiopythonDeprecationWarning,
-        )
-        return self.__format__(format_spec)
 
 
 def write(motifs, fmt):

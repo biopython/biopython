@@ -496,17 +496,17 @@ class MotifTestsBasic(unittest.TestCase):
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files."""
         with open(self.TFout, "w") as output_handle:
-            output_handle.write(format(self.m, "transfac"))
+            output_handle.write(self.m.format("transfac"))
 
     def test_format(self):
         self.m.name = "Foo"
-        s1 = format(self.m, "pfm")
+        s1 = self.m.format("pfm")
         expected_pfm = """  1.00   0.00   1.00   0.00  1.00
   0.00   0.00   0.00   0.00  0.00
   0.00   0.00   0.00   0.00  0.00
   0.00   1.00   0.00   1.00  0.00
 """
-        s2 = format(self.m, "jaspar")
+        s2 = self.m.format("jaspar")
         expected_jaspar = """>None Foo
 A [  1.00   0.00   1.00   0.00   1.00]
 C [  0.00   0.00   0.00   0.00   0.00]
@@ -514,7 +514,7 @@ G [  0.00   0.00   0.00   0.00   0.00]
 T [  0.00   1.00   0.00   1.00   0.00]
 """
         self.assertEqual(s2, expected_jaspar)
-        s3 = format(self.m, "transfac")
+        s3 = self.m.format("transfac")
         expected_transfac = """P0      A      C      G      T
 01      1      0      0      0      A
 02      0      0      0      1      T
@@ -525,7 +525,7 @@ XX
 //
 """
         self.assertEqual(s3, expected_transfac)
-        self.assertRaises(ValueError, format, self.m, "foo_bar")
+        self.assertRaises(ValueError, self.m.format, "foo_bar")
 
     def test_reverse_complement(self):
         """Test if motifs can be reverse-complemented."""
@@ -534,7 +534,7 @@ XX
         m = self.m
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = format(self.m, "transfac")
+        received_forward = self.m.format("transfac")
         expected_forward = """\
 P0      A      C      G      T
 01      1      0      0      0      A
@@ -555,7 +555,7 @@ T:   0.17   0.50   0.17   0.50   0.17
 """
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
+        received_reverse = m.format("transfac")
         expected_reverse = """\
 P0      A      C      G      T
 01      0      0      0      1      T
@@ -580,11 +580,11 @@ T:   0.50   0.17   0.50   0.17   0.50
         m = motifs.Motif(counts=counts)
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = format(m, "transfac")
+        received_forward = m.format("transfac")
         self.assertEqual(received_forward, expected_forward)
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
+        received_reverse = m.format("transfac")
         self.assertEqual(received_reverse, expected_reverse)
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
 
@@ -2196,8 +2196,8 @@ class TestTransfac(unittest.TestCase):
 
     def test_permissive_transfac_parser(self):
         """Parse the TRANSFAC-like file motifs/MA0056.1.transfac."""
-        # The test file MA0056.1.transfac was provided by the JASPAR database
-        # in a TRANSFAC-like format
+        # The test file MA0056.1.transfac was obtained from the JASPAR database
+        # in a TRANSFAC-like format.
         # Khan, A. et al. JASPAR 2018: update of the open-access database of
         # transcription factor binding profiles and its web framework.
         # Nucleic Acids Res. 2018; 46:D260-D266,

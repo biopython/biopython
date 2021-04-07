@@ -2785,19 +2785,19 @@ ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCAGATACTTTACGAGCATCGGC
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 34	2	0	1	1	1	3	26	+	query	38	0	38	target	79	10	73	5	10,3,12,7,5,	0,11,14,26,33,	10,20,34,60,68,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	10	73	query	19.0	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
@@ -2821,19 +2821,19 @@ CCCCACGTAGCATCAGC
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	17	4	17	target	13	0	13	1	13,	4,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	0	13	query	13.0	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
@@ -2851,19 +2851,19 @@ CCCCACGTAGCATCAGC
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	4	17	1	13,	0,	4,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	4	17	query	13.0	+	4	17	0	1	13,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
@@ -2880,19 +2880,19 @@ ACGTAGCATCAGCGGGG
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	17	0	13	target	13	0	13	1	13,	0,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	0	13	query	13.0	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
@@ -2910,19 +2910,19 @@ ACGTAGCATCAGC----
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 13	0	0	0	0	0	0	0	+	query	13	0	13	target	17	0	13	1	13,	0,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	0	13	query	13.0	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
@@ -2949,19 +2949,19 @@ TTTTTNACGCTCGAGCAGCTACG-----
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	6	23	query	13.0	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
@@ -2979,19 +2979,19 @@ TTTTTNACGCTCGAGCAGCTACG-----
 """,
         )
         self.assertEqual(
-            format(alignment, "psl"),
+            alignment.format("psl"),
             """\
 15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
 """,
         )
         self.assertEqual(
-            format(alignment, "bed"),
+            alignment.format("bed"),
             """\
 target	6	23	query	13.0	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
-            format(alignment, "sam"),
+            alignment.format("sam"),
             """\
 query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
