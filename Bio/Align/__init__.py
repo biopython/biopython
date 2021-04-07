@@ -13,8 +13,6 @@ class, used in the Bio.AlignIO module.
 
 """
 
-import warnings
-
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq

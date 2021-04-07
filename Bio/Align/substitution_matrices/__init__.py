@@ -10,7 +10,6 @@
 import os
 import string
 import numpy
-import warnings
 
 
 class Array(numpy.ndarray):
