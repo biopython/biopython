@@ -4298,6 +4298,9 @@ static PyGetSetDef Aligner_getset[] = {
             left_gap_extend_B = self->query_right_extend_gap_score; \
             right_gap_extend_B = self->query_left_extend_gap_score; \
             break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); \
+            return NULL; \
     } \
 \
     /* Needleman-Wunsch algorithm */ \
@@ -4572,6 +4575,7 @@ static PyGetSetDef Aligner_getset[] = {
             right_gap_open_B = self->query_right_open_gap_score; \
             right_gap_extend_A = self->target_right_extend_gap_score; \
             right_gap_extend_B = self->query_right_extend_gap_score; \
+            break; \
         case '-': \
             left_gap_open_A = self->target_right_open_gap_score; \
             left_gap_open_B = self->query_right_open_gap_score; \
@@ -4581,6 +4585,10 @@ static PyGetSetDef Aligner_getset[] = {
             right_gap_open_B = self->query_left_open_gap_score; \
             right_gap_extend_A = self->target_left_extend_gap_score; \
             right_gap_extend_B = self->query_left_extend_gap_score; \
+            break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); \
+            return NULL; \
     } \
 \
     /* Gotoh algorithm with three states */ \

@@ -177,10 +177,18 @@ Pairwise sequence aligner with parameters
 
     def test_aligner_nonexisting_property(self):
         aligner = Align.PairwiseAligner()
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError) as cm:
             aligner.no_such_property
-        with self.assertRaises(AttributeError):
+        self.assertEqual(
+            str(cm.exception),
+            "'PairwiseAligner' object has no attribute 'no_such_property'",
+        )
+        with self.assertRaises(AttributeError) as cm:
             aligner.no_such_property = 1
+        self.assertEqual(
+            str(cm.exception),
+            "'PairwiseAligner' object has no attribute 'no_such_property'",
+        )
 
 
 class TestPairwiseGlobal(unittest.TestCase):
