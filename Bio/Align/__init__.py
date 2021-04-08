@@ -1707,7 +1707,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes.
             # On CPython, __slots__ can be used for this, but currently
             # __slots__ does not behave the same way on PyPy at least.
-            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
+            raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):
