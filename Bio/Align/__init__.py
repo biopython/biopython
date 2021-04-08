@@ -1709,7 +1709,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             # __slots__ does not behave the same way on PyPy at least.
             raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
- 
+
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
