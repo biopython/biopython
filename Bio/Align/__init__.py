@@ -1693,8 +1693,6 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     """
 
-    __slots__ = ()  # To prevent confusion, don't allow users to create new attributes.
-
     def __init__(self, **kwargs):
         """Initialize a new PairwiseAligner with the keyword arguments as attributes.
 
@@ -1704,6 +1702,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         for name, value in kwargs.items():
             setattr(self, name, value)
 
+    def __setattr__(self, key, value):
+        if key not in dir(_aligners.PairwiseAligner):
+            # To prevent confusion, don't allow users to create new attributes.
+            # On CPython, __slots__ can be used for this, but currently
+            # __slots__ does not behave the same way on PyPy at least.
+            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
+        _aligners.PairwiseAligner.__setattr__(self, key, value)
+ 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
