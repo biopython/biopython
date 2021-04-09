@@ -250,6 +250,31 @@ G-A-T
         self.assertEqual(
             alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
         )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAACT
+||--|
+GA--T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((3, 1), (1, 0))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAACT
+|-|-|
+G-A-T
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((3, 2), (2, 1), (1, 0))))
 
     def test_align_affine1_score(self):
         seq1 = "CC"
@@ -404,6 +429,19 @@ GA?T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GA?T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((4, 0),)))
         seq2 = "GAXT"
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
@@ -423,6 +461,19 @@ GAXT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((4, 0),)))
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -441,6 +492,19 @@ GAXT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((4, 0),)))
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
@@ -467,6 +531,21 @@ GA-A?T
         self.assertEqual(
             alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
         )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GA?A-T
+||-|-|
+GA-A?T
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((5, 3), (3, 2), (1, 0)))
+        )
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -488,6 +567,21 @@ GA-AXT
         )
         self.assertEqual(
             alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAXA-T
+||-|-|
+GA-AXT
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((5, 3), (3, 2), (1, 0)))
         )
 
 
@@ -552,6 +646,30 @@ A-
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1),), ((0, 1),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+AA
+-|
+-A
+""",
+        )
+        self.assertEqual(alignment.aligned, (((1, 2),), ((1, 0),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+AA
+|-
+A-
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1),), ((1, 0),)))
 
     def test_match_score_open_penalty2(self):
         aligner = Align.PairwiseAligner()
@@ -613,6 +731,30 @@ GA-
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAA
+|-|
+G-A
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((2, 1), (1, 0))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 2.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAA
+||-
+GA-
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2),), ((2, 0),)))
 
     def test_match_score_open_penalty3(self):
         aligner = Align.PairwiseAligner()
@@ -661,6 +803,19 @@ GA--T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((0, 2), (2, 3))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAACT
+||--|
+GA--T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((3, 1), (1, 0))))
 
     def test_match_score_open_penalty4(self):
         aligner = Align.PairwiseAligner()
@@ -721,6 +876,31 @@ G-ATA
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (2, 3))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+G-CT-
+|--|-
+GA-TA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (2, 1))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 1.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+GC-T-
+|--|-
+G-ATA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (2, 1))))
+
 
 
 class TestPairwiseExtendPenalty(unittest.TestCase):
@@ -771,6 +951,19 @@ G--T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((0, 1), (1, 2))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.3)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+|--|
+G--T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((2, 1), (1, 0))))
 
     def test_extend_penalty2(self):
         aligner = Align.PairwiseAligner()
@@ -830,6 +1023,31 @@ G-T-
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 0.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+-.-|
+-G-T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((1, 2), (3, 4)), ((2, 1), (1, 0))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 0.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+|-.-
+G-T-
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((2, 1), (1, 0))))
+
 
 
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
@@ -880,6 +1098,19 @@ G--T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((0, 1), (1, 2))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -1.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+|--|
+G--T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((2, 1), (1, 0))))
 
 
 class TestPairwisePenalizeEndgaps(unittest.TestCase):
@@ -955,6 +1186,41 @@ GT--
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 3)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+--.|
+--GT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((2, 4),), ((2, 0),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+|--|
+G--T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((2, 1), (1, 0))))
+        alignment = alignments[2]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+|.--
+GT--
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2),), ((2, 0),)))
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
@@ -1024,6 +1290,30 @@ GTCT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (2, 3)), ((0, 2), (3, 4))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+G-AT
+|-.|
+GTCT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (1, 3)), ((4, 3), (2, 0))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 1.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+GA-T
+|.-|
+GTCT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (2, 3)), ((4, 2), (1, 0))))
 
     def test_separate_gap_penalties2(self):
         aligner = Align.PairwiseAligner()
@@ -1074,6 +1364,19 @@ G-TCT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAT  
+|-|  
+G-TCT
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (3, 2))))
 
 
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
@@ -1152,7 +1455,7 @@ GTCCT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 3), (3, 4)), ((0, 3), (4, 5))))
-        alignments = aligner.align(seq1, seq2)
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -1164,7 +1467,7 @@ G-AAT
 GTCCT
 """,
         )
-        self.assertEqual(alignment.aligned, (((0, 1), (1, 4)), ((0, 1), (2, 5))))
+        self.assertEqual(alignment.aligned, (((0, 1), (1, 4)), ((5, 4), (3, 0))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -1175,7 +1478,7 @@ GA-AT
 GTCCT
 """,
         )
-        self.assertEqual(alignment.aligned, (((0, 2), (2, 4)), ((0, 2), (3, 5))))
+        self.assertEqual(alignment.aligned, (((0, 2), (2, 4)), ((5, 3), (2, 0))))
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -1186,7 +1489,7 @@ GAA-T
 GTCCT
 """,
         )
-        self.assertEqual(alignment.aligned, (((0, 3), (3, 4)), ((0, 3), (4, 5))))
+        self.assertEqual(alignment.aligned, (((0, 3), (3, 4)), ((5, 2), (1, 0))))
 
 
 class TestPairwiseMatchDictionary(unittest.TestCase):
@@ -1257,6 +1560,30 @@ AT-T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||. 
+ATT 
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||-|
+AT-T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((3, 1), (1, 0))))
 
     def test_match_dictionary2(self):
         try:
@@ -1310,6 +1637,19 @@ ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||. 
+ATT 
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
 
     def test_match_dictionary3(self):
         try:
@@ -1363,6 +1703,19 @@ ATAT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATT 
+||. 
+ATAT
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
 
     def test_match_dictionary4(self):
         try:
@@ -1430,6 +1783,30 @@ AT-T
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||. 
+ATT 
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||-|
+AT-T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((3, 1), (1, 0))))
 
     def test_match_dictionary5(self):
         try:
@@ -1485,6 +1862,19 @@ ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATAT
+||. 
+ATT 
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
 
     def test_match_dictionary6(self):
         try:
@@ -1540,6 +1930,19 @@ ATAT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ATT 
+||. 
+ATAT
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
 
 
 class TestPairwiseOneCharacter(unittest.TestCase):
@@ -1776,6 +2179,19 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 """,
         )
         self.assertEqual(alignment.aligned, (((2, 13), (23, 34)), ((0, 11), (11, 22))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+--|||||||||||----------|||||||||||--
+--AABBBAAAACC----------CCAAAABBBAA--
+""",
+        )
+        self.assertEqual(alignment.aligned, (((2, 13), (23, 34)), ((22, 11), (11, 0))))
 
     def test_gap_here_only_2(self):
         # Force a bad alignment.
@@ -1842,6 +2258,30 @@ AAB------------BBAAAACCCCAAAABBBAA--
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 3), (15, 34)), ((0, 3), (3, 22))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -10)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+--|||||||||||||......------------.||
+--AABBBAAAACCCCAAAABB------------BAA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((2, 21), (33, 36)), ((22, 3), (3, 0))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, -10)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+--|||||||||||||......----------|||--
+--AABBBAAAACCCCAAAABB----------BAA--
+""",
+        )
+        self.assertEqual(alignment.aligned, (((2, 21), (31, 34)), ((22, 3), (3, 0))))
 
     def test_gap_here_only_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -1898,6 +2338,19 @@ TTG--GAA
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((0, 2), (4, 6))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TT-CC-AA
+||----||
+TTG--GAA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((6, 4), (2, 0))))
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -1966,6 +2419,56 @@ TTG--GAA
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((0, 2), (4, 6))))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 4)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -8.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TT-CCAA
+||-.-||
+TTGG-AA
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (2, 3), (4, 6)), ((6, 4), (3, 2), (2, 0)))
+        )
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, -8.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTC--CAA
+||----||
+TT-GG-AA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((6, 4), (2, 0))))
+        alignment = alignments[2]
+        self.assertAlmostEqual(alignment.score, -8.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTCC-AA
+||-.-||
+TT-GGAA
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 6)), ((6, 4), (4, 3), (2, 0)))
+        )
+        alignment = alignments[3]
+        self.assertAlmostEqual(alignment.score, -8.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TT-CC-AA
+||----||
+TTG--GAA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((6, 4), (2, 0))))
 
     def test_gap_here_only_local_1(self):
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
@@ -2027,6 +2530,30 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+  |||||||||||||                     
+  AABBBAAAACCCCAAAABBBAA            
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 13)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+                     |||||||||||||  
+            AABBBAAAACCCCAAAABBBAA  
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
 
     def test_gap_here_only_local_2(self):
         # Force a bad alignment.
@@ -2093,6 +2620,30 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+  |||||||||||||                     
+  AABBBAAAACCCCAAAABBBAA            
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 13)
+        self.assertEqual(
+            str(alignment),
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+                     |||||||||||||  
+            AABBBAAAACCCCAAAABBBAA  
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
 
     def test_gap_here_only_local_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -2160,6 +2711,30 @@ TTGGAA
 """,
         )
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTCCAA
+||    
+TTGGAA
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTCCAA
+    ||
+TTGGAA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((4, 6),), ((2, 0),)))
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -2174,11 +2749,11 @@ Pairwise sequence aligner with parameters
 """
             % (gap_score, gap_score),
         )
-        alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
+        alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2202,6 +2777,30 @@ TTGGAA
 """,
         )
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTCCAA
+||    
+TTGGAA
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+TTCCAA
+    ||
+TTGGAA
+""",
+        )
+        self.assertEqual(alignment.aligned, (((4, 6),), ((2, 0),)))
 
     def test_broken_gap_function(self):
         # Check if an Exception is propagated if the gap function raises one
@@ -2222,6 +2821,9 @@ TTGGAA
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
+        with self.assertRaises(RuntimeError):
+            alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+            alignments = list(alignments)
         aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
@@ -2229,6 +2831,9 @@ TTGGAA
             aligner.score(seq1, reverse_complement(seq2), strand="-")
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
+            alignments = list(alignments)
+        with self.assertRaises(RuntimeError):
+            alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
             alignments = list(alignments)
         aligner.target_gap_score = -1
         aligner.query_gap_score = gap_score
@@ -2240,6 +2845,9 @@ TTGGAA
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
+        with self.assertRaises(RuntimeError):
+            alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+            alignments = list(alignments)
         aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
@@ -2247,6 +2855,9 @@ TTGGAA
             aligner.score(seq1, reverse_complement(seq2), strand="-")
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
+            alignments = list(alignments)
+        with self.assertRaises(RuntimeError):
+            alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
             alignments = list(alignments)
 
 
@@ -2357,8 +2968,6 @@ class TestArgumentErrors(unittest.TestCase):
         message = "^argument should support the sequence protocol$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
-        with self.assertRaisesRegex(TypeError, message):
-            aligner.score("AAA", 3, strand="-")
         message = "^sequence has zero length$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "")
@@ -2460,6 +3069,25 @@ class TestOverflowError(unittest.TestCase):
         record = SeqIO.read(path, "fasta")
         seq2 = record.seq
         alignments = aligner.align(seq1, seq2)
+        self.assertAlmostEqual(alignments.score, 1286.0)
+        message = "^number of optimal alignments is larger than (%d|%d)$" % (
+            2147483647,  # on 32-bit systems
+            9223372036854775807,
+        )  # on 64-bit systems
+        with self.assertRaisesRegex(OverflowError, message):
+            n = len(alignments)
+        # confirm that we can still pull out individual alignments
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAAT-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAGC-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAACT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-AC-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGCGCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA--CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGGGAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC--GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG--A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCTAAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TGGCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAGTCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG-AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGCGTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--CTGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--AAA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA-GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATAGGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAGCTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--GTTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACACGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--AATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGATGA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCACCTCCTTTCTA
+|---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||--|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||--|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-||-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-|-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|---|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-|||||||||||||||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|--||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||--|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||---|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||-||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||---||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--||||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-|||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-|||||||||||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--||||||||||||||||||||||||--||||||||-|||-|||--||||--|||||||||||||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|--||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---|||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--|||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-|||||||||||||---|
+A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA-CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG-TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAACTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGACCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-GTC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGGGAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--CATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGGGGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC---CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG-CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAGTC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGCGTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGACTGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGCTTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTAAAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAGCTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTGTTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-TGGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACACGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA--CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CATGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-AGGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--TGACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCACCTCCTT---A
+""",
+        )
+        self.assertAlmostEqual(alignment.score, 1286.0)
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
             2147483647,  # on 32-bit systems
@@ -2810,6 +3438,36 @@ target	10	73	query	19.0	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	0	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
+        alignments = aligner.align(chromosome, reverse_complement(transcript), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 19.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCAGATACTTTACGAGCATCGGC
+----------|||||.||||-|||-----------|||..|||||||--------------|||||||-|||||------
+----------AGCATCGAGCGACT-----------TGAGTACTATTC--------------ATACTTT-CGAGC------
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+34	2	0	1	1	1	3	26	-	query	38	0	38	target	79	10	73	5	10,3,12,7,5,	0,11,14,26,33,	10,20,34,60,68,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	10	73	query	19.0	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
+""",
+        )
 
     def test_alignment_end_gap(self):
         aligner = Align.PairwiseAligner()
@@ -2846,6 +3504,36 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
 query	0	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        alignments = aligner.align("ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-")
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 13.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+----ACGTAGCATCAGC
+----|||||||||||||
+CCCCACGTAGCATCAGC
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+13	0	0	0	0	0	0	0	-	query	17	4	17	target	13	0	13	1	13,	4,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	0	13	query	13.0	-	0	13	0	1	13,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
+""",
+        )
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2874,6 +3562,36 @@ target	4	17	query	13.0	+	4	17	0	1	13,	0,
             alignment.format("sam"),
             """\
 query	0	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+""",
+        )
+        alignments = aligner.align("CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+CCCCACGTAGCATCAGC
+----|||||||||||||
+----ACGTAGCATCAGC
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+13	0	0	0	0	0	0	0	-	query	13	0	13	target	17	4	17	1	13,	0,	4,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	4	17	query	13.0	-	4	17	0	1	13,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
@@ -2905,6 +3623,35 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
+        alignments = aligner.align("ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+ACGTAGCATCAGC----
+|||||||||||||----
+ACGTAGCATCAGCGGGG
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+13	0	0	0	0	0	0	0	-	query	17	0	13	target	13	0	13	1	13,	0,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	0	13	query	13.0	-	0	13	0	1	13,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
+""",
+        )
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -2933,6 +3680,36 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
             alignment.format("sam"),
             """\
 query	0	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+""",
+        )
+        alignments = aligner.align("ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 13.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACGTAGCATCAGCGGGG
+|||||||||||||----
+ACGTAGCATCAGC----
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+13	0	0	0	0	0	0	0	-	query	13	0	13	target	17	0	13	1	13,	0,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	0	13	query	13.0	-	0	13	0	1	13,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
 
@@ -2974,6 +3751,35 @@ target	6	23	query	13.0	+	6	23	0	1	17,	0,
 query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
+        alignments = aligner.align(target, reverse_complement(query), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG-----
+------|||.||||||.||||||-----
+------ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	-	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	-	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
         # use Seq objects for target and query
         alignments = aligner.align(Seq(target), Seq(query))
         self.assertEqual(len(alignments), 1)
@@ -3002,6 +3808,35 @@ target	6	23	query	13.0	+	6	23	0	1	17,	0,
             alignment.format("sam"),
             """\
 query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
+        alignments = aligner.align(Seq(target), Seq(query).reverse_complement(), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG-----
+------|||.||||||.||||||-----
+------ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	-	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	-	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
 

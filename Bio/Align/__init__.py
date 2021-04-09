@@ -15,7 +15,7 @@ class, used in the Bio.AlignIO module.
 
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import Seq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1061,6 +1061,9 @@ class PairwiseAlignment:
         aligned_seq2 = ""
         pattern = ""
         path = self.path
+        if path[0][1] > path[-1][1]:  # mapped to reverse strand
+            path = tuple([(c1, n2-c2) for (c1, c2) in path])
+            seq2 = reverse_complement(seq2)
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
@@ -1475,15 +1478,30 @@ class PairwiseAlignment:
         """
         segments1 = []
         segments2 = []
-        i1, i2 = self.path[0]
-        for node in self.path[1:]:
-            j1, j2 = node
-            if j1 > i1 and j2 > i2:
-                segment1 = (i1, j1)
-                segment2 = (i2, j2)
-                segments1.append(segment1)
-                segments2.append(segment2)
-            i1, i2 = j1, j2
+        path = self.path
+        if path[0][1] < path[-1][1]:  # mapped to forward strand
+            i1, i2 = path[0]
+            for node in path[1:]:
+                j1, j2 = node
+                if j1 > i1 and j2 > i2:
+                    segment1 = (i1, j1)
+                    segment2 = (i2, j2)
+                    segments1.append(segment1)
+                    segments2.append(segment2)
+                i1, i2 = j1, j2
+        else:  # mapped to reverse strand
+            n2 = len(self.query)
+            i1, i2 = path[0]
+            i2 = n2 - i2
+            for node in path[1:]:
+                j1, j2 = node
+                j2 = n2 - j2
+                if j1 > i1 and j2 > i2:
+                    segment1 = (i1, j1)
+                    segment2 = (n2 - i2, n2 - j2)
+                    segments1.append(segment1)
+                    segments2.append(segment2)
+                i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
 
 
@@ -1710,17 +1728,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
-    def align(self, seqA, seqB):
+    def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
             sA = bytes(seqA)
         else:
             sA = seqA
-        if isinstance(seqB, (Seq, MutableSeq)):
-            sB = bytes(seqB)
-        else:
+        if strand == "+":
             sB = seqB
-        score, paths = _aligners.PairwiseAligner.align(self, sA, sB)
+        else:  #  strand == "-":
+            sB = reverse_complement(seqB)
+        if isinstance(sB, (Seq, MutableSeq)):
+            sB = bytes(sB)
+        score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
@@ -1728,6 +1748,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         """Return the alignments score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
             seqA = bytes(seqA)
+        if strand == "-":
+            seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
