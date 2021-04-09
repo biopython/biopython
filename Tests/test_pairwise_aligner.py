@@ -3519,7 +3519,7 @@ CCCCACGTAGCATCAGC
         self.assertEqual(
             alignment.format("psl"),
             """\
-13	0	0	0	0	0	0	0	-	query	17	4	17	target	13	0	13	1	13,	4,	0,
+13	0	0	0	0	0	0	0	-	query	17	0	13	target	13	0	13	1	13,	4,	0,
 """,
         )
         self.assertEqual(
@@ -3637,7 +3637,7 @@ ACGTAGCATCAGCGGGG
         self.assertEqual(
             alignment.format("psl"),
             """\
-13	0	0	0	0	0	0	0	-	query	17	0	13	target	13	0	13	1	13,	0,	0,
+13	0	0	0	0	0	0	0	-	query	17	4	17	target	13	0	13	1	13,	0,	0,
 """,
         )
         self.assertEqual(
@@ -3765,7 +3765,7 @@ TTTTTNACGCTCGAGCAGCTACG-----
         self.assertEqual(
             alignment.format("psl"),
             """\
-15	1	0	1	0	0	0	0	-	query	22	0	17	target	23	6	23	1	17,	0,	6,
+15	1	0	1	0	0	0	0	-	query	22	5	22	target	23	6	23	1	17,	0,	6,
 """,
         )
         self.assertEqual(
@@ -3824,7 +3824,7 @@ TTTTTNACGCTCGAGCAGCTACG-----
         self.assertEqual(
             alignment.format("psl"),
             """\
-15	1	0	1	0	0	0	0	-	query	22	0	17	target	23	6	23	1	17,	0,	6,
+15	1	0	1	0	0	0	0	-	query	22	5	22	target	23	6	23	1	17,	0,	6,
 """,
         )
         self.assertEqual(
