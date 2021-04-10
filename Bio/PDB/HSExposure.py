@@ -278,7 +278,7 @@ class ExposureCN(AbstractPropertyMap):
         """Initialize.
 
         A residue's exposure is defined as the number of CA atoms around
-        that residues CA atom. A dictionary is returned that uses a L{Residue}
+        that residue's CA atom. A dictionary is returned that uses a L{Residue}
         object as key, and the residue exposure as corresponding value.
 
         :param model: the model that contains the residues
