@@ -1062,7 +1062,7 @@ class PairwiseAlignment:
         pattern = ""
         path = self.path
         if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            path = tuple([(c1, n2-c2) for (c1, c2) in path])
+            path = tuple((c1, n2 - c2) for (c1, c2) in path])
             seq2 = reverse_complement(seq2)
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
@@ -1192,7 +1192,7 @@ class PairwiseAlignment:
         else:  # mapped to reverse strand
             strand = "-"
             n2 = len(query)
-            path = tuple([(c1, n2-c2) for (c1, c2) in path])
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         score = self.score
         blockSizes = []
         tStarts = []
@@ -1264,7 +1264,7 @@ class PairwiseAlignment:
         else:  # mapped to reverse strand
             strand = "-"
             seq2 = reverse_complement(query)
-            path = tuple([(c1, n2-c2) for (c1, c2) in path])
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         try:
             seq2 = bytes(seq2)
         except TypeError:  # string
@@ -1376,7 +1376,7 @@ class PairwiseAlignment:
         else:  # mapped to reverse strand
             flag = 16
             seq = reverse_complement(query)
-            path = tuple([(c1, n2-c2) for (c1, c2) in path])
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         try:
             seq = bytes(seq)
         except TypeError:  # string
@@ -1758,7 +1758,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             sA = seqA
         if strand == "+":
             sB = seqB
-        else:  #  strand == "-":
+        else:  # strand == "-":
             sB = reverse_complement(seqB)
         if isinstance(sB, (Seq, MutableSeq)):
             sB = bytes(sB)

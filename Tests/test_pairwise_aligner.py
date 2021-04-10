@@ -902,7 +902,6 @@ G-ATA
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (2, 1))))
 
 
-
 class TestPairwiseExtendPenalty(unittest.TestCase):
     def test_extend_penalty1(self):
         aligner = Align.PairwiseAligner()
@@ -1047,7 +1046,6 @@ G-T-
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((2, 1), (1, 0))))
-
 
 
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
