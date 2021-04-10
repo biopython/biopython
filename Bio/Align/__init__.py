@@ -15,7 +15,7 @@ class, used in the Bio.AlignIO module.
 
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import Seq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1061,6 +1061,9 @@ class PairwiseAlignment:
         aligned_seq2 = ""
         pattern = ""
         path = self.path
+        if path[0][1] > path[-1][1]:  # mapped to reverse strand
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            seq2 = reverse_complement(seq2)
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
@@ -1183,12 +1186,18 @@ class PairwiseAlignment:
             name = query.id
         except AttributeError:
             name = "query"
+        path = self.path
+        if path[0][1] < path[-1][1]:  # mapped to forward strand
+            strand = "+"
+        else:  # mapped to reverse strand
+            strand = "-"
+            n2 = len(query)
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         score = self.score
         blockSizes = []
         tStarts = []
-        strand = "+"
-        tStart, qStart = self.path[0]
-        for tEnd, qEnd in self.path[1:]:
+        tStart, qStart = path[0]
+        for tEnd, qEnd in path[1:]:
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1228,6 +1237,7 @@ class PairwiseAlignment:
         return line
 
     def _format_psl(self):
+        path = self.path
         query = self.query
         target = self.target
         try:
@@ -1242,16 +1252,23 @@ class PairwiseAlignment:
             tName = "target"
         else:
             target = target.seq
+        n1 = len(target)
+        n2 = len(query)
         try:
             seq1 = bytes(target)
         except TypeError:  # string
             seq1 = bytes(target, "ASCII")
+        if path[0][1] < path[-1][1]:  # mapped to forward strand
+            strand = "+"
+            seq2 = query
+        else:  # mapped to reverse strand
+            strand = "-"
+            seq2 = reverse_complement(query)
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         try:
-            seq2 = bytes(query)
+            seq2 = bytes(seq2)
         except TypeError:  # string
-            seq2 = bytes(query, "ASCII")
-        n1 = len(seq1)
-        n2 = len(seq2)
+            seq2 = bytes(seq2, "ASCII")
         wildcard = ord("N")
         # variable names follow those in the PSL file format specification
         matches = 0
@@ -1267,9 +1284,8 @@ class PairwiseAlignment:
         blockSizes = []
         qStarts = []
         tStarts = []
-        strand = "+"
-        tStart, qStart = self.path[0]
-        for tEnd, qEnd in self.path[1:]:
+        tStart, qStart = path[0]
+        for tEnd, qEnd in path[1:]:
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1300,6 +1316,8 @@ class PairwiseAlignment:
         qStart = qStarts[0]  # start of alignment in query
         tEnd = tStarts[-1] + blockSizes[-1]  # end of alignment in target
         qEnd = qStarts[-1] + blockSizes[-1]  # end of alignment in query
+        if strand == "-":
+            qStart, qEnd = qSize - qEnd, qSize - qStart
         blockCount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
@@ -1347,19 +1365,26 @@ class PairwiseAlignment:
             target = target.seq
         n1 = len(target)
         n2 = len(query)
-        try:
-            seq = bytes(query)
-        except TypeError:  # stri
-            seq = query
-        else:
-            seq = str(seq, "ASCII")
         pos = None
-        flag = 0
         qSize = n2
         tSize = n1
         cigar = []
-        tStart, qStart = self.path[0]
-        for tEnd, qEnd in self.path[1:]:
+        path = self.path
+        if path[0][1] < path[-1][1]:  # mapped to forward strand
+            flag = 0
+            seq = query
+        else:  # mapped to reverse strand
+            flag = 16
+            seq = reverse_complement(query)
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        try:
+            seq = bytes(seq)
+        except TypeError:  # string
+            pass
+        else:
+            seq = str(seq, "ASCII")
+        tStart, qStart = path[0]
+        for tEnd, qEnd in path[1:]:
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1475,15 +1500,30 @@ class PairwiseAlignment:
         """
         segments1 = []
         segments2 = []
-        i1, i2 = self.path[0]
-        for node in self.path[1:]:
-            j1, j2 = node
-            if j1 > i1 and j2 > i2:
-                segment1 = (i1, j1)
-                segment2 = (i2, j2)
-                segments1.append(segment1)
-                segments2.append(segment2)
-            i1, i2 = j1, j2
+        path = self.path
+        if path[0][1] < path[-1][1]:  # mapped to forward strand
+            i1, i2 = path[0]
+            for node in path[1:]:
+                j1, j2 = node
+                if j1 > i1 and j2 > i2:
+                    segment1 = (i1, j1)
+                    segment2 = (i2, j2)
+                    segments1.append(segment1)
+                    segments2.append(segment2)
+                i1, i2 = j1, j2
+        else:  # mapped to reverse strand
+            n2 = len(self.query)
+            i1, i2 = path[0]
+            i2 = n2 - i2
+            for node in path[1:]:
+                j1, j2 = node
+                j2 = n2 - j2
+                if j1 > i1 and j2 > i2:
+                    segment1 = (i1, j1)
+                    segment2 = (n2 - i2, n2 - j2)
+                    segments1.append(segment1)
+                    segments2.append(segment2)
+                i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
 
 
@@ -1710,17 +1750,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
-    def align(self, seqA, seqB):
+    def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
             sA = bytes(seqA)
         else:
             sA = seqA
-        if isinstance(seqB, (Seq, MutableSeq)):
-            sB = bytes(seqB)
-        else:
+        if strand == "+":
             sB = seqB
-        score, paths = _aligners.PairwiseAligner.align(self, sA, sB)
+        else:  # strand == "-":
+            sB = reverse_complement(seqB)
+        if isinstance(sB, (Seq, MutableSeq)):
+            sB = bytes(sB)
+        score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
@@ -1728,6 +1770,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         """Return the alignments score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq)):
             seqA = bytes(seqA)
+        if strand == "-":
+            seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)

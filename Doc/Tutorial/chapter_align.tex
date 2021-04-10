@@ -2018,7 +2018,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \subsubsection{Aligning to the reverse strand}
 \label{sec:pairwise-general-gapscores}
 
-By default, the pairwise aligner aligns the forward strand of the query to the forward strand of the target. To calculate the alignment score for \verb+seq2+ to the reverse strand of \verb+seq1+, use \verb+strand='-'+:
+By default, the pairwise aligner aligns the forward strand of the query to the forward strand of the target. To calculate the alignment score for \verb+seq2+ to the reverse strand of \verb+seq1+, use \verb+strand="-"+:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -2026,23 +2026,84 @@ By default, the pairwise aligner aligns the forward strand of the query to the f
 >>> seq1 = "AAAACCC"
 >>> seq2 = "AACC"
 >>> aligner = Align.PairwiseAligner()
->>> aligner.score(seq1, seq2)
-4.0
->>> aligner.score(seq1, seq2, strand="+")
+>>> aligner.mismatch_score = -1
+>>> aligner.internal_gap_score = -1
+>>> aligner.score(seq1, seq2)  # strand is "+" by default
 4.0
 >>> aligner.score(seq1, reverse_complement(seq2), strand="-")
 4.0
+>>> aligner.score(seq1, seq2, strand="-")
+0.0
+>>> aligner.score(seq1, reverse_complement(seq2))
+0.0
+
 \end{minted}
+
+The alignments against the reverse strand can be obtained by specifying \verb+strand="-"+ when calling \verb+aligner.align+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = aligner.align(seq1, seq2)
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+>>> print(alignments[0].format("bed"))  #doctest: +NORMALIZE_WHITESPACE
+target   2   6   query   4.0   +   2   6   0   1   4,   0,
+<BLANKLINE>
+>>> alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+>>> print(alignments[0].format("bed"))  #doctest: +NORMALIZE_WHITESPACE
+target   2   6   query   4.0   -   2   6   0   1   4,   0,
+<BLANKLINE>
+>>> alignments = aligner.align(seq1, seq2, strand="-")
+>>> len(alignments)
+2
+>>> print(alignments[0])
+AAAACCC----
+-----------
+-------GGTT
+<BLANKLINE>
+>>> print(alignments[1])
+----AAAACCC
+-----------
+GGTT-------
+<BLANKLINE>
+\end{minted}
+
 Note that the score for aligning \verb+seq2+ to the reverse strand of \verb+seq1+ may be different from the score for aligning the reverse complement of \verb+seq2+ to the forward strand of \verb+seq1+ if the left and right gap scores are different:
 %cont-doctest
 \begin{minted}{pycon}
->>> aligner.internal_gap_score = -1
 >>> aligner.left_gap_score = -0.5
 >>> aligner.right_gap_score = -0.2
 >>> aligner.score(seq1, seq2)
 2.8
+>>> alignments = aligner.align(seq1, seq2)
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
 >>> aligner.score(seq1, reverse_complement(seq2), strand="-")
 3.1
+>>> alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
 \end{minted}
 
 
