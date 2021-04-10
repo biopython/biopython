@@ -274,7 +274,8 @@ G-A-T
 """,
         )
         self.assertEqual(
-            alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((3, 2), (2, 1), (1, 0))))
+            alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((3, 2), (2, 1), (1, 0)))
+        )
 
     def test_align_affine1_score(self):
         seq1 = "CC"
@@ -3436,7 +3437,9 @@ target	10	73	query	19.0	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	0	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
-        alignments = aligner.align(chromosome, reverse_complement(transcript), strand="-")
+        alignments = aligner.align(
+            chromosome, reverse_complement(transcript), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 19.0)
@@ -3502,7 +3505,9 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
 query	0	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
-        alignments = aligner.align("ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-")
+        alignments = aligner.align(
+            "ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 13.0)
         alignment = alignments[0]
@@ -3562,7 +3567,9 @@ target	4	17	query	13.0	+	4	17	0	1	13,	0,
 query	0	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
-        alignments = aligner.align("CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-")
+        alignments = aligner.align(
+            "CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -3621,7 +3628,9 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
-        alignments = aligner.align("ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-")
+        alignments = aligner.align(
+            "ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -3680,7 +3689,9 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
-        alignments = aligner.align("ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-")
+        alignments = aligner.align(
+            "ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -3808,7 +3819,9 @@ target	6	23	query	13.0	+	6	23	0	1	17,	0,
 query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
-        alignments = aligner.align(Seq(target), Seq(query).reverse_complement(), strand="-")
+        alignments = aligner.align(
+            Seq(target), Seq(query).reverse_complement(), strand="-"
+        )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
