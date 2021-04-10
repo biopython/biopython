@@ -1062,7 +1062,7 @@ class PairwiseAlignment:
         pattern = ""
         path = self.path
         if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            path = tuple((c1, n2 - c2) for (c1, c2) in path])
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
             seq2 = reverse_complement(seq2)
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
