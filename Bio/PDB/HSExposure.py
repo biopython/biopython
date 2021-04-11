@@ -25,7 +25,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
     """
 
     def __init__(self, model, radius, offset, hse_up_key, hse_down_key, angle_key=None):
-        """Initialize.
+        """Initialize class.
 
         :param model: model
         :type model: L{Model}
@@ -140,7 +140,7 @@ class HSExposureCA(_AbstractHSExposure):
     """
 
     def __init__(self, model, radius=12, offset=0):
-        """Initialse class.
+        """Initialize class.
 
         :param model: the model that contains the residues
         :type model: L{Model}
@@ -275,7 +275,7 @@ class ExposureCN(AbstractPropertyMap):
     """Residue exposure as number of CA atoms around its CA atom."""
 
     def __init__(self, model, radius=12.0, offset=0):
-        """Initialize.
+        """Initialize class.
 
         A residue's exposure is defined as the number of CA atoms around
         that residues CA atom. A dictionary is returned that uses a L{Residue}
