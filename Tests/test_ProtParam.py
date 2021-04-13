@@ -190,7 +190,7 @@ class ProtParamTest(unittest.TestCase):
         self.assertAlmostEqual(self.analysis.gravy("Rose"), 0.7147, places=4)
         with self.assertRaises(ValueError) as cm:
             self.analysis.gravy("Wrong Scale")
-        self.assertEqual("scale: Wrong Scale not know", str(cm.exception))
+        self.assertEqual("scale: Wrong Scale not known", str(cm.exception))
 
     def test_molar_extinction_coefficient(self):
         """Molar extinction coefficient."""
