@@ -10,7 +10,7 @@
 
 # Hidrophobicity
 
-# 1 Kyte & Doolittle index of hydrophobicity
+# Kyte & Doolittle index of hydrophobicity
 # J. Mol. Biol. 157:105-132(1982).
 # "KyteDoolittle"
 kd = {"A": 1.8, "R": -4.5, "N": -3.5, "D": -3.5, "C": 2.5,
@@ -18,7 +18,7 @@ kd = {"A": 1.8, "R": -4.5, "N": -3.5, "D": -3.5, "C": 2.5,
       "L": 3.8, "K": -3.9, "M": 1.9, "F": 2.8, "P": -1.6,
       "S": -0.8, "T": -0.7, "W": -0.9, "Y": -1.3, "V": 4.2}
 
-# 2 Aboderin hydrophobicity index
+# Aboderin hydrophobicity index
 # International J. of Biochemistry, 2(11), 537-544.
 # "Aboderin"
 ab = {"A": 5.1, "R": 2.0, "N": 0.6, "D": 0.7, "C": 0.0,
@@ -26,7 +26,7 @@ ab = {"A": 5.1, "R": 2.0, "N": 0.6, "D": 0.7, "C": 0.0,
       "L": 10.0, "K": 1.3, "M": 8.7, "F": 9.6, "P": 4.9,
       "S": 3.1, "T": 3.5, "W": 9.2, "Y": 8.0, "V": 8.5}
 
-# 3 Abraham & Leo hydrophobicity index
+# Abraham & Leo hydrophobicity index
 # Proteins: Structure, Function and Genetics 2:130-152(1987).
 # "AbrahamLeo"
 al = {"A": 0.44, "R": -2.42, "N": -1.32, "D": -0.31, "C": 0.58,
@@ -34,7 +34,7 @@ al = {"A": 0.44, "R": -2.42, "N": -1.32, "D": -0.31, "C": 0.58,
       "L": 2.46, "K": -2.45, "M": 1.1, "F": 2.54, "P": 1.29,
       "S": -0.84, "T": -0.41, "W": 2.56, "Y": 1.63, "V": 1.73}
 
-# 4 Argos hydrophobicity index
+# Argos hydrophobicity index
 # European Journal of Biochemistry, 128(2-3), 565-575.
 # "Argos"
 ag = {"A": 0.61, "R": 0.6, "N": 0.06, "D": 0.46, "C": 1.07,
@@ -42,7 +42,7 @@ ag = {"A": 0.61, "R": 0.6, "N": 0.06, "D": 0.46, "C": 1.07,
       "L": 1.53, "K": 1.15, "M": 1.18, "F": 2.02, "P": 1.95,
       "S": 0.05, "T": 0.05, "W": 2.65, "Y": 1.88, "V": 1.32}
 
-# 5 Black & Mould hydrophobicity index
+# Black & Mould hydrophobicity index
 # Anal. Biochem. 193:72-82(1991).
 # "BlackMould"
 bm = {"A": 0.616, "R": 0.0, "N": 0.236, "D": 0.028, "C": 0.68,
@@ -50,7 +50,7 @@ bm = {"A": 0.616, "R": 0.0, "N": 0.236, "D": 0.028, "C": 0.68,
       "L": 0.943, "K": 0.283, "M": 0.738, "F": 1.0, "P": 0.711,
       "S": 0.359, "T": 0.45, "W": 0.878, "Y": 0.88, "V": 0.825}
 
-# 6 Bull & Breese hydrophobicity index
+# Bull & Breese hydrophobicity index
 # Arch. Biochem. Biophys. 161:665-670(1974)
 # "BullBreese"
 bb = {"A": 0.61, "R": 0.69, "N": 0.89, "D": 0.61, "C": 0.36,
@@ -58,7 +58,7 @@ bb = {"A": 0.61, "R": 0.69, "N": 0.89, "D": 0.61, "C": 0.36,
       "L": -1.65, "K": 0.46, "M": -0.66, "F": -1.52, "P": -0.17,
       "S": 0.42, "T": 0.29, "W": -1.2, "Y": -1.43, "V": -0.75}
 
-# 7 Casari & Sippl hydrophobic potential
+# Casari & Sippl hydrophobic potential
 # Journal of molecular biology, 224(3), 725-732.
 # "Casari"
 cs = {"A": 0.2, "R": -0.7, "N": -0.5, "D": -1.4, "C": 1.9,
@@ -66,7 +66,7 @@ cs = {"A": 0.2, "R": -0.7, "N": -0.5, "D": -1.4, "C": 1.9,
       "L": 0.5, "K": -1.6, "M": 0.5, "F": 1.0, "P": -1.0,
       "S": -0.7, "T": -0.4, "W": 1.6, "Y": 0.5, "V": 0.7}
 
-# 8 Cid hydrophobicity index
+# Cid hydrophobicity index
 # Protein engineering, 5(5), 373-375.
 # "Cid"
 ci = {"A": 0.02, "R": -0.42, "N": -0.77, "D": -1.04, "C": 0.77,
@@ -74,7 +74,7 @@ ci = {"A": 0.02, "R": -0.42, "N": -0.77, "D": -1.04, "C": 0.77,
       "L": 1.14, "K": -0.41, "M": 1.0, "F": 1.35, "P": -0.09,
       "S": -0.97, "T": -0.77, "W": 1.71, "Y": 1.11, "V": 1.13}
 
-# 9 Cowan hydrophobicity indices at ph 3.4 and 7.5
+# Cowan hydrophobicity indices at ph 3.4 and 7.5
 # Peptide Research 3:75-80(1990).
 # "Cowan3.4" "Conwan7.5"
 cw = {3.4 : {"A": 0.42, "R": -1.56, "N": -1.03, "D": -0.51, "C": 0.84,
@@ -87,7 +87,7 @@ cw = {3.4 : {"A": 0.42, "R": -1.56, "N": -1.03, "D": -0.51, "C": 0.84,
              "S": -0.63, "T": -0.27, "W": 1.35, "Y": 0.39, "V": 1.32}
       }
 
-# 10 Eisenberg Normalized consensus hydrophobicity scale
+# Eisenberg Normalized consensus hydrophobicity scale
 # J. Mol. Biol. 179:125-142(1984)
 # "Eisenberg"
 es = {"A": 0.62, "R": -2.53, "N": -0.78, "D": -0.9, "C": 0.29,
@@ -95,7 +95,7 @@ es = {"A": 0.62, "R": -2.53, "N": -0.78, "D": -0.9, "C": 0.29,
       "L": 1.06, "K": -1.5, "M": 0.64, "F": 1.19, "P": 0.12,
       "S": -0.18, "T": -0.05, "W": 0.81, "Y": 0.26, "V": 1.08}
 
-# 11 Engelman Hydrophobic Transfer Free Energies
+# Engelman Hydrophobic Transfer Free Energies
 # Annual review of biophysics and biophysical chemistry, 15(1), 321-353.
 # "Engelman"
 eg = {"A": -1.6, "R": 12.3, "N": 4.8, "D": 9.2, "C": -2,
@@ -103,7 +103,7 @@ eg = {"A": -1.6, "R": 12.3, "N": 4.8, "D": 9.2, "C": -2,
       "L": -2.8, "K": 8.8, "M": -3.4, "F": -3.7, "P": 0.2,
       "S": -0.6, "T": -1.2, "W": -1.9, "Y": 0.7, "V": -2.6}
 
-# 12 Fasman hydrophobicity index
+# Fasman hydrophobicity index
 # (1989). Prediction of protein structure and the principles of protein conformation. Springer.
 # "Fasman"
 fs = {"A": -0.21, "R": 2.11, "N": 0.96, "D": 1.36, "C": -6.04,
@@ -111,7 +111,7 @@ fs = {"A": -0.21, "R": 2.11, "N": 0.96, "D": 1.36, "C": -6.04,
       "L": -4.68, "K": 3.88, "M": -3.66, "F": -4.65, "P": 0.75,
       "S": 1.74, "T": 0.78, "W": -3.32, "Y": -1.01, "V": -3.5}
 
-# 13 Fauchere Hidrophobicity scale
+# Fauchere Hidrophobicity scale
 # Eur. J. Med. Chem. 18:369-375(1983).
 # "Fauchere"
 fc = {"A": 0.31, "R": -1.01, "N": -0.6, "D": -0.77, "C": 1.54,
@@ -119,7 +119,7 @@ fc = {"A": 0.31, "R": -1.01, "N": -0.6, "D": -0.77, "C": 1.54,
       "L": 1.7, "K": -0.99, "M": 1.23, "F": 1.79, "P": 0.72,
       "S": -0.04, "T": 0.26, "W": 2.25, "Y": 0.96, "V": 1.22}
 
-# 14 Goldsack & Chalifoux Free Energy of Mixing of the Hydrophobic Side Chains
+# Goldsack & Chalifoux Free Energy of Mixing of the Hydrophobic Side Chains
 # Journal of theoretical biology, 39(3), 645-651.
 # "Goldsack"
 gd = {"A": 0.75, "R": 0.75, "N": 0.69, "D": 0, "C": 1,
@@ -127,7 +127,7 @@ gd = {"A": 0.75, "R": 0.75, "N": 0.69, "D": 0, "C": 1,
       "L": 2.4, "K": 1.5, "M": 1.3, "F": 2.65, "P": 2.6,
       "S": 0, "T": 0.45, "W": 3, "Y": 2.85, "V": 1.7}
 
-# 15 Guy Hydrophobicity scale based on free energy of transfer (kcal/mole).
+# Guy Hydrophobicity scale based on free energy of transfer (kcal/mole).
 # Biophys J. 47:61-70(1985)
 # "Guy"
 gy = {"A": 0.1, "R": 1.91, "N": 0.48, "D": 0.78, "C": -1.42,
@@ -135,7 +135,7 @@ gy = {"A": 0.1, "R": 1.91, "N": 0.48, "D": 0.78, "C": -1.42,
       "L": -1.18, "K": 1.4, "M": -1.59, "F": -2.12, "P": 0.73,
       "S": 0.52, "T": 0.07, "W": -0.51, "Y": -0.21, "V": -1.27}
 
-# 16 Jones Hidrophobicity scale
+# Jones Hidrophobicity scale
 # Journal of theoretical biology, 50(1), 167-183.
 # "Jones"
 jo = {"A": 0.87, "R": 0.85, "N": 0.09, "D": 0.66, "C": 1.52,
@@ -143,7 +143,7 @@ jo = {"A": 0.87, "R": 0.85, "N": 0.09, "D": 0.66, "C": 1.52,
       "L": 2.17, "K": 1.64, "M": 1.67, "F": 2.87, "P": 2.77,
       "S": 0.07, "T": 0.07, "W": 3.77, "Y": 2.67, "V": 1.87}
 
-# 17 Juretic Hidrophobicity scale
+# Juretic Hidrophobicity scale
 # Theoretical and computational chemistry, 5, 405-445.
 # "Juretic"
 ju = {"A": 1.1, "R": -5.1, "N": -3.5, "D": -3.6, "C": 2.5,
@@ -151,7 +151,7 @@ ju = {"A": 1.1, "R": -5.1, "N": -3.5, "D": -3.6, "C": 2.5,
       "L": 3.8, "K": -4.11, "M": 1.9, "F": 2.8, "P": -1.9,
       "S": -0.5, "T": -0.7, "W": -0.46, "Y": -1.3, "V": 4.2}
 
-# 18 Kidera Hidrophobicity Factors
+# Kidera Hidrophobicity Factors
 # Journal of Protein Chemistry, 4(1), 23-55.
 # "Kidera"
 ki = {"A": -0.27, "R": 1.87, "N": 0.81, "D": 0.81, "C": -1.05,
@@ -159,7 +159,7 @@ ki = {"A": -0.27, "R": 1.87, "N": 0.81, "D": 0.81, "C": -1.05,
       "L": -1.1, "K": 1.7, "M": -0.73, "F": -1.43, "P": -0.75,
       "S": 0.42, "T": 0.63, "W": -1.57, "Y": -0.56, "V": -0.4}
 
-# 19 Miyazawa Hydrophobicity scale (contact energy derived from 3D data)
+# Miyazawa Hydrophobicity scale (contact energy derived from 3D data)
 # Macromolecules 18:534-552(1985)
 # "Miyazawa"
 mi = {"A": 5.33, "R": 4.18, "N": 3.71, "D": 3.59, "C": 7.93,
@@ -167,7 +167,7 @@ mi = {"A": 5.33, "R": 4.18, "N": 3.71, "D": 3.59, "C": 7.93,
       "L": 8.47, "K": 2.95, "M": 8.95, "F": 9.03, "P": 3.87,
       "S": 4.09, "T": 4.49, "W": 7.66, "Y": 5.89, "V": 7.63}
 
-# 20 Parker Hydrophilicity scale derived from HPLC peptide retention times
+# Parker Hydrophilicity scale derived from HPLC peptide retention times
 # Biochemistry 25:5425-5431(1986)
 # "Parker"
 pa = {"A": 2.1, "R": 4.2, "N": 7, "D": 10, "C": 1.4,
@@ -175,7 +175,7 @@ pa = {"A": 2.1, "R": 4.2, "N": 7, "D": 10, "C": 1.4,
       "L": -9.2, "K": 5.7, "M": -4.2, "F": -9.2, "P": 2.1,
       "S": 6.5, "T": 5.2, "W": -10, "Y": -1.9, "V": -3.7}
 
-# 21 Ponnuswamy Hydrophobic characteristics of folded proteins
+# Ponnuswamy Hydrophobic characteristics of folded proteins
 # Progress in biophysics and molecular biology, 59(1), 57-103.
 # "Ponnuswamy"
 po = {"A": 0.85, "R": 0.2, "N": -0.48, "D": -1.1, "C": 2.1,
@@ -183,7 +183,7 @@ po = {"A": 0.85, "R": 0.2, "N": -0.48, "D": -1.1, "C": 2.1,
       "L": 1.99, "K": -1.19, "M": 1.42, "F": 1.69, "P": -1.14,
       "S": -0.52, "T": -0.08, "W": 1.76, "Y": 1.37, "V": 2.53}
 
-# 22 Rose Hidrophobicity scale
+# Rose Hidrophobicity scale
 # Science 229:834-838(1985)
 # "Rose"
 ro = {"A": 0.74, "R": 0.64, "N": 0.63, "D": 0.62, "C": 0.91,
@@ -191,7 +191,7 @@ ro = {"A": 0.74, "R": 0.64, "N": 0.63, "D": 0.62, "C": 0.91,
       "L": 0.85, "K": 0.52, "M": 0.85, "F": 0.88, "P": 0.64,
       "S": 0.66, "T": 0.7, "W": 0.85, "Y": 0.76, "V": 0.86}
 
-# 23 Roseman Hidrophobicity scale
+# Roseman Hidrophobicity scale
 # J. Mol. Biol. 200:513-522(1988)
 # "Roseman"
 rm = {"A": 0.39, "R": -3.95, "N": -1.91, "D": -3.81, "C": 0.25,
@@ -199,7 +199,7 @@ rm = {"A": 0.39, "R": -3.95, "N": -1.91, "D": -3.81, "C": 0.25,
       "L": 1.82, "K": -2.77, "M": 0.96, "F": 2.27, "P": 0.99,
       "S": -1.24, "T": -1, "W": 2.13, "Y": 1.47, "V": 1.3}
 
-# 24 Sweet Optimized Matchig Hidrophobicity (OMH)
+# Sweet Optimized Matchig Hidrophobicity (OMH)
 # J. Mol. Biol. 171:479-488(1983).
 # "Sweet
 sw = {"A": -0.4, "R": -0.59, "N": -0.92, "D": -1.31, "C": 0.17,
@@ -207,7 +207,7 @@ sw = {"A": -0.4, "R": -0.59, "N": -0.92, "D": -1.31, "C": 0.17,
       "L": 1.22, "K": -0.67, "M": 1.02, "F": 1.92, "P": -0.49,
       "S": -0.55, "T": -0.28, "W": 0.5, "Y": 1.67, "V": 0.91}
 
-# 25 Tanford Hydrophobicity scale
+# Tanford Hydrophobicity scale
 # J. Am. Chem. Soc. 84:4240-4274(1962)
 # "Tanford"
 ta = {"A": 0.62, "R": -2.53, "N": -0.78, "D": -0.09, "C": 0.29,
@@ -215,7 +215,7 @@ ta = {"A": 0.62, "R": -2.53, "N": -0.78, "D": -0.09, "C": 0.29,
       "L": 1.53, "K": -1.5, "M": 0.64, "F": 1.19, "P": 0.12,
       "S": -0.18, "T": -0.05, "W": 0.81, "Y": 0.26, "V": 1.8}
 
-# 26 Wilson Hydrophobic constants derived from HPLC peptide retention times
+# Wilson Hydrophobic constants derived from HPLC peptide retention times
 # Biochem. J. 199:31-41(1981)
 # "Wilson"
 wi = {"A": -0.3, "R": -1.1, "N": -0.2, "D": -1.4, "C": 6.3,
@@ -223,7 +223,7 @@ wi = {"A": -0.3, "R": -1.1, "N": -0.2, "D": -1.4, "C": 6.3,
       "L": 6.6, "K": -3.6, "M": 2.5, "F": 7.5, "P": 2.2,
       "S": -0.6, "T": -2.2, "W": 7.9, "Y": 7.1, "V": 5.9}
 
-# 27 Zimmerman Hidrophobicity scale
+# Zimmerman Hidrophobicity scale
 # Journal of theoretical biology, 21(2), 170-201.
 # "Zimmerman"
 zi = {"A": 0.83, "R": 0.83, "N": 0.09, "D": 0.64, "C": 1.48,
