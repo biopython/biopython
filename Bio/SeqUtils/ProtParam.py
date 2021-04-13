@@ -203,7 +203,7 @@ class ProteinAnalysis:
         selected_scale = ProtParamData.gravy_scales.get(scale, -1)
 
         if selected_scale == -1:
-            raise ValueError("scale: {} not know".format(scale))
+            raise ValueError(f"scale: {scale} not known")
 
         total_gravy = sum(selected_scale[aa] for aa in self.sequence)
 
