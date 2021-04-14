@@ -1295,10 +1295,11 @@ class PairwiseAlignment:
             seq2 = bytes(seq2)
         except TypeError:  # string
             seq2 = bytes(seq2, "ASCII")
-        if mask == 'upper':
-            wildcard = ord(wildcard.lower())
-        else:
-            wildcard = ord(wildcard.upper())
+        if wildcard is not None:
+            if mask == 'upper':
+                wildcard = ord(wildcard.lower())
+            else:
+                wildcard = ord(wildcard.upper())
         # variable names follow those in the PSL file format specification
         matches = 0
         misMatches = 0
