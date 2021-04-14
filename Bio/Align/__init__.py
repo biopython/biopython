@@ -1053,9 +1053,9 @@ class PairwiseAlignment:
                        `repMatches` field of the PSL file instead of in the
                        `matches` field. Acceptable values are
                        None   : no masking (default);
-                       'lower': lower-case characters in the target sequence
+                       "lower": lower-case characters in the target sequence
                                 are considered to be masked;
-                       'upper': upper-case characters in the target sequence
+                       "upper": upper-case characters in the target sequence
                                 are considered to be masked;
          - wildcard  - PSL format only. Report alignments to the wildcard
                        character in the target or query sequence in the
@@ -1296,7 +1296,7 @@ class PairwiseAlignment:
         except TypeError:  # string
             seq2 = bytes(seq2, "ASCII")
         if wildcard is not None:
-            if mask == 'upper':
+            if mask == "upper":
                 wildcard = ord(wildcard.lower())
             else:
                 wildcard = ord(wildcard.upper())
@@ -1335,7 +1335,7 @@ class PairwiseAlignment:
                 blockSizes.append(tCount)
                 s1 = seq1[tStart:tEnd]
                 s2 = seq2[qStart:qEnd]
-                if mask == 'lower':
+                if mask == "lower":
                     for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
                         if u1 == wildcard or u2 == wildcard:
                             nCount += 1
@@ -1346,7 +1346,7 @@ class PairwiseAlignment:
                                 repMatches += 1
                         else:
                             misMatches += 1
-                elif mask == 'upper':
+                elif mask == "upper":
                     for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
                         if u1 == wildcard or u2 == wildcard:
                             nCount += 1
