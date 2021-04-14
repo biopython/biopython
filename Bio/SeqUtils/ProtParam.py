@@ -49,6 +49,7 @@ Other public methods are:
 import sys
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
+from Bio.SeqUtils import PseudoAAC  # Local
 from Bio.Seq import Seq
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
@@ -346,6 +347,15 @@ class ProteinAnalysis:
         mec_reduced = num_aa["W"] * 5500 + num_aa["Y"] * 1490
         mec_cystines = mec_reduced + (num_aa["C"] // 2) * 125
         return (mec_reduced, mec_cystines)
+
+    def pseudoAAC(self, l_param=3, weight=0.05, scales=None):
+        """Calculate the PseudoAAC described in Chou, 2001.
+
+        Uses the moduel PseudoAAC to calculate the pseudoAAC of a protein.
+        """
+        aac = self.get_amino_acids_percent()
+        paac = PseudoAAC.PseudoAAC(self.sequence, aac)
+        return paac.pseudoAAC(l_param, weight, scales)
 
 
 if __name__ == "__main__":
