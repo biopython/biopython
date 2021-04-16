@@ -42,7 +42,7 @@ Other public methods are:
  - protein_scale
  - flexibility
  - charge_at_pH
-
+ - pseudoAAC
 """
 
 

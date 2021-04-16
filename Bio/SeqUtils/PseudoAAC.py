@@ -15,13 +15,11 @@ Hidrophobicity, Hidrophilicity and Side-Chain Mass values are the same
 as used in the original paper.
 """
 
+from typing import Union, Optional
+from Bio.Seq import Seq
 from Bio.Data.IUPACData import protein_letters, protein_weights
 from Bio.SeqUtils.ProtParamData import hw, ta
 
-# TODO: add tests
-# standard test
-# test with diferent parameters (including scales)
-# test scale with missing param
 # TODO: add example with given scales
 # Normalized scales
 
@@ -90,9 +88,28 @@ class PseudoAAC:
     >>> print(f"{paac[21]:.3f}")
     0.016
 
+    It can also be used with other defined scales, these must have defined
+    values for all Amino Acids, or it will throw a KeyError.
+
+    >>> from Bio.SeqUtils.PseudoAAC import PseudoAAC
+    >>> from Bio.SeqUtils.ProtParamData import Flex, ja, kd
+    >>> protein = PseudoAAC("ACKLAA")
+    >>> paac = protein.pseudoAAC(scales=[Flex,ja,kd])
+    >>> print(f"{paac[0]:.3f}")
+    0.485
+    >>> print(f"{paac[8]:.3f}")
+    0.162
+    >>> print(f"{paac[21]:.3f}")
+    0.019
+    >>> del kd["A"]
+    >>> paac = protein.pseudoAAC(scales=[kd])
+    KeyError: 'scale 0 is missing value for aa: A'
+
     """
 
-    def __init__(self, protein_sequence, aa_percents=None):
+    def __init__(
+        self, protein_sequence: Union[Seq, str], aa_percents: Optional[dict] = None
+    ):
         """Initialize the class."""
         self.seq = str(protein_sequence).upper()
         self.L = len(self.seq)
@@ -103,10 +120,10 @@ class PseudoAAC:
 
         self.aac = aa_percents
 
-    def _calc_correlation(self, aa1, aa2, scales):
+    def _calc_correlation(self, aa1: str, aa2: str, scales: list) -> float:
         return sum([(s[aa1] - s[aa2]) ** 2 for s in scales]) / len(scales)
 
-    def _std_convert_scales(self, scales):
+    def _std_convert_scales(self, scales: list) -> list:
         """Perform the standard conversion on provided scales (PRIVATE)."""
         normalized = []
         for H in scales:
@@ -116,7 +133,9 @@ class PseudoAAC:
             normalized.append(H)
         return normalized
 
-    def pseudoAAC(self, l_param=3, weight=0.05, scales=None):
+    def pseudoAAC(
+        self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
+    ) -> list:
         """Calculate the Pseudo AminoAcid Composition described by Chou, 2001.
 
         Calculates the Pseudo-Amino Acid Compositions utilizing the given l_param,

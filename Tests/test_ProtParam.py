@@ -232,6 +232,21 @@ class ProtParamTest(unittest.TestCase):
             self.analysis.molar_extinction_coefficient()[1], 17545, places=5
         )
 
+    def test_pseudoAAC(self):
+        """Pseudo Amino Acid Composition."""
+        # Turn black code style off
+        # fmt: off
+        expected = [0.0377, 0.0188, 0.0314, 0.0753, 0.0377, 0.0879, 0.0314,
+                    0.0314, 0.0753, 0.1130, 0.0126, 0.0439, 0.0502, 0.0377,
+                    0.0377, 0.0628, 0.0816, 0.0314, 0.0063, 0.0502, 0.0141,
+                    0.0156, 0.0161]
+        # Turn black code style on
+        # fmt: on
+
+        for i, e in zip(self.analysis.pseudoAAC(), expected):
+            # Expected values have 4 decimal places, so restrict to that exactness
+            self.assertAlmostEqual(i, e, places=4)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
