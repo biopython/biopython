@@ -81,7 +81,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.version = None
 
     def __str__(self):

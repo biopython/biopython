@@ -50,7 +50,7 @@ class AbstractTrainer:
     """Provide generic functionality needed in all trainers."""
 
     def __init__(self, markov_model):
-        """Initialize."""
+        """Initialize the class."""
         self._markov_model = markov_model
 
     def log_likelihood(self, probabilities):
@@ -355,7 +355,7 @@ class KnownStateTrainer(AbstractTrainer):
     """
 
     def __init__(self, markov_model):
-        """Initialize."""
+        """Initialize the class."""
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs):

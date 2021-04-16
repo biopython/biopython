@@ -15,7 +15,7 @@ class Record(list):
     """AlignACE record (subclass of Python list)."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.parameters = None
 
 

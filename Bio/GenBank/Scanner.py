@@ -60,7 +60,7 @@ class InsdcScanner:
     SEQUENCE_HEADERS = ["XXX"]  # with right hand side spaces removed
 
     def __init__(self, debug=0):
-        """Initialize."""
+        """Initialize the class."""
         assert len(self.RECORD_START) == self.HEADER_WIDTH
         for marker in self.SEQUENCE_HEADERS:
             assert marker == marker.rstrip()

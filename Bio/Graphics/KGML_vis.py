@@ -120,7 +120,7 @@ class KGMLCanvas:
         show_reaction_entries=True,
         margins=(0.02, 0.02),
     ):
-        """Initialize."""
+        """Initialize the class."""
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs

@@ -168,7 +168,7 @@ class Record:
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.accession = []
         self.base_counts = ""
         self.comment = ""
@@ -512,7 +512,7 @@ class Reference:
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.number = ""
         self.bases = ""
         self.authors = ""
@@ -617,7 +617,7 @@ class Feature:
     """
 
     def __init__(self, key="", location=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.location = location
         self.qualifiers = []
@@ -647,7 +647,7 @@ class Qualifier:
     """
 
     def __init__(self, key="", value=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.value = value
 
