@@ -61,7 +61,7 @@ class Record:
     """
 
     def __init__(self):
-        """Initialize class."""
+        """Initialize the class."""
         self.version = None
         self.GridCornerUL = None
         self.GridCornerUR = None

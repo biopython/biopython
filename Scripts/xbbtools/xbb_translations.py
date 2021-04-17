@@ -22,7 +22,7 @@ class xbb_translations:
     """A class for doing translations."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         pass
 
     def frame1(self, seq, translation_table=1):

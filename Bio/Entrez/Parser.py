@@ -260,7 +260,7 @@ class DataHandlerMeta(type):
     """A metaclass is needed until Python supports @classproperty."""
 
     def __init__(cls, *args, **kwargs):
-        """Initialize."""
+        """Initialize the class."""
         cls._directory = None
 
     @property

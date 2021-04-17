@@ -26,7 +26,7 @@ class PathwayData:
         pathway_image,
         show_pathway_image=False,
     ):
-        """Initialize."""
+        """Initialize the class."""
         self.infilename = infilename
         self.outfilename = outfilename
         self.element_counts = element_counts

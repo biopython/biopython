@@ -57,7 +57,7 @@ class PathwayData:
     """Convenience structure for testing pathway data."""
 
     def __init__(self, name, element_counts, show_pathway_image=False):
-        """Initialize."""
+        """Initialize the class."""
         self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
         self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
         self.element_counts = element_counts

@@ -100,7 +100,7 @@ class ApplicationError(subprocess.CalledProcessError):
     """
 
     def __init__(self, returncode, cmd, stdout="", stderr=""):
-        """Initialize."""
+        """Initialize the class."""
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout

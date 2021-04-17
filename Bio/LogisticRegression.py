@@ -30,7 +30,7 @@ class LogisticRegression:
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.beta = []
 
 
