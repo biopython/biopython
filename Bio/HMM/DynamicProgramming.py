@@ -322,5 +322,5 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
     """
 
     def __init__(self, markov_model, sequence):
-        """Initialize."""
+        """Initialize the class."""
         raise NotImplementedError("Haven't coded this yet...")

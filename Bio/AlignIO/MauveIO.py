@@ -107,7 +107,7 @@ class MauveWriter(SequentialAlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
     def __init__(self, *args, **kwargs):
-        """Initialize."""
+        """Initialize the class."""
         super().__init__(*args, **kwargs)
         self._wrote_header = False
         self._wrote_first = False

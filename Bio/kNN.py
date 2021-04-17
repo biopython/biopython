@@ -42,7 +42,7 @@ class kNN:
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.classes = set()
         self.xs = []
         self.ys = []

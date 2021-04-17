@@ -850,7 +850,7 @@ class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self._scanner = _Scanner()
         self._consumer = _BlastConsumer()
 
@@ -864,7 +864,7 @@ class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self._scanner = _Scanner()
         self._consumer = _PSIBlastConsumer()
 
