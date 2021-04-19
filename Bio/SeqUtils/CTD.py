@@ -194,7 +194,7 @@ class CTD:
         """
         return [("".join([p[aa] for aa in self.seq]), p) for p in properties]
 
-    def _calc_C(self, prop_tuples) -> List[float]:
+    def _calc_C(self, prop_tuples: list) -> List[float]:
         """Calculate the Composition descriptors of CTD (PRIVATE)."""
         C_descriptors = []
         for string, prop in prop_tuples:
@@ -202,7 +202,7 @@ class CTD:
 
         return C_descriptors
 
-    def _calc_T(self, prop_tuples) -> List[float]:
+    def _calc_T(self, prop_tuples: list) -> List[float]:
         """Calculate the Transition descriptors of CTD (PRIVATE)."""
         T_descriptors = []
         for string, prop in prop_tuples:
@@ -213,7 +213,7 @@ class CTD:
 
         return T_descriptors
 
-    def _calc_D(self, prop_tuples) -> List[float]:
+    def _calc_D(self, prop_tuples: list) -> List[float]:
         """Calculate the Distribution descriptors of CTD (PRIVATE)."""
         # TODO: probably a faster way of calculating this
         D_descriptors = []

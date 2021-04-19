@@ -48,10 +48,11 @@ Other public methods are:
 
 
 import sys
+from typing import Union, Optional, List
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.SeqUtils import PseudoAAC  # Local
-from Bio.SeqUtils.CTD import CTD  # Local
+from Bio.SeqUtils.CTD import CTD, CTD_Property  # Local
 from Bio.Seq import Seq
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
@@ -74,7 +75,7 @@ class ProteinAnalysis:
 
     """
 
-    def __init__(self, prot_sequence, monoisotopic=False):
+    def __init__(self, prot_sequence: Union[Seq, str], monoisotopic: bool = False):
         """Initialize the class."""
         if prot_sequence.islower():
             self.sequence = Seq(prot_sequence.upper())
@@ -85,7 +86,7 @@ class ProteinAnalysis:
         self.length = len(self.sequence)
         self.monoisotopic = monoisotopic
 
-    def count_amino_acids(self):
+    def count_amino_acids(self) -> dict:
         """Count standard amino acids, return a dict.
 
         Counts the number times each amino acid is in the protein
@@ -103,7 +104,7 @@ class ProteinAnalysis:
 
         return self.amino_acids_content
 
-    def get_amino_acids_percent(self):
+    def get_amino_acids_percent(self) -> dict:
         """Calculate the amino acid content in percentages.
 
         The same as count_amino_acids only returns the Number in percentage of
@@ -125,13 +126,13 @@ class ProteinAnalysis:
 
         return self.amino_acids_percent
 
-    def molecular_weight(self):
+    def molecular_weight(self) -> float:
         """Calculate MW from Protein sequence."""
         return molecular_weight(
             self.sequence, seq_type="protein", monoisotopic=self.monoisotopic
         )
 
-    def aromaticity(self):
+    def aromaticity(self) -> float:
         """Calculate the aromaticity according to Lobry, 1994.
 
         Calculates the aromaticity value of a protein according to Lobry, 1994.
@@ -144,7 +145,7 @@ class ProteinAnalysis:
 
         return aromaticity
 
-    def instability_index(self):
+    def instability_index(self) -> float:
         """Calculate the instability index according to Guruprasad et al 1990.
 
         Implementation of the method of Guruprasad et al. 1990 to test a
@@ -164,7 +165,7 @@ class ProteinAnalysis:
 
         return (10.0 / self.length) * score
 
-    def flexibility(self):
+    def flexibility(self) -> List[float]:
         """Calculate the flexibility according to Vihinen, 1994.
 
         No argument to change window size because parameters are specific for
@@ -192,7 +193,7 @@ class ProteinAnalysis:
 
         return scores
 
-    def gravy(self, scale="KyteDoolitle"):
+    def gravy(self, scale="KyteDoolitle") -> float:
         """Calculate the GRAVY (Grand Average of Hydropathy) according to Kyte and Doolitle, 1982.
 
         Utilizes the given Hydrophobicity scale, by default uses the original
@@ -213,7 +214,7 @@ class ProteinAnalysis:
 
         return total_gravy / self.length
 
-    def _weight_list(self, window, edge):
+    def _weight_list(self, window: int, edge: float) -> List[float]:
         """Make list of relative weight of window edges (PRIVATE).
 
         The relative weight of window edges are compared to the window
@@ -229,7 +230,9 @@ class ProteinAnalysis:
 
         return weights
 
-    def protein_scale(self, param_dict, window, edge=1.0):
+    def protein_scale(
+        self, param_dict: dict, window: int, edge: float = 1.0
+    ) -> List[float]:
         """Compute a profile by any amino acid scale.
 
         An amino acid scale is defined by a numerical value assigned to each
@@ -303,7 +306,7 @@ class ProteinAnalysis:
 
         return scores
 
-    def isoelectric_point(self):
+    def isoelectric_point(self) -> float:
         """Calculate the isoelectric point.
 
         Uses the module IsoelectricPoint to calculate the pI of a protein.
@@ -313,13 +316,13 @@ class ProteinAnalysis:
         ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return ie_point.pi()
 
-    def charge_at_pH(self, pH):
+    def charge_at_pH(self, pH: float) -> float:
         """Calculate the charge of a protein at given pH."""
         aa_content = self.count_amino_acids()
         charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return charge.charge_at_pH(pH)
 
-    def secondary_structure_fraction(self):
+    def secondary_structure_fraction(self) -> [float, float, float]:
         """Calculate fraction of helix, turn and sheet.
 
         Returns a list of the fraction of amino acids which tend
@@ -339,7 +342,7 @@ class ProteinAnalysis:
 
         return helix, turn, sheet
 
-    def molar_extinction_coefficient(self):
+    def molar_extinction_coefficient(self) -> [float, float]:
         """Calculate the molar extinction coefficient.
 
         Calculates the molar extinction coefficient assuming cysteines
@@ -350,7 +353,9 @@ class ProteinAnalysis:
         mec_cystines = mec_reduced + (num_aa["C"] // 2) * 125
         return (mec_reduced, mec_cystines)
 
-    def pseudoAAC(self, l_param=3, weight=0.05, scales=None):
+    def pseudoAAC(
+        self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
+    ):
         """Calculate the PseudoAAC described in Chou, 2001.
 
         Uses the module PseudoAAC to calculate the pseudoAAC of a protein.
@@ -359,7 +364,9 @@ class ProteinAnalysis:
         paac = PseudoAAC.PseudoAAC(self.sequence, aac)
         return paac.pseudoAAC(l_param, weight, scales)
 
-    def CTD_descriptors(self, properties=None):
+    def CTD_descriptors(
+        self, properties: Optional[List[CTD_Property]] = None
+    ) -> List[float]:
         """Calculate the CTD descriptors described in Dubchak et al, 1995.
 
         Uses the module CTD to calculate the CTD descriptors of a protein.
