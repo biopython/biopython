@@ -43,6 +43,7 @@ Other public methods are:
  - flexibility
  - charge_at_pH
  - pseudoAAC
+ - CTD_descriptors
 """
 
 
@@ -50,6 +51,7 @@ import sys
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.SeqUtils import PseudoAAC  # Local
+from Bio.SeqUtils.CTD import CTD  # Local
 from Bio.Seq import Seq
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
@@ -351,11 +353,22 @@ class ProteinAnalysis:
     def pseudoAAC(self, l_param=3, weight=0.05, scales=None):
         """Calculate the PseudoAAC described in Chou, 2001.
 
-        Uses the moduel PseudoAAC to calculate the pseudoAAC of a protein.
+        Uses the module PseudoAAC to calculate the pseudoAAC of a protein.
         """
         aac = self.get_amino_acids_percent()
         paac = PseudoAAC.PseudoAAC(self.sequence, aac)
         return paac.pseudoAAC(l_param, weight, scales)
+
+    def CTD_descriptors(self, properties=None):
+        """Calculate the CTD descriptors described in Dubchak et al, 1995.
+
+        Uses the module CTD to calculate the CTD descriptors of a protein.
+        """
+        ctd = CTD(self.sequence)
+        if properties is None:
+            return ctd.CTD_descriptors()
+        else:
+            return ctd.CTD_descriptors(properties)
 
 
 if __name__ == "__main__":

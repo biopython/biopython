@@ -12,22 +12,13 @@ Descriptors are calculated as described in:
 
     *  Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou
        Kim. Recognition of a Protein Fold in the Context of the SCOP
-       classification. Proteins: Structure, Function and
-       Genetics,1999,35,401-407.
+       classification. Proteins: Structure, Function and Genetics,1999,35,401-407.
 
 """
-
-# https://rdrr.io/bioc/Rcpi/src/R/409-extractProtCTDD.R
-# https://rdrr.io/bioc/Rcpi/src/R/409-extractProtCTDT.R
 
 from typing import Union, List, Tuple
 from Bio.Seq import Seq
 from Bio.Data.IUPACData import protein_letters
-
-# TODO: references for groups
-# TODO: add examples to CTD class
-# TODO: improve all function docstrings
-# TODO: add function to ProteinAnalysis
 
 
 class CTD_Property:
@@ -35,12 +26,32 @@ class CTD_Property:
 
     Parameters
     ----------
-    :protein_sequence: A ``Bio.Seq`` or string object containing a protein
-                       sequence.
+    :groups: A List of strings, representing the classifications of each amino
+             acid. For example, the list: ["DEKNQR", "AGHPSTY", "CLVIMFW"] means
+             that the amino acids "DEKNQR", "AGHPSTY" and "CLVIMFW" will be mapped
+             to the numbers 1, 2 and 3 respectively.
 
     Methods
     -------
-    :composition_descriptors(properties): returns the Compositon descriptors of CT
+    :transitions(): returns an iterator of the possible transitions between the
+                    categories, without duplication with the reverse transition.
+                    For a class with 4 groups it would return, in this order:
+                    "12", "13", "14", "23", "24" and "34".
+
+    Examples
+    --------
+    >>> from Bio.SeqUtils.CTD import CTD_Property
+    >>> mock_property = CTD_Property(["K","R", "ANCQGHILMFPSTWYVDE"])
+
+    It implements the __getitem__ and __len__ methods as well.
+
+    >>> mock_property["K"]
+    "1"
+    >>> mock_property["A"]
+    "3"
+    >>> len(mock_property)
+    3
+
     """
 
     def __init__(self, groups: List[str]):
@@ -66,6 +77,7 @@ class CTD_Property:
                 yield f"{i+1}{j+1}"
 
 
+# All values taken from the previous cited works of Dubchak, I. and Muchink, I.
 # '1'stand for Polar; '2'stand for Neutral, '3' stand for Hydrophobicity
 _Hydrophobicity = CTD_Property(groups=["DEKNQR", "AGHPSTY", "CLVIMFW"])
 
@@ -87,7 +99,7 @@ _SolventAccessibility = CTD_Property(groups=["ALFCGIVW", "RKQEND", "MPSTHY"])
 # '1'stand for (0-0.108); '2'stand for (0.128-0.186), '3' stand for (0.219-0.409)
 _Polarizability = CTD_Property(groups=["GASDT", "CPNVEQIL", "KMHFRYW"])
 
-_default_ctd_props = [
+default_ctd_props = [
     _Hydrophobicity,
     _NormalizedVDWV,
     _Charge,
@@ -108,11 +120,62 @@ class CTD:
 
     Methods
     -------
-    :composition_descriptors(properties): returns the Compositon descriptors of CTD.
-    :transition_descriptors(properties): returns the Transition descriptors of CTD.
-    :distribution_descriptors(properties): returns the Distribution descriptors of CTD.
-    :CTD_descriptors(properties): returns the CTD descriptors.
+    :CTD_descriptors(properties): returns a list with the values of the CTD
+                                  descriptors. The size of this list is defined
+                                  by the number of groups of each property, with
+                                  the defaults it is: len(properties) * 21.
+    :composition_descriptors(properties): returns the Compositon descriptors of
+                                          CTD. The size of this list is defined
+                                          by the number of groups of each property,
+                                          with the defaults it is: len(properties) * 3.
+    :transition_descriptors(properties): returns the Transition descriptors of
+                                         CTD. The size of this list is defined
+                                         by the number of groups of each property,
+                                         with the defaults it is:
+                                         len(properties) * 3.
+    :distribution_descriptors(properties): returns the Distribution descriptors of
+                                           CTD. The size of this list is defined
+                                           by the number of groups of each property,
+                                           with the defaults it is: len(properties) * 15.
 
+    Examples
+    --------
+    >>> from Bio.SeqUtils.CTD import CTD
+    >>> protein = CTD("ACKLAA")
+    >>> ctd = protein.CTD_descriptors()
+    >>> print(len(ctd))
+    147
+
+    This methods can either be accessed from the class itself or from a
+    ``ProtParam.ProteinAnalysis`` object:
+
+    >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
+    >>> protein = PA("ACKLAA")
+    >>> ctd = protein.CTD_descriptors()
+    147
+
+    Calculate only a part of the descriptors.
+
+    >>> C = protein.composition_descriptors()
+    >>> T = protein.transition_descriptors()
+    >>> D = protein.distribution_descriptors()
+    >>> print(len(C), len(T), len(D))
+    21 21 105
+
+    Using user defined property groups.
+
+    >>> from Bio.SeqUtils.CTD import CTD_Property
+    >>> mock_property = CTD_Property(["K","R", "ANCQGHILMFPSTWYVDE"])
+    >>> ctd = protein.CTD_descriptors([mock_property])
+    >>> print(len(ctd))
+    21
+
+    To add your custom defined property to the standard one:
+
+    >>> from Bio.SeqUtils.CTD import default_ctd_props
+    >>> ctd = protein.CTD_descriptors(default_ctd_props + [mock_property])
+    >>> print(len(ctd))
+    168
     """
 
     def __init__(self, protein_sequence: Union[Seq, str]):
@@ -174,37 +237,41 @@ class CTD:
         return D_descriptors
 
     def composition_descriptors(
-        self, properties: List[CTD_Property] = _default_ctd_props
+        self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
         """Return the Composition descriptors of CTD."""
-        prop_tuples = self._seq2number_strings(properties)
+        prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_T(prop_tuples)
 
     def transition_descriptors(
-        self, properties: List[CTD_Property] = _default_ctd_props
+        self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
         """Return the Transition descriptors of CTD."""
-        prop_tuples = self._seq2number_strings(properties)
+        prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_T(prop_tuples)
 
     def distribution_descriptors(
-        self, properties: List[CTD_Property] = _default_ctd_props
+        self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
         """Return the Distribution descriptors of CTD."""
-        prop_tuples = self._seq2number_strings(properties)
+        prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_D(prop_tuples)
 
     def CTD_descriptors(
-        self, properties: List[CTD_Property] = _default_ctd_props
+        self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
-        """Return the CTD descriptors."""
-        # Taking N as = len(properties)
-        # First N*3 values are the composition of each group type
-        # The next N*3 values are the Transition properties
-        # The final N*5*3 values are the Distribution properties
+        """Return the CTD descriptors.
+
+        Each property in _properties_, will add G*7 values to the final result,
+        where G is the number of groups defined in the property, with G
+        Composition descriptors, G*(G-1)/2 Transition descriptors and 5*G
+        Distribution descriptors.
+
+        With the default properties returns 147 values.
+        """
         prop_tuples = self._get_prop_tuples(properties)
 
         return (
@@ -212,3 +279,9 @@ class CTD:
             + self._calc_T(prop_tuples)
             + self._calc_D(prop_tuples)
         )
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()
