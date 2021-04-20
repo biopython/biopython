@@ -257,7 +257,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_feature_set(self, set):
         """Return list of feature elements and list of labels for them."""
-        # print 'draw feature set'
+        # print('draw feature set')
         feature_elements = []  # Holds diagram elements belonging to the features
         label_elements = []  # Holds diagram elements belonging to feature labels
 
@@ -420,8 +420,8 @@ class CircularDrawer(AbstractDrawer):
             # No label required
             labelgroup = None
         # if locstart > locend:
-        #    print locstart, locend, feature.strand, sigil, feature.name
-        # print locstart, locend, feature.name
+        #    print(locstart, locend, feature.strand, sigil, feature.name)
+        # print(locstart, locend, feature.name)
         return sigil, labelgroup
 
     def draw_cross_link(self, cross_link):
@@ -522,7 +522,7 @@ class CircularDrawer(AbstractDrawer):
          - set       GraphSet object
 
         """
-        # print 'draw graph set'
+        # print('draw graph set')
         elements = []  # Holds graph elements
 
         # Distribution dictionary for how to draw the graph
@@ -1176,7 +1176,7 @@ class CircularDrawer(AbstractDrawer):
                 a = (
                     (start_angle + x * (angle_diff)) * pi / 180
                 )  # to radians for sin/cos
-                # print x0+r*cos(a), y0+r*sin(a)
+                # print(x0+r*cos(a), y0+r*sin(a))
                 path.lineTo(x0 + r * cos(a), y0 + r * sin(a))
                 x += dx
         a = end_angle * pi / 180

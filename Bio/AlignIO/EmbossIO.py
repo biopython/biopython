@@ -175,7 +175,7 @@ class EmbossIterator(AlignmentIterator):
                         index = 0
                 else:
                     # just a start value, this is just alignment annotation (?)
-                    # print "Skipping: " + line.rstrip()
+                    # print("Skipping: " + line.rstrip())
                     pass
             elif line.strip() == "":
                 # Just a spacer?

@@ -367,7 +367,7 @@ class SummaryInfo:
                 e_freq_table,
                 random_expected,
             )
-            # print freq_dict,
+            # print(freq_dict, end="")
             column_score = self._get_column_info_content(
                 freq_dict, e_freq_table, log_base, random_expected
             )
