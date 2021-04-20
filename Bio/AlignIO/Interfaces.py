@@ -61,10 +61,10 @@ class AlignmentIterator:
 
             with open("many.phy","r") as myFile:
                 for alignment in PhylipIterator(myFile):
-                    print "New alignment:"
+                    print("New alignment:")
                     for record in alignment:
-                        print record.id
-                        print record.seq
+                        print(record.id)
+                        print(record.seq)
 
         """
         return iter(self.__next__, None)

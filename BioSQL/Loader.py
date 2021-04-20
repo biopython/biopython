@@ -650,8 +650,8 @@ class DatabaseLoader:
          %s,
          %s,
          %s)"""
-        # print self.dbid, taxon_id, record.name, accession, identifier, \
-        #        division, description, version
+        # print(self.dbid, taxon_id, record.name, accession, identifier, \
+        #        division, description, version)
         self.adaptor.execute(
             sql,
             (
@@ -795,8 +795,8 @@ class DatabaseLoader:
                 self.adaptor.execute(mono_sql, (bioentry_id, term_id, str(value)))
             else:
                 pass
-                # print "Ignoring annotation '%s' entry of type '%s'" \
-                #      % (key, type(value))
+                # print("Ignoring annotation '%s' entry of type '%s'" \
+                #      % (key, type(value)))
 
     def _load_reference(self, reference, rank, bioentry_id):
         """Record SeqRecord's annotated references in the database (PRIVATE).

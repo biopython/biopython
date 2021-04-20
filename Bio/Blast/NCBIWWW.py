@@ -323,7 +323,7 @@ def _parse_qblast_ref_page(handle):
             msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
             raise ValueError("Error message from NCBI: %s" % msg)
         # We didn't recognise the error layout :(
-        # print s
+        # print(s)
         raise ValueError(
             "No RID and no RTOE found in the 'please wait' page, "
             "there was probably an error in your request but we "

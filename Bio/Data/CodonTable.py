@@ -312,7 +312,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
                 if codon not in candidates and codon not in codons:
                     candidates.append(codon)
     answer = codons[:]  # copy
-    # print "Have %i new candidates" % len(candidates)
+    # print("Have %i new candidates" % len(candidates))
     for ambig_codon in candidates:
         wanted = True
         # e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
@@ -325,7 +325,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
             if codon not in codons:
                 # This ambiguous codon can code for a non-stop, exclude it!
                 wanted = False
-                # print "Rejecting %s" % ambig_codon
+                # print("Rejecting %s" % ambig_codon)
                 continue
         if wanted:
             answer.append(ambig_codon)

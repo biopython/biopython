@@ -130,7 +130,7 @@ class GraphData:
         """
         positions = sorted(self.data)  # i.e. dict keys
         # Return first and last positions in graph
-        # print len(self.data)
+        # print(len(self.data))
         return (positions[0], positions[-1])
 
     def mean(self):

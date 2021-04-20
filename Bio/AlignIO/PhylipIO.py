@@ -247,7 +247,7 @@ class PhylipIterator(AlignmentIterator):
                 self._header = line
                 break
 
-            # print "New block..."
+            # print("New block...")
             for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
