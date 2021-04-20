@@ -997,7 +997,7 @@ class Nexus:
 
     def _statelabels(self, options):
         # self.charlabels = options
-        # print 'Command statelabels is not supported and will be ignored.'
+        # print("Command statelabels is not supported and will be ignored.")
         pass
 
     def _matrix(self, options):
@@ -1855,9 +1855,9 @@ class Nexus:
         for taxon in undelete[1:]:
             newconstant = []
             for site in constant:
-                # print '%d (paup=%d)' % (site[0],site[0]+1),
+                # print("%d (paup=%d)" % (site[0],site[0]+1), end="")
                 seqsite = matrix[taxon][site[0]].upper()
-                # print seqsite,'checked against',site[1],'\t',
+                # print(seqsite,"checked against",site[1],"\t", end="")
                 if (
                     seqsite == self.missing
                     or (
@@ -1887,11 +1887,11 @@ class Nexus:
                     )
                     if intersect:
                         newconstant.append((site[0], "".join(intersect)))
-                    #    print 'ok'
+                    #    print("ok")
                     # else:
-                    #    print 'failed'
+                    #    print("failed")
                 # else:
-                #    print 'failed'
+                #    print("failed")
             constant = newconstant
         cpos = [s[0] for s in constant]
         return cpos
@@ -1996,7 +1996,7 @@ class Nexus:
 
         if name in self.taxlabels:
             unique_name = _unique_label(self.taxlabels, name)
-            # print "WARNING: Sequence name %s is already present. Sequence was added as %s." % (name,unique_name)
+            # print("WARNING: Sequence name %s is already present. Sequence was added as %s." % (name,unique_name))
         else:
             unique_name = name
 

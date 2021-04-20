@@ -1778,11 +1778,11 @@ class Iterator:
 
         if query and "BLAST" not in lines[0]:
             # Cheat and re-insert the header
-            # print "-"*50
-            # print "".join(self._header)
-            # print "-"*50
-            # print "".join(lines)
-            # print "-"*50
+            # print("-"*50)
+            # print("".join(self._header))
+            # print("-"*50)
+            # print("".join(lines))
+            # print("-"*50)
             lines = self._header + lines
 
         if not lines:
