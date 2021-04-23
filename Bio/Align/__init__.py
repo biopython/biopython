@@ -1269,14 +1269,18 @@ class PairwiseAlignment:
             qName = query.id
         except AttributeError:
             qName = "query"
-        else:
+        try:
             query = query.seq
+        except AttributeError:
+            pass
         try:
             tName = target.id
         except AttributeError:
             tName = "target"
-        else:
+        try:
             target = target.seq
+        except AttributeError:
+            pass
         n1 = len(target)
         n2 = len(query)
         try:
