@@ -564,3 +564,13 @@ class DisorderedAtom(DisorderedEntityWrapper):
         """
         for child in self:
             child.coord = np.dot(child.coord, rot) + tran
+
+    def copy(self):
+        """Create a copy of the DisorderedAtom. DisorderedEntityWrapper.copy()
+        does not work well with DisorderedAtom objects, so we need to define it
+        explicitly"""
+        shallow = copy.copy(self)
+        shallow.detach_parent()
+        shallow.set_coord(copy.copy(self.get_coord()))
+        shallow.xtra = self.xtra.copy()
+        return shallow
