@@ -15,12 +15,11 @@ Hidrophobicity, Hidrophilicity and Side-Chain Mass values are the same
 as used in the original paper.
 """
 
-from typing import Union, Optional
+from typing import Union, Optional, List
 from Bio.Seq import Seq
 from Bio.Data.IUPACData import protein_letters, protein_weights
 from Bio.SeqUtils.ProtParamData import hw, ta
 
-# TODO: add example with given scales
 # Normalized scales
 
 # Normalized Hidrophobicity
@@ -121,6 +120,7 @@ class PseudoAAC:
         self.aac = aa_percents
 
     def _calc_correlation(self, aa1: str, aa2: str, scales: list) -> float:
+        """Calculate the sequence correlation between amino acids (PRIVATE)."""
         return sum([(s[aa1] - s[aa2]) ** 2 for s in scales]) / len(scales)
 
     def _std_convert_scales(self, scales: list) -> list:
@@ -135,7 +135,7 @@ class PseudoAAC:
 
     def pseudoAAC(
         self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
-    ) -> list:
+    ) -> List[float]:
         """Calculate the Pseudo AminoAcid Composition described by Chou, 2001.
 
         Calculates the Pseudo-Amino Acid Compositions utilizing the given l_param,
@@ -147,6 +147,7 @@ class PseudoAAC:
         (Tanford, 1962) and Side Chain Mass.
 
         Returns a list of size 20+l_param with the components.
+
         """
         if scales is None:
             scales = [H_1, H_2, M]
@@ -156,11 +157,12 @@ class PseudoAAC:
                 for aa in protein_letters:
                     if s.get(aa) is None:
                         raise KeyError(f"scale {i} is missing value for aa: {aa}")
-
             scales = self._std_convert_scales(scales)
 
         # Calculate correlation parameters
-        theta = []
+        # Initialize list with correct number of positions
+        # if l_param > self.L , some values will not be updated
+        theta = [0.0] * l_param
         for j in range(1, l_param + 1):
             t_j = sum(
                 [
@@ -168,8 +170,7 @@ class PseudoAAC:
                     for i in range(self.L - j)
                 ]
             )
-            t_j /= self.L - j
-            theta.append(t_j)
+            theta[j - 1] = t_j / self.L - j
 
         # Sum of all AAC values is one by definition
         sum_term = 1 + weight * sum(theta)

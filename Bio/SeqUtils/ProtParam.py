@@ -355,7 +355,7 @@ class ProteinAnalysis:
 
     def pseudoAAC(
         self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
-    ):
+    ) -> List[float]:
         """Calculate the PseudoAAC described in Chou, 2001.
 
         Uses the module PseudoAAC to calculate the pseudoAAC of a protein.

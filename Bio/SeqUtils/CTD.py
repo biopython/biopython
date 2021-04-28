@@ -16,7 +16,7 @@ Descriptors are calculated as described in:
 
 """
 
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Iterable
 from Bio.Seq import Seq
 from Bio.Data.IUPACData import protein_letters
 
@@ -56,7 +56,9 @@ class CTD_Property:
 
     def __init__(self, groups: List[str]):
         """Initialize the class."""
-        # TODO: assert all aa in groups
+        if set(sum(groups)) != set(protein_letters):
+            raise ValueError("Given groups do not contain all Amino Acids.")
+
         self.d = {}
         for i, group in enumerate(groups):
             for aa in group:
@@ -64,14 +66,14 @@ class CTD_Property:
 
         self.size = len(groups)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> float:
         return self.d[key]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.size
 
-    def transitions(self):
-        """Return an iterator of the possible transitions."""
+    def transitions(self) -> Iterable:
+        """Return Iterable of the possible transitions between groups."""
         for i in range(self.size):
             for j in range(i + 1, self.size):
                 yield f"{i+1}{j+1}"
@@ -112,6 +114,12 @@ default_ctd_props = [
 
 class CTD:
     """A Class for calculating the CTD descriptors of a protein.
+
+    The default amino acid properties used for calculating the descriptors are:
+    Hidrophobicity, Normalized Van der Waals Volume, Polarity, Charge, Secondary
+    Structure, Solvent Acessibility and Polarizability. All of the properties
+    are given as 3 different groups of Amino Acids, based on their similarity
+    in the given property.
 
     Parameters
     ----------
@@ -215,18 +223,19 @@ class CTD:
 
     def _calc_D(self, prop_tuples: list) -> List[float]:
         """Calculate the Distribution descriptors of CTD (PRIVATE)."""
-        # TODO: probably a faster way of calculating this
         D_descriptors = []
-        for s, p in prop_tuples:
-            positions = {str(k + 1): [] for k in range(len(p))}
+        for string, prop in prop_tuples:
+            positions = {str(k + 1): [] for k in range(len(prop))}
 
-            # Get the positions of each aa
-            for i, c in enumerate(s):
+            # Get the positions of each group in sequence
+            for i, c in enumerate(string):
                 positions[c].append(i)
 
             # calculate the descriptor values
             for key in positions:
                 pos_list = positions[key]
+
+                # If group is not present on string, all 5 values are 0
                 if pos_list == []:
                     D_descriptors += [0 for _ in range(5)]
                 else:
@@ -239,7 +248,11 @@ class CTD:
     def composition_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
-        """Return the Composition descriptors of CTD."""
+        """Return the Composition descriptors of CTD.
+
+        Returns the relative composition of each group of given properties
+        in the sequence.
+        """
         prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_T(prop_tuples)
@@ -247,7 +260,11 @@ class CTD:
     def transition_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
-        """Return the Transition descriptors of CTD."""
+        """Return the Transition descriptors of CTD.
+
+        For each property, returns the relative frequency of each transition
+        between the defined groups of that property in the sequence.
+        """
         prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_T(prop_tuples)
@@ -255,7 +272,11 @@ class CTD:
     def distribution_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
-        """Return the Distribution descriptors of CTD."""
+        """Return the Distribution descriptors of CTD.
+
+        For each property, calculates the % of the sequence that contains
+        0, 25, 50, 75 and 100% of the amino acids of each defined group.
+        """
         prop_tuples = self._get_prop_tuples(properties)
 
         return self._calc_D(prop_tuples)
@@ -263,7 +284,7 @@ class CTD:
     def CTD_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
-        """Return the CTD descriptors.
+        """Return the CTD descriptors, defined in Dubchak et al, 1995.
 
         Each property in _properties_, will add G*7 values to the final result,
         where G is the number of groups defined in the property, with G
