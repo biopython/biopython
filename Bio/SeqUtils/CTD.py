@@ -52,11 +52,17 @@ class CTD_Property:
     >>> len(mock_property)
     3
 
+    Groups must contain all standard amino acids.
+
+    >>> mock_property = CTD_Property(["K", "R", "ANCQGHILMFPSTWYVD"])
+    ValuError: 'Given groups do not contain all Amino Acids.'
+
     """
 
     def __init__(self, groups: List[str]):
         """Initialize the class."""
-        if set(sum(groups)) != set(protein_letters):
+        given_aas = "".join(groups)
+        if any([(aa not in given_aas) for aa in protein_letters]):
             raise ValueError("Given groups do not contain all Amino Acids.")
 
         self.d = {}
@@ -206,7 +212,9 @@ class CTD:
         """Calculate the Composition descriptors of CTD (PRIVATE)."""
         C_descriptors = []
         for string, prop in prop_tuples:
-            C_descriptors += [string.count(str(i)) / self.L for i in range(len(prop))]
+            C_descriptors += [
+                string.count(str(i + 1)) / self.L for i in range(len(prop))
+            ]
 
         return C_descriptors
 
@@ -255,7 +263,7 @@ class CTD:
         """
         prop_tuples = self._get_prop_tuples(properties)
 
-        return self._calc_T(prop_tuples)
+        return self._calc_C(prop_tuples)
 
     def transition_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
