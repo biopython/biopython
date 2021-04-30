@@ -104,13 +104,17 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
         super().__init__()
 
     def __getitem__(self, key):
+        length = self.length
         if isinstance(key, slice):
-            length = self.length
             start, end, step = key.indices(length)
             size = len(range(start, end, step))
             if size == 0:
                 return b""
         else:
+            if key < 0:
+                key += length
+                if key < 0:
+                    raise IndexError("index out of range")
             start = key
             end = key + 1
             step = 1
@@ -129,7 +133,10 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
         sequence = _twoBitIO.convert(
             data, start, end, step, self.nBlocks, self.maskBlocks
         )
-        return sequence
+        if isinstance(key, slice):
+            return sequence
+        else:  # single nucleotide
+            return ord(sequence)
 
     def __len__(self):
         return self.length

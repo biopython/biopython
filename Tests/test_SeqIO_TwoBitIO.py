@@ -296,6 +296,16 @@ class TestBaseClassMethods(unittest.TestCase):
     def tearDown(self):
         self.stream.close()
 
+    def test_getitem(self):
+        self.assertEqual(self.seq1_twobit, self.seq1_fasta)
+        self.assertEqual(self.seq2_twobit, self.seq2_fasta)
+        self.assertEqual(self.seq1_twobit[:], self.seq1_fasta[:])
+        self.assertEqual(self.seq2_twobit[:], self.seq2_fasta[:])
+        self.assertEqual(self.seq1_twobit[30], self.seq1_fasta[30])
+        self.assertEqual(self.seq2_twobit[30], self.seq2_fasta[30])
+        self.assertEqual(self.seq1_twobit[-30], self.seq1_fasta[-30])
+        self.assertEqual(self.seq2_twobit[-30], self.seq2_fasta[-30])
+
     def test_bytes(self):
         b = bytes(self.seq1_twobit)
         self.assertIsInstance(b, bytes)
