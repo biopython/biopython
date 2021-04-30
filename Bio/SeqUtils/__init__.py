@@ -24,24 +24,26 @@ from Bio.Data import IUPACData
 
 
 def GC(seq, percentage=True):
-    """Calculates G+C content, returns the percentage (float between 0 and 100). Returns G+C ratio if percentage=False.
+    """Calculate G+C content, returns the percentage (float between 0 and 100).
+
+    Returns G+C ratio if percentage=False (float between 0 and 1).
 
     Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
-    when counting the G and C content.  The percentage is calculated against
-    the full length, e.g.:
+    when counting the G and C content.  The percentage or ratio is calculated
+    against the full length, e.g.:
 
     >>> from Bio.SeqUtils import GC
-    >>> GC("ACTGN")
-    40.0
-    >>> GC("ACTGN", False)
-    .400
+    >>> seq = "ACTGN"
+    >>> print(f"GC as a percentage: {GC(seq):.2f}")
+    GC as a percentage: 40.00
+    >>> print(f"GC as a ratio: {GC(seq, False):.2f}")
+    GC as a ratio: 0.40
 
     Note that this will return zero for an empty sequence.
     """
     gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
     try:
-        gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
-        if percentage==True:
+        if percentage:
             return gc * 100.0 / len(seq)
         else:
             return gc / len(seq)
