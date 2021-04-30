@@ -11,9 +11,9 @@ def map_alignment(alignment1, alignment2):
     path2 = array(alignment2.path)
     path = []
     iEnd, qEnd = path2[0, :]
-    for row in path2[1:, :]:
+    for row2 in path2[1:, :]:
         iStart, qStart = iEnd, qEnd
-        iEnd, qEnd = row
+        iEnd, qEnd = row2
         iBlockSize = iEnd - iStart
         qBlockSize = qEnd - qStart
         if qBlockSize == 0:
@@ -22,12 +22,17 @@ def map_alignment(alignment1, alignment2):
             continue
         assert qBlockSize == iBlockSize
         index = path1[:, 1].searchsorted(iStart, side='right') - 1
-        offset = iStart - path1[index, 1]
-        row = array([path1[index, 0] + offset, qStart])
+        if index >= 0:
+            offset = iStart - path1[index, 1]
+            row = array([path1[index, 0] + offset, qStart])
+        else:
+            offset = path1[0, 1] - iStart
+            row = array([0, offset])
+            qBlockSize -= offset
         path.append(row)
         tStart = row[0]
-        for row in path1[index+1:, :]:
-            tBlockSize = row[0] - tStart
+        for row1 in path1[1:, :]:
+            tBlockSize = row1[0] - tStart
             if tBlockSize > qBlockSize:
                 row = path[-1] + qBlockSize
                 path.append(row)
@@ -67,6 +72,7 @@ class TestOneBlockTargetOneBlockQuery(unittest.TestCase):
         alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
+        self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
         self.assertEqual(str(alignment1), """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
@@ -75,12 +81,16 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
+        self.assertEqual(alignment2.path, ((5, 0), (15, 10)))
         self.assertEqual(str(alignment2), """\
 GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
 """)
         alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0].tolist(), [17, 0])
+        self.assertSequenceEqual(alignment.path[1].tolist(), [27, 10])
         self.assertEqual(str(alignment), """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
@@ -89,6 +99,43 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
+""")
+
+    def test_left_overhang(self):
+        chromosome = Seq("GGGCCCCCGGGGGGAAAAAAAAAA")
+        chromosome.id = "chromosome"
+        transcript = Seq("AGGGGGCCCCCGGGGGGA")
+        transcript.id = "transcript"
+        sequence = Seq("GGGGGCCCCCGGG")
+        sequence.id = "sequence"
+        alignments1 = aligner.align(chromosome, transcript)
+        self.assertEqual(len(alignments1), 1)
+        alignment1 = alignments1[0]
+        self.assertEqual(str(alignment1), """\
+   GGGCCCCCGGGGGGAAAAAAAAAA
+   |||||||||||||||         
+AGGGGGCCCCCGGGGGGA         
+""")
+        alignments2 = aligner.align(transcript, sequence)
+        self.assertEqual(len(alignments2), 1)
+        alignment2 = alignments2[0]
+        self.assertEqual(str(alignment2), """\
+AGGGGGCCCCCGGGGGGA
+ |||||||||||||    
+ GGGGGCCCCCGGG    
+""")
+        alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0].tolist(), [0, 2])
+        self.assertSequenceEqual(alignment.path[1].tolist(), [11, 13])
+        self.assertEqual(str(alignment), """\
+  GGGCCCCCGGGGGGAAAAAAAAAA
+  |||||||||||             
+GGGGGCCCCCGGG             
+""")
+        psl = format(alignment, "psl")
+        self.assertEqual(psl, """\
+11	0	0	0	0	0	0	0	+	sequence	13	2	13	chromosome	24	0	11	1	11,	2,	0,
 """)
 
     def test_right_overhang(self):
@@ -115,6 +162,9 @@ GGGGGGGCCCCCGGGGGGA
      GGCCCCCGGGGG  
 """)
         alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0].tolist(), [17, 0])
+        self.assertSequenceEqual(alignment.path[1].tolist(), [27, 10])
         self.assertEqual(str(alignment), """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGG  
                  ||||||||||  
@@ -208,3 +258,4 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
+
