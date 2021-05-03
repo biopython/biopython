@@ -8,7 +8,7 @@
 # Turn black code style off
 # fmt: off
 
-# Hidrophobicity
+# Hydrophobicity
 
 # Kyte & Doolittle index of hydrophobicity
 # J. Mol. Biol. 157:105-132(1982).
@@ -111,7 +111,7 @@ fs = {"A": -0.21, "R": 2.11, "N": 0.96, "D": 1.36, "C": -6.04,
       "L": -4.68, "K": 3.88, "M": -3.66, "F": -4.65, "P": 0.75,
       "S": 1.74, "T": 0.78, "W": -3.32, "Y": -1.01, "V": -3.5}
 
-# Fauchere Hidrophobicity scale
+# Fauchere Hydrophobicity scale
 # Eur. J. Med. Chem. 18:369-375(1983).
 # "Fauchere"
 fc = {"A": 0.31, "R": -1.01, "N": -0.6, "D": -0.77, "C": 1.54,
@@ -135,7 +135,7 @@ gy = {"A": 0.1, "R": 1.91, "N": 0.48, "D": 0.78, "C": -1.42,
       "L": -1.18, "K": 1.4, "M": -1.59, "F": -2.12, "P": 0.73,
       "S": 0.52, "T": 0.07, "W": -0.51, "Y": -0.21, "V": -1.27}
 
-# Jones Hidrophobicity scale
+# Jones Hydrophobicity scale
 # Journal of theoretical biology, 50(1), 167-183.
 # "Jones"
 jo = {"A": 0.87, "R": 0.85, "N": 0.09, "D": 0.66, "C": 1.52,
@@ -143,7 +143,7 @@ jo = {"A": 0.87, "R": 0.85, "N": 0.09, "D": 0.66, "C": 1.52,
       "L": 2.17, "K": 1.64, "M": 1.67, "F": 2.87, "P": 2.77,
       "S": 0.07, "T": 0.07, "W": 3.77, "Y": 2.67, "V": 1.87}
 
-# Juretic Hidrophobicity scale
+# Juretic Hydrophobicity scale
 # Theoretical and computational chemistry, 5, 405-445.
 # "Juretic"
 ju = {"A": 1.1, "R": -5.1, "N": -3.5, "D": -3.6, "C": 2.5,
@@ -151,7 +151,7 @@ ju = {"A": 1.1, "R": -5.1, "N": -3.5, "D": -3.6, "C": 2.5,
       "L": 3.8, "K": -4.11, "M": 1.9, "F": 2.8, "P": -1.9,
       "S": -0.5, "T": -0.7, "W": -0.46, "Y": -1.3, "V": 4.2}
 
-# Kidera Hidrophobicity Factors
+# Kidera Hydrophobicity Factors
 # Journal of Protein Chemistry, 4(1), 23-55.
 # "Kidera"
 ki = {"A": -0.27, "R": 1.87, "N": 0.81, "D": 0.81, "C": -1.05,
@@ -183,7 +183,7 @@ po = {"A": 0.85, "R": 0.2, "N": -0.48, "D": -1.1, "C": 2.1,
       "L": 1.99, "K": -1.19, "M": 1.42, "F": 1.69, "P": -1.14,
       "S": -0.52, "T": -0.08, "W": 1.76, "Y": 1.37, "V": 2.53}
 
-# Rose Hidrophobicity scale
+# Rose Hydrophobicity scale
 # Science 229:834-838(1985)
 # "Rose"
 ro = {"A": 0.74, "R": 0.64, "N": 0.63, "D": 0.62, "C": 0.91,
@@ -191,7 +191,7 @@ ro = {"A": 0.74, "R": 0.64, "N": 0.63, "D": 0.62, "C": 0.91,
       "L": 0.85, "K": 0.52, "M": 0.85, "F": 0.88, "P": 0.64,
       "S": 0.66, "T": 0.7, "W": 0.85, "Y": 0.76, "V": 0.86}
 
-# Roseman Hidrophobicity scale
+# Roseman Hydrophobicity scale
 # J. Mol. Biol. 200:513-522(1988)
 # "Roseman"
 rm = {"A": 0.39, "R": -3.95, "N": -1.91, "D": -3.81, "C": 0.25,
@@ -199,7 +199,7 @@ rm = {"A": 0.39, "R": -3.95, "N": -1.91, "D": -3.81, "C": 0.25,
       "L": 1.82, "K": -2.77, "M": 0.96, "F": 2.27, "P": 0.99,
       "S": -1.24, "T": -1, "W": 2.13, "Y": 1.47, "V": 1.3}
 
-# Sweet Optimized Matchig Hidrophobicity (OMH)
+# Sweet Optimized Matchig Hydrophobicity (OMH)
 # J. Mol. Biol. 171:479-488(1983).
 # "Sweet
 sw = {"A": -0.4, "R": -0.59, "N": -0.92, "D": -1.31, "C": 0.17,
@@ -223,7 +223,7 @@ wi = {"A": -0.3, "R": -1.1, "N": -0.2, "D": -1.4, "C": 6.3,
       "L": 6.6, "K": -3.6, "M": 2.5, "F": 7.5, "P": 2.2,
       "S": -0.6, "T": -2.2, "W": 7.9, "Y": 7.1, "V": 5.9}
 
-# Zimmerman Hidrophobicity scale
+# Zimmerman Hydrophobicity scale
 # Journal of theoretical biology, 21(2), 170-201.
 # "Zimmerman"
 zi = {"A": 0.83, "R": 0.83, "N": 0.09, "D": 0.64, "C": 1.48,

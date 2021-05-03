@@ -192,11 +192,12 @@ class ProteinAnalysis:
     def gravy(self, scale="KyteDoolitle"):
         """Calculate the GRAVY (Grand Average of Hydropathy) according to Kyte and Doolitle, 1982.
 
-        Utilizes the given Hidrophobicity scale, by default uses the original proposed
-        by Kyte and Doolittle (KyteDoolitle). Other options are: Aboderin, AbrahamLeo,
-        Argos, BlackMould, BullBreese, Casari, Cid, Cowan3.4, Cowan7.5, Eisenberg,
-        Engelman, Fasman, Fauchere, GoldSack, Guy, Jones, Juretic, Kidera, Miyazawa,
-        Parker,Ponnuswamy, Rose, Roseman, Sweet, Tanford, Wilson and Zimmerman.
+        Utilizes the given Hydrophobicity scale, by default uses the original
+        proposed by Kyte and Doolittle (KyteDoolitle). Other options are:
+        Aboderin, AbrahamLeo, Argos, BlackMould, BullBreese, Casari, Cid,
+        Cowan3.4, Cowan7.5, Eisenberg, Engelman, Fasman, Fauchere, GoldSack,
+        Guy, Jones, Juretic, Kidera, Miyazawa, Parker,Ponnuswamy, Rose,
+        Roseman, Sweet, Tanford, Wilson and Zimmerman.
 
         New scales can be added in ProtParamData.
         """
