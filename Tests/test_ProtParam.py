@@ -184,10 +184,41 @@ class ProtParamTest(unittest.TestCase):
             self.assertAlmostEqual(i, e, places=4)
 
     def test_gravy(self):
-        """Calculate gravy."""
-        self.assertAlmostEqual(self.analysis.gravy(), -0.5974, places=4)
-        self.assertAlmostEqual(self.analysis.gravy("Eisenberg"), -0.0435, places=4)
-        self.assertAlmostEqual(self.analysis.gravy("Rose"), 0.7147, places=4)
+        """Calculate gravy. Tests all pre-defined scales."""
+        expected_values = {
+            "KyteDoolitle": -0.5974,
+            "Aboderin": 4.5671,
+            "AbrahamLeo": 0.2378,
+            "Argos": 0.8607,
+            "BlackMould": 0.5074,
+            "BullBreese": -0.0445,
+            "Casari": -0.2414,
+            "Cid": -0.0678,
+            "Cowan3.4": 0.0234,
+            "Cowan7.5": -0.0733,
+            "Eisenberg": -0.0435,
+            "Engelman": 1.600,
+            "Fasman": -0.3614,
+            "Fauchere": 0.327,
+            "GoldSack": 1.1564,
+            "Guy": 0.0675,
+            "Jones": 1.223,
+            "Juretic": -0.6672,
+            "Kidera": 0.1383,
+            "Miyazawa": 5.3109,
+            "Parker": 1.7487,
+            "Ponnuswamy": 0.3491,
+            "Rose": 0.7147,
+            "Roseman": -0.4729,
+            "Sweet": -0.0791,
+            "Tanford": 0.0625,
+            "Wilson": 1.5493,
+            "Zimmerman": 1.2841,
+        }
+
+        for scale, exp_v in expected_values.items():
+            self.assertAlmostEqual(self.analysis.gravy(scale=scale), exp_v, places=4)
+
         with self.assertRaises(ValueError) as cm:
             self.analysis.gravy("Wrong Scale")
         self.assertEqual("scale: Wrong Scale not known", str(cm.exception))
