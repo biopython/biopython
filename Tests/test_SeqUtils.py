@@ -8,9 +8,11 @@ import os
 import unittest
 
 from Bio import SeqIO
+from Bio.Data.IUPACData import protein_letters
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqUtils import count_kmers
 from Bio.SeqUtils import GC
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import seq1
@@ -204,6 +206,57 @@ class SeqUtilsTests(unittest.TestCase):
                 0.9794,
             ),
         )
+
+    def test_count_kmers(self):
+        seq_text = "MAEGEITTFTALTVDFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTVD"
+
+        # Turn black code style off
+        # fmt: off
+        expected = {"TVD": 3, "DVT": 3, "EGE": 2, "TFT": 2, "KPK": 2, "DGT": 2,
+                    "TGD": 2, "GTV": 2, "VTG": 2, "MAE": 1, "EAM": 1, "AEG": 1,
+                    "GEA": 1, "GEI": 1, "IEG": 1, "EIT": 1, "TIE": 1, "ITT": 1,
+                    "TTI": 1, "TTF": 1, "FTT": 1, "FTA": 1, "ATF": 1, "TAL": 1,
+                    "LAT": 1, "ALT": 1, "TLA": 1, "LTV": 1, "VTL": 1, "VDF": 1,
+                    "FDV": 1, "DFN": 1, "NFD": 1, "FNL": 1, "LNF": 1, "NLP": 1,
+                    "PLN": 1, "LPP": 1, "PPL": 1, "PPG": 1, "GPP": 1, "PGN": 1,
+                    "NGP": 1, "GNY": 1, "YNG": 1, "NYK": 1, "KYN": 1, "YKK": 1,
+                    "KKY": 1, "KKP": 1, "PKK": 1, "PKL": 1, "LKP": 1, "KLL": 1,
+                    "LLK": 1, "LLY": 1, "YLL": 1, "LYC": 1, "CYL": 1, "YCS": 1,
+                    "SCY": 1, "CSN": 1, "NSC": 1, "SNG": 1, "GNS": 1, "NGG": 1,
+                    "GGN": 1, "GGH": 1, "HGG": 1, "GHF": 1, "FHG": 1, "HFL": 1,
+                    "LFH": 1, "FLR": 1, "RLF": 1, "LRI": 1, "IRL": 1, "RIL": 1,
+                    "LIR": 1, "ILP": 1, "PLI": 1, "LPD": 1, "DPL": 1, "PDG": 1,
+                    "GDP": 1, "VDG": 1, "GDV": 1}
+
+        # Ordered counts
+        expected_ordered = {
+            "TVD": 3, "DGT": 2, "GTV": 2, "MAE": 1, "AEG": 1, "EGE": 1,
+            "GEI": 1, "EIT": 1, "ITT": 1, "TTF": 1, "TFT": 1, "FTA": 1,
+            "TAL": 1, "ALT": 1, "LTV": 1, "VDF": 1, "DFN": 1, "FNL": 1,
+            "NLP": 1, "LPP": 1, "PPG": 1, "PGN": 1, "GNY": 1, "NYK": 1,
+            "YKK": 1, "KKP": 1, "KPK": 1, "PKL": 1, "KLL": 1, "LLY": 1,
+            "LYC": 1, "YCS": 1, "CSN": 1, "SNG": 1, "NGG": 1, "GGH": 1,
+            "GHF": 1, "HFL": 1, "FLR": 1, "LRI": 1, "RIL": 1, "ILP": 1,
+            "LPD": 1, "PDG": 1, "VDG": 1}
+        # Turn black code style on
+        # fmt: on
+
+        counts = count_kmers(seq_text, 3)
+        for key in expected:
+            self.assertEqual(counts[key], expected[key])
+
+        # Check if non present kmers are not counted
+        self.assertSetEqual(set(counts.keys()), set(expected.keys()))
+
+        counts = count_kmers(seq_text, 3, circular=True)
+        self.assertEqual(counts["VDM"], 1)
+        self.assertEqual(counts["MDV"], 1)
+        self.assertEqual(counts["DMA"], 1)
+        self.assertEqual(counts["AMD"], 1)
+
+        counts = count_kmers(seq_text, 3, ordered=True)
+        for key in expected_ordered:
+            self.assertEqual(counts[key], expected_ordered[key])
 
     def test_GC(self):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"

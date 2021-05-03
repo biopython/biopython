@@ -12,6 +12,7 @@
 
 import re
 from math import pi, sin, cos
+from collections import Counter
 
 from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
@@ -465,6 +466,71 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res
+
+
+def count_kmers(
+    seq: str, k: int, circular: bool = False, ordered: bool = True
+) -> Counter:
+    """Count how many times each kmer appears in seq.
+
+    Counts instances of each substring of size k (kmers) in seq. Returns a
+    python collections.Counter object, with the kmers as keys and the number
+    of occurence as values. Overlaping k-mers, such as "ARA" in "ARARA" will be
+    counted twice.
+
+    Arguments:
+     - seq: String or Biopython sequence object.
+     - k: integer with size of kmer to be counted.
+     - circular: bool. Is the molecule circular?
+     - ordered: bool. If False will count "AGC" and "CGA" as the same kmer. Will
+                also count palindromes twice.
+
+
+    >>> from Bio.SeqUtils import count_kmers
+    >>> counts = count_kmers("RAIVMGARARAGRWKGARAL", 3)
+    >>> print(f"Number of times 'GAR' appears in seq: {counts['GAR']:02d}")
+    Number of times 'GAR' appears in seq: 03
+    >>> print(f"Number of times 'ARA' appears in seq: {counts['LRA']:02d}")
+    Number of times 'ARA' appears in seq: 06
+
+    Counter objects return 0 instead of throwing errors if kmer is not present.
+
+    >>> print(f"Number of times 'LRA' appears in seq: {counts['LRA']:02d}")
+    Number of times 'LRA' appears in seq: 00
+
+    If ordered = True, wil not count the kmers in the reverse order as the same.
+
+    >>> counts = count_kmers("RAIVMGARARAGRWKGARAL", 3, ordered = True)
+    >>> print(f"Number of times 'GAR' appears in seq: {counts['GAR']:02d}")
+    Number of times 'GAR' appears in seq: 02
+    >>> print(f"Number of times 'RAG' appears in seq: {counts['RAG']:02d}")
+    Number of times 'RAG' appears in seq: 01
+    >>> print(f"Number of times 'ARA' appears in seq: {counts['LRA']:02d}")
+    Number of times 'ARA' appears in seq: 03
+
+    If circular = True, will wrap around the end of the sequence as well.
+
+    >>> counts = count_kmers("RAIVMGARARAGRWKGARAL",3, circular = True)
+    >>> print(f"Number of times 'LRA' appears in seq: {counts['LRA']:02d}")
+    Number of times 'LRA' appears in seq: 01
+
+    """
+    kmer_counts = Counter()
+
+    for i in range(len(seq) - k + 1):
+        kmer = seq[i : i + k]
+        kmer_counts[kmer] += 1
+        if not ordered:
+            kmer_counts[kmer[::-1]] += 1
+
+    if circular:
+        for i in range(1, k):
+            kmer = seq[-i:] + seq[: k - i]
+            kmer_counts[kmer] += 1
+            if not ordered:
+                kmer_counts[kmer[::-1]] += 1
+
+    return kmer_counts
 
 
 if __name__ == "__main__":
