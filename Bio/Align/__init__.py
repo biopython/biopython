@@ -15,7 +15,7 @@ class, used in the Bio.AlignIO module.
 
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq, reverse_complement
+from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1287,6 +1287,8 @@ class PairwiseAlignment:
             seq1 = bytes(target)
         except TypeError:  # string
             seq1 = bytes(target, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq1 = None
         if path[0][1] < path[-1][1]:  # mapped to forward strand
             strand = "+"
             seq2 = query
@@ -1298,6 +1300,8 @@ class PairwiseAlignment:
             seq2 = bytes(seq2)
         except TypeError:  # string
             seq2 = bytes(seq2, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq2 = None
         if wildcard is not None:
             if mask == "upper":
                 wildcard = ord(wildcard.lower())
@@ -1336,38 +1340,43 @@ class PairwiseAlignment:
                 tStarts.append(tStart)
                 qStarts.append(qStart)
                 blockSizes.append(tCount)
-                s1 = seq1[tStart:tEnd]
-                s2 = seq2[qStart:qEnd]
-                if mask == "lower":
-                    for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            if u1 == c1:
-                                matches += 1
-                            else:
-                                repMatches += 1
-                        else:
-                            misMatches += 1
-                elif mask == "upper":
-                    for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            if u1 == c1:
-                                matches += 1
-                            else:
-                                repMatches += 1
-                        else:
-                            misMatches += 1
+                if seq1 is None or seq2 is None:
+                    # contents of at least one sequence is unknown;
+                    # count all alignments as matches:
+                    matches += tCount
                 else:
-                    for u1, u2 in zip(s1.upper(), s2.upper()):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            matches += 1
-                        else:
-                            misMatches += 1
+                    s1 = seq1[tStart:tEnd]
+                    s2 = seq2[qStart:qEnd]
+                    if mask == "lower":
+                        for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    elif mask == "upper":
+                        for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    else:
+                        for u1, u2 in zip(s1.upper(), s2.upper()):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                matches += 1
+                            else:
+                                misMatches += 1
                 tStart = tEnd
                 qStart = qEnd
         tStart = tStarts[0]  # start of alignment in target

@@ -182,10 +182,28 @@ aligner.match_score = +1
 aligner.mismatch_score = -1
 aligner.mode = "local"
 
-def test_random():
+path1 = ((65, 0), (132, 67), (207, 67), (281, 141))
+path2 = ((32, 0), (68, 36))
+target1 = Seq(None, length=1000)
+query1 = Seq(None, length=141)
+target2 = Seq(None, length=141)
+query2 = Seq(None, length=36)
+
+target1.id = "chromosome"
+query1.id = "transcript"
+target2.id = "transcript"
+query2.id = "sequence"
+
+alignment1 = PairwiseAlignment(target1, query1, path1, None)
+alignment2 = PairwiseAlignment(target2, query2, path2, None)
+alignment = map_alignment(alignment1, alignment2)
+psl = map_check(alignment1, alignment2)
+assert format(alignment, "psl") == psl
+
+if True:
     chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
     nBlocks = random.randint(5, 10)
-    nBlocks = 1
+    nBlocks = 2
     transcript = ""
     position = 0
     for i in range(nBlocks):
@@ -217,9 +235,10 @@ def test_random():
     print("Randomized test OK")
 
 
-test_random()
+for i in range(10000):
+    test_random()
 
-if True:
+if False:
         chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGG")
         chromosome.id = "chromosome"
         transcript = Seq("GGGGGGGCCCCCGGGGGGA")
@@ -255,7 +274,6 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
         print("TEST OK")
 
 
-if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner=runner)
-
+# if __name__ == "__main__":
+    # runner = unittest.TextTestRunner(verbosity=2)
+    # unittest.main(testRunner=runner)
