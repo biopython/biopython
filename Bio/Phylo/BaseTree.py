@@ -474,7 +474,7 @@ class TreeMixin:
             instances in the tree, and values are the distance from the root to
             each clade (including terminals).
 
-        """
+        """  # noqa: D402
         if unit_branch_lengths:
             depth_of = lambda c: 1  # noqa: E731
         else:
