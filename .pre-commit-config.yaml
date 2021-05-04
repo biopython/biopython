@@ -16,7 +16,7 @@ repos:
     -   id: black
         args: [--check]
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.9
+    rev: 3.9.1
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -26,8 +26,8 @@ repos:
             'flake8-docstrings',
             'flake8-implicit-str-concat',
             'flake8-quotes',
-            'flake8-rst-docstrings',
-            'pydocstyle>=5.0.0',
+            'flake8-rst-docstrings>=0.2.3',
+            'pydocstyle>=6.0.0',
         ]
 -   repo: https://github.com/asottile/blacken-docs
     rev: v1.6.0
