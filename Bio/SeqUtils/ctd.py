@@ -40,22 +40,24 @@ class CTD_Property:
 
     Examples
     --------
-    >>> from Bio.SeqUtils.CTD import CTD_Property
+    >>> from Bio.SeqUtils.ctd import CTD_Property
     >>> mock_property = CTD_Property(["K","R", "ANCQGHILMFPSTWYVDE"])
 
     It implements the __getitem__ and __len__ methods as well.
 
-    >>> mock_property["K"]
-    "1"
-    >>> mock_property["A"]
-    "3"
+    >>> print("Amino Acid K is in group:", mock_property["K"])
+    Amino Acid K is in group: 1
+    >>> print("Amino Acid A is in group:", mock_property["A"])
+    Amino Acid A is in group: 3
     >>> len(mock_property)
     3
 
     Groups must contain all standard amino acids.
 
     >>> mock_property = CTD_Property(["K", "R", "ANCQGHILMFPSTWYVD"])
-    ValuError: 'Given groups do not contain all Amino Acids.'
+    Traceback (most recent call last):
+    ...
+    ValueError: Given groups do not contain all Amino Acids.
 
     """
 
@@ -72,7 +74,7 @@ class CTD_Property:
 
         self.size = len(groups)
 
-    def __getitem__(self, key) -> float:
+    def __getitem__(self, key) -> str:
         return self.d[key]
 
     def __len__(self) -> int:
@@ -134,7 +136,7 @@ class CTD:
 
     Methods
     -------
-    :CTD_descriptors(properties): returns a list with the values of the CTD
+    :all_descriptors(properties): returns a list with the values of the CTD
                                   descriptors. The size of this list is defined
                                   by the number of groups of each property, with
                                   the defaults it is: len(properties) * 21.
@@ -154,18 +156,10 @@ class CTD:
 
     Examples
     --------
-    >>> from Bio.SeqUtils.CTD import CTD
+    >>> from Bio.SeqUtils.ctd import CTD
     >>> protein = CTD("ACKLAA")
-    >>> ctd = protein.CTD_descriptors()
-    >>> print(len(ctd))
-    147
-
-    This methods can either be accessed from the class itself or from a
-    ``ProtParam.ProteinAnalysis`` object:
-
-    >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
-    >>> protein = PA("ACKLAA")
-    >>> ctd = protein.CTD_descriptors()
+    >>> desc = protein.all_descriptors()
+    >>> print(len(desc))
     147
 
     Calculate only a part of the descriptors.
@@ -178,18 +172,27 @@ class CTD:
 
     Using user defined property groups.
 
-    >>> from Bio.SeqUtils.CTD import CTD_Property
+    >>> from Bio.SeqUtils.ctd import CTD_Property
     >>> mock_property = CTD_Property(["K","R", "ANCQGHILMFPSTWYVDE"])
-    >>> ctd = protein.CTD_descriptors([mock_property])
-    >>> print(len(ctd))
+    >>> desc = protein.all_descriptors([mock_property])
+    >>> print(len(desc))
     21
 
     To add your custom defined property to the standard one:
 
-    >>> from Bio.SeqUtils.CTD import default_ctd_props
-    >>> ctd = protein.CTD_descriptors(default_ctd_props + [mock_property])
-    >>> print(len(ctd))
+    >>> from Bio.SeqUtils.ctd import default_ctd_props
+    >>> desc = protein.all_descriptors(default_ctd_props + [mock_property])
+    >>> print(len(desc))
     168
+
+    This methods can either be accessed from the class itself or from a
+    ``ProtParam.ProteinAnalysis`` object:
+
+    >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
+    >>> protein = PA("ACKLAA")
+    >>> desc = protein.get_CTD_descriptors()
+    >>> print(len(desc))
+    147
     """
 
     def __init__(self, protein_sequence: Union[Seq, str]):
@@ -233,7 +236,7 @@ class CTD:
         """Calculate the Distribution descriptors of CTD (PRIVATE)."""
         D_descriptors = []
         for string, prop in prop_tuples:
-            positions = {str(k + 1): [] for k in range(len(prop))}
+            positions: dict = {str(k + 1): [] for k in range(len(prop))}
 
             # Get the positions of each group in sequence
             for i, c in enumerate(string):
@@ -245,7 +248,7 @@ class CTD:
 
                 # If group is not present on string, all 5 values are 0
                 if pos_list == []:
-                    D_descriptors += [0 for _ in range(5)]
+                    D_descriptors += [0.0 for _ in range(5)]
                 else:
                     l = len(pos_list) / 5
                     for i in range(5):
@@ -289,7 +292,7 @@ class CTD:
 
         return self._calc_D(prop_tuples)
 
-    def CTD_descriptors(
+    def all_descriptors(
         self, properties: List[CTD_Property] = default_ctd_props
     ) -> List[float]:
         """Return the CTD descriptors, defined in Dubchak et al, 1995.

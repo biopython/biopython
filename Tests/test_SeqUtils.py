@@ -1,14 +1,14 @@
 # Copyright 2003 by Iddo Friedberg.  All rights reserved.
 # Copyright 2007-2009 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Tests for SeqUtils module."""
 import os
 import unittest
 
 from Bio import SeqIO
-from Bio.Data.IUPACData import protein_letters
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -241,14 +241,14 @@ class SeqUtilsTests(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        counts = count_kmers(seq_text, 3)
+        counts = count_kmers(seq_text, 3, ordered=False)
         for key in expected:
             self.assertEqual(counts[key], expected[key])
 
         # Check if non present kmers are not counted
         self.assertSetEqual(set(counts.keys()), set(expected.keys()))
 
-        counts = count_kmers(seq_text, 3, circular=True)
+        counts = count_kmers(seq_text, 3, circular=True, ordered=False)
         self.assertEqual(counts["VDM"], 1)
         self.assertEqual(counts["MDV"], 1)
         self.assertEqual(counts["DMA"], 1)

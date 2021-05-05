@@ -44,18 +44,22 @@ Other public methods are:
  - charge_at_pH
  - pseudoAAC
  - CTD_descriptors
+ - get_dipeptide_composition
+ - get_tripeptide_composition
 """
 
 
 import sys
-from typing import Union, Optional, List
+from typing import Union, Optional, List, Tuple
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
-from Bio.SeqUtils import PseudoAAC  # Local
-from Bio.SeqUtils.CTD import CTD, CTD_Property  # Local
+from Bio.SeqUtils import pseudo_aac  # Local
+from Bio.SeqUtils import ctd  # Local
 from Bio.Seq import Seq
 from Bio.Data import IUPACData
-from Bio.SeqUtils import molecular_weight
+from Bio.SeqUtils import molecular_weight, count_kmers
+
+# TODO: add tests
 
 
 class ProteinAnalysis:
@@ -81,8 +85,10 @@ class ProteinAnalysis:
             self.sequence = Seq(prot_sequence.upper())
         else:
             self.sequence = Seq(prot_sequence)
-        self.amino_acids_content = None
-        self.amino_acids_percent = None
+        self.amino_acids_content: Optional[dict] = None
+        self.amino_acids_percent: Optional[dict] = None
+        self.dipeptide_composition: Optional[dict] = None
+        self.tripeptide_composition: Optional[dict] = None
         self.length = len(self.sequence)
         self.monoisotopic = monoisotopic
 
@@ -125,6 +131,61 @@ class ProteinAnalysis:
             self.amino_acids_percent = percentages
 
         return self.amino_acids_percent
+
+    def get_dipeptide_composition(self) -> dict:
+        """Calculate the dipeptide composition in percentages.
+
+        Returns a dictionary with each dipeptide as a key and N/(L-1) as the
+        value, where L is the size of the sequence, and N is the number of
+        ocurrences of the key in the sequence. Only counts exact matches in
+        the sequence (ordered = True and circular = False in function
+        SeqUtils.count_kmers()).
+
+        The return value is cached in self.dipeptide_composition.
+        """
+        if self.dipeptide_composition is not None:
+            return self.dipeptide_composition
+
+        dipeptides = [
+            f"{aa}{aa2}"
+            for aa in IUPACData.protein_letters
+            for aa2 in IUPACData.protein_letters
+        ]
+
+        counts = count_kmers(self.sequence, 2)
+        self.dipeptide_composition = {
+            dipep: counts[dipep] / (self.length - 1) for dipep in dipeptides
+        }
+
+        return self.dipeptide_composition
+
+    def get_tripeptide_composition(self) -> dict:
+        """Calculate the tripeptide composition in percentages.
+
+        Returns a dictionary with each tripeptide as a key and N/(L-2) as the
+        value, where L is the size of the sequence, and N is the number of
+        ocurrences of the key in the sequence. Only counts exact matches in
+        the sequence (ordered = True and circular = False in function
+        SeqUtils.count_kmers()).
+
+        The return value is cached in self.tripeptide_composition.
+        """
+        if self.tripeptide_composition is not None:
+            return self.tripeptide_composition
+
+        tripeptides = [
+            f"{aa}{aa2}{aa3}"
+            for aa in IUPACData.protein_letters
+            for aa2 in IUPACData.protein_letters
+            for aa3 in IUPACData.protein_letters
+        ]
+
+        counts = count_kmers(self.sequence, 3)
+        self.tripeptide_composition = {
+            tripep: counts[tripep] / (self.length - 2) for tripep in tripeptides
+        }
+
+        return self.tripeptide_composition
 
     def molecular_weight(self) -> float:
         """Calculate MW from Protein sequence."""
@@ -193,7 +254,7 @@ class ProteinAnalysis:
 
         return scores
 
-    def gravy(self, scale="KyteDoolitle") -> float:
+    def gravy(self, scale: str = "KyteDoolitle") -> float:
         """Calculate the GRAVY (Grand Average of Hydropathy) according to Kyte and Doolitle, 1982.
 
         Utilizes the given Hydrophobicity scale, by default uses the original
@@ -322,7 +383,7 @@ class ProteinAnalysis:
         charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return charge.charge_at_pH(pH)
 
-    def secondary_structure_fraction(self) -> [float, float, float]:
+    def secondary_structure_fraction(self) -> Tuple[float, float, float]:
         """Calculate fraction of helix, turn and sheet.
 
         Returns a list of the fraction of amino acids which tend
@@ -342,7 +403,7 @@ class ProteinAnalysis:
 
         return helix, turn, sheet
 
-    def molar_extinction_coefficient(self) -> [float, float]:
+    def molar_extinction_coefficient(self) -> Tuple[float, float]:
         """Calculate the molar extinction coefficient.
 
         Calculates the molar extinction coefficient assuming cysteines
@@ -353,29 +414,30 @@ class ProteinAnalysis:
         mec_cystines = mec_reduced + (num_aa["C"] // 2) * 125
         return (mec_reduced, mec_cystines)
 
-    def pseudoAAC(
+    def get_pseudo_aac(
         self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
     ) -> List[float]:
         """Calculate the PseudoAAC described in Chou, 2001.
 
-        Uses the module PseudoAAC to calculate the pseudoAAC of a protein.
+        Uses the module pseudo_aac to calculate the Pseudo Amino Acid
+        Composition of a protein.
         """
         aac = self.get_amino_acids_percent()
-        paac = PseudoAAC.PseudoAAC(self.sequence, aac)
-        return paac.pseudoAAC(l_param, weight, scales)
+        paac = pseudo_aac.PseudoAAC(self.sequence, aac)
+        return paac.get_pseudo_aac(l_param, weight, scales)
 
-    def CTD_descriptors(
-        self, properties: Optional[List[CTD_Property]] = None
+    def get_CTD_descriptors(
+        self, properties: Optional[List[ctd.CTD_Property]] = None
     ) -> List[float]:
         """Calculate the CTD descriptors described in Dubchak et al, 1995.
 
-        Uses the module CTD to calculate the CTD descriptors of a protein.
+        Uses the module ctd to calculate the CTD descriptors of a protein.
         """
-        ctd = CTD(self.sequence)
+        desc = ctd.CTD(self.sequence)
         if properties is None:
-            return ctd.CTD_descriptors()
+            return desc.all_descriptors()
         else:
-            return ctd.CTD_descriptors(properties)
+            return desc.all_descriptors(properties)
 
 
 if __name__ == "__main__":

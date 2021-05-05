@@ -1,10 +1,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for Bio.SeqUtils.CTD and related code."""
+"""Tests for Bio.SeqUtils.ctd and related code."""
 
 import unittest
-from Bio.SeqUtils import CTD
+from Bio.SeqUtils import ctd
 
 
 class CTD_PropertyTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class CTD_PropertyTest(unittest.TestCase):
     def test_incomplete_groups(self):
         """Test method with incomplete group definition."""
         with self.assertRaises(ValueError) as cm:
-            mock = CTD.CTD_Property(["K", "R", "ANCQGHILMFPSTWYVD"])
+            mock = ctd.CTD_Property(["K", "R", "ANCQGHILMFPSTWYVD"])
         self.assertEqual(
             "Given groups do not contain all Amino Acids.", cm.exception.args[0]
         )
@@ -29,7 +29,7 @@ class CTDTest(unittest.TestCase):
             "RSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLE"
             "RLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
         )
-        self.ctd = CTD.CTD(self.seq_text)
+        self.desc = ctd.CTD(self.seq_text)
 
     def test_standard_properties(self):
         """Test method with standard parameters."""
@@ -59,17 +59,17 @@ class CTDTest(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        for i, e in zip(self.ctd.CTD_descriptors(), expected):
+        for i, e in zip(self.desc.all_descriptors(), expected):
             self.assertAlmostEqual(i, e, places=4)
 
         # test partial methods
-        for i, e in zip(self.ctd.composition_descriptors(), expected[:21]):
+        for i, e in zip(self.desc.composition_descriptors(), expected[:21]):
             self.assertAlmostEqual(i, e, places=4)
 
-        for i, e in zip(self.ctd.transition_descriptors(), expected[21:42]):
+        for i, e in zip(self.desc.transition_descriptors(), expected[21:42]):
             self.assertAlmostEqual(i, e, places=4)
 
-        for i, e in zip(self.ctd.distribution_descriptors(), expected[-105:]):
+        for i, e in zip(self.desc.distribution_descriptors(), expected[-105:]):
             self.assertAlmostEqual(i, e, places=4)
 
     def test_different_properties(self):
@@ -94,27 +94,27 @@ class CTDTest(unittest.TestCase):
 
         # random scales
         new_props = [
-            CTD.CTD_Property(["DEKCL", "AGHPSTYNQR", "VIMFW"]),
-            CTD.CTD_Property(["DEKNQRHP", "AGSTYCLVIMFW"]),
-            CTD.CTD_Property(["D", "E", "K", "NQR", "AGHPSTY", "CLVIMFW"]),
+            ctd.CTD_Property(["DEKCL", "AGHPSTYNQR", "VIMFW"]),
+            ctd.CTD_Property(["DEKNQRHP", "AGSTYCLVIMFW"]),
+            ctd.CTD_Property(["D", "E", "K", "NQR", "AGHPSTY", "CLVIMFW"]),
         ]
 
-        for i, e in zip(self.ctd.CTD_descriptors(properties=new_props), expected):
+        for i, e in zip(self.desc.all_descriptors(properties=new_props), expected):
             self.assertAlmostEqual(i, e, places=4)
 
         # test partial methods
         for i, e in zip(
-            self.ctd.composition_descriptors(properties=new_props), expected[:11]
+            self.desc.composition_descriptors(properties=new_props), expected[:11]
         ):
             self.assertAlmostEqual(i, e, places=4)
 
         for i, e in zip(
-            self.ctd.transition_descriptors(properties=new_props), expected[11:30]
+            self.desc.transition_descriptors(properties=new_props), expected[11:30]
         ):
             self.assertAlmostEqual(i, e, places=4)
 
         for i, e in zip(
-            self.ctd.distribution_descriptors(properties=new_props), expected[-55:]
+            self.desc.distribution_descriptors(properties=new_props), expected[-55:]
         ):
             self.assertAlmostEqual(i, e, places=4)
 

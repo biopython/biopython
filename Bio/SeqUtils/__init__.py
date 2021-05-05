@@ -403,7 +403,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
-    GC_Frame: a:5 t:0 g:8 c:5
+    GC_Frame: a:5 t:0 g:8 c:5 
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
     <BLANKLINE>
@@ -413,7 +413,7 @@ def six_frame_translations(seq, genetic_code=1):
     M  A  I  V  M  G  R  *
     auggccauuguaaugggccgcuga   54 %
     uaccgguaacauuacccggcgacu
-    A  M  T  I  P  R  Q
+    A  M  T  I  P  R  Q 
      H  G  N  Y  H  A  A  S
       P  W  Q  L  P  G  S
     <BLANKLINE>
@@ -489,30 +489,30 @@ def count_kmers(
     >>> from Bio.SeqUtils import count_kmers
     >>> counts = count_kmers("RAIVMGARARAGRWKGARAL", 3)
     >>> print(f"Number of times 'GAR' appears in seq: {counts['GAR']:02d}")
-    Number of times 'GAR' appears in seq: 03
-    >>> print(f"Number of times 'ARA' appears in seq: {counts['LRA']:02d}")
-    Number of times 'ARA' appears in seq: 06
+    Number of times 'GAR' appears in seq: 02
+    >>> print(f"Number of times 'ARA' appears in seq: {counts['ARA']:02d}")
+    Number of times 'ARA' appears in seq: 03
 
     Counter objects return 0 instead of throwing errors if kmer is not present.
 
     >>> print(f"Number of times 'LRA' appears in seq: {counts['LRA']:02d}")
     Number of times 'LRA' appears in seq: 00
 
-    If ordered = True, wil not count the kmers in the reverse order as the same.
+    If ordered = False, wil count the kmers in the reverse order as the same.
 
-    >>> counts = count_kmers("RAIVMGARARAGRWKGARAL", 3, ordered = True)
+    >>> counts = count_kmers("RAIVMGARARAGRWKGARAL", 3, ordered = False)
     >>> print(f"Number of times 'GAR' appears in seq: {counts['GAR']:02d}")
-    Number of times 'GAR' appears in seq: 02
+    Number of times 'GAR' appears in seq: 03
     >>> print(f"Number of times 'RAG' appears in seq: {counts['RAG']:02d}")
-    Number of times 'RAG' appears in seq: 01
-    >>> print(f"Number of times 'ARA' appears in seq: {counts['LRA']:02d}")
-    Number of times 'ARA' appears in seq: 03
+    Number of times 'RAG' appears in seq: 03
+    >>> print(f"Number of times 'ARA' appears in seq: {counts['ARA']:02d}")
+    Number of times 'ARA' appears in seq: 06
 
     If circular = True, will wrap around the end of the sequence as well.
 
     >>> counts = count_kmers("RAIVMGARARAGRWKGARAL",3, circular = True)
-    >>> print(f"Number of times 'LRA' appears in seq: {counts['LRA']:02d}")
-    Number of times 'LRA' appears in seq: 01
+    >>> print(f"Number of times 'ALR' appears in seq: {counts['ALR']:02d}")
+    Number of times 'ALR' appears in seq: 01
 
     """
     kmer_counts = Counter()

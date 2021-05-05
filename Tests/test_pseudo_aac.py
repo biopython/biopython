@@ -1,10 +1,11 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Tests for Bio.SeqUtils.PseudoAAC and related code."""
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Tests for Bio.SeqUtils.pseudo_aac and related code."""
 
 import unittest
-from Bio.SeqUtils import PseudoAAC
+from Bio.SeqUtils import pseudo_aac
 from Bio.SeqUtils.ProtParamData import Flex, ja, kd
 
 
@@ -18,7 +19,7 @@ class PseudoAACTest(unittest.TestCase):
             "RSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLE"
             "RLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
         )
-        self.paac = PseudoAAC.PseudoAAC(self.seq_text)
+        self.paac = pseudo_aac.PseudoAAC(self.seq_text)
 
     def test_standard_params(self):
         """Test method with standard parameters."""
@@ -31,7 +32,7 @@ class PseudoAACTest(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        for i, e in zip(self.paac.pseudoAAC(), expected):
+        for i, e in zip(self.paac.get_pseudo_aac(), expected):
             self.assertAlmostEqual(i, e, places=4)
 
     def test_different_numeric_params(self):
@@ -46,7 +47,7 @@ class PseudoAACTest(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        for i, e in zip(self.paac.pseudoAAC(l_param=13, weight=0.1), expected):
+        for i, e in zip(self.paac.get_pseudo_aac(l_param=13, weight=0.1), expected):
             self.assertAlmostEqual(i, e, places=4)
 
     def test_different_scales(self):
@@ -60,12 +61,12 @@ class PseudoAACTest(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        for i, e in zip(self.paac.pseudoAAC(scales=[Flex, ja, kd]), expected):
+        for i, e in zip(self.paac.get_pseudo_aac(scales=[Flex, ja, kd]), expected):
             self.assertAlmostEqual(i, e, places=4)
 
         with self.assertRaises(KeyError) as cm:
             del kd["C"]
-            self.paac.pseudoAAC(scales=[kd])
+            self.paac.get_pseudo_aac(scales=[kd])
         self.assertEqual("scale 0 is missing value for aa: C", cm.exception.args[0])
 
 

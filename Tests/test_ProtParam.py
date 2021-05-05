@@ -40,6 +40,24 @@ class ProtParamTest(unittest.TestCase):
                 percent_dict[i], self.seq_text.count(i) / float(seq_len)
             )
 
+    def test_get_dipeptide_composition(self):
+        """Calculate dipeptide composition."""
+        percent_dict = self.analysis.get_dipeptide_composition()
+        seq_len = len(self.seq_text)
+        for i in sorted(percent_dict):
+            self.assertAlmostEqual(
+                percent_dict[i], self.seq_text.count(i) / (float(seq_len) - 1)
+            )
+
+    def test_get_tripeptide_composition(self):
+        """Calculate tripeptide composition."""
+        percent_dict = self.analysis.get_tripeptide_composition()
+        seq_len = len(self.seq_text)
+        for i in sorted(percent_dict):
+            self.assertAlmostEqual(
+                percent_dict[i], self.seq_text.count(i) / (float(seq_len) - 2)
+            )
+
     def test_get_molecular_weight(self):
         """Calculate protein molecular weight."""
         self.assertAlmostEqual(self.analysis.molecular_weight(), 17103.16, 2)
@@ -236,7 +254,7 @@ class ProtParamTest(unittest.TestCase):
             self.analysis.molar_extinction_coefficient()[1], 17545, places=5
         )
 
-    def test_pseudoAAC(self):
+    def test_get_pseudo_aac(self):
         """Pseudo Amino Acid Composition."""
         # Turn black code style off
         # fmt: off
@@ -247,8 +265,39 @@ class ProtParamTest(unittest.TestCase):
         # Turn black code style on
         # fmt: on
 
-        for i, e in zip(self.analysis.pseudoAAC(), expected):
+        for i, e in zip(self.analysis.get_pseudo_aac(), expected):
             # Expected values have 4 decimal places, so restrict to that exactness
+            self.assertAlmostEqual(i, e, places=4)
+
+    def test_get_CTD_descriptors(self):
+        """Composition Trasition and Distribution descriptors."""
+        # Turn black code style off
+        # fmt: off
+        expected = [0.3158, 0.4211, 0.2632, 0.3882, 0.3487, 0.2632, 0.1184,
+                    0.7697, 0.1118, 0.3158, 0.3355, 0.3487, 0.3158, 0.4211,
+                    0.2632, 0.4408, 0.2697, 0.2895, 0.3816, 0.3158, 0.3026,
+                    0.2781, 0.1457, 0.2119, 0.2781, 0.1722, 0.2053, 0.1523,
+                    0.0331, 0.1656, 0.1854, 0.1987, 0.2517, 0.2715, 0.1391,
+                    0.2384, 0.2318, 0.2252, 0.1457, 0.2384, 0.2583, 0.1854,
+                    0.0132, 0.2105, 0.3882, 0.6316, 0.7829, 0.0066, 0.1908,
+                    0.4079, 0.5789, 0.7697, 0.0000, 0.1974, 0.3947, 0.6382,
+                    0.8224, 0.0066, 0.1974, 0.3421, 0.5461, 0.7697, 0.0132,
+                    0.2105, 0.4145, 0.5987, 0.7763, 0.0000, 0.1908, 0.4671,
+                    0.7303, 0.8355, 0.0921, 0.1711, 0.4671, 0.7566, 0.8684,
+                    0.0000, 0.1974, 0.3947, 0.5855, 0.8026, 0.0132, 0.2763,
+                    0.3487, 0.5395, 0.6645, 0.0000, 0.1908, 0.4276, 0.5789,
+                    0.8092, 0.0066, 0.1645, 0.4013, 0.5526, 0.7697, 0.0132,
+                    0.2303, 0.3882, 0.6645, 0.7829, 0.0066, 0.2171, 0.3487,
+                    0.5263, 0.7368, 0.0132, 0.1842, 0.3947, 0.6250, 0.8092,
+                    0.0000, 0.1908, 0.4671, 0.7303, 0.8355, 0.0000, 0.1842,
+                    0.4079, 0.6447, 0.7829, 0.0329, 0.1908, 0.4276, 0.5789,
+                    0.7961, 0.0197, 0.2105, 0.3421, 0.5592, 0.8158, 0.0066,
+                    0.1974, 0.3947, 0.5724, 0.8224, 0.0132, 0.2105, 0.3882,
+                    0.6316, 0.7829, 0.0000, 0.1908, 0.4211, 0.5789, 0.7368]
+        # Turn black code style on
+        # fmt: on
+
+        for i, e in zip(self.analysis.get_CTD_descriptors(), expected):
             self.assertAlmostEqual(i, e, places=4)
 
 

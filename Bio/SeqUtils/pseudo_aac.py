@@ -54,7 +54,7 @@ class PseudoAAC:
 
     Methods
     -------
-    :pseudoAAC(l_param,weight,scales): Calculates the Pseudo-AAC with given parameters.
+    :get_pseudo_aac(l_param,weight,scales): Calculates the Pseudo-AAC with given parameters.
 
     Examples
     --------
@@ -62,46 +62,44 @@ class PseudoAAC:
     or from a ``ProtParam.ProteinAnalysis`` object (with partially different
     names):
 
-    >>> from Bio.SeqUtils.PseudoAAC import PseudoAAC
+    >>> from Bio.SeqUtils.pseudo_aac import PseudoAAC
     >>> protein = PseudoAAC("ACKLAA")
-    >>> paac = protein.pseudoAAC()
+    >>> paac = protein.get_pseudo_aac()
     >>> print(len(paac))
     23
-    >>> print(f"{paac[0]:.3f}")
-    0.475
-    >>> print(f"{paac[3]:.3f}")
-    0.000
-    >>> print(f"{paac[21]:.3f}")
-    0.019
+    >>> print(f"{paac[0]:.4f}")
+    0.4747
+    >>> print(f"{paac[3]:.4f}")
+    0.0000
+    >>> print(f"{paac[21]:.4f}")
+    0.0188
 
     >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
-    >>> protein = PA("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
-    ...              "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
-    ...              "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
-    ...              "LPLPV")
-    >>> paac = protein.pseudoAAC()
-    >>> print(f"{paac[0]:.3f}")
-    0.038
-    >>> print(f"{paac[3]:.3f}")
-    0.075
-    >>> print(f"{paac[21]:.3f}")
-    0.016
+    >>> analysis = PA("ACKLAA")
+    >>> paac = analysis.get_pseudo_aac()
+    >>> print(f"{paac[0]:.4f}")
+    0.4747
+    >>> print(f"{paac[3]:.4f}")
+    0.0000
+    >>> print(f"{paac[21]:.4f}")
+    0.0188
 
     It can also be used with other defined scales, these must have defined
     values for all Amino Acids, or it will throw a KeyError.
 
-    >>> from Bio.SeqUtils.PseudoAAC import PseudoAAC
-    >>> from Bio.SeqUtils.ProtParamData import Flex, ja, kd
+    >>> from Bio.SeqUtils.ProtParamData import Flex, ja, ab
     >>> protein = PseudoAAC("ACKLAA")
-    >>> paac = protein.pseudoAAC(scales=[Flex,ja,kd])
-    >>> print(f"{paac[0]:.3f}")
-    0.485
-    >>> print(f"{paac[8]:.3f}")
-    0.162
-    >>> print(f"{paac[21]:.3f}")
-    0.019
-    >>> del kd["A"]
-    >>> paac = protein.pseudoAAC(scales=[kd])
+    >>> paac = protein.get_pseudo_aac(scales=[Flex,ja, ab])
+    >>> print(f"{paac[0]:.4f}")
+    0.4898
+    >>> print(f"{paac[8]:.4f}")
+    0.1633
+    >>> print(f"{paac[21]:.4f}")
+    0.0067
+    >>> del ab["A"]
+    >>> paac = protein.get_pseudo_aac(scales=[ab])
+    Traceback (most recent call last):
+    ...
     KeyError: 'scale 0 is missing value for aa: A'
 
     """
@@ -133,7 +131,7 @@ class PseudoAAC:
             normalized.append(H)
         return normalized
 
-    def pseudoAAC(
+    def get_pseudo_aac(
         self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
     ) -> List[float]:
         """Calculate the Pseudo AminoAcid Composition described by Chou, 2001.
@@ -170,7 +168,7 @@ class PseudoAAC:
                     for i in range(self.L - j)
                 ]
             )
-            theta[j - 1] = t_j / self.L - j
+            theta[j - 1] = t_j / (self.L - j)
 
         # Sum of all AAC values is one by definition
         sum_term = 1 + weight * sum(theta)
