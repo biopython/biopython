@@ -1909,6 +1909,8 @@ mclach = {
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/miyata.cmp
+# This similarity matrix is converted from the original miyata physicochemical distance matrix (PMID: 439147) via this formula: similarity = 1.25 - distance
+# The offset 1.25 is chosen by Dr. Gerhard Vogt. Be cautious about this offset since there is no known solid reason to use it.
 miyata = {
     ("W", "F"): 0.14, ("L", "R"): -1.37, ("S", "P"): 0.69, ("I", "I"): 1.25,
     ("Q", "Q"): 1.25, ("N", "A"): -0.53, ("H", "T"): -0.07, ("N", "E"): 0.4,
