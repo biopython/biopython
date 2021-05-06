@@ -10,37 +10,51 @@ def map_alignment(alignment1, alignment2):
     path1 = array(alignment1.path)
     path2 = array(alignment2.path)
     path = []
-    iEnd, qEnd = path2[0, :]
+    iEnd2, qEnd = path2[0, :]
     for row2 in path2[1:, :]:
-        iStart, qStart = iEnd, qEnd
-        iEnd, qEnd = row2
-        iBlockSize = iEnd - iStart
+        iStart2, qStart = iEnd2, qEnd
+        iEnd2, qEnd = row2
+        iBlockSize2 = iEnd2 - iStart2
         qBlockSize = qEnd - qStart
         if qBlockSize == 0:
             continue
-        if iBlockSize == 0:
+        if iBlockSize2 == 0:
             continue
-        assert qBlockSize == iBlockSize
-        index = path1[:, 1].searchsorted(iStart, side='right') - 1
+        assert qBlockSize == iBlockSize2
+        index = path1[:, 1].searchsorted(iStart2, side='right') - 1
         if index >= 0:
-            offset = iStart - path1[index, 1]
-            row = array([path1[index, 0] + offset, qStart])
+            tStart, iStart1 = path1[index]
+            offset = iStart2 - iStart1
+            row = array([tStart + offset, qStart])
+            iEnd1 = iStart2
         else:
-            offset = path1[0, 1] - iStart
+            tStart, iStart1 = path1[0]
+            offset = iStart1 - iStart2
             row = array([0, offset])
             qBlockSize -= offset
+            iEnd1 = offset
         path.append(row)
-        tStart = row[0]
+        tEnd = path[-1][0]
         for row1 in path1[1:, :]:
-            tBlockSize = row1[0] - tStart
-            if tBlockSize > qBlockSize:
-                row = path[-1] + qBlockSize
+            tStart, iStart1 = tEnd, iEnd1
+            tEnd, iEnd1 = row1
+            tBlockSize = tEnd - tStart
+            iBlockSize1 = iEnd1 - iStart1
+            if tBlockSize == 0:
+                continue
+            elif iBlockSize1 == 0:
+                row = array([tEnd, path[-1][1]])
                 path.append(row)
-                break
             else:
-                qBlockSize -= tBlockSize
-                row =  path[-1] + tBlockSize
-                path.append(row)
+                assert tBlockSize == iBlockSize1
+                if iEnd1 < iEnd2:
+                    row = path[-1] + tBlockSize
+                    path.append(row)
+                else:
+                    tBlockSize = iEnd2 - iStart1
+                    row =  path[-1] + tBlockSize
+                    path.append(row)
+                    break
     target = alignment1.target
     query = alignment2.query
     alignment = PairwiseAlignment(target, query, path, None)
@@ -200,10 +214,10 @@ alignment = map_alignment(alignment1, alignment2)
 psl = map_check(alignment1, alignment2)
 assert format(alignment, "psl") == psl
 
-if True:
+def test_random(nBlocks1=1, nBlocks2=1):
     chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
     nBlocks = random.randint(5, 10)
-    nBlocks = 2
+    nBlocks = nBlocks1
     transcript = ""
     position = 0
     for i in range(nBlocks):
@@ -211,7 +225,7 @@ if True:
         blockSize = random.randint(60,80)
         transcript += chromosome[position:position+blockSize]
         position += blockSize
-    nBlocks = 1
+    nBlocks = nBlocks2
     sequence = ""
     position = 0
     for i in range(nBlocks):
@@ -232,11 +246,11 @@ if True:
     alignment = map_alignment(alignment1, alignment2)
     psl = map_check(alignment1, alignment2)
     assert format(alignment, "psl") == psl
-    print("Randomized test OK")
+    print("Randomized test %d, %d OK" % (nBlocks1, nBlocks2))
 
 
-for i in range(10000):
-    test_random()
+for i in range(1000):
+    test_random(1, 1)
 
 if False:
         chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGG")
