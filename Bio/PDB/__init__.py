@@ -109,7 +109,7 @@ def _check_format(fmt, parseropt):
     if fmt in _FormatToParser:
         return _FormatToParser[fmt](**parseropt)
     else:
-        raise ValueError("Unknown format '%s'" % fmt.lower())
+        raise ValueError("Unknown format '%s'" % fmt)
 
 
 def _as_handle_gzip(handle):
@@ -173,7 +173,8 @@ def read(handle, fmt, **kwargs):
                 structure = parser.get_structure(id, fp)
             except ValueError:
                 raise ValueError(
-                    "Could not parse structure. Did you choose the correct parser (fmt) ?"
+                    "Could not parse structure using %s. Did you choose the correct parser (fmt) ?"
+                    % fmt.lower()
                 )
             # set id from header if given
             if structure.header["idcode"] != "":
