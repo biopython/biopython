@@ -6,57 +6,162 @@ from numpy import array
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner, PairwiseAlignment
 
-def map_alignment(alignment1, alignment2):
-    path1 = array(alignment1.path)
-    path2 = array(alignment2.path)
-    path = []
-    iEnd2, qEnd = path2[0, :]
-    for row2 in path2[1:, :]:
-        iStart2, qStart = iEnd2, qEnd
-        iEnd2, qEnd = row2
-        iBlockSize2 = iEnd2 - iStart2
-        qBlockSize = qEnd - qStart
-        if qBlockSize == 0:
-            continue
-        if iBlockSize2 == 0:
-            continue
-        assert qBlockSize == iBlockSize2
-        index = path1[:, 1].searchsorted(iStart2, side='right') - 1
-        if index >= 0:
-            tStart, iStart1 = path1[index]
-            offset = iStart2 - iStart1
-            row = array([tStart + offset, qStart])
-            iEnd1 = iStart2
-        else:
-            tStart, iStart1 = path1[0]
-            offset = iStart1 - iStart2
-            row = array([0, offset])
-            qBlockSize -= offset
-            iEnd1 = offset
-        path.append(row)
-        tEnd = path[-1][0]
-        for row1 in path1[1:, :]:
-            tStart, iStart1 = tEnd, iEnd1
-            tEnd, iEnd1 = row1
-            tBlockSize = tEnd - tStart
-            iBlockSize1 = iEnd1 - iStart1
-            if tBlockSize == 0:
-                continue
-            elif iBlockSize1 == 0:
-                row = array([tEnd, path[-1][1]])
-                path.append(row)
-            else:
-                assert tBlockSize == iBlockSize1
-                if iEnd1 < iEnd2:
-                    row = path[-1] + tBlockSize
-                    path.append(row)
-                else:
-                    tBlockSize = iEnd2 - iStart1
-                    row =  path[-1] + tBlockSize
-                    path.append(row)
+def getBeforeBlockMapping(mqStart, mqEnd, align1Blk):
+    qStart, qEnd, tStart, tEnd = align1Blk
+    if tEnd < mqStart:
+        size = tEnd - tStart
+    else:
+        size = mqStart - tStart
+    qEnd = qStart + size
+    mappedBlk = (qStart, qEnd, 0, 0)
+    return mappedBlk
+
+def getOverBlockMapping(mqStart, mqEnd, mtStart, align1Blk):
+    qStart, qEnd, tStart, tEnd = align1Blk
+    off = tStart - mqStart
+    if tEnd > mqEnd:
+        size = mqEnd - tStart
+    else:
+        size = tEnd - tStart
+    qEnd = qStart + size
+    tStart = mtStart + off
+    tEnd = tStart + size
+    mappedBlk = (qStart, qEnd, tStart, tEnd)
+    return mappedBlk
+
+def blockFromPslBlock(path, iBlock):
+    i = 0
+    previous = path[0]
+    for row in path[1:]:
+        if row[0] != previous[0] and row[1] != previous[1]:
+            if i == iBlock:
+                break
+            i += 1
+        previous = row
+    qStart = previous[1]
+    qEnd = row[1]
+    tStart = previous[0]
+    tEnd = row[0]
+    block = (qStart, qEnd, tStart, tEnd)
+    return block
+
+def getBlockMapping(inPsl, mapPsl, iMapBlk, align1Blk):
+    blockCount = 0
+    previous = mapPsl[0]
+    for row in mapPsl[1:]:
+        if previous[0] != row[0] and previous[1] != row[1]:
+            blockCount += 1
+        previous = row
+    qStart, qEnd, tStart, tEnd = align1Blk
+    for iBlk in range(iMapBlk, blockCount):
+        i = 0
+        previous = mapPsl[0]
+        for row in mapPsl[1:]:
+            if previous[0] != row[0] and previous[1] != row[1]:
+                if i == iBlk:
                     break
+                i += 1
+            previous = row
+        mqStart = previous[1]
+        mqEnd = row[1]
+        if tStart < mqStart:
+            iMapBlk = iBlk
+            mappedBlk = getBeforeBlockMapping(mqStart, mqEnd, align1Blk)
+            return mappedBlk, iMapBlk
+        if tStart >= mqStart and tStart < mqEnd:
+            iMapBlk = iBlk
+            mappedBlk = getOverBlockMapping(mqStart, mqEnd, previous[0], align1Blk)
+            return mappedBlk, iMapBlk
+    iMapBlk = iBlk
+    mappedBlk = (qStart, qEnd, 0, 0)
+    return mappedBlk, iMapBlk
+
+def addPslBlock(psl, blk):
+    qStart, qEnd, tStart, tEnd = blk
+    if psl:
+        previous_tStart, previous_qStart = psl[-1]
+        tGap = tStart - previous_tStart
+        qGap = qStart - previous_qStart
+        if tGap == 0 and qGap == 0:
+            pass  # this could be added to the previous block
+        elif tGap == 0:
+            assert qGap > 0
+        elif qGap == 0:
+            assert tGap > 0
+        else:
+            # adding a gap both in target and in query;
+            # add gap to target first:
+            psl.append([tStart, previous_qStart])
+    psl.append([tStart, qStart])
+    psl.append([tEnd, qEnd])
+
+def mapBlock(inPsl, mapPsl, iMapBlk, align1Blk, mappedPsl):
+    qStart, qEnd, tStart, tEnd = align1Blk
+    if qStart >= qEnd or tStart >= tEnd:
+        flag = False
+        return flag, iMapBlk, align1Blk
+    mappedBlk, iMapBlk = getBlockMapping(inPsl, mapPsl, iMapBlk, align1Blk)
+    mappedBlk_qStart, mappedBlk_qEnd, mappedBlk_tStart, mappedBlk_tEnd = mappedBlk
+    if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
+        addPslBlock(mappedPsl, mappedBlk)
+    if mappedBlk_qEnd != 0:
+        size = mappedBlk_qEnd - mappedBlk_qStart
+    else:
+        size = mappedBlk_tEnd - mappedBlk_tStart
+    qStart += size
+    tStart += size
+    align1Blk = qStart, qEnd, tStart, tEnd
+    flag = True
+    return flag, iMapBlk, align1Blk
+
+
+def map_alignment(alignment1, alignment2):
+    if len(alignment1.query) != len(alignment2.target):
+        raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
+    if alignment1.path[0][1] < alignment1.path[-1][1]:  # mapped to forward strand
+        strand1 = "+"
+        path1 = alignment1.path
+        if alignment2.path[0][1] < alignment2.path[-1][1]:  # mapped to forward strand
+            strand2 = "+"
+            path2 = alignment2.path
+        else:  # mapped to reverse strand
+            strand2 = "-"
+            n2 = len(alignment2.query)
+            path2 = tuple((c1, n2 - c2) for (c1, c2) in alignment2.path)
+    else:  # mapped to reverse strand
+        strand1 = "-"
+        n1 = len(alignment1.query)
+        n2 = len(alignment2.query)
+        path1 = tuple((c1, n1 - c2) for (c1, c2) in alignment1.path)
+        if alignment2.path[0][1] < alignment2.path[-1][1]:  # mapped to forward strand
+            strand2 = "+"
+            path2 = tuple((n1 - c1, n2 - c2) for (c1, c2) in alignment2.path)
+            path2 = path2[::-1]
+        else:  # mapped to reverse strand
+            strand2 = "-"
+            path2 = tuple((n1 - c1, c2) for (c1, c2) in alignment2.path)
+            path2 = path2[::-1]
+    if strand1 == strand2:
+        rcInPsl = False
+    else:
+        rcInPsl = True
+    mapPsl = array(path1)
+    inPsl = array(path2)
+    mappedPsl = []
+    iMapBlk = 0
+    for iBlock in range(len(inPsl)):
+        align1Blk = blockFromPslBlock(inPsl, iBlock)
+        while True:
+            flag, iMapBlk, align1Blk = mapBlock(inPsl, mapPsl, iMapBlk, align1Blk, mappedPsl)
+            if flag is False:
+                break
     target = alignment1.target
     query = alignment2.query
+    if rcInPsl is True:
+        n2 = len(query)
+        path = tuple((c1, n2 - c2) for (c1, c2) in mappedPsl)
+    else:
+        path = mappedPsl
     alignment = PairwiseAlignment(target, query, path, None)
     return alignment
 
@@ -214,9 +319,8 @@ alignment = map_alignment(alignment1, alignment2)
 psl = map_check(alignment1, alignment2)
 assert format(alignment, "psl") == psl
 
-def test_random(nBlocks1=1, nBlocks2=1):
+def test_random(nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
     chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
-    nBlocks = random.randint(5, 10)
     nBlocks = nBlocks1
     transcript = ""
     position = 0
@@ -236,21 +340,63 @@ def test_random(nBlocks1=1, nBlocks2=1):
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
     sequence = Seq(sequence)
+    if strand1 == '-':
+        chromosome = chromosome.reverse_complement()
+    if strand2 == '-':
+        sequence = sequence.reverse_complement()
     chromosome.id = "chromosome"
     transcript.id = "transcript"
     sequence.id = "sequence"
-    alignments = aligner.align(chromosome, transcript)
-    alignment1 = alignments[0]
-    alignments = aligner.align(transcript, sequence)
-    alignment2 = alignments[0]
+    alignments1 = aligner.align(chromosome, transcript, strand=strand1)
+    alignment1 = alignments1[0]
+    alignments2 = aligner.align(transcript, sequence, strand=strand2)
+    alignment2 = alignments2[0]
     alignment = map_alignment(alignment1, alignment2)
-    psl = map_check(alignment1, alignment2)
-    assert format(alignment, "psl") == psl
-    print("Randomized test %d, %d OK" % (nBlocks1, nBlocks2))
+    psl_check = map_check(alignment1, alignment2)
+    psl = format(alignment, "psl")
+    assert psl == psl_check
+    print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
+
+def test_random_sequences(strand1='+', strand2='+'):
+    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
+    transcript = "".join(['ACGT'[random.randint(0,3)] for i in range(300)])
+    sequence = "".join(['ACGT'[random.randint(0,3)] for i in range(100)])
+    chromosome = Seq(chromosome)
+    transcript = Seq(transcript)
+    sequence = Seq(sequence)
+    chromosome.id = "chromosome"
+    transcript.id = "transcript"
+    sequence.id = "sequence"
+    alignments = aligner.align(chromosome, transcript, strand=strand1)
+    alignment1 = alignments[0]
+    alignments = aligner.align(transcript, sequence, strand=strand2)
+    alignment2 = alignments[0]
+    psl_check = map_check(alignment1, alignment2)
+    alignment = map_alignment(alignment1, alignment2)
+    psl_check = psl_check.split()
+    psl = format(alignment, "psl")
+    psl = psl.split()
+    assert psl[8:] == psl_check[8:]
+    psl1 = format(alignment1, "psl")
+    words = psl1.split()
+    nBlocks1 = int(words[17])
+    psl2 = format(alignment2, "psl")
+    words = psl2.split()
+    nBlocks2 = int(words[17])
+    print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
 
 for i in range(1000):
-    test_random(1, 1)
+    nBlocks1 = random.randint(1,10)
+    nBlocks2 = random.randint(1,10)
+    test_random(nBlocks1, nBlocks2, '+', '+')
+    test_random(nBlocks1, nBlocks2, '+', '-')
+    test_random(nBlocks1, nBlocks2, '-', '+')
+    test_random(nBlocks1, nBlocks2, '-', '-')
+    test_random_sequences('+', '+')
+    test_random_sequences('+', '-')
+    test_random_sequences('-', '+')
+    test_random_sequences('-', '-')
 
 if False:
         chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGG")

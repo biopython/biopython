@@ -1263,6 +1263,8 @@ class PairwiseAlignment:
 
     def _format_psl(self, mask=False, wildcard="N"):
         path = self.path
+        if not path:  # alignment consists of gaps only
+            return ""
         query = self.query
         target = self.target
         try:
