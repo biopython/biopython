@@ -29,53 +29,6 @@ def getOverBlockMapping(mqStart, mqEnd, mtStart, align1Blk):
     mappedBlk = (qStart, qEnd, tStart, tEnd)
     return mappedBlk
 
-def blockFromPslBlock(path, iBlock):
-    i = 0
-    previous = path[0]
-    for row in path[1:]:
-        if row[0] != previous[0] and row[1] != previous[1]:
-            if i == iBlock:
-                break
-            i += 1
-        previous = row
-    qStart = previous[1]
-    qEnd = row[1]
-    tStart = previous[0]
-    tEnd = row[0]
-    block = (qStart, qEnd, tStart, tEnd)
-    return block
-
-def getBlockMapping(inPsl, mapPsl, iMapBlk, align1Blk):
-    blockCount = 0
-    previous = mapPsl[0]
-    for row in mapPsl[1:]:
-        if previous[0] != row[0] and previous[1] != row[1]:
-            blockCount += 1
-        previous = row
-    qStart, qEnd, tStart, tEnd = align1Blk
-    for iBlk in range(iMapBlk, blockCount):
-        i = 0
-        previous = mapPsl[0]
-        for row in mapPsl[1:]:
-            if previous[0] != row[0] and previous[1] != row[1]:
-                if i == iBlk:
-                    break
-                i += 1
-            previous = row
-        mqStart = previous[1]
-        mqEnd = row[1]
-        if tStart < mqStart:
-            iMapBlk = iBlk
-            mappedBlk = getBeforeBlockMapping(mqStart, mqEnd, align1Blk)
-            return mappedBlk, iMapBlk
-        if tStart >= mqStart and tStart < mqEnd:
-            iMapBlk = iBlk
-            mappedBlk = getOverBlockMapping(mqStart, mqEnd, previous[0], align1Blk)
-            return mappedBlk, iMapBlk
-    iMapBlk = iBlk
-    mappedBlk = (qStart, qEnd, 0, 0)
-    return mappedBlk, iMapBlk
-
 def addPslBlock(psl, blk):
     qStart, qEnd, tStart, tEnd = blk
     if psl:
@@ -95,26 +48,6 @@ def addPslBlock(psl, blk):
     psl.append([tStart, qStart])
     psl.append([tEnd, qEnd])
 
-def mapBlock(inPsl, mapPsl, iMapBlk, align1Blk, mappedPsl):
-    qStart, qEnd, tStart, tEnd = align1Blk
-    if qStart >= qEnd or tStart >= tEnd:
-        flag = False
-        return flag, iMapBlk, align1Blk
-    mappedBlk, iMapBlk = getBlockMapping(inPsl, mapPsl, iMapBlk, align1Blk)
-    mappedBlk_qStart, mappedBlk_qEnd, mappedBlk_tStart, mappedBlk_tEnd = mappedBlk
-    if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
-        addPslBlock(mappedPsl, mappedBlk)
-    if mappedBlk_qEnd != 0:
-        size = mappedBlk_qEnd - mappedBlk_qStart
-    else:
-        size = mappedBlk_tEnd - mappedBlk_tStart
-    qStart += size
-    tStart += size
-    align1Blk = qStart, qEnd, tStart, tEnd
-    flag = True
-    return flag, iMapBlk, align1Blk
-
-
 def map_alignment(alignment1, alignment2):
     if len(alignment1.query) != len(alignment2.target):
         raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
@@ -132,25 +65,82 @@ def map_alignment(alignment1, alignment2):
         strand2 = "+"
     else:  # mapped to reverse strand
         strand2 = "-"
-    if strand1 == "+":
-        if strand2 == "-": # mapped to reverse strand
-            path2 = tuple((c1, n2 - c2) for (c1, c2) in path2)
-    else:  # mapped to reverse strand
-        path1 = tuple((c1, n1 - c2) for (c1, c2) in path1)
-        if strand2 == "+":
-            path2 = tuple((n1 - c1, n2 - c2) for (c1, c2) in path2[::-1])
-        else:  # mapped to reverse strand
-            path2 = tuple((n1 - c1, c2) for (c1, c2) in path2[::-1])
     path1 = array(path1)
     path2 = array(path2)
+    if strand1 == "+":
+        if strand2 == "-": # mapped to reverse strand
+            path2[:, 1] = n2 - path2[:, 1]
+    else:  # mapped to reverse strand
+        path1[:, 1] = n1 - path1[:, 1]
+        path2[:, 0] = n1 - path2[::-1, 0]
+        if strand2 == "+":
+            path2[:, 1] = n2 - path2[::-1, 1]
+        else:  # mapped to reverse strand
+            path2[:, 1] = path2[::-1, 1]
     path = []
     iMapBlk = 0
-    for iBlock in range(len(path2)):
-        align1Blk = blockFromPslBlock(path2, iBlock)
+    blockCount2 = 0
+    previous = path2[0]
+    for row in path2[1:]:
+        if previous[0] != row[0] and previous[1] != row[1]:
+            blockCount2 += 1
+        previous = row
+    for iBlock in range(blockCount2):
+        j = 0
+        previous = path2[0]
+        for row in path2[1:]:
+            if row[0] != previous[0] and row[1] != previous[1]:
+                if j == iBlock:
+                    break
+                j += 1
+            previous = row
+        qStart = previous[1]
+        qEnd = row[1]
+        tStart = previous[0]
+        tEnd = row[0]
+        align1Blk = (qStart, qEnd, tStart, tEnd)
         while True:
-            flag, iMapBlk, align1Blk = mapBlock(path2, path1, iMapBlk, align1Blk, path)
-            if flag is False:
+            qStart, qEnd, tStart, tEnd = align1Blk
+            if qStart >= qEnd or tStart >= tEnd:
                 break
+            blockCount = 0
+            previous = path1[0]
+            for row in path1[1:]:
+                if previous[0] != row[0] and previous[1] != row[1]:
+                    blockCount += 1
+                previous = row
+            for iBlk in range(iMapBlk, blockCount):
+                i = 0
+                previous = path1[0]
+                for row in path1[1:]:
+                    if previous[0] != row[0] and previous[1] != row[1]:
+                        if i == iBlk:
+                            break
+                        i += 1
+                    previous = row
+                mqStart = previous[1]
+                mqEnd = row[1]
+                if tStart < mqStart:
+                    iMapBlk = iBlk
+                    mappedBlk = getBeforeBlockMapping(mqStart, mqEnd, align1Blk)
+                    break
+                elif tStart < mqEnd:
+                    iMapBlk = iBlk
+                    mappedBlk = getOverBlockMapping(mqStart, mqEnd, previous[0], align1Blk)
+                    break
+            else:
+                iMapBlk = iBlk
+                mappedBlk = (qStart, qEnd, 0, 0)
+            mappedBlk_qStart, mappedBlk_qEnd, mappedBlk_tStart, mappedBlk_tEnd = mappedBlk
+            if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
+                addPslBlock(path, mappedBlk)
+            if mappedBlk_qEnd != 0:
+                size = mappedBlk_qEnd - mappedBlk_qStart
+            else:
+                size = mappedBlk_tEnd - mappedBlk_tStart
+            qStart += size
+            tStart += size
+            align1Blk = qStart, qEnd, tStart, tEnd
     if strand1 != strand2:
         path = tuple((c1, n2 - c2) for (c1, c2) in path)
     alignment = PairwiseAlignment(target, query, path, None)
