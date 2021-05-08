@@ -118,50 +118,41 @@ def mapBlock(inPsl, mapPsl, iMapBlk, align1Blk, mappedPsl):
 def map_alignment(alignment1, alignment2):
     if len(alignment1.query) != len(alignment2.target):
         raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
-    if alignment1.path[0][1] < alignment1.path[-1][1]:  # mapped to forward strand
-        strand1 = "+"
-        path1 = alignment1.path
-        if alignment2.path[0][1] < alignment2.path[-1][1]:  # mapped to forward strand
-            strand2 = "+"
-            path2 = alignment2.path
-        else:  # mapped to reverse strand
-            strand2 = "-"
-            n2 = len(alignment2.query)
-            path2 = tuple((c1, n2 - c2) for (c1, c2) in alignment2.path)
-    else:  # mapped to reverse strand
-        strand1 = "-"
-        n1 = len(alignment1.query)
-        n2 = len(alignment2.query)
-        path1 = tuple((c1, n1 - c2) for (c1, c2) in alignment1.path)
-        if alignment2.path[0][1] < alignment2.path[-1][1]:  # mapped to forward strand
-            strand2 = "+"
-            path2 = tuple((n1 - c1, n2 - c2) for (c1, c2) in alignment2.path)
-            path2 = path2[::-1]
-        else:  # mapped to reverse strand
-            strand2 = "-"
-            path2 = tuple((n1 - c1, c2) for (c1, c2) in alignment2.path)
-            path2 = path2[::-1]
-    if strand1 == strand2:
-        rcInPsl = False
-    else:
-        rcInPsl = True
-    mapPsl = array(path1)
-    inPsl = array(path2)
-    mappedPsl = []
-    iMapBlk = 0
-    for iBlock in range(len(inPsl)):
-        align1Blk = blockFromPslBlock(inPsl, iBlock)
-        while True:
-            flag, iMapBlk, align1Blk = mapBlock(inPsl, mapPsl, iMapBlk, align1Blk, mappedPsl)
-            if flag is False:
-                break
     target = alignment1.target
     query = alignment2.query
-    if rcInPsl is True:
-        n2 = len(query)
-        path = tuple((c1, n2 - c2) for (c1, c2) in mappedPsl)
-    else:
-        path = mappedPsl
+    path1 = alignment1.path
+    path2 = alignment2.path
+    n1 = len(alignment1.query)
+    n2 = len(alignment2.query)
+    if path1[0][1] < path1[-1][1]:  # mapped to forward strand
+        strand1 = "+"
+    else:  # mapped to reverse strand
+        strand1 = "-"
+    if path2[0][1] < path2[-1][1]:  # mapped to forward strand
+        strand2 = "+"
+    else:  # mapped to reverse strand
+        strand2 = "-"
+    if strand1 == "+":
+        if strand2 == "-": # mapped to reverse strand
+            path2 = tuple((c1, n2 - c2) for (c1, c2) in path2)
+    else:  # mapped to reverse strand
+        path1 = tuple((c1, n1 - c2) for (c1, c2) in path1)
+        if strand2 == "+":
+            path2 = tuple((n1 - c1, n2 - c2) for (c1, c2) in path2[::-1])
+        else:  # mapped to reverse strand
+            path2 = tuple((n1 - c1, c2) for (c1, c2) in path2[::-1])
+    path1 = array(path1)
+    path2 = array(path2)
+    path = []
+    iMapBlk = 0
+    for iBlock in range(len(path2)):
+        align1Blk = blockFromPslBlock(path2, iBlock)
+        while True:
+            flag, iMapBlk, align1Blk = mapBlock(path2, path1, iMapBlk, align1Blk, path)
+            if flag is False:
+                break
+    if strand1 != strand2:
+        path = tuple((c1, n2 - c2) for (c1, c2) in path)
     alignment = PairwiseAlignment(target, query, path, None)
     return alignment
 
