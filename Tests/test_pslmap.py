@@ -6,29 +6,6 @@ from numpy import array
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner, PairwiseAlignment
 
-def getBeforeBlockMapping(mqStart, mqEnd, align1Blk):
-    qStart, qEnd, tStart, tEnd = align1Blk
-    if tEnd < mqStart:
-        size = tEnd - tStart
-    else:
-        size = mqStart - tStart
-    qEnd = qStart + size
-    mappedBlk = (qStart, qEnd, 0, 0)
-    return mappedBlk
-
-def getOverBlockMapping(mqStart, mqEnd, mtStart, align1Blk):
-    qStart, qEnd, tStart, tEnd = align1Blk
-    off = tStart - mqStart
-    if tEnd > mqEnd:
-        size = mqEnd - tStart
-    else:
-        size = tEnd - tStart
-    qEnd = qStart + size
-    tStart = mtStart + off
-    tEnd = tStart + size
-    mappedBlk = (qStart, qEnd, tStart, tEnd)
-    return mappedBlk
-
 def addPslBlock(psl, blk):
     qStart, qEnd, tStart, tEnd = blk
     if psl:
@@ -79,28 +56,17 @@ def map_alignment(alignment1, alignment2):
             path2[:, 1] = path2[::-1, 1]
     path = []
     iMapBlk = 0
-    blockCount2 = 0
-    previous = path2[0]
+    previous2 = path2[0]
     for row in path2[1:]:
-        if previous[0] != row[0] and previous[1] != row[1]:
-            blockCount2 += 1
-        previous = row
-    for iBlock in range(blockCount2):
-        j = 0
-        previous = path2[0]
-        for row in path2[1:]:
-            if row[0] != previous[0] and row[1] != previous[1]:
-                if j == iBlock:
-                    break
-                j += 1
-            previous = row
-        qStart = previous[1]
+        if row[0] == previous2[0] or row[1] == previous2[1]:
+            previous2 = row
+            continue
+        qStart = previous2[1]
         qEnd = row[1]
-        tStart = previous[0]
+        tStart = previous2[0]
         tEnd = row[0]
-        align1Blk = (qStart, qEnd, tStart, tEnd)
+        previous2 = row
         while True:
-            qStart, qEnd, tStart, tEnd = align1Blk
             if qStart >= qEnd or tStart >= tEnd:
                 break
             blockCount = 0
@@ -122,11 +88,21 @@ def map_alignment(alignment1, alignment2):
                 mqEnd = row[1]
                 if tStart < mqStart:
                     iMapBlk = iBlk
-                    mappedBlk = getBeforeBlockMapping(mqStart, mqEnd, align1Blk)
+                    if tEnd < mqStart:
+                        size = tEnd - tStart
+                    else:
+                        size = mqStart - tStart
+                    mappedBlk = (qStart, qStart + size, 0, 0)
                     break
                 elif tStart < mqEnd:
                     iMapBlk = iBlk
-                    mappedBlk = getOverBlockMapping(mqStart, mqEnd, previous[0], align1Blk)
+                    mtStart = previous[0]
+                    off = tStart - mqStart
+                    if tEnd > mqEnd:
+                        size = mqEnd - tStart
+                    else:
+                        size = tEnd - tStart
+                    mappedBlk = (qStart, qStart + size, mtStart + off, mtStart + off + size)
                     break
             else:
                 iMapBlk = iBlk
@@ -140,7 +116,6 @@ def map_alignment(alignment1, alignment2):
                 size = mappedBlk_tEnd - mappedBlk_tStart
             qStart += size
             tStart += size
-            align1Blk = qStart, qEnd, tStart, tEnd
     if strand1 != strand2:
         path = tuple((c1, n2 - c2) for (c1, c2) in path)
     alignment = PairwiseAlignment(target, query, path, None)
