@@ -48,7 +48,6 @@ def map_alignment(alignment1, alignment2):
             break
         previous_iter = row_iter
     path = []
-    iMapBlk = 0
     previous2 = path2[0]
     for row in path2[1:]:
         if row[0] == previous2[0] or row[1] == previous2[1]:
@@ -62,25 +61,10 @@ def map_alignment(alignment1, alignment2):
         while True:
             if qStart >= qEnd or tStart >= tEnd:
                 break
-            blockCount = 0
-            previous = path1[0]
-            for row in path1[1:]:
-                if previous[0] != row[0] and previous[1] != row[1]:
-                    blockCount += 1
-                previous = row
-            for iBlk in range(iMapBlk, blockCount):
-                i = 0
-                previous = path1[0]
-                for row in path1[1:]:
-                    if previous[0] != row[0] and previous[1] != row[1]:
-                        if i == iBlk:
-                            break
-                        i += 1
-                    previous = row
-                mqStart = previous[1]
-                mqEnd = row[1]
-                assert (previous == previous_iter).all()
-                assert (row == row_iter).all()
+            flag = True
+            while flag:
+                mqStart = previous_iter[1]
+                mqEnd = row_iter[1]
                 if tStart < mqStart:
                     if tEnd < mqStart:
                         size = tEnd - tStart
@@ -92,7 +76,7 @@ def map_alignment(alignment1, alignment2):
                     mappedBlk_tEnd = 0
                     break
                 elif tStart < mqEnd:
-                    mtStart = previous[0]
+                    mtStart = previous_iter[0]
                     off = tStart - mqStart
                     if tEnd > mqEnd:
                         size = mqEnd - tStart
@@ -109,6 +93,7 @@ def map_alignment(alignment1, alignment2):
                     try:
                         row_iter = next(path1_iter)
                     except StopIteration:
+                        flag = False
                         previous_iter = previous_iter_backup
                         break
                     if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
@@ -119,7 +104,6 @@ def map_alignment(alignment1, alignment2):
                 mappedBlk_qEnd = qEnd
                 mappedBlk_tStart = 0
                 mappedBlk_tEnd = 0
-            iMapBlk = iBlk
             if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
                 if path:
                     previous_tStart, previous_qStart = path[-1]
