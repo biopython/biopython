@@ -36,6 +36,17 @@ def map_alignment(alignment1, alignment2):
             path2[:, 1] = n2 - path2[::-1, 1]
         else:  # mapped to reverse strand
             path2[:, 1] = path2[::-1, 1]
+    path1_iter = iter(path1)
+    previous_iter = next(path1_iter)
+    while True:
+        try:
+            row_iter = next(path1_iter)
+        except StopIteration:
+            row_iter = None
+            break
+        if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
+            break
+        previous_iter = row_iter
     path = []
     iMapBlk = 0
     previous2 = path2[0]
@@ -68,8 +79,8 @@ def map_alignment(alignment1, alignment2):
                     previous = row
                 mqStart = previous[1]
                 mqEnd = row[1]
+                assert (row == row_iter).all()
                 if tStart < mqStart:
-                    iMapBlk = iBlk
                     if tEnd < mqStart:
                         size = tEnd - tStart
                     else:
@@ -80,7 +91,6 @@ def map_alignment(alignment1, alignment2):
                     mappedBlk_tEnd = 0
                     break
                 elif tStart < mqEnd:
-                    iMapBlk = iBlk
                     mtStart = previous[0]
                     off = tStart - mqStart
                     if tEnd > mqEnd:
@@ -92,12 +102,21 @@ def map_alignment(alignment1, alignment2):
                     mappedBlk_tStart = mtStart + off
                     mappedBlk_tEnd = mtStart + off + size
                     break
+                previous_iter = row_iter
+                while True:
+                    try:
+                        row_iter = next(path1_iter)
+                    except StopIteration:
+                        break
+                    if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
+                        break
+                    previous_iter = row_iter
             else:
-                iMapBlk = iBlk
                 mappedBlk_qStart = qStart
                 mappedBlk_qEnd = qEnd
                 mappedBlk_tStart = 0
                 mappedBlk_tEnd = 0
+            iMapBlk = iBlk
             if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
                 if path:
                     previous_tStart, previous_qStart = path[-1]
