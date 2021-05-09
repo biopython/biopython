@@ -6,24 +6,6 @@ from numpy import array
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner, PairwiseAlignment
 
-def addPslBlock(psl, blk):
-    qStart, qEnd, tStart, tEnd = blk
-    if psl:
-        previous_tStart, previous_qStart = psl[-1]
-        tGap = tStart - previous_tStart
-        qGap = qStart - previous_qStart
-        if tGap == 0 and qGap == 0:
-            pass  # this could be added to the previous block
-        elif tGap == 0:
-            assert qGap > 0
-        elif qGap == 0:
-            assert tGap > 0
-        else:
-            # adding a gap both in target and in query;
-            # add gap to target first:
-            psl.append([tStart, previous_qStart])
-    psl.append([tStart, qStart])
-    psl.append([tEnd, qEnd])
 
 def map_alignment(alignment1, alignment2):
     if len(alignment1.query) != len(alignment2.target):
@@ -92,7 +74,10 @@ def map_alignment(alignment1, alignment2):
                         size = tEnd - tStart
                     else:
                         size = mqStart - tStart
-                    mappedBlk = (qStart, qStart + size, 0, 0)
+                    mappedBlk_qStart = qStart
+                    mappedBlk_qEnd = qStart + size
+                    mappedBlk_tStart = 0
+                    mappedBlk_tEnd = 0
                     break
                 elif tStart < mqEnd:
                     iMapBlk = iBlk
@@ -102,14 +87,28 @@ def map_alignment(alignment1, alignment2):
                         size = mqEnd - tStart
                     else:
                         size = tEnd - tStart
-                    mappedBlk = (qStart, qStart + size, mtStart + off, mtStart + off + size)
+                    mappedBlk_qStart = qStart
+                    mappedBlk_qEnd = qStart + size
+                    mappedBlk_tStart = mtStart + off
+                    mappedBlk_tEnd = mtStart + off + size
                     break
             else:
                 iMapBlk = iBlk
-                mappedBlk = (qStart, qEnd, 0, 0)
-            mappedBlk_qStart, mappedBlk_qEnd, mappedBlk_tStart, mappedBlk_tEnd = mappedBlk
+                mappedBlk_qStart = qStart
+                mappedBlk_qEnd = qEnd
+                mappedBlk_tStart = 0
+                mappedBlk_tEnd = 0
             if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
-                addPslBlock(path, mappedBlk)
+                if path:
+                    previous_tStart, previous_qStart = path[-1]
+                    tGap = mappedBlk_tStart - previous_tStart
+                    qGap = mappedBlk_qStart - previous_qStart
+                    if tGap != 0 and qGap != 0:
+                        # adding a gap both in target and in query;
+                        # add gap to target first:
+                        path.append([mappedBlk_tStart, previous_qStart])
+                path.append([mappedBlk_tStart, mappedBlk_qStart])
+                path.append([mappedBlk_tEnd, mappedBlk_qEnd])
             if mappedBlk_qEnd != 0:
                 size = mappedBlk_qEnd - mappedBlk_qStart
             else:
