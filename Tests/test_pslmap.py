@@ -79,6 +79,7 @@ def map_alignment(alignment1, alignment2):
                     previous = row
                 mqStart = previous[1]
                 mqEnd = row[1]
+                assert (previous == previous_iter).all()
                 assert (row == row_iter).all()
                 if tStart < mqStart:
                     if tEnd < mqStart:
@@ -102,11 +103,13 @@ def map_alignment(alignment1, alignment2):
                     mappedBlk_tStart = mtStart + off
                     mappedBlk_tEnd = mtStart + off + size
                     break
+                previous_iter_backup = previous_iter
                 previous_iter = row_iter
                 while True:
                     try:
                         row_iter = next(path1_iter)
                     except StopIteration:
+                        previous_iter = previous_iter_backup
                         break
                     if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
                         break
