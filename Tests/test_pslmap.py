@@ -38,24 +38,22 @@ def map_alignment(alignment1, alignment2):
         else:  # mapped to reverse strand
             path2[:, 1] = path2[::-1, 1]
     path1_iter = iter(path1)
-    previous_iter = next(path1_iter)
+    tStart1, qStart1 = next(path1_iter)
     while True:
         try:
             row_iter = next(path1_iter)
         except StopIteration:
-            row_iter = None
             break
-        if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
+        if tStart1 != row_iter[0] and qStart1 != row_iter[1]:
             break
-        previous_iter = row_iter
+        tStart1, qStart1 = row_iter
+    tEnd1, qEnd1 = row_iter
     path = []
     tStart2, qStart2 = sys.maxsize, sys.maxsize
     for tEnd2, qEnd2 in path2:
         while qStart2 < qEnd2 and tStart2 < tEnd2:
             flag = True
             while flag:
-                qStart1 = previous_iter[1]
-                qEnd1 = row_iter[1]
                 if tStart2 < qStart1:
                     if tEnd2 < qStart1:
                         size = tEnd2 - tStart2
@@ -67,7 +65,6 @@ def map_alignment(alignment1, alignment2):
                     tEnd = 0
                     break
                 elif tStart2 < qEnd1:
-                    tStart1 = previous_iter[0]
                     off = tStart2 - qStart1
                     if tEnd2 > qEnd1:
                         size = qEnd1 - tStart2
@@ -78,7 +75,7 @@ def map_alignment(alignment1, alignment2):
                     tStart = tStart1 + off
                     tEnd = tStart + size
                     break
-                previous_iter_backup = previous_iter
+                previous_iter_backup = tStart1, qStart1
                 previous_iter = row_iter
                 while True:
                     try:
@@ -90,6 +87,8 @@ def map_alignment(alignment1, alignment2):
                     if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
                         break
                     previous_iter = row_iter
+                tStart1, qStart1 = previous_iter
+                qEnd1 = row_iter[1]
             else:
                 qStart = qStart2
                 qEnd = qEnd2
