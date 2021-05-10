@@ -47,8 +47,7 @@ def map_alignment(alignment1, alignment2):
     tStart2, qStart2 = sys.maxsize, sys.maxsize
     for tEnd2, qEnd2 in path2:
         while qStart2 < qEnd2 and tStart2 < tEnd2:
-            flag = True
-            while flag:
+            while True:
                 if tStart2 < qStart1:
                     if tEnd2 < qStart1:
                         size = tEnd2 - tStart2
@@ -76,12 +75,11 @@ def map_alignment(alignment1, alignment2):
                         break
                     tStart1, qStart1 = tEnd1, qEnd1
                 else:
-                    flag = False
-            else:
-                qStart = qStart2
-                qEnd = qEnd2
-                tStart = 0
-                tEnd = 0
+                    qStart = qStart2
+                    qEnd = qEnd2
+                    tStart = 0
+                    tEnd = 0
+                    break
             if qEnd != 0 and tEnd != 0:
                 if path:
                     previous_tStart, previous_qStart = path[-1]
