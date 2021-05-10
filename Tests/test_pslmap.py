@@ -37,14 +37,10 @@ def map_alignment(alignment1, alignment2):
             path2[:, 1] = n2 - path2[::-1, 1]
         else:  # mapped to reverse strand
             path2[:, 1] = path2[::-1, 1]
-    path1_iter = iter(path1)
-    tStart1, qStart1 = next(path1_iter)
-    while True:
-        try:
-            tEnd1, qEnd1 = next(path1_iter)
-        except StopIteration:
-            break
-        if tStart1 != tEnd1 and qStart1 != qEnd1:
+    path1 = iter(path1)
+    tStart1, qStart1 = sys.maxsize, sys.maxsize
+    for tEnd1, qEnd1 in path1:
+        if tStart1 < tEnd1 and qStart1 < qEnd1:
             break
         tStart1, qStart1 = tEnd1, qEnd1
     path = []
@@ -74,17 +70,13 @@ def map_alignment(alignment1, alignment2):
                     tStart = tStart1 + off
                     tEnd = tStart + size
                     break
-                previous_iter_backup = tStart1, qStart1
-                while True:
+                tStart1, qStart1 = sys.maxsize, sys.maxsize
+                for tEnd1, qEnd1 in path1:
+                    if tStart1 < tEnd1 and qStart1 < qEnd1:
+                        break
                     tStart1, qStart1 = tEnd1, qEnd1
-                    try:
-                        tEnd1, qEnd1 = next(path1_iter)
-                    except StopIteration:
-                        flag = False
-                        tStart1, qStart1 = previous_iter_backup
-                        break
-                    if tStart1 != tEnd1 and qStart1 != qEnd1:
-                        break
+                else:
+                    flag = False
             else:
                 qStart = qStart2
                 qEnd = qEnd2
@@ -156,8 +148,8 @@ GGGGGGGCCCCCGGGGGGA
 """)
         alignment = map_alignment(alignment1, alignment2)
         self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0].tolist(), [17, 0])
-        self.assertSequenceEqual(alignment.path[1].tolist(), [27, 10])
+        self.assertSequenceEqual(alignment.path[0], [17, 0])
+        self.assertSequenceEqual(alignment.path[1], [27, 10])
         self.assertEqual(str(alignment), """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
@@ -193,8 +185,8 @@ AGGGGGCCCCCGGGGGGA
 """)
         alignment = map_alignment(alignment1, alignment2)
         self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0].tolist(), [0, 2])
-        self.assertSequenceEqual(alignment.path[1].tolist(), [11, 13])
+        self.assertSequenceEqual(alignment.path[0], [0, 2])
+        self.assertSequenceEqual(alignment.path[1], [11, 13])
         self.assertEqual(str(alignment), """\
   GGGCCCCCGGGGGGAAAAAAAAAA
   |||||||||||             
@@ -230,8 +222,8 @@ GGGGGGGCCCCCGGGGGGA
 """)
         alignment = map_alignment(alignment1, alignment2)
         self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0].tolist(), [17, 0])
-        self.assertSequenceEqual(alignment.path[1].tolist(), [27, 10])
+        self.assertSequenceEqual(alignment.path[0], [17, 0])
+        self.assertSequenceEqual(alignment.path[1], [27, 10])
         self.assertEqual(str(alignment), """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGG  
                  ||||||||||  
@@ -382,6 +374,6 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
         print("TEST OK")
 
 
-# if __name__ == "__main__":
-    # runner = unittest.TextTestRunner(verbosity=2)
-    # unittest.main(testRunner=runner)
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
