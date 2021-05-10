@@ -49,34 +49,34 @@ def map_alignment(alignment1, alignment2):
             break
         previous_iter = row_iter
     path = []
-    tStart, qStart = sys.maxsize, sys.maxsize
-    for tEnd, qEnd in path2:
-        while qStart < qEnd and tStart < tEnd:
+    tStart2, qStart2 = sys.maxsize, sys.maxsize
+    for tEnd2, qEnd2 in path2:
+        while qStart2 < qEnd2 and tStart2 < tEnd2:
             flag = True
             while flag:
                 mqStart = previous_iter[1]
                 mqEnd = row_iter[1]
-                if tStart < mqStart:
-                    if tEnd < mqStart:
-                        size = tEnd - tStart
+                if tStart2 < mqStart:
+                    if tEnd2 < mqStart:
+                        size = tEnd2 - tStart2
                     else:
-                        size = mqStart - tStart
-                    mappedBlk_qStart = qStart
-                    mappedBlk_qEnd = qStart + size
-                    mappedBlk_tStart = 0
-                    mappedBlk_tEnd = 0
+                        size = mqStart - tStart2
+                    mqStart = qStart2
+                    mqEnd = qStart2 + size
+                    mtStart = 0
+                    mtEnd = 0
                     break
-                elif tStart < mqEnd:
+                elif tStart2 < mqEnd:
                     mtStart = previous_iter[0]
-                    off = tStart - mqStart
-                    if tEnd > mqEnd:
-                        size = mqEnd - tStart
+                    off = tStart2 - mqStart
+                    if tEnd2 > mqEnd:
+                        size = mqEnd - tStart2
                     else:
-                        size = tEnd - tStart
-                    mappedBlk_qStart = qStart
-                    mappedBlk_qEnd = qStart + size
-                    mappedBlk_tStart = mtStart + off
-                    mappedBlk_tEnd = mtStart + off + size
+                        size = tEnd2 - tStart2
+                    mqStart = qStart2
+                    mqEnd = qStart2 + size
+                    mtStart += off
+                    mtEnd = mtStart + size
                     break
                 previous_iter_backup = previous_iter
                 previous_iter = row_iter
@@ -91,28 +91,28 @@ def map_alignment(alignment1, alignment2):
                         break
                     previous_iter = row_iter
             else:
-                mappedBlk_qStart = qStart
-                mappedBlk_qEnd = qEnd
-                mappedBlk_tStart = 0
-                mappedBlk_tEnd = 0
-            if mappedBlk_qEnd != 0 and mappedBlk_tEnd != 0:
+                mqStart = qStart2
+                mqEnd = qEnd2
+                mtStart = 0
+                mtEnd = 0
+            if mqEnd != 0 and mtEnd != 0:
                 if path:
                     previous_tStart, previous_qStart = path[-1]
-                    tGap = mappedBlk_tStart - previous_tStart
-                    qGap = mappedBlk_qStart - previous_qStart
+                    tGap = mtStart - previous_tStart
+                    qGap = mqStart - previous_qStart
                     if tGap != 0 and qGap != 0:
                         # adding a gap both in target and in query;
                         # add gap to target first:
-                        path.append([mappedBlk_tStart, previous_qStart])
-                path.append([mappedBlk_tStart, mappedBlk_qStart])
-                path.append([mappedBlk_tEnd, mappedBlk_qEnd])
-            if mappedBlk_qEnd != 0:
-                size = mappedBlk_qEnd - mappedBlk_qStart
+                        path.append([mtStart, previous_qStart])
+                path.append([mtStart, mqStart])
+                path.append([mtEnd, mqEnd])
+            if mqEnd != 0:
+                size = mqEnd - mqStart
             else:
-                size = mappedBlk_tEnd - mappedBlk_tStart
-            qStart += size
-            tStart += size
-        tStart, qStart = tEnd, qEnd
+                size = mtEnd - mtStart
+            qStart2 += size
+            tStart2 += size
+        tStart2, qStart2 = tEnd2, qEnd2
     if strand1 != strand2:
         path = tuple((c1, n2 - c2) for (c1, c2) in path)
     alignment = PairwiseAlignment(target, query, path, None)
