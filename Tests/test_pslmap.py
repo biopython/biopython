@@ -1,4 +1,5 @@
 import os
+import sys
 import random
 import unittest
 from numpy import array
@@ -48,19 +49,9 @@ def map_alignment(alignment1, alignment2):
             break
         previous_iter = row_iter
     path = []
-    previous2 = path2[0]
-    for row in path2[1:]:
-        if row[0] == previous2[0] or row[1] == previous2[1]:
-            previous2 = row
-            continue
-        qStart = previous2[1]
-        qEnd = row[1]
-        tStart = previous2[0]
-        tEnd = row[0]
-        previous2 = row
-        while True:
-            if qStart >= qEnd or tStart >= tEnd:
-                break
+    tStart, qStart = sys.maxsize, sys.maxsize
+    for tEnd, qEnd in path2:
+        while qStart < qEnd and tStart < tEnd:
             flag = True
             while flag:
                 mqStart = previous_iter[1]
@@ -121,6 +112,7 @@ def map_alignment(alignment1, alignment2):
                 size = mappedBlk_tEnd - mappedBlk_tStart
             qStart += size
             tStart += size
+        tStart, qStart = tEnd, qEnd
     if strand1 != strand2:
         path = tuple((c1, n2 - c2) for (c1, c2) in path)
     alignment = PairwiseAlignment(target, query, path, None)
