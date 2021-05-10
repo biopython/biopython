@@ -37,13 +37,14 @@ def map_alignment(alignment1, alignment2):
             path2[:, 1] = n2 - path2[::-1, 1]
         else:  # mapped to reverse strand
             path2[:, 1] = path2[::-1, 1]
+    path = []
+    tEnd, qend = sys.maxsize, sys.maxsize
     path1 = iter(path1)
     tStart1, qStart1 = sys.maxsize, sys.maxsize
     for tEnd1, qEnd1 in path1:
         if tStart1 < tEnd1 and qStart1 < qEnd1:
             break
         tStart1, qStart1 = tEnd1, qEnd1
-    path = []
     tStart2, qStart2 = sys.maxsize, sys.maxsize
     for tEnd2, qEnd2 in path2:
         while qStart2 < qEnd2 and tStart2 < tEnd2:
@@ -55,23 +56,19 @@ def map_alignment(alignment1, alignment2):
                         size = qStart1 - tStart2
                     break
                 elif tStart2 < qEnd1:
-                    off = tStart2 - qStart1
+                    offset = tStart2 - qStart1
                     if tEnd2 > qEnd1:
                         size = qEnd1 - tStart2
                     else:
                         size = tEnd2 - tStart2
                     qStart = qStart2
+                    tStart = tStart1 + offset
+                    if tStart > tEnd and qStart > qEnd:
+                        # adding a gap both in target and in query;
+                        # add gap to target first:
+                        path.append([tStart, qEnd])
                     qEnd = qStart2 + size
-                    tStart = tStart1 + off
                     tEnd = tStart + size
-                    if path:
-                        previous_tStart, previous_qStart = path[-1]
-                        tGap = tStart - previous_tStart
-                        qGap = qStart - previous_qStart
-                        if tGap != 0 and qGap != 0:
-                            # adding a gap both in target and in query;
-                            # add gap to target first:
-                            path.append([tStart, previous_qStart])
                     path.append([tStart, qStart])
                     path.append([tEnd, qEnd])
                     break
