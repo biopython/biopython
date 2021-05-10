@@ -54,29 +54,29 @@ def map_alignment(alignment1, alignment2):
         while qStart2 < qEnd2 and tStart2 < tEnd2:
             flag = True
             while flag:
-                mqStart = previous_iter[1]
-                mqEnd = row_iter[1]
-                if tStart2 < mqStart:
-                    if tEnd2 < mqStart:
+                qStart1 = previous_iter[1]
+                qEnd1 = row_iter[1]
+                if tStart2 < qStart1:
+                    if tEnd2 < qStart1:
                         size = tEnd2 - tStart2
                     else:
-                        size = mqStart - tStart2
-                    mqStart = qStart2
-                    mqEnd = qStart2 + size
-                    mtStart = 0
-                    mtEnd = 0
+                        size = qStart1 - tStart2
+                    qStart = qStart2
+                    qEnd = qStart2 + size
+                    tStart = 0
+                    tEnd = 0
                     break
-                elif tStart2 < mqEnd:
-                    mtStart = previous_iter[0]
-                    off = tStart2 - mqStart
-                    if tEnd2 > mqEnd:
-                        size = mqEnd - tStart2
+                elif tStart2 < qEnd1:
+                    tStart1 = previous_iter[0]
+                    off = tStart2 - qStart1
+                    if tEnd2 > qEnd1:
+                        size = qEnd1 - tStart2
                     else:
                         size = tEnd2 - tStart2
-                    mqStart = qStart2
-                    mqEnd = qStart2 + size
-                    mtStart += off
-                    mtEnd = mtStart + size
+                    qStart = qStart2
+                    qEnd = qStart2 + size
+                    tStart = tStart1 + off
+                    tEnd = tStart + size
                     break
                 previous_iter_backup = previous_iter
                 previous_iter = row_iter
@@ -91,25 +91,25 @@ def map_alignment(alignment1, alignment2):
                         break
                     previous_iter = row_iter
             else:
-                mqStart = qStart2
-                mqEnd = qEnd2
-                mtStart = 0
-                mtEnd = 0
-            if mqEnd != 0 and mtEnd != 0:
+                qStart = qStart2
+                qEnd = qEnd2
+                tStart = 0
+                tEnd = 0
+            if qEnd != 0 and tEnd != 0:
                 if path:
                     previous_tStart, previous_qStart = path[-1]
-                    tGap = mtStart - previous_tStart
-                    qGap = mqStart - previous_qStart
+                    tGap = tStart - previous_tStart
+                    qGap = qStart - previous_qStart
                     if tGap != 0 and qGap != 0:
                         # adding a gap both in target and in query;
                         # add gap to target first:
-                        path.append([mtStart, previous_qStart])
-                path.append([mtStart, mqStart])
-                path.append([mtEnd, mqEnd])
-            if mqEnd != 0:
-                size = mqEnd - mqStart
+                        path.append([tStart, previous_qStart])
+                path.append([tStart, qStart])
+                path.append([tEnd, qEnd])
+            if qEnd != 0:
+                size = qEnd - qStart
             else:
-                size = mtEnd - mtStart
+                size = tEnd - tStart
             qStart2 += size
             tStart2 += size
         tStart2, qStart2 = tEnd2, qEnd2
