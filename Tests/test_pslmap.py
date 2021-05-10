@@ -41,13 +41,12 @@ def map_alignment(alignment1, alignment2):
     tStart1, qStart1 = next(path1_iter)
     while True:
         try:
-            row_iter = next(path1_iter)
+            tEnd1, qEnd1 = next(path1_iter)
         except StopIteration:
             break
-        if tStart1 != row_iter[0] and qStart1 != row_iter[1]:
+        if tStart1 != tEnd1 and qStart1 != qEnd1:
             break
-        tStart1, qStart1 = row_iter
-    tEnd1, qEnd1 = row_iter
+        tStart1, qStart1 = tEnd1, qEnd1
     path = []
     tStart2, qStart2 = sys.maxsize, sys.maxsize
     for tEnd2, qEnd2 in path2:
@@ -76,19 +75,16 @@ def map_alignment(alignment1, alignment2):
                     tEnd = tStart + size
                     break
                 previous_iter_backup = tStart1, qStart1
-                previous_iter = row_iter
                 while True:
+                    tStart1, qStart1 = tEnd1, qEnd1
                     try:
-                        row_iter = next(path1_iter)
+                        tEnd1, qEnd1 = next(path1_iter)
                     except StopIteration:
                         flag = False
-                        previous_iter = previous_iter_backup
+                        tStart1, qStart1 = previous_iter_backup
                         break
-                    if previous_iter[0] != row_iter[0] and previous_iter[1] != row_iter[1]:
+                    if tStart1 != tEnd1 and qStart1 != qEnd1:
                         break
-                    previous_iter = row_iter
-                tStart1, qStart1 = previous_iter
-                qEnd1 = row_iter[1]
             else:
                 qStart = qStart2
                 qEnd = qEnd2
