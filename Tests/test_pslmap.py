@@ -53,10 +53,6 @@ def map_alignment(alignment1, alignment2):
                         size = tEnd2 - tStart2
                     else:
                         size = qStart1 - tStart2
-                    qStart = qStart2
-                    qEnd = qStart2 + size
-                    tStart = 0
-                    tEnd = 0
                     break
                 elif tStart2 < qEnd1:
                     off = tStart2 - qStart1
@@ -68,6 +64,16 @@ def map_alignment(alignment1, alignment2):
                     qEnd = qStart2 + size
                     tStart = tStart1 + off
                     tEnd = tStart + size
+                    if path:
+                        previous_tStart, previous_qStart = path[-1]
+                        tGap = tStart - previous_tStart
+                        qGap = qStart - previous_qStart
+                        if tGap != 0 and qGap != 0:
+                            # adding a gap both in target and in query;
+                            # add gap to target first:
+                            path.append([tStart, previous_qStart])
+                    path.append([tStart, qStart])
+                    path.append([tEnd, qEnd])
                     break
                 tStart1, qStart1 = sys.maxsize, sys.maxsize
                 for tEnd1, qEnd1 in path1:
@@ -75,26 +81,8 @@ def map_alignment(alignment1, alignment2):
                         break
                     tStart1, qStart1 = tEnd1, qEnd1
                 else:
-                    qStart = qStart2
-                    qEnd = qEnd2
-                    tStart = 0
-                    tEnd = 0
+                    size = qEnd2 - qStart2
                     break
-            if qEnd != 0 and tEnd != 0:
-                if path:
-                    previous_tStart, previous_qStart = path[-1]
-                    tGap = tStart - previous_tStart
-                    qGap = qStart - previous_qStart
-                    if tGap != 0 and qGap != 0:
-                        # adding a gap both in target and in query;
-                        # add gap to target first:
-                        path.append([tStart, previous_qStart])
-                path.append([tStart, qStart])
-                path.append([tEnd, qEnd])
-            if qEnd != 0:
-                size = qEnd - qStart
-            else:
-                size = tEnd - tStart
             qStart2 += size
             tStart2 += size
         tStart2, qStart2 = tEnd2, qEnd2
