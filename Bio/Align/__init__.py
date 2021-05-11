@@ -13,6 +13,8 @@ class, used in the Bio.AlignIO module.
 
 """
 
+import sys
+
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
@@ -1645,6 +1647,7 @@ class PairwiseAlignment:
         >>> alignment = alignment1.map(alignment2)
         >>> print(format(alignment, "psl"))
         """
+        from numpy import array
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):
             raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))

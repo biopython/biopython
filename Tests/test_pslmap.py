@@ -1,107 +1,9 @@
 import os
-import sys
 import random
 import unittest
-from numpy import array
 
 from Bio.Seq import Seq
-from Bio.Align import PairwiseAligner, PairwiseAlignment
-
-
-def map_alignment(alignment1, alignment2):
-    if len(alignment1.query) != len(alignment2.target):
-        raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
-    target = alignment1.target
-    query = alignment2.query
-    path1 = alignment1.path
-    path2 = alignment2.path
-    n1 = len(alignment1.query)
-    n2 = len(alignment2.query)
-    if path1[0][1] < path1[-1][1]:  # mapped to forward strand
-        strand1 = "+"
-    else:  # mapped to reverse strand
-        strand1 = "-"
-    if path2[0][1] < path2[-1][1]:  # mapped to forward strand
-        strand2 = "+"
-    else:  # mapped to reverse strand
-        strand2 = "-"
-    path1 = array(path1)
-    path2 = array(path2)
-    if strand1 == "+":
-        if strand2 == "-": # mapped to reverse strand
-            path2[:, 1] = n2 - path2[:, 1]
-    else:  # mapped to reverse strand
-        path1[:, 1] = n1 - path1[:, 1]
-        path2[:, 0] = n1 - path2[::-1, 0]
-        if strand2 == "+":
-            path2[:, 1] = n2 - path2[::-1, 1]
-        else:  # mapped to reverse strand
-            path2[:, 1] = path2[::-1, 1]
-    path = []
-    tEnd, qend = sys.maxsize, sys.maxsize
-    path1 = iter(path1)
-    tStart1, qStart1 = sys.maxsize, sys.maxsize
-    for tEnd1, qEnd1 in path1:
-        if tStart1 < tEnd1 and qStart1 < qEnd1:
-            break
-        tStart1, qStart1 = tEnd1, qEnd1
-    tStart2, qStart2 = sys.maxsize, sys.maxsize
-    for tEnd2, qEnd2 in path2:
-        while qStart2 < qEnd2 and tStart2 < tEnd2:
-            while True:
-                if tStart2 < qStart1:
-                    if tEnd2 < qStart1:
-                        size = tEnd2 - tStart2
-                    else:
-                        size = qStart1 - tStart2
-                    break
-                elif tStart2 < qEnd1:
-                    offset = tStart2 - qStart1
-                    if tEnd2 > qEnd1:
-                        size = qEnd1 - tStart2
-                    else:
-                        size = tEnd2 - tStart2
-                    qStart = qStart2
-                    tStart = tStart1 + offset
-                    if tStart > tEnd and qStart > qEnd:
-                        # adding a gap both in target and in query;
-                        # add gap to target first:
-                        path.append([tStart, qEnd])
-                    qEnd = qStart2 + size
-                    tEnd = tStart + size
-                    path.append([tStart, qStart])
-                    path.append([tEnd, qEnd])
-                    break
-                tStart1, qStart1 = sys.maxsize, sys.maxsize
-                for tEnd1, qEnd1 in path1:
-                    if tStart1 < tEnd1 and qStart1 < qEnd1:
-                        break
-                    tStart1, qStart1 = tEnd1, qEnd1
-                else:
-                    size = qEnd2 - qStart2
-                    break
-            qStart2 += size
-            tStart2 += size
-        tStart2, qStart2 = tEnd2, qEnd2
-    if strand1 != strand2:
-        path = tuple((c1, n2 - c2) for (c1, c2) in path)
-    alignment = PairwiseAlignment(target, query, path, None)
-    return alignment
-
-def map_check(alignment1, alignment2):
-    psl1 = format(alignment1, "psl")
-    handle = open("transcript.psl", "w")
-    handle.write(psl1)
-    handle.close()
-    psl2 = format(alignment2, "psl")
-    handle = open("sequence.psl", "w")
-    handle.write(psl2)
-    handle.close()
-    stdout = os.popen("pslMap sequence.psl transcript.psl stdout")
-    psl = stdout.read()
-    os.remove("transcript.psl")
-    os.remove("sequence.psl")
-    return psl
+from Bio.Align import PairwiseAligner
 
 class TestSimple(unittest.TestCase):
 
@@ -140,7 +42,7 @@ GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
@@ -178,7 +80,7 @@ AGGGGGCCCCCGGGGGGA
  |||||||||||||    
  GGGGGCCCCCGGG    
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [0, 2])
         self.assertSequenceEqual(alignment.path[1], [11, 13])
@@ -216,7 +118,7 @@ GGGGGGGCCCCCGGGGGGA
      ||||||||||||  
      GGCCCCCGGGGG  
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
@@ -256,7 +158,7 @@ TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
@@ -296,7 +198,7 @@ GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
         self.assertSequenceEqual(alignment.path[1], [27, 0])
@@ -336,7 +238,7 @@ TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
         self.assertSequenceEqual(alignment.path[1], [27, 0])
@@ -349,74 +251,6 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """)
-
-
-def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
-    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
-    nBlocks = nBlocks1
-    transcript = ""
-    position = 0
-    for i in range(nBlocks):
-        position += random.randint(60,80)
-        blockSize = random.randint(60,80)
-        transcript += chromosome[position:position+blockSize]
-        position += blockSize
-    nBlocks = nBlocks2
-    sequence = ""
-    position = 0
-    for i in range(nBlocks):
-        position += random.randint(20,40)
-        blockSize = random.randint(20,40)
-        sequence += transcript[position:position+blockSize]
-        position += blockSize
-    chromosome = Seq(chromosome)
-    transcript = Seq(transcript)
-    sequence = Seq(sequence)
-    if strand1 == '-':
-        chromosome = chromosome.reverse_complement()
-    if strand2 == '-':
-        sequence = sequence.reverse_complement()
-    chromosome.id = "chromosome"
-    transcript.id = "transcript"
-    sequence.id = "sequence"
-    alignments1 = aligner.align(chromosome, transcript, strand=strand1)
-    alignment1 = alignments1[0]
-    alignments2 = aligner.align(transcript, sequence, strand=strand2)
-    alignment2 = alignments2[0]
-    alignment = map_alignment(alignment1, alignment2)
-    psl_check = map_check(alignment1, alignment2)
-    psl = format(alignment, "psl")
-    assert psl == psl_check
-    print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
-
-def test_random_sequences(aligner, strand1='+', strand2='+'):
-    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
-    transcript = "".join(['ACGT'[random.randint(0,3)] for i in range(300)])
-    sequence = "".join(['ACGT'[random.randint(0,3)] for i in range(100)])
-    print(chromosome, transcript, sequence)
-    chromosome = Seq(chromosome)
-    transcript = Seq(transcript)
-    sequence = Seq(sequence)
-    chromosome.id = "chromosome"
-    transcript.id = "transcript"
-    sequence.id = "sequence"
-    alignments = aligner.align(chromosome, transcript, strand=strand1)
-    alignment1 = alignments[0]
-    alignments = aligner.align(transcript, sequence, strand=strand2)
-    alignment2 = alignments[0]
-    psl_check = map_check(alignment1, alignment2)
-    alignment = map_alignment(alignment1, alignment2)
-    psl_check = psl_check.split()
-    psl = format(alignment, "psl")
-    psl = psl.split()
-    assert psl[8:] == psl_check[8:]
-    psl1 = format(alignment1, "psl")
-    words = psl1.split()
-    nBlocks1 = int(words[17])
-    psl2 = format(alignment2, "psl")
-    words = psl2.split()
-    nBlocks2 = int(words[17])
-    print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
 
 class TestComplex(unittest.TestCase):
@@ -455,7 +289,7 @@ GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCA
                             |||||||||||||||||||||||||||||||||||--------------------|||||||||||||||||||||||--------------------------------------|||||||||||||||||||||||---------------------------------||||||||||||||||||||--------------------------------|||||||||||||||||||||------------------------------||||||||||||||||||||
                             TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCG--------------------GGGACAGTTGATCCCATCCGCCT--------------------------------------TTTACGAATTCATACCGTGGTAG---------------------------------GCGGCATAGTACGACGAAGC--------------------------------GGTTGGGTCGAAAAACAGGTT------------------------------GCCGTCATATCGGTGGGTTC
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 76)
         self.assertEqual(str(alignment), """\
 GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAACTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTTTA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
@@ -493,7 +327,7 @@ CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGT
         ||------------|-------||||---|||------|-||||||-------------------------------|.||-------------|--||-|||.|-|||---.||||--|||----|.||-|||--|---||------------|||||------------||||---||---||---|||--|||-----|||--||--|-----||----------------||---------|||-|||-------------||--|--||||                       
         TC------------C-------CCTT---CTA------A-TGGAAT-------------------------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--AGC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT---------CAC-ACT-------------TGTAC--GCGAT                      
 """)
-        alignment = map_alignment(alignment1, alignment2)
+        alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 78)
         self.assertEqual(str(alignment), """\
 CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA------CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCGAATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATCCAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
@@ -506,7 +340,92 @@ CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATG
 """)
 
 
+def map_check(alignment1, alignment2):
+    psl1 = format(alignment1, "psl")
+    handle = open("transcript.psl", "w")
+    handle.write(psl1)
+    handle.close()
+    psl2 = format(alignment2, "psl")
+    handle = open("sequence.psl", "w")
+    handle.write(psl2)
+    handle.close()
+    stdout = os.popen("pslMap sequence.psl transcript.psl stdout")
+    psl = stdout.read()
+    os.remove("transcript.psl")
+    os.remove("sequence.psl")
+    return psl
+
+def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
+    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
+    nBlocks = nBlocks1
+    transcript = ""
+    position = 0
+    for i in range(nBlocks):
+        position += random.randint(60,80)
+        blockSize = random.randint(60,80)
+        transcript += chromosome[position:position+blockSize]
+        position += blockSize
+    nBlocks = nBlocks2
+    sequence = ""
+    position = 0
+    for i in range(nBlocks):
+        position += random.randint(20,40)
+        blockSize = random.randint(20,40)
+        sequence += transcript[position:position+blockSize]
+        position += blockSize
+    chromosome = Seq(chromosome)
+    transcript = Seq(transcript)
+    sequence = Seq(sequence)
+    if strand1 == '-':
+        chromosome = chromosome.reverse_complement()
+    if strand2 == '-':
+        sequence = sequence.reverse_complement()
+    chromosome.id = "chromosome"
+    transcript.id = "transcript"
+    sequence.id = "sequence"
+    alignments1 = aligner.align(chromosome, transcript, strand=strand1)
+    alignment1 = alignments1[0]
+    alignments2 = aligner.align(transcript, sequence, strand=strand2)
+    alignment2 = alignments2[0]
+    alignment = alignment1.map(alignment2)
+    psl_check = map_check(alignment1, alignment2)
+    psl = format(alignment, "psl")
+    assert psl == psl_check
+    print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
+
+def test_random_sequences(aligner, strand1='+', strand2='+'):
+    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
+    transcript = "".join(['ACGT'[random.randint(0,3)] for i in range(300)])
+    sequence = "".join(['ACGT'[random.randint(0,3)] for i in range(100)])
+    print(chromosome, transcript, sequence)
+    chromosome = Seq(chromosome)
+    transcript = Seq(transcript)
+    sequence = Seq(sequence)
+    chromosome.id = "chromosome"
+    transcript.id = "transcript"
+    sequence.id = "sequence"
+    alignments = aligner.align(chromosome, transcript, strand=strand1)
+    alignment1 = alignments[0]
+    alignments = aligner.align(transcript, sequence, strand=strand2)
+    alignment2 = alignments[0]
+    psl_check = map_check(alignment1, alignment2)
+    alignment = alignment1.map(alignment2)
+    psl_check = psl_check.split()
+    psl = format(alignment, "psl")
+    psl = psl.split()
+    assert psl[8:] == psl_check[8:]
+    psl1 = format(alignment1, "psl")
+    words = psl1.split()
+    nBlocks1 = int(words[17])
+    psl2 = format(alignment2, "psl")
+    words = psl2.split()
+    nBlocks2 = int(words[17])
+    print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
+
 def perform_randomized_tests(n=1000):
+    """Run this function to perform 8 x n mappings for alignments of randomly
+    generated sequences, get the alignment in PSL format, and compare the
+    result to that of pslMap."""
     aligner = PairwiseAligner()
     aligner.internal_open_gap_score = -1
     aligner.internal_extend_gap_score = -0.0
