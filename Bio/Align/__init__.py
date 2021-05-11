@@ -1595,6 +1595,136 @@ class PairwiseAlignment:
                 i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
 
+    def map(self, alignment):
+        """Map the alignment to self.target and return the resulting alignment.
+
+        Here, self.query and alignment.target are the same sequence.
+
+        A typical example is where self is the pairwise alignment between a
+        chromosome and a transcript, the argument is the pairwise alignment
+        between the transcript and a sequence (e.g., as obtained by RNA-seq),
+        and we want to find the alignment of the sequence to the chromosome:
+        
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = 'local'
+        >>> aligner.gap_score = -1
+        >>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+        >>> transcript = "CCCCCCCGGGGGG"
+        >>> alignments1 = aligner.align(chromosome, transcript)
+        >>> len(alignments1)
+        1
+        >>> alignment1 = alignments1[0]
+        >>> print(alignment1)
+        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+                |||||||-----------||||||        
+                CCCCCCC-----------GGGGGG        
+        <BLANKLINE>
+        >>> sequence = "CCCCGGGG"
+        >>> alignments2 = aligner.align(transcript, sequence)
+        >>> len(alignments2)
+        1
+        >>> alignment2 = alignments2[0]
+        >>> print(alignment2)
+        CCCCCCCGGGGGG
+           ||||||||  
+           CCCCGGGG  
+        <BLANKLINE>
+        >>> alignment = alignment1.map(alignment2)
+        >>> print(alignment)
+        >>> print(format(alignment, "psl"))
+
+        Mapping the alignment does not depend on the sequence contents. If we
+        delete the sequence contents, the same alignment is found in PSL format
+        (though we obviously lose the ability to print the sequence alignment):
+
+        >>> alignment1.target = Seq(None, len(alignment1.target))
+        >>> alignment1.query = Seq(None, len(alignment1.query))
+        >>> alignment2.target = Seq(None, len(alignment2.target))
+        >>> alignment2.query = Seq(None, len(alignment2.query))
+        >>> alignment = alignment1.map(alignment2)
+        >>> print(format(alignment, "psl"))
+        """
+        alignment1, alignment2 = self, alignment
+        if len(alignment1.query) != len(alignment2.target):
+            raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
+        target = alignment1.target
+        query = alignment2.query
+        path1 = alignment1.path
+        path2 = alignment2.path
+        n1 = len(alignment1.query)
+        n2 = len(alignment2.query)
+        if path1[0][1] < path1[-1][1]:  # mapped to forward strand
+            strand1 = "+"
+        else:  # mapped to reverse strand
+            strand1 = "-"
+        if path2[0][1] < path2[-1][1]:  # mapped to forward strand
+            strand2 = "+"
+        else:  # mapped to reverse strand
+            strand2 = "-"
+        path1 = array(path1)
+        path2 = array(path2)
+        if strand1 == "+":
+            if strand2 == "-": # mapped to reverse strand
+                path2[:, 1] = n2 - path2[:, 1]
+        else:  # mapped to reverse strand
+            path1[:, 1] = n1 - path1[:, 1]
+            path2[:, 0] = n1 - path2[::-1, 0]
+            if strand2 == "+":
+                path2[:, 1] = n2 - path2[::-1, 1]
+            else:  # mapped to reverse strand
+                path2[:, 1] = path2[::-1, 1]
+        path = []
+        tEnd, qend = sys.maxsize, sys.maxsize
+        path1 = iter(path1)
+        tStart1, qStart1 = sys.maxsize, sys.maxsize
+        for tEnd1, qEnd1 in path1:
+            if tStart1 < tEnd1 and qStart1 < qEnd1:
+                break
+            tStart1, qStart1 = tEnd1, qEnd1
+        tStart2, qStart2 = sys.maxsize, sys.maxsize
+        for tEnd2, qEnd2 in path2:
+            while qStart2 < qEnd2 and tStart2 < tEnd2:
+                while True:
+                    if tStart2 < qStart1:
+                        if tEnd2 < qStart1:
+                            size = tEnd2 - tStart2
+                        else:
+                            size = qStart1 - tStart2
+                        break
+                    elif tStart2 < qEnd1:
+                        offset = tStart2 - qStart1
+                        if tEnd2 > qEnd1:
+                            size = qEnd1 - tStart2
+                        else:
+                            size = tEnd2 - tStart2
+                        qStart = qStart2
+                        tStart = tStart1 + offset
+                        if tStart > tEnd and qStart > qEnd:
+                            # adding a gap both in target and in query;
+                            # add gap to target first:
+                            path.append([tStart, qEnd])
+                        qEnd = qStart2 + size
+                        tEnd = tStart + size
+                        path.append([tStart, qStart])
+                        path.append([tEnd, qEnd])
+                        break
+                    tStart1, qStart1 = sys.maxsize, sys.maxsize
+                    for tEnd1, qEnd1 in path1:
+                        if tStart1 < tEnd1 and qStart1 < qEnd1:
+                            break
+                        tStart1, qStart1 = tEnd1, qEnd1
+                    else:
+                        size = qEnd2 - qStart2
+                        break
+                qStart2 += size
+                tStart2 += size
+            tStart2, qStart2 = tEnd2, qEnd2
+        if strand1 != strand2:
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        alignment = PairwiseAlignment(target, query, path, None)
+        return alignment
+
 
 class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.

@@ -103,8 +103,19 @@ def map_check(alignment1, alignment2):
     os.remove("sequence.psl")
     return psl
 
-class TestOneBlockTargetOneBlockQuery(unittest.TestCase):
+class TestSimple(unittest.TestCase):
+
+    def setUp(self):
+        aligner = PairwiseAligner()
+        aligner.internal_open_gap_score = -1
+        aligner.internal_extend_gap_score = -0.0
+        aligner.match_score = +1
+        aligner.mismatch_score = -1
+        aligner.mode = "local"
+        self.aligner = aligner
+
     def test_internal(self):
+        aligner = self.aligner
         chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA")
         chromosome.id = "chromosome"
         transcript = Seq("GGGGGGGCCCCCGGGGGGA")
@@ -144,6 +155,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 """)
 
     def test_left_overhang(self):
+        aligner = self.aligner
         chromosome = Seq("GGGCCCCCGGGGGGAAAAAAAAAA")
         chromosome.id = "chromosome"
         transcript = Seq("AGGGGGCCCCCGGGGGGA")
@@ -181,6 +193,7 @@ GGGGGCCCCCGGG
 """)
 
     def test_right_overhang(self):
+        aligner = self.aligner
         chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGG")
         chromosome.id = "chromosome"
         transcript = Seq("GGGGGGGCCCCCGGGGGGA")
@@ -217,32 +230,128 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
 10	0	0	0	0	0	0	0	+	sequence	12	0	10	chromosome	27	17	27	1	10,	0,	17,
 """)
 
-aligner = PairwiseAligner()
-aligner.internal_open_gap_score = -1
-aligner.internal_extend_gap_score = -0.0
-aligner.match_score = +1
-aligner.mismatch_score = -1
-aligner.mode = "local"
+    def test_reverse_transcript(self):
+        aligner = self.aligner
+        chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA")
+        chromosome.id = "chromosome"
+        transcript = Seq("TCCCCCCGGGGGCCCCCCC")
+        transcript.id = "transcript"
+        sequence = Seq("GGCCCCCGGG")
+        sequence.id = "sequence"
+        alignments1 = aligner.align(chromosome, transcript, strand="-")
+        self.assertEqual(len(alignments1), 1)
+        alignment1 = alignments1[0]
+        self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
+        self.assertEqual(str(alignment1), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+            |||||||||||||||||||         
+            GGGGGGGCCCCCGGGGGGA         
+""")
+        alignments2 = aligner.align(transcript, sequence, strand="-")
+        self.assertEqual(len(alignments2), 1)
+        alignment2 = alignments2[0]
+        self.assertEqual(alignment2.path, ((4, 10), (14, 0)))
+        self.assertEqual(str(alignment2), """\
+TCCCCCCGGGGGCCCCCCC
+    ||||||||||     
+    CCCGGGGGCC     
+""")
+        alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0], [17, 0])
+        self.assertSequenceEqual(alignment.path[1], [27, 10])
+        self.assertEqual(str(alignment), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+                 ||||||||||             
+                 GGCCCCCGGG             
+""")
+        psl = format(alignment, "psl")
+        self.assertEqual(psl, """\
+10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
+""")
 
-path1 = ((65, 0), (132, 67), (207, 67), (281, 141))
-path2 = ((32, 0), (68, 36))
-target1 = Seq(None, length=1000)
-query1 = Seq(None, length=141)
-target2 = Seq(None, length=141)
-query2 = Seq(None, length=36)
+    def test_reverse_sequence(self):
+        aligner = self.aligner
+        chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA")
+        chromosome.id = "chromosome"
+        transcript = Seq("GGGGGGGCCCCCGGGGGGA")
+        transcript.id = "transcript"
+        sequence = Seq("CCCGGGGGCC")
+        sequence.id = "sequence"
+        alignments1 = aligner.align(chromosome, transcript)
+        self.assertEqual(len(alignments1), 1)
+        alignment1 = alignments1[0]
+        self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
+        self.assertEqual(str(alignment1), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+            |||||||||||||||||||         
+            GGGGGGGCCCCCGGGGGGA         
+""")
+        alignments2 = aligner.align(transcript, sequence, "-")
+        self.assertEqual(len(alignments2), 1)
+        alignment2 = alignments2[0]
+        self.assertEqual(alignment2.path, ((5, 10), (15, 0)))
+        self.assertEqual(str(alignment2), """\
+GGGGGGGCCCCCGGGGGGA
+     ||||||||||    
+     GGCCCCCGGG    
+""")
+        alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0], [17, 10])
+        self.assertSequenceEqual(alignment.path[1], [27, 0])
+        self.assertEqual(str(alignment), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+                 ||||||||||             
+                 GGCCCCCGGG             
+""")
+        psl = format(alignment, "psl")
+        self.assertEqual(psl, """\
+10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
+""")
 
-target1.id = "chromosome"
-query1.id = "transcript"
-target2.id = "transcript"
-query2.id = "sequence"
+    def test_reverse_transcript_sequence(self):
+        aligner = self.aligner
+        chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA")
+        chromosome.id = "chromosome"
+        transcript = Seq("TCCCCCCGGGGGCCCCCCC")
+        transcript.id = "transcript"
+        sequence = Seq("CCCGGGGGCC")
+        sequence.id = "sequence"
+        alignments1 = aligner.align(chromosome, transcript, "-")
+        self.assertEqual(len(alignments1), 1)
+        alignment1 = alignments1[0]
+        self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
+        self.assertEqual(str(alignment1), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+            |||||||||||||||||||         
+            GGGGGGGCCCCCGGGGGGA         
+""")
+        alignments2 = aligner.align(transcript, sequence)
+        self.assertEqual(len(alignments2), 1)
+        alignment2 = alignments2[0]
+        self.assertEqual(alignment2.path, ((4, 0), (14, 10)))
+        self.assertEqual(str(alignment2), """\
+TCCCCCCGGGGGCCCCCCC
+    ||||||||||     
+    CCCGGGGGCC     
+""")
+        alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 2)
+        self.assertSequenceEqual(alignment.path[0], [17, 10])
+        self.assertSequenceEqual(alignment.path[1], [27, 0])
+        self.assertEqual(str(alignment), """\
+AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
+                 ||||||||||             
+                 GGCCCCCGGG             
+""")
+        psl = format(alignment, "psl")
+        self.assertEqual(psl, """\
+10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
+""")
 
-alignment1 = PairwiseAlignment(target1, query1, path1, None)
-alignment2 = PairwiseAlignment(target2, query2, path2, None)
-alignment = map_alignment(alignment1, alignment2)
-psl = map_check(alignment1, alignment2)
-assert format(alignment, "psl") == psl
 
-def test_random(nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
+def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
     chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
     nBlocks = nBlocks1
     transcript = ""
@@ -280,10 +389,11 @@ def test_random(nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
     assert psl == psl_check
     print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
-def test_random_sequences(strand1='+', strand2='+'):
+def test_random_sequences(aligner, strand1='+', strand2='+'):
     chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
     transcript = "".join(['ACGT'[random.randint(0,3)] for i in range(300)])
     sequence = "".join(['ACGT'[random.randint(0,3)] for i in range(100)])
+    print(chromosome, transcript, sequence)
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
     sequence = Seq(sequence)
@@ -309,52 +419,111 @@ def test_random_sequences(strand1='+', strand2='+'):
     print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
 
-for i in range(1000):
-    nBlocks1 = random.randint(1,10)
-    nBlocks2 = random.randint(1,10)
-    test_random(nBlocks1, nBlocks2, '+', '+')
-    test_random(nBlocks1, nBlocks2, '+', '-')
-    test_random(nBlocks1, nBlocks2, '-', '+')
-    test_random(nBlocks1, nBlocks2, '-', '-')
-    test_random_sequences('+', '+')
-    test_random_sequences('+', '-')
-    test_random_sequences('-', '+')
-    test_random_sequences('-', '-')
+class TestComplex(unittest.TestCase):
+    def setUp(self):
+        aligner = PairwiseAligner()
+        aligner.internal_open_gap_score = -1
+        aligner.internal_extend_gap_score = -0.0
+        aligner.match_score = +1
+        aligner.mismatch_score = -1
+        aligner.mode = "local"
+        self.aligner = aligner
 
-if False:
-        chromosome = Seq("AAAAAAAAAAAAGGGGGGGCCCCCGGG")
+    def test1(self):
+        aligner = self.aligner
+        chromosome = Seq("GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTGCAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGGGTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTTGTCATTAACCAACTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTTGCGCGCACCCTTTTATCGGTAAGGCGCGGTGACTCTCTCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTCTAACAGGGCACCGAATTCGATTA")
         chromosome.id = "chromosome"
-        transcript = Seq("GGGGGGGCCCCCGGGGGGA")
+        transcript = Seq("GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCATGTGGGACAGTTGATCCCATCCGCCTCAAAATTTCTCGCAATATCGGTTGGGGCACAGGTCCACTTTACGAATTCATACCGTGGTAGAGACCTTTATTAGATAGATATGACTGTTTGATTGCGGCATAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGACCGGGTTGGGTCGAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGGGTTC")
         transcript.id = "transcript"
-        sequence = Seq("GGCCCCCGGGGG")
+        sequence = Seq("TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGGGGACAGTTGATCCCATCCGCCTTTTACGAATTCATACCGTGGTAGGCGGCATAGTACGACGAAGCGGTTGGGTCGAAAAACAGGTTGCCGTCATATCGGTGGGTTC")
         sequence.id = "sequence"
         alignments1 = aligner.align(chromosome, transcript)
-        assert len(alignments1) == 1
+        self.assertEqual(len(alignments1), 4693371383075020800)
         alignment1 = alignments1[0]
-        assert str(alignment1) == """\
-AAAAAAAAAAAAGGGGGGGCCCCCGGG    
-            |||||||||||||||    
-            GGGGGGGCCCCCGGGGGGA
-"""
+        self.assertEqual(len(alignment1.path), 164)
+        self.assertEqual(str(alignment1), """\
+GCCTACCGTATAACAATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGC-----CGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACT-ACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGG-ACAGCGGGAAGATGTCGTGGTTTC-CTT---G---TCATTAACC-------A-ACTCCATCTTA--AAAGCTCCTCTAGCCATGGCATG---GT---ACGTTGCGCGCACCCTTTTA-T----CG--GTAAGG-------CG---CGGT-------GACTCTC--------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCT-------AAG-GCACTT-ACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
+              |||--||-||------|---||||-|||----||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----||||----||||-----||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---|||-||-.||||------------|-|---------||||-|-------||||-||||---------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--|.|-------|||--||---|||---||---|--|||||-|||------||-|----||--|.||||-------||---||||-------|||---|--------||..||||||----------|||----||--||--|-------|||-|||-||-||.|----|||------||||---|-----|||-||.|.|-||----|--|||     
+            GGAAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGGAGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG---------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATTAGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA----------GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC---C-----GTCATATCGGTGG----G--TTC     
+""")
         alignments2 = aligner.align(transcript, sequence)
-        assert len(alignments2) == 1
+        self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        assert str(alignment2) == """\
-GGGGGGGCCCCCGGGGGGA
-     ||||||||||||  
-     GGCCCCCGGGGG  
-"""
+        self.assertEqual(len(alignment2.path), 12)
+        self.assertEqual(str(alignment2), """\
+GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCATGTGGGACAGTTGATCCCATCCGCCTCAAAATTTCTCGCAATATCGGTTGGGGCACAGGTCCACTTTACGAATTCATACCGTGGTAGAGACCTTTATTAGATAGATATGACTGTTTGATTGCGGCATAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGACCGGGTTGGGTCGAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGGGTTC
+                            |||||||||||||||||||||||||||||||||||--------------------|||||||||||||||||||||||--------------------------------------|||||||||||||||||||||||---------------------------------||||||||||||||||||||--------------------------------|||||||||||||||||||||------------------------------||||||||||||||||||||
+                            TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCG--------------------GGGACAGTTGATCCCATCCGCCT--------------------------------------TTTACGAATTCATACCGTGGTAG---------------------------------GCGGCATAGTACGACGAAGC--------------------------------GGTTGGGTCGAAAAACAGGTT------------------------------GCCGTCATATCGGTGGGTTC
+""")
         alignment = map_alignment(alignment1, alignment2)
-        assert str(alignment) == """\
-AAAAAAAAAAAAGGGGGGGCCCCCGGG  
-                 ||||||||||  
-                 GGCCCCCGGGGG
-"""
+        self.assertEqual(len(alignment.path), 76)
+        self.assertEqual(str(alignment), """\
+GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAACTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTTTA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
+                                   ||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----------------------------||----||--||--|-|--||--|||.||-|||------------------------------------------------------------------------------------------||---|---||||--|||-------------------------------------------------|||-|||------||-|----||--|.------------------------||..||||||----------|||----|------------------------------------||---|-----|||-||.|.|-||----|--|||     
+                                   TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----------------------------GGGACAGT--TG--A-T--CC--CATCCG-CCT------------------------------------------------------------------------------------------TTTACGAATTCAT--ACC------------------------------------------GTGGTAGGCG-GCA------TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GGT----T------------------------------------GC---C-----GTCATATCGGTGG----G--TTC     
+""")
         psl = format(alignment, "psl")
-        assert psl == """\
-10	0	0	0	0	0	0	0	+	sequence	12	0	10	chromosome	27	17	27	1	10,	0,	17,
-"""
-        print("TEST OK")
+        self.assertEqual(psl, """\
+96	10	0	0	11	36	27	294	+	sequence	142	0	142	chromosome	440	35	435	37	2,6,1,5,4,3,4,1,6,2,2,2,1,1,2,6,3,2,1,4,3,3,3,2,1,2,2,10,3,1,2,1,3,6,2,1,3,	0,2,8,12,17,21,24,28,29,35,41,43,45,46,47,49,55,58,63,67,71,81,84,87,90,95,99,108,118,121,122,124,125,129,136,138,139,	35,43,52,53,63,78,83,88,95,129,131,135,139,141,144,148,155,248,250,251,257,302,306,315,317,318,320,339,359,366,403,408,414,417,423,429,432,
+""")
+
+    def test2(self):
+        aligner = self.aligner
+        chromosome = Seq("CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAACCTGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTACATTCATACCTGCGTGACGGTCAGCCTCCCCCGGGACCTCATTGGGCGAATCTAGGTGTGATAATTGACACACTCTTGGTAAGAAGCACTCTTTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA")
+        chromosome.id = "chromosome"
+        transcript = Seq("CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTAGCATTAGACCGACGGGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATCTAACACTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCACCACGCACGACTAAGGACCATTTTCTGCGTGCGACGGTTAAAATAACCTCAATCACT")
+        transcript.id = "transcript"
+        sequence = Seq("TCCCCTTCTAATGGAATCCCCCTCCGAAGGTCGCAGAAGCGGCCACGCCGGAGATACCAGTTCCACGCCTCAGGTTGGACTTGTCACACTTGTACGCGAT")
+        sequence.id = "sequence"
+        alignments1 = aligner.align(chromosome, transcript)
+        self.assertEqual(len(alignments1), 50086982320128)
+        alignment1 = alignments1[0]
+        self.assertEqual(len(alignment1.path), 126)
+        self.assertEqual(str(alignment1), """\
+CTAATGCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGA------CTCTTAG----CGGATATGCGGCTGAGAAGTACGACA-----TGT---GT----ACATTCATAC--CTGCGT-------GACGGTCAGCCT----CCCCCGGGACCTCATTG-GGCGAATCTAGGTGTGATA-A-----TTGACA-CA----CTCTTGGTAAGAAGCACTCT---------TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTG-----CGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAAGCTCGCACGAATACGCAG-------TTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
+     |||--|.|||---------||.|||-------||-.|||-||||------------||--------||||---|-|||-----|||||------|||||||----|----||----||-|.||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-|||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-||----.|||-------||-||||||---------||----|||------|.||||-----------------||-----||||----||.|----||-|||----|-|||.|-||.||----|||||||.||---||-------||------|||.|||-----|||||||--------||-|--|----------------||----------|---|||--|||--------|||-----|||                         
+CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-AAAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CATCAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG-----------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA----CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------TA-A--A----------------AT----------A---ACC--TCA--------ATC-----ACT                         
+""")
+        alignments2 = aligner.align(transcript, sequence)
+        self.assertEqual(len(alignments2), 8735573632)
+        alignment2 = alignments2[0]
+        self.assertEqual(len(alignment2.path), 66)
+        self.assertEqual(str(alignment2), """\
+CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTAGCATTAGACCGACG--GGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATCTAACA---CTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCACCACGCACGACTAAGGACCATTTTCTG--CGTGCGACGGTTAAAATAACCTCAATCACT
+        ||------------|-------||||---|||------|-||||||-------------------------------|.||-------------|--||-|||.|-|||---.||||--|||----|.||-|||--|---||------------|||||------------||||---||---||---|||--|||-----|||--||--|-----||----------------||---------|||-|||-------------||--|--||||                       
+        TC------------C-------CCTT---CTA------A-TGGAAT-------------------------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--AGC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT---------CAC-ACT-------------TGTAC--GCGAT                      
+""")
+        alignment = map_alignment(alignment1, alignment2)
+        self.assertEqual(len(alignment.path), 78)
+        self.assertEqual(str(alignment), """\
+CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA------CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCGAATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATCCAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
+          |.------------------------||-|---------------||--------|----------|------||||---------------------------------------------|--||---|--.-|-||----||-----|||----||-.||--|---------|----------------||||--------||---||-----------||---|||----||----|--------|.--|---------------------------------------------------||--------------|||-|.|---------------||--.--|-----|||                                                                                                       
+          TC-----------------------CCCTT---------------CT--------A----------A------TGGA---------------------------------------ATCCCCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G---------------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----G--------GA--C-------------------------------------------------TTGT--------------CAC-ACT---------------TGTAC--G-----CGAT                                                                                                      
+""")
+        psl = format(alignment, "psl")
+        self.assertEqual(psl, """\
+61	6	0	0	14	32	28	260	+	sequence	100	0	99	chromosome	440	10	337	35	2,2,1,2,1,1,4,1,2,1,1,1,2,2,3,2,3,1,1,4,2,2,2,3,2,1,2,1,2,3,3,2,1,1,3,	0,3,6,7,9,10,11,21,22,24,27,28,29,35,37,42,44,49,50,52,57,61,63,68,74,76,77,79,82,84,87,90,94,95,96,	10,35,37,53,63,74,81,124,127,132,133,135,137,139,146,151,154,157,167,183,194,197,210,212,216,222,231,235,285,301,305,323,325,328,334,
+""")
+
+
+def perform_randomized_tests(n=1000):
+    aligner = PairwiseAligner()
+    aligner.internal_open_gap_score = -1
+    aligner.internal_extend_gap_score = -0.0
+    aligner.match_score = +1
+    aligner.mismatch_score = -1
+    aligner.mode = "local"
+    for i in range(n):
+        nBlocks1 = random.randint(1,10)
+        nBlocks2 = random.randint(1,10)
+        test_random(aligner, nBlocks1, nBlocks2, '+', '+')
+        test_random(aligner, nBlocks1, nBlocks2, '+', '-')
+        test_random(aligner, nBlocks1, nBlocks2, '-', '+')
+        test_random(aligner, nBlocks1, nBlocks2, '-', '-')
+        test_random_sequences('+', '+')
+        test_random_sequences('+', '-')
+        test_random_sequences('-', '+')
+        test_random_sequences('-', '-')
 
 
 if __name__ == "__main__":
