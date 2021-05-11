@@ -2249,7 +2249,8 @@ The \verb+map+ method can be applied on a pairwise alignment \verb+alignment1+ t
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mode = 'local'
->>> aligner.gap_score = -1
+>>> aligner.open_gap_score = -1
+>>> aligner.extend_gap_score = 0
 >>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
 >>> transcript = "CCCCCCCGGGGGG"
 >>> alignments1 = aligner.align(chromosome, transcript)
@@ -2271,9 +2272,14 @@ CCCCCCCGGGGGG
    ||||||||  
    CCCCGGGG  
 <BLANKLINE>
->>> alignment = alignment1.map(alignment2)
->>> print(alignment)
->>> print(format(alignment, "psl"))
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> print(mapped_alignment)
+AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+           ||||-----------||||          
+           CCCC-----------GGGG          
+<BLANKLINE>
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 \end{minted}
 
 Mapping the alignment does not depend on the sequence contents. If we delete
@@ -2282,12 +2288,14 @@ obviously lose the ability to print the sequence alignment):
 
 %cont-doctest
 \begin{minted}{pycon}
+>>> from Bio.Seq import Seq
 >>> alignment1.target = Seq(None, len(alignment1.target))
 >>> alignment1.query = Seq(None, len(alignment1.query))
 >>> alignment2.target = Seq(None, len(alignment2.target))
 >>> alignment2.query = Seq(None, len(alignment2.query))
->>> alignment = alignment1.map(alignment2)
->>> print(format(alignment, "psl"))
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 \end{minted}
 
 \paragraph*{Exporting alignments}

@@ -1598,7 +1598,7 @@ class PairwiseAlignment:
         return tuple(segments1), tuple(segments2)
 
     def map(self, alignment):
-        """Map the alignment to self.target and return the resulting alignment.
+        r"""Map the alignment to self.target and return the resulting alignment.
 
         Here, self.query and alignment.target are the same sequence.
 
@@ -1610,7 +1610,8 @@ class PairwiseAlignment:
         >>> from Bio import Align
         >>> aligner = Align.PairwiseAligner()
         >>> aligner.mode = 'local'
-        >>> aligner.gap_score = -1
+        >>> aligner.open_gap_score = -1
+        >>> aligner.extend_gap_score = 0
         >>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
         >>> transcript = "CCCCCCCGGGGGG"
         >>> alignments1 = aligner.align(chromosome, transcript)
@@ -1634,7 +1635,12 @@ class PairwiseAlignment:
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
-        >>> print(format(alignment, "psl"))
+        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+                   ||||-----------||||          
+                   CCCC-----------GGGG          
+        <BLANKLINE>
+        >>> format(alignment, "psl")
+        '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 
         Mapping the alignment does not depend on the sequence contents. If we
         delete the sequence contents, the same alignment is found in PSL format
@@ -1645,7 +1651,8 @@ class PairwiseAlignment:
         >>> alignment2.target = Seq(None, len(alignment2.target))
         >>> alignment2.query = Seq(None, len(alignment2.query))
         >>> alignment = alignment1.map(alignment2)
-        >>> print(format(alignment, "psl"))
+        >>> format(alignment, "psl")
+        '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
         """
         from numpy import array
         alignment1, alignment2 = self, alignment
