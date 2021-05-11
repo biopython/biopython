@@ -1,3 +1,10 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+
+"""Tests for mapping pairwise alignments."""
+
 import os
 import random
 import unittest
@@ -32,7 +39,8 @@ class TestSimple(unittest.TestCase):
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
-""")
+""")  # noqa: W291
+
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -272,7 +280,6 @@ class TestComplex(unittest.TestCase):
         sequence = Seq("TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGGGGACAGTTGATCCCATCCGCCTTTTACGAATTCATACCGTGGTAGGCGGCATAGTACGACGAAGCGGTTGGGTCGAAAAACAGGTTGCCGTCATATCGGTGGGTTC")
         sequence.id = "sequence"
         alignments1 = aligner.align(chromosome, transcript)
-        self.assertEqual(len(alignments1), 4693371383075020800)
         alignment1 = alignments1[0]
         self.assertEqual(len(alignment1.path), 164)
         self.assertEqual(str(alignment1), """\
@@ -281,7 +288,6 @@ GCCTACCGTATAACAATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAACGGCCTG
             GGAAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGGAGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG---------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATTAGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA----------GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC---C-----GTCATATCGGTGG----G--TTC     
 """)
         alignments2 = aligner.align(transcript, sequence)
-        self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertEqual(len(alignment2.path), 12)
         self.assertEqual(str(alignment2), """\
@@ -310,7 +316,6 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
         sequence = Seq("TCCCCTTCTAATGGAATCCCCCTCCGAAGGTCGCAGAAGCGGCCACGCCGGAGATACCAGTTCCACGCCTCAGGTTGGACTTGTCACACTTGTACGCGAT")
         sequence.id = "sequence"
         alignments1 = aligner.align(chromosome, transcript)
-        self.assertEqual(len(alignments1), 50086982320128)
         alignment1 = alignments1[0]
         self.assertEqual(len(alignment1.path), 126)
         self.assertEqual(str(alignment1), """\
@@ -319,7 +324,6 @@ CTAATGCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCT
 CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-AAAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CATCAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG-----------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA----CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------TA-A--A----------------AT----------A---ACC--TCA--------ATC-----ACT                         
 """)
         alignments2 = aligner.align(transcript, sequence)
-        self.assertEqual(len(alignments2), 8735573632)
         alignment2 = alignments2[0]
         self.assertEqual(len(alignment2.path), 66)
         self.assertEqual(str(alignment2), """\
@@ -355,30 +359,31 @@ def map_check(alignment1, alignment2):
     os.remove("sequence.psl")
     return psl
 
-def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
-    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
+
+def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1="+", strand2="+"):
+    chromosome = "".join(["ACGT"[random.randint(0, 3)] for i in range(1000)])
     nBlocks = nBlocks1
     transcript = ""
     position = 0
     for i in range(nBlocks):
-        position += random.randint(60,80)
-        blockSize = random.randint(60,80)
-        transcript += chromosome[position:position+blockSize]
+        position += random.randint(60, 80)
+        blockSize = random.randint(60, 80)
+        transcript += chromosome[position:position + blockSize]
         position += blockSize
     nBlocks = nBlocks2
     sequence = ""
     position = 0
     for i in range(nBlocks):
-        position += random.randint(20,40)
-        blockSize = random.randint(20,40)
-        sequence += transcript[position:position+blockSize]
+        position += random.randint(20, 40)
+        blockSize = random.randint(20, 40)
+        sequence += transcript[position:position + blockSize]
         position += blockSize
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
     sequence = Seq(sequence)
-    if strand1 == '-':
+    if strand1 == "-":
         chromosome = chromosome.reverse_complement()
-    if strand2 == '-':
+    if strand2 == "-":
         sequence = sequence.reverse_complement()
     chromosome.id = "chromosome"
     transcript.id = "transcript"
@@ -393,10 +398,11 @@ def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1='+', strand2='+'):
     assert psl == psl_check
     print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
-def test_random_sequences(aligner, strand1='+', strand2='+'):
-    chromosome = "".join(['ACGT'[random.randint(0,3)] for i in range(1000)])
-    transcript = "".join(['ACGT'[random.randint(0,3)] for i in range(300)])
-    sequence = "".join(['ACGT'[random.randint(0,3)] for i in range(100)])
+
+def test_random_sequences(aligner, strand1="+", strand2="+"):
+    chromosome = "".join(["ACGT"[random.randint(0,3)] for i in range(1000)])
+    transcript = "".join(["ACGT"[random.randint(0,3)] for i in range(300)])
+    sequence = "".join(["ACGT"[random.randint(0,3)] for i in range(100)])
     print(chromosome, transcript, sequence)
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
@@ -422,8 +428,11 @@ def test_random_sequences(aligner, strand1='+', strand2='+'):
     nBlocks2 = int(words[17])
     print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
+
 def perform_randomized_tests(n=1000):
-    """Run this function to perform 8 x n mappings for alignments of randomly
+    """Perform randomized tests and compare to pslMap.
+
+    Run this function to perform 8 x n mappings for alignments of randomly
     generated sequences, get the alignment in PSL format, and compare the
     result to that of pslMap."""
     aligner = PairwiseAligner()
@@ -433,16 +442,16 @@ def perform_randomized_tests(n=1000):
     aligner.mismatch_score = -1
     aligner.mode = "local"
     for i in range(n):
-        nBlocks1 = random.randint(1,10)
-        nBlocks2 = random.randint(1,10)
-        test_random(aligner, nBlocks1, nBlocks2, '+', '+')
-        test_random(aligner, nBlocks1, nBlocks2, '+', '-')
-        test_random(aligner, nBlocks1, nBlocks2, '-', '+')
-        test_random(aligner, nBlocks1, nBlocks2, '-', '-')
-        test_random_sequences('+', '+')
-        test_random_sequences('+', '-')
-        test_random_sequences('-', '+')
-        test_random_sequences('-', '-')
+        nBlocks1 = random.randint(1, 10)
+        nBlocks2 = random.randint(1, 10)
+        test_random(aligner, nBlocks1, nBlocks2, "+", "+")
+        test_random(aligner, nBlocks1, nBlocks2, "+", "-")
+        test_random(aligner, nBlocks1, nBlocks2, "-", "+")
+        test_random(aligner, nBlocks1, nBlocks2, "-", "-")
+        test_random_sequences("+", "+")
+        test_random_sequences("+", "-")
+        test_random_sequences("-", "+")
+        test_random_sequences("-", "-")
 
 
 if __name__ == "__main__":

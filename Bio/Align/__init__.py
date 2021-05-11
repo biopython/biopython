@@ -1606,7 +1606,7 @@ class PairwiseAlignment:
         chromosome and a transcript, the argument is the pairwise alignment
         between the transcript and a sequence (e.g., as obtained by RNA-seq),
         and we want to find the alignment of the sequence to the chromosome:
-        
+
         >>> from Bio import Align
         >>> aligner = Align.PairwiseAligner()
         >>> aligner.mode = 'local'
@@ -1675,7 +1675,7 @@ class PairwiseAlignment:
         path1 = array(path1)
         path2 = array(path2)
         if strand1 == "+":
-            if strand2 == "-": # mapped to reverse strand
+            if strand2 == "-":  # mapped to reverse strand
                 path2[:, 1] = n2 - path2[:, 1]
         else:  # mapped to reverse strand
             path1[:, 1] = n1 - path1[:, 1]
@@ -1685,7 +1685,7 @@ class PairwiseAlignment:
             else:  # mapped to reverse strand
                 path2[:, 1] = path2[::-1, 1]
         path = []
-        tEnd, qend = sys.maxsize, sys.maxsize
+        tEnd, qEnd = sys.maxsize, sys.maxsize
         path1 = iter(path1)
         tStart1, qStart1 = sys.maxsize, sys.maxsize
         for tEnd1, qEnd1 in path1:
