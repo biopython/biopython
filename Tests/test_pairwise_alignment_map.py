@@ -12,6 +12,7 @@ import unittest
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner
 
+
 class TestSimple(unittest.TestCase):
 
     def setUp(self):
@@ -40,7 +41,6 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
 """)  # noqa: W291
-
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -49,7 +49,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
@@ -58,7 +58,7 @@ GGGGGGGCCCCCGGGGGGA
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
@@ -79,7 +79,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
    GGGCCCCCGGGGGGAAAAAAAAAA
    |||||||||||||||         
 AGGGGGCCCCCGGGGGGA         
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -87,7 +87,7 @@ AGGGGGCCCCCGGGGGGA
 AGGGGGCCCCCGGGGGGA
  |||||||||||||    
  GGGGGCCCCCGGG    
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [0, 2])
@@ -96,7 +96,7 @@ AGGGGGCCCCCGGGGGGA
   GGGCCCCCGGGGGGAAAAAAAAAA
   |||||||||||             
 GGGGGCCCCCGGG             
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 11	0	0	0	0	0	0	0	+	sequence	13	2	13	chromosome	24	0	11	1	11,	2,	0,
@@ -117,7 +117,7 @@ GGGGGCCCCCGGG
 AAAAAAAAAAAAGGGGGGGCCCCCGGG    
             |||||||||||||||    
             GGGGGGGCCCCCGGGGGGA
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -125,7 +125,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
 GGGGGGGCCCCCGGGGGGA
      ||||||||||||  
      GGCCCCCGGGGG  
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
@@ -134,7 +134,7 @@ GGGGGGGCCCCCGGGGGGA
 AAAAAAAAAAAAGGGGGGGCCCCCGGG  
                  ||||||||||  
                  GGCCCCCGGGGG
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	+	sequence	12	0	10	chromosome	27	17	27	1	10,	0,	17,
@@ -156,7 +156,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence, strand="-")
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -165,7 +165,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
@@ -174,7 +174,7 @@ TCCCCCCGGGGGCCCCCCC
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
@@ -196,7 +196,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence, "-")
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -205,7 +205,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
@@ -214,7 +214,7 @@ GGGGGGGCCCCCGGGGGGA
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
@@ -236,7 +236,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -245,7 +245,7 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
 TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
@@ -254,7 +254,7 @@ TCCCCCCGGGGGCCCCCCC
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
@@ -286,7 +286,7 @@ class TestComplex(unittest.TestCase):
 GCCTACCGTATAACAATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGC-----CGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACT-ACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGG-ACAGCGGGAAGATGTCGTGGTTTC-CTT---G---TCATTAACC-------A-ACTCCATCTTA--AAAGCTCCTCTAGCCATGGCATG---GT---ACGTTGCGCGCACCCTTTTA-T----CG--GTAAGG-------CG---CGGT-------GACTCTC--------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCT-------AAG-GCACTT-ACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
               |||--||-||------|---||||-|||----||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----||||----||||-----||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---|||-||-.||||------------|-|---------||||-|-------||||-||||---------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--|.|-------|||--||---|||---||---|--|||||-|||------||-|----||--|.||||-------||---||||-------|||---|--------||..||||||----------|||----||--||--|-------|||-|||-||-||.|----|||------||||---|-----|||-||.|.|-||----|--|||     
             GGAAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGGAGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG---------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATTAGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA----------GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC---C-----GTCATATCGGTGG----G--TTC     
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
         self.assertEqual(len(alignment2.path), 12)
@@ -301,7 +301,7 @@ GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCA
 GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAACTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTTTA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
                                    ||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----------------------------||----||--||--|-|--||--|||.||-|||------------------------------------------------------------------------------------------||---|---||||--|||-------------------------------------------------|||-|||------||-|----||--|.------------------------||..||||||----------|||----|------------------------------------||---|-----|||-||.|.|-||----|--|||     
                                    TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----------------------------GGGACAGT--TG--A-T--CC--CATCCG-CCT------------------------------------------------------------------------------------------TTTACGAATTCAT--ACC------------------------------------------GTGGTAGGCG-GCA------TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GGT----T------------------------------------GC---C-----GTCATATCGGTGG----G--TTC     
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 96	10	0	0	11	36	27	294	+	sequence	142	0	142	chromosome	440	35	435	37	2,6,1,5,4,3,4,1,6,2,2,2,1,1,2,6,3,2,1,4,3,3,3,2,1,2,2,10,3,1,2,1,3,6,2,1,3,	0,2,8,12,17,21,24,28,29,35,41,43,45,46,47,49,55,58,63,67,71,81,84,87,90,95,99,108,118,121,122,124,125,129,136,138,139,	35,43,52,53,63,78,83,88,95,129,131,135,139,141,144,148,155,248,250,251,257,302,306,315,317,318,320,339,359,366,403,408,414,417,423,429,432,
@@ -322,7 +322,7 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
 CTAATGCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGA------CTCTTAG----CGGATATGCGGCTGAGAAGTACGACA-----TGT---GT----ACATTCATAC--CTGCGT-------GACGGTCAGCCT----CCCCCGGGACCTCATTG-GGCGAATCTAGGTGTGATA-A-----TTGACA-CA----CTCTTGGTAAGAAGCACTCT---------TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTG-----CGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAAGCTCGCACGAATACGCAG-------TTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
      |||--|.|||---------||.|||-------||-.|||-||||------------||--------||||---|-|||-----|||||------|||||||----|----||----||-|.||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-|||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-||----.|||-------||-||||||---------||----|||------|.||||-----------------||-----||||----||.|----||-|||----|-|||.|-||.||----|||||||.||---||-------||------|||.|||-----|||||||--------||-|--|----------------||----------|---|||--|||--------|||-----|||                         
 CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-AAAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CATCAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG-----------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA----CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------TA-A--A----------------AT----------A---ACC--TCA--------ATC-----ACT                         
-""")
+""")  # noqa: W291
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
         self.assertEqual(len(alignment2.path), 66)
@@ -330,14 +330,14 @@ CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-
 CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTAGCATTAGACCGACG--GGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATCTAACA---CTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCACCACGCACGACTAAGGACCATTTTCTG--CGTGCGACGGTTAAAATAACCTCAATCACT
         ||------------|-------||||---|||------|-||||||-------------------------------|.||-------------|--||-|||.|-|||---.||||--|||----|.||-|||--|---||------------|||||------------||||---||---||---|||--|||-----|||--||--|-----||----------------||---------|||-|||-------------||--|--||||                       
         TC------------C-------CCTT---CTA------A-TGGAAT-------------------------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--AGC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT---------CAC-ACT-------------TGTAC--GCGAT                      
-""")
+""")  # noqa: W291
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 78)
         self.assertEqual(str(alignment), """\
 CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA------CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCGAATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATCCAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
           |.------------------------||-|---------------||--------|----------|------||||---------------------------------------------|--||---|--.-|-||----||-----|||----||-.||--|---------|----------------||||--------||---||-----------||---|||----||----|--------|.--|---------------------------------------------------||--------------|||-|.|---------------||--.--|-----|||                                                                                                       
           TC-----------------------CCCTT---------------CT--------A----------A------TGGA---------------------------------------ATCCCCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G---------------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----G--------GA--C-------------------------------------------------TTGT--------------CAC-ACT---------------TGTAC--G-----CGAT                                                                                                      
-""")
+""")  # noqa: W291
         psl = format(alignment, "psl")
         self.assertEqual(psl, """\
 61	6	0	0	14	32	28	260	+	sequence	100	0	99	chromosome	440	10	337	35	2,2,1,2,1,1,4,1,2,1,1,1,2,2,3,2,3,1,1,4,2,2,2,3,2,1,2,1,2,3,3,2,1,1,3,	0,3,6,7,9,10,11,21,22,24,27,28,29,35,37,42,44,49,50,52,57,61,63,68,74,76,77,79,82,84,87,90,94,95,96,	10,35,37,53,63,74,81,124,127,132,133,135,137,139,146,151,154,157,167,183,194,197,210,212,216,222,231,235,285,301,305,323,325,328,334,
@@ -400,9 +400,9 @@ def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1="+", strand2="+"):
 
 
 def test_random_sequences(aligner, strand1="+", strand2="+"):
-    chromosome = "".join(["ACGT"[random.randint(0,3)] for i in range(1000)])
-    transcript = "".join(["ACGT"[random.randint(0,3)] for i in range(300)])
-    sequence = "".join(["ACGT"[random.randint(0,3)] for i in range(100)])
+    chromosome = "".join(["ACGT"[random.randint(0, 3)] for i in range(1000)])
+    transcript = "".join(["ACGT"[random.randint(0, 3)] for i in range(300)])
+    sequence = "".join(["ACGT"[random.randint(0, 3)] for i in range(100)])
     print(chromosome, transcript, sequence)
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
@@ -434,7 +434,8 @@ def perform_randomized_tests(n=1000):
 
     Run this function to perform 8 x n mappings for alignments of randomly
     generated sequences, get the alignment in PSL format, and compare the
-    result to that of pslMap."""
+    result to that of pslMap.
+    """
     aligner = PairwiseAligner()
     aligner.internal_open_gap_score = -1
     aligner.internal_extend_gap_score = -0.0

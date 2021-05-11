@@ -1653,7 +1653,7 @@ class PairwiseAlignment:
         >>> alignment = alignment1.map(alignment2)
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
-        """
+        """  # noqa: W291
         from numpy import array
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):
