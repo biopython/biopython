@@ -14,7 +14,6 @@ from Bio.Align import PairwiseAligner
 
 
 class TestSimple(unittest.TestCase):
-
     def setUp(self):
         aligner = PairwiseAligner()
         aligner.internal_open_gap_score = -1
@@ -36,11 +35,14 @@ class TestSimple(unittest.TestCase):
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
@@ -403,7 +405,6 @@ def test_random_sequences(aligner, strand1="+", strand2="+"):
     chromosome = "".join(["ACGT"[random.randint(0, 3)] for i in range(1000)])
     transcript = "".join(["ACGT"[random.randint(0, 3)] for i in range(300)])
     sequence = "".join(["ACGT"[random.randint(0, 3)] for i in range(100)])
-    print(chromosome, transcript, sequence)
     chromosome = Seq(chromosome)
     transcript = Seq(transcript)
     sequence = Seq(sequence)
@@ -426,7 +427,10 @@ def test_random_sequences(aligner, strand1="+", strand2="+"):
     psl2 = format(alignment2, "psl")
     words = psl2.split()
     nBlocks2 = int(words[17])
-    print("Randomized sequence test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
+    print(
+        "Randomized sequence test %d, %d, %s, %s OK"
+        % (nBlocks1, nBlocks2, strand1, strand2)
+    )
 
 
 def perform_randomized_tests(n=1000):

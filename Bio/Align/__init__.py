@@ -1655,9 +1655,13 @@ class PairwiseAlignment:
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
         """  # noqa: W291
         from numpy import array
+
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):
-            raise ValueError("length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)" % (len(alignment1.query), len(alignment2.target)))
+            raise ValueError(
+                "length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)"
+                % (len(alignment1.query), len(alignment2.target))
+            )
         target = alignment1.target
         query = alignment2.query
         path1 = alignment1.path
