@@ -3,7 +3,7 @@
 # as part of this package.
 
 
-"""Tests for pairwise aligner module."""
+"""Tests for the PairwiseAligner in Bio.Align."""
 
 import array
 import os
