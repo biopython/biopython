@@ -13,9 +13,11 @@ class, used in the Bio.AlignIO module.
 
 """
 
+import sys
+
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq, reverse_complement
+from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1263,26 +1265,34 @@ class PairwiseAlignment:
 
     def _format_psl(self, mask=False, wildcard="N"):
         path = self.path
+        if not path:  # alignment consists of gaps only
+            return ""
         query = self.query
         target = self.target
         try:
             qName = query.id
         except AttributeError:
             qName = "query"
-        else:
+        try:
             query = query.seq
+        except AttributeError:
+            pass
         try:
             tName = target.id
         except AttributeError:
             tName = "target"
-        else:
+        try:
             target = target.seq
+        except AttributeError:
+            pass
         n1 = len(target)
         n2 = len(query)
         try:
             seq1 = bytes(target)
         except TypeError:  # string
             seq1 = bytes(target, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq1 = None
         if path[0][1] < path[-1][1]:  # mapped to forward strand
             strand = "+"
             seq2 = query
@@ -1294,6 +1304,8 @@ class PairwiseAlignment:
             seq2 = bytes(seq2)
         except TypeError:  # string
             seq2 = bytes(seq2, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq2 = None
         if wildcard is not None:
             if mask == "upper":
                 wildcard = ord(wildcard.lower())
@@ -1332,38 +1344,43 @@ class PairwiseAlignment:
                 tStarts.append(tStart)
                 qStarts.append(qStart)
                 blockSizes.append(tCount)
-                s1 = seq1[tStart:tEnd]
-                s2 = seq2[qStart:qEnd]
-                if mask == "lower":
-                    for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            if u1 == c1:
-                                matches += 1
-                            else:
-                                repMatches += 1
-                        else:
-                            misMatches += 1
-                elif mask == "upper":
-                    for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            if u1 == c1:
-                                matches += 1
-                            else:
-                                repMatches += 1
-                        else:
-                            misMatches += 1
+                if seq1 is None or seq2 is None:
+                    # contents of at least one sequence is unknown;
+                    # count all alignments as matches:
+                    matches += tCount
                 else:
-                    for u1, u2 in zip(s1.upper(), s2.upper()):
-                        if u1 == wildcard or u2 == wildcard:
-                            nCount += 1
-                        elif u1 == u2:
-                            matches += 1
-                        else:
-                            misMatches += 1
+                    s1 = seq1[tStart:tEnd]
+                    s2 = seq2[qStart:qEnd]
+                    if mask == "lower":
+                        for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    elif mask == "upper":
+                        for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    else:
+                        for u1, u2 in zip(s1.upper(), s2.upper()):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                matches += 1
+                            else:
+                                misMatches += 1
                 tStart = tEnd
                 qStart = qEnd
         tStart = tStarts[0]  # start of alignment in target
@@ -1579,6 +1596,148 @@ class PairwiseAlignment:
                     segments2.append(segment2)
                 i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
+
+    def map(self, alignment):
+        r"""Map the alignment to self.target and return the resulting alignment.
+
+        Here, self.query and alignment.target are the same sequence.
+
+        A typical example is where self is the pairwise alignment between a
+        chromosome and a transcript, the argument is the pairwise alignment
+        between the transcript and a sequence (e.g., as obtained by RNA-seq),
+        and we want to find the alignment of the sequence to the chromosome:
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = 'local'
+        >>> aligner.open_gap_score = -1
+        >>> aligner.extend_gap_score = 0
+        >>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+        >>> transcript = "CCCCCCCGGGGGG"
+        >>> alignments1 = aligner.align(chromosome, transcript)
+        >>> len(alignments1)
+        1
+        >>> alignment1 = alignments1[0]
+        >>> print(alignment1)
+        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+                |||||||-----------||||||        
+                CCCCCCC-----------GGGGGG        
+        <BLANKLINE>
+        >>> sequence = "CCCCGGGG"
+        >>> alignments2 = aligner.align(transcript, sequence)
+        >>> len(alignments2)
+        1
+        >>> alignment2 = alignments2[0]
+        >>> print(alignment2)
+        CCCCCCCGGGGGG
+           ||||||||  
+           CCCCGGGG  
+        <BLANKLINE>
+        >>> alignment = alignment1.map(alignment2)
+        >>> print(alignment)
+        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+                   ||||-----------||||          
+                   CCCC-----------GGGG          
+        <BLANKLINE>
+        >>> format(alignment, "psl")
+        '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+
+        Mapping the alignment does not depend on the sequence contents. If we
+        delete the sequence contents, the same alignment is found in PSL format
+        (though we obviously lose the ability to print the sequence alignment):
+
+        >>> alignment1.target = Seq(None, len(alignment1.target))
+        >>> alignment1.query = Seq(None, len(alignment1.query))
+        >>> alignment2.target = Seq(None, len(alignment2.target))
+        >>> alignment2.query = Seq(None, len(alignment2.query))
+        >>> alignment = alignment1.map(alignment2)
+        >>> format(alignment, "psl")
+        '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+        """  # noqa: W291
+        from numpy import array
+
+        alignment1, alignment2 = self, alignment
+        if len(alignment1.query) != len(alignment2.target):
+            raise ValueError(
+                "length of alignment1 query sequence (%d) != length of alignment2 target sequence (%d)"
+                % (len(alignment1.query), len(alignment2.target))
+            )
+        target = alignment1.target
+        query = alignment2.query
+        path1 = alignment1.path
+        path2 = alignment2.path
+        n1 = len(alignment1.query)
+        n2 = len(alignment2.query)
+        if path1[0][1] < path1[-1][1]:  # mapped to forward strand
+            strand1 = "+"
+        else:  # mapped to reverse strand
+            strand1 = "-"
+        if path2[0][1] < path2[-1][1]:  # mapped to forward strand
+            strand2 = "+"
+        else:  # mapped to reverse strand
+            strand2 = "-"
+        path1 = array(path1)
+        path2 = array(path2)
+        if strand1 == "+":
+            if strand2 == "-":  # mapped to reverse strand
+                path2[:, 1] = n2 - path2[:, 1]
+        else:  # mapped to reverse strand
+            path1[:, 1] = n1 - path1[:, 1]
+            path2[:, 0] = n1 - path2[::-1, 0]
+            if strand2 == "+":
+                path2[:, 1] = n2 - path2[::-1, 1]
+            else:  # mapped to reverse strand
+                path2[:, 1] = path2[::-1, 1]
+        path = []
+        tEnd, qEnd = sys.maxsize, sys.maxsize
+        path1 = iter(path1)
+        tStart1, qStart1 = sys.maxsize, sys.maxsize
+        for tEnd1, qEnd1 in path1:
+            if tStart1 < tEnd1 and qStart1 < qEnd1:
+                break
+            tStart1, qStart1 = tEnd1, qEnd1
+        tStart2, qStart2 = sys.maxsize, sys.maxsize
+        for tEnd2, qEnd2 in path2:
+            while qStart2 < qEnd2 and tStart2 < tEnd2:
+                while True:
+                    if tStart2 < qStart1:
+                        if tEnd2 < qStart1:
+                            size = tEnd2 - tStart2
+                        else:
+                            size = qStart1 - tStart2
+                        break
+                    elif tStart2 < qEnd1:
+                        offset = tStart2 - qStart1
+                        if tEnd2 > qEnd1:
+                            size = qEnd1 - tStart2
+                        else:
+                            size = tEnd2 - tStart2
+                        qStart = qStart2
+                        tStart = tStart1 + offset
+                        if tStart > tEnd and qStart > qEnd:
+                            # adding a gap both in target and in query;
+                            # add gap to target first:
+                            path.append([tStart, qEnd])
+                        qEnd = qStart2 + size
+                        tEnd = tStart + size
+                        path.append([tStart, qStart])
+                        path.append([tEnd, qEnd])
+                        break
+                    tStart1, qStart1 = sys.maxsize, sys.maxsize
+                    for tEnd1, qEnd1 in path1:
+                        if tStart1 < tEnd1 and qStart1 < qEnd1:
+                            break
+                        tStart1, qStart1 = tEnd1, qEnd1
+                    else:
+                        size = qEnd2 - qStart2
+                        break
+                qStart2 += size
+                tStart2 += size
+            tStart2, qStart2 = tEnd2, qEnd2
+        if strand1 != strand2:
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        alignment = PairwiseAlignment(target, query, path, None)
+        return alignment
 
 
 class PairwiseAlignments:
