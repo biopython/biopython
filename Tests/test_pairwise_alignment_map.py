@@ -47,7 +47,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertEqual(alignment2.path, ((5, 0), (15, 10)))
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
@@ -57,14 +59,17 @@ GGGGGGGCCCCCGGGGGGA
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """)
 
@@ -79,7 +84,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
    GGGCCCCCGGGGGGAAAAAAAAAA
    |||||||||||||||         
 AGGGGGCCCCCGGGGGGA         
@@ -88,7 +95,9 @@ AGGGGGCCCCCGGGGGGA
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 AGGGGGCCCCCGGGGGGA
  |||||||||||||    
  GGGGGCCCCCGGG    
@@ -98,14 +107,17 @@ AGGGGGCCCCCGGGGGGA
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [0, 2])
         self.assertSequenceEqual(alignment.path[1], [11, 13])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
   GGGCCCCCGGGGGGAAAAAAAAAA
   |||||||||||             
 GGGGGCCCCCGGG             
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 11	0	0	0	0	0	0	0	+	sequence	13	2	13	chromosome	24	0	11	1	11,	2,	0,
 """)
 
@@ -120,7 +132,9 @@ GGGGGCCCCCGGG
         alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGG    
             |||||||||||||||    
             GGGGGGGCCCCCGGGGGGA
@@ -129,7 +143,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 GGGGGGGCCCCCGGGGGGA
      ||||||||||||  
      GGCCCCCGGGGG  
@@ -139,14 +155,17 @@ GGGGGGGCCCCCGGGGGGA
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGG  
                  ||||||||||  
                  GGCCCCCGGGGG
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 10	0	0	0	0	0	0	0	+	sequence	12	0	10	chromosome	27	17	27	1	10,	0,	17,
 """)
 
@@ -162,7 +181,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
@@ -172,7 +193,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertEqual(alignment2.path, ((4, 10), (14, 0)))
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
@@ -182,14 +205,17 @@ TCCCCCCGGGGGCCCCCCC
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 0])
         self.assertSequenceEqual(alignment.path[1], [27, 10])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """)
 
@@ -205,7 +231,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
@@ -215,7 +243,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertEqual(alignment2.path, ((5, 10), (15, 0)))
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 GGGGGGGCCCCCGGGGGGA
      ||||||||||    
      GGCCCCCGGG    
@@ -225,14 +255,17 @@ GGGGGGGCCCCCGGGGGGA
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
         self.assertSequenceEqual(alignment.path[1], [27, 0])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """)
 
@@ -248,7 +281,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
-        self.assertEqual(str(alignment1), """\
+        self.assertEqual(
+            str(alignment1),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             |||||||||||||||||||         
             GGGGGGGCCCCCGGGGGGA         
@@ -258,7 +293,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertEqual(alignment2.path, ((4, 0), (14, 10)))
-        self.assertEqual(str(alignment2), """\
+        self.assertEqual(
+            str(alignment2),
+            """\
 TCCCCCCGGGGGCCCCCCC
     ||||||||||     
     CCCGGGGGCC     
@@ -268,14 +305,17 @@ TCCCCCCGGGGGCCCCCCC
         self.assertEqual(len(alignment.path), 2)
         self.assertSequenceEqual(alignment.path[0], [17, 10])
         self.assertSequenceEqual(alignment.path[1], [27, 0])
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  ||||||||||             
                  GGCCCCCGGG             
 """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """)
 
@@ -336,7 +376,8 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
             """,  # noqa: W291
         )
         psl = format(alignment, "psl")
-        self.assertEqual(psl, """\
+        self.assertEqual(psl,
+            """\
 96	10	0	0	11	36	27	294	+	sequence	142	0	142	chromosome	440	35	435	37	2,6,1,5,4,3,4,1,6,2,2,2,1,1,2,6,3,2,1,4,3,3,3,2,1,2,2,10,3,1,2,1,3,6,2,1,3,	0,2,8,12,17,21,24,28,29,35,41,43,45,46,47,49,55,58,63,67,71,81,84,87,90,95,99,108,118,121,122,124,125,129,136,138,139,	35,43,52,53,63,78,83,88,95,129,131,135,139,141,144,148,155,248,250,251,257,302,306,315,317,318,320,339,359,366,403,408,414,417,423,429,432,
 """)
 
