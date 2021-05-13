@@ -864,8 +864,7 @@ The methods ``get_column`` and ``add_sequence`` of the MultipleSeqAlignment
 class were deprecated in Release 1.57 and removed in Release 1.69.
 The ``format`` method of the MultipleSeqAlignment class and the
 PairwiseAlignment class were deprecated in Release 1.76. This decision was
-reversed in Release 1.79. Instead, the ``__format__`` method of the
-PairwiseAlignment class was deprecated in Release 1.79.
+reversed in Release 1.79.
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
 
