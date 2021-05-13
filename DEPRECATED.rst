@@ -860,11 +860,17 @@ please consider using Bio.Align.substitution_matrices.
 
 Bio.Align
 ---------
-The methods ``get_column`` and ``add_sequence`` of the MultipleSeqAlignment
-class were deprecated in Release 1.57 and removed in Release 1.69.
+The ``get_column`` method of the MultipleSeqAlignment was deprecated in
+Release 1.57 and removed in Release 1.69.
+
+The ``add_sequence`` method of the MultipleSeqAlignment was deprecated in
+Release 1.57 and should have been removed in Release 1.69. It was actually
+removed in Release 1.79.
+
 The ``format`` method of the MultipleSeqAlignment class and the
 PairwiseAlignment class were deprecated in Release 1.76. This decision was
 reversed in Release 1.79.
+
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
 

@@ -399,56 +399,6 @@ class MultipleSeqAlignment:
 
         return max_length
 
-    def add_sequence(self, descriptor, sequence, start=None, end=None, weight=1.0):
-        """Add a sequence to the alignment.
-
-        This doesn't do any kind of alignment, it just adds in the sequence
-        object, which is assumed to be prealigned with the existing
-        sequences.
-
-        Arguments:
-            - descriptor - The descriptive id of the sequence being added.
-              This will be used as the resulting SeqRecord's
-              .id property (and, for historical compatibility,
-              also the .description property)
-            - sequence - A string with sequence info.
-            - start - You can explicitly set the start point of the sequence.
-              This is useful (at least) for BLAST alignments, which can
-              just be partial alignments of sequences.
-            - end - Specify the end of the sequence, which is important
-              for the same reason as the start.
-            - weight - The weight to place on the sequence in the alignment.
-              By default, all sequences have the same weight. (0.0 =>
-              no weight, 1.0 => highest weight)
-
-        In general providing a SeqRecord and calling .append is preferred.
-        """
-        new_seq = Seq(sequence)
-
-        # We are now effectively using the SeqRecord's .id as
-        # the primary identifier (e.g. in Bio.SeqIO) so we should
-        # populate it with the descriptor.
-        # For backwards compatibility, also store this in the
-        # SeqRecord's description property.
-        new_record = SeqRecord(new_seq, id=descriptor, description=descriptor)
-
-        # hack! We really need to work out how to deal with annotations
-        # and features in biopython. Right now, I'll just use the
-        # generic annotations dictionary we've got to store the start
-        # and end, but we should think up something better. I don't know
-        # if I'm really a big fan of the LocatableSeq thing they've got
-        # in BioPerl, but I'm not positive what the best thing to do on
-        # this is...
-        if start:
-            new_record.annotations["start"] = start
-        if end:
-            new_record.annotations["end"] = end
-
-        # another hack to add weight information to the sequence
-        new_record.annotations["weight"] = weight
-
-        self._records.append(new_record)
-
     def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
 
@@ -1620,8 +1570,8 @@ class PairwiseAlignment:
         >>> alignment1 = alignments1[0]
         >>> print(alignment1)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                |||||||-----------||||||        
-                CCCCCCC-----------GGGGGG        
+                |||||||-----------||||||
+                CCCCCCC-----------GGGGGG
         <BLANKLINE>
         >>> sequence = "CCCCGGGG"
         >>> alignments2 = aligner.align(transcript, sequence)
@@ -1630,14 +1580,14 @@ class PairwiseAlignment:
         >>> alignment2 = alignments2[0]
         >>> print(alignment2)
         CCCCCCCGGGGGG
-           ||||||||  
-           CCCCGGGG  
+           ||||||||
+           CCCCGGGG
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                   ||||-----------||||          
-                   CCCC-----------GGGG          
+                   ||||-----------||||
+                   CCCC-----------GGGG
         <BLANKLINE>
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
