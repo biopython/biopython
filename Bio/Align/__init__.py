@@ -1572,8 +1572,8 @@ class PairwiseAlignment:
         >>> alignment1 = alignments1[0]
         >>> print(alignment1)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                |||||||-----------||||||
-                CCCCCCC-----------GGGGGG
+                |||||||-----------||||||        
+                CCCCCCC-----------GGGGGG        
         <BLANKLINE>
         >>> sequence = "CCCCGGGG"
         >>> alignments2 = aligner.align(transcript, sequence)
@@ -1582,14 +1582,14 @@ class PairwiseAlignment:
         >>> alignment2 = alignments2[0]
         >>> print(alignment2)
         CCCCCCCGGGGGG
-           ||||||||
-           CCCCGGGG
+           ||||||||  
+           CCCCGGGG  
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                   ||||-----------||||
-                   CCCC-----------GGGG
+                   ||||-----------||||          
+                   CCCC-----------GGGG          
         <BLANKLINE>
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
