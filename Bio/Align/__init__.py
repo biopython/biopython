@@ -241,11 +241,13 @@ class MultipleSeqAlignment:
         are shown, with the record identifiers.  This should fit nicely on a
         single screen. e.g.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([])
-        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
-        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha")
+        >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta")
+        >>> c = SeqRecord(Seq("ACTGCTAGATAG"), id="Gamma")
+        >>> align = MultipleSeqAlignment([a, b, c])
         >>> print(align)
         Alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
@@ -304,10 +306,10 @@ class MultipleSeqAlignment:
         e.g.
 
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([])
-        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
-        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha", description="")
+        >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta", description="")
+        >>> c = SeqRecord(Seq("ACTGCTAGATAG"), id="Gamma", description="")
+        >>> align = MultipleSeqAlignment([a, b, c])
         >>> print(format(align, "fasta"))
         >Alpha
         ACTGCTAGCTAG
@@ -340,10 +342,10 @@ class MultipleSeqAlignment:
         e.g.
 
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([])
-        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
-        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha")
+        >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta")
+        >>> c = SeqRecord(Seq("ACTGCTAGATAG"), id="Gamma")
+        >>> align = MultipleSeqAlignment([a, b, c])
         >>> for record in align:
         ...    print(record.id)
         ...    print(record.seq)
@@ -377,10 +379,10 @@ class MultipleSeqAlignment:
         by finding the maximum length of sequences in the alignment.
 
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([])
-        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
-        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha")
+        >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta")
+        >>> c = SeqRecord(Seq("ACTGCTAGATAG"), id="Gamma")
+        >>> align = MultipleSeqAlignment([a, b, c])
         >>> align.get_alignment_length()
         12
 
