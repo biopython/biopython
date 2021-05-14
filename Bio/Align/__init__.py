@@ -1739,6 +1739,69 @@ class PairwiseAlignment:
         alignment = PairwiseAlignment(target, query, path, None)
         return alignment
 
+    @property
+    def substitutions(self):
+        """Return an Array with the number of substitutions of letters in the alignment.
+
+        As an example, consider a sequence alignment of two RNA sequences:
+
+        >>> from Bio.Align import PairwiseAligner
+        >>> target = "ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTTATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG"  # human spliceosomal small nuclear RNA U1
+        >>> query = "ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTCTTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG"  # sea lamprey spliceosomal small RNA U1
+        >>> aligner = PairwiseAligner()
+        >>> aligner.gap_score = -10
+        >>> alignments = aligner.align(target, query)
+        >>> len(alignments)
+        1
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTTATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG
+        |||||||||||.||||||||..|||||||||||..|||||||..|||||||||||||||..|||||||||||.|||..|.|.|||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||.|||||.|
+        ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTCTTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG
+
+        >>> m = alignment.substitutions
+        >>> print(m)
+             A    C    G    T
+        A 28.0  0.5  2.0  1.5
+        C  0.5 39.0  0.5  3.5
+        G  2.0  0.5 45.0  0.5
+        T  1.5  3.5  0.5 35.0
+        <BLANKLINE>
+
+        Note that the matrix is symmetric, with counts divided equally on both
+        sides of the diagonal. For example, the total number of substitutions
+        between C and T in the alignment is 3.5 + 3.5 = 7.
+        """
+        target = self.target
+        try:
+            target = target.seq
+        except AttributeError:
+            pass
+        query = self.query
+        try:
+            query = query.seq
+        except AttributeError:
+            pass
+        sequences = (str(target), str(query))
+        letters = set.union(*[set(sequence) for sequence in sequences])
+        letters = "".join(sorted(letters))
+        m = substitution_matrices.Array(letters, dims=2)
+        n = len(sequences)
+        for i1 in range(n):
+            path1 = [p[i1] for p in self.path]
+            sequence1 = sequences[i1]
+            for i2 in range(i1):
+                path2 = [p[i2] for p in self.path]
+                sequence2 = sequences[i2]
+                start1, start2 = sys.maxsize, sys.maxsize
+                for end1, end2 in zip(path1, path2):
+                    if start1 < end1 and start2 < end2:  # aligned
+                        for c1, c2 in zip(sequence1[start1:end1], sequence2[start2:end2]):
+                            m[c1, c2] += 1.0
+                    start1, start2 = end1, end2
+        m += m.transpose()
+        m /= 2.0
+        return m
 
 class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
