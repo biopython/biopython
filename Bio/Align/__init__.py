@@ -1523,11 +1523,25 @@ class PairwiseAlignment:
         The second integer value is the number of columns in the alignment when
         it is printed, and is equal to the sum of the number of matches, number
         of mismatches, and the total length of gaps in the target and query.
+        Sequence sections beyond the aligned segment are not included in the
+        number of columns.
 
         For example,
 
         >>> from Bio import Align
         >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "global"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        -GACCT-G
+        -||--|-|
+        CGA--TCG
+        <BLANKLINE>
+        >>> len(alignment)
+        2
+        >>> alignment.shape
+        (2, 8)
         >>> aligner.mode = "local"
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
@@ -1539,12 +1553,12 @@ class PairwiseAlignment:
         >>> len(alignment)
         2
         >>> alignment.shape
-        (2, 8)
+        (2, 7)
         """
         path = self.path
         if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            length = len(self.query)
-            path[:, 1] = length - path[:, 1]
+            n2 = len(self.query)
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
         start = path[0]
         n = len(start)
         m = 0

@@ -361,7 +361,7 @@ Pairwise sequence aligner with parameters
 zA-Bz
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
     def test_gotoh_local(self):
@@ -406,7 +406,7 @@ Pairwise sequence aligner with parameters
 zA-Bz
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 
@@ -1410,7 +1410,7 @@ GAT
 G-TCT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -1424,7 +1424,7 @@ GAT
 G-TCT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (3, 2))))
 
 
@@ -1603,7 +1603,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1629,7 +1629,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1695,7 +1695,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -1709,7 +1709,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
 
     def test_match_dictionary3(self):
@@ -1763,7 +1763,7 @@ ATT
 ATAT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -1777,7 +1777,7 @@ ATT
 ATAT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
 
     def test_match_dictionary4(self):
@@ -1834,7 +1834,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1860,7 +1860,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1928,7 +1928,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -1942,7 +1942,7 @@ ATAT
 ATT 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
 
     def test_match_dictionary6(self):
@@ -1998,7 +1998,7 @@ ATT
 ATAT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -2012,7 +2012,7 @@ ATT
 ATAT
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 4))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
 
 
@@ -2059,7 +2059,7 @@ abcde
   c  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
 
     def test_align_one_char2(self):
@@ -2104,7 +2104,7 @@ abcce
   c  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1)
@@ -2116,7 +2116,7 @@ abcce
    c 
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((3, 4),), ((0, 1),)))
 
     def test_align_one_char3(self):
@@ -2609,7 +2609,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -2621,7 +2621,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -2635,7 +2635,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -2647,7 +2647,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
 
     def test_gap_here_only_local_2(self):
@@ -2703,7 +2703,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -2715,7 +2715,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -2729,7 +2729,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -2741,7 +2741,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 36))
+        self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
 
     def test_gap_here_only_local_3(self):
@@ -2798,7 +2798,7 @@ TTCCAA
 TTGGAA
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2810,7 +2810,7 @@ TTCCAA
 TTGGAA
 """,
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -2824,7 +2824,7 @@ TTCCAA
 TTGGAA
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2836,7 +2836,7 @@ TTCCAA
 TTGGAA
 """,
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((4, 6),), ((2, 0),)))
         aligner.query_gap_score = gap_score
         self.assertEqual(
@@ -2868,7 +2868,7 @@ TTCCAA
 TTGGAA
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2880,7 +2880,7 @@ TTCCAA
 TTGGAA
 """,
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -2894,7 +2894,7 @@ TTCCAA
 TTGGAA
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -2906,7 +2906,7 @@ TTCCAA
 TTGGAA
 """,
         )
-        self.assertEqual(alignment.shape, (2, 6))
+        self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((4, 6),), ((2, 0),)))
 
     def test_broken_gap_function(self):
@@ -3320,7 +3320,7 @@ class TestUnicodeStrings(unittest.TestCase):
 ℸℵ-ℶℸ
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
     def test_gotoh_local(self):
@@ -3344,7 +3344,7 @@ class TestUnicodeStrings(unittest.TestCase):
 学生-科学
 """,  # noqa: W291
         )
-        self.assertEqual(alignment.shape, (2, 5))
+        self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 

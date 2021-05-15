@@ -2206,6 +2206,21 @@ alignnment and the number of columns in the alignment as printed:
 (2, 5)
 \end{minted}
 
+For local alignments, sections that are not aligned are not included in the number of columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.mode = 'local'
+>>> local_alignments = aligner.align("TGAACT", "GAC")
+>>> local_alignment = local_alignments[0]
+>>> print(local_alignment)
+TGAACT
+ ||-| 
+ GA-C 
+<BLANKLINE>
+>>> local_alignment.shape
+(2, 4)
+\end{minted}
+
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
 chunks, you get two tuples of length $N$:
@@ -2241,6 +2256,7 @@ Note that different alignments may have the same subsequences aligned to each ot
 
 %cont-doctest
 \begin{minted}{pycon}
+>>> aligner.mode = "global"
 >>> aligner.mismatch_score = -10
 >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
 >>> len(alignments)
