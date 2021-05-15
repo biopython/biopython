@@ -2244,6 +2244,63 @@ AAAG-AAA
 \end{minted}
 The \verb+aligned+ property can be used to identify alignments that are identical to each other in terms of their aligned sequences.
 
+Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
+>>> target = "AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT"
+>>> query = "AAAAAAACCCTCCCCGGCCGGGGTTTAGTTT"
+>>> alignments = aligner.align(target, query)
+>>> aligner.mismatch_score = -1
+>>> aligner.gap_score = -1
+>>> alignments = aligner.align(target, query)
+>>> len(alignments)
+8
+>>> print(alignments[0])
+AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT
+|||||||-|||.||||||..|||||||..|||
+AAAAAAA-CCCTCCCCGGCCGGGGTTTAGTTT
+<BLANKLINE>
+>>> m = alignments[0].substitutions
+>>> print(m)
+    A   C   G   T
+A 7.0 0.0 0.0 0.0
+C 0.0 7.0 0.0 1.0
+G 0.0 2.0 6.0 0.0
+T 1.0 0.0 1.0 6.0
+<BLANKLINE>
+\end{minted}{pycon}
+
+Note that the matrix is not symmetric: rows correspond to the target sequence, and columns to the query sequence.  For example, the number of G's in the target sequence that are aligned to a C in the query sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m['G', 'C']
+2.0
+\end{minted}{pycon}
+and the number of C's in the query sequence tat are aligned to a T in the query sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m['C', 'G']
+0.0
+\end{minted}{pycon}
+To get a symmetric matrix, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> m += m.transpose()
+>>> m /= 2.0
+>>> print(m)
+    A   C   G   T
+A 7.0 0.0 0.0 0.5
+C 0.0 7.0 1.0 0.5
+G 0.0 1.0 6.0 0.5
+T 0.5 0.5 0.5 6.0
+<BLANKLINE>
+>>> m['G', 'C']
+1.0
+>>> m['C', 'G']
+1.0
+\end{minted}{pycon}
+The total number of substitutions between C's and G's in the alignment is 1.0 + 1.0 = 2.
+
 The \verb+map+ method can be applied on a pairwise alignment \verb+alignment1+ to find the pairwise alignment of the query of \verb+alignment2+ to the target of \verb+alignment1+, where the target of \verb+alignment2+ and the query of \verb+alignment1+ are identical. A typical example is where \verb+alignment1+ is the pairwise alignment between a chromosome and a transcript, \verb+alignment2+ is the pairwise alignment between the transcript and a sequence (e.g., an RNA-seq read), and we want to find the alignment of the sequence to the chromosome:
         
 %cont-doctest
