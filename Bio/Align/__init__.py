@@ -1831,7 +1831,9 @@ class PairwiseAlignment:
                 start1, start2 = sys.maxsize, sys.maxsize
                 for end1, end2 in zip(path1, path2):
                     if start1 < end1 and start2 < end2:  # aligned
-                        for c1, c2 in zip(sequence1[start1:end1], sequence2[start2:end2]):
+                        segment1 = sequence1[start1:end1]
+                        segment2 = sequence2[start2:end2]
+                        for c1, c2 in zip(segment1, segment2):
                             m[c1, c2] += 1.0
                     start1, start2 = end1, end2
         return m
