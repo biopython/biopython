@@ -2188,6 +2188,16 @@ GA--T
 <BLANKLINE>
 \end{minted}
 
+The \verb+shape+ property returns a tuple with the number of aligned sequences
+(always 2 for a pairwise alignment) and the number of columns in the alignment
+as printed:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.shape
+(2, 5)
+\end{minted}
+
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
 chunks, you get two tuples of length $N$:
