@@ -3866,7 +3866,7 @@ class TestAlignmentMethods(unittest.TestCase):
         aligner.extend_gap_score = -2
         aligner.match = +1
         aligner.mismatch = -3
-        aligner.mode = 'local'
+        aligner.mode = "local"
         alignments = aligner.align(target, query)
         self.assertEqual(len(alignments), 9031680)
         alignment = alignments[0]
@@ -3878,8 +3878,8 @@ C   5.0 186.0   9.0  14.0
 G  12.0  11.0 248.0   8.0
 T  11.0  19.0   6.0 145.0
 """)
-        self.assertAlmostEqual(m['T', 'C'], 19.0)
-        self.assertAlmostEqual(m['C', 'T'], 14.0)
+        self.assertAlmostEqual(m["T", "C"], 19.0)
+        self.assertAlmostEqual(m["C", "T"], 14.0)
         m += m.transpose()
         m /= 2.0
         self.assertEqual(str(m), """\
@@ -3889,8 +3889,8 @@ C   4.0 186.0  10.0  16.5
 G  13.5  10.0 248.0   7.0
 T  12.0  16.5   7.0 145.0
 """)
-        self.assertAlmostEqual(m['C', 'T'], 16.5)
-        self.assertAlmostEqual(m['T', 'C'], 16.5)
+        self.assertAlmostEqual(m["C", "T"], 16.5)
+        self.assertAlmostEqual(m["T", "C"], 16.5)
 
 
 if __name__ == "__main__":
