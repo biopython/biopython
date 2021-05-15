@@ -1762,6 +1762,16 @@ class PairwiseAlignment:
         >>> m = alignment.substitutions
         >>> print(m)
              A    C    G    T
+        A 28.0  0.0  2.0  2.0
+        C  1.0 39.0  0.0  5.0
+        G  2.0  1.0 45.0  1.0
+        T  1.0  2.0  0.0 35.0
+        <BLANKLINE>
+
+        >>> m += m.transpose()
+        >>> m /= 2.0
+        >>> print(m)
+             A    C    G    T
         A 28.0  0.5  2.0  1.5
         C  0.5 39.0  0.5  3.5
         G  2.0  0.5 45.0  0.5
@@ -1790,7 +1800,7 @@ class PairwiseAlignment:
         for i1 in range(n):
             path1 = [p[i1] for p in self.path]
             sequence1 = sequences[i1]
-            for i2 in range(i1):
+            for i2 in range(i1+1, n):
                 path2 = [p[i2] for p in self.path]
                 sequence2 = sequences[i2]
                 start1, start2 = sys.maxsize, sys.maxsize
@@ -1799,8 +1809,6 @@ class PairwiseAlignment:
                         for c1, c2 in zip(sequence1[start1:end1], sequence2[start2:end2]):
                             m[c1, c2] += 1.0
                     start1, start2 = end1, end2
-        m += m.transpose()
-        m /= 2.0
         return m
 
 class PairwiseAlignments:
