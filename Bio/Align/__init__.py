@@ -1509,6 +1509,64 @@ class PairwiseAlignment:
     def __str__(self):
         return self.format()
 
+    def __len__(self):
+        """Return the number of sequences in the alignment, which is always 2."""
+        return 2
+
+    @property
+    def shape(self):
+        """Return the shape of the alignment as a tuple of two integer values.
+
+        The first integer value is the number of sequences in the alignment as
+        returned by len(alignment), which is always 2 for pairwise alignments.
+
+        The second integer value is the number of columns in the alignment when
+        it is printed, and is equal to the sum of the number of matches, number
+        of mismatches, and the total length of gaps in the target and query.
+        Sequence sections beyond the aligned segment are not included in the
+        number of columns.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "global"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        -GACCT-G
+        -||--|-|
+        CGA--TCG
+        <BLANKLINE>
+        >>> len(alignment)
+        2
+        >>> alignment.shape
+        (2, 8)
+        >>> aligner.mode = "local"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+         GACCT-G
+         ||--|-|
+        CGA--TCG
+        <BLANKLINE>
+        >>> len(alignment)
+        2
+        >>> alignment.shape
+        (2, 7)
+        """
+        path = self.path
+        if path[0][1] > path[-1][1]:  # mapped to reverse strand
+            n2 = len(self.query)
+            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        start = path[0]
+        n = len(start)
+        m = 0
+        for end in path[1:]:
+            m += max(e - s for s, e in zip(start, end))
+            start = end
+        return (n, m)
+
     @property
     def aligned(self):
         """Return the indices of subsequences aligned to each other.
