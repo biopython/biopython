@@ -2188,9 +2188,17 @@ GA--T
 <BLANKLINE>
 \end{minted}
 
-The \verb+shape+ property returns a tuple with the number of aligned sequences
-(always 2 for a pairwise alignment) and the number of columns in the alignment
-as printed:
+The length of the alignment is defined as the number of aligned sequences,
+which is always 2 for a pairwise alignment:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignment)
+2
+\end{minted}
+
+The \verb+shape+ property returns a tuple consisting of the length of the
+alignnment and the number of columns in the alignment as printed:
 
 %cont-doctest
 \begin{minted}{pycon}
