@@ -1552,7 +1552,6 @@ class PairwiseAlignment:
             m += max(e - s for s, e in zip(start, end))
             start = end
         return (n, m)
-        
 
     @property
     def aligned(self):
