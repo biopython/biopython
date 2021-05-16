@@ -1122,12 +1122,8 @@ class PairwiseAlignment:
                         pattern += "."
             start1 = end1
             start2 = end2
-        n1 -= end1
-        n2 -= end2
-        n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + " " * (n - n1)
-        aligned_seq2 += seq2[end2:] + " " * (n - n2)
-        pattern += " " * n
+        aligned_seq1 += seq1[end1:]
+        aligned_seq2 += seq2[end2:]
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_generalized(self):
@@ -1678,8 +1674,8 @@ class PairwiseAlignment:
         >>> alignment1 = alignments1[0]
         >>> print(alignment1)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                |||||||-----------||||||        
-                CCCCCCC-----------GGGGGG        
+                |||||||-----------||||||
+                CCCCCCC-----------GGGGGG
         <BLANKLINE>
         >>> sequence = "CCCCGGGG"
         >>> alignments2 = aligner.align(transcript, sequence)
@@ -1688,14 +1684,14 @@ class PairwiseAlignment:
         >>> alignment2 = alignments2[0]
         >>> print(alignment2)
         CCCCCCCGGGGGG
-           ||||||||  
-           CCCCGGGG  
+           ||||||||
+           CCCCGGGG
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
         AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                   ||||-----------||||          
-                   CCCC-----------GGGG          
+                   ||||-----------||||
+                   CCCC-----------GGGG
         <BLANKLINE>
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
@@ -1711,7 +1707,7 @@ class PairwiseAlignment:
         >>> alignment = alignment1.map(alignment2)
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
-        """  # noqa: W291
+        """
         from numpy import array
 
         alignment1, alignment2 = self, alignment
