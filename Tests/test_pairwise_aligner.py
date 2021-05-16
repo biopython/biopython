@@ -2209,6 +2209,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
+
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
             return -2000 - y
@@ -2284,6 +2285,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
+
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
             return -2000 - y
@@ -2575,6 +2577,7 @@ TTG--GAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
+
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
             return -2000 - y
@@ -2674,6 +2677,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
+
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
             return -2000 - y
