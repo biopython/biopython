@@ -357,7 +357,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
  AwBw
- |-| 
+ |-|
 zA-Bz
 """,  # noqa: W291
         )
@@ -402,7 +402,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
  AwBw
- |-| 
+ |-|
 zA-Bz
 """,  # noqa: W291
         )
@@ -1405,8 +1405,8 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-GAT  
-|-|  
+GAT
+|-|
 G-TCT
 """,  # noqa: W291
         )
@@ -1419,8 +1419,8 @@ G-TCT
         self.assertEqual(
             str(alignment),
             """\
-GAT  
-|-|  
+GAT
+|-|
 G-TCT
 """,  # noqa: W291
         )
@@ -1599,8 +1599,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1625,8 +1625,8 @@ AT-T
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1691,8 +1691,8 @@ AT-T
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1705,8 +1705,8 @@ ATT
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1758,8 +1758,8 @@ ATT
         self.assertEqual(
             str(alignment),
             """\
-ATT 
-||. 
+ATT
+||.
 ATAT
 """,  # noqa: W291
         )
@@ -1772,8 +1772,8 @@ ATAT
         self.assertEqual(
             str(alignment),
             """\
-ATT 
-||. 
+ATT
+||.
 ATAT
 """,  # noqa: W291
         )
@@ -1830,8 +1830,8 @@ ATAT
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1856,8 +1856,8 @@ AT-T
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1924,8 +1924,8 @@ AT-T
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1938,8 +1938,8 @@ ATT
             str(alignment),
             """\
 ATAT
-||. 
-ATT 
+||.
+ATT
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1993,8 +1993,8 @@ ATT
         self.assertEqual(
             str(alignment),
             """\
-ATT 
-||. 
+ATT
+||.
 ATAT
 """,  # noqa: W291
         )
@@ -2007,8 +2007,8 @@ ATAT
         self.assertEqual(
             str(alignment),
             """\
-ATT 
-||. 
+ATT
+||.
 ATAT
 """,  # noqa: W291
         )
@@ -2055,8 +2055,8 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 abcde
-  |  
-  c  
+  |
+  c
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2100,8 +2100,8 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 abcce
-  |  
-  c  
+  |
+  c
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2112,8 +2112,8 @@ abcce
             str(alignment),
             """\
 abcce
-   | 
-   c 
+   |
+   c
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2605,8 +2605,8 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+  |||||||||||||
+  AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2617,8 +2617,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+                     |||||||||||||
+            AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2631,8 +2631,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+  |||||||||||||
+  AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2643,8 +2643,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+                     |||||||||||||
+            AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2699,8 +2699,8 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+  |||||||||||||
+  AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2711,8 +2711,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+                     |||||||||||||
+            AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2725,8 +2725,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+  |||||||||||||
+  AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2737,8 +2737,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+                     |||||||||||||
+            AABBBAAAACCCCAAAABBBAA
 """,  # noqa: W291
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2794,7 +2794,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 TTCCAA
-||    
+||
 TTGGAA
 """,  # noqa: W291
         )
@@ -2820,7 +2820,7 @@ TTGGAA
             str(alignment),
             """\
 TTCCAA
-||    
+||
 TTGGAA
 """,  # noqa: W291
         )
@@ -2864,7 +2864,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 TTCCAA
-||    
+||
 TTGGAA
 """,  # noqa: W291
         )
@@ -2890,7 +2890,7 @@ TTGGAA
             str(alignment),
             """\
 TTCCAA
-||    
+||
 TTGGAA
 """,  # noqa: W291
         )
@@ -3316,7 +3316,7 @@ class TestUnicodeStrings(unittest.TestCase):
             str(alignment),
             """\
  ℵℷℶℷ
- |-| 
+ |-|
 ℸℵ-ℶℸ
 """,  # noqa: W291
         )
@@ -3340,7 +3340,7 @@ class TestUnicodeStrings(unittest.TestCase):
             str(alignment),
             """\
  生物科物
- |-| 
+ |-|
 学生-科学
 """,  # noqa: W291
         )
