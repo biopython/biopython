@@ -359,7 +359,7 @@ Pairwise sequence aligner with parameters
  AwBw
  |-|
 zA-Bz
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
@@ -404,7 +404,7 @@ Pairwise sequence aligner with parameters
  AwBw
  |-|
 zA-Bz
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
@@ -1408,7 +1408,7 @@ Pairwise sequence aligner with parameters
 GAT
 |-|
 G-TCT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
@@ -1422,7 +1422,7 @@ G-TCT
 GAT
 |-|
 G-TCT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((4, 3), (3, 2))))
@@ -1601,7 +1601,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -1627,7 +1627,7 @@ AT-T
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
@@ -1693,7 +1693,7 @@ AT-T
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -1707,7 +1707,7 @@ ATT
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
@@ -1761,7 +1761,7 @@ ATT
 ATT
 ||.
 ATAT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -1775,7 +1775,7 @@ ATAT
 ATT
 ||.
 ATAT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
@@ -1832,7 +1832,7 @@ ATAT
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -1858,7 +1858,7 @@ AT-T
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
@@ -1926,7 +1926,7 @@ AT-T
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -1940,7 +1940,7 @@ ATT
 ATAT
 ||.
 ATT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((3, 0),)))
@@ -1996,7 +1996,7 @@ ATT
 ATT
 ||.
 ATAT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
@@ -2010,7 +2010,7 @@ ATAT
 ATT
 ||.
 ATAT
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 3),), ((4, 1),)))
@@ -2057,7 +2057,7 @@ Pairwise sequence aligner with parameters
 abcde
   |
   c
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
@@ -2102,7 +2102,7 @@ Pairwise sequence aligner with parameters
 abcce
   |
   c
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
@@ -2114,7 +2114,7 @@ abcce
 abcce
    |
    c
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertEqual(alignment.aligned, (((3, 4),), ((0, 1),)))
@@ -2210,11 +2210,14 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y  # noqa: E731
-        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = (
-            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
-        )
+        def nogaps(x, y):
+            return  -2000 - y
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        def specificgaps(x, y):
+            if x in breaks:
+                return -2 - y
+            else:
+                return -2000 - y
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
@@ -2280,11 +2283,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y  # noqa: E731
+        def nogaps(x, y):
+            return  -2000 - y
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = (
-            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
-        )  # noqa: E731
+        def specificgaps(x, y):
+            if x in breaks:
+                return -2 - y
+            else:
+                return -2000 - y
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
@@ -2566,11 +2572,14 @@ TTG--GAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y  # noqa: E731
-        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = (
-            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
-        )  # noqa: E731
+        def nogaps(x, y):
+            return  -2000 - y
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        def specificgaps(x, y):
+            if x in breaks:
+                return -2 - y
+            else:
+                return -2000 - y
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
@@ -2607,7 +2616,7 @@ Pairwise sequence aligner with parameters
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||
   AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
@@ -2619,7 +2628,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||
             AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
@@ -2633,7 +2642,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||
   AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
@@ -2645,7 +2654,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||
             AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
@@ -2660,11 +2669,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y  # noqa: E731
+        def nogaps(x, y):
+            return  -2000 - y
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = (
-            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
-        )  # noqa: E731
+        def specificgaps(x, y):
+            if x in breaks:
+                return -2 - y
+            else:
+                return -2000 - y
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
@@ -2701,7 +2713,7 @@ Pairwise sequence aligner with parameters
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||
   AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
@@ -2713,7 +2725,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||
             AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
@@ -2727,7 +2739,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||
   AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((2, 15),), ((22, 9),)))
@@ -2739,7 +2751,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||
             AABBBAAAACCCCAAAABBBAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertEqual(alignment.aligned, (((21, 34),), ((13, 0),)))
@@ -2796,7 +2808,7 @@ Pairwise sequence aligner with parameters
 TTCCAA
 ||
 TTGGAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
@@ -2822,7 +2834,7 @@ TTGGAA
 TTCCAA
 ||
 TTGGAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
@@ -2866,7 +2878,7 @@ Pairwise sequence aligner with parameters
 TTCCAA
 ||
 TTGGAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
@@ -2892,7 +2904,7 @@ TTGGAA
 TTCCAA
 ||
 TTGGAA
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertEqual(alignment.aligned, (((0, 2),), ((6, 4),)))
@@ -3318,7 +3330,7 @@ class TestUnicodeStrings(unittest.TestCase):
  ℵℷℶℷ
  |-|
 ℸℵ-ℶℸ
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
@@ -3342,7 +3354,7 @@ class TestUnicodeStrings(unittest.TestCase):
  生物科物
  |-|
 学生-科学
-""",  # noqa: W291
+""",
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))

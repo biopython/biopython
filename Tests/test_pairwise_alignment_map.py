@@ -39,9 +39,9 @@ class TestSimple(unittest.TestCase):
             str(alignment1),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-            |||||||||||||||||||         
-            GGGGGGGCCCCCGGGGGGA         
-""",  # noqa: W291
+            |||||||||||||||||||
+            GGGGGGGCCCCCGGGGGGA
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
@@ -51,9 +51,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment2),
             """\
 GGGGGGGCCCCCGGGGGGA
-     ||||||||||    
-     GGCCCCCGGG    
-""",  # noqa: W291
+     ||||||||||
+     GGCCCCCGGG
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -63,9 +63,9 @@ GGGGGGGCCCCCGGGGGGA
             str(alignment),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-                 ||||||||||             
-                 GGCCCCCGGG             
-""",  # noqa: W291
+                 ||||||||||
+                 GGCCCCCGGG
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -90,9 +90,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment1),
             """\
    GGGCCCCCGGGGGGAAAAAAAAAA
-   |||||||||||||||         
-AGGGGGCCCCCGGGGGGA         
-""",  # noqa: W291
+   |||||||||||||||
+AGGGGGCCCCCGGGGGGA
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
@@ -101,9 +101,9 @@ AGGGGGCCCCCGGGGGGA
             str(alignment2),
             """\
 AGGGGGCCCCCGGGGGGA
- |||||||||||||    
- GGGGGCCCCCGGG    
-""",  # noqa: W291
+ |||||||||||||
+ GGGGGCCCCCGGG
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -113,9 +113,9 @@ AGGGGGCCCCCGGGGGGA
             str(alignment),
             """\
   GGGCCCCCGGGGGGAAAAAAAAAA
-  |||||||||||             
-GGGGGCCCCCGGG             
-""",  # noqa: W291
+  |||||||||||
+GGGGGCCCCCGGG
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -139,10 +139,10 @@ GGGGGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-AAAAAAAAAAAAGGGGGGGCCCCCGGG    
-            |||||||||||||||    
+AAAAAAAAAAAAGGGGGGGCCCCCGGG
+            |||||||||||||||
             GGGGGGGCCCCCGGGGGGA
-""",  # noqa: W291
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
@@ -151,9 +151,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
             str(alignment2),
             """\
 GGGGGGGCCCCCGGGGGGA
-     ||||||||||||  
-     GGCCCCCGGGGG  
-""",  # noqa: W291
+     ||||||||||||
+     GGCCCCCGGGGG
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -162,10 +162,10 @@ GGGGGGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAAAAAAGGGGGGGCCCCCGGG  
-                 ||||||||||  
+AAAAAAAAAAAAGGGGGGGCCCCCGGG
+                 ||||||||||
                  GGCCCCCGGGGG
-""",  # noqa: W291
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -191,9 +191,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
             str(alignment1),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-            |||||||||||||||||||         
-            GGGGGGGCCCCCGGGGGGA         
-""",  # noqa: W291
+            |||||||||||||||||||
+            GGGGGGGCCCCCGGGGGGA
+""",
         )
         alignments2 = aligner.align(transcript, sequence, strand="-")
         self.assertEqual(len(alignments2), 1)
@@ -203,9 +203,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment2),
             """\
 TCCCCCCGGGGGCCCCCCC
-    ||||||||||     
-    CCCGGGGGCC     
-""",  # noqa: W291
+    ||||||||||
+    CCCGGGGGCC
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -215,9 +215,9 @@ TCCCCCCGGGGGCCCCCCC
             str(alignment),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-                 ||||||||||             
-                 GGCCCCCGGG             
-""",  # noqa: W291
+                 ||||||||||
+                 GGCCCCCGGG
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -243,9 +243,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment1),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-            |||||||||||||||||||         
-            GGGGGGGCCCCCGGGGGGA         
-""",  # noqa: W291
+            |||||||||||||||||||
+            GGGGGGGCCCCCGGGGGGA
+""",
         )
         alignments2 = aligner.align(transcript, sequence, "-")
         self.assertEqual(len(alignments2), 1)
@@ -255,9 +255,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment2),
             """\
 GGGGGGGCCCCCGGGGGGA
-     ||||||||||    
-     GGCCCCCGGG    
-""",  # noqa: W291
+     ||||||||||
+     GGCCCCCGGG
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -267,9 +267,9 @@ GGGGGGGCCCCCGGGGGGA
             str(alignment),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-                 ||||||||||             
-                 GGCCCCCGGG             
-""",  # noqa: W291
+                 ||||||||||
+                 GGCCCCCGGG
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -295,9 +295,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment1),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-            |||||||||||||||||||         
-            GGGGGGGCCCCCGGGGGGA         
-""",  # noqa: W291
+            |||||||||||||||||||
+            GGGGGGGCCCCCGGGGGGA
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
@@ -307,9 +307,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
             str(alignment2),
             """\
 TCCCCCCGGGGGCCCCCCC
-    ||||||||||     
-    CCCGGGGGCC     
-""",  # noqa: W291
+    ||||||||||
+    CCCGGGGGCC
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 2)
@@ -319,9 +319,9 @@ TCCCCCCGGGGGCCCCCCC
             str(alignment),
             """\
 AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
-                 ||||||||||             
-                 GGCCCCCGGG             
-""",  # noqa: W291
+                 ||||||||||
+                 GGCCCCCGGG
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -363,9 +363,9 @@ class TestComplex(unittest.TestCase):
             str(alignment1),
             """\
 GCCTACCGTATAACAATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGC-----CGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACT-ACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGG-ACAGCGGGAAGATGTCGTGGTTTC-CTT---G---TCATTAACC-------A-ACTCCATCTTA--AAAGCTCCTCTAGCCATGGCATG---GT---ACGTTGCGCGCACCCTTTTA-T----CG--GTAAGG-------CG---CGGT-------GACTCTC--------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCT-------AAG-GCACTT-ACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
-              |||--||-||------|---||||-|||----||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----||||----||||-----||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---|||-||-.||||------------|-|---------||||-|-------||||-||||---------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--|.|-------|||--||---|||---||---|--|||||-|||------||-|----||--|.||||-------||---||||-------|||---|--------||..||||||----------|||----||--||--|-------|||-|||-||-||.|----|||------||||---|-----|||-||.|.|-||----|--|||     
-            GGAAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGGAGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG---------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATTAGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA----------GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC---C-----GTCATATCGGTGG----G--TTC     
-""",  # noqa: W291
+              |||--||-||------|---||||-|||----||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----||||----||||-----||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---|||-||-.||||------------|-|---------||||-|-------||||-||||---------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--|.|-------|||--||---|||---||---|--|||||-|||------||-|----||--|.||||-------||---||||-------|||---|--------||..||||||----------|||----||--||--|-------|||-|||-||-||.|----|||------||||---|-----|||-||.|.|-||----|--|||
+            GGAAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGGAGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG---------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATTAGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA----------GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC---C-----GTCATATCGGTGG----G--TTC
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
@@ -384,9 +384,9 @@ GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCA
             str(alignment),
             """\
 GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAACTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTTTA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGGTTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAACAG-GGCACCGAATTCGATTA
-                                   ||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----------------------------||----||--||--|-|--||--|||.||-|||------------------------------------------------------------------------------------------||---|---||||--|||-------------------------------------------------|||-|||------||-|----||--|.------------------------||..||||||----------|||----|------------------------------------||---|-----|||-||.|.|-||----|--|||     
-                                   TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----------------------------GGGACAGT--TG--A-T--CC--CATCCG-CCT------------------------------------------------------------------------------------------TTTACGAATTCAT--ACC------------------------------------------GTGGTAGGCG-GCA------TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GGT----T------------------------------------GC---C-----GTCATATCGGTGG----G--TTC     
-""",  # noqa: W291
+                                   ||------.|||||---|---|||||-----|.||-----------|||--||||-|------||.|.|----------------------------||----||--||--|-|--||--|||.||-|||------------------------------------------------------------------------------------------||---|---||||--|||-------------------------------------------------|||-|||------||-|----||--|.------------------------||..||||||----------|||----|------------------------------------||---|-----|||-||.|.|-||----|--|||
+                                   TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----------------------------GGGACAGT--TG--A-T--CC--CATCCG-CCT------------------------------------------------------------------------------------------TTTACGAATTCAT--ACC------------------------------------------GTGGTAGGCG-GCA------TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GGT----T------------------------------------GC---C-----GTCATATCGGTGG----G--TTC
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
@@ -417,9 +417,9 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
             str(alignment1),
             """\
 CTAATGCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGA------CTCTTAG----CGGATATGCGGCTGAGAAGTACGACA-----TGT---GT----ACATTCATAC--CTGCGT-------GACGGTCAGCCT----CCCCCGGGACCTCATTG-GGCGAATCTAGGTGTGATA-A-----TTGACA-CA----CTCTTGGTAAGAAGCACTCT---------TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTG-----CGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAAGCTCGCACGAATACGCAG-------TTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
-     |||--|.|||---------||.|||-------||-.|||-||||------------||--------||||---|-|||-----|||||------|||||||----|----||----||-|.||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-|||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-||----.|||-------||-||||||---------||----|||------|.||||-----------------||-----||||----||.|----||-|||----|-|||.|-||.||----|||||||.||---||-------||------|||.|||-----|||||||--------||-|--|----------------||----------|---|||--|||--------|||-----|||                         
-CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-AAAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CATCAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG-----------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA----CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------TA-A--A----------------AT----------A---ACC--TCA--------ATC-----ACT                         
-""",  # noqa: W291
+     |||--|.|||---------||.|||-------||-.|||-||||------------||--------||||---|-|||-----|||||------|||||||----|----||----||-|.||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-|||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-||----.|||-------||-||||||---------||----|||------|.||||-----------------||-----||||----||.|----||-|||----|-|||.|-||.||----|||||||.||---||-------||------|||.|||-----|||||||--------||-|--|----------------||----------|---|||--|||--------|||-----|||
+CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-AAAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CATCAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG-----------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA----CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------TA-A--A----------------AT----------A---ACC--TCA--------ATC-----ACT
+""",
         )
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
@@ -428,9 +428,9 @@ CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-
             str(alignment2),
             """\
 CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTAGCATTAGACCGACG--GGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATCTAACA---CTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCACCACGCACGACTAAGGACCATTTTCTG--CGTGCGACGGTTAAAATAACCTCAATCACT
-        ||------------|-------||||---|||------|-||||||-------------------------------|.||-------------|--||-|||.|-|||---.||||--|||----|.||-|||--|---||------------|||||------------||||---||---||---|||--|||-----|||--||--|-----||----------------||---------|||-|||-------------||--|--||||                       
-        TC------------C-------CCTT---CTA------A-TGGAAT-------------------------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--AGC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT---------CAC-ACT-------------TGTAC--GCGAT                      
-""",  # noqa: W291
+        ||------------|-------||||---|||------|-||||||-------------------------------|.||-------------|--||-|||.|-|||---.||||--|||----|.||-|||--|---||------------|||||------------||||---||---||---|||--|||-----|||--||--|-----||----------------||---------|||-|||-------------||--|--||||
+        TC------------C-------CCTT---CTA------A-TGGAAT-------------------------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--AGC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT---------CAC-ACT-------------TGTAC--GCGAT
+""",
         )
         alignment = alignment1.map(alignment2)
         self.assertEqual(len(alignment.path), 78)
@@ -438,9 +438,9 @@ CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGT
             str(alignment),
             """\
 CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA------CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCGAATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCCGATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATCCAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGACGGTACGGTTGCTATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGACCAACTTGGAATAGTGTAACGCAGCGCTTGA
-          |.------------------------||-|---------------||--------|----------|------||||---------------------------------------------|--||---|--.-|-||----||-----|||----||-.||--|---------|----------------||||--------||---||-----------||---|||----||----|--------|.--|---------------------------------------------------||--------------|||-|.|---------------||--.--|-----|||                                                                                                       
-          TC-----------------------CCCTT---------------CT--------A----------A------TGGA---------------------------------------ATCCCCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G---------------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----G--------GA--C-------------------------------------------------TTGT--------------CAC-ACT---------------TGTAC--G-----CGAT                                                                                                      
-""",  # noqa: W291
+          |.------------------------||-|---------------||--------|----------|------||||---------------------------------------------|--||---|--.-|-||----||-----|||----||-.||--|---------|----------------||||--------||---||-----------||---|||----||----|--------|.--|---------------------------------------------------||--------------|||-|.|---------------||--.--|-----|||
+          TC-----------------------CCCTT---------------CT--------A----------A------TGGA---------------------------------------ATCCCCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G---------------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----G--------GA--C-------------------------------------------------TTGT--------------CAC-ACT---------------TGTAC--G-----CGAT
+""",
         )
         psl = format(alignment, "psl")
         self.assertEqual(
