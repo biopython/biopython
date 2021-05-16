@@ -2211,13 +2211,15 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
-            return  -2000 - y
+            return -2000 - y
+
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         def specificgaps(x, y):
             if x in breaks:
                 return -2 - y
             else:
                 return -2000 - y
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
@@ -2284,13 +2286,15 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
-            return  -2000 - y
+            return -2000 - y
+
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         def specificgaps(x, y):
             if x in breaks:
                 return -2 - y
             else:
                 return -2000 - y
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
@@ -2573,13 +2577,15 @@ TTG--GAA
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
-            return  -2000 - y
+            return -2000 - y
+
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         def specificgaps(x, y):
             if x in breaks:
                 return -2 - y
             else:
                 return -2000 - y
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
@@ -2670,13 +2676,15 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
         def nogaps(x, y):
-            return  -2000 - y
+            return -2000 - y
+
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         def specificgaps(x, y):
             if x in breaks:
                 return -2 - y
             else:
                 return -2000 - y
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
