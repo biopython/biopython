@@ -47,15 +47,23 @@ _ambiguous_gc_values = {
 def gc_content(seq: str, ambiguous: str = "ignore"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
-    Copes with mixed case sequences.
+    Copes with mixed case sequences. Ambiguous Nucleotides in this context are
+    those different from ATCGSW.
 
-    If ignore_ambiguous=True, it will work as if all ambiguous nucleotides were
-    removed from the sequence (e.g: seq.replace('N','')). Amibiguous Nucleotides
-    in thei context are those different from ATCGSW.
+    If ambiguous equals "ignore" (default) , it will treat only unambiguous
+    nucleotides (GCS) as counting towards the GC percentage.
 
-    If False will use a "mean" value for the ambigous characters, for example,
-    G and C will be counted as 1, N and X will be counted as 0.5, D will be
-    counted as 0.33 etc. See Bio.SeqUtils.ambiguous_gc_values for a full list.
+    If ambiguous equals "count", will use a "mean" value when counting the
+    ambiguous characters, for example, G and C will still be counted as 1, N
+    and X will be counted as 0.5, D will be counted as 0.33 etc. See
+    Bio.SeqUtils._ambiguous_gc_values for a full list.
+
+    If ambiguous equals "remove", will only only count GCS towards the
+    percentage, but will also not count ambiguous characters towards the length
+    of the sequence. Equivalent to gc_content(seq.replace('N','')) but replacing
+    all ambiguous nucleotides.
+
+    Will raise a ValueError for any other value of the ambiguous parameter.
 
 
     >>> from Bio.SeqUtils import gc_content
