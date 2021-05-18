@@ -1012,6 +1012,72 @@ class PairwiseAlignment:
     def __ge__(self, other):
         return self.path >= other.path
 
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            if key.indices(len(self)) == (0, 2, 1):
+                target = self.target
+                query = self.query
+                path = self.path
+                score = self.score
+                return PairwiseAlignment(target, query, path, score)
+            raise NotImplementedError
+        if isinstance(key, int):
+            raise NotImplementedError
+        if isinstance(key, tuple):
+            try:
+                row, col = key
+            except ValueError:
+                raise ValueError("only tuples of length 2 can be alignment indices")
+            if isinstance(row, int):
+                raise NotImplementedError
+            if isinstance(row, slice):
+                if row.indices(len(self)) != (0, 2, 1):
+                   raise NotImplementedError
+                if isinstance(col, int):
+                    raise NotImplementedError
+                if isinstance(col, slice):
+                    n, m = self.shape
+                    start, stop, step = col.indices(m)
+                    if step != 1:
+                        raise NotImplementedError
+                    index = start
+                    path = []
+                    end = 0
+                    path_iterator = iter(self.path)
+                    starts = next(path_iterator)
+                    for ends in path_iterator:
+                        start = end
+                        end = start + max(e - s for s, e in zip(starts, ends))
+                        if index < end:
+                            offset = index - start
+                            point = tuple(s + offset for s in starts)
+                            path.append(point)
+                            break
+                        starts = ends
+                    index = stop
+                    while True:
+                        if index < end:
+                            offset = index - start
+                            point = tuple(s + offset for s in starts)
+                            path.append(point)
+                            break
+                        path.append(ends)
+                        starts = ends
+                        ends = next(path_iterator)
+                        start = end
+                        end = start + max(e - s for s, e in zip(starts, ends))
+                    path = tuple(path)
+                    target = self.target
+                    query = self.query
+                    if path == self.path:
+                        score = self.score
+                    else:
+                        score = None
+                    return PairwiseAlignment(target, query, path, score)
+                raise TypeError("second index must be an integer or slice")
+            raise TypeError("first index must be an integer or slice")
+        raise TypeError("alignment indices must be integers, slices, or tuples")
+
     def _convert_sequence_string(self, sequence):
         if isinstance(sequence, (bytes, bytearray)):
             return sequence.decode()
