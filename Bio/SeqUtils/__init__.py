@@ -498,12 +498,9 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
+    from Bio.Seq import reverse_complement, translate
 
-    if "u" in seq.lower():
-        anti = reverse_complement_rna(seq)
-    else:
-        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+    anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}
@@ -517,9 +514,9 @@ def six_frame_translations(seq, genetic_code=1):
         short = f"{seq[:10]} ... {seq[-10:]}"
     else:
         short = seq
-    header = "GC_Frame:"
+    header = "GC_Frame: "
     for nt in ["a", "t", "g", "c"]:
-        header += " %s:%d" % (nt, seq.count(nt.upper()))
+        header += "%s:%d " % (nt, seq.count(nt.upper()))
 
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
@@ -532,12 +529,12 @@ def six_frame_translations(seq, genetic_code=1):
         subseq = seq[i : i + 60]
         csubseq = comp[i : i + 60]
         p = i // 3
-        res += "%d/%d\n" % (i + 1, i / 3 + 1)
+        res += f"{i+1}/{int(i / 3 + 1)}\n"
         res += "  " + "  ".join(frames[3][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += subseq.lower() + f"{int(GC(subseq)):5d} %\n"
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
