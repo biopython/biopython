@@ -11,42 +11,111 @@
 
 
 import re
+import warnings
+from collections import Counter
 from math import pi, sin, cos
 
 from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
-
+from Bio import BiopythonDeprecationWarning
 
 ######################################
 # DNA
 ######################
 # {{{
 
+# Nucleotides not present here are treated as having value 0.
+ambiguous_gc_values = {
+    "C": 1.0,
+    "G": 1.0,
+    "S": 1.0,
+    "V": 0.67,
+    "B": 0.67,
+    "M": 0.5,
+    "R": 0.5,
+    "Y": 0.5,
+    "K": 0.5,
+    "X": 0.5,
+    "N": 0.5,
+    "H": 0.33,
+    "D": 0.33,
+}
 
-def GC(seq, percentage=True):
-    """Calculate G+C content, returns the percentage (float between 0 and 100).
 
-    Returns G+C ratio if percentage=False (float between 0 and 1).
+def gc_content(seq: str, ignore_ambiguous: bool = True):
+    """Calculate G+C percentage in seq (float between 0 and 1).
 
-    Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
-    when counting the G and C content.  The percentage or ratio is calculated
-    against the full length, e.g.:
+    Copes with mixed case sequences.
 
-    >>> from Bio.SeqUtils import GC
+    If ignore_ambiguous=True, it will work as if all ambiguous nucleotides were
+    removed from the sequence (e.g: seq.replace('N','')). Amibiguous Nucleotides
+    in thei context are those different from ATCGSW.
+
+    If False will use a "mean" value for the ambigous characters, for example,
+    G and C will be counted as 1, N and X will be counted as 0.5, D will be
+    counted as 0.33 etc. See Bio.SeqUtils.ambiguous_gc_values for a full list.
+
+
+    >>> from Bio.SeqUtils import gc_content
+    >>> seq = "ACTG"
+    >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
+    GC content of ACTG : 0.50
+
+    S and W are not considered ambiguous.
+
+    >>> seq = "ACTGSSSS"
+    >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
+    GC content of ACTGSSSS : 0.75
+    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.2f}")
+    GC content with ambiguous counting: 0.75
+
+    Some examples with ambiguous nucleotides.
+
     >>> seq = "ACTGN"
-    >>> print(f"GC as a percentage: {GC(seq):.2f}")
-    GC as a percentage: 40.00
-    >>> print(f"GC as a ratio: {GC(seq, False):.2f}")
-    GC as a ratio: 0.40
+    >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
+    GC content of ACTGN : 0.50
+    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.2f}")
+    GC content with ambiguous counting: 0.50
+
+    Ambiguous nucleotides are also removed from the length of the sequence.
+
+    >>> seq = "GDVV"
+    >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
+    GC content of GDVV : 1.00
+    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.4f}")
+    GC content with ambiguous counting: 0.6675
 
     Note that this will return zero for an empty sequence.
     """
+    count = Counter(seq)
+    if ignore_ambiguous:
+        gc = sum(count[x] for x in ["G", "C", "S", "g", "c", "s"])
+        l = gc + sum(count[x] for x in ["A", "T", "W", "a", "t", "w"])
+    else:
+        gc = sum(
+            (count[aa] + count[aa.lower()]) * perc
+            for aa, perc in ambiguous_gc_values.items()
+        )
+        l = len(seq)
+
+    try:
+        return gc / l
+    except ZeroDivisionError:
+        return 0
+
+
+def GC(seq):
+    """Calculate G+C content (DEPRECATED).
+
+    Use Bio.SeqUtils.gc_content instead.
+    """
+    warnings.warn(
+        "GC is deprecated; please use gc_content instead.", BiopythonDeprecationWarning,
+    )
+
     gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
     try:
-        if percentage:
-            return gc * 100.0 / len(seq)
-        else:
-            return gc / len(seq)
+        return gc * 100.0 / len(seq)
     except ZeroDivisionError:
         return 0.0
 

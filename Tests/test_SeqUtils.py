@@ -11,7 +11,7 @@ from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC
+from Bio.SeqUtils import gc_content
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
@@ -340,13 +340,22 @@ TTT	0.886
             ),
         )
 
-    def test_GC(self):
-        s = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
-        seq = Seq(s)
-        record = SeqRecord(seq)
-        self.assertEqual(GC(s), 56.25)
-        self.assertEqual(GC(seq), 56.25)
-        self.assertEqual(GC(record), 56.25)
+    def test_gc_content(self):
+        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        self.assertEqual(gc_content(seq), 0.5625)
+
+        seq = "ACTGSSSS"
+        self.assertEqual(gc_content(seq), 0.75)
+
+        # Test ambiguous nucleotide behaviour
+
+        seq = "CCTGNN"
+        self.assertEqual(gc_content(seq), 0.75)
+        self.assertAlmostEqual(gc_content(seq, False), 0.667, places=3)
+
+        seq = "GDVV"
+        self.assertEqual(gc_content(seq), 1.00)
+        self.assertEqual(gc_content(seq, False), 0.6675)
 
     def test_GC_skew(self):
         s = "A" * 50
