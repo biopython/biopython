@@ -24,25 +24,27 @@ from Bio import BiopythonDeprecationWarning
 ######################
 # {{{
 
-# Nucleotides not present here are treated as having value 0.
-ambiguous_gc_values = {
+_ambiguous_gc_values = {
+    "A": 0.0,
     "C": 1.0,
+    "T": 0.0,
     "G": 1.0,
     "S": 1.0,
-    "V": 0.67,
-    "B": 0.67,
+    "V": 0.6667,
+    "B": 0.6667,
     "M": 0.5,
     "R": 0.5,
     "Y": 0.5,
     "K": 0.5,
     "X": 0.5,
     "N": 0.5,
-    "H": 0.33,
-    "D": 0.33,
+    "H": 0.3333,
+    "D": 0.3333,
+    "W": 0.0,
 }
 
 
-def gc_content(seq: str, ignore_ambiguous: bool = True):
+def gc_content(seq: str, ambiguous: str = "ignore"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
     Copes with mixed case sequences.
@@ -66,36 +68,53 @@ def gc_content(seq: str, ignore_ambiguous: bool = True):
     >>> seq = "ACTGSSSS"
     >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
     GC content of ACTGSSSS : 0.75
-    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.2f}")
+    >>> gc = gc_content(seq, "count")
+    >>> print(f"GC content with ambiguous counting: {gc:.2f}")
     GC content with ambiguous counting: 0.75
 
     Some examples with ambiguous nucleotides.
 
     >>> seq = "ACTGN"
     >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
-    GC content of ACTGN : 0.50
-    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.2f}")
+    GC content of ACTGN : 0.40
+    >>> gc = gc_content(seq, "count")
+    >>> print(f"GC content with ambiguous counting: {gc:.2f}")
     GC content with ambiguous counting: 0.50
+    >>> gc = gc_content(seq, "remove")
+    >>> print(f"GC content with ambiguous removing: {gc:.2f}")
+    GC content with ambiguous removing: 0.50
 
     Ambiguous nucleotides are also removed from the length of the sequence.
 
     >>> seq = "GDVV"
     >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
-    GC content of GDVV : 1.00
-    >>> print(f"GC content with ambiguous counting: {gc_content(seq, False):.4f}")
-    GC content with ambiguous counting: 0.6675
+    GC content of GDVV : 0.25
+    >>> gc = gc_content(seq, "count")
+    >>> print(f"GC content with ambiguous counting: {gc:.4f}")
+    GC content with ambiguous counting: 0.6667
+    >>> gc = gc_content(seq, "remove")
+    >>> print(f"GC content with ambiguous removing: {gc:.2f}")
+    GC content with ambiguous removing: 1.00
+
 
     Note that this will return zero for an empty sequence.
     """
+    if ambiguous not in ("count", "remove", "ignore"):
+        raise ValueError(f"ambiguous value {ambiguous} not recognized")
+
     count = Counter(seq)
-    if ignore_ambiguous:
-        gc = sum(count[x] for x in ["G", "C", "S", "g", "c", "s"])
-        l = gc + sum(count[x] for x in ["A", "T", "W", "a", "t", "w"])
-    else:
+
+    if ambiguous == "count":
         gc = sum(
             (count[x] + count[x.lower()]) * perc
-            for x, perc in ambiguous_gc_values.items()
+            for x, perc in _ambiguous_gc_values.items()
         )
+    else:
+        gc = sum(count[x] + count[x.lower()] for x in "GCS")
+
+    if ambiguous == "remove":
+        l = sum(count[x] + count[x.lower()] for x in "ACTGSW")
+    else:
         l = len(seq)
 
     try:

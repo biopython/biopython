@@ -341,21 +341,35 @@ TTT	0.886
         )
 
     def test_gc_content(self):
+        """Tests gc_content function."""
+        self.assertEqual(gc_content(""), 0)
+        self.assertEqual(gc_content("", "count"), 0)
+        self.assertEqual(gc_content("", "remove"), 0)
+
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
         self.assertEqual(gc_content(seq), 0.5625)
+        self.assertEqual(gc_content(seq, "count"), 0.5625)
+        self.assertEqual(gc_content(seq, "remove"), 0.5625)
 
         seq = "ACTGSSSS"
         self.assertEqual(gc_content(seq), 0.75)
+        self.assertEqual(gc_content(seq, "count"), 0.75)
+        self.assertEqual(gc_content(seq, "remove"), 0.75)
 
         # Test ambiguous nucleotide behaviour
 
         seq = "CCTGNN"
-        self.assertEqual(gc_content(seq), 0.75)
-        self.assertAlmostEqual(gc_content(seq, False), 0.667, places=3)
+        self.assertEqual(gc_content(seq), 0.5)
+        self.assertAlmostEqual(gc_content(seq, "count"), 0.667, places=3)
+        self.assertEqual(gc_content(seq, "remove"), 0.75)
 
         seq = "GDVV"
-        self.assertEqual(gc_content(seq), 1.00)
-        self.assertEqual(gc_content(seq, False), 0.6675)
+        self.assertEqual(gc_content(seq), 0.25)
+        self.assertEqual(gc_content(seq, "count"), 0.666675)
+        self.assertEqual(gc_content(seq, "remove"), 1.00)
+
+        with self.assertRaises(ValueError):
+            gc_content(seq, "other string")
 
     def test_GC_skew(self):
         s = "A" * 50
