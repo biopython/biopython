@@ -773,19 +773,21 @@ def Tm_GC(
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
-    percent_gc = SeqUtils.gc_content(seq) * 100
-    # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
-    tmp = (
-        sum(map(seq.count, ("K", "M", "N", "R", "Y"))) * 50.0 / len(seq)
-        + sum(map(seq.count, ("B", "V"))) * 66.67 / len(seq)
-        + sum(map(seq.count, ("D", "H"))) * 33.33 / len(seq)
-    )
+
+    tmp = any([(x in seq) for x in "KMNRYBVDH"])
+
     if strict and tmp:
         raise ValueError(
             "ambiguous bases B, D, H, K, M, N, R, V, Y not allowed when 'strict=True'"
         )
-    else:
-        percent_gc += tmp
+
+    # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
+    percent_gc = SeqUtils.gc_content(seq, "count") * 100
+
+    # gc_content counts X as 0.5
+    if mismatch:
+        percent_gc -= seq.count("X") * 50.0 / len(seq)
+
     if userset:
         A, B, C, D = userset
     else:
