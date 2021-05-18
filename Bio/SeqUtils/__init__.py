@@ -93,8 +93,8 @@ def gc_content(seq: str, ignore_ambiguous: bool = True):
         l = gc + sum(count[x] for x in ["A", "T", "W", "a", "t", "w"])
     else:
         gc = sum(
-            (count[aa] + count[aa.lower()]) * perc
-            for aa, perc in ambiguous_gc_values.items()
+            (count[x] + count[x.lower()]) * perc
+            for x, perc in ambiguous_gc_values.items()
         )
         l = len(seq)
 

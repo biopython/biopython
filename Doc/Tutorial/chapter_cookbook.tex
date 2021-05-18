@@ -1131,9 +1131,11 @@ of all the GC percentages.  Again, you could do this with a for loop, but I pref
 
 \begin{minted}{python}
 from Bio import SeqIO
-from Bio.SeqUtils import GC
+from Bio.SeqUtils import gc_content
 
-gc_values = sorted(GC(rec.seq) for rec in SeqIO.parse("ls_orchid.fasta", "fasta"))
+gc_values = sorted(
+    100 * gc_content(rec.seq) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+)
 \end{minted}
 
 Having read in each sequence and calculated the GC\%, we then sorted them into ascending

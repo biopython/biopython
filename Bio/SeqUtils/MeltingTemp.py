@@ -564,7 +564,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         corr = 0.368 * (len(seq) - 1) * math.log(mon)
     if method == 6:
         corr = (
-            (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon)
+            (4.29 * SeqUtils.gc_content(seq) - 3.95) * 1e-5 * math.log(mon)
         ) + 9.40e-6 * math.log(mon) ** 2
     # Turn black code style off
     # fmt: off
@@ -581,7 +581,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
-                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * \
+                corr = (4.29 * SeqUtils.gc_content(seq) - 3.95) * \
                     1e-5 * math.log(mon) + 9.40e-6 * math.log(mon) ** 2
                 return corr
             elif R < 6.0:
@@ -590,7 +590,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                             - 8.03e-3 * math.log(mon) ** 2)
                 g = 8.31 * (0.486 - 0.258 * math.log(mon)
                             + 5.25e-3 * math.log(mon) ** 3)
-        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100)
+        corr = (a + b * math.log(mg) + (SeqUtils.gc_content(seq))
                 * (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1)))
                 * (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
     # Turn black code style on
@@ -773,7 +773,7 @@ def Tm_GC(
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
-    percent_gc = SeqUtils.GC(seq)
+    percent_gc = SeqUtils.gc_content(seq) * 100
     # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
     tmp = (
         sum(map(seq.count, ("K", "M", "N", "R", "Y"))) * 50.0 / len(seq)
@@ -1012,7 +1012,7 @@ def Tm_NN(
     delta_s += nn_table["init"][d_s]
 
     # Type: Duplex with no (allA/T) or at least one (oneG/C) GC pair
-    if SeqUtils.GC(seq) == 0:
+    if SeqUtils.gc_content(seq) == 0:
         delta_h += nn_table["init_allA/T"][d_h]
         delta_s += nn_table["init_allA/T"][d_s]
     else:

@@ -75,13 +75,13 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqUtils import GC
+>>> from Bio.SeqUtils import gc_content
 >>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
->>> GC(my_seq)
-46.875
+>>> gc_content(my_seq)
+0.46875
 \end{minted}
 
-\noindent Note that using the \verb|Bio.SeqUtils.GC()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
+\noindent Note that using the \verb|Bio.SeqUtils.gc_content()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
 
 Also note that just like a normal Python string, the \verb|Seq| object is in some ways ``read-only''.  If you need to edit your sequence, for example simulating a point mutation, look at the Section~\ref{sec:mutable-seq} below which talks about the \verb|MutableSeq| object.
 

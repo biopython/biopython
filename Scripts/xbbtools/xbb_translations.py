@@ -15,7 +15,7 @@
 import time
 
 from Bio.Seq import Seq, reverse_complement, translate
-from Bio.SeqUtils import GC
+from Bio.SeqUtils import gc_content
 
 
 class xbb_translations:
@@ -93,7 +93,7 @@ class xbb_translations:
 
     def gc(self, seq):
         """Calculate GC content in percent (0-100)."""
-        return GC(seq)
+        return 100 * gc_content(seq)
 
     def gcframe(self, seq, translation_table=1, direction="both"):
         """Print a pretty print translation in several frames."""
