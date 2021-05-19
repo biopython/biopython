@@ -1037,35 +1037,31 @@ class PairwiseAlignment:
                     raise NotImplementedError
                 if isinstance(col, slice):
                     n, m = self.shape
-                    start, stop, step = col.indices(m)
+                    start_index, stop_index, step = col.indices(m)
                     if step != 1:
                         raise NotImplementedError
-                    index = start
                     path = []
-                    end = 0
+                    index = 0
                     path_iterator = iter(self.path)
                     starts = next(path_iterator)
                     for ends in path_iterator:
-                        start = end
-                        end = start + max(e - s for s, e in zip(starts, ends))
-                        if index < end:
-                            offset = index - start
-                            point = tuple(s + offset for s in starts)
+                        index += max(e - s for s, e in zip(starts, ends))
+                        if start_index < index:
+                            offset = index - start_index
+                            point = tuple(e - offset if s < e else s for s, e in zip(starts, ends))
                             path.append(point)
                             break
                         starts = ends
-                    index = stop
                     while True:
-                        if index < end:
-                            offset = index - start
-                            point = tuple(s + offset for s in starts)
+                        if stop_index <= index:
+                            offset = index - stop_index
+                            point = tuple(e - offset if s < e else s for s, e in zip(starts, ends))
                             path.append(point)
                             break
                         path.append(ends)
                         starts = ends
                         ends = next(path_iterator)
-                        start = end
-                        end = start + max(e - s for s, e in zip(starts, ends))
+                        index += max(e - s for s, e in zip(starts, ends))
                     path = tuple(path)
                     target = self.target
                     query = self.query
