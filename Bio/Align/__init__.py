@@ -1013,6 +1013,55 @@ class PairwiseAlignment:
         return self.path >= other.path
 
     def __getitem__(self, key):
+        """Return self[key].
+
+        Currently, this is implemented only for indices of the form
+
+        self[:, :]
+
+        which returns a copy of the PairwiseAlignment object, and
+
+        self[:, i:]
+        self[:, :j]
+        self[:, i:j]
+
+        which returns a new PairwiseAlignment object spanning the indicated
+        columns.
+
+        >>> from Bio.Align import PairwiseAligner
+        >>> aligner = PairwiseAligner()
+        >>> a = "ACCGGTTT"
+        >>> b = "ACGGGTT"
+        >>> alignments = aligner.align(a, b)
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        ACCGG-TTT
+        ||-||-|--
+        AC-GGGT--
+        <BLANKLINE>
+        >>> alignment[:, 1:]  # doctest:+ELLIPSIS
+        <Bio.Align.PairwiseAlignment object at ...>
+        >>> print(alignment[:, 1:])
+        ACCGG-TTT
+         |-||-|--
+        AC-GGGT--
+        <BLANKLINE>
+        >>> print(alignment[:, 2:])
+        ACCGG-TTT
+          -||-|--
+        AC-GGGT--
+        <BLANKLINE>
+        >>> print(alignment[:, 3:])
+        ACCGG-TTT
+           ||-|--
+         ACGGGT--
+        <BLANKLINE>
+        >>> print(alignment[:, 3:-1])
+        ACCGG-TTT
+           ||-|-
+         ACGGGT-
+        <BLANKLINE>
+        """
         if isinstance(key, slice):
             if key.indices(len(self)) == (0, 2, 1):
                 target = self.target
