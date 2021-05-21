@@ -2389,6 +2389,46 @@ obviously lose the ability to print the sequence alignment):
 '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 \end{minted}
 
+\paragraph*{Slicing and indexing a pairwise alignment}
+
+Currently, only slices of the form \verb+alignment[:, i:j]+ are implemented, where \verb+i+ and \verb+j+ are integers or are absent. This returns a new \verb+PairwiseAlignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment. To illustrate this, in the following example the printed alignment has 5 columns:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+GAACT
+|-|-|
+G-A-T
+<BLANKLINE>
+\end{minted}
+
+Extracting the first 4 columns gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, :4]  # doctest:+ELLIPSIS
+<Bio.Align.PairwiseAlignment object at ...>
+>>> print(alignment[:, :4])
+GAACT
+|-|-
+G-A-T
+<BLANKLINE>
+\end{minted}
+Here, the final \verb+T+ nucleotides are still shown, but they are not aligned to each other. Note that \verb+alignment+ is a global alignment, but \verb+alignment[:, :4]+ is a local alignment.
+
+Similarly, extracting the last 3 columns gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -3:]  # doctest:+ELLIPSIS
+<Bio.Align.PairwiseAlignment object at ...>
+>>> print(alignment[:, -3:])
+GAACT
+  |-|
+ GA-T
+<BLANKLINE>
+\end{minted}
+This is also now a local alignment, with the initial \verb+GA+ nucleotides in the target and \verb+G+ nucleotide in the query not aligned to each other.
+
+
 \paragraph*{Exporting alignments}
 
 Use the \verb+format+ method to create a string representation of the alignment in various file formats. This method takes an argument \verb+fmt+ specifying the file format, and may take additional keyword arguments depending on file type. The following values for \verb+fmt+ are supported:
