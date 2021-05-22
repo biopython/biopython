@@ -1081,7 +1081,7 @@ class PairwiseAlignment:
                 raise NotImplementedError
             if isinstance(row, slice):
                 if row.indices(len(self)) != (0, 2, 1):
-                   raise NotImplementedError
+                    raise NotImplementedError
                 if isinstance(col, int):
                     raise NotImplementedError
                 if isinstance(col, slice):
@@ -1097,14 +1097,18 @@ class PairwiseAlignment:
                         index += max(e - s for s, e in zip(starts, ends))
                         if start_index < index:
                             offset = index - start_index
-                            point = tuple(e - offset if s < e else s for s, e in zip(starts, ends))
+                            point = tuple(
+                                e - offset if s < e else s for s, e in zip(starts, ends)
+                            )
                             path.append(point)
                             break
                         starts = ends
                     while True:
                         if stop_index <= index:
                             offset = index - stop_index
-                            point = tuple(e - offset if s < e else s for s, e in zip(starts, ends))
+                            point = tuple(
+                                e - offset if s < e else s for s, e in zip(starts, ends)
+                            )
                             path.append(point)
                             break
                         path.append(ends)
