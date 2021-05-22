@@ -1030,36 +1030,34 @@ class PairwiseAlignment:
 
         >>> from Bio.Align import PairwiseAligner
         >>> aligner = PairwiseAligner()
-        >>> a = "ACCGGTTT"
-        >>> b = "ACGGGTT"
-        >>> alignments = aligner.align(a, b)
+        >>> alignments = aligner.align("ACCGGTTT", "ACGGGTT")
         >>> alignment = alignments[0]
         >>> print(alignment)
         ACCGG-TTT
-        ||-||-|--
-        AC-GGGT--
+        ||-||-||-
+        AC-GGGTT-
         <BLANKLINE>
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
         <Bio.Align.PairwiseAlignment object at ...>
         >>> print(alignment[:, 1:])
         ACCGG-TTT
-         |-||-|--
-        AC-GGGT--
+         |-||-||-
+        AC-GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 2:])
         ACCGG-TTT
-          -||-|--
-        AC-GGGT--
+          -||-||-
+        AC-GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:])
         ACCGG-TTT
-           ||-|--
-         ACGGGT--
+           ||-||-
+         ACGGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:-1])
         ACCGG-TTT
-           ||-|-
-         ACGGGT-
+           ||-||
+         ACGGGTT
         <BLANKLINE>
         """
         if isinstance(key, slice):
