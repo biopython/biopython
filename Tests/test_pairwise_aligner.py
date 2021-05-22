@@ -4016,7 +4016,8 @@ class TestAlignmentMethods(unittest.TestCase):
 AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertAlmostEqual(alignment[:, :].score, 6.0)
         self.assertEqual(
@@ -4025,7 +4026,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertAlmostEqual(alignment[:, 0:].score, 6.0)
         self.assertEqual(
             str(alignment[:, 0:]),
@@ -4033,7 +4035,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertAlmostEqual(alignment[:, :12].score, 6.0)
         self.assertEqual(
             str(alignment[:, :12]),
@@ -4041,7 +4044,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertAlmostEqual(alignment[:, 0:12].score, 6.0)
         self.assertEqual(
             str(alignment[:, 0:12]),
@@ -4049,7 +4053,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 1:].score)
         self.assertEqual(
             str(alignment[:, 1:]),
@@ -4057,7 +4062,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
  -|-||-|-|--
 A-C-GG-AAC--
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 2:].score)
         self.assertEqual(
             str(alignment[:, 2:]),
@@ -4065,7 +4071,8 @@ A-C-GG-AAC--
 AACCGGGA-CCG
   |-||-|-|--
  AC-GG-AAC--
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 3:].score)
         self.assertEqual(
             str(alignment[:, 3:]),
@@ -4073,7 +4080,8 @@ AACCGGGA-CCG
 AACCGGGA-CCG
    -||-|-|--
  AC-GG-AAC--
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 4:].score)
         self.assertEqual(
             str(alignment[:, 4:]),
@@ -4081,7 +4089,8 @@ AACCGGGA-CCG
 AACCGGGA-CCG
     ||-|-|--
   ACGG-AAC--
-""")
+""",
+        )
         self.assertIsNone(alignment[:, :-1].score)
         self.assertEqual(
             str(alignment[:, :-1]),
@@ -4089,7 +4098,8 @@ AACCGGGA-CCG
 AACCGGGA-CCG
 |-|-||-|-|-
 A-C-GG-AAC-
-""")
+""",
+        )
         self.assertIsNone(alignment[:, :-2].score)
         self.assertEqual(
             str(alignment[:, :-2]),
@@ -4097,7 +4107,8 @@ A-C-GG-AAC-
 AACCGGGA-CCG
 |-|-||-|-|
 A-C-GG-AAC
-""")
+""",
+        )
         self.assertIsNone(alignment[:, :-3].score)
         self.assertEqual(
             str(alignment[:, :-3]),
@@ -4105,7 +4116,8 @@ A-C-GG-AAC
 AACCGGGA-CCG
 |-|-||-|-
 A-C-GG-AAC
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 1:-1].score)
         self.assertEqual(
             str(alignment[:, 1:-1]),
@@ -4113,7 +4125,8 @@ A-C-GG-AAC
 AACCGGGA-CCG
  -|-||-|-|-
 A-C-GG-AAC-
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 1:-2].score)
         self.assertEqual(
             str(alignment[:, 1:-2]),
@@ -4121,7 +4134,8 @@ A-C-GG-AAC-
 AACCGGGA-CCG
  -|-||-|-|
 A-C-GG-AAC
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 2:-1].score)
         self.assertEqual(
             str(alignment[:, 2:-1]),
@@ -4129,7 +4143,8 @@ A-C-GG-AAC
 AACCGGGA-CCG
   |-||-|-|-
  AC-GG-AAC-
-""")
+""",
+        )
         self.assertIsNone(alignment[:, 2:-2].score)
         self.assertEqual(
             str(alignment[:, 2:-2]),
@@ -4137,7 +4152,8 @@ AACCGGGA-CCG
 AACCGGGA-CCG
   |-||-|-|
  AC-GG-AAC
-""")
+""",
+        )
 
     def test_substitutions(self):
         aligner = Align.PairwiseAligner()
