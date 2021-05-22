@@ -254,8 +254,14 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             return False
 
         seqs = self._filter_search(is_aligned_seq, "preorder", True)
-        records = (seq.to_seqrecord() for seq in seqs)
-        return MultipleSeqAlignment(records)
+        try:
+            first_seq = next(seqs)
+        except StopIteration:
+            # No aligned sequences were found --> empty MSA
+            return MultipleSeqAlignment([])
+        msa = MultipleSeqAlignment([first_seq.to_seqrecord()])
+        msa.extend(seq.to_seqrecord() for seq in seqs)
+        return msa
 
     # Singular property for plural attribute
     def _get_confidence(self):
