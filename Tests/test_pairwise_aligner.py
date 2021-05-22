@@ -4005,6 +4005,72 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 
 
 class TestAlignmentMethods(unittest.TestCase):
+    def test_indexing_slicing(self):
+        aligner = Align.PairwiseAligner()
+        alignments = aligner.align("AACCGGGACCG", "ACGGAAC")
+        self.assertEqual(len(alignments), 88)
+        alignment = alignments[0]
+        self.assertEqual(str(alignment), """\
+AACCGGGA-CCG
+|-|-||-|-|--
+A-C-GG-AAC--
+""")
+        self.assertEqual(str(alignment[:, 1:]), """\
+AACCGGGA-CCG
+ -|-||-|-|--
+A-C-GG-AAC--
+""")
+        self.assertEqual(str(alignment[:, 2:]), """\
+AACCGGGA-CCG
+  |-||-|-|--
+ AC-GG-AAC--
+""")
+        self.assertEqual(str(alignment[:, 3:]), """\
+AACCGGGA-CCG
+   -||-|-|--
+ AC-GG-AAC--
+""")
+        self.assertEqual(str(alignment[:, 4:]), """\
+AACCGGGA-CCG
+    ||-|-|--
+  ACGG-AAC--
+""")
+        self.assertEqual(str(alignment[:, :-1]), """\
+AACCGGGA-CCG
+|-|-||-|-|-
+A-C-GG-AAC-
+""")
+        self.assertEqual(str(alignment[:, :-2]), """\
+AACCGGGA-CCG
+|-|-||-|-|
+A-C-GG-AAC
+""")
+        self.assertEqual(str(alignment[:, :-3]), """\
+AACCGGGA-CCG
+|-|-||-|-
+A-C-GG-AAC
+""")
+        self.assertEqual(str(alignment[:, 1:-1]), """\
+AACCGGGA-CCG
+ -|-||-|-|-
+A-C-GG-AAC-
+""")
+        self.assertEqual(str(alignment[:, 1:-2]), """\
+AACCGGGA-CCG
+ -|-||-|-|
+A-C-GG-AAC
+""")
+        self.assertEqual(str(alignment[:, 2:-1]), """\
+AACCGGGA-CCG
+  |-||-|-|-
+ AC-GG-AAC-
+""")
+        self.assertEqual(str(alignment[:, 2:-2]), """\
+AACCGGGA-CCG
+  |-||-|-|
+ AC-GG-AAC
+""")
+
     def test_substitutions(self):
         aligner = Align.PairwiseAligner()
         path = os.path.join("Align", "ecoli.fa")
