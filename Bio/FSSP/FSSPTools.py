@@ -48,12 +48,11 @@ def mult_align(sum_dict, align_dict):
         for j in align_dict.abs(i).pos_align_dict:
             # loop within a position
             mult_align_dict[j] += align_dict.abs(i).pos_align_dict[j].aa
-    fssp_align = MultipleSeqAlignment([])
-    for i in sorted(mult_align_dict):
-        fssp_align.append(
-            SeqRecord(Seq(mult_align_dict[i]), sum_dict[i].pdb2 + sum_dict[i].chain2)
-        )
-    return fssp_align
+    records = [
+        SeqRecord(Seq(mult_align_dict[i]), sum_dict[i].pdb2 + sum_dict[i].chain2)
+        for i in sorted(mult_align_dict)
+    ]
+    return MultipleSeqAlignment(records)
 
 
 #
