@@ -127,18 +127,12 @@ handle.name: {handle.name}
 """
             )
 
-        alignment = MultipleSeqAlignment([])
-
-        # TODO - Introduce an annotated alignment class?
-        # See also Bio/AlignIO/MafIO.py for same requirement.
-        # For now, store the annotation a new private property:
-        alignment._annotations = {}
+        annotations = {}
+        records = []
 
         # Want to record both the query header tags, and the alignment tags.
-        for key, value in header_tags.items():
-            alignment._annotations[key] = value
-        for key, value in align_tags.items():
-            alignment._annotations[key] = value
+        annotations.update(header_tags)
+        annotations.update(align_tags)
 
         # Query
         # =====
@@ -152,7 +146,6 @@ handle.name: {handle.name}
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_tags["al_start"])
         record._al_stop = int(query_tags["al_stop"])
-        alignment.append(record)
 
         # TODO - Can FASTA output RNA?
         if "sq_type" in query_tags:
@@ -160,6 +153,8 @@ handle.name: {handle.name}
                 record.annotations["molecule_type"] = "DNA"
             elif query_tags["sq_type"] == "p":
                 record.annotations["molecule_type"] = "protein"
+
+        records.append(record)
 
         # Match
         # =====
@@ -173,7 +168,6 @@ handle.name: {handle.name}
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_tags["al_start"])
         record._al_stop = int(match_tags["al_stop"])
-        alignment.append(record)
 
         if "sq_type" in match_tags:
             if match_tags["sq_type"] == "D":
@@ -181,7 +175,9 @@ handle.name: {handle.name}
             elif match_tags["sq_type"] == "p":
                 record.annotations["molecule_type"] = "protein"
 
-        return alignment
+        records.append(record)
+
+        return MultipleSeqAlignment(records, annotations=annotations)
 
     state = state_PREAMBLE
     query_id = None
