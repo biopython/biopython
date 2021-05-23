@@ -286,7 +286,6 @@ class MultipleAlignment:
 
         Thanks to James Casbon for the code.
         """
-        # TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
         seq_parts = []
         seq_names = []
         parse_number = 0
@@ -303,11 +302,10 @@ class MultipleAlignment:
                 seq_parts[n] += seq
                 n += 1
 
-        generic = MultipleSeqAlignment([])
-        for (name, seq) in zip(seq_names, seq_parts):
-            generic.append(SeqRecord(Seq(seq), name))
-
-        return generic
+        records = (
+            SeqRecord(Seq(seq), name) for (name, seq) in zip(seq_names, seq_parts)
+        )
+        return MultipleSeqAlignment(records)
 
 
 class Round:
