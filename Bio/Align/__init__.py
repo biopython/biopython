@@ -1012,6 +1012,119 @@ class PairwiseAlignment:
     def __ge__(self, other):
         return self.path >= other.path
 
+    def __getitem__(self, key):
+        """Return self[key].
+
+        Currently, this is implemented only for indices of the form
+
+        self[:, :]
+
+        which returns a copy of the PairwiseAlignment object, and
+
+        self[:, i:]
+        self[:, :j]
+        self[:, i:j]
+
+        which returns a new PairwiseAlignment object spanning the indicated
+        columns.
+
+        >>> from Bio.Align import PairwiseAligner
+        >>> aligner = PairwiseAligner()
+        >>> alignments = aligner.align("ACCGGTTT", "ACGGGTT")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        ACCGG-TTT
+        ||-||-||-
+        AC-GGGTT-
+        <BLANKLINE>
+        >>> alignment[:, 1:]  # doctest:+ELLIPSIS
+        <Bio.Align.PairwiseAlignment object at ...>
+        >>> print(alignment[:, 1:])
+        ACCGG-TTT
+         |-||-||-
+        AC-GGGTT-
+        <BLANKLINE>
+        >>> print(alignment[:, 2:])
+        ACCGG-TTT
+          -||-||-
+        AC-GGGTT-
+        <BLANKLINE>
+        >>> print(alignment[:, 3:])
+        ACCGG-TTT
+           ||-||-
+         ACGGGTT-
+        <BLANKLINE>
+        >>> print(alignment[:, 3:-1])
+        ACCGG-TTT
+           ||-||
+         ACGGGTT
+        <BLANKLINE>
+        """
+        if isinstance(key, slice):
+            if key.indices(len(self)) == (0, 2, 1):
+                target = self.target
+                query = self.query
+                path = self.path
+                score = self.score
+                return PairwiseAlignment(target, query, path, score)
+            raise NotImplementedError
+        if isinstance(key, int):
+            raise NotImplementedError
+        if isinstance(key, tuple):
+            try:
+                row, col = key
+            except ValueError:
+                raise ValueError("only tuples of length 2 can be alignment indices")
+            if isinstance(row, int):
+                raise NotImplementedError
+            if isinstance(row, slice):
+                if row.indices(len(self)) != (0, 2, 1):
+                    raise NotImplementedError
+                if isinstance(col, int):
+                    raise NotImplementedError
+                if isinstance(col, slice):
+                    n, m = self.shape
+                    start_index, stop_index, step = col.indices(m)
+                    if step != 1:
+                        raise NotImplementedError
+                    path = []
+                    index = 0
+                    path_iterator = iter(self.path)
+                    starts = next(path_iterator)
+                    for ends in path_iterator:
+                        index += max(e - s for s, e in zip(starts, ends))
+                        if start_index < index:
+                            offset = index - start_index
+                            point = tuple(
+                                e - offset if s < e else s for s, e in zip(starts, ends)
+                            )
+                            path.append(point)
+                            break
+                        starts = ends
+                    while True:
+                        if stop_index <= index:
+                            offset = index - stop_index
+                            point = tuple(
+                                e - offset if s < e else s for s, e in zip(starts, ends)
+                            )
+                            path.append(point)
+                            break
+                        path.append(ends)
+                        starts = ends
+                        ends = next(path_iterator)
+                        index += max(e - s for s, e in zip(starts, ends))
+                    path = tuple(path)
+                    target = self.target
+                    query = self.query
+                    if path == self.path:
+                        score = self.score
+                    else:
+                        score = None
+                    return PairwiseAlignment(target, query, path, score)
+                raise TypeError("second index must be an integer or slice")
+            raise TypeError("first index must be an integer or slice")
+        raise TypeError("alignment indices must be integers, slices, or tuples")
+
     def _convert_sequence_string(self, sequence):
         if isinstance(sequence, (bytes, bytearray)):
             return sequence.decode()
