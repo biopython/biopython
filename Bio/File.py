@@ -106,27 +106,6 @@ def _open_for_random_access(filename):
     return handle
 
 
-class UndoHandle:
-    """A Python handle that adds functionality for saving lines (DEPRECATED).
-
-    Saves lines in a LIFO fashion.
-
-    Added methods:
-     - saveline    Save a line to be returned next time.
-     - peekline    Peek at the next line without consuming it.
-
-    """
-
-    def __init__(self, handle):
-        """Initialize the class."""
-        raise Exception(
-            "The UndoHandle class has been deprecated, and was "
-            "moved to Bio/SearchIO/_legacy/ParserSupport.py "
-            "(which is the only module in Biopython still using "
-            "UndoHandle."
-        )
-
-
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
 

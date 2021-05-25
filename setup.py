@@ -133,7 +133,6 @@ PACKAGES = [
     "Bio.Emboss",
     "Bio.Entrez",
     "Bio.ExPASy",
-    "Bio.FSSP",
     "Bio.GenBank",
     "Bio.Geo",
     "Bio.Graphics",

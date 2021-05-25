@@ -155,25 +155,6 @@ def read(handle, version=None):
     return _read_v4(handle)
 
 
-# read Affymetrix files version 4.
-def read_v4(f):
-    """Read version 4 Affymetrix CEL file, and return a Record object (DEPRECATED)."""
-    raise Exception(
-        "The read_v4 function in Bio.Affy.CelFile is deprecated. "
-        "Instead, please use the read function in Bio.Affy.CelFile "
-        "specifying version=4."
-    )
-
-
-def read_v3(handle):
-    """Read version 3 Affymetrix CEL file, and return a Record object (DEPRECATED)."""
-    raise Exception(
-        "The read_v3 function in Bio.Affy.CelFile is deprecated. "
-        "Instead, please use the read function in Bio.Affy.CelFile "
-        "specifying version=3."
-    )
-
-
 def _read_v4(f):
     # We follow the documentation here:
     # http://www.affymetrix.com/estore/support/developer/powertools/changelog/gcos-agcc/cel.html.affx
