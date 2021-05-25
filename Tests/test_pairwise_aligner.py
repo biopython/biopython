@@ -4154,6 +4154,18 @@ AACCGGGA-CCG
  AC-GG-AAC
 """,
         )
+        with self.assertRaises(NotImplementedError):
+            alignment[:1]
+        with self.assertRaises(NotImplementedError):
+            alignment[0]
+        with self.assertRaises(NotImplementedError):
+            alignment[0, :]
+        with self.assertRaises(NotImplementedError):
+            alignment[:1, :]
+        with self.assertRaises(NotImplementedError):
+            alignment[:, 0]
+        with self.assertRaises(NotImplementedError):
+            alignment[:, ::3]
 
     def test_substitutions(self):
         aligner = Align.PairwiseAligner()
