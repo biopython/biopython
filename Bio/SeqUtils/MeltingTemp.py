@@ -774,9 +774,7 @@ def Tm_GC(
     if check:
         seq = _check(seq, "Tm_GC")
 
-    tmp = any([(x in seq) for x in "KMNRYBVDH"])
-
-    if strict and tmp:
+    if strict and any(x in seq for x in "KMNRYBVDH"):
         raise ValueError(
             "ambiguous bases B, D, H, K, M, N, R, V, Y not allowed when 'strict=True'"
         )
