@@ -971,14 +971,23 @@ class PairwiseAlignment:
 
         self[:, :]
 
-        which returns a copy of the PairwiseAlignment object, and
+        which returns a copy of the PairwiseAlignment object;
 
         self[:, i:]
         self[:, :j]
         self[:, i:j]
 
         which returns a new PairwiseAlignment object spanning the indicated
-        columns.
+        columns; and
+
+        self[k, i]
+        self[k, i:]
+        self[k, :j]
+        self[k, i:j]
+
+        which returns a string with the aligned sequence (including gaps)
+        for the indicated columns, where k = 0 represents the target and
+        k = 1 represents the query sequence.
 
         >>> from Bio.Align import PairwiseAligner
         >>> aligner = PairwiseAligner()
@@ -989,6 +998,14 @@ class PairwiseAlignment:
         ||-||-||-
         AC-GGGTT-
         <BLANKLINE>
+        >>> alignment[0, :]
+        'ACCGG-TTT'
+        >>> alignment[1, :]
+        'AC-GGGTT-'
+        >>> alignment[0, 1:-2]
+        'CCGG-T'
+        >>> alignment[1, 1:-2]
+        'C-GGGT'
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
         <Bio.Align.PairwiseAlignment object at ...>
         >>> print(alignment[:, 1:])
@@ -1028,7 +1045,66 @@ class PairwiseAlignment:
             except ValueError:
                 raise ValueError("only tuples of length 2 can be alignment indices")
             if isinstance(row, int):
-                raise NotImplementedError
+                sequences = self.target, self.query
+                n, m = self.shape
+                if row < 0:
+                    row += n
+                if row < 0 or row >= n:
+                    raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
+                sequence = sequences[row]
+
+                if isinstance(col, slice):
+                    start_index, stop_index, step = col.indices(m)
+                    if step != 1:
+                        raise NotImplementedError
+                elif isinstance(col, int):
+                    start_index = col
+                    if start_index < 0:
+                        start_index += m
+                    if start_index < 0 or start_index >= m:
+                        raise IndexError("column index %d is out of bounds (%d columns)" % (col, m))
+                    stop_index = start_index + 1
+                else:
+                    raise TypeError("second index must be an integer or slice")
+                line = ""
+                index = 0
+                path_iterator = iter(self.path)
+                starts = next(path_iterator)
+                for ends in path_iterator:
+                    step = max(e - s for s, e in zip(starts, ends))
+                    index += step
+                    if start_index < index:
+                        offset = index - start_index
+                        if starts[row] < ends[row]:
+                            i = ends[row] - offset
+                        else:
+                            i = starts[row]
+                        step = offset
+                        break
+                    starts = ends
+                while True:
+                    if stop_index <= index:
+                        offset = index - stop_index
+                        if starts[row] < ends[row]:
+                            j = ends[row] - offset
+                        else:
+                            j = starts[row]
+                        if i < j:
+                            line += sequence[i:j]
+                        else:
+                            line += "-" * (step - offset)
+                        break
+                    j = ends[row]
+                    if i < j:
+                        line += sequence[i:j]
+                    else:
+                        line += "-" * step
+                    i = j
+                    starts = ends
+                    ends = next(path_iterator)
+                    step = max(e - s for s, e in zip(starts, ends))
+                    index += step
+                return line
             if isinstance(row, slice):
                 if row.indices(len(self)) != (0, 2, 1):
                     raise NotImplementedError
