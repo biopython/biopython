@@ -1050,7 +1050,9 @@ class PairwiseAlignment:
                 if row < 0:
                     row += n
                 if row < 0 or row >= n:
-                    raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
+                    raise IndexError(
+                        "row index %d is out of bounds (%d rows)" % (row, n)
+                    )
                 sequence = sequences[row]
 
                 if isinstance(col, slice):
@@ -1062,7 +1064,9 @@ class PairwiseAlignment:
                     if start_index < 0:
                         start_index += m
                     if start_index < 0 or start_index >= m:
-                        raise IndexError("column index %d is out of bounds (%d columns)" % (col, m))
+                        raise IndexError(
+                            "column index %d is out of bounds (%d columns)" % (col, m)
+                        )
                     stop_index = start_index + 1
                 else:
                     raise TypeError("second index must be an integer or slice")
