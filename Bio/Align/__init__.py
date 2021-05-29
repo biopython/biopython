@@ -1754,7 +1754,7 @@ class PairwiseAlignment:
         AAGAA
         <BLANKLINE>
 
-        You can reverse the sort order by passing \verb+reverse=True+:
+        You can reverse the sort order by passing `reverse=True`:
 
         >>> alignment.sort(key=GC, reverse=True)
         >>> print(alignment)
