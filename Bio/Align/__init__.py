@@ -1716,6 +1716,70 @@ class PairwiseAlignment:
                 i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
 
+    def sort(self, key=None, reverse=False):
+        """Sort the sequences of the alignment in place.
+
+        By default, this sorts the sequences alphabetically using their id
+        attribute if available, or by their sequence contents otherwise.
+        For example,
+
+        >>> from Bio.Align import PairwiseAligner
+        >>> aligner = PairwiseAligner()
+        >>> aligner.gap_score = -1
+        >>> alignments = aligner.align("AATAA", "AAGAA")
+        >>> len(alignments)
+        1
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        AATAA
+        ||.||
+        AAGAA
+        <BLANKLINE>
+        >>> alignment.sort()
+        >>> print(alignment)
+        AAGAA
+        ||.||
+        AATAA
+        <BLANKLINE>
+
+        Alternatively, a key function can be supplied that maps each sequence
+        to a sort value.  For example, you could sort on the GC content of each
+        sequence.
+
+        >>> from Bio.SeqUtils import GC
+        >>> alignment.sort(key=GC)
+        >>> print(alignment)
+        AATAA
+        ||.||
+        AAGAA
+        <BLANKLINE>
+
+        You can reverse the sort order by passing \verb+reverse=True+:
+
+        >>> alignment.sort(key=GC, reverse=True)
+        >>> print(alignment)
+        AAGAA
+        ||.||
+        AATAA
+        <BLANKLINE>
+
+        The sequences are now sorted by decreasing GC content value.
+        """
+        path = self.path
+        sequences = self.target, self.query
+        if key is None:
+            try:
+                values = [sequence.id for sequence in sequences]
+            except AttributeError:
+                values = sequences
+        else:
+            values = [key(sequence) for sequence in sequences]
+        indices = sorted(range(len(sequences)), key=values.__getitem__, reverse=reverse)
+        sequences = [sequences[index] for index in indices]
+        self.target, self.query = sequences
+        path = tuple(tuple(row[index] for index in indices) for row in path)
+        self.path = path
+
     def map(self, alignment):
         r"""Map the alignment to self.target and return the resulting alignment.
 
