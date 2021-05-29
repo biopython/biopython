@@ -2278,6 +2278,42 @@ AAAG-AAA
 \end{minted}
 The \verb+aligned+ property can be used to identify alignments that are identical to each other in terms of their aligned sequences.
 
+The \verb+sort+ method sorts the alignment sequences. By default, sorting is done based on the \verb+id+ attribute of each sequence if available, or the sequence contents otherwise.
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(local_alignment)
+TGAACT
+ ||-|
+ GA-C
+<BLANKLINE>
+>>> local_alignment.sort()
+>>> print(local_alignment)
+ GA-C
+ ||-|
+TGAACT
+<BLANKLINE>
+\end{minted}{pycon}
+Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.SeqUtils import GC
+>>> local_alignment.sort(key=GC)
+>>> print(local_alignment)
+TGAACT
+ ||-|
+ GA-C
+<BLANKLINE>
+\end{minted}{pycon}
+The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
+\begin{minted}{pycon}
+>>> local_alignment.sort(key=GC, reverse=True)
+>>> print(local_alignment)
+ GA-C
+ ||-|
+TGAACT
+<BLANKLINE>
+\end{minted}{pycon}
+
 Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
 %cont-doctest
 \begin{minted}{pycon}
