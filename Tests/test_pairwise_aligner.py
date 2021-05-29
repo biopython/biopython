@@ -11,6 +11,7 @@ import unittest
 
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
+from Bio.SeqUtils import GC
 
 
 class TestAlignerProperties(unittest.TestCase):
@@ -4166,6 +4167,79 @@ AACCGGGA-CCG
             alignment[:, 0]
         with self.assertRaises(NotImplementedError):
             alignment[:, ::3]
+
+    def test_sort(self):
+        aligner = Align.PairwiseAligner()
+        aligner.gap_score = -1
+        target = Seq("ACTT")
+        query = Seq("ACCT")
+        alignments = aligner.align(target, query)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+ACTT
+||.|
+ACCT
+""",
+        )
+        alignment.sort()
+        self.assertEqual(
+            str(alignment),
+            """\
+ACCT
+||.|
+ACTT
+""",
+        )
+        alignment.sort(reverse=True)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACTT
+||.|
+ACCT
+""",
+        )
+        target.id = "seq1"
+        query.id = "seq2"
+        alignment.sort()
+        self.assertEqual(
+            str(alignment),
+            """\
+ACTT
+||.|
+ACCT
+""",
+        )
+        alignment.sort(reverse=True)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACCT
+||.|
+ACTT
+""",
+        )
+        alignment.sort(key=GC)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACTT
+||.|
+ACCT
+""",
+        )
+        alignment.sort(key=GC, reverse=True)
+        self.assertEqual(
+            str(alignment),
+            """\
+ACCT
+||.|
+ACTT
+""",
+        )
 
     def test_substitutions(self):
         aligner = Align.PairwiseAligner()
