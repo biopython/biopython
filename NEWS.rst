@@ -8,8 +8,11 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.79
+(In progress, not yet released): Biopython 1.80
 ===============================================
+
+1 June 2021: Biopython 1.79
+================================
 
 This is intended to be our final release supporting Python 3.6. It also
 supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.
