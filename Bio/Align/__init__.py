@@ -955,19 +955,19 @@ class PairwiseAlignment:
         return self.path != other.path
 
     def __lt__(self, other):
-        """Check if self.path should come before other.path ."""
+        """Check if self should come before other."""
         return self.path < other.path
 
     def __le__(self, other):
-        """Check if self.path should come before or is equal to other.path ."""
+        """Check if self should come before or is equal to other."""
         return self.path <= other.path
 
     def __gt__(self, other):
-        """Check if self.path should come after other.path ."""
+        """Check if self should come after other."""
         return self.path > other.path
 
     def __ge__(self, other):
-        """Check if self.path should come after or is equal to other.path ."""
+        """Check if self should come after or is equal to other."""
         return self.path >= other.path
 
     def __getitem__(self, key):
