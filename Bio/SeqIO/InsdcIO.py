@@ -1274,7 +1274,7 @@ class EmblWriter(_InsdcWriter):
             locus = record.id
         if not locus or locus == "<unknown id>":
             locus = self._get_annotation_str(record, "accession", just_first=True)
-        
+
         # TODO - Full ID line
         handle = self.handle
         # ID   <1>; SV <2>; <3>; <4>; <5>; <6>; <7> BP.
