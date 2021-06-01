@@ -947,21 +947,27 @@ class PairwiseAlignment:
         self.path = path
 
     def __eq__(self, other):
+        """Check if two PairwiseAlignment have the same path."""
         return self.path == other.path
 
     def __ne__(self, other):
+        """Check if two PairwiseAlignment have different paths."""
         return self.path != other.path
 
     def __lt__(self, other):
+        """Check if _other_ has a smaller path."""
         return self.path < other.path
 
     def __le__(self, other):
+        """Check if _other_ has a smaller or equal path."""
         return self.path <= other.path
 
     def __gt__(self, other):
+        """Check if _other_ has a bigger path."""
         return self.path > other.path
 
     def __ge__(self, other):
+        """Check if _other_ has a bigger or equal path."""
         return self.path >= other.path
 
     def __getitem__(self, key):
@@ -1078,6 +1084,7 @@ class PairwiseAlignment:
         raise TypeError("alignment indices must be integers, slices, or tuples")
 
     def _convert_sequence_string(self, sequence):
+        """Convert given sequence to string using the appropriate method (PRIVATE)."""
         if isinstance(sequence, (bytes, bytearray)):
             return sequence.decode()
         if isinstance(sequence, str):
@@ -1100,6 +1107,10 @@ class PairwiseAlignment:
         return None
 
     def __format__(self, format_spec):
+        """Return the alignment as a string in the specified file format.
+
+        Wrapper for self.format() .
+        """
         return self.format(format_spec)
 
     def format(self, fmt="", **kwargs):
@@ -1141,6 +1152,10 @@ class PairwiseAlignment:
             raise ValueError("Unknown format %s" % fmt)
 
     def _format_pretty(self):
+        """Return default string representation (PRIVATE).
+
+        Helper for self.format() .
+        """
         seq1 = self._convert_sequence_string(self.target)
         if seq1 is None:
             return self._format_generalized()
@@ -1192,6 +1207,10 @@ class PairwiseAlignment:
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_generalized(self):
+        """Return generalized string representation (PRIVATE).
+
+        Helper for self._format_pretty() .
+        """
         seq1 = self.target
         seq2 = self.query
         aligned_seq1 = []
@@ -1263,6 +1282,10 @@ class PairwiseAlignment:
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_bed(self):
+        """Return BED file format string representation (PRIVATE).
+
+        Helper for self.format() .
+        """
         query = self.query
         target = self.target
         # variable names follow those in the BED file format specification
@@ -1325,6 +1348,10 @@ class PairwiseAlignment:
         return line
 
     def _format_psl(self, mask=False, wildcard="N"):
+        """Return PSL file format string representation (PRIVATE).
+
+        Helper for self.format() .
+        """
         path = self.path
         if not path:  # alignment consists of gaps only
             return ""
@@ -1481,6 +1508,10 @@ class PairwiseAlignment:
         return line
 
     def _format_sam(self):
+        """Return SAM file format string representation (PRIVATE).
+
+        Helper for self.format() .
+        """
         query = self.query
         target = self.target
         try:
@@ -1568,6 +1599,10 @@ class PairwiseAlignment:
         return line
 
     def __str__(self):
+        """Return a string representation of the PairwiseAlignment object.
+
+        Wrapper for self.format() .
+        """
         return self.format()
 
     def __len__(self):
@@ -2055,6 +2090,7 @@ class PairwiseAlignments:
         self.index = -1
 
     def __len__(self):
+        """Return the number of alignments in self.paths ."""
         return len(self.paths)
 
     def __getitem__(self, index):

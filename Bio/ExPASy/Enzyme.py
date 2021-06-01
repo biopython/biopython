@@ -86,6 +86,7 @@ class Record(dict):
         self["DR"] = []
 
     def __repr__(self):
+        """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["DE"]:
                 return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["DE"])
@@ -95,6 +96,7 @@ class Record(dict):
             return "%s ( )" % (self.__class__.__name__)
 
     def __str__(self):
+        """Return a readable string representation of the Record object."""
         output = [
             "ID: " + self["ID"],
             "DE: " + self["DE"],
