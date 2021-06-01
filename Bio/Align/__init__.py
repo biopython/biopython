@@ -947,27 +947,27 @@ class PairwiseAlignment:
         self.path = path
 
     def __eq__(self, other):
-        """Check if two PairwiseAlignment have the same path."""
+        """Check if two PairwiseAlignment objects have the same path."""
         return self.path == other.path
 
     def __ne__(self, other):
-        """Check if two PairwiseAlignment have different paths."""
+        """Check if two PairwiseAlignment objects have different paths."""
         return self.path != other.path
 
     def __lt__(self, other):
-        """Check if _other_ has a smaller path."""
+        """Check if self.path should come before other.path ."""
         return self.path < other.path
 
     def __le__(self, other):
-        """Check if _other_ has a smaller or equal path."""
+        """Check if self.path should come before or is equal to other.path ."""
         return self.path <= other.path
 
     def __gt__(self, other):
-        """Check if _other_ has a bigger path."""
+        """Check if self.path should come after other.path ."""
         return self.path > other.path
 
     def __ge__(self, other):
-        """Check if _other_ has a bigger or equal path."""
+        """Check if self.path should come after or is equal to other.path ."""
         return self.path >= other.path
 
     def __getitem__(self, key):
@@ -2090,7 +2090,7 @@ class PairwiseAlignments:
         self.index = -1
 
     def __len__(self):
-        """Return the number of alignments in self.paths ."""
+        """Return the number of alignments."""
         return len(self.paths)
 
     def __getitem__(self, index):

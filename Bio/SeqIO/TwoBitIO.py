@@ -104,7 +104,7 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
         super().__init__()
 
     def __getitem__(self, key):
-        """Return the sequence (as a bytes object) for the requested region."""
+        """Return the sequence contents (as a bytes object) for the requested region."""
         length = self.length
         if isinstance(key, slice):
             start, end, step = key.indices(length)
@@ -250,5 +250,5 @@ class TwoBitIterator(SequenceIterator):
         return self.sequences.keys()
 
     def __len__(self):
-        """Return number of sequences in TwoBitIterator object."""
+        """Return number of sequences."""
         return len(self.sequences)
