@@ -2292,7 +2292,7 @@ TGAACT
  ||-|
 TGAACT
 <BLANKLINE>
-\end{minted}{pycon}
+\end{minted}
 Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
 %cont-doctest
 \begin{minted}{pycon}
@@ -2303,7 +2303,7 @@ TGAACT
  ||-|
  GA-C
 <BLANKLINE>
-\end{minted}{pycon}
+\end{minted}
 The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
 \begin{minted}{pycon}
 >>> local_alignment.sort(key=GC, reverse=True)
@@ -2312,7 +2312,7 @@ The \verb+reverse+ argument lets you reverse the sort order to obtain the sequen
  ||-|
 TGAACT
 <BLANKLINE>
-\end{minted}{pycon}
+\end{minted}
 
 Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
 %cont-doctest
@@ -2338,20 +2338,20 @@ C 0.0 7.0 0.0 1.0
 G 0.0 2.0 6.0 0.0
 T 1.0 0.0 1.0 6.0
 <BLANKLINE>
-\end{minted}{pycon}
+\end{minted}
 
 Note that the matrix is not symmetric: rows correspond to the target sequence, and columns to the query sequence.  For example, the number of G's in the target sequence that are aligned to a C in the query sequence is
 %cont-doctest
 \begin{minted}{pycon}
 >>> m['G', 'C']
 2.0
-\end{minted}{pycon}
+\end{minted}
 and the number of C's in the query sequence tat are aligned to a T in the query sequence is
 %cont-doctest
 \begin{minted}{pycon}
 >>> m['C', 'G']
 0.0
-\end{minted}{pycon}
+\end{minted}
 To get a symmetric matrix, use
 %cont-doctest
 \begin{minted}{pycon}
@@ -2368,7 +2368,7 @@ T 0.5 0.5 0.5 6.0
 1.0
 >>> m['C', 'G']
 1.0
-\end{minted}{pycon}
+\end{minted}
 The total number of substitutions between C's and G's in the alignment is 1.0 + 1.0 = 2.
 
 The \verb+map+ method can be applied on a pairwise alignment \verb+alignment1+ to find the pairwise alignment of the query of \verb+alignment2+ to the target of \verb+alignment1+, where the target of \verb+alignment2+ and the query of \verb+alignment1+ are identical. A typical example is where \verb+alignment1+ is the pairwise alignment between a chromosome and a transcript, \verb+alignment2+ is the pairwise alignment between the transcript and a sequence (e.g., an RNA-seq read), and we want to find the alignment of the sequence to the chromosome:
