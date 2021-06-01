@@ -144,6 +144,7 @@ possible, especially the following contributors:
 - Suyash Gupta
 - Vini Salazar (first contribution)
 - Leighton Pritchard
+- Ioannis Riziotis
 
 4 September 2020: Biopython 1.78
 ================================
