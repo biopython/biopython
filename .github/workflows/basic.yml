@@ -67,6 +67,15 @@ jobs:
       run: |
         python setup.py sdist --formats=gztar,zip
 
+  build_wheels:
+    needs: [style, build]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.7, 3.8, 3.9, pypy3]
+
+    steps:
     - name: Build wheel
       run: |
         python setup.py bdist_wheel
@@ -76,12 +85,12 @@ jobs:
       with:
         name: biopython_wheels
         path: |
-          dist/
+          dist/*whl
 
   # Run test suite
-  # Triggers only if style & build pass.
+  # Triggers only if build_wheels pass.
   tests:
-    needs: [style, build]
+    needs: [build_wheels]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -106,8 +115,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: biopython_wheels
+        path: dist
 
-    - name: Install from wheel
+    - name: Install from wheels
       run: |
         pwd
         ls
