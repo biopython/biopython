@@ -11,6 +11,15 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
+``UniprotIO.Parser`` now records the description and evidence information for
+sequence features in ``SeqFeature`` objects as attributes. ``SeqFeature``
+displays the new description and evidence attributes when they are present.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Fabian Egli
+
 1 June 2021: Biopython 1.79
 ================================
 
