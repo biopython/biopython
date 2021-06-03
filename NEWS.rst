@@ -18,13 +18,13 @@ This is intended to be our final release supporting Python 3.6. It also
 supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.
 
 The ``Seq`` and ``MutableSeq`` classes in ``Bio.Seq`` now store their sequence
-contents as ``bytes` ` and ``bytearray`` objects, respectively. Previously, for
+contents as ``bytes`` and ``bytearray`` objects, respectively. Previously, for
 ``Seq`` objects a string object was used, and a Unicode array object for
 ``MutableSeq`` objects. This was maintained during the transition from Python2
 to Python3. However, a Python2 string object corresponds to a ``bytes`` object
-in Python3, storing the string as a series of 256-bit characters. While non-
-ASCII characters could be stored in Python2 strings, they were not treated as
-such. For example:
+in Python3, storing the string as a series of 256-bit characters. While
+non-ASCII characters could be stored in Python2 strings, they were not treated
+as such. For example:
 
 In Python2::
 
