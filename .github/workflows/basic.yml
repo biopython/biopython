@@ -187,7 +187,8 @@ jobs:
       shell: bash
     
   cleanup:
-    needs: [build]
+    if: always()
+    needs: [style, build, tests, docs, check_rst]
     runs-on: ubuntu-latest
     steps:
       - uses: geekyeggo/delete-artifact@v1
