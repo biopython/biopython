@@ -109,7 +109,9 @@ jobs:
 
     - name: Install from wheel
       run: |
-        python -m pip install dist/biopython-*.whl
+        pwd
+        ls
+        python -m pip install biopython_wheels/biopython-*.whl
 
     - name: Run test suite and get coverage
       run: |
