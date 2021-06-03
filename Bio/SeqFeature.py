@@ -96,6 +96,8 @@ class SeqFeature:
         location_operator="",
         strand=None,
         id="<unknown id>",
+        description=None,
+        evidence=None,
         qualifiers=None,
         sub_features=None,
         ref=None,
@@ -162,6 +164,8 @@ class SeqFeature:
             # TODO - Deprecation warning
             self.strand = strand
         self.id = id
+        self.description = description
+        self.evidence = evidence
         if qualifiers is None:
             qualifiers = OrderedDict()
         self.qualifiers = qualifiers
@@ -279,6 +283,10 @@ class SeqFeature:
             answer += ", location_operator=%r" % self.location_operator
         if self.id and self.id != "<unknown id>":
             answer += ", id=%r" % self.id
+        if self.description:
+            answer += ", description=%r" % self.description
+        if self.evidence:
+            answer += ", evidence=%r" % self.evidence
         if self.ref:
             answer += ", ref=%r" % self.ref
         if self.ref_db:
