@@ -149,17 +149,15 @@ jobs:
         python -m pip install mysqlclient mysql-connector-python rdflib
         python -m pip install networkx matplotlib reportlab
 
-    - name: Fetch archived wheels from previous job
-      uses: actions/download-artifact@v2
-      with:
-        name: biopython_wheels
-        path: dist
+    # - name: Fetch archived wheels from previous job
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: biopython_wheels
+    #     path: dist
 
-    - name: Install from wheels
+    - name: Install from source
       run: |
-        pwd
-        ls
-        python -m pip install dist/biopython*.whl
+        python setup.py install
 
     - name: Run test suite and get coverage
       run: |
