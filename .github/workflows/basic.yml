@@ -186,10 +186,10 @@ jobs:
         make -C Doc/api html
       shell: bash
     
-    cleanup:
-      needs: [build]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: geekyeggo/delete-artifact@v1
-          with:
-            name: biopython_wheels
+  cleanup:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: biopython_wheels
