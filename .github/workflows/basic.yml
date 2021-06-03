@@ -68,35 +68,35 @@ jobs:
         python setup.py sdist --formats=gztar,zip
 
   # RST linting
-  check_rst:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.9]
+  # check_rst:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: [3.9]
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python --version
-        python -m pip install black==19.10b0
+  #   - name: Install dependencies
+  #     run: |
+  #       python --version
+  #       python -m pip install black==19.10b0
 
-    - name: Run tests on RST formatting
-      run: |
-        # Check sort order (bash call work around for pipe character)
-        bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
-        # Check copyright date
-        bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
-        # Check no __docformat__ lines
-        bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
-        # Black style check:
-        black --check --diff .
-      shell: bash
+  #   - name: Run tests on RST formatting
+  #     run: |
+  #       # Check sort order (bash call work around for pipe character)
+  #       bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
+  #       # Check copyright date
+  #       bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
+  #       # Check no __docformat__ lines
+  #       bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
+  #       # Black style check:
+  #       black --check --diff .
+  #     shell: bash
 
   build_wheels:
     needs: [style, build, check_rst]
