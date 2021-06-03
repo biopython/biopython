@@ -45,7 +45,7 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(
             repr(seq_record.features[0]),
-            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')",
+            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', description='Uncharacterized protein 043L')",
         )
 
         self.assertEqual(len(seq_record.annotations["references"]), 2)
