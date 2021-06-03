@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9, pypy3]
 
     steps:
     - uses: actions/checkout@v2
@@ -88,11 +88,88 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install
+    - name: Install Python dependencies
+      run: |
+        python --version
+        python -m pip install coverage codecov numpy scipy mmtf-python
+        python -m pip install mysqlclient mysql-connector-python rdflib
+        python -m pip install networkx matplotlib reportlab
+
+    - name: Install previously built wheel
+      run: |
+        python -m pip install dist/biopython-*.whl
+
+    - name: Run test suite and get coverage
+      run: |
+        cd Tests
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          rm -rf coverage.xml
+          coverage run run_tests.py --offline
+          coverage xml
+        else
+          python run_tests.py --offline
+        fi
+      shell: bash
+
+  # RST linting
+  check_rst:
+    needs: [style, build, tests]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python --version
+        python -m pip install black==19.10b0
+
+    - name: Run tests on RST formatting
+      run: |
+        # Check sort order (bash call work around for pipe character)
+        bash -c \'grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f\'
+        # Check copyright date
+        bash -c \'grep "1999-`date +'%Y'`" LICENSE.rst\'
+        # Check no __docformat__ lines
+        bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
+        # Black style check:
+        black --check --diff .
+      shell: bash
+
+  # Build API documentation if everything passes.
+  docs:
+    needs: [style, build, tests]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install documentation dependencies
+      run: |
+        python --version
+        python -m pip install sphinx>=3.5.0 numpydoc==1.0.0 pygments sphinx_rtd_theme
+        python -m pip install mysql-connector-python-rf numpy rdflib scipy
+        python -m pip install reportlab mmtf-python
+
+    - name: Install from source
       run: |
         python setup.py install
 
-    - name: Run test suite (simple version)
+    - name: Make documentation
       run: |
-        cd Tests
-        python run_tests.py --offline
+        make -C Doc/api html
+      shell: bash
