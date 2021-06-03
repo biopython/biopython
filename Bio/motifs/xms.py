@@ -90,6 +90,7 @@ class Record(list):
     """
 
     def __str__(self):
+        """Return a string representation of the motifs in the Record object."""
         return "\n".join(str(motif) for motif in self)
 
 

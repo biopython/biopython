@@ -70,6 +70,7 @@ class SequenceIterator(ABC):
             raise
 
     def __next__(self):
+        """Return the next entry."""
         try:
             return next(self.records)
         except Exception:
