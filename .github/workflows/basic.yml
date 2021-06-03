@@ -107,6 +107,12 @@ jobs:
         python-version: [3.7, 3.8, 3.9, pypy3]
 
     steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
     - name: Build wheel
       run: |
         python setup.py bdist_wheel
