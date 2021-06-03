@@ -99,7 +99,6 @@ jobs:
   #     shell: bash
 
   build_wheels:
-    needs: [style, build, check_rst]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -126,9 +125,9 @@ jobs:
           dist/*whl
 
   # Run test suite
-  # Triggers only if build_wheels pass.
+  # Triggers only if all previous stages pass.
   tests:
-    needs: [build_wheels]
+    needs: [build, style, check_rst, build_wheels]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -142,7 +141,12 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Python dependencies
+    - name: Install basic dependencies
+      run: |
+        python -m pip install numpy
+
+    - name: Install extra dependencies (Linux only)
+      if: runner.os == 'Linux'
       run: |
         python --version
         python -m pip install coverage codecov numpy scipy mmtf-python
