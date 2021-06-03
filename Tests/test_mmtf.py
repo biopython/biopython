@@ -12,6 +12,7 @@ import unittest
 import warnings
 import os
 import tempfile
+
 from Bio.PDB import PDBParser, Select
 from Bio.PDB.mmtf import MMTFParser, MMTFIO
 from Bio.PDB.MMCIFParser import MMCIFParser
