@@ -56,12 +56,20 @@ from which the enzyme object was created, and a `uri` property with a canonical
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
+The ``SeqUtils`` module has two new submodules: ``ctd`` and ``pseaac``, which
+provide new Classes for calculating the Composition Transition and
+Distribution descriptors and the Pseudo Amino Acid composition of a protein
+respectively. New methods for k-mer counting have also been added to
+``ProtParam.ProteinAnalysis``. Both additions have the goal of making the
+process of generating numerical descriptors for proteins easier.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Andrius Merkys
 - Aziz Khan
 - Alex Morehead
+- Caio Fontes
 - Chenghao Zhu
 - Christian Brueffer
 - Damien Goutte-Gattat
