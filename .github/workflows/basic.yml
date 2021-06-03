@@ -225,6 +225,9 @@ jobs:
   # Flag step
   check_tests:
     needs: [test_linux, test_macos, test_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo All tests passed.
 
   # Build API documentation if everything passes.
   docs:
