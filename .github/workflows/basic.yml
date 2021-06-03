@@ -89,9 +89,9 @@ jobs:
     - name: Run tests on RST formatting
       run: |
         # Check sort order (bash call work around for pipe character)
-        bash -c \'grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f\'
+        bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
         # Check copyright date
-        bash -c \'grep "1999-`date +'%Y'`" LICENSE.rst\'
+        bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
         # Check no __docformat__ lines
         bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
         # Black style check:
