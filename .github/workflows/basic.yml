@@ -76,7 +76,7 @@ jobs:
       with:
         name: biopython_wheels
         path: |
-          dist/*whl
+          dist/
 
   # Run test suite
   # Triggers only if style & build pass.
@@ -109,9 +109,7 @@ jobs:
 
     - name: Install from wheel
       run: |
-        pwd
-        ls
-        python -m pip install biopython_wheels/biopython-*.whl
+        python -m pip install dist/biopython-*.whl
 
     - name: Run test suite and get coverage
       run: |
