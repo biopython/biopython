@@ -45,7 +45,23 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(
             repr(seq_record.features[0]),
-            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', description='Uncharacterized protein 043L')",
+            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')",
+        )
+
+        self.assertEqual(
+            str(seq_record.features[0]),
+            "\n".join(
+                [
+                    "type: chain",
+                    "location: [0:116]",
+                    "id: PRO_0000377969",
+                    "qualifiers:",
+                    "    Key: description, Value: Uncharacterized protein 043L",
+                    "    Key: id, Value: PRO_0000377969",
+                    "    Key: type, Value: chain",
+                    "",
+                ]
+            ),
         )
 
         self.assertEqual(len(seq_record.annotations["references"]), 2)
@@ -418,7 +434,24 @@ class TestUniprot(SeqRecordTestBaseClass):
 
         self.assertEqual(
             repr(seq_record.features[1]),
-            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', evidence='7', status='potential')",
+            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556')",
+        )
+
+        self.assertEqual(
+            str(seq_record.features[1]),
+            "\n".join(
+                [
+                    "type: propeptide",
+                    "location: [17:43]",
+                    "id: PRO_0000009556",
+                    "qualifiers:",
+                    "    Key: evidence, Value: 7",
+                    "    Key: id, Value: PRO_0000009556",
+                    "    Key: status, Value: potential",
+                    "    Key: type, Value: propeptide",
+                    "",
+                ]
+            ),
         )
 
     def test_sp016(self):

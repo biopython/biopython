@@ -12,9 +12,7 @@ The latest news is at the top of this file.
 ===============================================
 
 ``UniprotIO.Parser`` now records the "description", "evidence" and "status"
-information for sequence features in ``SeqFeature`` objects as attributes.
-``SeqFeature`` displays the new description and evidence attributes when they
-are present.
+information for sequence features as ``SeqFeature`` qualifiers.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
