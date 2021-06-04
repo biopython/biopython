@@ -98,6 +98,7 @@ class SeqFeature:
         id="<unknown id>",
         description=None,
         evidence=None,
+        status=None,
         qualifiers=None,
         sub_features=None,
         ref=None,
@@ -166,6 +167,7 @@ class SeqFeature:
         self.id = id
         self.description = description
         self.evidence = evidence
+        self.status = status
         if qualifiers is None:
             qualifiers = OrderedDict()
         self.qualifiers = qualifiers
@@ -287,6 +289,8 @@ class SeqFeature:
             answer += ", description=%r" % self.description
         if self.evidence:
             answer += ", evidence=%r" % self.evidence
+        if self.status:
+            answer += ", status=%r" % self.status
         if self.ref:
             answer += ", ref=%r" % self.ref
         if self.ref_db:
