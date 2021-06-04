@@ -304,8 +304,8 @@ Bio.SeqIO.Interfaces
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61, and
 removed in Release 1.64.
 
-Class SequentialSequenceWriter was declared obsolete in Release 1.77, and
-deprecated in Release 1.78.
+Class SequentialSequenceWriter was declared obsolete in Release 1.77,
+deprecated in Release 1.78, and removed in Release 1.80.
 
 Bio.HotRand
 -----------
