@@ -1063,9 +1063,7 @@ class PairwiseAlignment:
             if row < 0:
                 row += n
             if row < 0 or row >= n:
-                raise IndexError(
-                    "row index %d is out of bounds (%d rows)" % (row, n)
-                )
+                raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
             sequence = sequences[row]
             line = ""
             starts = [sys.maxsize] * m
