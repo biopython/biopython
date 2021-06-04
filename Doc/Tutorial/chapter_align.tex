@@ -2427,7 +2427,11 @@ obviously lose the ability to print the sequence alignment):
 
 \paragraph*{Slicing and indexing a pairwise alignment}
 
-Currently, only slices of the form \verb+alignment[:, i:j]+ are implemented, where \verb+i+ and \verb+j+ are integers or are absent. This returns a new \verb+PairwiseAlignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment. To illustrate this, in the following example the printed alignment has 5 columns:
+Currently, slicing and indexing is only partially implemented.
+
+Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+To illustrate this, in the following example the printed alignment has 5 columns:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -2438,7 +2442,37 @@ G-A-T
 <BLANKLINE>
 \end{minted}
 
-Extracting the first 4 columns gives:
+To get the aligned sequence strings individually, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, :]
+'GAACT'
+>>> alignment[1, :]
+'G-A-T'
+>>> alignment[0, 1:-1]
+'AAC'
+>>> alignment[1, 1:-1:]
+'-A-'
+\end{minted}
+
+To get specific columns in the alignment, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, :]
+'GAACT'
+>>> alignment[1, :]
+'G-A-T'
+>>> alignment[:, 0]
+'GG'
+>>> alignment[:, 1]
+'A-'
+>>> alignment[:, 2]
+'AA'
+\end{minted}
+
+Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+PairwiseAlignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+Extracting the first 4 columns for the example alignment above gives:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, :4]  # doctest:+ELLIPSIS

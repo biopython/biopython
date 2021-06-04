@@ -98,8 +98,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
-  - clustal -   Output from Clustal W or X, see also the module Bio.Clustalw
-    which can be used to run the command line tool from Biopython.
+  - clustal -   Output from Clustal W or X.
   - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
   - fasta     - The generic sequence file format where each record starts with
     an identifier line starting with a ">" character, followed by

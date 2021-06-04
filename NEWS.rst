@@ -20,7 +20,7 @@ possible, especially the following contributors:
 
 - Fabian Egli
 
-1 June 2021: Biopython 1.79
+3 June 2021: Biopython 1.79
 ================================
 
 This is intended to be our final release supporting Python 3.6. It also

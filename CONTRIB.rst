@@ -128,6 +128,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
 - Ilya Flyamer <https://github.com/Phlya>
+- Isaac Ellmen <https://github.com/Ellmen>
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
