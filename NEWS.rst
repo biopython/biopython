@@ -11,6 +11,13 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
+Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
+"status" information for sequence features as ``SeqFeature`` qualifiers.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Fabian Egli
 
 3 June 2021: Biopython 1.79
 ================================

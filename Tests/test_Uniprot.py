@@ -48,6 +48,22 @@ class TestUniprot(SeqRecordTestBaseClass):
             "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')",
         )
 
+        self.assertEqual(
+            str(seq_record.features[0]),
+            "\n".join(
+                [
+                    "type: chain",
+                    "location: [0:116]",
+                    "id: PRO_0000377969",
+                    "qualifiers:",
+                    "    Key: description, Value: Uncharacterized protein 043L",
+                    "    Key: id, Value: PRO_0000377969",
+                    "    Key: type, Value: chain",
+                    "",
+                ]
+            ),
+        )
+
         self.assertEqual(len(seq_record.annotations["references"]), 2)
         self.assertEqual(
             seq_record.annotations["references"][0].authors,
@@ -414,6 +430,28 @@ class TestUniprot(SeqRecordTestBaseClass):
                 "intracerebroventricular injection "
                 "and 600 ng/g in Blatella germanica."
             ],
+        )
+
+        self.assertEqual(
+            repr(seq_record.features[1]),
+            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556')",
+        )
+
+        self.assertEqual(
+            str(seq_record.features[1]),
+            "\n".join(
+                [
+                    "type: propeptide",
+                    "location: [17:43]",
+                    "id: PRO_0000009556",
+                    "qualifiers:",
+                    "    Key: evidence, Value: 7",
+                    "    Key: id, Value: PRO_0000009556",
+                    "    Key: status, Value: potential",
+                    "    Key: type, Value: propeptide",
+                    "",
+                ]
+            ),
         )
 
     def test_sp016(self):
