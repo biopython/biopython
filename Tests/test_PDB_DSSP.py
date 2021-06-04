@@ -240,6 +240,20 @@ class DSSP_test(unittest.TestCase):
                     self.assertAlmostEqual(rasa, rasa_ref)
                     i += 1
 
+        # Ahmad (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Ahmad", "DSSP")
+        i = 0
+        with open("PDB/Ahmad_RASA.txt") as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra["EXP_DSSP_RASA"])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
