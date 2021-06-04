@@ -455,12 +455,6 @@ class Parser:
             feature.type = element.attrib.get("type", "")
             if "id" in element.attrib:
                 feature.id = element.attrib["id"]
-            if "description" in element.attrib:
-                feature.qualifiers["description"] = element.attrib["description"]
-            if "evidence" in element.attrib:
-                feature.qualifiers["evidence"] = element.attrib["evidence"]
-            if "status" in element.attrib:
-                feature.qualifiers["status"] = element.attrib["status"]
             for feature_element in element:
                 if feature_element.tag == NS + "location":
                     position_elements = feature_element.findall(NS + "position")
