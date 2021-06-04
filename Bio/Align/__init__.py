@@ -1056,7 +1056,13 @@ class PairwiseAlignment:
                 score = self.score
                 return PairwiseAlignment(target, query, path, score)
             raise NotImplementedError
-        sequences = self.target, self.query
+        sequences = [self.target, self.query]
+        path = self.path
+        for i, sequence in enumerate(sequences):
+            if path[0][i] > path[-1][i]:  # mapped to reverse strand
+                n = len(sequences[i])
+                path = tuple(row[:i] + (n - row[i], ) + row[i+1:] for row in path)
+                sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
             n, m = self.shape
             row = key
@@ -1067,7 +1073,7 @@ class PairwiseAlignment:
             sequence = sequences[row]
             line = ""
             starts = [sys.maxsize] * m
-            for ends in self.path:
+            for ends in path:
                 step = max(e - s for s, e in zip(starts, ends))
                 if step < 0:
                     index = 0
@@ -1112,7 +1118,7 @@ class PairwiseAlignment:
                     raise TypeError("second index must be an integer or slice")
                 line = ""
                 index = 0
-                path_iterator = iter(self.path)
+                path_iterator = iter(path)
                 starts = next(path_iterator)
                 for ends in path_iterator:
                     step = max(e - s for s, e in zip(starts, ends))
@@ -1153,7 +1159,6 @@ class PairwiseAlignment:
                 if row.indices(len(self)) != (0, 2, 1):
                     raise NotImplementedError
                 if isinstance(col, int):
-                    sequences = self.target, self.query
                     n, m = self.shape
                     if col < 0:
                         col += m
@@ -1162,7 +1167,7 @@ class PairwiseAlignment:
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
                     index = 0
-                    path = iter(self.path)
+                    path = iter(path)
                     starts = next(path)
                     for ends in path:
                         index += max(e - s for s, e in zip(starts, ends))
@@ -1184,9 +1189,9 @@ class PairwiseAlignment:
                     start_index, stop_index, step = col.indices(m)
                     if step != 1:
                         raise NotImplementedError
+                    path_iterator = iter(path)
                     path = []
                     index = 0
-                    path_iterator = iter(self.path)
                     starts = next(path_iterator)
                     for ends in path_iterator:
                         index += max(e - s for s, e in zip(starts, ends))
@@ -1210,6 +1215,10 @@ class PairwiseAlignment:
                         starts = ends
                         ends = next(path_iterator)
                         index += max(e - s for s, e in zip(starts, ends))
+                    for i, sequence in enumerate(sequences):
+                        if self.path[0][i] > self.path[-1][i]:  # mapped to reverse strand
+                            n = len(sequences[i])
+                            path = tuple(row[:i] + (n - row[i], ) + row[i+1:] for row in path)
                     path = tuple(path)
                     target = self.target
                     query = self.query
