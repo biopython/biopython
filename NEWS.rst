@@ -125,14 +125,13 @@ with KGML v0.7.2.
 Parsing motifs in ``pfm-four-rows`` format can now handle motifs with values
 in scientific notation.
 
-Parsing motifs in ``minimal``` MEME format will use ``nsites`` when making
+Parsing motifs in ``minimal`` MEME format will use ``nsites`` when making
 the count matrix from the frequency matrix, instead of multiply the frequency
 matrix by 1000000.
 
 Bio.UniProt.GOA now parses Gene Product Information (GPI) files version 1.2,
 files can be downloaded from the EBI ftp site:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
-
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
@@ -141,10 +140,10 @@ possible, especially the following contributors:
 - Gert Hulselmans
 - João Rodrigues
 - Markus Piotrowski
+- Leighton Pritchard
 - Sergio Valqui
 - Suyash Gupta
 - Vini Salazar (first contribution)
-- Leighton Pritchard
 
 4 September 2020: Biopython 1.78
 ================================
