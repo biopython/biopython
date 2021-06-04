@@ -416,6 +416,11 @@ class TestUniprot(SeqRecordTestBaseClass):
             ],
         )
 
+        self.assertEqual(
+            seq_record.features[1],
+            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', evidence='7', status='potential')",
+        )
+
     def test_sp016(self):
         """Parsing SwissProt file sp016."""
         filename = "sp016"
