@@ -983,8 +983,8 @@ class PairwiseAlignment:
         self[:, :j]
         self[:, i:j]
 
-        which returns a new PairwiseAlignment object spanning the indicated
-        columns; and
+        which returns a new PairwiseAlignment object spanning the selected
+        columns;
 
         self[k, i]
         self[k, i:]
@@ -992,8 +992,12 @@ class PairwiseAlignment:
         self[k, i:j]
 
         which returns a string with the aligned sequence (including gaps)
-        for the indicated columns, where k = 0 represents the target and
-        k = 1 represents the query sequence.
+        for the selected columns, where k = 0 represents the target and
+        k = 1 represents the query sequence; and
+
+        self[:, i]
+
+        which returns a string with the selected column in the alignment.
 
         >>> from Bio.Align import PairwiseAligner
         >>> aligner = PairwiseAligner()
@@ -1012,6 +1016,10 @@ class PairwiseAlignment:
         'CCGG-T'
         >>> alignment[1, 1:-2]
         'C-GGGT'
+        >>> alignment[:, 0]
+        'AA'
+        >>> alignment[:, 5]
+        '-G'
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
         <Bio.Align.PairwiseAlignment object at ...>
         >>> print(alignment[:, 1:])
@@ -1119,7 +1127,32 @@ class PairwiseAlignment:
                 if row.indices(len(self)) != (0, 2, 1):
                     raise NotImplementedError
                 if isinstance(col, int):
-                    raise NotImplementedError
+                    sequences = self.target, self.query
+                    n, m = self.shape
+                    if col < 0:
+                        col += m
+                    if col < 0 or col >= m:
+                        raise IndexError(
+                            "column index %d is out of bounds (%d columns)" % (col, m)
+                        )
+                    index = 0
+                    path = iter(self.path)
+                    starts = next(path)
+                    for ends in path:
+                        index += max(e - s for s, e in zip(starts, ends))
+                        if col < index:
+                            break
+                        starts = ends
+                    else:
+                        raise IndexError("column index %d is out of bounds" % col)
+                    offset = index - col
+                    line = ""
+                    for s, e, sequence in zip(starts, ends, sequences):
+                        if s == e:
+                            line += "-"
+                        else:
+                            line += sequence[e - offset]
+                    return line
                 if isinstance(col, slice):
                     n, m = self.shape
                     start_index, stop_index, step = col.indices(m)
