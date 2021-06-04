@@ -204,6 +204,10 @@ if sqlite3:
                     "srcSize": 129993255,
                     "strand": 1,
                     "size": 162,
+                    "leftStatus": None,
+                    "leftCount": None,
+                    "rightStatus": None,
+                    "rightCount": None,
                 },
             )
 
@@ -222,6 +226,10 @@ if sqlite3:
                     "srcSize": 13221,
                     "strand": 1,
                     "size": 164,
+                    "leftStatus": "N",
+                    "leftCount": 0,
+                    "rightStatus": "N",
+                    "rightCount": 0,
                 },
             )
 
@@ -242,6 +250,10 @@ if sqlite3:
                     "srcSize": 129993255,
                     "strand": 1,
                     "size": 42,
+                    "leftStatus": None,
+                    "leftCount": None,
+                    "rightStatus": None,
+                    "rightCount": None,
                 },
             )
 
@@ -255,6 +267,10 @@ if sqlite3:
                     "srcSize": 174210431,
                     "strand": -1,
                     "size": 46,
+                    "leftStatus": "I",
+                    "leftCount": 9,
+                    "rightStatus": "I",
+                    "rightCount": 943,
                 },
             )
 
@@ -268,6 +284,10 @@ if sqlite3:
                     "srcSize": 173908612,
                     "strand": -1,
                     "size": 46,
+                    "leftStatus": "I",
+                    "leftCount": 9,
+                    "rightStatus": "I",
+                    "rightCount": 10,
                 },
             )
 
@@ -281,6 +301,10 @@ if sqlite3:
                     "srcSize": 170899992,
                     "strand": -1,
                     "size": 46,
+                    "leftStatus": "I",
+                    "leftCount": 9,
+                    "rightStatus": "I",
+                    "rightCount": 931,
                 },
             )
 
@@ -294,6 +318,10 @@ if sqlite3:
                     "srcSize": 125616256,
                     "strand": -1,
                     "size": 46,
+                    "leftStatus": "I",
+                    "leftCount": 13,
+                    "rightStatus": "I",
+                    "rightCount": 1,
                 },
             )
 
@@ -307,6 +335,10 @@ if sqlite3:
                     "srcSize": 54797317,
                     "strand": -1,
                     "size": 36,
+                    "leftStatus": "C",
+                    "leftCount": 0,
+                    "rightStatus": "C",
+                    "rightCount": 0,
                 },
             )
 

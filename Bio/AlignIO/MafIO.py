@@ -166,6 +166,10 @@ def MafIterator(handle, seq_count=None):
                     "size": int(line_split[3]),
                     "strand": strand,
                     "srcSize": int(line_split[5]),
+                    "leftStatus": None,
+                    "leftCount": None,
+                    "rightStatus": None,
+                    "rightCount": None,
                 }
 
                 sequence = line_split[6]
@@ -195,9 +199,26 @@ def MafIterator(handle, seq_count=None):
                     )
                 )
             elif line.startswith("i"):
-                # TODO: information about what is in the aligned species DNA before
+                # information about what is in the aligned species DNA before
                 # and after the immediately preceding "s" line
-                pass
+                # i (literal), src (ID), leftStatus, leftCount, rightStatus, rightCount
+                line_split = line.strip().split()
+                # First check that the format is correct
+                if len(line_split) != 6:
+                    raise ValueError(
+                        "Error parsing information - 'i' line must have 7 fields"
+                    )
+                if not records:
+                    raise ValueError("Found 'i' line before sequence of alignment")
+                if records[-1].id != line_split[1]:
+                    raise ValueError(
+                        "Found 'i' line with src different from previous alignment"
+                    )
+                # Add the annotations:
+                records[-1].annotations["leftStatus"] = line_split[2]
+                records[-1].annotations["leftCount"] = int(line_split[3])
+                records[-1].annotations["rightStatus"] = line_split[4]
+                records[-1].annotations["rightCount"] = int(line_split[5])
             elif line.startswith("e"):
                 # TODO: information about the size of the gap between the alignments
                 # that span the current block
