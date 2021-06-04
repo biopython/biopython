@@ -14,10 +14,13 @@ The latest news is at the top of this file.
 Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 "status" information for sequence features as ``SeqFeature`` qualifiers.
 
+Store information for 'i' lines in MAF.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Fabian Egli
+- Lucille Lopez-Delisle (first contribution)
 
 3 June 2021: Biopython 1.79
 ================================
