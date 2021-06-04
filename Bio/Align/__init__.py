@@ -990,6 +990,7 @@ class PairwiseAlignment:
         self[k, i:]
         self[k, :j]
         self[k, i:j]
+        self[k] (equivalent to self[k, :])
 
         which returns a string with the aligned sequence (including gaps)
         for the selected columns, where k = 0 represents the target and
@@ -1011,6 +1012,10 @@ class PairwiseAlignment:
         >>> alignment[0, :]
         'ACCGG-TTT'
         >>> alignment[1, :]
+        'AC-GGGTT-'
+        >>> alignment[0]
+        'ACCGG-TTT'
+        >>> alignment[1]
         'AC-GGGTT-'
         >>> alignment[0, 1:-2]
         'CCGG-T'
@@ -1051,15 +1056,36 @@ class PairwiseAlignment:
                 score = self.score
                 return PairwiseAlignment(target, query, path, score)
             raise NotImplementedError
+        sequences = self.target, self.query
         if isinstance(key, int):
-            raise NotImplementedError
+            n, m = self.shape
+            row = key
+            if row < 0:
+                row += n
+            if row < 0 or row >= n:
+                raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
+            sequence = sequences[row]
+            line = ""
+            starts = [sys.maxsize] * m
+            for ends in self.path:
+                step = max(e - s for s, e in zip(starts, ends))
+                if step < 0:
+                    index = 0
+                else:
+                    index += step
+                    s, e = starts[row], ends[row]
+                    if s < e:
+                        line += sequence[s:e]
+                    elif s == e:
+                        line += "-" * step
+                starts = ends
+            return line
         if isinstance(key, tuple):
             try:
                 row, col = key
             except ValueError:
                 raise ValueError("only tuples of length 2 can be alignment indices")
             if isinstance(row, int):
-                sequences = self.target, self.query
                 n, m = self.shape
                 if row < 0:
                     row += n

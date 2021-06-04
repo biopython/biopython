@@ -4020,6 +4020,10 @@ A-C-GG-AAC--
 """,
         )
         self.assertAlmostEqual(alignment.score, 6.0)
+        self.assertEqual(alignment[0], "AACCGGGA-CCG")
+        self.assertEqual(alignment[1], "A-C-GG-AAC--")
+        self.assertEqual(alignment[-2], "AACCGGGA-CCG")
+        self.assertEqual(alignment[-1], "A-C-GG-AAC--")
         self.assertEqual(alignment[0, :], "AACCGGGA-CCG")
         self.assertEqual(alignment[1, :], "A-C-GG-AAC--")
         self.assertEqual(alignment[-2, :], "AACCGGGA-CCG")
@@ -4213,8 +4217,6 @@ AACCGGGA-CCG
         )
         with self.assertRaises(NotImplementedError):
             alignment[:1]
-        with self.assertRaises(NotImplementedError):
-            alignment[0]
         with self.assertRaises(NotImplementedError):
             alignment[:1, :]
         with self.assertRaises(NotImplementedError):
