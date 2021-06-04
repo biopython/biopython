@@ -11,7 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
-1 June 2021: Biopython 1.79
+
+3 June 2021: Biopython 1.79
 ================================
 
 This is intended to be our final release supporting Python 3.6. It also
