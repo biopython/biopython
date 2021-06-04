@@ -6,31 +6,36 @@ Python releases go first, then code (modules, methods, functions).
 Python
 ======
 
-Python 2.3
+Python 3.9
 ----------
-No longer supported as of Release 1.51, having triggered a warning with
-Release 1.50, with a mention in the release notes for Release 1.49.
+First supported in release 1.79, although it was mostly working in 1.78.
 
-Python 2.4
+Python 3.8
 ----------
-No longer supported as of Release 1.59, having triggered a warning since
-Release 1.55, with advance notice in the release notes for Release 1.54.
+First supported in release 1.75.
 
-Python 2.5
+Python 3.7
 ----------
-No longer supported as of Release 1.63, having triggered a warning with
-Release 1.62, with advance notice in the release notes for Release 1.61.
+First supported in release 1.73.
 
-Python 2.6
+Python 3.6
 ----------
-No longer supported as of Release 1.69, having triggered a warning with
-release 1.66 onwards.
+Triggers a deprecation warning as of release 1.79.
+First supported in release 1.69.
 
-Python 2.7
+Python 3.5
 ----------
-No longer supported as of Release 1.77 (2020, in line with end-of-life or
-sunset date for Python 2.7 itself), having triggered a warning in prior
-releases.
+No longer supported as of Release 1.77. First supported in release 1.66.
+
+Python 3.4
+----------
+No longer supported as of Release 1.75, having triggered a deprecation
+warning in release 1.74. First supported in release 1.64.
+
+Python 3.3
+----------
+No longer supported as of Release 1.70, having triggered a warning with
+release 1.67 onwards.
 
 Python 3.0, 3.1, 3.2
 --------------------
@@ -38,32 +43,31 @@ Never officially supported, these triggered a warning in Release 1.62
 recommending Python 3.3 or later. As of Biopython Release 1.63 onwards,
 installation simply aborts with a error message.
 
-Python 3.3
+Python 2.7
 ----------
-No longer supported as of Release 1.70, having triggered a warning with
-release 1.67 onwards.
+No longer supported as of Release 1.77 (2020, in line with end-of-life or
+sunset date for Python 2.7 itself), having triggered a warning in prior
+releases.
 
-Python 3.4
+Python 2.6
 ----------
-No longer supported as of Release 1.75, having triggered a deprecation
-warning in release 1.74. First supported in release 1.64.
+No longer supported as of Release 1.69, having triggered a warning with
+release 1.66 onwards.
 
-Python 3.5
+Python 2.5
 ----------
-No longer supported as of Release 1.77. First supported in release 1.66.
+No longer supported as of Release 1.63, having triggered a warning with
+Release 1.62, with advance notice in the release notes for Release 1.61.
 
-Python 3.6
+Python 2.4
 ----------
-Triggers a deprecation warning as of release 1.79.
-First supported in release 1.69.
+No longer supported as of Release 1.59, having triggered a warning since
+Release 1.55, with advance notice in the release notes for Release 1.54.
 
-Python 3.7
+Python 2.3
 ----------
-First supported in release 1.73.
-
-Python 3.8
-----------
-First supported in release 1.75.
+No longer supported as of Release 1.51, having triggered a warning with
+Release 1.50, with a mention in the release notes for Release 1.49.
 
 Jython
 ------
