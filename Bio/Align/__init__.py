@@ -1123,7 +1123,7 @@ class PairwiseAlignment:
                     if starts[row] < ends[row]:
                         offset = index - start_index
                         i = ends[row] - offset
-                        line = sequences[row][i:i+1]
+                        line = sequences[row][i:i + 1]
                     else:
                         line = "-"
                     return line
@@ -1179,7 +1179,9 @@ class PairwiseAlignment:
                 except IndexError:
                     raise
                 except Exception:
-                    raise TypeError("second index must be an integer, slice, or iterable of integers") from None
+                    raise TypeError(
+                        "second index must be an integer, slice, or iterable of integers"
+                    ) from None
                 else:
                     return line
             if isinstance(row, slice):
