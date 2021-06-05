@@ -4006,11 +4006,7 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 
 
 class TestAlignmentMethods(unittest.TestCase):
-    def test_indexing_slicing(self):
-        aligner = Align.PairwiseAligner()
-        alignments = aligner.align("AACCGGGACCG", "ACGGAAC")
-        self.assertEqual(len(alignments), 88)
-        alignment = alignments[0]
+    def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             str(alignment),
             """\
@@ -4020,39 +4016,39 @@ A-C-GG-AAC--
 """,
         )
         self.assertAlmostEqual(alignment.score, 6.0)
-        self.assertEqual(alignment[0], "AACCGGGA-CCG")
-        self.assertEqual(alignment[1], "A-C-GG-AAC--")
-        self.assertEqual(alignment[-2], "AACCGGGA-CCG")
-        self.assertEqual(alignment[-1], "A-C-GG-AAC--")
-        self.assertEqual(alignment[0, :], "AACCGGGA-CCG")
-        self.assertEqual(alignment[1, :], "A-C-GG-AAC--")
-        self.assertEqual(alignment[-2, :], "AACCGGGA-CCG")
-        self.assertEqual(alignment[-1, :], "A-C-GG-AAC--")
-        self.assertEqual(alignment[:, 0], "AA")
-        self.assertEqual(alignment[:, 1], "A-")
-        self.assertEqual(alignment[:, 2], "CC")
-        self.assertEqual(alignment[:, 3], "C-")
-        self.assertEqual(alignment[:, 4], "GG")
-        self.assertEqual(alignment[:, 5], "GG")
-        self.assertEqual(alignment[:, 6], "G-")
-        self.assertEqual(alignment[:, 7], "AA")
-        self.assertEqual(alignment[:, 8], "-A")
-        self.assertEqual(alignment[:, 9], "CC")
-        self.assertEqual(alignment[:, 10], "C-")
-        self.assertEqual(alignment[:, 11], "G-")
-        self.assertEqual(alignment[:, -12], "AA")
-        self.assertEqual(alignment[:, -11], "A-")
-        self.assertEqual(alignment[:, -10], "CC")
-        self.assertEqual(alignment[:, -9], "C-")
-        self.assertEqual(alignment[:, -8], "GG")
-        self.assertEqual(alignment[:, -7], "GG")
-        self.assertEqual(alignment[:, -6], "G-")
-        self.assertEqual(alignment[:, -5], "AA")
-        self.assertEqual(alignment[:, -4], "-A")
-        self.assertEqual(alignment[:, -3], "CC")
-        self.assertEqual(alignment[:, -2], "C-")
-        self.assertEqual(alignment[:, -1], "G-")
-        self.assertAlmostEqual(alignment[:, :].score, 6.0)
+        self.assertEqual(alignment[0], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[-2], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[-1], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[0, :], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, :], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[-2, :], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[-1, :], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[:, 0], "AA", msg=msg)
+        self.assertEqual(alignment[:, 1], "A-", msg=msg)
+        self.assertEqual(alignment[:, 2], "CC", msg=msg)
+        self.assertEqual(alignment[:, 3], "C-", msg=msg)
+        self.assertEqual(alignment[:, 4], "GG", msg=msg)
+        self.assertEqual(alignment[:, 5], "GG", msg=msg)
+        self.assertEqual(alignment[:, 6], "G-", msg=msg)
+        self.assertEqual(alignment[:, 7], "AA", msg=msg)
+        self.assertEqual(alignment[:, 8], "-A", msg=msg)
+        self.assertEqual(alignment[:, 9], "CC", msg=msg)
+        self.assertEqual(alignment[:, 10], "C-", msg=msg)
+        self.assertEqual(alignment[:, 11], "G-", msg=msg)
+        self.assertEqual(alignment[:, -12], "AA", msg=msg)
+        self.assertEqual(alignment[:, -11], "A-", msg=msg)
+        self.assertEqual(alignment[:, -10], "CC", msg=msg)
+        self.assertEqual(alignment[:, -9], "C-", msg=msg)
+        self.assertEqual(alignment[:, -8], "GG", msg=msg)
+        self.assertEqual(alignment[:, -7], "GG", msg=msg)
+        self.assertEqual(alignment[:, -6], "G-", msg=msg)
+        self.assertEqual(alignment[:, -5], "AA", msg=msg)
+        self.assertEqual(alignment[:, -4], "-A", msg=msg)
+        self.assertEqual(alignment[:, -3], "CC", msg=msg)
+        self.assertEqual(alignment[:, -2], "C-", msg=msg)
+        self.assertEqual(alignment[:, -1], "G-", msg=msg)
+        self.assertAlmostEqual(alignment[:, :].score, 6.0, msg=msg)
         self.assertEqual(
             str(alignment[:, :]),
             """\
@@ -4060,10 +4056,11 @@ AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 0:], "AACCGGGA-CCG")
-        self.assertEqual(alignment[1, 0:], "A-C-GG-AAC--")
-        self.assertAlmostEqual(alignment[:, 0:].score, 6.0)
+        self.assertEqual(alignment[0, 0:], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 0:], "A-C-GG-AAC--", msg=msg)
+        self.assertAlmostEqual(alignment[:, 0:].score, 6.0, msg=msg)
         self.assertEqual(
             str(alignment[:, 0:]),
             """\
@@ -4071,10 +4068,11 @@ AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, :12], "AACCGGGA-CCG")
-        self.assertEqual(alignment[1, :12], "A-C-GG-AAC--")
-        self.assertAlmostEqual(alignment[:, :12].score, 6.0)
+        self.assertEqual(alignment[0, :12], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, :12], "A-C-GG-AAC--", msg=msg)
+        self.assertAlmostEqual(alignment[:, :12].score, 6.0, msg=msg)
         self.assertEqual(
             str(alignment[:, :12]),
             """\
@@ -4082,10 +4080,11 @@ AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 0:12], "AACCGGGA-CCG")
-        self.assertEqual(alignment[1, 0:12], "A-C-GG-AAC--")
-        self.assertAlmostEqual(alignment[:, 0:12].score, 6.0)
+        self.assertEqual(alignment[0, 0:12], "AACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 0:12], "A-C-GG-AAC--", msg=msg)
+        self.assertAlmostEqual(alignment[:, 0:12].score, 6.0, msg=msg)
         self.assertEqual(
             str(alignment[:, 0:12]),
             """\
@@ -4093,10 +4092,11 @@ AACCGGGA-CCG
 |-|-||-|-|--
 A-C-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 1:], "ACCGGGA-CCG")
-        self.assertEqual(alignment[1, 1:], "-C-GG-AAC--")
-        self.assertIsNone(alignment[:, 1:].score)
+        self.assertEqual(alignment[0, 1:], "ACCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 1:], "-C-GG-AAC--", msg=msg)
+        self.assertIsNone(alignment[:, 1:].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 1:]),
             """\
@@ -4104,10 +4104,11 @@ AACCGGGA-CCG
  -|-||-|-|--
 A-C-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 2:], "CCGGGA-CCG")
-        self.assertEqual(alignment[1, 2:], "C-GG-AAC--")
-        self.assertIsNone(alignment[:, 2:].score)
+        self.assertEqual(alignment[0, 2:], "CCGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 2:], "C-GG-AAC--", msg=msg)
+        self.assertIsNone(alignment[:, 2:].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 2:]),
             """\
@@ -4115,10 +4116,11 @@ AACCGGGA-CCG
   |-||-|-|--
  AC-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 3:], "CGGGA-CCG")
-        self.assertEqual(alignment[1, 3:], "-GG-AAC--")
-        self.assertIsNone(alignment[:, 3:].score)
+        self.assertEqual(alignment[0, 3:], "CGGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 3:], "-GG-AAC--", msg=msg)
+        self.assertIsNone(alignment[:, 3:].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 3:]),
             """\
@@ -4126,10 +4128,11 @@ AACCGGGA-CCG
    -||-|-|--
  AC-GG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 4:], "GGGA-CCG")
-        self.assertEqual(alignment[1, 4:], "GG-AAC--")
-        self.assertIsNone(alignment[:, 4:].score)
+        self.assertEqual(alignment[0, 4:], "GGGA-CCG", msg=msg)
+        self.assertEqual(alignment[1, 4:], "GG-AAC--", msg=msg)
+        self.assertIsNone(alignment[:, 4:].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 4:]),
             """\
@@ -4137,10 +4140,11 @@ AACCGGGA-CCG
     ||-|-|--
   ACGG-AAC--
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, :-1], "AACCGGGA-CC")
-        self.assertEqual(alignment[1, :-1], "A-C-GG-AAC-")
-        self.assertIsNone(alignment[:, :-1].score)
+        self.assertEqual(alignment[0, :-1], "AACCGGGA-CC", msg=msg)
+        self.assertEqual(alignment[1, :-1], "A-C-GG-AAC-", msg=msg)
+        self.assertIsNone(alignment[:, :-1].score, msg=msg)
         self.assertEqual(
             str(alignment[:, :-1]),
             """\
@@ -4148,10 +4152,11 @@ AACCGGGA-CCG
 |-|-||-|-|-
 A-C-GG-AAC-
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, :-2], "AACCGGGA-C")
-        self.assertEqual(alignment[1, :-2], "A-C-GG-AAC")
-        self.assertIsNone(alignment[:, :-2].score)
+        self.assertEqual(alignment[0, :-2], "AACCGGGA-C", msg=msg)
+        self.assertEqual(alignment[1, :-2], "A-C-GG-AAC", msg=msg)
+        self.assertIsNone(alignment[:, :-2].score, msg=msg)
         self.assertEqual(
             str(alignment[:, :-2]),
             """\
@@ -4159,10 +4164,11 @@ AACCGGGA-CCG
 |-|-||-|-|
 A-C-GG-AAC
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, :-3], "AACCGGGA-")
-        self.assertEqual(alignment[1, :-3], "A-C-GG-AA")
-        self.assertIsNone(alignment[:, :-3].score)
+        self.assertEqual(alignment[0, :-3], "AACCGGGA-", msg=msg)
+        self.assertEqual(alignment[1, :-3], "A-C-GG-AA", msg=msg)
+        self.assertIsNone(alignment[:, :-3].score, msg=msg)
         self.assertEqual(
             str(alignment[:, :-3]),
             """\
@@ -4170,10 +4176,11 @@ AACCGGGA-CCG
 |-|-||-|-
 A-C-GG-AAC
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 1:-1], "ACCGGGA-CC")
-        self.assertEqual(alignment[1, 1:-1], "-C-GG-AAC-")
-        self.assertIsNone(alignment[:, 1:-1].score)
+        self.assertEqual(alignment[0, 1:-1], "ACCGGGA-CC", msg=msg)
+        self.assertEqual(alignment[1, 1:-1], "-C-GG-AAC-", msg=msg)
+        self.assertIsNone(alignment[:, 1:-1].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 1:-1]),
             """\
@@ -4181,10 +4188,11 @@ AACCGGGA-CCG
  -|-||-|-|-
 A-C-GG-AAC-
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 1:-2], "ACCGGGA-C")
-        self.assertEqual(alignment[1, 1:-2], "-C-GG-AAC")
-        self.assertIsNone(alignment[:, 1:-2].score)
+        self.assertEqual(alignment[0, 1:-2], "ACCGGGA-C", msg=msg)
+        self.assertEqual(alignment[1, 1:-2], "-C-GG-AAC", msg=msg)
+        self.assertIsNone(alignment[:, 1:-2].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 1:-2]),
             """\
@@ -4192,10 +4200,11 @@ AACCGGGA-CCG
  -|-||-|-|
 A-C-GG-AAC
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 2:-1], "CCGGGA-CC")
-        self.assertEqual(alignment[1, 2:-1], "C-GG-AAC-")
-        self.assertIsNone(alignment[:, 2:-1].score)
+        self.assertEqual(alignment[0, 2:-1], "CCGGGA-CC", msg=msg)
+        self.assertEqual(alignment[1, 2:-1], "C-GG-AAC-", msg=msg)
+        self.assertIsNone(alignment[:, 2:-1].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 2:-1]),
             """\
@@ -4203,10 +4212,11 @@ AACCGGGA-CCG
   |-||-|-|-
  AC-GG-AAC-
 """,
+            msg=msg,
         )
-        self.assertEqual(alignment[0, 2:-2], "CCGGGA-C")
-        self.assertEqual(alignment[1, 2:-2], "C-GG-AAC")
-        self.assertIsNone(alignment[:, 2:-2].score)
+        self.assertEqual(alignment[0, 2:-2], "CCGGGA-C", msg=msg)
+        self.assertEqual(alignment[1, 2:-2], "C-GG-AAC", msg=msg)
+        self.assertIsNone(alignment[:, 2:-2].score, msg=msg)
         self.assertEqual(
             str(alignment[:, 2:-2]),
             """\
@@ -4214,13 +4224,30 @@ AACCGGGA-CCG
   |-||-|-|
  AC-GG-AAC
 """,
+            msg=msg,
         )
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(NotImplementedError, msg=msg):
             alignment[:1]
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(NotImplementedError, msg=msg):
             alignment[:1, :]
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(NotImplementedError, msg=msg):
             alignment[:, ::3]
+
+    def test_indexing_slicing(self):
+        target = "AACCGGGACCG"
+        query = "ACGGAAC"
+        aligner = Align.PairwiseAligner()
+        alignments = aligner.align(target, query)
+        self.assertEqual(len(alignments), 88)
+        alignment = alignments[0]
+        msg = "forward strand"
+        self.check_indexing_slicing(alignment, msg)
+        query = reverse_complement(query)
+        alignments = aligner.align(target, query, strand="-")
+        self.assertEqual(len(alignments), 88)
+        alignment = alignments[0]
+        msg = "reverse strand"
+        self.check_indexing_slicing(alignment, msg)
 
     def test_sort(self):
         aligner = Align.PairwiseAligner()
