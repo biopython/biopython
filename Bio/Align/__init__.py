@@ -1061,7 +1061,7 @@ class PairwiseAlignment:
         for i, sequence in enumerate(sequences):
             if path[0][i] > path[-1][i]:  # mapped to reverse strand
                 n = len(sequences[i])
-                path = tuple(row[:i] + (n - row[i], ) + row[i + 1:] for row in path)
+                path = tuple(row[:i] + (n - row[i],) + row[i + 1:] for row in path)
                 sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
             n, m = self.shape
@@ -1220,7 +1220,7 @@ class PairwiseAlignment:
                             # mapped to reverse strand
                             n = len(sequences[i])
                             path = tuple(
-                                row[:i] + (n - row[i], ) + row[i + 1:] for row in path
+                                row[:i] + (n - row[i],) + row[i + 1:] for row in path
                             )
                     path = tuple(path)
                     target = self.target
