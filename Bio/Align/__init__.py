@@ -1123,7 +1123,7 @@ class PairwiseAlignment:
                     if starts[row] < ends[row]:
                         offset = index - start_index
                         i = ends[row] - offset
-                        line = sequences[row][i:i + 1]
+                        line = sequences[row][i : i + 1]
                     else:
                         line = "-"
                     return line
