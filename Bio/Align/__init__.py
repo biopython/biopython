@@ -941,10 +941,13 @@ class PairwiseAlignment:
         You would normally obtain a PairwiseAlignment object by iterating
         over a PairwiseAlignments object.
         """
+        import numpy
+
         self.target = target
         self.query = query
         self.score = score
         self.path = path
+        self.coordinates = numpy.array(path).transpose()
 
     def __eq__(self, other):
         """Check if two PairwiseAlignment objects have the same path."""
@@ -1099,6 +1102,8 @@ class PairwiseAlignment:
         -TG
         <BLANKLINE>
         """
+        import numpy
+
         if isinstance(key, slice):
             if key.indices(len(self)) == (0, 2, 1):
                 target = self.target
@@ -1109,10 +1114,12 @@ class PairwiseAlignment:
             raise NotImplementedError
         sequences = [self.target, self.query]
         path = self.path
+        coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
-            if path[0][i] > path[-1][i]:  # mapped to reverse strand
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 n = len(sequences[i])
                 path = tuple(row[:i] + (n - row[i],) + row[i + 1 :] for row in path)
+                coordinates[i, :] = n - coordinates[i, :]
                 sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
             n, m = self.shape
@@ -1123,9 +1130,9 @@ class PairwiseAlignment:
                 raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
             sequence = sequences[row]
             line = ""
-            starts = [sys.maxsize] * m
-            for ends in path:
-                step = max(e - s for s, e in zip(starts, ends))
+            starts = numpy.full(n, sys.maxsize, dtype=int)
+            for ends in coordinates.transpose():
+                step = max(ends - starts)
                 if step < 0:
                     index = 0
                 else:
