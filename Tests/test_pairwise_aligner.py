@@ -4233,12 +4233,40 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsNone(alignment[:, ::2].score, msg=msg)
+        self.assertEqual(
+            str(alignment[:, ::2]),
+            """\
+ACGG-C
+|||---
+ACG-A-
+""",
+            msg=msg,
+        )
+        self.assertIsNone(alignment[:, range(0, 12, 2)].score, msg=msg)
+        self.assertEqual(
+            str(alignment[:, range(0, 12, 2)]),
+            """\
+ACGG-C
+|||---
+ACG-A-
+""",
+            msg=msg,
+        )
+        self.assertIsNone(alignment[:, (1, 8, 5)].score, msg=msg)
+        self.assertEqual(
+            str(alignment[:, (1, 8, 5)]),
+            """\
+A-G
+--|
+-AG
+""",
+            msg=msg,
+        )
         with self.assertRaises(NotImplementedError, msg=msg):
             alignment[:1]
         with self.assertRaises(NotImplementedError, msg=msg):
             alignment[:1, :]
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:, ::3]
 
     def test_indexing_slicing(self):
         target = "AACCGGGACCG"
