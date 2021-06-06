@@ -1191,7 +1191,7 @@ class PairwiseAlignment:
                             if gaps[i]:
                                 line = "-" * length
                             else:
-                                offset = start_index - indices[index]
+                                offset = start_index - indices[i]
                                 start = sequence_indices[i] + offset
                                 stop = start + length
                                 line = sequence[start: stop]
@@ -1419,11 +1419,13 @@ class PairwiseAlignment:
         aligned_seq1 = ""
         aligned_seq2 = ""
         pattern = ""
-        path = self.path
-        if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        coordinates = self.coordinates
+        if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
             seq2 = reverse_complement(seq2)
-        end1, end2 = path[0]
+        coordinates = coordinates.transpose()
+        end1, end2 = coordinates[0, :]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
             aligned_seq1 += " " * (end - end1) + seq1[:end1]
@@ -1431,7 +1433,7 @@ class PairwiseAlignment:
             pattern += " " * end
         start1 = end1
         start2 = end2
-        for end1, end2 in path[1:]:
+        for end1, end2 in coordinates[1:]:
             if end1 == start1:
                 gap = end2 - start2
                 aligned_seq1 += "-" * gap
@@ -1903,16 +1905,16 @@ class PairwiseAlignment:
         >>> alignment.shape
         (2, 7)
         """
-        path = self.path
-        if path[0][1] > path[-1][1]:  # mapped to reverse strand
+        import numpy
+
+        coordinates = self.coordinates
+        n = len(coordinates)
+        if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
             n2 = len(self.query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
-        start = path[0]
-        n = len(start)
-        m = 0
-        for end in path[1:]:
-            m += max(e - s for s, e in zip(start, end))
-            start = end
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
+        steps = numpy.diff(coordinates, 1).max(0)
+        m = sum(steps)
         return (n, m)
 
     @property
@@ -1977,10 +1979,10 @@ class PairwiseAlignment:
         """
         segments1 = []
         segments2 = []
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
-            i1, i2 = path[0]
-            for node in path[1:]:
+        coordinates = self.coordinates.transpose()
+        if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
+            i1, i2 = coordinates[0]
+            for node in coordinates[1:]:
                 j1, j2 = node
                 if j1 > i1 and j2 > i2:
                     segment1 = (i1, j1)
@@ -1990,9 +1992,9 @@ class PairwiseAlignment:
                 i1, i2 = j1, j2
         else:  # mapped to reverse strand
             n2 = len(self.query)
-            i1, i2 = path[0]
+            i1, i2 = coordinates[0]
             i2 = n2 - i2
-            for node in path[1:]:
+            for node in coordinates[1:]:
                 j1, j2 = node
                 j2 = n2 - j2
                 if j1 > i1 and j2 > i2:
@@ -2052,7 +2054,6 @@ class PairwiseAlignment:
 
         The sequences are now sorted by decreasing GC content value.
         """
-        path = self.path
         sequences = self.target, self.query
         if key is None:
             try:
@@ -2064,8 +2065,7 @@ class PairwiseAlignment:
         indices = sorted(range(len(sequences)), key=values.__getitem__, reverse=reverse)
         sequences = [sequences[index] for index in indices]
         self.target, self.query = sequences
-        path = tuple(tuple(row[index] for index in indices) for row in path)
-        self.path = path
+        self.coordinates = self.coordinates.take(indices, 0)
 
     def map(self, alignment):
         r"""Map the alignment to self.target and return the resulting alignment.
@@ -2293,13 +2293,13 @@ class PairwiseAlignment:
         m = substitution_matrices.Array(letters, dims=2)
         n = len(sequences)
         for i1 in range(n):
-            path1 = [p[i1] for p in self.path]
+            coordinates1 = self.coordinates[i1, :]
             sequence1 = sequences[i1]
             for i2 in range(i1 + 1, n):
-                path2 = [p[i2] for p in self.path]
+                coordinates2 = self.coordinates[i2, :]
                 sequence2 = sequences[i2]
                 start1, start2 = sys.maxsize, sys.maxsize
-                for end1, end2 in zip(path1, path2):
+                for end1, end2 in zip(coordinates1, coordinates2):
                     if start1 < end1 and start2 < end2:  # aligned
                         segment1 = sequence1[start1:end1]
                         segment2 = sequence2[start2:end2]
