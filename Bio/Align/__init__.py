@@ -1130,19 +1130,17 @@ class PairwiseAlignment:
                 raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
             sequence = sequences[row]
             line = ""
-            starts = numpy.full(n, sys.maxsize, dtype=int)
-            for ends in coordinates.transpose():
-                step = max(ends - starts)
-                if step < 0:
-                    index = 0
+            steps = numpy.diff(coordinates, 1)
+            gaps = (steps[row] == 0)
+            steps = steps.max(0)
+            i = 0
+            for step, gap in zip(steps, gaps):
+                if gap:
+                    line += "-" * step
                 else:
-                    index += step
-                    s, e = starts[row], ends[row]
-                    if s < e:
-                        line += sequence[s:e]
-                    elif s == e:
-                        line += "-" * step
-                starts = ends
+                    j = i + step
+                    line += sequence[i:j]
+                    i = j
             return line
         if isinstance(key, tuple):
             try:
@@ -1165,19 +1163,14 @@ class PairwiseAlignment:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    starts = numpy.full(n, sys.maxsize, dtype=int)
-                    for ends in coordinates.transpose():
-                        step = max(ends - starts)
-                        if step < 0:
-                            index = 0
-                        else:
-                            index += step
-                            if start_index < index:
-                                break
-                        starts = ends
-                    if starts[row] < ends[row]:
-                        offset = index - start_index
-                        i = ends[row] - offset
+                    steps = numpy.diff(coordinates, 1)
+                    indices = steps.max(0).cumsum()
+                    steps = steps[row]
+                    index = indices.searchsorted(start_index, side="right")
+                    if steps[index]:
+                        offset = start_index - indices[index]
+                        indices = steps.cumsum()
+                        i = indices[index] + offset
                         line = sequences[row][i : i + 1]
                     else:
                         line = "-"
@@ -1186,44 +1179,48 @@ class PairwiseAlignment:
                     sequence = sequences[row]
                     start_index, stop_index, step = col.indices(m)
                     if step == 1:
-                        line = ""
-                        index = 0
-                        path_iterator = iter(path)
-                        starts = next(path_iterator)
-                        for ends in path_iterator:
-                            step = max(e - s for s, e in zip(starts, ends))
-                            index += step
-                            if start_index < index:
-                                offset = index - start_index
-                                if starts[row] < ends[row]:
-                                    i = ends[row] - offset
-                                else:
-                                    i = starts[row]
-                                step = offset
-                                break
-                            starts = ends
-                        while True:
-                            if stop_index <= index:
-                                offset = index - stop_index
-                                if starts[row] < ends[row]:
-                                    j = ends[row] - offset
-                                else:
-                                    j = starts[row]
-                                if i < j:
-                                    line += sequence[i:j]
-                                else:
-                                    line += "-" * (step - offset)
-                                break
-                            j = ends[row]
-                            if i < j:
-                                line += sequence[i:j]
+                        steps = numpy.diff(coordinates, 1)
+                        gaps = (steps[row] == 0)
+                        sequence_indices = steps[row, :].cumsum()
+                        steps = steps.max(0)
+                        indices = steps.cumsum()
+                        i = indices.searchsorted(start_index, side="right")
+                        j = i + indices[i:].searchsorted(stop_index, side="right")
+                        if i == j:
+                            length = stop_index - start_index
+                            if gaps[i]:
+                                line = "-" * length
                             else:
-                                line += "-" * step
-                            i = j
-                            starts = ends
-                            ends = next(path_iterator)
-                            step = max(e - s for s, e in zip(starts, ends))
-                            index += step
+                                offset = start_index - indices[index]
+                                start = sequence_indices[i] + offset
+                                stop = start + length
+                                line = sequence[start: stop]
+                        else:
+                            length = indices[i] - start_index
+                            stop = sequence_indices[i]
+                            if gaps[i]:
+                                line = "-" * length
+                            else:
+                                start = stop - length
+                                line = sequence[start: stop]
+                            i += 1
+                            while i < j:
+                                step = steps[i]
+                                if gaps[i]:
+                                    line += "-" * step
+                                else:
+                                    start = stop
+                                    stop = start + step
+                                    line += sequence[start: stop]
+                                i += 1
+                            length = stop_index - indices[j-1]
+                            if length > 0:
+                                if gaps[j]:
+                                    line += "-" * length
+                                else:
+                                    start = stop
+                                    stop = start + length
+                                    line += sequence[start: stop]
                         return line
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
