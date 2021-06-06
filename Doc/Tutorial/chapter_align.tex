@@ -2505,6 +2505,17 @@ GAACT
 \end{minted}
 This is also now a local alignment, with the initial \verb+GA+ nucleotides in the target and \verb+G+ nucleotide in the query not aligned to each other.
 
+The column index can also be an iterable of integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -3:]  # doctest:+ELLIPSIS
+<Bio.Align.PairwiseAlignment object at ...>
+>>> print(alignment[:, (1, 3, 0)])
+ACG
+--|
+--G
+<BLANKLINE>
+\end{minted}
 
 \paragraph*{Exporting alignments}
 

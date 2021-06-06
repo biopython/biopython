@@ -970,6 +970,28 @@ class PairwiseAlignment:
         """Check if self should come after or is equal to other."""
         return self.path >= other.path
 
+    def _construct_path(self, lines):
+        """Construct the path from a printed alignment."""
+        n = len(lines)
+        m = len(lines[0])
+        for line in lines:
+            assert m == len(line)
+        path = []
+        indices = [0] * n
+        current_state = [None] * n
+        for i in range(m):
+            next_state = [line[i] != "-" for line in lines]
+            if next_state == current_state:
+                step += 1
+            else:
+                indices = [index + step if state else index for index, state in zip(indices, current_state)]
+                path.append(indices)
+                step = 1
+                current_state = next_state
+        indices = [index + step if state else index for index, state in zip(indices, current_state)]
+        path.append(indices)
+        return path
+
     def __getitem__(self, key):
         """Return self[key].
 
@@ -982,6 +1004,7 @@ class PairwiseAlignment:
         self[:, i:]
         self[:, :j]
         self[:, i:j]
+        self[:, iterable] (where iterable returns integers)
 
         return a new PairwiseAlignment object spanning the selected
         columns;
@@ -1022,8 +1045,10 @@ class PairwiseAlignment:
         'CCGG-T'
         >>> alignment[1, 1:-2]
         'C-GGGT'
-        >>> alignment[0, (1, 2, 5)]
-        'CC-'
+        >>> alignment[0, (1, 5, 2)]
+        'C-C'
+        >>> alignment[1, ::2]
+        'A-GT-'
         >>> alignment[1, range(0, 9, 2)]
         'A-GT-'
         >>> alignment[:, 0]
@@ -1051,6 +1076,21 @@ class PairwiseAlignment:
         ACCGG-TTT
            ||-||
          ACGGGTT
+        <BLANKLINE>
+        >>> print(alignment[:, ::2])
+        ACGTT
+        |-||-
+        A-GT-
+        <BLANKLINE>
+        >>> print(alignment[:, range(1, 9, 2)])
+        CG-T
+        ||-|
+        CGGT
+        <BLANKLINE>
+        >>> print(alignment[:, (2, 7, 3)])
+        CTG
+        -||
+        -TG
         <BLANKLINE>
         """
         if isinstance(key, slice):
@@ -1187,8 +1227,8 @@ class PairwiseAlignment:
             if isinstance(row, slice):
                 if row.indices(len(self)) != (0, 2, 1):
                     raise NotImplementedError
+                n, m = self.shape
                 if isinstance(col, int):
-                    n, m = self.shape
                     if col < 0:
                         col += m
                     if col < 0 or col >= m:
@@ -1214,52 +1254,67 @@ class PairwiseAlignment:
                             line += sequence[e - offset]
                     return line
                 if isinstance(col, slice):
-                    n, m = self.shape
                     start_index, stop_index, step = col.indices(m)
-                    if step != 1:
-                        raise NotImplementedError
-                    path_iterator = iter(path)
-                    path = []
-                    index = 0
-                    starts = next(path_iterator)
-                    for ends in path_iterator:
-                        index += max(e - s for s, e in zip(starts, ends))
-                        if start_index < index:
-                            offset = index - start_index
-                            point = tuple(
-                                e - offset if s < e else s for s, e in zip(starts, ends)
-                            )
-                            path.append(point)
-                            break
-                        starts = ends
-                    while True:
-                        if stop_index <= index:
-                            offset = index - stop_index
-                            point = tuple(
-                                e - offset if s < e else s for s, e in zip(starts, ends)
-                            )
-                            path.append(point)
-                            break
-                        path.append(ends)
-                        starts = ends
-                        ends = next(path_iterator)
-                        index += max(e - s for s, e in zip(starts, ends))
-                    for i, sequence in enumerate(sequences):
-                        if self.path[0][i] > self.path[-1][i]:
-                            # mapped to reverse strand
-                            n = len(sequences[i])
-                            path = tuple(
-                                row[:i] + (n - row[i],) + row[i + 1 :] for row in path
-                            )
-                    path = tuple(path)
-                    target = self.target
-                    query = self.query
-                    if path == self.path:
-                        score = self.score
-                    else:
-                        score = None
-                    return PairwiseAlignment(target, query, path, score)
-                raise TypeError("second index must be an integer or slice")
+                    if step == 1:
+                        path_iterator = iter(path)
+                        path = []
+                        index = 0
+                        starts = next(path_iterator)
+                        for ends in path_iterator:
+                            index += max(e - s for s, e in zip(starts, ends))
+                            if start_index < index:
+                                offset = index - start_index
+                                point = tuple(
+                                    e - offset if s < e else s for s, e in zip(starts, ends)
+                                )
+                                path.append(point)
+                                break
+                            starts = ends
+                        while True:
+                            if stop_index <= index:
+                                offset = index - stop_index
+                                point = tuple(
+                                    e - offset if s < e else s for s, e in zip(starts, ends)
+                                )
+                                path.append(point)
+                                break
+                            path.append(ends)
+                            starts = ends
+                            ends = next(path_iterator)
+                            index += max(e - s for s, e in zip(starts, ends))
+                        for i, sequence in enumerate(sequences):
+                            if self.path[0][i] > self.path[-1][i]:
+                                # mapped to reverse strand
+                                n = len(sequences[i])
+                                path = tuple(
+                                    row[:i] + (n - row[i],) + row[i + 1 :] for row in path
+                                )
+                        path = tuple(path)
+                        target = self.target
+                        query = self.query
+                        if path == self.path:
+                            score = self.score
+                        else:
+                            score = None
+                        return PairwiseAlignment(target, query, path, score)
+                    # make an iterable if step != 1
+                    col = range(start_index, stop_index, step)
+                # try if we can use col as an iterable
+                indices = tuple(col)
+                try:
+                    lines = [self[i, indices] for i in range(n)]
+                except IndexError:
+                    raise
+                except Exception:
+                    raise TypeError(
+                        "second index must be an integer, slice, or iterable of integers"
+                    ) from None
+                else:
+                    target, query = (line.replace("-", "") for line in lines)
+                    path = self._construct_path(lines)
+                    score = None
+                    alignment = PairwiseAlignment(target, query, path, score)
+                    return alignment
             raise TypeError("first index must be an integer or slice")
         raise TypeError("alignment indices must be integers, slices, or tuples")
 
