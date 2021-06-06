@@ -982,13 +982,19 @@ class PairwiseAlignment:
         for i in range(m):
             next_state = [line[i] != "-" for line in lines]
             if next_state == current_state:
-                step += 1
+                step += 1  # noqa: F821
             else:
-                indices = [index + step if state else index for index, state in zip(indices, current_state)]
+                indices = [
+                    index + step if state else index
+                    for index, state in zip(indices, current_state)
+                ]
                 path.append(indices)
                 step = 1
                 current_state = next_state
-        indices = [index + step if state else index for index, state in zip(indices, current_state)]
+        indices = [
+            index + step if state else index
+            for index, state in zip(indices, current_state)
+        ]
         path.append(indices)
         return path
 
@@ -1265,7 +1271,8 @@ class PairwiseAlignment:
                             if start_index < index:
                                 offset = index - start_index
                                 point = tuple(
-                                    e - offset if s < e else s for s, e in zip(starts, ends)
+                                    e - offset if s < e else s
+                                    for s, e in zip(starts, ends)
                                 )
                                 path.append(point)
                                 break
@@ -1274,7 +1281,8 @@ class PairwiseAlignment:
                             if stop_index <= index:
                                 offset = index - stop_index
                                 point = tuple(
-                                    e - offset if s < e else s for s, e in zip(starts, ends)
+                                    e - offset if s < e else s
+                                    for s, e in zip(starts, ends)
                                 )
                                 path.append(point)
                                 break
@@ -1287,7 +1295,8 @@ class PairwiseAlignment:
                                 # mapped to reverse strand
                                 n = len(sequences[i])
                                 path = tuple(
-                                    row[:i] + (n - row[i],) + row[i + 1 :] for row in path
+                                    row[:i] + (n - row[i],) + row[i + 1 :]
+                                    for row in path
                                 )
                         path = tuple(path)
                         target = self.target
