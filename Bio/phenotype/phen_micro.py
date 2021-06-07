@@ -551,7 +551,7 @@ class PlateRecord:
     def __str__(self):
         """Return a human readable summary of the record (string).
 
-        The python built in function str works by calling the object's ___str__
+        The python built in function str works by calling the object's __str__
         method.  e.g.
 
         >>> from Bio import phenotype
@@ -802,7 +802,7 @@ class WellRecord:
     def __str__(self):
         """Return a human readable summary of the record (string).
 
-        The python built-in function str works by calling the object's ___str__
+        The python built-in function str works by calling the object's __str__
         method.  e.g.
 
         >>> from Bio import phenotype
