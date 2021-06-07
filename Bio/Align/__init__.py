@@ -980,25 +980,26 @@ class PairwiseAlignment:
         for line in lines:
             assert m == len(line)
         path = []
-        indices = [0] * n
-        current_state = [None] * n
-        for i in range(m):
-            next_state = [line[i] != "-" for line in lines]
-            if next_state == current_state:
-                step += 1  # noqa: F821
-            else:
-                indices = [
-                    index + step if state else index
-                    for index, state in zip(indices, current_state)
-                ]
-                path.append(indices)
-                step = 1
-                current_state = next_state
-        indices = [
-            index + step if state else index
-            for index, state in zip(indices, current_state)
-        ]
-        path.append(indices)
+        if m > 0:
+            indices = [0] * n
+            current_state = [None] * n
+            for i in range(m):
+                next_state = [line[i] != "-" for line in lines]
+                if next_state == current_state:
+                    step += 1  # noqa: F821
+                else:
+                    indices = [
+                        index + step if state else index
+                        for index, state in zip(indices, current_state)
+                    ]
+                    path.append(indices)
+                    step = 1
+                    current_state = next_state
+            indices = [
+                index + step if state else index
+                for index, state in zip(indices, current_state)
+            ]
+            path.append(indices)
         return path
 
     def __getitem__(self, key):
@@ -1113,12 +1114,10 @@ class PairwiseAlignment:
                 return PairwiseAlignment(target, query, path, score)
             raise NotImplementedError
         sequences = [self.target, self.query]
-        path = self.path
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 n = len(sequences[i])
-                path = tuple(row[:i] + (n - row[i],) + row[i + 1 :] for row in path)
                 coordinates[i, :] = n - coordinates[i, :]
                 sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
@@ -1269,47 +1268,25 @@ class PairwiseAlignment:
                     return line
                 if isinstance(col, slice):
                     start_index, stop_index, step = col.indices(m)
-                    if step == 1:
-                        path_iterator = iter(path)
-                        path = []
-                        index = 0
-                        starts = next(path_iterator)
-                        for ends in path_iterator:
-                            index += max(e - s for s, e in zip(starts, ends))
-                            if start_index < index:
-                                offset = index - start_index
-                                point = tuple(
-                                    e - offset if s < e else s
-                                    for s, e in zip(starts, ends)
-                                )
-                                path.append(point)
-                                break
-                            starts = ends
-                        while True:
-                            if stop_index <= index:
-                                offset = index - stop_index
-                                point = tuple(
-                                    e - offset if s < e else s
-                                    for s, e in zip(starts, ends)
-                                )
-                                path.append(point)
-                                break
-                            path.append(ends)
-                            starts = ends
-                            ends = next(path_iterator)
-                            index += max(e - s for s, e in zip(starts, ends))
+                    if start_index < stop_index and step == 1:
+                        steps = numpy.diff(coordinates, 1)
+                        indices = steps.max(0).cumsum()
+                        i = indices.searchsorted(start_index, side="right")
+                        j = i + indices[i:].searchsorted(stop_index, side="left") + 1
+                        offset = steps[:, i] - indices[i] + start_index
+                        coordinates[:, i] += offset * (steps[:, i] > 0)
+                        offset = indices[j-1] - stop_index
+                        coordinates[:, j] -= offset * (steps[:, j-1] > 0)
+                        coordinates = coordinates[:, i:j+1]
                         for i, sequence in enumerate(sequences):
-                            if self.path[0][i] > self.path[-1][i]:
+                            if self.coordinates[i, 0] > self.coordinates[i, -1]:
                                 # mapped to reverse strand
-                                n = len(sequences[i])
-                                path = tuple(
-                                    row[:i] + (n - row[i],) + row[i + 1 :]
-                                    for row in path
-                                )
-                        path = tuple(path)
+                                n = len(sequence)
+                                coordinates[i, :] = n - coordinates[i, :]
+                        path = tuple(tuple(row) for row in coordinates.transpose())
                         target = self.target
                         query = self.query
-                        if path == self.path:
+                        if numpy.array_equal(coordinates, self.coordinates):
                             score = self.score
                         else:
                             score = None
