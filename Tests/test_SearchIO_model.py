@@ -1150,7 +1150,7 @@ class HSPMultipleFragmentCases(SearchTestBaseClass):
         self.assertIs(self.frag2, self.hsp[1])
 
     def test_setitem_single(self):
-        """Test HSP.__setitem___, single item."""
+        """Test HSP.__setitem__, single item."""
         frag3 = HSPFragment("hit_id", "query_id", "AAA", "AAT")
         self.hsp[1] = frag3
         self.assertEqual(2, len(self.hsp))
