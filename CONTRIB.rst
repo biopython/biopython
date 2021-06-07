@@ -70,6 +70,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chad Parmet <https://github.com/cparmet>
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
+- Chenghao Zhu <zhuchcn@gmail.com>
 - Chris Daley <https://github.com/chebizarro>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris MacRaild <https://github.com/macraild>

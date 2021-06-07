@@ -17,6 +17,9 @@ Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Fixed typos of triple underscore.
+
+- Chenghao Zhu
 - Fabian Egli
 
 3 June 2021: Biopython 1.79
