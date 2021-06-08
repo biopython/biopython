@@ -950,28 +950,48 @@ class PairwiseAlignment:
         self.coordinates = numpy.array(path).transpose()
 
     def __eq__(self, other):
-        """Check if two PairwiseAlignment objects have the same path."""
-        return self.path == other.path
+        """Check if two PairwiseAlignment objects have the same alignment."""
+        return numpy.array_equal(self.coordinates, other.coordinates)
 
     def __ne__(self, other):
-        """Check if two PairwiseAlignment objects have different paths."""
-        return self.path != other.path
+        """Check if two PairwiseAlignment objects have different alignments."""
+        return not numpy.array_equal(self.coordinates, other.coordinates)
 
     def __lt__(self, other):
         """Check if self should come before other."""
-        return self.path < other.path
+        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            if left < right:
+                return True
+            if left > right:
+                return False
+        return False
 
     def __le__(self, other):
         """Check if self should come before or is equal to other."""
-        return self.path <= other.path
+        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            if left < right:
+                return True
+            if left > right:
+                return False
+        return True
 
     def __gt__(self, other):
         """Check if self should come after other."""
-        return self.path > other.path
+        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            if left > right:
+                return True
+            if left < right:
+                return False
+        return False
 
     def __ge__(self, other):
         """Check if self should come after or is equal to other."""
-        return self.path >= other.path
+        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            if left > right:
+                return True
+            if left < right:
+                return False
+        return True
 
     def _construct_path(self, lines):
         """Construct the path from a printed alignment."""
@@ -1177,7 +1197,7 @@ class PairwiseAlignment:
                 if isinstance(col, slice):
                     sequence = sequences[row]
                     start_index, stop_index, step = col.indices(m)
-                    if step == 1:
+                    if start_index < stop_index and step == 1:
                         steps = numpy.diff(coordinates, 1)
                         gaps = (steps[row] == 0)
                         sequence_indices = steps[row, :].cumsum()
@@ -1447,8 +1467,7 @@ class PairwiseAlignment:
         aligned_seq1 = []
         aligned_seq2 = []
         pattern = []
-        path = self.path
-        end1, end2 = path[0]
+        end1, end2 = self.coordinates[:, 0]
         if end1 > 0 or end2 > 0:
             if end1 <= end2:
                 for c2 in seq2[: end2 - end1]:
@@ -1466,7 +1485,7 @@ class PairwiseAlignment:
                     pattern.append(s2)
         start1 = end1
         start2 = end2
-        for end1, end2 in path[1:]:
+        for end1, end2 in self.coordinates[:, 1:].transpose():
             if end1 == start1:
                 for c2 in seq2[start2:end2]:
                     s2 = str(c2)
@@ -1528,18 +1547,19 @@ class PairwiseAlignment:
             name = query.id
         except AttributeError:
             name = "query"
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        coordinates = self.coordinates
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             strand = "+"
         else:  # mapped to reverse strand
             strand = "-"
-            n2 = len(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            n = len(query)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n - coordinates[1, :]
         score = self.score
         blockSizes = []
         tStarts = []
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1583,8 +1603,8 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        path = self.path
-        if not path:  # alignment consists of gaps only
+        coordinates = self.coordinates
+        if not coordinates.size:  # alignment consists of gaps only
             return ""
         query = self.query
         target = self.target
@@ -1612,13 +1632,14 @@ class PairwiseAlignment:
             seq1 = bytes(target, "ASCII")
         except UndefinedSequenceError:  # sequence contents is unknown
             seq1 = None
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             strand = "+"
             seq2 = query
         else:  # mapped to reverse strand
             strand = "-"
             seq2 = reverse_complement(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
         try:
             seq2 = bytes(seq2)
         except TypeError:  # string
@@ -1644,8 +1665,8 @@ class PairwiseAlignment:
         blockSizes = []
         qStarts = []
         tStarts = []
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
