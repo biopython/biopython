@@ -14,11 +14,14 @@ class, used in the Bio.AlignIO module.
 """
 
 import sys
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
+
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -946,7 +949,6 @@ class PairwiseAlignment:
         self.target = target
         self.query = query
         self.score = score
-        self.path = path
         self.coordinates = numpy.array(path).transpose()
 
     def __eq__(self, other):
@@ -960,6 +962,7 @@ class PairwiseAlignment:
     def __lt__(self, other):
         """Check if self should come before other."""
         for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            left, right = tuple(left), tuple(right)
             if left < right:
                 return True
             if left > right:
@@ -969,6 +972,7 @@ class PairwiseAlignment:
     def __le__(self, other):
         """Check if self should come before or is equal to other."""
         for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            left, right = tuple(left), tuple(right)
             if left < right:
                 return True
             if left > right:
@@ -978,6 +982,7 @@ class PairwiseAlignment:
     def __gt__(self, other):
         """Check if self should come after other."""
         for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            left, right = tuple(left), tuple(right)
             if left > right:
                 return True
             if left < right:
@@ -987,11 +992,32 @@ class PairwiseAlignment:
     def __ge__(self, other):
         """Check if self should come after or is equal to other."""
         for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+            left, right = tuple(left), tuple(right)
             if left > right:
                 return True
             if left < right:
                 return False
         return True
+
+    @property
+    def path(self):
+        warnings.warn("The path attribute is deprecated; please use the "
+                      "coordinates attribute instead. The coordinates attribute "
+                      "is a numpy array containing the same values as the path "
+                      "attributes, after transposition.",
+                     BiopythonDeprecationWarning,)
+        return tuple(tuple(row) for row in self.coordinates.transpose())
+
+    @path.setter
+    def path(self, value):
+        import numpy
+
+        warnings.warn("The path attribute is deprecated; please use the "
+                      "coordinates attribute instead. The coordinates attribute "
+                      "is a numpy array containing the same values as the path "
+                      "attributes, after transposition.",
+                     BiopythonDeprecationWarning,)
+        self.coordinates = numpy.array(path).transpose()
 
     def _construct_path(self, lines):
         """Construct the path from a printed alignment."""
@@ -1129,7 +1155,7 @@ class PairwiseAlignment:
             if key.indices(len(self)) == (0, 2, 1):
                 target = self.target
                 query = self.query
-                path = self.path
+                path = tuple(tuple(row) for row in self.coordinates.transpose())
                 score = self.score
                 return PairwiseAlignment(target, query, path, score)
             raise NotImplementedError
