@@ -283,6 +283,8 @@ class SeqFeature:
             answer += ", ref=%r" % self.ref
         if self.ref_db:
             answer += ", ref_db=%r" % self.ref_db
+        if self.qualifiers:
+            answer += ", qualifiers=..."
         answer += ")"
         return answer
 
