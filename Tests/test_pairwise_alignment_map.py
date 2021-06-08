@@ -558,10 +558,10 @@ def perform_randomized_tests(n=1000):
         test_random(aligner, nBlocks1, nBlocks2, "+", "-")
         test_random(aligner, nBlocks1, nBlocks2, "-", "+")
         test_random(aligner, nBlocks1, nBlocks2, "-", "-")
-        test_random_sequences("+", "+")
-        test_random_sequences("+", "-")
-        test_random_sequences("-", "+")
-        test_random_sequences("-", "-")
+        test_random_sequences(aligner, "+", "+")
+        test_random_sequences(aligner, "+", "-")
+        test_random_sequences(aligner, "-", "+")
+        test_random_sequences(aligner, "-", "-")
 
 
 if __name__ == "__main__":
