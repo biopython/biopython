@@ -953,15 +953,21 @@ class PairwiseAlignment:
 
     def __eq__(self, other):
         """Check if two PairwiseAlignment objects have the same alignment."""
+        import numpy
+
         return numpy.array_equal(self.coordinates, other.coordinates)
 
     def __ne__(self, other):
         """Check if two PairwiseAlignment objects have different alignments."""
+        import numpy
+
         return not numpy.array_equal(self.coordinates, other.coordinates)
 
     def __lt__(self, other):
         """Check if self should come before other."""
-        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
             left, right = tuple(left), tuple(right)
             if left < right:
                 return True
@@ -971,7 +977,9 @@ class PairwiseAlignment:
 
     def __le__(self, other):
         """Check if self should come before or is equal to other."""
-        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
             left, right = tuple(left), tuple(right)
             if left < right:
                 return True
@@ -981,7 +989,9 @@ class PairwiseAlignment:
 
     def __gt__(self, other):
         """Check if self should come after other."""
-        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
             left, right = tuple(left), tuple(right)
             if left > right:
                 return True
@@ -991,7 +1001,9 @@ class PairwiseAlignment:
 
     def __ge__(self, other):
         """Check if self should come after or is equal to other."""
-        for left, right in zip(self.coordinates.transpose(), other.coordinates.transpose()):
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
             left, right = tuple(left), tuple(right)
             if left > right:
                 return True
@@ -1001,23 +1013,28 @@ class PairwiseAlignment:
 
     @property
     def path(self):
-        warnings.warn("The path attribute is deprecated; please use the "
-                      "coordinates attribute instead. The coordinates attribute "
-                      "is a numpy array containing the same values as the path "
-                      "attributes, after transposition.",
-                     BiopythonDeprecationWarning,)
+        """Return the path through the trace matrix."""
+        warnings.warn(
+            "The path attribute is deprecated; please use the coordinates "
+            "attribute instead. The coordinates attribute is a numpy array "
+            "containing the same values as the path attributes, after "
+            "transposition.",
+            BiopythonDeprecationWarning,
+        )
         return tuple(tuple(row) for row in self.coordinates.transpose())
 
     @path.setter
     def path(self, value):
         import numpy
 
-        warnings.warn("The path attribute is deprecated; please use the "
-                      "coordinates attribute instead. The coordinates attribute "
-                      "is a numpy array containing the same values as the path "
-                      "attributes, after transposition.",
-                     BiopythonDeprecationWarning,)
-        self.coordinates = numpy.array(path).transpose()
+        warnings.warn(
+            "The path attribute is deprecated; please use the coordinates "
+            "attribute instead. The coordinates attribute is a numpy array "
+            "containing the same values as the path attributes, after "
+            "transposition.",
+            BiopythonDeprecationWarning,
+        )
+        self.coordinates = numpy.array(value).transpose()
 
     def _construct_path(self, lines):
         """Construct the path from a printed alignment."""
@@ -1176,7 +1193,7 @@ class PairwiseAlignment:
             sequence = sequences[row]
             line = ""
             steps = numpy.diff(coordinates, 1)
-            gaps = (steps[row] == 0)
+            gaps = steps[row] == 0  # seriously, flake8??
             steps = steps.max(0)
             i = 0
             for step, gap in zip(steps, gaps):
@@ -1239,7 +1256,7 @@ class PairwiseAlignment:
                                 offset = start_index - indices[i]
                                 start = sequence_indices[i] + offset
                                 stop = start + length
-                                line = sequence[start: stop]
+                                line = sequence[start:stop]
                         else:
                             length = indices[i] - start_index
                             stop = sequence_indices[i]
@@ -1247,7 +1264,7 @@ class PairwiseAlignment:
                                 line = "-" * length
                             else:
                                 start = stop - length
-                                line = sequence[start: stop]
+                                line = sequence[start:stop]
                             i += 1
                             while i < j:
                                 step = steps[i]
@@ -1256,16 +1273,16 @@ class PairwiseAlignment:
                                 else:
                                     start = stop
                                     stop = start + step
-                                    line += sequence[start: stop]
+                                    line += sequence[start:stop]
                                 i += 1
-                            length = stop_index - indices[j-1]
+                            length = stop_index - indices[j - 1]
                             if length > 0:
                                 if gaps[j]:
                                     line += "-" * length
                                 else:
                                     start = stop
                                     stop = start + length
-                                    line += sequence[start: stop]
+                                    line += sequence[start:stop]
                         return line
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
@@ -1321,9 +1338,9 @@ class PairwiseAlignment:
                         j = i + indices[i:].searchsorted(stop_index, side="left") + 1
                         offset = steps[:, i] - indices[i] + start_index
                         coordinates[:, i] += offset * (steps[:, i] > 0)
-                        offset = indices[j-1] - stop_index
-                        coordinates[:, j] -= offset * (steps[:, j-1] > 0)
-                        coordinates = coordinates[:, i:j+1]
+                        offset = indices[j - 1] - stop_index
+                        coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
+                        coordinates = coordinates[:, i : j + 1]
                         for i, sequence in enumerate(sequences):
                             if self.coordinates[i, 0] > self.coordinates[i, -1]:
                                 # mapped to reverse strand
