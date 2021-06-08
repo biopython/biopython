@@ -279,12 +279,12 @@ class SeqFeature:
             answer += ", location_operator=%r" % self.location_operator
         if self.id and self.id != "<unknown id>":
             answer += ", id=%r" % self.id
+        if self.qualifiers:
+            answer += ", qualifiers=..."
         if self.ref:
             answer += ", ref=%r" % self.ref
         if self.ref_db:
             answer += ", ref_db=%r" % self.ref_db
-        if self.qualifiers:
-            answer += ", qualifiers=..."
         answer += ")"
         return answer
 
