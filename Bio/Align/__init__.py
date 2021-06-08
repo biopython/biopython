@@ -2132,40 +2132,41 @@ class PairwiseAlignment:
             )
         target = alignment1.target
         query = alignment2.query
-        path1 = alignment1.path
-        path2 = alignment2.path
+        coordinates1 = alignment1.coordinates
+        coordinates2 = alignment2.coordinates
         n1 = len(alignment1.query)
         n2 = len(alignment2.query)
-        if path1[0][1] < path1[-1][1]:  # mapped to forward strand
+        if coordinates1[1, 0] < coordinates1[1, -1]:  # mapped to forward strand
             strand1 = "+"
         else:  # mapped to reverse strand
             strand1 = "-"
-        if path2[0][1] < path2[-1][1]:  # mapped to forward strand
+        if coordinates2[1, 0] < coordinates2[1, -1]:  # mapped to forward strand
             strand2 = "+"
         else:  # mapped to reverse strand
             strand2 = "-"
-        path1 = array(path1)
-        path2 = array(path2)
         if strand1 == "+":
             if strand2 == "-":  # mapped to reverse strand
-                path2[:, 1] = n2 - path2[:, 1]
+                coordinates2 = coordinates2.copy()
+                coordinates2[1, :] = n2 - coordinates2[1, :]
         else:  # mapped to reverse strand
-            path1[:, 1] = n1 - path1[:, 1]
-            path2[:, 0] = n1 - path2[::-1, 0]
+            coordinates1 = coordinates1.copy()
+            coordinates1[1, :] = n1 - coordinates1[1, :]
+            coordinates2 = coordinates2.copy()
+            coordinates2[0, :] = n1 - coordinates2[0, ::-1]
             if strand2 == "+":
-                path2[:, 1] = n2 - path2[::-1, 1]
+                coordinates2[1, :] = n2 - coordinates2[1, ::-1]
             else:  # mapped to reverse strand
-                path2[:, 1] = path2[::-1, 1]
+                coordinates2[1, :] = coordinates2[1, ::-1]
         path = []
         tEnd, qEnd = sys.maxsize, sys.maxsize
-        path1 = iter(path1)
+        coordinates1 = iter(coordinates1.transpose())
         tStart1, qStart1 = sys.maxsize, sys.maxsize
-        for tEnd1, qEnd1 in path1:
+        for tEnd1, qEnd1 in coordinates1:
             if tStart1 < tEnd1 and qStart1 < qEnd1:
                 break
             tStart1, qStart1 = tEnd1, qEnd1
         tStart2, qStart2 = sys.maxsize, sys.maxsize
-        for tEnd2, qEnd2 in path2:
+        for tEnd2, qEnd2 in coordinates2.transpose():
             while qStart2 < qEnd2 and tStart2 < tEnd2:
                 while True:
                     if tStart2 < qStart1:
@@ -2192,7 +2193,7 @@ class PairwiseAlignment:
                         path.append([tEnd, qEnd])
                         break
                     tStart1, qStart1 = sys.maxsize, sys.maxsize
-                    for tEnd1, qEnd1 in path1:
+                    for tEnd1, qEnd1 in coordinates1:
                         if tStart1 < tEnd1 and qStart1 < qEnd1:
                             break
                         tStart1, qStart1 = tEnd1, qEnd1
