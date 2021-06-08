@@ -404,12 +404,24 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, Seq("ACGT").removeprefix, 7)
         self.assertRaises(TypeError, Seq("ACGT").removeprefix, 7.0)
         self.assertRaises(TypeError, Seq("ACGT").removeprefix, None)
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removeprefix, 7.0
+        )
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removeprefix, "A"
+        )
 
     def test_str_removesuffix(self):
         """Check matches the python string removesuffix method."""
         self.assertRaises(TypeError, Seq("ACGT").removesuffix, 7)
         self.assertRaises(TypeError, Seq("ACGT").removesuffix, 7.0)
         self.assertRaises(TypeError, Seq("ACGT").removesuffix, None)
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removesuffix, 7.0
+        )
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removesuffix, "A"
+        )
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
