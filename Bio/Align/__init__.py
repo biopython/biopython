@@ -1242,7 +1242,7 @@ class PairwiseAlignment:
                     start_index, stop_index, step = col.indices(m)
                     if start_index < stop_index and step == 1:
                         steps = numpy.diff(coordinates, 1)
-                        gaps = (steps[row] == 0)
+                        gaps = steps[row] == 0  # come on flake8, this is ugly
                         sequence_indices = steps[row, :].cumsum()
                         steps = steps.max(0)
                         indices = steps.cumsum()
