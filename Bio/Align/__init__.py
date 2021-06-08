@@ -1309,7 +1309,7 @@ class PairwiseAlignment:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    starts = numpy.full(n, sys.maxsize, dtype=int)
+                    starts = numpy.full(n, sys.maxsize)
                     for ends in coordinates.transpose():
                         step = max(ends - starts)
                         if step < 0:
