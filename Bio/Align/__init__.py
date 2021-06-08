@@ -1784,22 +1784,23 @@ class PairwiseAlignment:
         qSize = n2
         tSize = n1
         cigar = []
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        coordinates = self.coordinates
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             flag = 0
             seq = query
         else:  # mapped to reverse strand
             flag = 16
             seq = reverse_complement(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
         try:
             seq = bytes(seq)
         except TypeError:  # string
             pass
         else:
             seq = str(seq, "ASCII")
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
