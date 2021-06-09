@@ -596,18 +596,12 @@ class QueryResult(_BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
-    # marker for default self.pop() return value
-    # this method is adapted from Python's built in OrderedDict.pop
-    # implementation
-    __marker = object()
-
-    def pop(self, hit_key=-1, default=__marker):
+    def pop(self, hit_key=-1):
         """Remove the specified hit key and return the Hit object.
 
         :param hit_key: key of the Hit object to return
         :type hit_key: int or string
         :param default: return value if no Hit exists with the given key
-        :type default: object
 
         By default, ``pop`` will remove and return the last Hit object in the
         QueryResult object. To remove specific Hit objects, you can use its
@@ -658,12 +652,9 @@ class QueryResult(_BaseSearchObject):
             return hit
         except KeyError:
             if hit_key in self.__alt_hit_ids:
-                return self.pop(self.__alt_hit_ids[hit_key], default)
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
+                return self.pop(self.__alt_hit_ids[hit_key])
+            else:
                 raise KeyError(hit_key) from None
-        # if key doesn't exist but a default is set, return the default value
-        return default
 
     def index(self, hit_key):
         """Return the index of a given hit key, zero-based.
