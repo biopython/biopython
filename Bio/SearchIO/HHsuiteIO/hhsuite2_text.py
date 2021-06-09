@@ -6,7 +6,6 @@
 """Bio.SearchIO parser for HHSUITE version 2 and 3 plain text output format."""
 
 import re
-from collections import OrderedDict
 import warnings
 
 from Bio.SearchIO._utils import read_forward
@@ -193,7 +192,7 @@ class Hhsuite2TextParser:
     def _create_qresult(self, hit_blocks):
         """Create the Biopython data structures from the parsed data (PRIVATE)."""
         query_id = self.query_id
-        hit_dict = OrderedDict()
+        hit_dict = {}
 
         for output_index, block in enumerate(hit_blocks):
             hit_id = block["hit_id"]

@@ -152,8 +152,6 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
-from collections import OrderedDict
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -381,7 +379,7 @@ class StockholmIterator(AlignmentIterator):
         # if present it agrees with our parsing.
 
         seqs = {}
-        ids = OrderedDict()  # Really only need an OrderedSet, but python lacks this
+        ids = {}
         gs = {}
         gr = {}
         gf = {}

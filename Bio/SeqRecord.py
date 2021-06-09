@@ -213,7 +213,7 @@ class SeqRecord:
         if annotations is None:
             annotations = {}
         elif not isinstance(annotations, dict):
-            raise TypeError("annotations argument should be a dict")
+            raise TypeError("annotations argument must be a dict or None")
         self.annotations = annotations
 
         if letter_annotations is None:

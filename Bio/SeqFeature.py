@@ -293,8 +293,8 @@ class SeqFeature:
         if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
         out += "qualifiers:\n"
-        for key, value in self.qualifiers.items():
-            out += f"    Key: {key}, Value: {value}\n"
+        for qual_key in sorted(self.qualifiers):
+            out += "    Key: %s, Value: %s\n" % (qual_key, self.qualifiers[qual_key])
         return out
 
     def _shift(self, offset):

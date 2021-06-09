@@ -31,7 +31,7 @@ Feature Table Documentation:
 import warnings
 import re
 import sys
-from collections import OrderedDict
+from collections import defaultdict
 
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1737,7 +1737,7 @@ class GenBankScanner(InsdcScanner):
                     if self.debug > 1:
                         print("Found comment")
                     comment_list = []
-                    structured_comment_dict = OrderedDict()
+                    structured_comment_dict = defaultdict(dict)
                     regex = fr"([^#]+){self.STRUCTURED_COMMENT_START}$"
                     structured_comment_key = re.search(regex, data)
                     if structured_comment_key is not None:
@@ -1771,9 +1771,6 @@ class GenBankScanner(InsdcScanner):
                                         self.STRUCTURED_COMMENT_DELIM
                                     ),
                                     data,
-                                )
-                                structured_comment_dict.setdefault(
-                                    structured_comment_key, OrderedDict()
                                 )
                                 structured_comment_dict[structured_comment_key][
                                     match.group(1)
