@@ -379,7 +379,7 @@ class StockholmIterator(AlignmentIterator):
         # if present it agrees with our parsing.
 
         seqs = {}
-        ids = {}
+        ids = {}  # Really only need an OrderedSet, but python lacks this
         gs = {}
         gr = {}
         gf = {}
