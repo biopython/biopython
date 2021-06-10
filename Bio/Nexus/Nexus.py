@@ -864,9 +864,6 @@ class Nexus:
             self.matchchar = options["matchchar"][0]
         if "labels" in options:
             self.labels = options["labels"]
-        if "transpose" in options:
-            # self.transpose = True
-            raise NexusError("TRANSPOSE is not supported!")
         if "interleave" in options:
             if options["interleave"] is None or options["interleave"].lower() == "yes":
                 self.interleave = True
