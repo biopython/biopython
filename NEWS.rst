@@ -14,11 +14,14 @@ The latest news is at the top of this file.
 Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 "status" information for sequence features as ``SeqFeature`` qualifiers.
 
+Speed up and refactoring of code in ``AlignInfo`` consensus methods.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Fixed typos of triple underscore.
 
+- Caio Fontes
 - Chenghao Zhu
 - Fabian Egli
 

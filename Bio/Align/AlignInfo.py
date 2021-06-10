@@ -14,6 +14,7 @@ be put into classes in this module.
 
 import math
 import sys
+from collections import Counter
 
 from Bio.Seq import Seq
 
@@ -63,38 +64,31 @@ class SummaryInfo:
         # find the length of the consensus we are creating
         con_len = self.alignment.get_alignment_length()
 
-        # go through each seq item
+        # atom_counts holds information about each column in alignment.
+        atom_counts = self._get_column_counts("-.")
+
+        # number of atoms in each column
+        num_atoms = [sum(c.values()) for c in atom_counts]
+
+        # go through each column
         for n in range(con_len):
-            # keep track of the counts of the different atoms we get
-            atom_dict = {}
-            num_atoms = 0
-
-            for record in self.alignment:
-                # make sure we haven't run past the end of any sequences
-                # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] != "-" and record.seq[n] != ".":
-                        if record.seq[n] not in atom_dict:
-                            atom_dict[record.seq[n]] = 1
-                        else:
-                            atom_dict[record.seq[n]] += 1
-
-                        num_atoms = num_atoms + 1
-
+            max_size = None
             max_atoms = []
-            max_size = 0
 
-            for atom in atom_dict:
-                if atom_dict[atom] > max_size:
-                    max_atoms = [atom]
-                    max_size = atom_dict[atom]
-                elif atom_dict[atom] == max_size:
+            for atom, c in atom_counts[n].most_common():
+                # initialize max_size
+                if max_size is None:
+                    max_size = c
+                if c == max_size:
                     max_atoms.append(atom)
+                else:
+                    # Since the entries are ordered, no need to continue
+                    break
 
-            if require_multiple and num_atoms == 1:
+            if require_multiple and num_atoms[n] == 1:
                 consensus += ambiguous
             elif (len(max_atoms) == 1) and (
-                (float(max_size) / float(num_atoms)) >= threshold
+                (float(max_size) / float(num_atoms[n])) >= threshold
             ):
                 consensus += max_atoms[0]
             else:
@@ -119,37 +113,31 @@ class SummaryInfo:
         # find the length of the consensus we are creating
         con_len = self.alignment.get_alignment_length()
 
-        # go through each seq item
+        # atom_counts holds information about each column in alignment.
+        atom_counts = self._get_column_counts()
+
+        # number of atoms in each column
+        num_atoms = [sum(c.values()) for c in atom_counts]
+
+        # go through each column
         for n in range(con_len):
-            # keep track of the counts of the different atoms we get
-            atom_dict = {}
-            num_atoms = 0
-
-            for record in self.alignment:
-                # make sure we haven't run past the end of any sequences
-                # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] not in atom_dict:
-                        atom_dict[record.seq[n]] = 1
-                    else:
-                        atom_dict[record.seq[n]] += 1
-
-                    num_atoms += 1
-
+            max_size = None
             max_atoms = []
-            max_size = 0
 
-            for atom in atom_dict:
-                if atom_dict[atom] > max_size:
-                    max_atoms = [atom]
-                    max_size = atom_dict[atom]
-                elif atom_dict[atom] == max_size:
+            for atom, c in atom_counts[n].most_common():
+                # initialize max_size
+                if max_size is None:
+                    max_size = c
+                if c == max_size:
                     max_atoms.append(atom)
+                else:
+                    # Since the entries are ordered, no need to continue
+                    break
 
-            if require_multiple and num_atoms == 1:
+            if require_multiple and num_atoms[n] == 1:
                 consensus += ambiguous
             elif (len(max_atoms) == 1) and (
-                (float(max_size) / float(num_atoms)) >= threshold
+                (float(max_size) / float(num_atoms[n])) >= threshold
             ):
                 consensus += max_atoms[0]
             else:
@@ -214,6 +202,21 @@ class SummaryInfo:
                 )
 
         return rep_dict
+
+    def _get_column_counts(self, skip_chars=""):
+        """Count each type of atom (not in skip_chars) per alignment column (PRIVATE)."""
+        con_len = self.alignment.get_alignment_length()
+
+        # atom_counts holds information about each column in alignment.
+        atom_counts = [Counter() for _ in range(con_len)]
+
+        # Get counts information for each column
+        for record in self.alignment:
+            for n, letter in enumerate(record.seq):
+                if letter not in skip_chars:
+                    atom_counts[n][letter] += 1
+
+        return atom_counts
 
     def _pair_replacement(self, seq1, seq2, weight1, weight2, dictionary, letters):
         """Compare two sequences and generate info on the replacements seen (PRIVATE).
