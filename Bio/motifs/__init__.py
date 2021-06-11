@@ -15,8 +15,6 @@ It also includes functionality for parsing output from the AlignACE, MEME,
 and MAST programs, as well as files in the TRANSFAC format.
 """
 
-import warnings
-
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
@@ -179,7 +177,14 @@ class Instances(list):
 
     def __init__(self, instances=None, alphabet="ACGT"):
         """Initialize the class."""
-        from Bio.Seq import Seq
+        from Bio.Seq import Seq, MutableSeq
+
+        if isinstance(instances, (Seq, MutableSeq, str)):
+            raise TypeError(
+                "instances should be iterator of Seq objects or strings. "
+                "If a single sequence is given, will treat each character "
+                "as a separate sequence."
+            )
 
         length = None
         if instances is not None:
