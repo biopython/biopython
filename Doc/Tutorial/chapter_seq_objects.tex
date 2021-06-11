@@ -157,7 +157,18 @@ writing FASTA format sequence files is covered in Chapter~\ref{chapter:seqio}.
 
 \section{Concatenating or adding sequences}
 
-As of Biopython 1.78, you can add any two Seq objects together.
+Two \verb|Seq| objects can be concatenated by adding them:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> seq1 = Seq("ACGT")
+>>> seq2 = Seq("AACCGG")
+>>> seq1 + seq2
+Seq('ACGTAACCGG')
+\end{minted}
+
+Biopython does not check the sequence contents and will not raise an exception if for example you concatenate a protein sequence and a DNA sequence (which is likely a mistake):
 
 %doctest
 \begin{minted}{pycon}
@@ -167,8 +178,6 @@ As of Biopython 1.78, you can add any two Seq objects together.
 >>> protein_seq + dna_seq
 Seq('EVRNAKACGT')
 \end{minted}
-
-Deliberately mixing DNA and protein like this is likely a mistake though...
 
 You may often have many sequences to add together, which can be done with a for loop like this:
 
