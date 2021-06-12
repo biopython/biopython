@@ -507,7 +507,7 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4],], [[0, 4]]]))
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[0, 4]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
