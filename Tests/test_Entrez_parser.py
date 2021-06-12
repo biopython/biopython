@@ -8,6 +8,7 @@
 import unittest
 import sys
 import os
+import pickle
 
 from io import BytesIO, StringIO
 
@@ -64,6 +65,30 @@ class GeneralTests(unittest.TestCase):
         self.assertIn("DbList", record)
         handle.close()
 
+    def test_pickle(self):
+        """Test if records created by the parser can be pickled."""
+        directory = "Entrez"
+        filenames = os.listdir(directory)
+        for filename in sorted(filenames):
+            basename, extension = os.path.splitext(filename)
+            if extension != ".xml":
+                continue
+            if filename in ("biosample.xml", # DTD not specified in XML file
+                            "einfo3.xml",    # DTD incomplete
+                            "einfo4.xml",    # XML corrupted
+                            "epost2.xml",    # EPost with incorrect arguments
+                            "esummary8.xml", # ESummary with incorrect arguments
+                            "journals.xml",  # Missing XML declaration
+                           ):
+                continue
+            path = os.path.join(directory, filename)
+            with open(path, "rb") as stream:
+                record = Entrez.read(stream)
+            with BytesIO() as stream:
+                pickle.dump(record, stream)
+                stream.seek(0)
+                pickled_record = pickle.load(stream)
+            self.assertEqual(record, pickled_record)
 
 class EInfoTest(unittest.TestCase):
     """Tests for parsing XML output returned by EInfo."""

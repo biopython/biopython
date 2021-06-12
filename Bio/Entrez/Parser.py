@@ -94,15 +94,10 @@ class NoneElement:
 class IntegerElement(int):
     """NCBI Entrez XML element mapped to an integer."""
 
-    def __new__(cls, value, tag, attributes, key=None):
+    def __new__(cls, value):
         """Create an IntegerElement."""
         self = int.__new__(cls, value)
-        self.tag = tag
-        if key is None:
-            self.key = tag
-        else:
-            self.key = key
-        self.attributes = attributes
+        self.attributes = {}
         return self
 
     def __repr__(self):
@@ -118,15 +113,10 @@ class IntegerElement(int):
 class StringElement(str):
     """NCBI Entrez XML element mapped to a string."""
 
-    def __new__(cls, value, tag, attributes, key=None):
+    def __new__(cls, value):
         """Create a StringElement."""
         self = str.__new__(cls, value)
-        self.tag = tag
-        if key is None:
-            self.key = tag
-        else:
-            self.key = key
-        self.attributes = attributes
+        self.attributes = {}
         return self
 
     def __repr__(self):
@@ -659,17 +649,19 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-        value = "".join(self.data)
+        data = "".join(self.data)
         self.data = []
+        value = StringElement(data)
+        value.tag = tag
         attributes = self.attributes
         self.attributes = None
         if tag in self.items:
             assert tag == "Item"
-            key = attributes["Name"]
+            value.key = attributes["Name"]
             del attributes["Name"]
         else:
-            key = tag
-        value = StringElement(value, tag, attributes, key)
+            value.key = tag
+        value.attributes.update(attributes)
         if element is None:
             self.record = element
         else:
@@ -723,7 +715,10 @@ class DataHandler(metaclass=DataHandlerMeta):
         if self.data:
             value = int("".join(self.data))
             self.data = []
-            value = IntegerElement(value, tag, attributes, key)
+            value = IntegerElement(value)
+            value.tag = tag
+            value.attributes.update(attributes)
+            value.key = key
         else:
             value = NoneElement(tag, attributes, key)
         element = self.element
