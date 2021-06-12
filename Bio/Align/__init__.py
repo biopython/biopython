@@ -952,12 +952,12 @@ class PairwiseAlignment:
 
     @property
     def target(self):
-        """Returns self.sequences[0] for a pairwise alignment."""
+        """Return self.sequences[0] for a pairwise alignment."""
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
                 "self.target is defined for pairwise alignments only (found alignment of % sequences)"
-                 % n
+                % n
             )
         return self.sequences[0]
 
@@ -968,18 +968,18 @@ class PairwiseAlignment:
         if n != 2:
             raise ValueError(
                 "self.target is defined for pairwise alignments only (found alignment of % sequences)"
-                 % n
+                % n
             )
         self.sequences[0] = value
 
     @property
     def query(self):
-        """Returns self.sequences[1] for a pairwise alignment."""
+        """Return self.sequences[1] for a pairwise alignment."""
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
                 "self.query is defined for pairwise alignments only (found alignment of % sequences)"
-                 % n
+                % n
             )
         return self.sequences[1]
 
@@ -990,7 +990,7 @@ class PairwiseAlignment:
         if n != 2:
             raise ValueError(
                 "self.query is defined for pairwise alignments only (found alignment of % sequences)"
-                 % n
+                % n
             )
         self.sequences[1] = value
 
