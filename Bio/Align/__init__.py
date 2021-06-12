@@ -1620,7 +1620,7 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        query, target = self.sequences
+        target, query = self.sequences
         # variable names follow those in the BED file format specification
         try:
             chrom = target.id
@@ -2357,16 +2357,7 @@ class PairwiseAlignment:
         The total number of substitutions between T's and C's in the alignment
         is 3.5 + 3.5 = 7.
         """
-        target, query = self.sequences
-        try:
-            target = target.seq
-        except AttributeError:
-            pass
-        try:
-            query = query.seq
-        except AttributeError:
-            pass
-        sequences = (str(target), str(query))
+        sequences = self.sequences
         letters = set.union(*[set(sequence) for sequence in sequences])
         letters = "".join(sorted(letters))
         m = substitution_matrices.Array(letters, dims=2)
