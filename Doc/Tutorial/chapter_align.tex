@@ -2240,7 +2240,7 @@ TGAACT
 
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
-chunks, you get two tuples of length $N$:
+chunks, you get a numpy array with dimensions $2 \times N \times 2$:
 
 \begin{minted}{python}
 (
@@ -2254,7 +2254,11 @@ In the current example, \verb+alignment.aligned+ returns two tuples of length 2:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.aligned
-(((0, 2), (4, 5)), ((0, 2), (2, 3)))
+array([[[0, 2],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 2],
+        [2, 3]]])
 \end{minted}
 while for the alternative alignment, two tuples of length 3 are returned:
 
@@ -2267,7 +2271,13 @@ GAACT
 G-A-T
 <BLANKLINE>
 >>> alignment.aligned
-(((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+array([[[0, 1],
+        [2, 3],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 1],
+        [1, 2],
+        [2, 3]]])
 \end{minted}
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
 
@@ -2284,14 +2294,22 @@ AAAC-AAA
 AAA-GAAA
 <BLANKLINE>
 >>> alignments[0].aligned
-(((0, 3), (4, 7)), ((0, 3), (4, 7)))
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
 >>> print(alignments[1])
 AAA-CAAA
 |||--|||
 AAAG-AAA
 <BLANKLINE>
 >>> alignments[1].aligned
-(((0, 3), (4, 7)), ((0, 3), (4, 7)))
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
 \end{minted}
 The \verb+aligned+ property can be used to identify alignments that are identical to each other in terms of their aligned sequences.
 
