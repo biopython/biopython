@@ -560,7 +560,8 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]])))
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]]))
+        )
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
@@ -2858,7 +2859,8 @@ TT-GGAA
         self.assertTrue(
             numpy.array_equal(
                 alignment.aligned,
-                numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]])),
+                numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]])
+            ),
         )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
