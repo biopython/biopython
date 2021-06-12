@@ -4415,6 +4415,31 @@ T  12.0  16.5   7.0 145.0
         self.assertAlmostEqual(m["C", "T"], 16.5)
         self.assertAlmostEqual(m["T", "C"], 16.5)
 
+    def test_target_query_properties(self):
+        target = "ABCD"
+        query = "XYZ"
+        alignment = Align.PairwiseAlignment(target, query, None, None)
+        self.assertEqual(alignment.sequences[0], target)
+        self.assertEqual(alignment.sequences[1], query)
+        self.assertEqual(alignment.target, target)
+        self.assertEqual(alignment.query, query)
+        target = "EFGH"
+        query = "UVW"
+        alignment.target = target
+        alignment.query = query
+        self.assertEqual(alignment.sequences[0], target)
+        self.assertEqual(alignment.sequences[1], query)
+        self.assertEqual(alignment.target, target)
+        self.assertEqual(alignment.query, query)
+        target = "IJKL"
+        query = "RST"
+        sequences = [target, query]
+        alignment.sequences = sequences
+        self.assertEqual(alignment.sequences[0], target)
+        self.assertEqual(alignment.sequences[1], query)
+        self.assertEqual(alignment.target, target)
+        self.assertEqual(alignment.query, query)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -946,10 +946,53 @@ class PairwiseAlignment:
         """
         import numpy
 
-        self.target = target
-        self.query = query
+        self.sequences = [target, query]
         self.score = score
         self.coordinates = numpy.array(path).transpose()
+
+    @property
+    def target(self):
+        """Returns self.sequences[0] for a pairwise alignment."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                 % n
+            )
+        return self.sequences[0]
+
+    @target.setter
+    def target(self, value):
+        """For a pairwise alignment, set self.sequences[0]."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                 % n
+            )
+        self.sequences[0] = value
+
+    @property
+    def query(self):
+        """Returns self.sequences[1] for a pairwise alignment."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                 % n
+            )
+        return self.sequences[1]
+
+    @query.setter
+    def query(self, value):
+        """For a pairwise alignment, set self.sequences[1]."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                 % n
+            )
+        self.sequences[1] = value
 
     def __eq__(self, other):
         """Check if two PairwiseAlignment objects have the same alignment."""
@@ -1170,13 +1213,12 @@ class PairwiseAlignment:
 
         if isinstance(key, slice):
             if key.indices(len(self)) == (0, 2, 1):
-                target = self.target
-                query = self.query
+                target, query = self.sequences
                 path = tuple(tuple(row) for row in self.coordinates.transpose())
                 score = self.score
                 return PairwiseAlignment(target, query, path, score)
             raise NotImplementedError
-        sequences = [self.target, self.query]
+        sequences = list(self.sequences)
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
@@ -1347,8 +1389,7 @@ class PairwiseAlignment:
                                 n = len(sequence)
                                 coordinates[i, :] = n - coordinates[i, :]
                         path = tuple(tuple(row) for row in coordinates.transpose())
-                        target = self.target
-                        query = self.query
+                        target, query = self.sequences
                         if numpy.array_equal(coordinates, self.coordinates):
                             score = self.score
                         else:
@@ -1448,10 +1489,11 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        seq1 = self._convert_sequence_string(self.target)
+        target, query = self.sequences
+        seq1 = self._convert_sequence_string(target)
         if seq1 is None:
             return self._format_generalized()
-        seq2 = self._convert_sequence_string(self.query)
+        seq2 = self._convert_sequence_string(query)
         if seq2 is None:
             return self._format_generalized()
         n1 = len(seq1)
@@ -1505,8 +1547,7 @@ class PairwiseAlignment:
 
         Helper for self._format_pretty() .
         """
-        seq1 = self.target
-        seq2 = self.query
+        seq1, seq2 = self.sequences
         aligned_seq1 = []
         aligned_seq2 = []
         pattern = []
@@ -1579,8 +1620,7 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        query = self.query
-        target = self.target
+        query, target = self.sequences
         # variable names follow those in the BED file format specification
         try:
             chrom = target.id
@@ -1649,8 +1689,7 @@ class PairwiseAlignment:
         coordinates = self.coordinates
         if not coordinates.size:  # alignment consists of gaps only
             return ""
-        query = self.query
-        target = self.target
+        target, query = self.sequences
         try:
             qName = query.id
         except AttributeError:
@@ -1807,8 +1846,7 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        query = self.query
-        target = self.target
+        target, query = self.sequences
         try:
             qName = query.id
         except AttributeError:
@@ -1949,12 +1987,12 @@ class PairwiseAlignment:
         """
         import numpy
 
-        coordinates = self.coordinates
+        coordinates = self.coordinates.copy()
         n = len(coordinates)
-        if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
-            n2 = len(self.query)
-            coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
+        for i in range(n):
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
+                k = len(self.sequences[i])
+                coordinates[i, :] = k - coordinates[i, :]
         steps = numpy.diff(coordinates, 1).max(0)
         m = sum(steps)
         return (n, m)
@@ -2033,7 +2071,7 @@ class PairwiseAlignment:
                     segments2.append(segment2)
                 i1, i2 = j1, j2
         else:  # mapped to reverse strand
-            n2 = len(self.query)
+            n2 = len(self.sequences[1])
             i1, i2 = coordinates[0]
             i2 = n2 - i2
             for node in coordinates[1:]:
@@ -2096,7 +2134,7 @@ class PairwiseAlignment:
 
         The sequences are now sorted by decreasing GC content value.
         """
-        sequences = self.target, self.query
+        sequences = self.sequences
         if key is None:
             try:
                 values = [sequence.id for sequence in sequences]
@@ -2105,8 +2143,7 @@ class PairwiseAlignment:
         else:
             values = [key(sequence) for sequence in sequences]
         indices = sorted(range(len(sequences)), key=values.__getitem__, reverse=reverse)
-        sequences = [sequences[index] for index in indices]
-        self.target, self.query = sequences
+        self.sequences = [sequences[index] for index in indices]
         self.coordinates = self.coordinates.take(indices, 0)
 
     def map(self, alignment):
@@ -2320,12 +2357,11 @@ class PairwiseAlignment:
         The total number of substitutions between T's and C's in the alignment
         is 3.5 + 3.5 = 7.
         """
-        target = self.target
+        target, query = self.sequences
         try:
             target = target.seq
         except AttributeError:
             pass
-        query = self.query
         try:
             query = query.seq
         except AttributeError:
