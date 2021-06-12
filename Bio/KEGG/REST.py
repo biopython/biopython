@@ -199,7 +199,7 @@ def kegg_get(dbentries, option=None):
     # <org> = KEGG organism code or T number
     #
     # <option> = aaseq | ntseq | mol | kcf | image
-    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
+    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml", "json"]:
         resp = _q("get", dbentries, option)
     elif option:
         raise ValueError("Invalid option arg for kegg get request.")
