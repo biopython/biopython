@@ -265,7 +265,8 @@ G-A-T
         self.assertEqual(alignment.shape, (2, 5))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]])
+                alignment.aligned,
+                numpy.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
@@ -559,9 +560,7 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]]))
-        )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]])))
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
@@ -633,7 +632,8 @@ GA-AXT
         self.assertEqual(alignment.shape, (2, 6))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
@@ -838,7 +838,8 @@ G-A
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]]))
+                alignment.aligned, numpy.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]])
+            )
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -2356,8 +2357,7 @@ abcce
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[3, 4]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[3, 4]], [[0, 1]]]))
         )
 
     def test_align_one_char3(self):
@@ -2756,7 +2756,8 @@ TTGG-AA
         self.assertEqual(alignment.shape, (2, 7))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [2, 3], [4, 6]], [[0, 2], [3, 4], [4, 6]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [2, 3], [4, 6]], [[0, 2], [3, 4], [4, 6]]]),
             )
         )
         alignment = alignments[1]
@@ -2856,7 +2857,8 @@ TT-GGAA
         self.assertEqual(alignment.shape, (2, 7))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]))
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]])),
         )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
