@@ -2021,7 +2021,11 @@ class PairwiseAlignment:
         GA--T
         <BLANKLINE>
         >>> alignment.aligned
-        (((0, 2), (4, 5)), ((0, 2), (2, 3)))
+        array([[[0, 2],
+                [4, 5]],
+        <BLANKLINE>
+               [[0, 2],
+                [2, 3]]])
         >>> alignment = alignments[1]
         >>> print(alignment)
         GAACT
@@ -2029,7 +2033,13 @@ class PairwiseAlignment:
         G-A-T
         <BLANKLINE>
         >>> alignment.aligned
-        (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+        array([[[0, 1],
+                [2, 3],
+                [4, 5]],
+        <BLANKLINE>
+               [[0, 1],
+                [1, 2],
+                [2, 3]]])
 
         Note that different alignments may have the same subsequences
         aligned to each other. In particular, this may occur if alignments
@@ -2045,45 +2055,45 @@ class PairwiseAlignment:
         AAA-GAAA
         <BLANKLINE>
         >>> alignments[0].aligned
-        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        array([[[0, 3],
+                [4, 7]],
+        <BLANKLINE>
+               [[0, 3],
+                [4, 7]]])
         >>> print(alignments[1])
         AAA-CAAA
         |||--|||
         AAAG-AAA
         <BLANKLINE>
         >>> alignments[1].aligned
-        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        array([[[0, 3],
+                [4, 7]],
+        <BLANKLINE>
+               [[0, 3],
+                [4, 7]]])
 
         The property can be used to identify alignments that are identical
         to each other in terms of their aligned sequences.
         """
-        segments1 = []
-        segments2 = []
-        coordinates = self.coordinates.transpose()
-        if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
-            i1, i2 = coordinates[0]
-            for node in coordinates[1:]:
-                j1, j2 = node
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (i2, j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
-        else:  # mapped to reverse strand
-            n2 = len(self.sequences[1])
-            i1, i2 = coordinates[0]
-            i2 = n2 - i2
-            for node in coordinates[1:]:
-                j1, j2 = node
-                j2 = n2 - j2
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (n2 - i2, n2 - j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
-        return tuple(segments1), tuple(segments2)
+        import numpy
+
+        coordinates = self.coordinates.copy()
+        for i, sequence in enumerate(self.sequences):
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
+                n = len(sequence)
+                coordinates[i, :] = n - coordinates[i, :]
+        coordinates = coordinates.transpose()
+        steps = numpy.diff(coordinates, axis=0).min(1)
+        indices = numpy.flatnonzero(steps)
+        starts = coordinates[indices, :]
+        ends = coordinates[indices + 1, :]
+        segments = numpy.stack([starts, ends], axis=0).transpose()
+        for i, sequence in enumerate(self.sequences):
+            if self.coordinates[i, 0] > self.coordinates[i, -1]:
+                # mapped to reverse strand
+                n = len(sequence)
+                segments[i, :] = n - segments[i, :]
+        return segments
 
     def sort(self, key=None, reverse=False):
         """Sort the sequences of the alignment in place.
