@@ -2859,7 +2859,7 @@ TT-GGAA
         self.assertTrue(
             numpy.array_equal(
                 alignment.aligned,
-                numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]])
+                numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]),
             ),
         )
         alignment = alignments[3]
