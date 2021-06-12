@@ -2086,7 +2086,7 @@ class PairwiseAlignment:
         steps = numpy.diff(coordinates, axis=0).min(1)
         indices = numpy.flatnonzero(steps)
         starts = coordinates[indices, :]
-        ends = coordinates[indices+1, :]
+        ends = coordinates[indices + 1, :]
         segments = numpy.stack([starts, ends], axis=0).transpose()
         for i, sequence in enumerate(self.sequences):
             if self.coordinates[i, 0] > self.coordinates[i, -1]:

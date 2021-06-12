@@ -299,7 +299,8 @@ G-A-T
         self.assertEqual(alignment.shape, (2, 5))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 1], [2, 3], [4, 5]], [[3, 2], [2, 1], [1, 0]]])
+                alignment.aligned,
+                numpy.array([[[0, 1], [2, 3], [4, 5]], [[3, 2], [2, 1], [1, 0]]]),
             )
         )
 
@@ -467,9 +468,7 @@ GA?T
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[0, 4]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[0, 4]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -485,9 +484,7 @@ GA?T
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]]))
         )
         seq2 = "GAXT"
         aligner.wildcard = "X"
@@ -509,9 +506,7 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4],], [[0, 4]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4],], [[0, 4]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -527,9 +522,7 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]]))
         )
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
@@ -550,9 +543,7 @@ GAXT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[0, 4]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 4]], [[0, 4]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -569,8 +560,7 @@ GAXT
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]])
-            )
+                alignment.aligned, numpy.array([[[0, 4]], [[4, 0]]]))
         )
 
     def test_needlemanwunsch_simple2(self):
@@ -598,7 +588,8 @@ GA-A?T
         self.assertEqual(alignment.shape, (2, 6))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
@@ -616,7 +607,8 @@ GA-A?T
         self.assertEqual(alignment.shape, (2, 6))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
         seq1 = "GAXAT"
@@ -659,7 +651,8 @@ GA-AXT
         self.assertEqual(alignment.shape, (2, 6))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
 
@@ -715,8 +708,7 @@ AA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[1, 2]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[1, 2]], [[0, 1]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -730,8 +722,7 @@ A-
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 1]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 1]], [[0, 1]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -747,8 +738,7 @@ AA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[1, 2]], [[1, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[1, 2]], [[1, 0]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -762,8 +752,7 @@ A-
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 1]], [[1, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 1]], [[1, 0]]]))
         )
 
     def test_match_score_open_penalty2(self):
@@ -832,8 +821,7 @@ GA-
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -850,8 +838,7 @@ G-A
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]])
-            )
+                alignment.aligned, numpy.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -865,8 +852,7 @@ GA-
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[2, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[2, 0]]]))
         )
 
     def test_match_score_open_penalty3(self):
@@ -1346,8 +1332,7 @@ GACT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 4]], [[0, 2]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 4]], [[0, 2]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -1361,7 +1346,8 @@ G--T
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
+            numpy.array_equal(
+                alignment.aligned, numpy.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
         alignment = alignments[2]
@@ -1376,8 +1362,7 @@ GT--
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 3)
@@ -1393,8 +1378,7 @@ GACT
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 4]], [[2, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 4]], [[2, 0]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -1424,8 +1408,7 @@ GT--
         )
         self.assertEqual(alignment.shape, (2, 4))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[2, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[2, 0]]]))
         )
 
 
@@ -1816,8 +1799,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1849,8 +1831,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1922,8 +1903,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -1939,8 +1919,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]]))
         )
 
     def test_match_dictionary3(self):
@@ -1996,8 +1975,7 @@ ATAT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -2013,8 +1991,7 @@ ATAT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[4, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[4, 1]]]))
         )
 
     def test_match_dictionary4(self):
@@ -2073,8 +2050,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -2106,8 +2082,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -2181,8 +2156,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -2198,8 +2172,7 @@ ATT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[3, 0]]]))
         )
 
     def test_match_dictionary6(self):
@@ -2257,8 +2230,7 @@ ATAT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
@@ -2274,8 +2246,7 @@ ATAT
         )
         self.assertEqual(alignment.shape, (2, 3))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[4, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 3]], [[4, 1]]]))
         )
 
 
@@ -2324,8 +2295,7 @@ abcde
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]]))
         )
 
     def test_align_one_char2(self):
@@ -2372,8 +2342,7 @@ abcce
         )
         self.assertEqual(alignment.shape, (2, 1))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1)
@@ -2437,8 +2406,7 @@ abcde
         )
         self.assertEqual(alignment.shape, (2, 5))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 3]], [[0, 1]]]))
         )
 
     def test_align_one_char_score3(self):
@@ -2537,7 +2505,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[2, 13], [23, 34]], [[0, 11], [11, 22]]])
+                alignment.aligned,
+                numpy.array([[[2, 13], [23, 34]], [[0, 11], [11, 22]]]),
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
@@ -2555,7 +2524,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[2, 13], [23, 34]], [[22, 11], [11, 0]]])
+                alignment.aligned,
+                numpy.array([[[2, 13], [23, 34]], [[22, 11], [11, 0]]]),
             )
         )
 
@@ -2818,7 +2788,8 @@ TT-GGAA
         self.assertEqual(alignment.shape, (2, 7))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 6]], [[0, 2], [2, 3], [4, 6]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [3, 4], [4, 6]], [[0, 2], [2, 3], [4, 6]]]),
             )
         )
         alignment = alignments[3]
@@ -2852,7 +2823,8 @@ TTGG-AA
         self.assertEqual(alignment.shape, (2, 7))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [2, 3], [4, 6]], [[6, 4], [3, 2], [2, 0]]])
+                alignment.aligned,
+                numpy.array([[[0, 2], [2, 3], [4, 6]], [[6, 4], [3, 2], [2, 0]]]),
             )
         )
         alignment = alignments[1]
@@ -2884,8 +2856,7 @@ TT-GGAA
         self.assertEqual(alignment.shape, (2, 7))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]])
-            )
+                alignment.aligned, numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]))
         )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -2960,8 +2931,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[0, 13]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[0, 13]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -2975,8 +2945,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[9, 22]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[9, 22]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -2992,8 +2961,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[22, 9]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[22, 9]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -3007,8 +2975,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[13, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[13, 0]]]))
         )
 
     def test_gap_here_only_local_2(self):
@@ -3072,8 +3039,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[0, 13]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[0, 13]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -3087,8 +3053,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[9, 22]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[9, 22]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -3104,8 +3069,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[22, 9]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[2, 15]], [[22, 9]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -3119,8 +3083,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(alignment.shape, (2, 13))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[13, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[21, 34]], [[13, 0]]]))
         )
 
     def test_gap_here_only_local_3(self):
@@ -3179,8 +3142,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3194,8 +3156,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[4, 6]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[4, 6]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -3211,8 +3172,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[6, 4]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[6, 4]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3226,8 +3186,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[2, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[2, 0]]]))
         )
         aligner.query_gap_score = gap_score
         self.assertEqual(
@@ -3261,8 +3220,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[0, 2]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3276,8 +3234,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[4, 6]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[4, 6]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 2)
@@ -3293,8 +3250,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[6, 4]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[0, 2]], [[6, 4]]]))
         )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3308,8 +3264,7 @@ TTGGAA
         )
         self.assertEqual(alignment.shape, (2, 2))
         self.assertTrue(
-            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[2, 0]]])
-            )
+            numpy.array_equal(alignment.aligned, numpy.array([[[4, 6]], [[2, 0]]]))
         )
 
     def test_broken_gap_function(self):
@@ -3693,7 +3648,8 @@ class TestUnicodeStrings(unittest.TestCase):
         self.assertEqual(alignment.shape, (2, 5))
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned, numpy.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]])
+                alignment.aligned,
+                numpy.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
             )
         )
 
