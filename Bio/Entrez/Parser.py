@@ -96,6 +96,7 @@ class IntegerElement(int):
         return int.__new__(cls, value)
 
     def __init__(self, value, tag, attributes, key):
+        """Initialize an IntegerElement."""
         self.tag = tag
         self.attributes = attributes
         self.key = key
@@ -118,6 +119,7 @@ class StringElement(str):
         return str.__new__(cls, value)
 
     def __init__(self, value, tag, attributes, key):
+        """Initialize a StringElement."""
         self.tag = tag
         self.attributes = attributes
         self.key = key
