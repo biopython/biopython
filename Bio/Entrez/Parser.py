@@ -55,13 +55,10 @@ from urllib.request import urlopen, urlparse
 class NoneElement:
     """NCBI Entrez XML element mapped to None."""
 
-    def __init__(self, tag, attributes, key=None):
+    def __init__(self, tag, attributes, key):
         """Create a NoneElement."""
         self.tag = tag
-        if key is None:
-            self.key = tag
-        else:
-            self.key = key
+        self.key = key
         self.attributes = attributes
 
     def __eq__(self, other):
@@ -94,11 +91,14 @@ class NoneElement:
 class IntegerElement(int):
     """NCBI Entrez XML element mapped to an integer."""
 
-    def __new__(cls, value):
+    def __new__(cls, value, *args, **kwargs):
         """Create an IntegerElement."""
-        self = int.__new__(cls, value)
-        self.attributes = {}
-        return self
+        return int.__new__(cls, value)
+
+    def __init__(self, value, tag, attributes, key):
+        self.tag = tag
+        self.attributes = attributes
+        self.key = key
 
     def __repr__(self):
         """Return a string representation of the object."""
@@ -113,11 +113,14 @@ class IntegerElement(int):
 class StringElement(str):
     """NCBI Entrez XML element mapped to a string."""
 
-    def __new__(cls, value):
+    def __new__(cls, value, *args, **kwargs):
         """Create a StringElement."""
-        self = str.__new__(cls, value)
-        self.attributes = {}
-        return self
+        return str.__new__(cls, value)
+
+    def __init__(self, value, tag, attributes, key):
+        self.tag = tag
+        self.attributes = attributes
+        self.key = key
 
     def __repr__(self):
         """Return a string representation of the object."""
@@ -651,17 +654,15 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         data = "".join(self.data)
         self.data = []
-        value = StringElement(data)
-        value.tag = tag
         attributes = self.attributes
         self.attributes = None
         if tag in self.items:
             assert tag == "Item"
-            value.key = attributes["Name"]
+            key = attributes["Name"]
             del attributes["Name"]
         else:
-            value.key = tag
-        value.attributes.update(attributes)
+            key = tag
+        value = StringElement(data, tag, attributes, key)
         if element is None:
             self.record = element
         else:
@@ -715,10 +716,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         if self.data:
             value = int("".join(self.data))
             self.data = []
-            value = IntegerElement(value)
-            value.tag = tag
-            value.attributes.update(attributes)
-            value.key = key
+            value = IntegerElement(value, tag, attributes, key)
         else:
             value = NoneElement(tag, attributes, key)
         element = self.element
