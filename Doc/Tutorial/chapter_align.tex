@@ -1728,7 +1728,7 @@ two sequences:
 3.0
 \end{minted}
 
-To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+PairwiseAlignment+ objects returned:
+To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+Alignment+ objects returned:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -2055,7 +2055,7 @@ AATT-
 
 \subsubsection{Iterating over alignments}
 
-The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similar to a \verb+tuple+ or \verb+list+ of \verb+PairwiseAlignment+ objects, they are different in the sense that each \verb+PairwiseAlignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
+The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similar to a \verb+tuple+ or \verb+list+ of \verb+Alignment+ objects, they are different in the sense that each \verb+Alignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
 
 You can perform the following operations on \verb+alignments+:
 \begin{itemize}
@@ -2146,7 +2146,7 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 \end{itemize}
 
 \subsubsection{Alignment objects}
-The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
+The \verb+aligner.align+ method returns \verb+Alignment+ objects, each representing one alignment between the two sequences.
 
 %doctest
 \begin{minted}{pycon}
@@ -2157,7 +2157,7 @@ The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each r
 >>> alignments = aligner.align(target, query)
 >>> alignment = alignments[0]
 >>> alignment # doctest: +SKIP
-<Bio.Align.PairwiseAlignment object at 0x10204d250>
+<Bio.Align.Alignment object at 0x10204d250>
 \end{minted}
 
 Each alignment stores the alignment score:
@@ -2177,7 +2177,7 @@ as well as pointers to the sequences that were aligned:
 'GAT'
 \end{minted}
 
-Print the \verb+PairwiseAlignment+ object to show the alignment explicitly:
+Print the \verb+Alignment+ object to show the alignment explicitly:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -2512,13 +2512,13 @@ To get specific columns in the alignment, use
 'AA'
 \end{minted}
 
-Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+PairwiseAlignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
 
 Extracting the first 4 columns for the example alignment above gives:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, :4]  # doctest:+ELLIPSIS
-<Bio.Align.PairwiseAlignment object at ...>
+<Bio.Align.Alignment object at ...>
 >>> print(alignment[:, :4])
 GAACT
 |-|-
@@ -2531,7 +2531,7 @@ Similarly, extracting the last 3 columns gives:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Bio.Align.PairwiseAlignment object at ...>
+<Bio.Align.Alignment object at ...>
 >>> print(alignment[:, -3:])
 GAACT
   |-|
@@ -2544,7 +2544,7 @@ The column index can also be an iterable of integers:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Bio.Align.PairwiseAlignment object at ...>
+<Bio.Align.Alignment object at ...>
 >>> print(alignment[:, (1, 3, 0)])
 ACG
 --|
@@ -2629,7 +2629,7 @@ In addition to the \verb+format+ method, you can use Python's built-in \verb+for
 >>> print(format(alignment, "psl"))  #doctest: +NORMALIZE_WHITESPACE
 6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
 \end{minted}
-allowing \verb+PairwiseAlignment+ objects to be used in formatted (f-) strings in Python:
+allowing \verb+Alignment+ objects to be used in formatted (f-) strings in Python:
 \begin{minted}{pycon}
 >>> print(f"The alignment in PSL format is '{alignment:psl}'.")  #doctest: +NORMALIZE_WHITESPACE
 The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,

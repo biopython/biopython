@@ -15,7 +15,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.PairwiseAlignment.map."
+        "Install numpy if you want to use Bio.Align."
     ) from None
 
 from Bio import Align, SeqIO
@@ -4770,15 +4770,16 @@ T  12.0  16.5   7.0 145.0
     def test_target_query_properties(self):
         target = "ABCD"
         query = "XYZ"
-        alignment = Align.PairwiseAlignment(target, query, None, None)
+        sequences = [target, query]
+        alignment = Align.Alignment(sequences, None, None)
         self.assertEqual(alignment.sequences[0], target)
         self.assertEqual(alignment.sequences[1], query)
         self.assertEqual(alignment.target, target)
         self.assertEqual(alignment.query, query)
         target = "EFGH"
         query = "UVW"
-        alignment.target = target
-        alignment.query = query
+        sequences = [target, query]
+        alignment.sequences = sequences
         self.assertEqual(alignment.sequences[0], target)
         self.assertEqual(alignment.sequences[1], query)
         self.assertEqual(alignment.target, target)

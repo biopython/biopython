@@ -15,7 +15,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.PairwiseAlignment.map."
+        "Install numpy if you want to use Bio.Align.Alignment.map."
     ) from None
 
 from Bio.Seq import Seq
