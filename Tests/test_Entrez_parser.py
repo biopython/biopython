@@ -73,13 +73,14 @@ class GeneralTests(unittest.TestCase):
             basename, extension = os.path.splitext(filename)
             if extension != ".xml":
                 continue
-            if filename in ("biosample.xml", # DTD not specified in XML file
-                            "einfo3.xml",    # DTD incomplete
-                            "einfo4.xml",    # XML corrupted
-                            "epost2.xml",    # EPost with incorrect arguments
-                            "esummary8.xml", # ESummary with incorrect arguments
-                            "journals.xml",  # Missing XML declaration
-                           ):
+            if filename in (
+                "biosample.xml",  # DTD not specified in XML file
+                "einfo3.xml",     # DTD incomplete
+                "einfo4.xml",     # XML corrupted
+                "epost2.xml",     # XML returned by EPost with incorrect arguments
+                "esummary8.xml",  # XML returned by ESummary with incorrect arguments
+                "journals.xml",   # Missing XML declaration
+            ):
                 continue
             path = os.path.join(directory, filename)
             with open(path, "rb") as stream:
@@ -89,6 +90,7 @@ class GeneralTests(unittest.TestCase):
                 stream.seek(0)
                 pickled_record = pickle.load(stream)
             self.assertEqual(record, pickled_record)
+
 
 class EInfoTest(unittest.TestCase):
     """Tests for parsing XML output returned by EInfo."""
