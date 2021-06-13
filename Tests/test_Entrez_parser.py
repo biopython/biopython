@@ -75,11 +75,11 @@ class GeneralTests(unittest.TestCase):
                 continue
             if filename in (
                 "biosample.xml",  # DTD not specified in XML file
-                "einfo3.xml",     # DTD incomplete
-                "einfo4.xml",     # XML corrupted
-                "epost2.xml",     # XML returned by EPost with incorrect arguments
+                "einfo3.xml",  # DTD incomplete
+                "einfo4.xml",  # XML corrupted
+                "epost2.xml",  # XML returned by EPost with incorrect arguments
                 "esummary8.xml",  # XML returned by ESummary with incorrect arguments
-                "journals.xml",   # Missing XML declaration
+                "journals.xml",  # Missing XML declaration
             ):
                 continue
             path = os.path.join(directory, filename)
