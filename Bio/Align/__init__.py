@@ -2718,7 +2718,8 @@ class PairwiseAlignment(Alignment):
 
         sequences = [target, query]
         coordinates = numpy.array(path).transpose()
-        super().__init__(sequences, coordinates. score)
+        super().__init__(sequences, coordinates)
+        self.score = score
 
 
 if __name__ == "__main__":
