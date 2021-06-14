@@ -19,7 +19,6 @@ from Bio import SeqIO
 
 import requires_internet
 
-
 requires_internet.check()
 
 
@@ -128,7 +127,7 @@ class KEGGTests(unittest.TestCase):
         )
 
     def test_get_br_ko00002(self):
-        with kegg_get('br:ko00002', 'json') as handle:
+        with kegg_get("br:ko00002", "json") as handle:
             handle.read()
         self.assertEqual(handle.url, "http://rest.kegg.jp/get/br:ko00002/json")
 
