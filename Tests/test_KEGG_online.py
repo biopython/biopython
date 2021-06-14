@@ -19,6 +19,7 @@ from Bio import SeqIO
 
 import requires_internet
 
+
 requires_internet.check()
 
 
