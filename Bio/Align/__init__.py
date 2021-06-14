@@ -929,15 +929,18 @@ class Alignment:
     Internally, the alignment is stored as the path through the traceback
     matrix, i.e. a tuple of pairs of indices corresponding to the vertices of
     the path in the traceback matrix.
+
+    Commonly attributes (which may or may not be present):
+         - annotations - A dictionary with annotations describing the alignment;
+         - score       - The alignment score.
     """
 
-    def __init__(self, sequences, coordinates, score):
+    def __init__(self, sequences, coordinates):
         """Initialize a new Alignment object.
 
         Arguments:
          - sequences   - A list of the sequences that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
-         - score       - The alignment score.
 
         You would normally obtain an Alignment object by iterating
         over a PairwiseAlignments object.
@@ -946,7 +949,6 @@ class Alignment:
 
         self.sequences = sequences
         self.coordinates = coordinates
-        self.score = score
 
     @property
     def target(self):
@@ -1215,8 +1217,9 @@ class Alignment:
             if key.indices(len(self)) == (0, 2, 1):
                 sequences = self.sequences
                 coordinates = self.coordinates.copy()
-                score = self.score
-                return Alignment(sequences, coordinates, score)
+                alignment = Alignment(sequences, coordinates)
+                alignment.score = self.score
+                return alignment
             raise NotImplementedError
         sequences = list(self.sequences)
         coordinates = self.coordinates.copy()
@@ -1389,11 +1392,10 @@ class Alignment:
                                 n = len(sequence)
                                 coordinates[i, :] = n - coordinates[i, :]
                         sequences = self.sequences
+                        alignment = Alignment(sequences, coordinates)
                         if numpy.array_equal(coordinates, self.coordinates):
-                            score = self.score
-                        else:
-                            score = None
-                        return Alignment(sequences, coordinates, score)
+                            alignment.score = self.score
+                        return alignment
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
                 # try if we can use col as an iterable
@@ -1409,8 +1411,7 @@ class Alignment:
                 else:
                     sequences = [line.replace("-", "") for line in lines]
                     coordinates = self._infer_coordinates(lines)
-                    score = None
-                    alignment = Alignment(sequences, coordinates, score)
+                    alignment = Alignment(sequences, coordinates)
                     return alignment
             raise TypeError("first index must be an integer or slice")
         raise TypeError("alignment indices must be integers, slices, or tuples")
@@ -2297,7 +2298,7 @@ class Alignment:
         if strand1 != strand2:
             coordinates[1, :] = n2 - coordinates[1, :]
         sequences = [target, query]
-        alignment = Alignment(sequences, coordinates, None)
+        alignment = Alignment(sequences, coordinates)
         return alignment
 
     @property
@@ -2449,7 +2450,8 @@ class PairwiseAlignments:
         path = next(self.paths)
         self.index += 1
         coordinates = numpy.array(path).transpose()
-        alignment = Alignment(self.sequences, coordinates, self.score)
+        alignment = Alignment(self.sequences, coordinates)
+        alignment.score = self.score
         self.alignment = alignment
         return alignment
 
