@@ -2413,7 +2413,7 @@ class PairwiseAlignments:
          - paths - An iterator over the paths in the traceback matrix;
                    each path defines one alignment.
 
-        You would normally obtain an PairwiseAlignments object by calling
+        You would normally obtain a PairwiseAlignments object by calling
         aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
         """
         self.sequences = [seqA, seqB]
