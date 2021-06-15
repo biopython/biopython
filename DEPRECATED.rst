@@ -878,6 +878,9 @@ reversed in Release 1.79.
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
 
+The PairwiseAlignment class was deprecated in Release 1.80; please use the new
+Alignment class instead.
+
 Bio.Align.Generic
 -----------------
 This module which defined to original (Multiple-Sequence) Alignment class was

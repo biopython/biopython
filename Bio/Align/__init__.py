@@ -926,11 +926,10 @@ class MultipleSeqAlignment:
 class Alignment:
     """Represents a sequence alignment.
 
-    Internally, the alignment is stored as the path through the traceback
-    matrix, i.e. a tuple of pairs of indices corresponding to the vertices of
-    the path in the traceback matrix.
+    Internally, the alignment is stored as a numpy array containing the
+    sequence coordinates defining the alignment.
 
-    Commonly attributes (which may or may not be present):
+    Commonly used attributes (which may or may not be present):
          - annotations - A dictionary with annotations describing the alignment;
          - score       - The alignment score.
     """
@@ -2716,6 +2715,13 @@ class PairwiseAlignment(Alignment):
         """
         import numpy
 
+        warnings.warn(
+            "The PairwiseAlignment class is deprecated; please use the "
+            "Alignment class instead.  Note that the coordinates attribute of "
+            "an Alignment object is a numpy array and the transpose of the "
+            "path attribute of a PairwiseAlignment object.",
+            BiopythonDeprecationWarning,
+        )
         sequences = [target, query]
         coordinates = numpy.array(path).transpose()
         super().__init__(sequences, coordinates)
