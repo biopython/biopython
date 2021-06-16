@@ -871,9 +871,13 @@ The ``add_sequence`` method of the MultipleSeqAlignment was deprecated in
 Release 1.57 and should have been removed in Release 1.69. It was actually
 removed in Release 1.79.
 
-The ``format`` method of the MultipleSeqAlignment class and the
-PairwiseAlignment class were deprecated in Release 1.76. This decision was
-reversed in Release 1.79.
+The ``format`` method of the MultipleSeqAlignment class was deprecated in
+Release 1.76, and removed in Release 1.79. Use the ``__format__`` method via
+the ``format`` function or an f-string instead.
+
+The ``format`` method of the PairwiseAlignment class was deprecated in
+Release 1.76. This decision was reversed in Release 1.79, as the format
+method can accept additional arguments.
 
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
