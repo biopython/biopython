@@ -879,9 +879,6 @@ The ``format`` method of the PairwiseAlignment class was deprecated in
 Release 1.76. This decision was reversed in Release 1.79, as the format
 method can accept additional arguments.
 
-The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
-was deprecated in Release 1.79.
-
 Bio.Align.Generic
 -----------------
 This module which defined to original (Multiple-Sequence) Alignment class was
