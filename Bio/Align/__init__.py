@@ -1235,6 +1235,10 @@ class Alignment:
             if row < 0 or row >= n:
                 raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
             sequence = sequences[row]
+            try:
+                sequence = sequence.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
             line = ""
             steps = numpy.diff(coordinates, 1)
             gaps = steps[row] == 0  # seriously, flake8??
@@ -1939,8 +1943,8 @@ class Alignment:
         return self.format()
 
     def __len__(self):
-        """Return the number of sequences in the alignment, which is always 2."""
-        return 2
+        """Return the number of sequences in the alignment."""
+        return len(self.sequences)
 
     @property
     def shape(self):
