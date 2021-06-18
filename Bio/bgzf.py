@@ -461,7 +461,7 @@ def _load_bgzf_block(handle, text_mode=False):
             if subfield_len != 2:
                 raise ValueError("Wrong BC payload length")
             if block_size is not None:
-                raise AttributeError("Two BC subfields?")
+                raise ValueError("Two BC subfields?")
             block_size = struct.unpack("<H", subfield_data)[0] + 1  # uint16_t
     assert x_len == extra_len, (x_len, extra_len)
     if block_size is None:
@@ -568,7 +568,7 @@ class BgzfReader:
             raise AttributeError("Both filename and fileobj are defined")
         if fileobj:
             if "b" not in fileobj.mode.lower():
-                raise AttributeError("fileobj not open in binary mode")
+                raise ValueError("fileobj not open in binary mode")
             else:
                 handle = fileobj
         else:
@@ -776,7 +776,7 @@ class BgzfWriter:
             raise AttributeError("Both filename and fileobj are defined")
         if fileobj:
             if "b" not in fileobj.mode.lower():
-                raise AttributeError("fileobj not open in binary mode")
+                raise ValueError("fileobj not open in binary mode")
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
