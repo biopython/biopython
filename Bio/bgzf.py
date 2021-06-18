@@ -458,11 +458,14 @@ def _load_bgzf_block(handle, text_mode=False):
         subfield_data = handle.read(subfield_len)
         x_len += subfield_len + 4
         if subfield_id == _bytes_BC:
-            assert subfield_len == 2, "Wrong BC payload length"
-            assert block_size is None, "Two BC subfields?"
+            if subfield_len != 2:
+                raise ValueError("Wrong BC payload length")
+            if block_size is not None:
+                raise AttributeError("Two BC subfields?")
             block_size = struct.unpack("<H", subfield_data)[0] + 1  # uint16_t
     assert x_len == extra_len, (x_len, extra_len)
-    assert block_size is not None, "Missing BC, this isn't a BGZF file!"
+    if block_size is None:
+        raise ValueError("Missing BC, this isn't a BGZF file!")
     # Now comes the compressed data, CRC, and length of uncompressed data.
     deflate_size = block_size - 1 - extra_len - 19
     d = zlib.decompressobj(-15)  # Negative window size means no headers
@@ -561,10 +564,13 @@ class BgzfReader:
         # Must open the BGZF file in binary mode, but we may want to
         # treat the contents as either text or binary (unicode or
         # bytes under Python 3)
+        if filename and fileobj:
+            raise AttributeError("Both filename and fileobj are defined")
         if fileobj:
-            assert filename is None
-            handle = fileobj
-            assert "b" in handle.mode.lower()
+            if "b" not in fileobj.mode.lower():
+                raise AttributeError("fileobj not open in binary mode")
+            else:
+                handle = fileobj
         else:
             if "w" in mode.lower() or "a" in mode.lower():
                 raise ValueError(
@@ -648,7 +654,8 @@ class BgzfReader:
             # Don't need to load the block if already there
             # (this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
-            assert start_offset == self._block_start_offset
+            if start_offset != self._block_start_offset:
+                raise ValueError("start_offset not loaded correctly")
         if within_block > len(self._buffer):
             if not (within_block == 0 and len(self._buffer) == 0):
                 raise ValueError(
@@ -677,7 +684,8 @@ class BgzfReader:
                     self._within_block_offset : self._within_block_offset + size
                 ]
                 self._within_block_offset += size
-                assert data  # Must be at least 1 byte
+                if not data:
+                    raise ValueError("Must be at least 1 byte")
                 result += data
                 break
             else:
@@ -764,8 +772,11 @@ class BgzfWriter:
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
         """Initilize the class."""
+        if filename and fileobj:
+            raise AttributeError("Both filename and fileobj are defined")
         if fileobj:
-            assert filename is None
+            if "b" not in fileobj.mode.lower():
+                raise AttributeError("fileobj not open in binary mode")
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
@@ -784,7 +795,8 @@ class BgzfWriter:
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
-        assert len(block) <= 65536
+        if len(block) > 65536:
+            raise ValueError(f"{len(block)} Block length > 65536")
         # Giving a negative window bits means no gzip/zlib headers,
         # -15 used in samtools
         c = zlib.compressobj(
