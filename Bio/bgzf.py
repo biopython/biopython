@@ -706,7 +706,8 @@ class BgzfReader:
                 data = self._buffer[self._within_block_offset :]
                 # Must now load the next block to ensure tell() works
                 self._load_block()  # will reset offsets
-                assert data
+                if not data:
+                    raise ValueError("Must be at least 1 byte")
                 result += data
                 break
             else:
