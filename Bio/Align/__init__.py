@@ -930,8 +930,11 @@ class Alignment:
     sequence coordinates defining the alignment.
 
     Commonly used attributes (which may or may not be present):
-         - annotations - A dictionary with annotations describing the alignment;
-         - score       - The alignment score.
+         - annotations        - A dictionary with annotations describing the
+                                alignment;
+         - column_annotations - A dictionary with annotations describing each
+                                column in the alignment;
+         - score              - The alignment score.
     """
 
     def __init__(self, sequences, coordinates):
@@ -1398,6 +1401,20 @@ class Alignment:
                         alignment = Alignment(sequences, coordinates)
                         if numpy.array_equal(coordinates, self.coordinates):
                             alignment.score = self.score
+                        try:
+                            column_annotations = self.column_annotations
+                        except AttributeError:
+                            pass
+                        else:
+                            alignment.column_annotations = {}
+                            for key, value in column_annotations.items():
+                                value = value[start:end]
+                                try:
+                                    value = value.copy()
+                                except AttributeError:
+                                    # immutable tuples like str, tuple
+                                    pass
+                                alignment.column_annotations[key] = value
                         return alignment
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
@@ -1415,6 +1432,20 @@ class Alignment:
                     sequences = [line.replace("-", "") for line in lines]
                     coordinates = self._infer_coordinates(lines)
                     alignment = Alignment(sequences, coordinates)
+                    try:
+                        column_annotations = self.column_annotations
+                    except AttributeError:
+                        pass
+                    else:
+                        alignment.column_annotations = {}
+                        for key, value in column_annotations.items():
+                            value = value[start:end]
+                            try:
+                                value = value.copy()
+                            except AttributeError:
+                                # immutable tuples like str, tuple
+                                pass
+                            alignment.column_annotations[key] = value
                     return alignment
             raise TypeError("first index must be an integer or slice")
         raise TypeError("alignment indices must be integers, slices, or tuples")
