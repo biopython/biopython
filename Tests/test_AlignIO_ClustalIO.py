@@ -10,7 +10,7 @@ from io import StringIO
 from Bio.AlignIO.ClustalIO import ClustalIterator
 from Bio.AlignIO.ClustalIO import ClustalWriter
 
-# This is a truncated version of the example in Tests/cw02.aln
+# This is a truncated version of the example in Tests/clustalw.aln
 # Notice the inclusion of sequence numbers (right hand side)
 aln_example1 = """\
 CLUSTAL W (1.81) multiple sequence alignment

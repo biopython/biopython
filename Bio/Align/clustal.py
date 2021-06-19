@@ -9,41 +9,44 @@
 You are expected to use this module via the Bio.Align functions (or the
 Bio.SeqIO functions if you are interested in the sequences only).
 """
+import Bio
 from Bio.Align import Alignment
+from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
-class ClustalWriter:
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
+
+    def write_header(self, alignments):
+        """Use this to write the file header."""
+        stream = self.stream
+        try:
+            program = alignments.program
+        except AttributeError:
+            program = "Biopython"
+            version = Bio.__version__
+        else:
+            try:
+                version = alignments.version
+            except AttributeError:
+                version = ""
+        line = "%s %s multiple sequence alignment\n" % (program, version)
+        stream.write(line)
+        stream.write("\n")
+        stream.write("\n")
+
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
-        if len(alignment) == 0:
+        nseqs, length = alignment.shape
+        if nseqs == 0:
             raise ValueError("Must have at least one sequence")
-        if alignment.get_alignment_length() == 0:
-            # This doubles as a check for an alignment object
+        if length == 0:
             raise ValueError("Non-empty sequences are required")
 
-        try:
-            version = str(alignment._version)
-        except AttributeError:
-            version = ""
-        if not version:
-            version = "1.81"
-        if version.startswith("2."):
-            # e.g. 2.0.x
-            output = "CLUSTAL %s multiple sequence alignment\n\n\n" % version
-        else:
-            # e.g. 1.81 or 1.83
-            output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
-
-        cur_char = 0
-        max_length = len(alignment[0])
-
-        if max_length <= 0:
-            raise ValueError("Non-empty sequences are required")
-
+        stream = self.stream
         try:
             column_annotations = alignment.column_annotations
         except AttributeError:
@@ -51,52 +54,55 @@ class ClustalWriter:
         else:
             consensus = column_annotations.get("clustal_consensus")
 
-        # keep displaying sequences until we reach the end
-        while cur_char != max_length:
-            # calculate the number of sequences to show, which will
-            # be less if we are at the end of the sequence
-            if (cur_char + 50) > max_length:
-                show_num = max_length - cur_char
+        gapped_sequences = list(alignment)
+        names = []
+        for i, sequence in enumerate(alignment.sequences):
+            try:
+                name = sequence.id
+            except AttributeError:
+                name = "sequence_%d" % i
             else:
-                show_num = 50
+                # when we output, we do a nice 80 column output, although
+                # this may result in truncation of the ids.  Also, make sure
+                # we don't get any spaces in the record identifier when output
+                # in the file by replacing them with underscores.
+                name = name[:30].replace(" ", "_")
+            name = name.ljust(36)
+            names.append(name)
 
-            # go through all of the records and print out the sequences
-            # when we output, we do a nice 80 column output, although this
-            # may result in truncation of the ids.
-            for record in alignment:
-                # Make sure we don't get any spaces in the record
-                # identifier when output in the file by replacing
-                # them with underscores:
-                line = record.id[0:30].replace(" ", "_").ljust(36)
-                line += str(record.seq[cur_char : (cur_char + show_num)])
-                output += line + "\n"
+        start = 0
+        while start != length:
+            # calculate the number of letters to show, which will
+            # be less if we are at the end of the alignment.
+            stop = start + 50
+            if stop > length:
+                stop = length
+
+            for name, gapped_sequence in zip(names, gapped_sequences):
+                line = "%s%s\n" % (name, gapped_sequence[start:stop])
+                stream.write(line)
 
             # now we need to print out the star info, if we've got it
             if consensus is not None:
-                output += (
-                    (" " * 36) + consensus[cur_char : (cur_char + show_num)] + "\n"
-                )
+                line = " " * 36 + consensus[start:stop] + "\n"
+                stream.write(line)
 
-            output += "\n"
-            cur_char += show_num
-
-        # Want a trailing blank new line in case the output is concatenated
-        self.stream.write(output + "\n")
+            stream.write("\n")
+            start = stop
 
 
-class Iterator:
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    _header = None  # for caching lines between __next__ calls
-
-    def __init__(self, stream):
+    def __init__(self, source):
         """Create an Iterator object.
 
         Arguments:
-         - stream   - input data or file name
+         - source   - input data or file name
 
         """
-        self.stream = stream
+        super().__init__(source, mode="t", fmt="Clustal")
+        stream = self.stream
         try:
             line = next(stream)
         except StopIteration:
@@ -123,12 +129,8 @@ class Iterator:
         else:
             self.version = None
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
+    def parse(self, stream):
         """Parse the next alignment from the stream."""
-        stream = self.stream
         if stream is None:
             raise StopIteration
 
@@ -186,7 +188,7 @@ class Iterator:
                 if index:
                     break
         else:
-            raise ValueError("Failed to find end of first block")
+            raise StopIteration
 
         assert index is not None
 
@@ -256,5 +258,4 @@ class Iterator:
                 )
             alignment.column_annotations = {}
             alignment.column_annotations["clustal_consensus"] = consensus
-        self.stream = None
-        return alignment
+        yield alignment
