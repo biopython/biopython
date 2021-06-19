@@ -937,7 +937,7 @@ class Alignment:
          - score              - The alignment score.
     """
 
-    def __init__(self, sequences, coordinates):
+    def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
 
         Arguments:
