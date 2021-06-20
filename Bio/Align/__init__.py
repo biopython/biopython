@@ -1176,7 +1176,7 @@ class Alignment:
         >>> alignment[:, 5]
         '-G'
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
-        <Bio.Align.Alignment object at ...>
+        <Bio.Align.Alignment object (2 rows x 8 columns) at 0x...>
         >>> print(alignment[:, 1:])
         ACCGG-TTT
          |-||-||-
@@ -1972,6 +1972,37 @@ class Alignment:
         Wrapper for self.format() .
         """
         return self.format()
+
+    def __repr__(self):
+        """Return a representation of the object for debugging.
+
+        The representation cannot be used with eval() to recreate the object,
+        which is usually possible with simple python objects.  For example:
+
+        <Bio.Align.Alignment object (2 rows x 14 columns) at 0x10403d850>
+
+        The hex string is the memory address of the object and can be used to
+        distinguish different Alignment objects.  See help(id) for more
+        information.
+
+        >>> import numpy
+        >>> from Bio.Align import Alignment
+        >>> alignment = Alignment(("ACCGT", "ACGT"),
+        ...                       coordinates = numpy.array([[0, 2, 3, 5],
+        ...                                                  [0, 2, 2, 4],
+        ...                                                 ]))
+        >>> print(alignment)
+        ACCGT
+        ||-||
+        AC-GT
+        <BLANKLINE>
+        >>> alignment  # doctest:+ELLIPSIS
+        <Bio.Align.Alignment object (2 rows x 5 columns) at 0x...>
+        """
+        n, m = self.shape
+        return "<%s.%s object (%i rows x %i columns) at 0x%x>" % (
+            self.__module__, self.__class__.__name__, n, m, id(self),
+        )
 
     def __len__(self):
         """Return the number of sequences in the alignment."""
