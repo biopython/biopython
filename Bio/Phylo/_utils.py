@@ -476,13 +476,14 @@ def draw(
     else:
         if name:
             axes.set_title(name)
-        else:
-            if title:
-                axes.set_title(title)
+        elif title:
+            axes.set_title(title)
+            
     if xlabel is None:
         axes.set_xlabel("branch length")
     else:
         axes.set_xlabel(xlabel)
+        
     if ylabel is None:
         axes.set_ylabel("taxa")
     else:
