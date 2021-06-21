@@ -475,19 +475,16 @@ def draw(
         pass
     else:
         if name:
-            axes.set_title(name)
-        elif title:
-            axes.set_title(title)
-            
+            title = name
+        if title:
+            title = title
+        axes.set_title(title)
     if xlabel is None:
-        axes.set_xlabel("branch length")
-    else:
-        axes.set_xlabel(xlabel)
-        
+        xlabel = 'branch length'
+    axes.set_xlabel(xlabel)
     if ylabel is None:
-        axes.set_ylabel("taxa")
-    else:
-        axes.set_xlabel(ylabel)
+        ylabel = 'taxa'
+    axes.set_ylabel(ylabel)
     # Add margins around the tree to prevent overlapping the axes
     xmax = max(x_posns.values())
     axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
