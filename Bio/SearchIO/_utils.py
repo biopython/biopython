@@ -132,7 +132,7 @@ def optionalcascade(cont_attr, item_attr, doc=""):
     def getter(self):
         if self._items:
             # don't use self._items here, so QueryResult can use this property
-            # as well (the underlying OrderedDict is not integer-indexable)
+            # as well (the underlying dict is not integer-indexable)
             return getattr(self[0], item_attr)
         else:
             return getattr(self, cont_attr)

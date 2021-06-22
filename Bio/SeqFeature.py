@@ -53,8 +53,6 @@ Classes:
 """
 import functools
 
-from collections import OrderedDict
-
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
@@ -85,7 +83,7 @@ class SeqFeature:
      - qualifiers - A dictionary of qualifiers on the feature. These are
        analogous to the qualifiers from a GenBank feature table. The keys of
        the dictionary are qualifier names, the values are the qualifier
-       values. As of Biopython 1.69 this is an ordered dictionary.
+       values.
 
     """
 
@@ -162,9 +160,9 @@ class SeqFeature:
             # TODO - Deprecation warning
             self.strand = strand
         self.id = id
-        if qualifiers is None:
-            qualifiers = OrderedDict()
-        self.qualifiers = qualifiers
+        self.qualifiers = {}
+        if qualifiers is not None:
+            self.qualifiers.update(qualifiers)
         if sub_features is not None:
             raise TypeError("Rather than sub_features, use a CompoundFeatureLocation")
         if ref is not None:
@@ -309,7 +307,7 @@ class SeqFeature:
             type=self.type,
             location_operator=self.location_operator,
             id=self.id,
-            qualifiers=OrderedDict(self.qualifiers.items()),
+            qualifiers=self.qualifiers.copy(),
         )
 
     def _flip(self, length):
@@ -327,7 +325,7 @@ class SeqFeature:
             type=self.type,
             location_operator=self.location_operator,
             id=self.id,
-            qualifiers=OrderedDict(self.qualifiers.items()),
+            qualifiers=self.qualifiers.copy(),
         )
 
     def extract(self, parent_sequence, references=None):

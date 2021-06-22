@@ -14,6 +14,10 @@ The latest news is at the top of this file.
 Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 "status" information for sequence features as ``SeqFeature`` qualifiers.
 
+Because dict retains the item order by default since Python3.6, all instaces of
+``collections.OrderedDict`` have been replaced by either standard ``dict`` or
+where appropriate by ``collections.defaultsdict``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 

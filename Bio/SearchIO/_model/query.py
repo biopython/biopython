@@ -8,7 +8,6 @@
 
 from copy import deepcopy
 from itertools import chain
-from collections import OrderedDict
 
 from Bio.SearchIO._utils import optionalcascade
 
@@ -193,7 +192,7 @@ class QueryResult(_BaseSearchObject):
         # default values
         self._id = id
         self._hit_key_function = hit_key_function or _hit_key_func
-        self._items = OrderedDict()
+        self._items = {}
         self._description = None
         self.__alt_hit_ids = {}
         self.program = "<unknown program>"
@@ -717,10 +716,7 @@ class QueryResult(_BaseSearchObject):
 
         # if sorting is in-place, don't create a new QueryResult object
         if in_place:
-            new_hits = OrderedDict()
-            for hit in sorted_hits:
-                new_hits[self._hit_key_function(hit)] = hit
-            self._items = new_hits
+            self._items = {self._hit_key_function(hit): hit for hit in sorted_hits}
         # otherwise, return a new sorted QueryResult object
         else:
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
