@@ -476,8 +476,6 @@ def draw(
     else:
         if name:
             title = name
-        if title:
-            title = title
         axes.set_title(title)
     if xlabel is None:
         xlabel = 'branch length'
