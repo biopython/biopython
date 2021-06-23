@@ -1969,8 +1969,10 @@ class Alignment:
     def __str__(self):
         """Return a string representation of the Alignment object.
 
-        Wrapper for self.format() .
+        Wrapper for self.format().
         """
+        if len(self.sequences) > 2:
+            raise NotImplementedError("__str__ is currently implemented for pairwise alignments only")
         return self.format()
 
     def __repr__(self):
