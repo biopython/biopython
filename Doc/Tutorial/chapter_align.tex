@@ -1480,13 +1480,11 @@ version 1.72). Both can perform global and local alignments and offer numerous
 options to change the alignment parameters. Although \verb|pairwise2| has gained
 some speed and memory enhancements recently, the new \verb|PairwiseAligner| is
 much faster; so if you need to make many alignments with larger sequences, the
-latter would be the tool to choose. \verb|pairwise2|, on the contrary, is also
-able to align lists, which can be useful if your sequences do not consist of
-single characters only. 
+latter would be the tool to choose.
 
 Given that the parameters and sequences are the same, both aligners will return
-the same alignments and alignment score (if the number of alignments is too high
-they may return different subsets of all valid alignments).
+the same alignments and alignment score (if the number of alignments is too
+high, \verb|pairwise2| may return a subset of all valid alignments).
 
 \subsection{pairwise2}
 \label{sec:pairwise2}
