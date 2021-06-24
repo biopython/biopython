@@ -242,9 +242,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     i = 0
 
         records = [SeqRecord(Seq(seq), id=seqid, description=seqid) for (seqid, seq) in zip(ids, seqs)]
-        alignment = Alignment(records, None)
-        coordinates = alignment._infer_coordinates(aligned_seqs)
-        alignment.coordinates = coordinates
+        coordinates = Alignment._infer_coordinates(aligned_seqs)
+        alignment = Alignment(records, coordinates)
         # TODO - Handle alignment annotation better, for now
         # mimic the old parser in Bio.Clustalw
         if consensus:

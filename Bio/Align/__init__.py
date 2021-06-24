@@ -937,19 +937,57 @@ class Alignment:
          - score              - The alignment score.
     """
 
+    @classmethod
+    def _infer_coordinates(cls, lines):
+        """Infer the coordinates from a printed alignment."""
+        import numpy
+
+        n = len(lines)
+        m = len(lines[0])
+        for line in lines:
+            assert m == len(line)
+        path = []
+        if m > 0:
+            indices = [0] * n
+            current_state = [None] * n
+            for i in range(m):
+                next_state = [line[i] != "-" for line in lines]
+                if next_state == current_state:
+                    step += 1  # noqa: F821
+                else:
+                    indices = [
+                        index + step if state else index
+                        for index, state in zip(indices, current_state)
+                    ]
+                    path.append(indices)
+                    step = 1
+                    current_state = next_state
+            indices = [
+                index + step if state else index
+                for index, state in zip(indices, current_state)
+            ]
+            path.append(indices)
+        coordinates = numpy.array(path).transpose()
+        return coordinates
+
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
 
         Arguments:
          - sequences   - A list of the sequences that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
-
-        You would normally obtain an Alignment object by iterating
-        over a PairwiseAlignments object.
+                         If None (the default value), assume that the sequences
+                         align to each other without any gaps.
         """
         import numpy
 
         self.sequences = sequences
+        if coordinates is None:
+            lengths = set([len(sequence) for sequence in sequences])
+            if len(lengths) != 1:
+                raise ValueError("sequences must have the same length if coordinates is None")
+            length = lengths.pop()
+            coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
     @property
@@ -1165,38 +1203,6 @@ class Alignment:
             BiopythonDeprecationWarning,
         )
         self.coordinates = numpy.array(value).transpose()
-
-    def _infer_coordinates(self, lines):
-        """Infer the coordinates from a printed alignment."""
-        import numpy
-
-        n = len(lines)
-        m = len(lines[0])
-        for line in lines:
-            assert m == len(line)
-        path = []
-        if m > 0:
-            indices = [0] * n
-            current_state = [None] * n
-            for i in range(m):
-                next_state = [line[i] != "-" for line in lines]
-                if next_state == current_state:
-                    step += 1  # noqa: F821
-                else:
-                    indices = [
-                        index + step if state else index
-                        for index, state in zip(indices, current_state)
-                    ]
-                    path.append(indices)
-                    step = 1
-                    current_state = next_state
-            indices = [
-                index + step if state else index
-                for index, state in zip(indices, current_state)
-            ]
-            path.append(indices)
-        coordinates = numpy.array(path).transpose()
-        return coordinates
 
     def __getitem__(self, key):
         """Return self[key].
@@ -2061,7 +2067,7 @@ class Alignment:
         return self.format()
 
     def __repr__(self):
-        """Return a representation of the object for debugging.
+        """Return a representation of the alignment, including its shape.
 
         The representation cannot be used with eval() to recreate the object,
         which is usually possible with simple python objects.  For example:
