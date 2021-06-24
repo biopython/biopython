@@ -37,7 +37,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write("\n")
         stream.write("\n")
 
-
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
         nseqs, length = alignment.shape
@@ -149,8 +148,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # Sequence consensus line...
                 assert len(ids) > 0
                 assert index is not None
-                length = len(aligned_seq)
-                consensus = line[index:index+length]
+                length = len(aligned_seq)  # noqa: F821
+                consensus = line[index : index + length]
                 break
             elif line.strip():
                 # Sequences identifier...
@@ -206,7 +205,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if line.startswith(" "):  # Sequence consensus line
                 assert index is not None
                 length = len(aligned_seq)
-                consensus += line[index:index+length]
+                consensus += line[index : index + length]
             elif not line.strip():  # Blank line
                 continue
             else:
