@@ -999,17 +999,57 @@ class Alignment:
     def __eq__(self, other):
         """Check if two Alignment objects specify the same alignment."""
         import numpy
+        from itertools import zip_longest
 
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left != right:
+                return False
         return numpy.array_equal(self.coordinates, other.coordinates)
 
     def __ne__(self, other):
         """Check if two Alignment objects have different alignments."""
         import numpy
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left != right:
+                return True
 
         return not numpy.array_equal(self.coordinates, other.coordinates)
 
     def __lt__(self, other):
         """Check if self should come before other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return True
+            if left > right:
+                return False
         for left, right in zip(
             self.coordinates.transpose(), other.coordinates.transpose()
         ):
@@ -1022,6 +1062,21 @@ class Alignment:
 
     def __le__(self, other):
         """Check if self should come before or is equal to other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return True
+            if left > right:
+                return False
         for left, right in zip(
             self.coordinates.transpose(), other.coordinates.transpose()
         ):
@@ -1034,6 +1089,21 @@ class Alignment:
 
     def __gt__(self, other):
         """Check if self should come after other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return False
+            if left > right:
+                return True
         for left, right in zip(
             self.coordinates.transpose(), other.coordinates.transpose()
         ):
@@ -1046,6 +1116,21 @@ class Alignment:
 
     def __ge__(self, other):
         """Check if self should come after or is equal to other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return False
+            if left > right:
+                return True
         for left, right in zip(
             self.coordinates.transpose(), other.coordinates.transpose()
         ):

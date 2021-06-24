@@ -22,7 +22,7 @@ from Bio.Seq import Seq, reverse_complement
 from Bio.SeqUtils import GC
 
 
-class TestAlignmentMethods(unittest.TestCase):
+class TestPairwiseAlignment(unittest.TestCase):
     def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             repr(alignment),
@@ -443,6 +443,49 @@ T  12.0  16.5   7.0 145.0
         self.assertEqual(alignment.sequences[1], query)
         self.assertEqual(alignment.target, target)
         self.assertEqual(alignment.query, query)
+
+
+class TestMultipleAlignment(unittest.TestCase):
+    def setUp(self):
+        from Bio.Align import clustal
+
+        path = "Clustalw/hedgehog.aln"
+        with open(path) as stream:
+            alignments = clustal.AlignmentIterator(stream)
+            self.alignment = next(alignments)
+
+    def tearDown(self):
+        del self.alignment
+
+    def test_target_query_properties(self):
+        target = "ABCD"
+        query = "XYZ"
+        alignment = self.alignment
+        with self.assertRaises(ValueError):
+            alignment.target
+        with self.assertRaises(ValueError):
+            alignment.query
+        with self.assertRaises(ValueError):
+            alignment.target = target
+        with self.assertRaises(ValueError):
+            alignment.query = query
+
+    def test_comparison(self):
+        alignment = self.alignment
+        self.assertEqual(alignment.shape, (5, 447))
+        sequences = alignment.sequences
+        coordinates = numpy.array(alignment.coordinates)
+        other = Align.Alignment(sequences, coordinates)
+        self.assertEqual(alignment, other)
+        self.assertLessEqual(alignment, other)
+        self.assertGreaterEqual(other, alignment)
+        coordinates = numpy.array([[0, len(sequence)] for sequence in sequences])
+        other = Align.Alignment(sequences, coordinates)
+        self.assertNotEqual(alignment, other)
+        self.assertLess(alignment, other)
+        self.assertLessEqual(alignment, other)
+        self.assertGreater(other, alignment)
+        self.assertGreaterEqual(other, alignment)
 
 
 if __name__ == "__main__":
