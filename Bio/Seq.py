@@ -20,6 +20,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 import array
+import numbers
 import warnings
 
 from abc import ABC
@@ -425,7 +426,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> mutable_seq[5:8]
         MutableSeq('ACG')
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # Return a single letter as a string
             return chr(self._data[index])
         else:
@@ -479,7 +480,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq('ATG') * 2
         MutableSeq('ATGATG')
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self._data * other)
 
@@ -490,7 +491,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> 2 * Seq('ATG')
         Seq('ATGATG')
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self._data * other)
 
@@ -519,7 +520,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> id(seq) == id(seq2)
         False
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self._data * other)
 
@@ -2591,7 +2592,7 @@ class MutableSeq(_SeqAbstractBaseClass):
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # Replacing a single letter with a new string
             self._data[index] = ord(value)
         else:
