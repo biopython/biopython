@@ -1322,7 +1322,10 @@ class Alignment:
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 n = len(sequences[i])
                 coordinates[i, :] = n - coordinates[i, :]
-                sequences[i] = reverse_complement(sequences[i])
+                try:  # reverse_complement function does not work on SeqRecord
+                    sequences[i] = sequences[i].reverse_complement()
+                except AttributeError:  # for str
+                    sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
             n, m = self.shape
             row = key
@@ -1335,6 +1338,7 @@ class Alignment:
                 sequence = sequence.seq  # SeqRecord confusion
             except AttributeError:
                 pass
+            sequence = str(sequence)
             line = ""
             steps = numpy.diff(coordinates, 1)
             gaps = steps[row] == 0  # seriously, flake8??
@@ -1383,6 +1387,11 @@ class Alignment:
                     return line
                 if isinstance(col, slice):
                     sequence = sequences[row]
+                    try:
+                        sequence = sequence.seq  # SeqRecord confusion
+                    except AttributeError:
+                        pass
+                    sequence = str(sequence)
                     start_index, stop_index, step = col.indices(m)
                     if start_index < stop_index and step == 1:
                         steps = numpy.diff(coordinates, 1)
@@ -1443,8 +1452,6 @@ class Alignment:
                 else:
                     return line
             if isinstance(row, slice):
-                if row.indices(len(self)) != (0, 2, 1):
-                    raise NotImplementedError
                 n, m = self.shape
                 if isinstance(col, int):
                     if col < 0:
@@ -1467,12 +1474,25 @@ class Alignment:
                         raise IndexError("column index %d is out of bounds" % col)
                     offset = index - col
                     line = ""
-                    for s, e, sequence in zip(starts, ends, sequences):
+                    start, stop, step = row.indices(n)
+                    for i in range(start, stop, step):
+                        s = starts[i]
+                        e = ends[i]
                         if s == e:
                             line += "-"
                         else:
+                            sequence = sequences[i]
+                            # SeqRecord __getitem__ does not allow numpy int
+                            try:
+                                sequence = sequence.seq
+                            except AttributeError:
+                                pass
+                            # Seq __getitem__ does not allow numpy int
+                            sequence = str(sequence)
                             line += sequence[e - offset]
                     return line
+                if row.indices(len(self)) != (0, 2, 1):
+                    raise NotImplementedError
                 if isinstance(col, slice):
                     start_index, stop_index, step = col.indices(m)
                     if start_index < stop_index and step == 1:

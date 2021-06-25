@@ -547,7 +547,7 @@ class TestMultipleAlignment(unittest.TestCase):
     def setUp(self):
         from Bio.Align import clustal
 
-        path = "Clustalw/hedgehog.aln"
+        path = "Clustalw/opuntia.aln"
         with open(path) as stream:
             alignments = clustal.AlignmentIterator(stream)
             self.alignment = next(alignments)
@@ -570,7 +570,7 @@ class TestMultipleAlignment(unittest.TestCase):
 
     def test_comparison(self):
         alignment = self.alignment
-        self.assertEqual(alignment.shape, (5, 447))
+        self.assertEqual(alignment.shape, (7, 156))
         sequences = alignment.sequences
         coordinates = numpy.array(alignment.coordinates)
         other = Align.Alignment(sequences, coordinates)
@@ -583,6 +583,111 @@ class TestMultipleAlignment(unittest.TestCase):
         self.assertLessEqual(alignment, other)
         self.assertGreater(other, alignment)
         self.assertGreaterEqual(other, alignment)
+
+    def check_indexing_slicing(self, alignment, msg):
+        self.assertEqual(
+            repr(alignment),
+            "<Bio.Align.Alignment object (7 rows x 156 columns) at 0x%x>"
+            % id(alignment),
+        )
+        # self.assertEqual(str(alignment), ..., msg=msg)  # FIXME
+        self.assertEqual(alignment[0], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[-2], "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA", msg=msg)
+        self.assertEqual(alignment[-1], "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, :], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, :], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[-2, :], "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA", msg=msg)
+        self.assertEqual(alignment[-1, :], "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[:, 0], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, 1], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 2], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, 3], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 4], "CCCCCCC", msg=msg)
+        self.assertEqual(alignment[:, 5], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 6], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, 7], "TTTATTT", msg=msg)
+        self.assertEqual(alignment[:, 8], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 9], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 10], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, 11], "GGGGGGG", msg=msg)
+        self.assertEqual(alignment[:, 12], "AAAAGGG", msg=msg)
+        self.assertEqual(alignment[:, -156], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, -155], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, -154], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, -9], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, -8], "GGGGGAG", msg=msg)
+        self.assertEqual(alignment[:, -7], "TTTTTTT", msg=msg)
+        self.assertEqual(alignment[:, -6], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, -5], "CCCCCCC", msg=msg)
+        self.assertEqual(alignment[:, -4], "CCCCCCC", msg=msg)
+        self.assertEqual(alignment[:, -3], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[:, -2], "GGGGGGG", msg=msg)
+        self.assertEqual(alignment[:, -1], "AAAAAAA", msg=msg)
+        self.assertEqual(alignment[0, range(0, 156, 2)], "TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTCCATTAATTTAAATGTATTAAATCTGTTGGACG", msg=msg)
+        self.assertEqual(alignment[1, range(1, 156, 2)], "AAATAGAGGAGGAAAGAAGGAGAGAAAAA----TTTTAATCTAAACAAAAAAACATATAAGAACAGACATATATTCAA", msg=msg)
+        self.assertEqual(alignment[0, (1, 4, 9)], "ACA", msg=msg)
+        self.assertEqual(alignment[1, (1, 57, 58)], "AA-", msg=msg)
+        # self.assertEqual(str(alignment[:, :]), ..., msg=msg)
+        self.assertEqual(alignment[0, 0:156], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, 0:156], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, 0:], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, 0:], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        # self.assertEqual(str(alignment[:, 0:]), ..., msg=msg)
+        self.assertEqual(alignment[0, :156], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, :156], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, 1:], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, 1:], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, 2:], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, 2:], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, 60:], "------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[1, 60:], "------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA", msg=msg)
+        self.assertEqual(alignment[0, 156:], "", msg=msg)
+        self.assertEqual(alignment[1, 156:], "", msg=msg)
+        self.assertEqual(alignment[0, :-1], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[1, :-1], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[0, :-2], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCA", msg=msg)
+        self.assertEqual(alignment[1, :-2], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCA", msg=msg)
+        self.assertEqual(alignment[0, :-3], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACC", msg=msg)
+        self.assertEqual(alignment[1, :-3], "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACC", msg=msg)
+        self.assertEqual(alignment[0, 1:-1], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[1, 1:-1], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[0, 1:-2], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCA", msg=msg)
+        self.assertEqual(alignment[1, 1:-2], "ATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCA", msg=msg)
+        self.assertEqual(alignment[0, 2:-1], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[1, 2:-1], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAG", msg=msg)
+        self.assertEqual(alignment[0, 2:-2], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCA", msg=msg)
+        self.assertEqual(alignment[1, 2:-2], "TACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCA", msg=msg)
+        # self.assertEqual(str(alignment[:, :156]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 0:156]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 1:]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 2:]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 3:]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 4:]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, :-1]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, :-2]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, :-3]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 1:-1]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 1:-2]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 2:-1]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 2:-2]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, ::2]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, range(0, 156, 2)]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, (1, 8, 5)]), ..., msg=msg)
+        with self.assertRaises(NotImplementedError, msg=msg):
+            alignment[:1]
+        with self.assertRaises(NotImplementedError, msg=msg):
+            alignment[:1, :]
+
+    def test_indexing_slicing(self):
+        alignment = self.alignment
+        msg = "forward strand"
+        self.check_indexing_slicing(alignment, msg)
+        alignment.sequences[2] = alignment.sequences[2].reverse_complement()
+        n = len(alignment.sequences[2])
+        alignment.coordinates[2, :] = n - alignment.coordinates[2, :]
+        msg = "reverse strand"
+        self.check_indexing_slicing(alignment, msg)
 
 
 if __name__ == "__main__":
