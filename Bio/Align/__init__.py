@@ -1343,7 +1343,7 @@ class Alignment:
             steps = numpy.diff(coordinates, 1)
             gaps = steps[row] == 0  # seriously, flake8??
             steps = steps.max(0)
-            i = 0
+            i = coordinates[row, 0]
             for step, gap in zip(steps, gaps):
                 if gap:
                     line += "-" * step
@@ -1379,7 +1379,7 @@ class Alignment:
                     index = indices.searchsorted(start_index, side="right")
                     if steps[index]:
                         offset = start_index - indices[index]
-                        indices = steps.cumsum()
+                        indices = coordinates[row, 0] + steps.cumsum()
                         i = indices[index] + offset
                         line = sequences[row][i : i + 1]
                     else:
@@ -1396,7 +1396,7 @@ class Alignment:
                     if start_index < stop_index and step == 1:
                         steps = numpy.diff(coordinates, 1)
                         gaps = steps[row] == 0  # come on flake8, this is ugly
-                        sequence_indices = steps[row, :].cumsum()
+                        sequence_indices = coordinates[row, 0] + steps[row, :].cumsum()
                         steps = steps.max(0)
                         indices = steps.cumsum()
                         i = indices.searchsorted(start_index, side="right")
@@ -1513,7 +1513,10 @@ class Alignment:
                         sequences = self.sequences
                         alignment = Alignment(sequences, coordinates)
                         if numpy.array_equal(coordinates, self.coordinates):
-                            alignment.score = self.score
+                            try:
+                                alignment.score = self.score
+                            except AttributeError:
+                                pass
                         try:
                             column_annotations = self.column_annotations
                         except AttributeError:
@@ -1552,12 +1555,11 @@ class Alignment:
                     else:
                         alignment.column_annotations = {}
                         for key, value in column_annotations.items():
-                            value = value[start_index:stop_index]
-                            try:
-                                value = value.copy()
-                            except AttributeError:
-                                # immutable tuples like str, tuple
-                                pass
+                            value_generator = (value[index] for index in indices)
+                            if isinstance(value, str):
+                                value = "".join(value_generator)
+                            else:
+                                value = value.__class__(value_generator)
                             alignment.column_annotations[key] = value
                     return alignment
             raise TypeError("first index must be an integer or slice")
