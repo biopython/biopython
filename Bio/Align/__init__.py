@@ -983,7 +983,7 @@ class Alignment:
 
         self.sequences = sequences
         if coordinates is None:
-            lengths = set(len(sequence) for sequence in sequences)
+            lengths = {len(sequence) for sequence in sequences}
             if len(lengths) != 1:
                 raise ValueError("sequences must have the same length if coordinates is None")
             length = lengths.pop()
@@ -1499,7 +1499,7 @@ class Alignment:
                         else:
                             alignment.column_annotations = {}
                             for key, value in column_annotations.items():
-                                value = value[start_index:end_index]
+                                value = value[start_index:stop_index]
                                 try:
                                     value = value.copy()
                                 except AttributeError:
@@ -1530,7 +1530,7 @@ class Alignment:
                     else:
                         alignment.column_annotations = {}
                         for key, value in column_annotations.items():
-                            value = value[start_index:end_index]
+                            value = value[start_index:stop_index]
                             try:
                                 value = value.copy()
                             except AttributeError:
