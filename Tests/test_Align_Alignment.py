@@ -39,6 +39,8 @@ A-C-GG-AAC--
             msg=msg,
         )
         self.assertAlmostEqual(alignment.score, 6.0)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 12))
         self.assertEqual(alignment[0], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[-2], "AACCGGGA-CCG", msg=msg)
@@ -591,6 +593,8 @@ class TestMultipleAlignment(unittest.TestCase):
             % id(alignment),
         )
         # self.assertEqual(str(alignment), ..., msg=msg)  # FIXME
+        self.assertEqual(len(alignment), 7)
+        self.assertEqual(alignment.shape, (7, 156))
         self.assertEqual(
             alignment[0],
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",

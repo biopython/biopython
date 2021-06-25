@@ -1620,6 +1620,10 @@ class Alignment:
                        `matches`, `misMatches`, or `repMatches` fields.
                        Default value is 'N'.
         """
+        if len(self.sequences) > 2:
+            raise NotImplementedError(
+                "format is currently implemented for pairwise alignments only"
+            )
         if fmt == "":
             return self._format_pretty(**kwargs)
         elif fmt == "psl":
@@ -2263,6 +2267,10 @@ class Alignment:
         """
         import numpy
 
+        if len(self.sequences) > 2:
+            raise NotImplementedError(
+                "aligned is currently implemented for pairwise alignments only"
+            )
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(self.sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
