@@ -26,7 +26,9 @@ class TestPairwiseAlignment(unittest.TestCase):
     def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment))
+            "<Bio.Align.Alignment object (2 rows x 12 columns) at 0x%x>"
+            % id(alignment),
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -292,16 +294,18 @@ A-G
         target = "AACCGGGACCG"
         query = "ACGGAAC"
         sequences = (target, query)
-        coordinates = numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11],
-                                   [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]])
+        coordinates = numpy.array(
+            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]]
+        )
         alignment = Align.Alignment(sequences, coordinates)
         alignment.score = 6.0
         msg = "forward strand"
         self.check_indexing_slicing(alignment, msg)
         query = reverse_complement(query)
         sequences = (target, query)
-        coordinates = numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11],
-                                   [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]])
+        coordinates = numpy.array(
+            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
+        )
         alignment = Align.Alignment(sequences, coordinates)
         alignment.score = 6.0
         msg = "reverse strand"
@@ -385,8 +389,102 @@ ACTT
         path = os.path.join("Align", "bsubtilis.fa")
         record = SeqIO.read(path, "fasta")
         query = record.seq
-        coordinates = numpy.array([[503, 744, 744, 747, 748, 820, 820, 822, 822, 823, 823, 828, 828, 833, 833, 845, 848, 850, 851, 854, 857, 1003, 1004, 1011, 1011, 1017, 1017, 1020, 1021, 1116, 1116, 1119, 1120, 1132, 1133, 1242, 1243, 1246, 1246, 1289, 1289, 1292, 1293, 1413],
-                                  [512, 753, 754, 757, 757, 829, 831, 833, 834, 835, 838, 843, 844, 849, 850, 862, 862, 864, 864, 867, 867, 1013, 1013, 1020, 1021, 1027, 1028, 1031, 1031, 1126, 1127, 1130, 1130, 1142, 1142, 1251, 1251, 1254, 1255, 1298, 1299, 1302, 1302, 1422]])
+        coordinates = numpy.array(
+            [
+                [
+                    503,
+                    744,
+                    744,
+                    747,
+                    748,
+                    820,
+                    820,
+                    822,
+                    822,
+                    823,
+                    823,
+                    828,
+                    828,
+                    833,
+                    833,
+                    845,
+                    848,
+                    850,
+                    851,
+                    854,
+                    857,
+                    1003,
+                    1004,
+                    1011,
+                    1011,
+                    1017,
+                    1017,
+                    1020,
+                    1021,
+                    1116,
+                    1116,
+                    1119,
+                    1120,
+                    1132,
+                    1133,
+                    1242,
+                    1243,
+                    1246,
+                    1246,
+                    1289,
+                    1289,
+                    1292,
+                    1293,
+                    1413,
+                ],
+                [
+                    512,
+                    753,
+                    754,
+                    757,
+                    757,
+                    829,
+                    831,
+                    833,
+                    834,
+                    835,
+                    838,
+                    843,
+                    844,
+                    849,
+                    850,
+                    862,
+                    862,
+                    864,
+                    864,
+                    867,
+                    867,
+                    1013,
+                    1013,
+                    1020,
+                    1021,
+                    1027,
+                    1028,
+                    1031,
+                    1031,
+                    1126,
+                    1127,
+                    1130,
+                    1130,
+                    1142,
+                    1142,
+                    1251,
+                    1251,
+                    1254,
+                    1255,
+                    1298,
+                    1299,
+                    1302,
+                    1302,
+                    1422,
+                ],
+            ]
+        )
         sequences = (target, query)
         alignment = Align.Alignment(sequences, coordinates)
         m = alignment.substitutions

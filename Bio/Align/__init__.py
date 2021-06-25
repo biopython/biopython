@@ -985,7 +985,9 @@ class Alignment:
         if coordinates is None:
             lengths = {len(sequence) for sequence in sequences}
             if len(lengths) != 1:
-                raise ValueError("sequences must have the same length if coordinates is None")
+                raise ValueError(
+                    "sequences must have the same length if coordinates is None"
+                )
             length = lengths.pop()
             coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
@@ -2063,7 +2065,9 @@ class Alignment:
         Wrapper for self.format().
         """
         if len(self.sequences) > 2:
-            raise NotImplementedError("__str__ is currently implemented for pairwise alignments only")
+            raise NotImplementedError(
+                "__str__ is currently implemented for pairwise alignments only"
+            )
         return self.format()
 
     def __repr__(self):
@@ -2094,7 +2098,11 @@ class Alignment:
         """
         n, m = self.shape
         return "<%s.%s object (%i rows x %i columns) at 0x%x>" % (
-            self.__module__, self.__class__.__name__, n, m, id(self),
+            self.__module__,
+            self.__class__.__name__,
+            n,
+            m,
+            id(self),
         )
 
     def __len__(self):
