@@ -981,6 +981,36 @@ TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA""",
             ("seq2", "seq6", "seq1", "seq5", "seq4", "seq7", "seq3"),
         )
 
+    def test_substitutions(self):
+        alignment = self.alignment
+        m = alignment.substitutions
+        self.assertEqual(
+            str(m),
+            """\
+       A     C     G     T
+A 1395.0   3.0  13.0   6.0
+C    3.0 271.0   0.0  16.0
+G    5.0   0.0 480.0   0.0
+T    6.0  12.0   0.0 874.0
+""",
+        )
+        self.assertAlmostEqual(m["T", "C"], 12.0)
+        self.assertAlmostEqual(m["C", "T"], 16.0)
+        m += m.transpose()
+        m /= 2.0
+        self.assertEqual(
+            str(m),
+            """\
+       A     C     G     T
+A 1395.0   3.0   9.0   6.0
+C    3.0 271.0   0.0  14.0
+G    9.0   0.0 480.0   0.0
+T    6.0  14.0   0.0 874.0
+""",
+        )
+        self.assertAlmostEqual(m["C", "T"], 14.0)
+        self.assertAlmostEqual(m["T", "C"], 14.0)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
