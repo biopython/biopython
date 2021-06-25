@@ -837,6 +837,150 @@ class TestMultipleAlignment(unittest.TestCase):
         msg = "reverse strand"
         self.check_indexing_slicing(alignment, msg)
 
+    def test_sort(self):
+        alignment = self.alignment[:, 40:100]
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            (
+                "gi|6273285|gb|AF191659.1|AF191",
+                "gi|6273284|gb|AF191658.1|AF191",
+                "gi|6273287|gb|AF191661.1|AF191",
+                "gi|6273286|gb|AF191660.1|AF191",
+                "gi|6273290|gb|AF191664.1|AF191",
+                "gi|6273289|gb|AF191663.1|AF191",
+                "gi|6273291|gb|AF191665.1|AF191",
+            ),
+        )
+        alignment.sort()
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            (
+                "gi|6273284|gb|AF191658.1|AF191",
+                "gi|6273285|gb|AF191659.1|AF191",
+                "gi|6273286|gb|AF191660.1|AF191",
+                "gi|6273287|gb|AF191661.1|AF191",
+                "gi|6273289|gb|AF191663.1|AF191",
+                "gi|6273290|gb|AF191664.1|AF191",
+                "gi|6273291|gb|AF191665.1|AF191",
+            ),
+        )
+        alignment.sort(reverse=True)
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            (
+                "gi|6273291|gb|AF191665.1|AF191",
+                "gi|6273290|gb|AF191664.1|AF191",
+                "gi|6273289|gb|AF191663.1|AF191",
+                "gi|6273287|gb|AF191661.1|AF191",
+                "gi|6273286|gb|AF191660.1|AF191",
+                "gi|6273285|gb|AF191659.1|AF191",
+                "gi|6273284|gb|AF191658.1|AF191",
+            ),
+        )
+        for i, sequence in enumerate(alignment.sequences[::-1]):
+            sequence.id = "seq%d" % (i + 1)
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            ("seq7", "seq6", "seq5", "seq4", "seq3", "seq2", "seq1"),
+        )
+        alignment.sort()
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            ("seq1", "seq2", "seq3", "seq4", "seq5", "seq6", "seq7"),
+        )
+        alignment.sort(reverse=True)
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            ("seq7", "seq6", "seq5", "seq4", "seq3", "seq2", "seq1"),
+        )
+        alignment.sort(key=lambda record: GC(record.seq))
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            ("seq3", "seq7", "seq4", "seq5", "seq1", "seq6", "seq2"),
+        )
+        alignment.sort(key=lambda record: GC(record.seq), reverse=True)
+        self.assertEqual(
+            "\n".join(row for row in alignment),  # str(alignment),
+            """\
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGGGG--------GATGCGGATAAATGGAAAGGCGAAAGAAAGAATA
+TATACATTAAAGGAGGGGGA------TGCGGATAAATGGAAAGGCGAAAGAAAGAATATA
+TATACATTAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+TATACATAAAAGAAGG----------GGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA""",
+        )
+        self.assertEqual(
+            tuple(sequence.id for sequence in alignment.sequences),
+            ("seq2", "seq6", "seq1", "seq5", "seq4", "seq7", "seq3"),
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

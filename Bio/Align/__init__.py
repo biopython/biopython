@@ -1491,7 +1491,7 @@ class Alignment:
                             sequence = str(sequence)
                             line += sequence[e - offset]
                     return line
-                if row.indices(len(self)) != (0, 2, 1):
+                if row.indices(n) != (0, n, 1):
                     raise NotImplementedError
                 if isinstance(col, slice):
                     start_index, stop_index, step = col.indices(m)
