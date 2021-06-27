@@ -3123,6 +3123,7 @@ def reverse_complement(sequence):
 
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object.
+    Given a SeqRecord, returns a new SeqRecord object.
 
     Supports unambiguous and ambiguous nucleotide sequences.
 
@@ -3136,15 +3137,18 @@ def reverse_complement(sequence):
     >>> reverse_complement("A")
     'T'
     """
-    return complement(sequence)[::-1]
+    try:
+        return sequence.reverse_complement()  # Seq, MutableSeq, or SeqRecord
+    except AttributeError:
+        return complement(sequence)[::-1]
 
 
 def complement(sequence):
     """Return the complement sequence of a DNA string.
 
     If given a string, returns a new string object.
-
     Given a Seq or a MutableSeq, returns a new Seq object.
+    Given a SeqRecord, returns a new SeqRecord object.
 
     Supports unambiguous and ambiguous nucleotide sequences.
 
@@ -3166,8 +3170,7 @@ def complement(sequence):
         return sequence.complement()
     elif isinstance(sequence, MutableSeq):
         # Return a Seq
-        # Don't use the MutableSeq reverse_complement method as it is
-        # 'in place'.
+        # Don't use the MutableSeq complement method as it is 'in place'.
         return Seq(sequence).complement()
 
     # Assume it's a string.

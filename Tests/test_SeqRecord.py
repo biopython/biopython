@@ -12,6 +12,7 @@ import unittest
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
+from Bio.Seq import reverse_complement
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import ExactPosition
@@ -432,6 +433,20 @@ class SeqRecordMethodsMore(unittest.TestCase):
                 letter_annotations={"test": "abcd"}
             ).letter_annotations,
         )
+
+        rc = reverse_complement(s)
+
+        self.assertEqual("CAGT", rc.seq)
+        self.assertEqual("<unknown id>", rc.id)
+        self.assertEqual("<unknown name>", rc.name)
+        self.assertEqual("<unknown description>", rc.description)
+        self.assertEqual([], rc.dbxrefs)
+        self.assertEqual(
+            "[SeqFeature(FeatureLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
+            repr(rc.features),
+        )
+        self.assertEqual({}, rc.annotations)
+        self.assertEqual({"test": "dcba"}, rc.letter_annotations)
 
     def test_reverse_complement_mutable_seq(self):
         s = SeqRecord(MutableSeq("ACTG"))
