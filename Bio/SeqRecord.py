@@ -11,6 +11,7 @@
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
 from io import StringIO
+import numbers
 
 from Bio import StreamModeError
 from Bio.Seq import UndefinedSequenceError
@@ -444,7 +445,7 @@ class SeqRecord:
         >>> rec.seq[5]
         'K'
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # NOTE - The sequence level annotation like the id, name, etc
             # do not really apply to a single character.  However, should
             # we try and expose any per-letter-annotation here?  If so how?
