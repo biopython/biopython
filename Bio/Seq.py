@@ -1467,7 +1467,6 @@ class _SeqAbstractBaseClass(ABC):
             # reverse complement of an undefined sequence is an undefined sequence
             # of the same length
             return self
-        data = self._data.translate(_rna_complement_table)
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1906,7 +1905,7 @@ class Seq(_SeqAbstractBaseClass):
         >>> my_protein.reverse_complement()
         Seq('YCKBITK')
 
-        Here "M" was interpretted as the IUPAC ambiguity code for
+        Here "M" was interpreted as the IUPAC ambiguity code for
         "A" or "C", with complement "K" for "T" or "G" - and so on.
         """
         # Use -1 stride/step to reverse the complement
