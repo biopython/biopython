@@ -19,6 +19,10 @@ from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
 from Bio.Seq import UnknownSeq
 
+try:
+    import numpy
+except ImportError:
+    numpy = None
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
@@ -96,6 +100,9 @@ class StringMethodTests(unittest.TestCase):
         if not isinstance(seq, UnknownSeq):
             _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
+    if numpy is not None:
+        # test with numpy integers (numpy.int32, numpy.int64 etc.)
+        _start_end_values.extend(numpy.array([3, 5]))
 
     def _test_method(self, method_name, start_end=False):
         """Check this method matches the plain string's method."""

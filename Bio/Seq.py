@@ -298,6 +298,7 @@ class _SeqAbstractBaseClass(ABC):
     """
 
     __slots__ = ("_data",)
+    __array_ufunc__ = None  # turn off numpy Ufuncs
 
     @abstractmethod
     def __init__(self):
@@ -2126,7 +2127,7 @@ class UnknownSeq(Seq):
         >>> print(unk[1:-1:2])
         NNN
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             if index >= -self._length and index < self._length:
                 return self._character
             raise IndexError("sequence index out of range")
