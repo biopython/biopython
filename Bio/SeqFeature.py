@@ -1103,8 +1103,7 @@ class FeatureLocation:
         """Extract the sequence from supplied parent sequence using the FeatureLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
-        generally return an object of the same type. The exception to this is
-        a MutableSeq as the parent sequence will return a Seq object.
+        return an object of the same type.
         If the location refers to other records, they must be supplied
         in the optional dictionary references.
 
@@ -1135,17 +1134,11 @@ class FeatureLocation:
                 parent_sequence = parent_sequence.seq
             except AttributeError:
                 pass
-        if isinstance(parent_sequence, MutableSeq):
-            # This avoids complications with reverse complements
-            # (the MutableSeq reverse complement acts in situ)
-            parent_sequence = Seq(parent_sequence)
         f_seq = parent_sequence[self.nofuzzy_start : self.nofuzzy_end]
+        if isinstance(f_seq, MutableSeq):
+            f_seq = Seq(f_seq)
         if self.strand == -1:
-            try:
-                f_seq = f_seq.reverse_complement()
-            except AttributeError:
-                assert isinstance(f_seq, str)
-                f_seq = reverse_complement(f_seq)
+            f_seq = reverse_complement(f_seq, inplace=False)  # TODO: remove inplace=False
         return f_seq
 
 

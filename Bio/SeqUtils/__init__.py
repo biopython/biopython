@@ -13,7 +13,7 @@
 import re
 from math import pi, sin, cos
 
-from Bio.Seq import Seq
+from Bio.Seq import Seq, complement
 from Bio.Data import IUPACData
 
 
@@ -380,13 +380,16 @@ def molecular_weight(
             "%s is not a valid unambiguous letter for %s" % (e, seq_type)
         ) from None
 
-    if seq_type in ("DNA", "RNA") and double_stranded:
-        seq = str(Seq(seq).complement())
+    if double_stranded:
+        if seq_type == "protein":
+            raise ValueError("double-stranded proteins await their discovery")
+        elif seq_type == "DNA":
+            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+        elif seq_type == "RNA":
+            seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
-    elif seq_type == "protein" and double_stranded:
-        raise ValueError("double-stranded proteins await their discovery")
 
     return weight
 
@@ -416,9 +419,12 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, translate
+    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
-    anti = reverse_complement(seq)
+    if 'u' in seq.lower():
+        anti = reverse_complement_rna(seq)
+    else:
+        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
     comp = anti[::-1]
     length = len(seq)
     frames = {}

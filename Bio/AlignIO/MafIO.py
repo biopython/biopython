@@ -815,7 +815,7 @@ class MafIndex:
         for seqid, seq in subseq.items():
             seq = Seq(seq)
 
-            seq = seq if strand == ref_first_strand else seq.reverse_complement()
+            seq = seq if strand == ref_first_strand else seq.reverse_complement(inplace=False)  # TODO: remove inplace=False
 
             result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
 
