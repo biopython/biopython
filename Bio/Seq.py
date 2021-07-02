@@ -1433,7 +1433,7 @@ class _SeqAbstractBaseClass(ABC):
                         BiopythonDeprecationWarning,
                     )
                     inplace = True
-                if (b"U" in self._data or b"u" in self._data):
+                if b"U" in self._data or b"u" in self._data:
                     warnings.warn(
                         "mutable_seq.complement() will change in the near "
                         "future to always return DNA nucleotides only. "
@@ -3225,6 +3225,7 @@ def reverse_complement(sequence, inplace=None):
     sequence = sequence.decode("ASCII")
     return sequence[::-1]
 
+
 def reverse_complement_rna(sequence, inplace=False):
     """Return the reverse complement as an RNA sequence.
 
@@ -3288,6 +3289,7 @@ def reverse_complement_rna(sequence, inplace=False):
     sequence = sequence.translate(_rna_complement_table)
     sequence = sequence.decode("ASCII")
     return sequence[::-1]
+
 
 def complement(sequence, inplace=None):
     """Return the complement as a DNA sequence.

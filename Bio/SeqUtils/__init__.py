@@ -402,7 +402,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
-    GC_Frame: a:5 t:0 g:8 c:5 
+    GC_Frame: a:5 t:0 g:8 c:5
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
     <BLANKLINE>
@@ -412,7 +412,7 @@ def six_frame_translations(seq, genetic_code=1):
     M  A  I  V  M  G  R  *
     auggccauuguaaugggccgcuga   54 %
     uaccgguaacauuacccggcgacu
-    A  M  T  I  P  R  Q 
+    A  M  T  I  P  R  Q
      H  G  N  Y  H  A  A  S
       P  W  Q  L  P  G  S
     <BLANKLINE>
@@ -421,7 +421,7 @@ def six_frame_translations(seq, genetic_code=1):
     """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
-    if 'u' in seq.lower():
+    if "u" in seq.lower():
         anti = reverse_complement_rna(seq)
     else:
         anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
