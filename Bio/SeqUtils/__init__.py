@@ -438,9 +438,9 @@ def six_frame_translations(seq, genetic_code=1):
         short = "%s ... %s" % (seq[:10], seq[-10:])
     else:
         short = seq
-    header = "GC_Frame: "
+    header = "GC_Frame:"
     for nt in ["a", "t", "g", "c"]:
-        header += "%s:%d " % (nt, seq.count(nt.upper()))
+        header += " %s:%d" % (nt, seq.count(nt.upper()))
 
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
@@ -461,7 +461,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
         res += csubseq.lower() + "\n"
         # - frames
-        res += "  ".join(frames[-2][p : p + 20]) + " \n"
+        res += "  ".join(frames[-2][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res
