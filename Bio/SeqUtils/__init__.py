@@ -13,7 +13,7 @@
 import re
 from math import pi, sin, cos
 
-from Bio.Seq import Seq, complement
+from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
 
 

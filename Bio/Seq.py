@@ -3339,7 +3339,6 @@ def complement(sequence, inplace=None):
     raised if ``reverse_complement`` is called on a ``Seq`` object with
     ``inplace=True``.
     """
-
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
     if inplace is None:
