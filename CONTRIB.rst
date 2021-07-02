@@ -40,6 +40,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ariel Aptekmann <https://github.com/aralap>
 - Artemi Bendandi <https://github.com/artbendandi>
 - Austin Varela <https://github.com/austinv11>
+- Aziz Khan <https://github.com/asntech>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>

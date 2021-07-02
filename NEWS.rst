@@ -26,6 +26,12 @@ Fixed typos of triple underscore.
 - Chenghao Zhu
 - Fabian Egli
 
+The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
+string array since the JASPAR 2018 release.
+
+- Aziz Khan
+
+
 3 June 2021: Biopython 1.79
 ================================
 
