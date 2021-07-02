@@ -26,8 +26,8 @@ appropriate::
     TF name ETS1
     Matrix ID   MA0098.3
     Collection  CORE
-    TF class    Tryptophan cluster factors
-    TF family   Ets-related factors
+    TF class    ['Tryptophan cluster factors']
+    TF family   ['Ets-related factors']
     Species 9606
     Taxonomic group vertebrates
     Accession   ['P14921']
@@ -403,13 +403,18 @@ class JASPAR5:
         # fetch remaining annotation as tags from the ANNOTATION table
         cur.execute("select TAG, VAL from MATRIX_ANNOTATION where id = %s", (int_id,))
         rows = cur.fetchall()
+
+        # Since JASPAR 2018 tf_family and tf_class are return as array.
+        tf_family = []
+        tf_class = []
+
         for row in rows:
             attr = row[0]
             val = row[1]
             if attr == "class":
-                motif.tf_class = val
+                tf_class.append(val)
             elif attr == "family":
-                motif.tf_family = val
+                tf_family.append(val)
             elif attr == "tax_group":
                 motif.tax_group = val
             elif attr == "type":
@@ -424,6 +429,9 @@ class JASPAR5:
                 # TODO If we were to implement additional abitrary tags
                 # motif.tag(attr, val)
                 pass
+
+        motif.tf_family = tf_family
+        motif.tf_class = tf_class
 
         return motif
 
