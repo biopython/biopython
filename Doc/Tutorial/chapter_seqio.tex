@@ -185,7 +185,7 @@ You can also print them out directly:
 \begin{minted}{python}
 print(first_record.annotations)
 \end{minted}
-\noindent Like any Python dictionary, you can easily get a list of the keys:
+\noindent Like any Python dictionary, you can easily get the keys:
 \begin{minted}{python}
 print(first_record.annotations.keys())
 \end{minted}
@@ -257,31 +257,29 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 
 You can check by hand, but for every record the species name is in the description line as the second word.  This means if we break up each record's \verb|.description| at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-all_species = []
-for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-    all_species.append(seq_record.description.split()[1])
-print(all_species)
-\end{minted}
-
-\noindent This gives:
-
-\begin{minted}{text}
-['C.irapeanum', 'C.californicum', 'C.fasciculatum', 'C.margaritaceum', ..., 'P.barbatum']
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> all_species = []
+>>> for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
+...     all_species.append(seq_record.description.split()[1])
+...
+>>> print(all_species) # doctest:+ELLIPSIS
+['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 \end{minted}
 
 The concise alternative using list comprehensions would be:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-all_species == [
-    seq_record.description.split()[1]
-    for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta")
-]
-print(all_species)
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> all_species = [
+...     seq_record.description.split()[1]
+...     for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta")
+... ]
+...
+>>> print(all_species) # doctest:+ELLIPSIS
+['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 \end{minted}
 
 In general, extracting information from the FASTA description line is not very nice.
