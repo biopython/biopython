@@ -1482,13 +1482,6 @@ class Alignment:
                             line += "-"
                         else:
                             sequence = sequences[i]
-                            # SeqRecord __getitem__ does not allow numpy int
-                            try:
-                                sequence = sequence.seq
-                            except AttributeError:
-                                pass
-                            # Seq __getitem__ does not allow numpy int
-                            sequence = str(sequence)
                             line += sequence[e - offset]
                     return line
                 if row.indices(n) != (0, n, 1):
