@@ -657,10 +657,10 @@ class QueryResult(_BaseSearchObject):
             return hit
         except KeyError:
             if hit_key in self.__alt_hit_ids:
-                return self.pop(self.__alt_hit_ids[hit_key], default)
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
-                raise KeyError(hit_key) from None
+                return self.pop(self.__alt_hit_ids[hit_key])
+        # if key doesn't exist and no default is set, raise a KeyError
+        if default is self.__marker:
+            raise KeyError(hit_key) from None
         # if key doesn't exist but a default is set, return the default value
         return default
 
