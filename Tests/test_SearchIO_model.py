@@ -654,6 +654,11 @@ class QueryResultCases(SearchTestBaseClass):
         hit = self.qresult.pop(inexistent_key, default)
         self.assertEqual(hit, default)
 
+    def test_pop_inexistent_key(self):
+        """Test QueryResult.pop with default for inexistent key."""
+        inexistent_key = "neither a standard nor alternative key"
+        self.assertRaises(KeyError, self.qresult.pop, inexistent_key)
+
     def test_pop_ok(self):
         """Test QueryResult.pop."""
         self.assertEqual(3, len(self.qresult))
