@@ -156,6 +156,16 @@ def _parse_features_packet(length, data, record):
                 location = next_location + location
             else:
                 location = location + next_location
+
+            name = _get_attribute_value(segment, "name")
+            if name:
+                # This is a "named sub-feature", create a distinct feature
+                # to store its name
+                subfeat = SeqFeature(
+                    next_location, type="misc_feature", qualifiers={"label": [name]}
+                )
+                record.features.append(subfeat)
+
         if not location:
             raise ValueError("Missing feature location")
 

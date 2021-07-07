@@ -187,11 +187,22 @@ class TestSnapGene(unittest.TestCase):
                     "label": ["KanR"],
                 },
                 {
+                    "type": "misc_feature",
+                    "start": 3405,
+                    "end": 3474,
+                    "strand": -1,
+                    "label": ["signal sequence"],
+                },
+                {
                     "type": "CDS",
                     "start": 2613,
                     "end": 3474,
                     "strand": -1,
                     "label": ["AmpR"],
+                    "segments": [
+                        {"start": 3405, "end": 3474},
+                        {"start": 2613, "end": 3405},
+                    ],
                 },
                 {
                     "type": "gene",
