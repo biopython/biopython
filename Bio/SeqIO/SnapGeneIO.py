@@ -145,6 +145,8 @@ def _parse_features_packet(length, data, record):
 
         location = None
         for segment in feature.getElementsByTagName("Segment"):
+            if _get_attribute_value(segment, "type", "standard") == "gap":
+                continue
             rng = _get_attribute_value(segment, "range")
             next_location = _parse_location(rng, strand, record)
             if not location:
@@ -224,7 +226,6 @@ _packet_handlers = {
     0x06: _parse_notes_packet,
     0x0A: _parse_features_packet,
 }
-
 
 # Helper functions to process the XML data in
 # some of the segments
