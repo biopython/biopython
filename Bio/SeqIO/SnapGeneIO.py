@@ -146,10 +146,14 @@ def _parse_features_packet(length, data, record):
         location = None
         for segment in feature.getElementsByTagName("Segment"):
             rng = _get_attribute_value(segment, "range")
+            next_location = _parse_location(rng, strand, record)
             if not location:
-                location = _parse_location(rng, strand, record)
+                location = next_location
+            elif strand == -1:
+                # Reverse segments order for reverse-strand features
+                location = next_location + location
             else:
-                location = location + _parse_location(rng, strand, record)
+                location = location + next_location
         if not location:
             raise ValueError("Missing feature location")
 
