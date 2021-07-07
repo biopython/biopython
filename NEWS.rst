@@ -29,6 +29,7 @@ possible, especially the following contributors:
 
 - Aziz Khan
 - Chenghao Zhu
+- Damien Goutte-Gattat
 - Fabian Egli
 - Michiel de Hoon
 - Peter Cock
