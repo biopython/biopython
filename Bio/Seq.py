@@ -486,7 +486,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def __rmul__(self, other):
         """Multiply integer by sequence.
@@ -497,7 +502,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def __imul__(self, other):
         """Multiply the sequence object by other and assign.
@@ -526,7 +536,12 @@ class _SeqAbstractBaseClass(ABC):
         """
         if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
