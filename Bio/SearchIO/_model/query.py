@@ -650,11 +650,7 @@ class QueryResult(_BaseSearchObject):
             hit = self._items.pop(hit_key)
             # remove all alternative IDs of the popped hit
             for alt_id in hit.id_all[1:]:
-                try:
-                    del self.__alt_hit_ids[alt_id]
-                except KeyError:
-                    pass
-            return hit
+                self.__alt_hit_ids.pop(alt_id, None)
         except KeyError:
             if hit_key in self.__alt_hit_ids:
                 return self.pop(self.__alt_hit_ids[hit_key])
