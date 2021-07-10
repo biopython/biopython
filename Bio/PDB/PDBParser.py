@@ -213,6 +213,8 @@ class PDBParser:
                 except Exception:
                     # Should we allow parsing to continue in permissive mode?
                     # If so, what coordinates should we default to?  Easier to abort!
+                    if self.PERMISSIVE:
+                        continue # Skip the whole line if permissive
                     raise PDBConstructionException(
                         "Invalid or missing coordinate(s) at line %i."
                         % global_line_counter
