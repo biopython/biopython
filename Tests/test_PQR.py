@@ -48,7 +48,7 @@ class ParseSimplePQR(unittest.TestCase):
         data = "ATOM      1  N   PRO     1      00abc1  02.000 3.0000 -0.1000  1.0000       N\n"
 
         # Get sole atom of this structure
-        parser = PDBParser(is_pqr=True)  # default initialization
+        parser = PDBParser(is_pqr=True, PERMISSIVE=False)
         self.assertRaises(
             PDBConstructionException, parser.get_structure, "example", StringIO(data)
         )
