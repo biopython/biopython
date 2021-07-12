@@ -647,17 +647,17 @@ class QueryResultCases(SearchTestBaseClass):
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual("refseq_rna", mapped.target)
 
-    def test_pop_inexistent_with_defualt(self):
-        """Test QueryResult.pop with default for inexistent key."""
+    def test_pop_nonexistent_with_default(self):
+        """Test QueryResult.pop with default for nonexistent key."""
         default = "An arbitrary default return value for this test only."
-        inexistent_key = "neither a standard nor alternative key"
-        hit = self.qresult.pop(inexistent_key, default)
+        nonexistent_key = "neither a standard nor alternative key"
+        hit = self.qresult.pop(nonexistent_key, default)
         self.assertEqual(hit, default)
 
-    def test_pop_inexistent_key(self):
-        """Test QueryResult.pop with default for inexistent key."""
-        inexistent_key = "neither a standard nor alternative key"
-        self.assertRaises(KeyError, self.qresult.pop, inexistent_key)
+    def test_pop_nonexistent_key(self):
+        """Test QueryResult.pop with default for nonexistent key."""
+        nonexistent_key = "neither a standard nor alternative key"
+        self.assertRaises(KeyError, self.qresult.pop, nonexistent_key)
 
     def test_pop_ok(self):
         """Test QueryResult.pop."""
