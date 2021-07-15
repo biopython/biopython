@@ -244,7 +244,7 @@ print(all_species)
 ['Cypripedium irapeanum', 'Cypripedium californicum', ..., 'Paphiopedilum barbatum']
 \end{minted}
 
-Great.  That was pretty easy because GenBank files are annotated in a standardised way.
+Great.  That was pretty easy because GenBank files are annotated in a standardized way.
 
 Now, let's suppose you wanted to extract a list of the species from a FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!  Our example FASTA format file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} starts like this:
 
@@ -307,7 +307,7 @@ of a \verb|SeqRecord| can be modified directly, for example:
 Note, if you want to change the way FASTA is output when written to a file
 (see Section~\ref{sec:writing-sequence-files}), then you should modify both
 the \verb|id| and \verb|description| attributes. To ensure the correct
-behaviour, it is best to include the \verb|id| plus a space at the start of
+behavior, it is best to include the \verb|id| plus a space at the start of
 the desired \verb|description|:
 
 %doctest examples
@@ -660,7 +660,7 @@ print(orchid_dict.keys())
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{minted}
 
-You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accession numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
+You should recognize these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accession numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
 First you must write your own function to return the key you want (as a string) when given a \verb|SeqRecord| object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
@@ -970,7 +970,7 @@ Very often when you are indexing a sequence file it can be quite large -- so
 you may want to compress it on disk. Unfortunately efficient random access
 is difficult with the more common file formats like gzip and bzip2. In this
 setting, BGZF (Blocked GNU Zip Format) can be very helpful. This is a variant
-of gzip (and can be decompressed using standard gzip tools) popularised by
+of gzip (and can be decompressed using standard gzip tools) popularized by
 the BAM file format, \href{https://www.htslib.org/}{samtools}, and
 \href{https://www.htslib.org/doc/tabix.html}{tabix}.
 
@@ -1131,7 +1131,7 @@ from Bio import SeqIO
 SeqIO.write(my_records, "my_example.faa", "fasta")
 \end{minted}
 
-\noindent And if you open this file in your favourite text editor it should look like this:
+\noindent And if you open this file in your favorite text editor it should look like this:
 
 \begin{minted}{text}
 >gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
@@ -1237,7 +1237,7 @@ in the cookbook chapter which looks at inter-converting between different FASTQ 
 Finally, as an added incentive for using the \verb|Bio.SeqIO.convert()| function
 (on top of the fact your code will be shorter), doing it this way may also be
 faster! The reason for this is the convert function can take advantage of
-several file format specific optimisations and tricks.
+several file format specific optimizations and tricks.
 
 \subsection{Converting a file of sequences to their reverse complements}
 \label{sec:SeqIO-reverse-complement}
@@ -1371,7 +1371,7 @@ the \verb|>| character) and the sequence (as a plain string):
 \end{minted}
 
 As long as you don't care about line wrapping (and you probably don't
-for short read high-througput data), then outputing FASTA format from
+for short read high-throughput data), then outputting FASTA format from
 these strings is also very fast:
 
 \begin{minted}{python}
