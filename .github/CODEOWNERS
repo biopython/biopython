@@ -57,7 +57,7 @@ Tests/test_PopGen*.py @tiagoantao
 Bio/SearchIO/* @bow
 Tests/test_SearchIO*.py @bow
 
-Bio/Seq*.py @peterjc
+Bio/Seq*.py @peterjc @mdehoon
 Bio/SeqIO/* @peterjc
 Tests/test_Seq* @peterjc
 Tests/test_seq* @peterjc
