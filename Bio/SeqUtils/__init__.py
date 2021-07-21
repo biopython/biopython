@@ -382,7 +382,7 @@ def molecular_weight(
 
     if double_stranded:
         if seq_type == "protein":
-            raise ValueError("double-stranded proteins await their discovery")
+            raise ValueError("protein sequences cannot be double-stranded")
         elif seq_type == "DNA":
             seq = complement(seq, inplace=False)  # TODO: remove inplace=False
         elif seq_type == "RNA":

@@ -246,8 +246,10 @@ class Instances(list):
             # TODO: remove inplace=False
             if isinstance(instance, (Seq, MutableSeq)):
                 instance = instance.reverse_complement(inplace=False)
-            if isinstance(instance, (str, SeqRecord)):
+            elif isinstance(instance, (str, SeqRecord)):
                 instance = instance.reverse_complement()
+            else:
+                raise RuntimeError("instance has unexpected type %s" % type(instance))
             instances.append(instance)
         return instances
 
