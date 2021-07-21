@@ -939,7 +939,35 @@ class Alignment:
 
     @classmethod
     def infer_coordinates(cls, lines):
-        """Infer the coordinates from a printed alignment."""
+        """Infer the coordinates from a printed alignment.
+
+        This method is primarily employed in Biopython's alignment parsers,
+        though it may be useful for other purposes.
+
+        For an alignment consisting of N sequences, printed as N lines with
+        the same number of columns, where gaps are represented by dashes,
+        this method will calculate the sequence coordinates that define the
+        alignment. The coordinates are returned as a numpy array of integers,
+        and can be used to create an Alignment object.
+
+        This is an example for the alignment of three sequences TAGGCATACGTG,
+        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
+
+        >>> from Bio.Align import Alignment
+        >>> lines = ["TAGGCATACGTG",
+        ...          "AACG--TACGT-",
+        ...          "-ACGCATACTTG",
+        ...         ]
+        >>> sequences = [line.replace("-", "") for line in lines]
+        >>> sequences
+        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
+        >>> coordinates = Alignment.infer_coordinates(lines)
+        >>> coordinates
+        array([[ 0,  1,  4,  6, 11, 12],
+               [ 0,  1,  4,  4,  9,  9],
+               [ 0,  0,  3,  5, 10, 11]])
+        >>> alignment = Alignment(sequences, coordinates)
+        """
         import numpy
 
         n = len(lines)

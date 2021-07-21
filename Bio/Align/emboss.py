@@ -4,15 +4,11 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.AlignIO support for "emboss" alignment output from EMBOSS tools.
-
-You are expected to use this module via the Bio.Align functions (or the
-Bio.SeqIO functions if you are interested in the sequences only).
+"""Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
 This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
-import Bio
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
