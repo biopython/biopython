@@ -13,7 +13,7 @@
 import re
 from math import pi, sin, cos
 
-from Bio.Seq import Seq
+from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
 
 
@@ -380,13 +380,16 @@ def molecular_weight(
             "%s is not a valid unambiguous letter for %s" % (e, seq_type)
         ) from None
 
-    if seq_type in ("DNA", "RNA") and double_stranded:
-        seq = str(Seq(seq).complement())
+    if double_stranded:
+        if seq_type == "protein":
+            raise ValueError("protein sequences cannot be double-stranded")
+        elif seq_type == "DNA":
+            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+        elif seq_type == "RNA":
+            seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
-    elif seq_type == "protein" and double_stranded:
-        raise ValueError("double-stranded proteins await their discovery")
 
     return weight
 
@@ -399,7 +402,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
-    GC_Frame: a:5 t:0 g:8 c:5 
+    GC_Frame: a:5 t:0 g:8 c:5
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
     <BLANKLINE>
@@ -409,16 +412,19 @@ def six_frame_translations(seq, genetic_code=1):
     M  A  I  V  M  G  R  *
     auggccauuguaaugggccgcuga   54 %
     uaccgguaacauuacccggcgacu
-    A  M  T  I  P  R  Q 
+    A  M  T  I  P  R  Q
      H  G  N  Y  H  A  A  S
       P  W  Q  L  P  G  S
     <BLANKLINE>
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, translate
+    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
-    anti = reverse_complement(seq)
+    if "u" in seq.lower():
+        anti = reverse_complement_rna(seq)
+    else:
+        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
     comp = anti[::-1]
     length = len(seq)
     frames = {}
@@ -432,9 +438,9 @@ def six_frame_translations(seq, genetic_code=1):
         short = "%s ... %s" % (seq[:10], seq[-10:])
     else:
         short = seq
-    header = "GC_Frame: "
+    header = "GC_Frame:"
     for nt in ["a", "t", "g", "c"]:
-        header += "%s:%d " % (nt, seq.count(nt.upper()))
+        header += " %s:%d" % (nt, seq.count(nt.upper()))
 
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
@@ -455,7 +461,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
         res += csubseq.lower() + "\n"
         # - frames
-        res += "  ".join(frames[-2][p : p + 20]) + " \n"
+        res += "  ".join(frames[-2][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res

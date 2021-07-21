@@ -237,10 +237,19 @@ class Instances(list):
 
     def reverse_complement(self):
         """Compute reverse complement of sequences."""
+        from Bio.Seq import Seq, MutableSeq
+        from Bio.SeqRecord import SeqRecord
+
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
-            instance = instance.reverse_complement()
+            # TODO: remove inplace=False
+            if isinstance(instance, (Seq, MutableSeq)):
+                instance = instance.reverse_complement(inplace=False)
+            elif isinstance(instance, (str, SeqRecord)):
+                instance = instance.reverse_complement()
+            else:
+                raise RuntimeError("instance has unexpected type %s" % type(instance))
             instances.append(instance)
         return instances
 
