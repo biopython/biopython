@@ -938,7 +938,7 @@ class Alignment:
     """
 
     @classmethod
-    def _infer_coordinates(cls, lines):
+    def infer_coordinates(cls, lines):
         """Infer the coordinates from a printed alignment."""
         import numpy
 
@@ -1539,7 +1539,7 @@ class Alignment:
                     ) from None
                 else:
                     sequences = [line.replace("-", "") for line in lines]
-                    coordinates = self._infer_coordinates(lines)
+                    coordinates = self.infer_coordinates(lines)
                     alignment = Alignment(sequences, coordinates)
                     try:
                         column_annotations = self.column_annotations
