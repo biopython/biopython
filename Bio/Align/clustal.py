@@ -109,7 +109,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         # Whitelisted programs we know about
         words = line.split()
-        known_programs = ["CLUSTAL", "PROBCONS", "MUSCLE", "MSAPROBS", "Kalign"]
+        known_programs = [
+            "CLUSTAL",
+            "PROBCONS",
+            "MUSCLE",
+            "MSAPROBS",
+            "Kalign",
+            "Biopython",
+        ]
         program = words[0]
         if program not in known_programs:
             raise ValueError(
@@ -244,7 +251,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             SeqRecord(Seq(seq), id=seqid, description=seqid)
             for (seqid, seq) in zip(ids, seqs)
         ]
-        coordinates = Alignment._infer_coordinates(aligned_seqs)
+        coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
         # TODO - Handle alignment annotation better, for now
         # mimic the old parser in Bio.Clustalw
