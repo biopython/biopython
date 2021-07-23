@@ -6,8 +6,8 @@
 # package.
 """Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
-This module contains a parser for the EMBOSS pairs/simple file format, for
-example from the alignret, water and needle tools.
+This module contains a parser for the EMBOSS pair/simple file format, for
+example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -90,6 +90,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     similarity = None
                     gaps = None
                     score = None
+                    longest_identity = None
+                    longest_similarity = None
+                    shortest_identity = None
+                    shortest_similarity = None
                 else:
                     raise ValueError("Unexpected line: %s" % line)
             elif sequences is None:
@@ -112,7 +116,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     continue
                 if not line.startswith("# "):
                     raise ValueError("Unexpected line: %s") % line
-                key, value = line[2:].split(":", 1)
+                try:
+                    key, value = line[2:].split(":", 1)
+                except ValueError:
+                    # An equal sign is used for Longest_Identity,
+                    # Longest_Similarity, Shortest_Identity, and
+                    # Shortest_Similarity, which are included if command line
+                    # argument -nobrief was used.
+                    key, value = line[2:].split(" = ", 1)
                 if key == "Aligned_sequences":
                     number_of_sequences = int(value.strip())
                     assert len(identifiers) == 0
@@ -141,6 +152,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     gaps = int(value.strip().split("/")[0])
                 elif key == "Score":
                     score = float(value.strip())
+                # TODO:
+                # The following are generated if the -nobrief command line
+                # argument used. We could simply calculate them from the
+                # alignment, but then we have to define what we mean by
+                # "similar". For now, simply store them as an annotation.
+                elif key == "Longest_Identity":
+                    longest_identity = value.strip()
+                elif key == "Longest_Similarity":
+                    longest_similarity = value.strip()
+                elif key == "Shortest_Identity":
+                    shortest_identity = value.strip()
+                elif key == "Shortest_Similarity":
+                    shortest_similarity = value.strip()
+                else:
+                    raise ValueError("Failed to parse line '%s'" % line)
             else:
                 # parse the sequences
                 if not line:
@@ -174,6 +200,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 alignment.gaps = gaps
                             if score is not None:
                                 alignment.score = score
+                            if longest_identity is not None:
+                                alignment.longest_identity = longest_identity
+                            if longest_similarity is not None:
+                                alignment.longest_similarity = longest_similarity
+                            if shortest_identity is not None:
+                                alignment.shortest_identity = shortest_identity
+                            if shortest_similarity is not None:
+                                alignment.shortest_similarity = shortest_similarity
                             if consensus:
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
