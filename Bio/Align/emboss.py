@@ -69,6 +69,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         identifiers = None
         number_of_sequences = None
+        annotations = {}
         for line in stream:
             line = line.rstrip("\r\n")
             if identifiers is None:
@@ -83,17 +84,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     identifiers = []
                     ncols = None
                     sequences = None
-                    matrix = None
-                    gap_penalty = None
-                    extend_penalty = None
-                    identity = None
-                    similarity = None
-                    gaps = None
-                    score = None
-                    longest_identity = None
-                    longest_similarity = None
-                    shortest_identity = None
-                    shortest_similarity = None
                 else:
                     raise ValueError("Unexpected line: %s" % line)
             elif sequences is None:
@@ -137,34 +127,34 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if len(identifiers) == number_of_sequences:
                             break
                 elif key == "Matrix":
-                    matrix = value.strip()
+                    annotations["matrix"] = value.strip()
                 elif key == "Gap_penalty":
-                    gap_penalty = float(value.strip())
+                    annotations["gap_penalty"] = float(value.strip())
                 elif key == "Extend_penalty":
-                    extend_penalty = float(value.strip())
+                    annotations["extend_penalty"] = float(value.strip())
                 elif key == "Length":
                     ncols = int(value.strip())
                 elif key == "Identity":
-                    identity = int(value.strip().split("/")[0])
+                    annotations["identity"] = int(value.strip().split("/")[0])
                 elif key == "Similarity":
-                    similarity = int(value.strip().split("/")[0])
+                    annotations["similarity"] = int(value.strip().split("/")[0])
                 elif key == "Gaps":
-                    gaps = int(value.strip().split("/")[0])
+                    annotations["gaps"] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    score = float(value.strip())
+                    annotations["score"] = float(value.strip())
                 # TODO:
                 # The following are generated if the -nobrief command line
                 # argument used. We could simply calculate them from the
                 # alignment, but then we have to define what we mean by
                 # "similar". For now, simply store them as an annotation.
                 elif key == "Longest_Identity":
-                    longest_identity = value.strip()
+                    annotations["longest_identity"] = value.strip()
                 elif key == "Longest_Similarity":
-                    longest_similarity = value.strip()
+                    annotations["longest_similarity"] = value.strip()
                 elif key == "Shortest_Identity":
-                    shortest_identity = value.strip()
+                    annotations["shortest_identity"] = value.strip()
                 elif key == "Shortest_Similarity":
-                    shortest_similarity = value.strip()
+                    annotations["shortest_similarity"] = value.strip()
                 else:
                     raise ValueError("Failed to parse line '%s'" % line)
             else:
@@ -186,34 +176,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 for sequence, identifier in zip(sequences, identifiers)
                             ]
                             alignment = Alignment(records, coordinates)
-                            if matrix is not None:
-                                alignment.matrix = matrix
-                            if gap_penalty is not None:
-                                alignment.gap_penalty = gap_penalty
-                            if extend_penalty is not None:
-                                alignment.extend_penalty = extend_penalty
-                            if identity is not None:
-                                alignment.identity = identity
-                            if similarity is not None:
-                                alignment.similarity = similarity
-                            if gaps is not None:
-                                alignment.gaps = gaps
-                            if score is not None:
-                                alignment.score = score
-                            if longest_identity is not None:
-                                alignment.longest_identity = longest_identity
-                            if longest_similarity is not None:
-                                alignment.longest_similarity = longest_similarity
-                            if shortest_identity is not None:
-                                alignment.shortest_identity = shortest_identity
-                            if shortest_similarity is not None:
-                                alignment.shortest_similarity = shortest_similarity
+                            if annotations:
+                                alignment.annotations = annotations
                             if consensus:
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
                                 }
                             yield alignment
                             identifiers = None
+                            annotations = {}
                     continue
                 prefix = line[:21].strip()
                 if prefix == "":
