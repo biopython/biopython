@@ -1855,7 +1855,7 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, length=None):
+    def __init__(self, data, length=None, start=None):
         """Create a Seq object.
 
         Arguments:
@@ -1891,17 +1891,22 @@ class Seq(_SeqAbstractBaseClass):
         ...
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
+        if data is None:
+            pass
+        elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
+            pass
+        elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
+            data = bytes(data)
+        elif isinstance(data, str):
+            data = bytes(data, encoding="ASCII")
+        else:
+            raise TypeError(
+                "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
+            )
         if length is None:
-            if isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
-                self._data = data
-            elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-                self._data = bytes(data)
-            elif isinstance(data, str):
-                self._data = bytes(data, encoding="ASCII")
-            else:
-                raise TypeError(
-                    "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
-                )
+            self._data = data
+        elif start is not None:
+            self._data = _PartiallyDefinedSequenceData(length, start, data)
         else:
             if data is not None:
                 raise ValueError("length should be None if data is None")
@@ -2807,6 +2812,69 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         if self._length == 0:
             return b""
         raise UndefinedSequenceError("Sequence content is undefined")
+
+    def __add__(self, other):
+        if isinstance(other, _UndefinedSequenceData):
+            return _UndefinedSequenceData(self._length + other._length)
+        raise TypeError
+
+
+class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
+    """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
+
+    Objects of this class can be used to create a Seq object to represent
+    sequences with a known length, but an unknown sequence contents.
+    Calling __len__ returns the sequence length, calling __getitem__ raises a
+    ValueError except for requests of zero size, for which it returns an empty
+    bytes object.
+    """
+
+    __slots__ = ("_length", "_start", "_data")
+
+    def __init__(self, length, start, data):
+        """Initialize the object with the sequence length."""
+        if length < 0:
+            raise ValueError("Length must not be negative.")
+        if start < 0:
+            raise ValueError("Start must not be negative.")
+        if start + len(data) > length:
+            raise ValueError("Provided sequence data extend beyond sequence length.")
+        self._length = length
+        self._start = start
+        self._data = data
+        super().__init__()
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            start, end, step = key.indices(self._length)
+            size = len(range(start, end, step))
+            if size == 0:
+                return b""
+            if self._start <= start:
+                start -= self._start
+                if end <= self._start + len(self._data):
+                    end -= self._start
+                    return self._data[start:end:step]
+                else:
+                    data = self._data[start::step]
+                    return _PartiallyDefinedSequenceData(size, 0, data)
+            if start <= self._start + len(self._data):
+                return None
+            return _UndefinedSequenceData(size)
+        elif self._start <= key and key < self._start + len(self._data):
+            return self._data[key - self._start]
+        elif self._length <= key:
+            raise IndexError("sequence index out of range")
+        else:
+            raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
+
+    def __len__(self):
+        return self._length
+
+    def __bytes__(self):
+        if self._length == 0:
+            return b""
+        raise UndefinedSequenceError("Sequence content is only partially defined")
 
     def __add__(self, other):
         if isinstance(other, _UndefinedSequenceData):
