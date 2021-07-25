@@ -144,7 +144,8 @@ def _parse_features_packet(length, data, record):
             strand = -1
 
         location = None
-        for segment in feature.getElementsByTagName("Segment"):
+        subparts = []
+        for i, segment in enumerate(feature.getElementsByTagName("Segment")):
             if _get_attribute_value(segment, "type", "standard") == "gap":
                 continue
             rng = _get_attribute_value(segment, "range")
@@ -159,12 +160,11 @@ def _parse_features_packet(length, data, record):
 
             name = _get_attribute_value(segment, "name")
             if name:
-                # This is a "named sub-feature", create a distinct feature
-                # to store its name
-                subfeat = SeqFeature(
-                    next_location, type="misc_feature", qualifiers={"label": [name]}
-                )
-                record.features.append(subfeat)
+                subparts.append([i, name])
+
+        if len(subparts) > 0:
+            # Add a "parts" qualifiers to represent "named subfeatures"
+            quals["parts"] = [";".join("{}:{}".format(i, n) for i, n in subparts)]
 
         if not location:
             raise ValueError("Missing feature location")

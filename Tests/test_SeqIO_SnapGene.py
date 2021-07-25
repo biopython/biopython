@@ -187,18 +187,12 @@ class TestSnapGene(unittest.TestCase):
                     "label": ["KanR"],
                 },
                 {
-                    "type": "misc_feature",
-                    "start": 3405,
-                    "end": 3474,
-                    "strand": -1,
-                    "label": ["signal sequence"],
-                },
-                {
                     "type": "CDS",
                     "start": 2613,
                     "end": 3474,
                     "strand": -1,
                     "label": ["AmpR"],
+                    "parts": ["1:signal sequence"],
                     "segments": [
                         {"start": 3405, "end": 3474},
                         {"start": 2613, "end": 3405},
@@ -250,6 +244,7 @@ class TestSnapGene(unittest.TestCase):
                 self.assertEqual(exp_feat["strand"], read_feat.location.strand)
                 self._check_multivalued_qualifier("label", exp_feat, read_feat)
                 self._check_multivalued_qualifier("note", exp_feat, read_feat)
+                self._check_multivalued_qualifier("parts", exp_feat, read_feat)
                 if "name" in exp_feat:
                     self.assertEqual(exp_feat["name"], read_feat.qualifiers["name"][0])
                 else:
