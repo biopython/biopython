@@ -145,6 +145,7 @@ def _parse_features_packet(length, data, record):
 
         location = None
         subparts = []
+        n_parts = 0
         for i, segment in enumerate(feature.getElementsByTagName("Segment")):
             if _get_attribute_value(segment, "type", "standard") == "gap":
                 continue
@@ -160,10 +161,14 @@ def _parse_features_packet(length, data, record):
 
             name = _get_attribute_value(segment, "name")
             if name:
-                subparts.append([i, name])
+                subparts.append([i + 1, name])
+            n_parts += 1
 
         if len(subparts) > 0:
             # Add a "parts" qualifiers to represent "named subfeatures"
+            if strand == -1:
+                # Reverse segment indexes for reverse-strand features
+                subparts = [[n_parts - i + 1, name] for i, n in subparts]
             quals["parts"] = [";".join("{}:{}".format(i, n) for i, n in subparts)]
 
         if not location:
