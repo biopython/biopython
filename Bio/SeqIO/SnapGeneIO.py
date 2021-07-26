@@ -146,10 +146,11 @@ def _parse_features_packet(length, data, record):
         location = None
         subparts = []
         n_parts = 0
-        for i, segment in enumerate(feature.getElementsByTagName("Segment")):
+        for segment in feature.getElementsByTagName("Segment"):
             if _get_attribute_value(segment, "type", "standard") == "gap":
                 continue
             rng = _get_attribute_value(segment, "range")
+            n_parts += 1
             next_location = _parse_location(rng, strand, record)
             if not location:
                 location = next_location
@@ -161,15 +162,14 @@ def _parse_features_packet(length, data, record):
 
             name = _get_attribute_value(segment, "name")
             if name:
-                subparts.append([i + 1, name])
-            n_parts += 1
+                subparts.append([n_parts, name])
 
         if len(subparts) > 0:
             # Add a "parts" qualifiers to represent "named subfeatures"
             if strand == -1:
-                # Reverse segment indexes for reverse-strand features
-                subparts = [[n_parts - i + 1, name] for i, n in subparts]
-            quals["parts"] = [";".join("{}:{}".format(i, n) for i, n in subparts)]
+                # Reverse segment indexes and order for reverse-strand features
+                subparts = reversed([[n_parts - i + 1, name] for i, name in subparts])
+            quals["parts"] = [";".join("{}:{}".format(i, name) for i, name in subparts)]
 
         if not location:
             raise ValueError("Missing feature location")

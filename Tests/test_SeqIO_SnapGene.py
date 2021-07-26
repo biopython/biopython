@@ -97,7 +97,7 @@ class TestSnapGene(unittest.TestCase):
             "id": "Sample",
             "description": "Sample Sequence F",
             "length": 1000,
-            "date": datetime.datetime(2021, 7, 7, 0, 0),
+            "date": datetime.datetime(2021, 7, 26, 0, 0),
             "topology": "circular",
             "features": [
                 {
@@ -107,6 +107,7 @@ class TestSnapGene(unittest.TestCase):
                     "strand": -1,
                     "label": ["FeatureB"],
                     "note": ["An example of a reverse-strand split feature"],
+                    "parts": ["1:subfeature1;3:subfeature3"],
                     "segments": [
                         {"start": 634, "end": 724},
                         {"start": 516, "end": 634},
@@ -120,6 +121,7 @@ class TestSnapGene(unittest.TestCase):
                     "strand": 1,
                     "label": ["FeatureA"],
                     "note": ["An example of a split feature"],
+                    "parts": ["2:subfeature2"],
                     "segments": [
                         {"start": 160, "end": 180},
                         {"start": 187, "end": 207},
