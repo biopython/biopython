@@ -2829,18 +2829,19 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     bytes object.
     """
 
-    __slots__ = ("_length", "_start", "_data")
+    __slots__ = ("_length", "_starts", "_data")
 
-    def __init__(self, length, start, data):
+    def __init__(self, length, starts, data):
         """Initialize the object with the sequence length."""
         if length < 0:
             raise ValueError("Length must not be negative.")
-        if start < 0:
-            raise ValueError("Start must not be negative.")
-        if start + len(data) > length:
-            raise ValueError("Provided sequence data extend beyond sequence length.")
+        for s, d in zip(starts, data):
+            if s < 0:
+                raise ValueError("Start must not be negative.")
+            if s + len(d) > length:
+                raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
-        self._start = start
+        self._starts = starts
         self._data = data
         super().__init__()
 
@@ -2850,22 +2851,34 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             size = len(range(start, end, step))
             if size == 0:
                 return b""
-            if self._start <= start:
-                start -= self._start
-                if end <= self._start + len(self._data):
-                    end -= self._start
-                    return self._data[start:end:step]
+            starts = []
+            data = []
+            for s, d in zip(self._starts, self._data):
+                if start < s:
+                    first = s + (start - s) % step
                 else:
-                    data = self._data[start::step]
-                    return _PartiallyDefinedSequenceData(size, 0, data)
-            if start <= self._start + len(self._data):
-                return None
-            return _UndefinedSequenceData(size)
-        elif self._start <= key and key < self._start + len(self._data):
-            return self._data[key - self._start]
+                    first = start
+                e = s + len(d)
+                if end < e:
+                    last = end
+                else:
+                    last = e + (end - e) % step
+                d = d[first-s:last-s:step]
+                s = (first - start) // step
+                starts.append(s)
+                data.append(d)
+            if len(starts) == 0:
+                return _UndefinedSequenceData(size)
+            if len(data) == 1:
+                if starts[0] == 0 and len(data) == size:
+                    return data[0]
+            return _PartiallyDefinedSequenceData(size, starts, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
         else:
+            for s, d in zip(self._starts, self._data):
+                if s <= key and key < s + len(d):
+                    return d[key - s]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
     def __len__(self):
