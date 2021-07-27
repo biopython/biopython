@@ -1855,7 +1855,7 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, length=None, start=None):
+    def __init__(self, data, length=None, starts=None):
         """Create a Seq object.
 
         Arguments:
@@ -1892,25 +1892,21 @@ class Seq(_SeqAbstractBaseClass):
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
         if data is None:
-            pass
+            if length is not None:
+                raise ValueError("length must not be None if data is None")
+            self._data = _UndefinedSequenceData(length)
         elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
-            pass
+            self._data = data
         elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-            data = bytes(data)
+            self._data = data = bytes(data)
         elif isinstance(data, str):
-            data = bytes(data, encoding="ASCII")
+            self._data = bytes(data, encoding="ASCII")
+        elif starts is not None:
+            self._data = _PartiallyDefinedSequenceData(length, starts, data)
         else:
             raise TypeError(
                 "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
             )
-        if length is None:
-            self._data = data
-        elif start is not None:
-            self._data = _PartiallyDefinedSequenceData(length, start, data)
-        else:
-            if data is not None:
-                raise ValueError("length should be None if data is None")
-            self._data = _UndefinedSequenceData(length)
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -2835,11 +2831,15 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         """Initialize the object with the sequence length."""
         if length < 0:
             raise ValueError("Length must not be negative.")
+        position = 0
         for s, d in zip(starts, data):
-            if s < 0:
-                raise ValueError("Start must not be negative.")
-            if s + len(d) > length:
-                raise ValueError("Provided sequence data extend beyond sequence length.")
+            if not isinstance(d, bytes):
+                raise ValueError("Expected a list of bytes objects")
+            if s < position:
+                raise ValueError("Sequence data are overlapping or not sorted.")
+            position = s + len(d)
+        if position > length:
+            raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
         self._starts = starts
         self._data = data
@@ -2865,12 +2865,13 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                     last = e + (end - e) % step
                 d = d[first-s:last-s:step]
                 s = (first - start) // step
-                starts.append(s)
-                data.append(d)
+                if len(d) > 0:
+                    starts.append(s)
+                    data.append(d)
             if len(starts) == 0:
                 return _UndefinedSequenceData(size)
             if len(data) == 1:
-                if starts[0] == 0 and len(data) == size:
+                if starts[0] == 0 and len(data[0]) == size:
                     return data[0]
             return _PartiallyDefinedSequenceData(size, starts, data)
         elif self._length <= key:

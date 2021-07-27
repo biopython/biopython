@@ -16,7 +16,7 @@ from Bio.Data.IUPACData import ambiguous_rna_values
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.Seq import translate
-from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
 from Bio.Seq import UnknownSeq
 
 try:
@@ -1477,6 +1477,121 @@ class ComparisonTests(unittest.TestCase):
                 self.assertGreaterEqual(Seq("TT"), seq2[3:5], msg=msg)
                 self.assertGreaterEqual(MutableSeq("TT"), seq1[2:4], msg=msg)
                 self.assertGreaterEqual(MutableSeq("TT"), seq2[3:5], msg=msg)
+
+
+class PartialSequenceTests(unittest.TestCase):
+    """Test Seq objects with partially defined sequences."""
+
+    def test_getitem(self):
+        #           1    1    2
+        # 0    5    0    5    0
+        # ?????ABCD?????EFG???
+        seq = Seq([b"ABCD", b"EFG"], length=20, starts=[5, 14])
+        self.assertEqual(seq._data._starts, [5, 14])
+        self.assertEqual(seq._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(seq._data._length, 20)
+        # step = 1, stop = +inf
+        s = seq[:]
+        self.assertEqual(s._data._starts, [5, 14])
+        self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(s._data._length, 20)
+        s = seq[0:]
+        self.assertEqual(s._data._starts, [5, 14])
+        self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(s._data._length, 20)
+        s = seq[1:]
+        self.assertEqual(s._data._starts, [4, 13])
+        self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(s._data._length, 19)
+        s = seq[4:]
+        self.assertEqual(s._data._starts, [1, 10])
+        self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(s._data._length, 16)
+        s = seq[5:]
+        self.assertEqual(s._data._starts, [0, 9])
+        self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
+        self.assertEqual(s._data._length, 15)
+        s = seq[6:]
+        self.assertEqual(s._data._starts, [0, 8])
+        self.assertEqual(s._data._data, [b"BCD", b"EFG"])
+        self.assertEqual(s._data._length, 14)
+        s = seq[7:]
+        self.assertEqual(s._data._starts, [0, 7])
+        self.assertEqual(s._data._data, [b"CD", b"EFG"])
+        self.assertEqual(s._data._length, 13)
+        s = seq[8:]
+        self.assertEqual(s._data._starts, [0, 6])
+        self.assertEqual(s._data._data, [b"D", b"EFG"])
+        self.assertEqual(s._data._length, 12)
+        s = seq[9:]
+        self.assertEqual(s._data._starts, [5])
+        self.assertEqual(s._data._data, [b"EFG"])
+        self.assertEqual(s._data._length, 11)
+        s = seq[10:]
+        self.assertEqual(s._data._starts, [4])
+        self.assertEqual(s._data._data, [b"EFG"])
+        self.assertEqual(s._data._length, 10)
+        s = seq[13:]
+        self.assertEqual(s._data._starts, [1])
+        self.assertEqual(s._data._data, [b"EFG"])
+        self.assertEqual(s._data._length, 7)
+        s = seq[14:]
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"EFG"])
+        self.assertEqual(s._data._length, 6)
+        s = seq[15:]
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"FG"])
+        self.assertEqual(s._data._length, 5)
+        s = seq[16:]
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"G"])
+        self.assertEqual(s._data._length, 4)
+        s = seq[17:]
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 3)
+        s = seq[18:]
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 2)
+        s = seq[19:]
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 1)
+        s = seq[20:]
+        self.assertEqual(s._data, b"")
+        # step = 1, stop = 9
+        s = seq[:9]
+        self.assertEqual(s._data._starts, [5])
+        self.assertEqual(s._data._data, [b"ABCD"])
+        self.assertEqual(s._data._length, 9)
+        s = seq[0:9]
+        self.assertEqual(s._data._starts, [5])
+        self.assertEqual(s._data._data, [b"ABCD"])
+        self.assertEqual(s._data._length, 9)
+        s = seq[1:9]
+        self.assertEqual(s._data._starts, [4])
+        self.assertEqual(s._data._data, [b"ABCD"])
+        self.assertEqual(s._data._length, 8)
+        s = seq[4:9]
+        self.assertEqual(s._data._starts, [1])
+        self.assertEqual(s._data._data, [b"ABCD"])
+        self.assertEqual(s._data._length, 5)
+        s = seq[5:9]
+        self.assertEqual(s._data, b"ABCD")
+        s = seq[6:9]
+        self.assertEqual(s._data, b"BCD")
+        s = seq[7:9]
+        self.assertEqual(s._data, b"CD")
+        s = seq[8:9]
+        self.assertEqual(s._data, b"D")
+        s = seq[9:9]
+        self.assertEqual(s._data, b"")
+        s = seq[10:9]
+        self.assertEqual(s._data, b"")
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
 
 
 if __name__ == "__main__":
