@@ -1491,101 +1491,169 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(seq._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(seq._data._length, 20)
         # step = 1, stop = +inf
-        s = seq[:]
+        s = seq[:]  # ?????ABCD?????EFG???
         self.assertEqual(s._data._starts, [5, 14])
         self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(s._data._length, 20)
-        s = seq[0:]
+        s = seq[0:]  # ?????ABCD?????EFG???
         self.assertEqual(s._data._starts, [5, 14])
         self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(s._data._length, 20)
-        s = seq[1:]
+        s = seq[1:]  # ????ABCD?????EFG???
         self.assertEqual(s._data._starts, [4, 13])
         self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(s._data._length, 19)
-        s = seq[4:]
+        s = seq[4:]  # ?ABCD?????EFG???
         self.assertEqual(s._data._starts, [1, 10])
         self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(s._data._length, 16)
-        s = seq[5:]
+        s = seq[5:]  # ABCD?????EFG???
         self.assertEqual(s._data._starts, [0, 9])
         self.assertEqual(s._data._data, [b"ABCD", b"EFG"])
         self.assertEqual(s._data._length, 15)
-        s = seq[6:]
+        s = seq[6:]  # BCD?????EFG???
         self.assertEqual(s._data._starts, [0, 8])
         self.assertEqual(s._data._data, [b"BCD", b"EFG"])
         self.assertEqual(s._data._length, 14)
-        s = seq[7:]
+        s = seq[7:]  # CD?????EFG???
         self.assertEqual(s._data._starts, [0, 7])
         self.assertEqual(s._data._data, [b"CD", b"EFG"])
         self.assertEqual(s._data._length, 13)
-        s = seq[8:]
+        s = seq[8:]  # D?????EFG???
         self.assertEqual(s._data._starts, [0, 6])
         self.assertEqual(s._data._data, [b"D", b"EFG"])
         self.assertEqual(s._data._length, 12)
-        s = seq[9:]
+        s = seq[9:]  # ?????EFG???
         self.assertEqual(s._data._starts, [5])
         self.assertEqual(s._data._data, [b"EFG"])
         self.assertEqual(s._data._length, 11)
-        s = seq[10:]
+        s = seq[10:]  # ????EFG???
         self.assertEqual(s._data._starts, [4])
         self.assertEqual(s._data._data, [b"EFG"])
         self.assertEqual(s._data._length, 10)
-        s = seq[13:]
+        s = seq[13:]  # ?EFG???
         self.assertEqual(s._data._starts, [1])
         self.assertEqual(s._data._data, [b"EFG"])
         self.assertEqual(s._data._length, 7)
-        s = seq[14:]
+        s = seq[14:]  # EFG???
         self.assertEqual(s._data._starts, [0])
         self.assertEqual(s._data._data, [b"EFG"])
         self.assertEqual(s._data._length, 6)
-        s = seq[15:]
+        s = seq[15:]  # FG???
         self.assertEqual(s._data._starts, [0])
         self.assertEqual(s._data._data, [b"FG"])
         self.assertEqual(s._data._length, 5)
-        s = seq[16:]
+        s = seq[16:]  # G???
         self.assertEqual(s._data._starts, [0])
         self.assertEqual(s._data._data, [b"G"])
         self.assertEqual(s._data._length, 4)
-        s = seq[17:]
+        s = seq[17:]  # ???
         self.assertIsInstance(s._data, _UndefinedSequenceData)
         self.assertEqual(len(s), 3)
-        s = seq[18:]
+        s = seq[18:]  # ??
         self.assertIsInstance(s._data, _UndefinedSequenceData)
         self.assertEqual(len(s), 2)
-        s = seq[19:]
+        s = seq[19:]  # ?
         self.assertIsInstance(s._data, _UndefinedSequenceData)
         self.assertEqual(len(s), 1)
-        s = seq[20:]
+        s = seq[20:]  # empty sequence
         self.assertEqual(s._data, b"")
         # step = 1, stop = 9
-        s = seq[:9]
+        s = seq[:9]  # ?????ABCD
         self.assertEqual(s._data._starts, [5])
         self.assertEqual(s._data._data, [b"ABCD"])
         self.assertEqual(s._data._length, 9)
-        s = seq[0:9]
+        s = seq[0:9]  # ?????ABCD
         self.assertEqual(s._data._starts, [5])
         self.assertEqual(s._data._data, [b"ABCD"])
         self.assertEqual(s._data._length, 9)
-        s = seq[1:9]
+        s = seq[1:9]  # ????ABCD
         self.assertEqual(s._data._starts, [4])
         self.assertEqual(s._data._data, [b"ABCD"])
         self.assertEqual(s._data._length, 8)
-        s = seq[4:9]
+        s = seq[4:9]  # ?ABCD
         self.assertEqual(s._data._starts, [1])
         self.assertEqual(s._data._data, [b"ABCD"])
         self.assertEqual(s._data._length, 5)
-        s = seq[5:9]
+        s = seq[5:9]  # ABCD
         self.assertEqual(s._data, b"ABCD")
-        s = seq[6:9]
+        s = seq[6:9]  # BCD
         self.assertEqual(s._data, b"BCD")
-        s = seq[7:9]
+        s = seq[7:9]  # CD
         self.assertEqual(s._data, b"CD")
-        s = seq[8:9]
+        s = seq[8:9]  # D
         self.assertEqual(s._data, b"D")
-        s = seq[9:9]
+        s = seq[9:9]  # empty sequence
         self.assertEqual(s._data, b"")
-        s = seq[10:9]
+        s = seq[10:9]  # empty sequence
+        self.assertEqual(s._data, b"")
+        # step = 2, stop = +inf
+        s = seq[::2]  # ???BD??EG?
+        self.assertEqual(s._data._starts, [3, 7])
+        self.assertEqual(s._data._data, [b"BD", b"EG"])
+        self.assertEqual(s._data._length, 10)
+        s = seq[0::2]  # ???BD??EG?
+        self.assertEqual(s._data._starts, [3, 7])
+        self.assertEqual(s._data._data, [b"BD", b"EG"])
+        self.assertEqual(s._data._length, 10)
+        s = seq[1::2]  # ??AC???F??
+        self.assertEqual(s._data._starts, [2, 7])
+        self.assertEqual(s._data._data, [b"AC", b"F"])
+        self.assertEqual(s._data._length, 10)
+        s = seq[4::2]  # ?BD??EG?
+        self.assertEqual(s._data._starts, [1, 5])
+        self.assertEqual(s._data._data, [b"BD", b"EG"])
+        self.assertEqual(s._data._length, 8)
+        s = seq[5::2]  # AC???F??
+        self.assertEqual(s._data._starts, [0, 5])
+        self.assertEqual(s._data._data, [b"AC", b"F"])
+        self.assertEqual(s._data._length, 8)
+        s = seq[6::2]  # BD??EG?
+        self.assertEqual(s._data._starts, [0, 4])
+        self.assertEqual(s._data._data, [b"BD", b"EG"])
+        self.assertEqual(s._data._length, 7)
+        s = seq[7::2]  # C???F??
+        self.assertEqual(s._data._starts, [0, 4])
+        self.assertEqual(s._data._data, [b"C", b"F"])
+        self.assertEqual(s._data._length, 7)
+        s = seq[8::2]  # D??EG?
+        self.assertEqual(s._data._starts, [0, 3])
+        self.assertEqual(s._data._data, [b"D", b"EG"])
+        self.assertEqual(s._data._length, 6)
+        s = seq[9::2]  # ???F??
+        self.assertEqual(s._data._starts, [3])
+        self.assertEqual(s._data._data, [b"F"])
+        self.assertEqual(s._data._length, 6)
+        s = seq[10::2]  # ??EG?
+        self.assertEqual(s._data._starts, [2])
+        self.assertEqual(s._data._data, [b"EG"])
+        self.assertEqual(s._data._length, 5)
+        s = seq[13::2]  # ?F??
+        self.assertEqual(s._data._starts, [1])
+        self.assertEqual(s._data._data, [b"F"])
+        self.assertEqual(s._data._length, 4)
+        s = seq[14::2]  # EG?
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"EG"])
+        self.assertEqual(s._data._length, 3)
+        s = seq[15::2]  # F??
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"F"])
+        self.assertEqual(s._data._length, 3)
+        s = seq[16::2]  # G?
+        self.assertEqual(s._data._starts, [0])
+        self.assertEqual(s._data._data, [b"G"])
+        self.assertEqual(s._data._length, 2)
+        s = seq[17::2]  # ??
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 2)
+        s = seq[18::2]  # ?
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 1)
+        s = seq[19::2]  # ?
+        self.assertIsInstance(s._data, _UndefinedSequenceData)
+        self.assertEqual(len(s), 1)
+        s = seq[20::2]  # empty sequence
         self.assertEqual(s._data, b"")
 
 
