@@ -18,18 +18,18 @@ Because dict retains the item order by default since Python3.6, all instaces of
 ``collections.OrderedDict`` have been replaced by either standard ``dict`` or
 where appropriate by ``collections.defaultsdict``.
 
-Many thanks to the Biopython developers and community for making this release
-possible, especially the following contributors:
-
-Fixed typos of triple underscore.
-
-- Chenghao Zhu
-- Fabian Egli
-
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
 
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
 - Aziz Khan
+- Chenghao Zhu
+- Fabian Egli
 
 
 3 June 2021: Biopython 1.79
