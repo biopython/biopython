@@ -166,10 +166,6 @@ def MafIterator(handle, seq_count=None):
                     "size": int(line_split[3]),
                     "strand": strand,
                     "srcSize": int(line_split[5]),
-                    "leftStatus": None,
-                    "leftCount": None,
-                    "rightStatus": None,
-                    "rightCount": None,
                 }
 
                 sequence = line_split[6]
