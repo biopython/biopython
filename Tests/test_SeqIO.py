@@ -696,7 +696,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "clustal",
             True,
-            "Clustalw/cw02.aln",
+            "Clustalw/clustalw.aln",
             2,
             ids,
             names,

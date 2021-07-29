@@ -137,11 +137,9 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     SeqIO.write(records, child.stdin, old_format)
     child.stdin.close()
     child.stderr.close()
-    # TODO - Is there a nice way to return an iterator AND
-    # automatically close the handle?
-    records = list(SeqIO.parse(child.stdout, new_format))
+    records = SeqIO.parse(child.stdout, new_format)
+    yield from records
     child.stdout.close()
-    return records
 
 
 # Top level function as this makes it easier to use for debugging:

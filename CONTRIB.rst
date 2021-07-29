@@ -40,6 +40,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ariel Aptekmann <https://github.com/aralap>
 - Artemi Bendandi <https://github.com/artbendandi>
 - Austin Varela <https://github.com/austinv11>
+- Aziz Khan <https://github.com/asntech>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>
@@ -70,6 +71,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chad Parmet <https://github.com/cparmet>
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
+- Chenghao Zhu <zhuchcn@gmail.com>
 - Chris Daley <https://github.com/chebizarro>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris MacRaild <https://github.com/macraild>

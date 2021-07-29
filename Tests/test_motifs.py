@@ -12,6 +12,15 @@ import os
 import unittest
 import math
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingExternalDependencyError
+
+    raise MissingExternalDependencyError(
+        "Install numpy if you want to use Bio.motifs."
+    ) from None
+
 from Bio import motifs
 from Bio.Seq import Seq
 
@@ -2247,6 +2256,76 @@ class MotifTestPWM(unittest.TestCase):
         with open("motifs/SRF.pfm") as handle:
             self.m = motifs.read(handle, "pfm")
         self.s = Seq("ACGTGTGCGTAGTGCGT")
+
+    def test_getitem(self):
+        counts = self.m.counts
+        python_integers = range(13)
+        numpy_integers = numpy.array(python_integers)
+        integers = {"python": python_integers, "numpy": numpy_integers}
+        for int_type in ("python", "numpy"):
+            i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12 = integers[int_type]
+            msg = "using %s integers as indices" % int_type
+            # slice, slice
+            d = counts[i1::i2, i2:i12:i3]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertEqual(len(d["C"]), 4, msg=msg)
+            self.assertEqual(len(d["T"]), 4, msg=msg)
+            self.assertAlmostEqual(d["C"][i0], 45.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i1], 1.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i2], 0.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i3], 1.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i0], 0.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i1], 42.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i2], 3.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i3], 0.0, msg=msg)
+            # slice, int
+            d = counts[i1::i2, i4]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertAlmostEqual(d["C"], 1.0, msg=msg)
+            self.assertAlmostEqual(d["T"], 13.0, msg=msg)
+            # int, slice
+            t = counts[i2, i3:i12:i2]
+            self.assertIsInstance(t, tuple, msg=msg)
+            self.assertAlmostEqual(t[i0], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i1], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i2], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i3], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i4], 43.0, msg=msg)
+            # int, int
+            v = counts[i1, i5]
+            self.assertAlmostEqual(v, 1.0, msg=msg)
+            # tuple, slice
+            d = counts[(i0, i3), i3:i12:i2]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertEqual(len(d["A"]), 5, msg=msg)
+            self.assertEqual(len(d["T"]), 5, msg=msg)
+            self.assertAlmostEqual(d["A"][i0], 1.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i1], 3.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i2], 1.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i3], 15.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i4], 2.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i0], 0.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i1], 42.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i2], 45.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i3], 30.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i4], 0.0, msg=msg)
+            # tuple, int
+            d = counts[(i0, i3), i5]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertAlmostEqual(d["A"], 3.0, msg=msg)
+            self.assertAlmostEqual(d["T"], 42.0, msg=msg)
+            # str, slice
+            t = counts["C", i2:i12:i4]
+            self.assertIsInstance(t, tuple, msg=msg)
+            self.assertAlmostEqual(t[i0], 45.0, msg=msg)
+            self.assertAlmostEqual(t[i1], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i2], 0.0, msg=msg)
+            # str, int
+            self.assertAlmostEqual(counts["T", i4], 13.0, msg=msg)
 
     def test_simple(self):
         """Test if Bio.motifs PWM scoring works."""

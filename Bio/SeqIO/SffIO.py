@@ -80,7 +80,7 @@ homopolymer stretch estimate, the value should be rounded to the nearest 100:
 
 If a read name is exactly 14 alphanumeric characters, the annotations
 dictionary will also contain meta-data about the read extracted by
-interpretting the name as a 454 Sequencing System "Universal" Accession
+interpreting the name as a 454 Sequencing System "Universal" Accession
 Number. Note that if a read name happens to be exactly 14 alphanumeric
 characters but was not generated automatically, these annotation records
 will contain nonsense information.

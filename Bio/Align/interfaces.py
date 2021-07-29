@@ -4,43 +4,36 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.SeqIO support module (not for general use).
+"""Bio.Align support module (not for general use).
 
-Unless you are writing a new parser or writer for Bio.SeqIO, you should not
+Unless you are writing a new parser or writer for Bio.Align, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 from abc import ABC
 from abc import abstractmethod
 
 from Bio import StreamModeError
-from Bio.Seq import MutableSeq
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 
-class SequenceIterator(ABC):
-    """Base class for building SeqRecord iterators.
+class AlignmentIterator(ABC):
+    """Base class for building Alignment iterators.
 
-    You should write a parse method that returns a SeqRecord generator.  You
+    You should write a parse method that returns an Alignment generator.  You
     may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, source, alphabet=None, mode="t", fmt=None):
-        """Create a SequenceIterator object.
+    def __init__(self, source, mode="t", fmt=None):
+        """Create an AlignmentIterator object.
 
         Arguments:
         - source - input file stream, or path to input file
-        - alphabet - no longer used, should be None
 
         This method MAY be overridden by any subclass.
 
         Note when subclassing:
         - there should be a single non-optional argument, the source.
-        - you do not have to require an alphabet.
         - you can add additional optional arguments.
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         try:
             self.stream = open(source, "r" + mode)
             self.should_close_stream = True
@@ -60,7 +53,7 @@ class SequenceIterator(ABC):
             self.stream = source
             self.should_close_stream = False
         try:
-            self.records = self.parse(self.stream)
+            self.alignments = self.parse(self.stream)
         except Exception:
             if self.should_close_stream:
                 self.stream.close()
@@ -69,22 +62,14 @@ class SequenceIterator(ABC):
     def __next__(self):
         """Return the next entry."""
         try:
-            return next(self.records)
+            return next(self.alignments)
         except Exception:
             if self.should_close_stream:
                 self.stream.close()
             raise
 
     def __iter__(self):
-        """Iterate over the entries as a SeqRecord objects.
-
-        Example usage for Fasta files::
-
-            with open("example.fasta","r") as myFile:
-                myFastaReader = FastaIterator(myFile)
-                for record in myFastaReader:
-                    print(record.id)
-                    print(record.seq)
+        """Iterate over the entries as Alignment objects.
 
         This method SHOULD NOT be overridden by any subclass. It should be
         left as is, which will call the subclass implementation of __next__
@@ -93,43 +78,25 @@ class SequenceIterator(ABC):
         return self
 
     @abstractmethod
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord iterator."""
+    def parse(self, stream):
+        """Start parsing the file, and return an Alignment iterator."""
 
 
-def _get_seq_string(record):
-    """Use this to catch errors like the sequence being None (PRIVATE)."""
-    if not isinstance(record, SeqRecord):
-        raise TypeError("Expected a SeqRecord object")
-    if record.seq is None:
-        raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
-    elif not isinstance(record.seq, (Seq, MutableSeq)):
-        raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
-    return str(record.seq)
-
-
-# Function variant of the SequenceWriter method.
-def _clean(text):
-    """Use this to avoid getting newlines in the output (PRIVATE)."""
-    return text.replace("\n", " ").replace("\r", " ")
-
-
-class SequenceWriter:
-    """Base class for sequence writers. This class should be subclassed.
+class AlignmentWriter:
+    """Base class for alignment writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
-    header, repeated records, and an (optional) footer, as well
-    as for interlaced file formats such as Clustal.
+    header, one or more alignments, and an (optional) footer.
 
     The user may call the write_file() method to write a complete
-    file containing the sequences.
+    file containing the alignments.
 
     Alternatively, users may call the write_header(), followed
-    by multiple calls to write_record() and/or write_records(),
+    by multiple calls to write_alignment() and/or write_alignments(),
     followed finally by write_footer().
 
     Note that write_header() cannot require any assumptions about
-    the number of records.
+    the number of alignments.
     """
 
     def __init__(self, target, mode="w"):
@@ -142,9 +109,9 @@ class SequenceWriter:
                 raise StreamModeError("File must be opened in text mode.") from None
             except AttributeError:
                 # target is a path
-                handle = open(target, mode)
+                stream = open(target, mode)
             else:
-                handle = target
+                stream = target
         elif mode == "wb":
             try:
                 target.write(b"")
@@ -153,20 +120,16 @@ class SequenceWriter:
                 raise StreamModeError("File must be opened in binary mode.") from None
             except AttributeError:
                 # target is a path
-                handle = open(target, mode)
+                stream = open(target, mode)
             else:
-                handle = target
+                stream = target
         else:
             raise RuntimeError("Unknown mode '%s'" % mode)
 
         self._target = target
-        self.handle = handle
+        self.stream = stream
 
-    def clean(self, text):
-        """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ")
-
-    def write_header(self):
+    def write_header(self, alignments):
         """Write the file header to the output file."""
         pass
         ##################################################
@@ -182,68 +145,63 @@ class SequenceWriter:
         # if the file format defines a file footer.      #
         ##################################################
 
-    def write_record(self, record):
-        """Write a single record to the output file.
+    def write_alignment(self, alignment):
+        """Write a single alignment to the output file.
 
-        record - a SeqRecord object
+        alignment - an Alignment object
         """
         raise NotImplementedError("This method should be implemented")
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # for sequential file formats.                   #
-        ##################################################
+        ###################################################
+        # You MUST implement this method in the subclass. #
+        ###################################################
 
-    def write_records(self, records, maxcount=None):
-        """Write records to the output file, and return the number of records.
+    def write_alignments(self, alignments, maxcount=None):
+        """Write alignments to the output file, and return the number of alignments.
 
-        records - A list or iterator returning SeqRecord objects
-        maxcount - The maximum number of records allowed by the
+        alignments - A list or iterator returning Alignment objects
+        maxcount - The maximum number of alignments allowed by the
         file format, or None if there is no maximum.
         """
         count = 0
         if maxcount is None:
-            for record in records:
-                self.write_record(record)
+            for alignment in alignments:
+                self.write_alignment(alignment)
                 count += 1
         else:
-            for record in records:
+            for alignment in alignments:
                 if count == maxcount:
                     if maxcount == 1:
-                        raise ValueError("More than one sequence found")
+                        raise ValueError("More than one alignment found")
                     else:
                         raise ValueError(
-                            "Number of sequences is larger than %d" % maxcount
+                            "Number of alignments is larger than %d" % maxcount
                         )
-                self.write_record(record)
+                self.write_alignment(alignment)
                 count += 1
         return count
 
-    def write_file(self, records, mincount=0, maxcount=None):
-        """Write a complete file with the records, and return the number of records.
+    def write_file(self, alignments, mincount=0, maxcount=None):
+        """Write a file with the alignments, and return the number of alignments.
 
-        records - A list or iterator returning SeqRecord objects
+        alignments - A list or iterator returning Alignment objects
         """
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # for interlaced file formats.                   #
-        ##################################################
         try:
-            self.write_header()
-            count = self.write_records(records, maxcount)
+            self.write_header(alignments)
+            count = self.write_alignments(alignments, maxcount)
             self.write_footer()
         finally:
-            if self.handle is not self._target:
-                self.handle.close()
+            if self.stream is not self._target:
+                self.stream.close()
         if count < mincount:
             if mincount == 1:  # Common case
-                raise ValueError("Must have one sequence")
+                raise ValueError("Must have one alignment")
             elif mincount == maxcount:
                 raise ValueError(
-                    "Number of sequences is %d (expected %d)" % (count, mincount)
+                    "Number of alignments is %d (expected %d)" % (count, mincount)
                 )
             else:
                 raise ValueError(
-                    "Number of sequences is %d (expected at least %d)"
+                    "Number of alignmnets is %d (expected at least %d)"
                     % (count, mincount)
                 )
         return count

@@ -9,7 +9,7 @@ Firstly, running BLAST for your query sequence(s), and getting some output.
 Secondly, parsing the BLAST output in Python for further analysis.
 
 Your first introduction to running BLAST was probably via the NCBI web-service.
-In fact, there are lots of ways you can run BLAST, which can be categorised in several ways.
+In fact, there are lots of ways you can run BLAST, which can be categorized in several ways.
 The most important distinction is running BLAST locally (on your own machine),
 and running BLAST remotely (on another machine, typically the NCBI servers).
 We're going to start this chapter by invoking the NCBI online BLAST service
@@ -208,36 +208,23 @@ of $0.001$ and produce XML output to the specified file (which we can then parse
 On my computer this takes about six minutes - a good reason to save the output
 to a file so you can repeat any analysis as needed.
 
-From within Biopython we can use the NCBI BLASTX wrapper from the
-\verb|Bio.Blast.Applications| module to build the command line string,
-and run it:
+From within python we can use the \verb|subprocess| module to build the command line
+string, and run it:
 
 \begin{minted}{pycon}
->>> from Bio.Blast.Applications import NcbiblastxCommandline
->>> help(NcbiblastxCommandline)
-...
->>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
-...                                      outfmt=5, out="opuntia.xml")
->>> blastx_cline
-NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
-db='nr', evalue=0.001)
->>> print(blastx_cline)
-blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
->>> stdout, stderr = blastx_cline()
+>>> import subprocess
+>>> cmd = "blastx -query opuntia.fasta -db nr -out opuntia.xml"
+>>> cmd += " -evalue 0.001 -outfmt 5"
+>>> subprocess.run(cmd, shell=True)
 \end{minted}
 
-In this example there shouldn't be any output from BLASTX to the terminal,
-so stdout and stderr should be empty. You may want to check the output file
-\verb|opuntia.xml| has been created.
+In this example there shouldn't be any output from BLASTX to the terminal. You may want
+to check the output file \verb|opuntia.xml| has been created.
 
 As you may recall from earlier examples in the tutorial, the \verb|opuntia.fasta|
 contains seven sequences, so the BLAST XML output should contain multiple results.
 Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
 Section~\ref{sec:parsing-blast}.
-
-\emph{WARNING:}	We have decided to drop these command line wrappers in a future Biopython
-release. We will be updating this documentation to instead build the command line
-directly, and invoke it with the \texttt{subprocess} module.
 
 \subsection{Other versions of BLAST}
 
@@ -268,7 +255,7 @@ XML, HTML, and plain text. Originally, Biopython had parsers for BLAST
 plain text and HTML output, as these were the only output formats offered
 at the time. Unfortunately, the BLAST output in these formats kept changing,
 each time breaking the Biopython parsers. Our HTML BLAST parser has been
-removed, while the deprectaed plain text BLAST parser is now only available
+removed, while the deprecated plain text BLAST parser is now only available
 via \verb|Bio.SearchIO|. Use it at your own risk, it may or may not work,
 depending on which BLAST version you're using.
 
@@ -482,8 +469,8 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \section{Dealing with PSI-BLAST}
 
 You can run the standalone version of PSI-BLAST (the legacy NCBI command line
-tool \verb|blastpgp|, or its replacement \verb|psiblast|) using the wrappers
-in \verb|Bio.Blast.Applications| module.
+tool \verb|blastpgp|, or its replacement \verb|psiblast|) directly from the
+command line or using python's \verb|subprocess| module.
 
 At the time of writing, the NCBI do not appear to support tools running a
 PSI-BLAST search via the internet.
@@ -496,7 +483,7 @@ iteration is new or reused isn't present in the XML file.
 
 You can run the standalone version of RPS-BLAST (either the legacy NCBI
 command line tool \verb|rpsblast|, or its replacement with the same name)
-using the wrappers in \verb|Bio.Blast.Applications| module.
+directly from the command line or using python's \verb|subprocess| module.
 
 At the time of writing, the NCBI do not appear to support tools running an
 RPS-BLAST search via the internet.

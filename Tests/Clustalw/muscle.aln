@@ -1,0 +1,62 @@
+MUSCLE (3.8) multiple sequence alignment
+
+
+Test1seq             ------------------------------------------------------------
+AT3G20900.1-SEQ      ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCAC
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             -----AGTTACAATAACTGACGAAGCTAAGTAGGCTACTAATTAACGTCATCAACCTAAT
+AT3G20900.1-SEQ      ATCAAAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAAATTAAAGTCATCAACCTAAT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             ACATAGCACTTAGAAAAAAGTGAAGTAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
+AT3G20900.1-SEQ      ACATAGCACTTAGAAAAAAGTGAAGCAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             AATTGATAGTGTAAATCATCGTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGA
+AT3G20900.1-SEQ      AATTGATAGTGTAAATCATAGTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGA
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             CTTGATTCAAATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACA
+AT3G20900.1-SEQ      CTTGATTCAAATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAA
+AT3G20900.1-CDS      --------------------------------------ATGAACAAAGTAGCGAGGAAGA
+                                                           ***** *** **   *  ** *
+
+Test1seq             AAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
+AT3G20900.1-SEQ      CAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
+AT3G20900.1-CDS      A------------------------------CAAAACATC--------------------
+                                                    ********                     
+
+Test1seq             GTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
+AT3G20900.1-SEQ      GTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             CCTATATCAACGTAAACAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
+AT3G20900.1-SEQ      CCTATATCAAAAAAAAAAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
+AT3G20900.1-CDS      ------------------------------------------------------------
+                                                                                 
+
+Test1seq             TCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
+AT3G20900.1-SEQ      GCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
+AT3G20900.1-CDS      --------------------------------AGCAAAGAAAACGATCTGTCTCCGTCGT
+                                                     ****************************
+
+Test1seq             AACACACGGTCGCTAGAGAAACTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-SEQ      AACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-CDS      AACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+                     ******* **   * ****  ***************************************
+
+Test1seq             GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCGTGGTGACGTCAGCACCGCT
+AT3G20900.1-SEQ      GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCT
+AT3G20900.1-CDS      GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCT
+                     **************************************** *******************
+
+Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
+AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
+                     *************************  

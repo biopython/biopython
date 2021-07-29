@@ -284,7 +284,7 @@ class TestAlignIO_reading(unittest.TestCase):
         info_content = summary.information_content(e_freq_table=e_freq_table)
 
     def test_reading_alignments_clustal1(self):
-        path = "Clustalw/cw02.aln"
+        path = "Clustalw/clustalw.aln"
         self.check_iterator_for_loop_handle(path, "clustal", 1, 2)
         self.check_iterator_for_loop_filename(path, "clustal", 1)
         self.check_iterator_next(path, "clustal", 1)

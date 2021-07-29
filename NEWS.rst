@@ -14,13 +14,27 @@ The latest news is at the top of this file.
 Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 "status" information for sequence features as ``SeqFeature`` qualifiers.
 
-Store information for 'i' lines in MAF.
+Because dict retains the item order by default since Python3.6, all instaces of
+``collections.OrderedDict`` have been replaced by either standard ``dict`` or
+where appropriate by ``collections.defaultsdict``.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Fixed typos of triple underscore.
+
+- Chenghao Zhu
 - Fabian Egli
+
+Store information for 'i' lines in MAF.
+
 - Lucille Lopez-Delisle (first contribution)
+
+The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
+string array since the JASPAR 2018 release.
+
+- Aziz Khan
+
 
 3 June 2021: Biopython 1.79
 ================================
