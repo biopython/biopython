@@ -13,6 +13,9 @@
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
+.. image:: https://github.com/biopython/biopython/actions/workflows/basic.yml/badge.svg
+   :alt: GitHub workflow status
+   :target: https://github.com/biopython/biopython/actions
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
