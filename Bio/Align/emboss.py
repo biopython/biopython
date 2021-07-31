@@ -6,8 +6,8 @@
 # package.
 """Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
-This module contains a parser for the EMBOSS pairs/simple file format, for
-example from the alignret, water and needle tools.
+This module contains a parser for the EMBOSS pair/simple file format, for
+example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -69,6 +69,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         identifiers = None
         number_of_sequences = None
+        annotations = {}
         for line in stream:
             line = line.rstrip("\r\n")
             if identifiers is None:
@@ -83,13 +84,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     identifiers = []
                     ncols = None
                     sequences = None
-                    matrix = None
-                    gap_penalty = None
-                    extend_penalty = None
-                    identity = None
-                    similarity = None
-                    gaps = None
-                    score = None
                 else:
                     raise ValueError("Unexpected line: %s" % line)
             elif sequences is None:
@@ -112,7 +106,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     continue
                 if not line.startswith("# "):
                     raise ValueError("Unexpected line: %s") % line
-                key, value = line[2:].split(":", 1)
+                try:
+                    key, value = line[2:].split(":", 1)
+                except ValueError:
+                    # An equal sign is used for Longest_Identity,
+                    # Longest_Similarity, Shortest_Identity, and
+                    # Shortest_Similarity, which are included if command line
+                    # argument -nobrief was used.
+                    key, value = line[2:].split(" = ", 1)
                 if key == "Aligned_sequences":
                     number_of_sequences = int(value.strip())
                     assert len(identifiers) == 0
@@ -126,21 +127,36 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if len(identifiers) == number_of_sequences:
                             break
                 elif key == "Matrix":
-                    matrix = value.strip()
+                    annotations["matrix"] = value.strip()
                 elif key == "Gap_penalty":
-                    gap_penalty = float(value.strip())
+                    annotations["gap_penalty"] = float(value.strip())
                 elif key == "Extend_penalty":
-                    extend_penalty = float(value.strip())
+                    annotations["extend_penalty"] = float(value.strip())
                 elif key == "Length":
                     ncols = int(value.strip())
                 elif key == "Identity":
-                    identity = int(value.strip().split("/")[0])
+                    annotations["identity"] = int(value.strip().split("/")[0])
                 elif key == "Similarity":
-                    similarity = int(value.strip().split("/")[0])
+                    annotations["similarity"] = int(value.strip().split("/")[0])
                 elif key == "Gaps":
-                    gaps = int(value.strip().split("/")[0])
+                    annotations["gaps"] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    score = float(value.strip())
+                    annotations["score"] = float(value.strip())
+                # TODO:
+                # The following are generated if the -nobrief command line
+                # argument used. We could simply calculate them from the
+                # alignment, but then we have to define what we mean by
+                # "similar". For now, simply store them as an annotation.
+                elif key == "Longest_Identity":
+                    annotations["longest_identity"] = value.strip()
+                elif key == "Longest_Similarity":
+                    annotations["longest_similarity"] = value.strip()
+                elif key == "Shortest_Identity":
+                    annotations["shortest_identity"] = value.strip()
+                elif key == "Shortest_Similarity":
+                    annotations["shortest_similarity"] = value.strip()
+                else:
+                    raise ValueError("Failed to parse line '%s'" % line)
             else:
                 # parse the sequences
                 if not line:
@@ -160,26 +176,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 for sequence, identifier in zip(sequences, identifiers)
                             ]
                             alignment = Alignment(records, coordinates)
-                            if matrix is not None:
-                                alignment.matrix = matrix
-                            if gap_penalty is not None:
-                                alignment.gap_penalty = gap_penalty
-                            if extend_penalty is not None:
-                                alignment.extend_penalty = extend_penalty
-                            if identity is not None:
-                                alignment.identity = identity
-                            if similarity is not None:
-                                alignment.similarity = similarity
-                            if gaps is not None:
-                                alignment.gaps = gaps
-                            if score is not None:
-                                alignment.score = score
+                            if annotations:
+                                alignment.annotations = annotations
                             if consensus:
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
                                 }
                             yield alignment
                             identifiers = None
+                            annotations = {}
                     continue
                 prefix = line[:21].strip()
                 if prefix == "":

@@ -295,13 +295,13 @@ class TestEmboss(unittest.TestCase):
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 112)
-        self.assertEqual(alignment.similarity, 112)
-        self.assertEqual(alignment.gaps, 19)
-        self.assertAlmostEqual(alignment.score, 591.5)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 112)
+        self.assertEqual(alignment.annotations["similarity"], 112)
+        self.assertEqual(alignment.annotations["gaps"], 19)
+        self.assertAlmostEqual(alignment.annotations["score"], 591.5)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 131))
         self.assertEqual(alignment.sequences[0].id, "IXI_234")
@@ -325,6 +325,129 @@ class TestEmboss(unittest.TestCase):
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
 
+    def test_pair_example_nobrief(self):
+        # Variation on the alignment file obtained from EMBOSS
+        # (http://emboss.sourceforge.net/docs/themes/alnformats/align.pair)
+        # if we include 3 sequences to align against, and we use the -nobrief
+        # command line option.
+        path = "Emboss/needle_nobrief_multiple.pair"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "needle")
+            self.assertEqual(alignments.rundate, "Fri 23 Jul 2021 22:45:41")
+            self.assertEqual(
+                alignments.commandline,
+                "needle -asequence seqa.fa -bsequence seqb.fa -datafile EBLOSUM62 -gapopen 10 -gapextend 0.5 -nobrief -outfile stdout",
+            )
+            self.assertEqual(alignments.align_format, "srspair")
+            self.assertEqual(alignments.report_file, "stdout")
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 3)
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 112)
+        self.assertEqual(alignment.annotations["similarity"], 112)
+        self.assertEqual(alignment.annotations["gaps"], 19)
+        self.assertAlmostEqual(alignment.annotations["score"], 591.5)
+        self.assertEqual(alignment.annotations["longest_identity"], "100.00%")
+        self.assertEqual(alignment.annotations["longest_similarity"], "100.00%")
+        self.assertEqual(alignment.annotations["shortest_identity"], "85.50%")
+        self.assertEqual(alignment.annotations["shortest_similarity"], "85.50%")
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 131))
+        self.assertEqual(alignment.sequences[0].id, "IXI_234")
+        self.assertEqual(alignment.sequences[1].id, "IXI_235")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[0, 15, 24, 74, 84, 131], [0, 15, 15, 65, 65, 112]]),
+            )
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
+        )
+        alignment = alignments[1]
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 120)
+        self.assertEqual(alignment.annotations["similarity"], 120)
+        self.assertEqual(alignment.annotations["gaps"], 4)
+        self.assertAlmostEqual(alignment.annotations["score"], 618.0)
+        self.assertEqual(alignment.annotations["longest_identity"], "94.49%")
+        self.assertEqual(alignment.annotations["longest_similarity"], "94.49%")
+        self.assertEqual(alignment.annotations["shortest_identity"], "91.60%")
+        self.assertEqual(alignment.annotations["shortest_similarity"], "91.60%")
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 131))
+        self.assertEqual(alignment.sequences[0].id, "IXI_234")
+        self.assertEqual(alignment.sequences[1].id, "IXI_236")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRGSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[0, 22, 24, 97, 99, 131], [0, 22, 22, 95, 95, 127]]),
+            )
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "||||||||||||||||||||||  |||||.||||.|||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||  ||||.||||.|||||||||||||..|||||||",
+        )
+        alignment = alignments[2]
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 119)
+        self.assertEqual(alignment.annotations["similarity"], 124)
+        self.assertEqual(alignment.annotations["gaps"], 7)
+        self.assertAlmostEqual(alignment.annotations["score"], 609.0)
+        self.assertEqual(alignment.annotations["longest_identity"], "95.97%")
+        self.assertEqual(alignment.annotations["longest_similarity"], "100.00%")
+        self.assertEqual(alignment.annotations["shortest_identity"], "90.84%")
+        self.assertEqual(alignment.annotations["shortest_similarity"], "94.66%")
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 131))
+        self.assertEqual(alignment.sequences[0].id, "IXI_234")
+        self.assertEqual(alignment.sequences[1].id, "IXI_237")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "TSPASLRPPAGPSSRPAMVSSRRRPSPPGPRRPTCSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSRGSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [[0, 23, 24, 35, 39, 97, 99, 131], [0, 23, 23, 34, 34, 92, 92, 124]]
+                ),
+            )
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|||||:||||||||||||||||| |||||||||||    |||||||||||||:||||||||||||||||||||:|||||||||||||||||||||||  |||||||||||||||:||||||||:|||||||",
+        )
+
     def test_simple_example(self):
         # Alignment file obtained from EMBOSS:
         # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
@@ -337,13 +460,13 @@ class TestEmboss(unittest.TestCase):
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 95)
-        self.assertEqual(alignment.similarity, 127)
-        self.assertEqual(alignment.gaps, 25)
-        self.assertAlmostEqual(alignment.score, 100.0)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 95)
+        self.assertEqual(alignment.annotations["similarity"], 127)
+        self.assertEqual(alignment.annotations["gaps"], 25)
+        self.assertAlmostEqual(alignment.annotations["score"], 100.0)
         self.assertEqual(len(alignment), 4)
         self.assertEqual(alignment.shape, (4, 131))
         self.assertEqual(alignment.sequences[0].id, "IXI_234")
@@ -397,13 +520,13 @@ class TestEmboss(unittest.TestCase):
         alignments = list(alignments)
         self.assertEqual(len(alignments), 5)
         alignment = alignments[0]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 32)
-        self.assertEqual(alignment.similarity, 64)
-        self.assertEqual(alignment.gaps, 17)
-        self.assertAlmostEqual(alignment.score, 112.0)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 32)
+        self.assertEqual(alignment.annotations["similarity"], 64)
+        self.assertEqual(alignment.annotations["gaps"], 17)
+        self.assertAlmostEqual(alignment.annotations["score"], 112.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 124))
         self.assertEqual(alignment.sequences[0].id, "ref_rec")
@@ -432,13 +555,13 @@ class TestEmboss(unittest.TestCase):
             " :|:.||    :.|.|::|.:  :.|.....:|.:|.||:.:..:..|.:|::|..:|||.|::..|:::....:|.|:::|.:.|...::.:.|.||..:..| ..|:|.|: ||        ",
         )
         alignment = alignments[1]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 34)
-        self.assertEqual(alignment.similarity, 58)
-        self.assertEqual(alignment.gaps, 9)
-        self.assertAlmostEqual(alignment.score, 154.0)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 34)
+        self.assertEqual(alignment.annotations["similarity"], 58)
+        self.assertEqual(alignment.annotations["gaps"], 9)
+        self.assertAlmostEqual(alignment.annotations["score"], 154.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 119))
         self.assertEqual(alignment.sequences[0].id, "ref_rec")
@@ -461,13 +584,13 @@ class TestEmboss(unittest.TestCase):
             " ||||||:......|:..|...|::.....|.::||:|...:..||:|.|:.:||.||:.:|:.:|.......|::|:....::|..::..||||....||...|::...|        ",
         )
         alignment = alignments[2]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 29)
-        self.assertEqual(alignment.similarity, 53)
-        self.assertEqual(alignment.gaps, 9)
-        self.assertAlmostEqual(alignment.score, 121.0)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 29)
+        self.assertEqual(alignment.annotations["similarity"], 53)
+        self.assertEqual(alignment.annotations["gaps"], 9)
+        self.assertAlmostEqual(alignment.annotations["score"], 121.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 120))
         self.assertEqual(alignment.sequences[0].id, "ref_rec")
@@ -490,13 +613,13 @@ class TestEmboss(unittest.TestCase):
             " .|::|||..|..:.:..||.:.|:..........|.:.:.....||.::|:.:....|:|:|:|.:|....:..:|:|....|:|...|...||:.:..||.|||.:.:..        ",
         )
         alignment = alignments[3]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 30)
-        self.assertEqual(alignment.similarity, 64)
-        self.assertEqual(alignment.gaps, 9)
-        self.assertAlmostEqual(alignment.score, 126.0)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 30)
+        self.assertEqual(alignment.annotations["similarity"], 64)
+        self.assertEqual(alignment.annotations["gaps"], 9)
+        self.assertAlmostEqual(alignment.annotations["score"], 126.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 118))
         self.assertEqual(alignment.sequences[0].id, "ref_rec")
@@ -525,13 +648,13 @@ class TestEmboss(unittest.TestCase):
             " :|:|:|:..:|....:.....||:...|.:|.:||.:.:|  ||.|:::.|:.:||:.|..:.:.:..|....:|:.|:.|.: :.:..:.|:.:.:.| .|||.:|    :||:.:",
         )
         alignment = alignments[4]
-        self.assertEqual(alignment.matrix, "EBLOSUM62")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 35)
-        self.assertEqual(alignment.similarity, 70)
-        self.assertEqual(alignment.gaps, 18)
-        self.assertAlmostEqual(alignment.score, 156.5)
+        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 35)
+        self.assertEqual(alignment.annotations["similarity"], 70)
+        self.assertEqual(alignment.annotations["gaps"], 18)
+        self.assertAlmostEqual(alignment.annotations["score"], 156.5)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 125))
         self.assertEqual(alignment.sequences[0].id, "ref_rec")
@@ -573,13 +696,13 @@ class TestEmboss(unittest.TestCase):
         alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertEqual(alignment.matrix, "EDNAFULL")
-        self.assertAlmostEqual(alignment.gap_penalty, 10.0)
-        self.assertAlmostEqual(alignment.extend_penalty, 0.5)
-        self.assertEqual(alignment.identity, 210)
-        self.assertEqual(alignment.similarity, 210)
-        self.assertEqual(alignment.gaps, 408)
-        self.assertAlmostEqual(alignment.score, 561.0)
+        self.assertEqual(alignment.annotations["matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 210)
+        self.assertEqual(alignment.annotations["similarity"], 210)
+        self.assertEqual(alignment.annotations["gaps"], 408)
+        self.assertAlmostEqual(alignment.annotations["score"], 561.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 667))
         self.assertEqual(alignment.sequences[0].id, "asis")
