@@ -43,6 +43,7 @@ jobs:
           name: Dependencies
           command: |
             python --version
+            pip install -r .circleci/requirements-sphinx.txt
             pip install coverage codecov numpy scipy mmtf-python mysqlclient mysql-connector-python rdflib networkx matplotlib reportlab
             echo "Python dependencies installed"
       - run:
@@ -56,6 +57,14 @@ jobs:
             echo "Built wheel and installing it..."
             python -m pip install dist/biopython-*.whl
             echo "Biopython should now be installed"
+      - run:
+          name: Sphinx
+          command: |
+            make -C Doc/api/ html
+      - deploy:
+          name: Deploy Sphinx documentation
+          command: |
+            .github/deploy_docs.sh
       - run:
           name: Test
           command: |
