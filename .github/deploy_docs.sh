@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $(git rev-parse --abbrev-ref HEAD) != "master" ]]; then
+    echo "Not on master branch, not attempting to deploy documentation"
+    exit 0
+fi
+
 # Assumes being called from the Biopython repository's root folder,
 # (i.e. a clone of https://github.com/biopython/biopython) as part
 # of our continuous integration testing to save the compiled docs
