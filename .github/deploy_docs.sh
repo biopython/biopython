@@ -5,6 +5,10 @@
 # of our continuous integration testing to save the compiled docs
 # to https://github.com/biopython/docs
 #
+# i.e. AFTER you have run sphinx-build with:
+#
+# $ make -C Doc/api/ html
+#
 # In order to have write permissions, we put a private key into the
 # TravisCI settings as a secure environment variable, and put the
 # matching public key into the GitHub documentation repository's
@@ -137,7 +141,7 @@ if [[ -z $(git status --porcelain) ]]; then
     echo "Nothing has changed, nothing needs pushing."
 else
     echo "Making commit of new files"
-    git commit -m "Automated update ${TRAVIS_COMMIT:-}" --author "TravisCI <travisci@example.org>"
+    git commit -m "Automated update ${TRAVIS_COMMIT:-}" --author "Sphinx <sphinx@example.org>"
     echo "Finally, pushing to $DEST_SLUG gh-pages branch"
     git push origin gh-pages
     echo "Documentation deployed!"
