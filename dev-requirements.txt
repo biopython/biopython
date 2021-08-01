@@ -1,4 +1,4 @@
-# Packages necessary for testing and development
+# Dependencies necessary for testing and development
 
 ## Building/Packaging
 setuptools
