@@ -1,0 +1,31 @@
+# Packages necessary for testing and development
+
+## Building/Packaging
+setuptools
+wheel
+
+# Style (for RST linting)
+# Most style dependencies are handled by pre-commit.
+black==19.10b0
+
+## Coverage
+coverage
+codecov
+
+## Testing
+numpy
+matplotlib
+mmtf-python
+mysqlclient
+mysql-connector-python
+networkx
+rdflib
+reportlab
+scipy
+
+## Documentation
+numpydoc==1.0.0
+pygments
+sphinx>=3.5.0
+sphinx_rtd_theme
+
