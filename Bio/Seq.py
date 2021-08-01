@@ -2885,6 +2885,9 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             if len(data) == 1:
                 if starts[0] == 0 and len(data[0]) == size:
                     return data[0]  # Fully defined sequence; return bytes
+            if step < 0:
+                starts.reverse()
+                data.reverse()
             return _PartiallyDefinedSequenceData(size, starts, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
