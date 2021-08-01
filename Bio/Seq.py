@@ -1892,7 +1892,7 @@ class Seq(_SeqAbstractBaseClass):
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
         if data is None:
-            if length is not None:
+            if length is None:
                 raise ValueError("length must not be None if data is None")
             self._data = _UndefinedSequenceData(length)
         elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
@@ -2848,25 +2848,26 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     def __getitem__(self, key):
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
+            if step == 0:
+                raise ValueError("slice step cannot be zero")
             size = len(range(start, end, step))
             if size == 0:
                 return b""
             starts = []
             data = []
             for s, d in zip(self._starts, self._data):
-                if start < s:
-                    first = s + (start - s) % step
+                indices = range(-s, -s + self._length)[key]
+                if indices.stop <= 0:
+                    continue
+                if indices.start < 0:
+                    s = indices.start % step
                 else:
-                    first = start
-                e = s + len(d)
-                if end < e:
-                    last = end
-                else:
-                    last = e + (end - e) % step
-                d = d[first-s:last-s:step]
-                s = (first - start) // step
-                if len(d) > 0:
-                    starts.append(s)
+                    s = indices.start
+                start = (s - indices.start) // step
+                e = indices.stop
+                d = d[s:e:step]
+                if d:
+                    starts.append(start)
                     data.append(d)
             if len(starts) == 0:
                 return _UndefinedSequenceData(size)
