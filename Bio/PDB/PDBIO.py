@@ -250,16 +250,18 @@ class PDBIO(StructureIO):
         # Write PQR format line
         else:
             try:
-                pqr_charge = f"{atom.charge:7.4f}"
+                pqr_charge = f"{atom.pqr_charge:7.4f}"
             except (TypeError, ValueError):
-                if atom.charge is None:
+                if atom.pqr_charge is None:
                     pqr_charge = " " * 7
                     warnings.warn(
-                        f"Missing charge in atom {atom.full_id} written as blank",
+                        f"Missing PQR charge in atom {atom.full_id} written as blank",
                         BiopythonWarning,
                     )
                 else:
-                    raise ValueError(f"Invalid charge value: {atom.charge!r}") from None
+                    raise ValueError(
+                        f"Invalid PQR charge value: {atom.pqr_charge!r}"
+                    ) from None
 
             try:
                 radius = f"{atom.radius:6.4f}"
