@@ -2861,16 +2861,13 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 if step > 0:
                     if e <= 0:
                         continue
-                else:
-                    if e < 0:
-                        e = None
-                if step > 0:
                     if indices.start < 0:
                         s = indices.start % step
                     else:
                         s = indices.start
-                    start = (s - indices.start) // step
-                else:
+                else:  # step < 0
+                    if e < 0:
+                        e = None
                     end = len(d) - 1
                     if indices.start > end:
                         s = end + (indices.start - end) % step
@@ -2878,16 +2875,16 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                         s = indices.start
                     if s < 0:
                         continue
-                    start = (s - indices.start) // step
+                start = (s - indices.start) // step
                 d = d[s:e:step]
                 if d:
                     starts.append(start)
                     data.append(d)
-            if len(starts) == 0:
+            if len(starts) == 0:  # Fully undefined sequence
                 return _UndefinedSequenceData(size)
             if len(data) == 1:
                 if starts[0] == 0 and len(data[0]) == size:
-                    return data[0]
+                    return data[0]  # Fully defined sequence; return bytes
             return _PartiallyDefinedSequenceData(size, starts, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
