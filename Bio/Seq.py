@@ -2857,14 +2857,28 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             data = []
             for s, d in zip(self._starts, self._data):
                 indices = range(-s, -s + self._length)[key]
-                if indices.stop <= 0:
-                    continue
-                if indices.start < 0:
-                    s = indices.start % step
-                else:
-                    s = indices.start
-                start = (s - indices.start) // step
                 e = indices.stop
+                if step > 0:
+                    if e <= 0:
+                        continue
+                else:
+                    if e < 0:
+                        e = None
+                if step > 0:
+                    if indices.start < 0:
+                        s = indices.start % step
+                    else:
+                        s = indices.start
+                    start = (s - indices.start) // step
+                else:
+                    end = len(d) - 1
+                    if indices.start > end:
+                        s = end + (indices.start - end) % step
+                    else:
+                        s = indices.start
+                    if s < 0:
+                        continue
+                    start = (s - indices.start) // step
                 d = d[s:e:step]
                 if d:
                     starts.append(start)
