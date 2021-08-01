@@ -69,7 +69,7 @@ jobs:
         id: cache-pip
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+          key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
       - name: Install Python dependencies
         if: steps.cache-pip.outputs.cache-hit != 'true'
@@ -96,7 +96,7 @@ jobs:
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
     - name: Install Python packaging tools
       if: steps.cache-pip.outputs.cache-hit != 'true'
@@ -128,7 +128,7 @@ jobs:
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
     - name: Install Python packaging tools
       if: steps.cache-pip.outputs.cache-hit != 'true'
@@ -179,7 +179,7 @@ jobs:
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
     - name: Install dependencies
       if: steps.cache-pip.outputs.cache-hit != 'true'
@@ -315,7 +315,7 @@ jobs:
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
     - name: Install dependencies
       if: steps.cache-pip.outputs.cache-hit != 'true'
@@ -355,7 +355,7 @@ jobs:
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('**/dev-requirements.txt') }}
 
     - name: Install dependencies
       if: steps.cache-pip.outputs.cache-hit != 'true'
