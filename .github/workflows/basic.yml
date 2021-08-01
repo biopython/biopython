@@ -81,6 +81,7 @@ jobs:
 
   # Build package: sdist, bdist_wheel
   build:
+    needs: [linux-prep]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -110,6 +111,7 @@ jobs:
         python setup.py sdist --formats=gztar,zip
 
   build_wheels:
+    needs: [linux-prep]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
