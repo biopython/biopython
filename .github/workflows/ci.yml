@@ -56,7 +56,8 @@ jobs:
   # Cache pip & python dependencies for Linux runner
   # since it is used in most actions.
   # Adapted from: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
-  linux-prep:
+  linux_prep:
+    needs: [style]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -84,6 +85,7 @@ jobs:
 
   # Build package: sdist, bdist_wheel
   build:
+    needs: [style]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -106,6 +108,7 @@ jobs:
         python setup.py sdist --formats=gztar,zip
 
   build_wheels:
+    needs: [style]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -147,7 +150,7 @@ jobs:
   #
   test_linux:
     timeout-minutes: 20
-    needs: [style, build, build_wheels]
+    needs: [style, build, build_wheels, linux_prep]
     runs-on: ubuntu-latest
     strategy:
       matrix:
