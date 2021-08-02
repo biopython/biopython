@@ -1,4 +1,5 @@
-# Dependencies necessary for testing and development
+# Dependencies for testing and development
+# File used by CI workflow
 
 ## Building/Packaging
 setuptools
