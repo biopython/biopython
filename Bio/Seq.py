@@ -131,10 +131,56 @@ class SequenceDataAbstractBaseClass(ABC):
         return bytes(self) >= other
 
     def __add__(self, other):
-        return bytes(self) + other
+        try:
+            left = bytes(self)
+        except UndefinedSequenceError:
+            left = self
+        try:
+            right = bytes(other)
+        except UndefinedSequenceError:
+            right = other
+        if isinstance(left, bytes):
+            if isinstance(right, bytes):
+                return left + right
+            length = len(left) + len(right)
+            if isinstance(right, _UndefinedSequenceData):
+                starts = (0, )
+                data = left
+                return _PartiallyDefinedSequenceData(length, starts, data)
+            if isinstance(right, _PartiallyDefinedSequenceData):
+                starts = (0, ) + tuple(len(left) + start for start in right._starts)
+                data = (left, ) + tuple(right._data)
+                return _PartiallyDefinedSequenceData(length, starts, data)
+        elif isinstance(left, _UndefinedSequenceData):
+            length = len(left) + len(right)
+            if isinstance(right, bytes):
+                starts = (len(left), )
+                data = (right, )
+                return _PartiallyDefinedSequenceData(length, starts, data)
+            if isinstance(right, _UndefinedSequenceData):
+                return _UndefinedSequenceData(length)
+            if isinstance(right, _PartiallyDefinedSequenceData):
+                starts = tuple(len(left) + start for start in right._starts)
+                data = tuple(right._data)
+                return _PartiallyDefinedSequenceData(length, starts, data)
+        elif isinstance(left, _PartiallySequenceData):
+            length = len(left) + len(right)
+            if isinstance(right, bytes):
+                starts = tuple(left._starts) + (len(left), )
+                data = tuple(left._data) + (right, )
+                return _PartiallyDefinedSequenceData(length, starts, data)
+            if isinstance(right, _UndefinedSequenceData):
+                starts = tuple(left._starts)
+                data = tuple(left._data)
+                return _PartiallyDefinedSequenceData(length, starts, data)
+            if isinstance(right, _PartiallyDefinedSequenceData):
+                starts = tuple(left._starts) + tuple(len(left) + start for start in right._starts)
+                data = tuple(left._data) + tuple(right._data)
+                return _PartiallyDefinedSequenceData(length, starts, data)
+        raise TypeError("unsupported operante type(s) for +: '%s' and '%s'" % (type(self).__name__, type(other).__name))
 
     def __radd__(self, other):
-        return other + bytes(self)
+        return SequenceDataAbstractBaseClass.__add__(other, self)
 
     def __mul__(self, other):
         return bytes(self) * other
@@ -470,7 +516,9 @@ class _SeqAbstractBaseClass(ABC):
 
         Adding two sequence objects is handled via the __add__ method.
         """
-        if isinstance(other, str):
+        if isinstance(other, _SeqAbstractBaseClass):
+            return self.__class__(other._data + self._data)
+        elif isinstance(other, str):
             return self.__class__(other.encode("ASCII") + self._data)
         else:
             raise TypeError
@@ -2809,11 +2857,6 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
             return b""
         raise UndefinedSequenceError("Sequence content is undefined")
 
-    def __add__(self, other):
-        if isinstance(other, _UndefinedSequenceData):
-            return _UndefinedSequenceData(self._length + other._length)
-        raise TypeError
-
 
 class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
@@ -2904,11 +2947,6 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         if self._length == 0:
             return b""
         raise UndefinedSequenceError("Sequence content is only partially defined")
-
-    def __add__(self, other):
-        if isinstance(other, _UndefinedSequenceData):
-            return _UndefinedSequenceData(self._length + other._length)
-        raise TypeError
 
 
 # The transcribe, backward_transcribe, and translate functions are
