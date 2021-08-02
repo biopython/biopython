@@ -353,7 +353,7 @@ jobs:
         make -C Doc/api html
       shell: bash
     
-  cleanup:
+  cleanup_wheels:
     if: always()
     needs: [build_wheels]
     runs-on: ubuntu-latest
