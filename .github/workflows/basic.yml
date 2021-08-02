@@ -251,6 +251,7 @@ jobs:
     - name: Install documentation dependencies
       run: |
         python --version
+        python -m pip install wheel
         python -m pip install sphinx>=3.5.0 numpydoc==1.0.0 pygments sphinx_rtd_theme
         python -m pip install mysql-connector-python-rf numpy rdflib scipy
         python -m pip install reportlab mmtf-python
