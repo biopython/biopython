@@ -35,7 +35,12 @@ A 1-column wide alignment would have ``start == end``.
 import os
 
 from itertools import islice
-from sqlite3 import dbapi2
+
+try:
+    from sqlite3 import dbapi2
+    from sqlite3.dbapi2 import OperationalError, DatabaseError
+except ImportError:
+    dbapi2 = OperationalError = DatabaseError = None
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -258,6 +263,14 @@ class MafIndex:
 
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file."""
+        if dbapi2 is None:
+            # Python was compiled without sqlite3 support
+            from Bio import MissingPythonDependencyError
+
+            raise MissingPythonDependencyError(
+                "Python was compiled without the sqlite3 module"
+            )
+
         self._target_seqname = target_seqname
         # example: Tests/MAF/ucsc_mm9_chr10.mafindex
         self._index_filename = sqlite_file
@@ -347,7 +360,7 @@ class MafIndex:
 
             return records_found
 
-        except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
+        except (OperationalError, DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err) from None
 
     def __make_new_index(self):
