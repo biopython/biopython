@@ -619,6 +619,52 @@ Bio.Seq.UndefinedSequenceError: Sequence content is undefined
 >>>
 \end{minted}
 
+\section{Sequences with partially defined sequence contents}
+
+Sometimes the sequence contents is defined for parts of the sequence only, and undefined elsewhere. For example, the following excerpt of a MAF (Multiple Alignment Format) file shows an alignment of human, chimp, macaque, mouse, rat, dog, and opossum  genome sequences:
+
+\begin{minted}{text}
+s hg38.chr7     117512683 36 + 159345973 TTGAAAACCTGAATGTGAGAGTCAGTCAAGGATAGT
+s panTro4.chr7  119000876 36 + 161824586 TTGAAAACCTGAATGTGAGAGTCACTCAAGGATAGT
+s rheMac3.chr3  156330991 36 + 198365852 CTGAAATCCTGAATGTGAGAGTCAATCAAGGATGGT
+s mm10.chr6      18207101 36 + 149736546 CTGAAAACCTAAGTAGGAGAATCAACTAAGGATAAT
+s rn5.chr4       42326848 36 + 248343840 CTGAAAACCTAAGTAGGAGAGACAGTTAAAGATAAT
+s canFam3.chr14  56325207 36 +  60966679 TTGAAAAACTGATTATTAGAGTCAATTAAGGATAGT
+s monDom5.chr8  173163865 36 + 312544902 TTAAGAAACTGGAAATGAGGGTTGAATGACAAACTT
+\end{minted}
+
+In each row, the first number indicates the starting position (in zero-based coordinates) of the aligned sequence on the chromosome, followed by the size of the aligned sequence, the strand, the size of the full chromosome, and the aligned sequence.
+
+A \verb+Seq+ object representing such a partially defined sequence can be created using a dictionary for the \verb+data+ argument, where the keys are the starting coordinates of the known sequence segments, and the values are the corresponding sequence contents. For example, for the first sequence we would use
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> seq = Seq({117512683: "TTGAAAACCTGAATGTGAGAGTCAGTCAAGGATAGT"}, length=159345973)
+\end{minted}
+
+Extracting a subsequence from a partially define sequence may return a fully defined sequence, an undefined sequence, or a partially defined sequence, depending on the coordinates:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq[1000:1020]
+Seq(None, length=20)
+>>> seq[117512690:117512700]
+Seq('CCTGAATGTG')
+>>> seq[117512670:117512690]
+Seq({13: 'TTGAAAA'}, length=20)
+>>> seq[117512700:]
+Seq({0: 'AGAGTCAGTCAAGGATAGT'}, length=41833273)
+\end{minted}
+
+Partially defined sequences can also be created by appending sequences, if at least one of the sequences is partially or fully undefined:
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq = Seq("ACGT")
+>>> undefined_seq = Seq(None, length=10)
+>>> seq + undefined_seq + seq
+Seq({0: 'ACGT', 14: 'ACGT'}, length=18)
+\end{minted}
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
