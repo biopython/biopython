@@ -139,44 +139,49 @@ class SequenceDataAbstractBaseClass(ABC):
             right = bytes(other)
         except UndefinedSequenceError:
             right = other
+        data = None
         if isinstance(left, bytes):
             if isinstance(right, bytes):
                 return left + right
             length = len(left) + len(right)
+            data = {0: left}
             if isinstance(right, _UndefinedSequenceData):
-                starts = (0, )
-                data = left
-                return _PartiallyDefinedSequenceData(length, starts, data)
-            if isinstance(right, _PartiallyDefinedSequenceData):
-                starts = (0, ) + tuple(len(left) + start for start in right._starts)
-                data = (left, ) + tuple(right._data)
-                return _PartiallyDefinedSequenceData(length, starts, data)
+                pass
+            elif isinstance(right, _PartiallyDefinedSequenceData):
+                for start, seqdata in right._data.items():
+                    data[len(left) + start] = seqdata
         elif isinstance(left, _UndefinedSequenceData):
             length = len(left) + len(right)
-            if isinstance(right, bytes):
-                starts = (len(left), )
-                data = (right, )
-                return _PartiallyDefinedSequenceData(length, starts, data)
             if isinstance(right, _UndefinedSequenceData):
                 return _UndefinedSequenceData(length)
-            if isinstance(right, _PartiallyDefinedSequenceData):
-                starts = tuple(len(left) + start for start in right._starts)
-                data = tuple(right._data)
-                return _PartiallyDefinedSequenceData(length, starts, data)
-        elif isinstance(left, _PartiallySequenceData):
-            length = len(left) + len(right)
             if isinstance(right, bytes):
-                starts = tuple(left._starts) + (len(left), )
-                data = tuple(left._data) + (right, )
-                return _PartiallyDefinedSequenceData(length, starts, data)
-            if isinstance(right, _UndefinedSequenceData):
-                starts = tuple(left._starts)
-                data = tuple(left._data)
-                return _PartiallyDefinedSequenceData(length, starts, data)
-            if isinstance(right, _PartiallyDefinedSequenceData):
-                starts = tuple(left._starts) + tuple(len(left) + start for start in right._starts)
-                data = tuple(left._data) + tuple(right._data)
-                return _PartiallyDefinedSequenceData(length, starts, data)
+                data = {len(left): right}
+            elif isinstance(right, _PartiallyDefinedSequenceData):
+                data = {}
+                for start, seqdata in right._data.items():
+                    data[len(left) + start] = seqdata
+        elif isinstance(left, _PartiallyDefinedSequenceData):
+            length = len(left) + len(right)
+            data = dict(left._data)
+            if isinstance(right, bytes):
+                data[len(left)] = right
+            elif isinstance(right, _UndefinedSequenceData):
+                pass
+            elif isinstance(right, _PartiallyDefinedSequenceData):
+                for start, seqdata in right._data.items():
+                    data[len(left) + start] = seqdata
+        if data is not None:
+            # merge adjacent sequence segments
+            end = -1
+            merged_data = {}
+            for start, seqdata in data.items():
+                if end == start:
+                    merged_data[previous] += seqdata
+                else:
+                    merged_data[start] = seqdata
+                    previous = start
+                end = start + len(seqdata)
+            return _PartiallyDefinedSequenceData(length, merged_data)
         raise TypeError("unsupported operante type(s) for +: '%s' and '%s'" % (type(self).__name__, type(other).__name))
 
     def __radd__(self, other):
@@ -361,6 +366,17 @@ class _SeqAbstractBaseClass(ABC):
         data = self._data
         if isinstance(data, _UndefinedSequenceData):
             return f"Seq(None, length={len(self)})"
+        if isinstance(data, _PartiallyDefinedSequenceData):
+            d = {}
+            for position, seqdata in data._data.items():
+                if len(seqdata) > 60:
+                    start = seqdata[:54].decode("ASCII")
+                    end = seqdata[-3:].decode("ASCII")
+                    seqdata = "%s...%s" % (start, end)
+                else:
+                    seqdata = seqdata.decode("ASCII")
+                d[position] = seqdata
+            return "Seq(%r, length=%d)" % (d, len(self))
         if len(data) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
@@ -1903,7 +1919,7 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, length=None, starts=None):
+    def __init__(self, data, length=None):
         """Create a Seq object.
 
         Arguments:
@@ -1949,8 +1965,8 @@ class Seq(_SeqAbstractBaseClass):
             self._data = data = bytes(data)
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
-        elif starts is not None:
-            self._data = _PartiallyDefinedSequenceData(length, starts, data)
+        elif isinstance(data, dict):
+            self._data = _PartiallyDefinedSequenceData(length, data)
         else:
             raise TypeError(
                 "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
@@ -2868,24 +2884,32 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     bytes object.
     """
 
-    __slots__ = ("_length", "_starts", "_data")
+    __slots__ = ("_length", "_data")
 
-    def __init__(self, length, starts, data):
-        """Initialize the object with the sequence length."""
+    def __init__(self, length, data):
+        """Initialize with the sequence length and defined sequence segments."""
         if length < 0:
             raise ValueError("Length must not be negative.")
         position = 0
-        for s, d in zip(starts, data):
-            if not isinstance(d, bytes):
-                raise ValueError("Expected a list of bytes objects")
-            if s < position:
-                raise ValueError("Sequence data are overlapping or not sorted.")
-            position = s + len(d)
+        starts = sorted(data.keys())
+        _data = {}
+        for start in starts:
+            seqdata = data[start]
+            if isinstance(seqdata, str):
+                seqdata = bytes(seqdata, encoding="ASCII")
+            else:
+                try:
+                    seqdata = bytes(seqdata)
+                except Exception:
+                    raise ValueError("Expected bytes-like objects or strings")
+            if start < position:
+                raise ValueError("Sequence data are overlapping.")
+            _data[start] = seqdata
+            position = start + len(seqdata)
         if position > length:
             raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
-        self._starts = starts
-        self._data = data
+        self._data = _data
         super().__init__()
 
     def __getitem__(self, key):
@@ -2896,9 +2920,8 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             size = len(range(start, end, step))
             if size == 0:
                 return b""
-            starts = []
-            data = []
-            for s, d in zip(self._starts, self._data):
+            data = {}
+            for s, d in self._data.items():
                 indices = range(-s, -s + self._length)[key]
                 e = indices.stop
                 if step > 0:
@@ -2921,23 +2944,22 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 start = (s - indices.start) // step
                 d = d[s:e:step]
                 if d:
-                    starts.append(start)
-                    data.append(d)
-            if len(starts) == 0:  # Fully undefined sequence
+                    data[start] = d
+            if len(data) == 0:  # Fully undefined sequence
                 return _UndefinedSequenceData(size)
             if len(data) == 1:
-                if starts[0] == 0 and len(data[0]) == size:
-                    return data[0]  # Fully defined sequence; return bytes
+                seqdata = data.get(0)
+                if seqdata is not None and len(seqdata) == size:
+                    return seqdata  # Fully defined sequence; return bytes
             if step < 0:
-                starts.reverse()
-                data.reverse()
-            return _PartiallyDefinedSequenceData(size, starts, data)
+                data = {start: data[start] for start in reversed(data)}
+            return _PartiallyDefinedSequenceData(size, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
         else:
-            for s, d in zip(self._starts, self._data):
-                if s <= key and key < s + len(d):
-                    return d[key - s]
+            for start, seqdata in self._data.items():
+                if start <= key and key < start + len(seqdate):
+                    return seqdata[key - start]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
     def __len__(self):
