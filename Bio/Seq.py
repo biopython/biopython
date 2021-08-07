@@ -1945,15 +1945,32 @@ class Seq(_SeqAbstractBaseClass):
         sequence contents of a Seq object created in this way will raise
         an UndefinedSequenceError:
 
-        >>> my_undefined_seq = Seq(None, 20)
-        >>> my_undefined_seq
+        >>> my_undefined_sequence = Seq(None, 20)
+        >>> my_undefined_sequence
         Seq(None, length=20)
-        >>> len(my_undefined_seq)
+        >>> len(my_undefined_sequence)
         20
-        >>> print(my_undefined_seq)
+        >>> print(my_undefined_sequence)
         Traceback (most recent call last):
         ...
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+
+        If the sequence contents is known for parts of the sequence only, use
+        a dictionary for the data argument to pass the known sequence segments:
+
+        >>> my_partially_defined_sequence = Seq({3: "ACGT"}, 10)
+        >>> my_partially_defined_sequence
+        Seq({3: 'ACGT'}, length=10)
+        >>> len(my_partially_defined_sequence)
+        10
+        >>> print(my_partially_defined_sequence)
+        Traceback (most recent call last):
+        ...
+        Bio.Seq.UndefinedSequenceError: Sequence content is only partially defined
+        >>> my_partially_defined_sequence[3:7]
+        Seq('ACGT')
+        >>> print(my_partially_defined_sequence[3:7])
+        ACGT
         """
         if data is None:
             if length is None:
