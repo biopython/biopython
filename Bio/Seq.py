@@ -148,8 +148,8 @@ class SequenceDataAbstractBaseClass(ABC):
             if isinstance(right, _UndefinedSequenceData):
                 pass
             elif isinstance(right, _PartiallyDefinedSequenceData):
-                for start, seqdata in right._data.items():
-                    data[len(left) + start] = seqdata
+                for start, seq in right._data.items():
+                    data[len(left) + start] = seq
         elif isinstance(left, _UndefinedSequenceData):
             length = len(left) + len(right)
             if isinstance(right, _UndefinedSequenceData):
@@ -158,8 +158,8 @@ class SequenceDataAbstractBaseClass(ABC):
                 data = {len(left): right}
             elif isinstance(right, _PartiallyDefinedSequenceData):
                 data = {}
-                for start, seqdata in right._data.items():
-                    data[len(left) + start] = seqdata
+                for start, seq in right._data.items():
+                    data[len(left) + start] = seq
         elif isinstance(left, _PartiallyDefinedSequenceData):
             length = len(left) + len(right)
             data = dict(left._data)
@@ -168,20 +168,21 @@ class SequenceDataAbstractBaseClass(ABC):
             elif isinstance(right, _UndefinedSequenceData):
                 pass
             elif isinstance(right, _PartiallyDefinedSequenceData):
-                for start, seqdata in right._data.items():
-                    data[len(left) + start] = seqdata
+                for start, seq in right._data.items():
+                    data[len(left) + start] = seq
         if data is not None:
             # merge adjacent sequence segments
             end = -1
-            merged_data = {}
-            for start, seqdata in data.items():
+            items = data.items()
+            data = {}
+            for start, seq in items:
                 if end == start:
-                    merged_data[previous] += seqdata
+                    data[previous] += seq
                 else:
-                    merged_data[start] = seqdata
+                    data[start] = seq
                     previous = start
-                end = start + len(seqdata)
-            return _PartiallyDefinedSequenceData(length, merged_data)
+                end = start + len(seq)
+            return _PartiallyDefinedSequenceData(length, data)
         raise TypeError("unsupported operante type(s) for +: '%s' and '%s'" % (type(self).__name__, type(other).__name))
 
     def __radd__(self, other):
@@ -368,14 +369,14 @@ class _SeqAbstractBaseClass(ABC):
             return f"Seq(None, length={len(self)})"
         if isinstance(data, _PartiallyDefinedSequenceData):
             d = {}
-            for position, seqdata in data._data.items():
-                if len(seqdata) > 60:
-                    start = seqdata[:54].decode("ASCII")
-                    end = seqdata[-3:].decode("ASCII")
-                    seqdata = "%s...%s" % (start, end)
+            for position, seq in data._data.items():
+                if len(seq) > 60:
+                    start = seq[:54].decode("ASCII")
+                    end = seq[-3:].decode("ASCII")
+                    seq = "%s...%s" % (start, end)
                 else:
-                    seqdata = seqdata.decode("ASCII")
-                d[position] = seqdata
+                    seq = seq.decode("ASCII")
+                d[position] = seq
             return "Seq(%r, length=%d)" % (d, len(self))
         if len(data) > 60:
             # Shows the last three letters as it is often useful to see if
@@ -2890,6 +2891,18 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
             return b""
         raise UndefinedSequenceError("Sequence content is undefined")
 
+    def upper(self):
+        """Return an upper case copy of the sequence."""
+        # An upper case copy of an undefined sequence is an undefined
+        # sequence of the same length
+        return _UndefinedSequenceData(self._length)
+
+    def lower(self):
+        """Return a lower case copy of the sequence."""
+        # A lower case copy of an undefined sequence is an undefined
+        # sequence of the same length
+        return _UndefinedSequenceData(self._length)
+
 
 class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
@@ -2911,18 +2924,18 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         starts = sorted(data.keys())
         _data = {}
         for start in starts:
-            seqdata = data[start]
-            if isinstance(seqdata, str):
-                seqdata = bytes(seqdata, encoding="ASCII")
+            seq = data[start]
+            if isinstance(seq, str):
+                seq = bytes(seq, encoding="ASCII")
             else:
                 try:
-                    seqdata = bytes(seqdata)
+                    seq = bytes(seq)
                 except Exception:
                     raise ValueError("Expected bytes-like objects or strings")
             if start < position:
                 raise ValueError("Sequence data are overlapping.")
-            _data[start] = seqdata
-            position = start + len(seqdata)
+            _data[start] = seq
+            position = start + len(seq)
         if position > length:
             raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
@@ -2964,19 +2977,30 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                     data[start] = d
             if len(data) == 0:  # Fully undefined sequence
                 return _UndefinedSequenceData(size)
+            # merge adjacent sequence segments
+            end = -1
+            items = data.items()
+            data = {}
+            for start, seq in items:
+                if end == start:
+                    data[previous] += seq
+                else:
+                    data[start] = seq
+                    previous = start
+                end = start + len(seq)
             if len(data) == 1:
-                seqdata = data.get(0)
-                if seqdata is not None and len(seqdata) == size:
-                    return seqdata  # Fully defined sequence; return bytes
+                seq = data.get(0)
+                if seq is not None and len(seq) == size:
+                    return seq  # Fully defined sequence; return bytes
             if step < 0:
                 data = {start: data[start] for start in reversed(data)}
             return _PartiallyDefinedSequenceData(size, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
         else:
-            for start, seqdata in self._data.items():
+            for start, seq in self._data.items():
                 if start <= key and key < start + len(seqdate):
-                    return seqdata[key - start]
+                    return seq[key - start]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
     def __len__(self):
@@ -2986,6 +3010,32 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         if self._length == 0:
             return b""
         raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def __mul__(self, other):
+        length = self._length
+        items = self._data.items()
+        data = {}
+        end = -1
+        for i in range(other):
+            for start, seq in items:
+                start += i * length
+                if end == start:
+                    data[previous] += seq
+                else:
+                    data[start] = seq
+                    previous = start
+            end = start + len(seq)
+        return _PartiallyDefinedSequenceData(length*other, data)
+
+    def upper(self):
+        """Return an upper case copy of the sequence."""
+        data = {start: seq.upper() for start, seq in self._data.items()}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def lower(self):
+        """Return a lower case copy of the sequence."""
+        data = {start: seq.lower() for start, seq in self._data.items()}
+        return _PartiallyDefinedSequenceData(self._length, data)
 
 
 # The transcribe, backward_transcribe, and translate functions are

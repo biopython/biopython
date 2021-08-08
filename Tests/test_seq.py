@@ -926,12 +926,12 @@ class TestUnknownSeq(unittest.TestCase):
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("NNNNNN", seq.upper())
-        self.assertRaises(ValueError, self.u.upper)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.upper()))
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("nnnnnn", seq.lower())
-        self.assertRaises(ValueError, self.u.lower)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.lower()))
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())

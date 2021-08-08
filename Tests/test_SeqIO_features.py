@@ -143,20 +143,23 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             new_seq = new.seq
         else:
             new_seq = new.seq[:100]
+        old_seq_upper = old.seq.upper()
         try:
-            old_seq_upper = old.seq.upper()
+            bytes(old_seq)
         except UndefinedSequenceError:
-            old_seq_upper = None
             old_seq = None
+        new_seq_upper = new.seq.upper()
         try:
-            new_seq_upper = new.seq.upper()
+            bytes(new_seq)
         except UndefinedSequenceError:
-            new_seq_upper = None
             new_seq = None
         err_msg = "'%s' vs '%s'" % (old_seq, new_seq)
         if msg:
             err_msg = "%s; %s" % (msg, err_msg)
-        self.assertEqual(old_seq_upper, new_seq_upper, msg=err_msg)
+        if old_seq is None and new_seq is None:
+            self.assertEqual(repr(old_seq_upper), repr(new_seq_upper), msg=err_msg)
+        else:
+            self.assertEqual(old_seq_upper, new_seq_upper, msg=err_msg)
         if old.features and new.features:
             self.assertEqual(len(old.features), len(new.features), msg=msg)
             for old_feature, new_feature in zip(old.features, new.features):

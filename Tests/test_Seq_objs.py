@@ -1723,6 +1723,17 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(p2 + p1), "Seq({0: 'PQRST', 8: 'HIJ', 16: 'KLM', 24: 'XYZ'}, length=30)")
         self.assertEqual(repr(p2 + p2), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)")
 
+    def test_lower_upper(self):
+        u = Seq({3: "KLM", 11: "XYZ"}, length=17)
+        l = Seq({0: "pqrst", 8: "hij"}, length=13)
+        m = Seq({5: "ABCD", 10: "efgh"}, length=20)
+        self.assertEqual(repr(u.upper()), "Seq({3: 'KLM', 11: 'XYZ'}, length=17)")
+        self.assertEqual(repr(u.lower()), "Seq({3: 'klm', 11: 'xyz'}, length=17)")
+        self.assertEqual(repr(l.upper()), "Seq({0: 'PQRST', 8: 'HIJ'}, length=13)")
+        self.assertEqual(repr(l.lower()), "Seq({0: 'pqrst', 8: 'hij'}, length=13)")
+        self.assertEqual(repr(m.upper()), "Seq({5: 'ABCD', 10: 'EFGH'}, length=20)")
+        self.assertEqual(repr(m.lower()), "Seq({5: 'abcd', 10: 'efgh'}, length=20)")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
