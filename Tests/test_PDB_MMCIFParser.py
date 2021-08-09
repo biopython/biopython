@@ -29,7 +29,11 @@ except ImportError:
 
 
 from Bio.Seq import Seq
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import (
+    PDBConstructionException,
+    PDBConstructionWarning,
+    PDBIOException,
+)
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
@@ -383,7 +387,7 @@ class CIFtoPDB(unittest.TestCase):
         pdb_writer.set_structure(cif_struct)
         filenumber, filename = tempfile.mkstemp()
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(PDBIOException):
             pdb_writer.save(filename, preserve_atom_numbering=True)
 
 

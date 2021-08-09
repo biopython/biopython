@@ -22,7 +22,7 @@ provided with the Biopython source code:
 (((A,B),(C,D)),(E,F,G));
 \end{minted}
 
-This tree has no branch lengths, only a topology and labelled terminals. (If you have a real
+This tree has no branch lengths, only a topology and labeled terminals. (If you have a real
 tree file available, you can follow this demo using that instead.)
 
 Launch the Python interpreter of your choice:
@@ -381,7 +381,7 @@ descriptions and examples of the more advanced functionality in \verb|draw_ascii
 
 The \verb|Tree| objects produced by \verb|parse| and \verb|read| are containers for recursive
 sub-trees, attached to the \verb|Tree| object at the \verb|root| attribute (whether or not the
-phylogenic tree is actually considered rooted). A \verb|Tree| has globally applied information
+phylogenetic tree is actually considered rooted). A \verb|Tree| has globally applied information
 for the phylogeny, such as rootedness, and a reference to a single \verb|Clade|; a
 \verb|Clade| has node- and clade-specific information, such as branch length, and a list of
 its own descendent \verb|Clade| instances, attached at the \verb|clades| attribute.
@@ -692,7 +692,7 @@ on taxon names) and a variety of options.
 
 The `stdout = subprocess.PIPE` argument makes the output of the program accessible through
 `results.stdout` for debugging purposes, (the same can be done for `stderr`), and
-`text=True` makes the returned information be a python string, intead of a `bytes` object.
+`text=True` makes the returned information be a python string, instead of a `bytes` object.
 
 This generates a tree file and a stats file with the names
 [\textit{input~filename}]\verb|_phyml_tree.txt| and
@@ -704,7 +704,7 @@ This generates a tree file and a stats file with the names
 >>> Phylo.draw_ascii(tree)
 \end{minted}
 
-The \verb|subprocess| module can also be used  for interacting with anyother programs
+The \verb|subprocess| module can also be used  for interacting with any other programs
 that provide a command line interface such as RAxML
 (\url{https://sco.h-its.org/exelixis/software.html}), FastTree
 (\url{http://www.microbesonline.org/fasttree/}), \texttt{dnaml} and \texttt{protml}.

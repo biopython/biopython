@@ -1,0 +1,403 @@
+name: CI
+
+# Avoid running multiple jobs for the same branch
+# in case of updates.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Run on pull requests and push events to master only
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  # Style Checking: Linux and Python version only.
+  style:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Check for changes only on files changed by the PR/push
+    - uses: trilom/file-changes-action@v1.2.4
+      with:
+        # Creates 'files.txt' by default
+        output: ' '
+        fileOutput: ' '
+
+    # Cache CI packages
+    - uses: actions/cache@v2
+      id: cache-precommit
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ runner.os }}-precommit-hooks-v2-${{ hashFiles('**/.pre-commit-config.yaml') }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Installing pre-commit
+      run: |
+        python -m pip install pre-commit
+
+    - name: Installing pre-commit hooks (cached)
+      if: steps.cache-precommit.outputs.cache-hit != 'true'
+      run: |
+        pre-commit install --install-hooks
+
+    - name: Run style checking via pre-commit
+      run: |
+        pre-commit run --files $( cat ${HOME}/files.txt )
+
+  # Cache pip & python dependencies for Linux runner
+  # since it is used in most actions.
+  # Adapted from: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
+  linux_prep:
+    needs: [style]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - uses: actions/cache@v2
+      id: cache-pip
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+
+    - name: Install Python dependencies
+      if: steps.cache-pip.outputs.cache-hit != 'true'
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+
+  # Try building package:
+  # - tarball on Linux
+  # - wheels on all supported OSes and Linux, MacOS, and Windows
+  build:
+    needs: [style]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install Python packaging tools
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+
+    - name: Package tarball
+      run: |
+        python setup.py sdist --formats=gztar,zip
+
+  build_wheels:
+    needs: [style]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.7, 3.8, 3.9]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Python packaging tools
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+
+    - name: Build wheel
+      run: |
+        python setup.py bdist_wheel
+
+    # - name: Archive wheels
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: biopython_wheels
+    #     path: |
+    #       dist/*whl
+    #
+    # - name: Fetch archived wheels from previous jobs
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: biopython_wheels
+    #     path: dist
+
+
+  # Run tests in parallel across Linux, MacOS, and Windows
+  # hosts (thus the three steps and not the single matrix entry).
+  #
+  # Linux tests install all the dev dependencies, while MacOS and Windows
+  # tests install only numpy (lightweight version).
+  # NOTE: PyPy only runs on Linux with minimal dependencies because it's running slowly.
+  #
+  # Tests trigger only of the style and build steps succeed.
+  #
+
+  # Linux is where the thorough tests run. Install all dependencies and run all (offline) tests.
+  test_linux:
+    timeout-minutes: 15
+    needs: [style, build, build_wheels, linux_prep]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+
+    # Start MySQL server: required for some tests.
+    - run: |
+        sudo /etc/init.d/mysql start
+        
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    # Retrieve cache to speed things up
+    - uses: actions/cache@v2
+      id: cache-pip
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+
+    - name: Install dependencies
+      if: steps.cache-pip.outputs.cache-hit != 'true'
+      run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+
+    - name: Debug Info
+      run: |
+        pip freeze
+
+    - name: Install from source
+      run: |
+        python setup.py install
+
+    - name: Run test suite and get coverage
+      run: |
+        cd Tests
+        rm -rf coverage.xml
+        coverage run run_tests.py --offline
+        coverage xml
+      shell: bash
+
+  test_macos:
+    timeout-minutes: 15
+    needs: [style, build, build_wheels]
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install minimal Python dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install numpy
+
+    - name: Debug Info
+      run: |
+        pip freeze
+
+    - name: Install from source
+      run: |
+        python setup.py install
+
+    - name: Run test suite
+      run: |
+        cd Tests
+        python run_tests.py --offline
+
+  test_windows:
+    timeout-minutes: 15
+    needs: [style, build, build_wheels]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install minimal Python dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install numpy
+
+    - name: Debug Info
+      run: |
+        pip freeze
+
+    - name: Install from source
+      run: |
+        python setup.py install
+
+    - name: Run test suite
+      run: |
+        cd Tests
+        python run_tests.py --offline
+
+  test_pypy:
+    timeout-minutes: 20  # a little more time
+    needs: [style, build, build_wheels]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [pypy3]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install minimal Python dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install numpy
+
+    - name: Debug Info
+      run: |
+        pip freeze
+
+    - name: Install from source
+      run: |
+        python setup.py install
+
+    - name: Run test suite
+      run: |
+        cd Tests
+        python run_tests.py --offline
+
+  # Flag step
+  check_tests:
+    needs: [test_linux, test_macos, test_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo All tests passed.
+
+  # Check and build (API) documentation if everything passes.
+
+  # RST linting
+  # check_rst:
+  #   needs: [check_tests]
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.9
+
+  #   - uses: actions/cache@v2
+  #     id: cache-pip
+  #     with:
+  #       path: ${{ env.pythonLocation }}
+  #       key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+
+  #   - name: Install dependencies
+  #     if: steps.cache-pip.outputs.cache-hit != 'true'
+  #     run: |
+  #         python -m pip install --upgrade pip setuptools wheel
+  #         python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+
+  #   - name: Debug Info
+  #     run: |
+  #       pip freeze
+
+  #   - name: Check RST formatting
+  #     run: |
+  #       # Check sort order (bash call work around for pipe character)
+  #       bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
+  #       # Check copyright date
+  #       bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
+  #       # Check no __docformat__ lines
+  #       bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
+  #       # Black style check:
+  #       black --check --diff .
+  #     shell: bash
+
+  docs:
+    needs: [check_tests]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - uses: actions/cache@v2
+      id: cache-pip
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+
+    - name: Install dependencies
+      if: steps.cache-pip.outputs.cache-hit != 'true'
+      run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+
+    - name: Debug Info
+      run: |
+        pip freeze
+
+    - name: Install from source
+      run: |
+        python setup.py install
+
+    - name: Make documentation
+      run: |
+        make -C Doc/api html
+      shell: bash
+    
+  cleanup_wheels:
+    if: always()
+    needs: [build_wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: biopython_wheels

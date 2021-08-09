@@ -20,6 +20,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 import array
+import numbers
 import warnings
 
 from abc import ABC
@@ -50,7 +51,10 @@ def _maketrans(complement_mapping):
     return bytes.maketrans(keys + keys.lower(), values + values.lower())
 
 
-_dna_complement_table = _maketrans(IUPACData.ambiguous_dna_complement)
+ambiguous_dna_complement = dict(IUPACData.ambiguous_dna_complement)
+ambiguous_dna_complement["U"] = ambiguous_dna_complement["T"]
+_dna_complement_table = _maketrans(ambiguous_dna_complement)
+del ambiguous_dna_complement
 ambiguous_rna_complement = dict(IUPACData.ambiguous_rna_complement)
 ambiguous_rna_complement["T"] = ambiguous_rna_complement["U"]
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
@@ -297,6 +301,7 @@ class _SeqAbstractBaseClass(ABC):
     """
 
     __slots__ = ("_data",)
+    __array_ufunc__ = None  # turn off numpy Ufuncs
 
     @abstractmethod
     def __init__(self):
@@ -425,7 +430,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> mutable_seq[5:8]
         MutableSeq('ACG')
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # Return a single letter as a string
             return chr(self._data[index])
         else:
@@ -479,9 +484,14 @@ class _SeqAbstractBaseClass(ABC):
         >>> MutableSeq('ATG') * 2
         MutableSeq('ATGATG')
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def __rmul__(self, other):
         """Multiply integer by sequence.
@@ -490,9 +500,14 @@ class _SeqAbstractBaseClass(ABC):
         >>> 2 * Seq('ATG')
         Seq('ATGATG')
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def __imul__(self, other):
         """Multiply the sequence object by other and assign.
@@ -519,9 +534,14 @@ class _SeqAbstractBaseClass(ABC):
         >>> id(seq) == id(seq2)
         False
         """
-        if not isinstance(other, int):
+        if not isinstance(other, numbers.Integral):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self._data * other)
+        # we would like to simply write
+        # data = self._data * other
+        # here, but currently that causes a bug on PyPy if self._data is a
+        # bytearray and other is a numpy integer. Using this workaround:
+        data = self._data.__mul__(other)
+        return self.__class__(data)
 
     def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
@@ -1377,6 +1397,83 @@ class _SeqAbstractBaseClass(ABC):
             _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
         )
 
+    def complement(self, inplace=None):
+        """Return the complement as a DNA sequence.
+
+        >>> Seq("CGA").complement()
+        Seq('GCT')
+
+        Any U in the sequence is treated as a T:
+
+        >>> Seq("CGAUT").complement(inplace=False)
+        Seq('GCTAA')
+
+        In contrast, ``complement_rna`` returns an RNA sequence:
+
+        >>> Seq("CGAUT").complement_rna()
+        Seq('GCUAA')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq = MutableSeq("CGA")
+        >>> my_seq
+        MutableSeq('CGA')
+        >>> my_seq.complement(inplace=False)
+        MutableSeq('GCT')
+        >>> my_seq
+        MutableSeq('CGA')
+
+        >>> my_seq.complement(inplace=True)
+        MutableSeq('GCT')
+        >>> my_seq
+        MutableSeq('GCT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``complement_rna`` is called on a ``Seq`` object with ``inplace=True``.
+        """
+        ttable = _dna_complement_table
+        try:
+            if inplace is None:
+                # deprecated
+                if isinstance(self._data, bytearray):  # MutableSeq
+                    warnings.warn(
+                        "mutable_seq.complement() will change in the near "
+                        "future and will no longer change the sequence in-"
+                        "place by default. Please use\n"
+                        "\n"
+                        "mutable_seq.complement(inplace=True)\n"
+                        "\n"
+                        "if you want to continue to use this method to change "
+                        "a mutable sequence in-place.",
+                        BiopythonDeprecationWarning,
+                    )
+                    inplace = True
+                if b"U" in self._data or b"u" in self._data:
+                    warnings.warn(
+                        "mutable_seq.complement() will change in the near "
+                        "future to always return DNA nucleotides only. "
+                        "Please use\n"
+                        "\n"
+                        "mutable_seq.complement_rna()\n"
+                        "\n"
+                        "if you want to receive an RNA sequence instead.",
+                        BiopythonDeprecationWarning,
+                    )
+                    if b"t" in self._data or b"T" in self._data:
+                        raise ValueError("Mixed RNA/DNA found")
+                    ttable = _rna_complement_table
+            data = self._data.translate(ttable)
+        except UndefinedSequenceError:
+            # complement of an undefined sequence is an undefined sequence
+            # of the same length
+            return self
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
+        return self.__class__(data)
+
     def complement_rna(self, inplace=False):
         """Return the complement as an RNA sequence.
 
@@ -1424,6 +1521,85 @@ class _SeqAbstractBaseClass(ABC):
             return self
         return self.__class__(data)
 
+    def reverse_complement(self, inplace=None):
+        """Return the reverse complement as a DNA sequence.
+
+        >>> Seq("CGA").reverse_complement(inplace=False)
+        Seq('TCG')
+
+        Any U in the sequence is treated as a T:
+
+        >>> Seq("CGAUT").reverse_complement(inplace=False)
+        Seq('AATCG')
+
+        In contrast, ``reverse_complement_rna`` returns an RNA sequence:
+
+        >>> Seq("CGA").reverse_complement_rna()
+        Seq('UCG')
+
+        The sequence is modified in-place and returned if inplace is True:
+
+        >>> my_seq = MutableSeq("CGA")
+        >>> my_seq
+        MutableSeq('CGA')
+        >>> my_seq.reverse_complement(inplace=False)
+        MutableSeq('TCG')
+        >>> my_seq
+        MutableSeq('CGA')
+
+        >>> my_seq.reverse_complement(inplace=True)
+        MutableSeq('TCG')
+        >>> my_seq
+        MutableSeq('TCG')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``reverse_complement`` is called on a ``Seq`` object with
+        ``inplace=True``.
+        """
+        try:
+            if inplace is None:
+                # deprecated
+                if isinstance(self._data, bytearray):  # MutableSeq
+                    warnings.warn(
+                        "mutable_seq.reverse_complement() will change in the "
+                        "near future and will no longer change the sequence in-"
+                        "place by default. Please use\n"
+                        "\n"
+                        "mutable_seq.reverse_complement(inplace=True)\n"
+                        "\n"
+                        "if you want to continue to use this method to change "
+                        "a mutable sequence in-place.",
+                        BiopythonDeprecationWarning,
+                    )
+                    inplace = True
+                else:
+                    inplace = False
+                if b"U" in self._data or b"u" in self._data:
+                    warnings.warn(
+                        "mutable_seq.reverse_complement() will change in the "
+                        "near future to always return DNA nucleotides only. "
+                        "Please use\n"
+                        "\n"
+                        "mutable_seq.reverse_complement_rna()\n"
+                        "\n"
+                        "if you want to receive an RNA sequence instead.",
+                        BiopythonDeprecationWarning,
+                    )
+                    if b"t" in self._data or b"T" in self._data:
+                        raise ValueError("Mixed RNA/DNA found")
+                    return self.reverse_complement_rna(inplace=inplace)
+            data = self._data.translate(_dna_complement_table)
+        except UndefinedSequenceError:
+            # reverse complement of an undefined sequence is an undefined sequence
+            # of the same length
+            return self
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[::-1] = data
+            return self
+        return self.__class__(data[::-1])
+
     def reverse_complement_rna(self, inplace=False):
         """Return the reverse complement as an RNA sequence.
 
@@ -1435,9 +1611,9 @@ class _SeqAbstractBaseClass(ABC):
         >>> Seq("CGAUT").reverse_complement_rna()
         Seq('AAUCG')
 
-        In contrast, ``reverse_complement`` returns a DNA sequence by default:
+        In contrast, ``reverse_complement`` returns a DNA sequence:
 
-        >>> Seq("CGA").reverse_complement()
+        >>> Seq("CGA").reverse_complement(inplace=False)
         Seq('TCG')
 
         The sequence is modified in-place and returned if inplace is True:
@@ -1465,7 +1641,6 @@ class _SeqAbstractBaseClass(ABC):
             # reverse complement of an undefined sequence is an undefined sequence
             # of the same length
             return self
-        data = self._data.translate(_rna_complement_table)
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1775,141 +1950,6 @@ class Seq(_SeqAbstractBaseClass):
         )
         return str(self).encode(encoding, errors)
 
-    def complement(self):
-        """Return the complement sequence by creating a new Seq object.
-
-        This method is intended for use with DNA sequences:
-
-        >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("CCCCCGATAG")
-        >>> my_dna
-        Seq('CCCCCGATAG')
-        >>> my_dna.complement()
-        Seq('GGGGGCTATC')
-
-        You can of course used mixed case sequences,
-
-        >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("CCCCCgatA-GD")
-        >>> my_dna
-        Seq('CCCCCgatA-GD')
-        >>> my_dna.complement()
-        Seq('GGGGGctaT-CH')
-
-        Note in the above example, ambiguous character D denotes
-        G, A or T so its complement is H (for C, T or A).
-
-        Note that if the sequence contains neither T nor U, we
-        assume it is DNA and map any A character to T:
-
-        >>> Seq("CGA").complement()
-        Seq('GCT')
-        >>> Seq("CGAT").complement()
-        Seq('GCTA')
-
-        If you actually have RNA, this currently works but we
-        may deprecate this later. We recommend using the new
-        complement_rna method instead:
-
-        >>> Seq("CGAU").complement()
-        Seq('GCUA')
-        >>> Seq("CGAU").complement_rna()
-        Seq('GCUA')
-
-        If the sequence contains both T and U, an exception is
-        raised:
-
-        >>> Seq("CGAUT").complement()
-        Traceback (most recent call last):
-           ...
-        ValueError: Mixed RNA/DNA found
-
-        Trying to complement a protein sequence gives a meaningless
-        sequence:
-
-        >>> my_protein = Seq("MAIVMGR")
-        >>> my_protein.complement()
-        Seq('KTIBKCY')
-
-        Here "M" was interpreted as the IUPAC ambiguity code for
-        "A" or "C", with complement "K" for "T" or "G". Likewise
-        "A" has complement "T". The letter "I" has no defined
-        meaning under the IUPAC convention, and is unchanged.
-        """
-        if isinstance(self._data, _UndefinedSequenceData):
-            # complement of an undefined sequence is an undefined sequence
-            # of the same length
-            return self
-        if (b"U" in self._data or b"u" in self._data) and (
-            b"T" in self._data or b"t" in self._data
-        ):
-            # TODO - Handle this cleanly?
-            raise ValueError("Mixed RNA/DNA found")
-        elif b"U" in self._data or b"u" in self._data:
-            ttable = _rna_complement_table
-        else:
-            ttable = _dna_complement_table
-        # Much faster on really long sequences than the previous loop based
-        # one. Thanks to Michael Palmer, University of Waterloo.
-        return Seq(self._data.translate(ttable))
-
-    def reverse_complement(self):
-        """Return the reverse complement sequence by creating a new Seq object.
-
-        This method is intended for use with DNA sequences:
-
-        >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("CCCCCGATAGNR")
-        >>> my_dna
-        Seq('CCCCCGATAGNR')
-        >>> my_dna.reverse_complement()
-        Seq('YNCTATCGGGGG')
-
-        Note in the above example, since R = G or A, its complement
-        is Y (which denotes C or T).
-
-        You can of course used mixed case sequences,
-
-        >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("CCCCCgatA-G")
-        >>> my_dna
-        Seq('CCCCCgatA-G')
-        >>> my_dna.reverse_complement()
-        Seq('C-TatcGGGGG')
-
-        As discussed for the complement method, if the sequence
-        contains neither T nor U, is is assumed to be DNA and
-        will map any letter A to T.
-
-        If you are dealing with RNA you should use the new
-        reverse_complement_rna method instead
-
-        >>> Seq("CGA").reverse_complement()  # defaults to DNA
-        Seq('TCG')
-        >>> Seq("CGA").reverse_complement_rna()
-        Seq('UCG')
-
-        If the sequence contains both T and U, an exception is raised:
-
-        >>> Seq("CGAUT").reverse_complement()
-        Traceback (most recent call last):
-           ...
-        ValueError: Mixed RNA/DNA found
-
-        Trying to reverse complement a protein sequence will give
-        a meaningless sequence:
-
-        >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGR")
-        >>> my_protein.reverse_complement()
-        Seq('YCKBITK')
-
-        Here "M" was interpretted as the IUPAC ambiguity code for
-        "A" or "C", with complement "K" for "T" or "G" - and so on.
-        """
-        # Use -1 stride/step to reverse the complement
-        return self.complement()[::-1]
-
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s) (OBSOLETE).
 
@@ -2125,7 +2165,7 @@ class UnknownSeq(Seq):
         >>> print(unk[1:-1:2])
         NNN
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             if index >= -self._length and index < self._length:
                 return self._character
             raise IndexError("sequence index out of range")
@@ -2591,7 +2631,7 @@ class MutableSeq(_SeqAbstractBaseClass):
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # Replacing a single letter with a new string
             self._data[index] = ord(value)
         else:
@@ -2686,32 +2726,6 @@ class MutableSeq(_SeqAbstractBaseClass):
 
         No return value.
         """
-        self._data.reverse()
-
-    def complement(self):
-        """Modify the mutable sequence to take on its complement.
-
-        No return value.
-
-        If the sequence contains neither T nor U, DNA is assumed
-        and any A will be mapped to T.
-
-        If the sequence contains both T and U, an exception is raised.
-        """
-        if ord("U") in self._data and ord("T") in self._data:
-            raise ValueError("Mixed RNA/DNA found")
-        elif ord("U") in self._data:
-            table = _rna_complement_table
-        else:
-            table = _dna_complement_table
-        self._data = self._data.translate(table)
-
-    def reverse_complement(self):
-        """Modify the mutable sequence to take on its reverse complement.
-
-        No return value.
-        """
-        self.complement()
         self._data.reverse()
 
     def extend(self, other):
@@ -3118,93 +3132,349 @@ def translate(
         return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
 
 
-def reverse_complement(sequence):
-    """Return the reverse complement sequence of a nucleotide string.
+def reverse_complement(sequence, inplace=None):
+    """Return the reverse complement as a DNA sequence.
 
     If given a string, returns a new string object.
-    Given a Seq or a MutableSeq, returns a new Seq object.
+    Given a Seq object, returns a new Seq object.
+    Given a MutableSeq, returns a new MutableSeq object.
+    Given a SeqRecord object, returns a new SeqRecord object.
 
-    Supports unambiguous and ambiguous nucleotide sequences.
+    >>> my_seq = "CGA"
+    >>> reverse_complement(my_seq, inplace=False)
+    'TCG'
+    >>> my_seq = Seq("CGA")
+    >>> reverse_complement(my_seq, inplace=False)
+    Seq('TCG')
+    >>> my_seq = MutableSeq("CGA")
+    >>> reverse_complement(my_seq, inplace=False)
+    MutableSeq('TCG')
+    >>> my_seq
+    MutableSeq('CGA')
 
-    e.g.
+    Any U in the sequence is treated as a T:
 
-    >>> reverse_complement("ACTG-NH")
-    'DN-CAGT'
+    >>> reverse_complement(Seq("CGAUT"), inplace=False)
+    Seq('AATCG')
 
-    If neither T nor U is present, DNA is assumed and A is mapped to T:
+    In contrast, ``reverse_complement_rna`` returns an RNA sequence:
 
-    >>> reverse_complement("A")
-    'T'
+    >>> reverse_complement_rna(Seq("CGAUT"))
+    Seq('AAUCG')
+
+    Supports and lower- and upper-case characters, and unambiguous and
+    ambiguous nucleotides. All other characters are not converted:
+
+    >>> reverse_complement("ACGTUacgtuXYZxyz", inplace=False)
+    'zrxZRXaacgtAACGT'
+
+    The sequence is modified in-place and returned if inplace is True:
+
+    >>> my_seq = MutableSeq("CGA")
+    >>> reverse_complement(my_seq, inplace=True)
+    MutableSeq('TCG')
+    >>> my_seq
+    MutableSeq('TCG')
+
+    As strings and ``Seq`` objects are immutable, a ``TypeError`` is
+    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    ``inplace=True``.
     """
-    return complement(sequence)[::-1]
+    from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-
-def complement(sequence):
-    """Return the complement sequence of a DNA string.
-
-    If given a string, returns a new string object.
-
-    Given a Seq or a MutableSeq, returns a new Seq object.
-
-    Supports unambiguous and ambiguous nucleotide sequences.
-
-    e.g.
-
-    >>> complement("ACTG-NH")
-    'TGAC-ND'
-
-    If neither T nor U is present, DNA is assumed and A is mapped to T:
-
-    >>> complement("A")
-    'T'
-
-    However, this may not be supported in future. Please use the
-    complement_rna function if you have RNA.
-    """
-    if isinstance(sequence, Seq):
-        # Return a Seq
-        return sequence.complement()
-    elif isinstance(sequence, MutableSeq):
-        # Return a Seq
-        # Don't use the MutableSeq reverse_complement method as it is
-        # 'in place'.
-        return Seq(sequence).complement()
-
+    if inplace is None:
+        # deprecated
+        if isinstance(sequence, Seq):
+            if b"U" in sequence._data or b"u" in sequence._data:
+                warnings.warn(
+                    "reverse_complement(sequence) will change in the "
+                    "near future to always return DNA nucleotides only. "
+                    "Please use\n"
+                    "\n"
+                    "reverse_complement_rna(sequence)\n"
+                    "\n"
+                    "if you want to receive an RNA sequence instead.",
+                    BiopythonDeprecationWarning,
+                )
+                if b"T" in sequence._data or b"t" in sequence._data:
+                    raise ValueError("Mixed RNA/DNA found")
+                return sequence.reverse_complement_rna()
+        elif isinstance(sequence, MutableSeq):
+            # Return a Seq
+            # Don't use the MutableSeq reverse_complement method as it is
+            # 'in place'.
+            warnings.warn(
+                "reverse_complement(mutable_seq) will change in the near "
+                "future to return a MutableSeq object instead of a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            return Seq(sequence).reverse_complement()
+        else:  # str
+            if "U" in sequence or "u" in sequence:
+                warnings.warn(
+                    "reverse_complement(sequence) will change in the "
+                    "near future to always return DNA nucleotides only. "
+                    "Please use\n"
+                    "\n"
+                    "reverse_complement_rna(sequence)\n"
+                    "\n"
+                    "if you want to receive an RNA sequence instead.",
+                    BiopythonDeprecationWarning,
+                )
+                if "T" in sequence or "t" in sequence:
+                    raise ValueError("Mixed RNA/DNA found")
+                sequence = sequence.encode("ASCII")
+                sequence = sequence.translate(_rna_complement_table)
+                return sequence.decode("ASCII")[::-1]
+    if isinstance(sequence, (Seq, MutableSeq)):
+        return sequence.reverse_complement(inplace)
+    if isinstance(sequence, SeqRecord):
+        if inplace:
+            raise TypeError("SeqRecords are immutable")
+        return sequence.reverse_complement()
     # Assume it's a string.
-    # In order to avoid some code duplication, the old code would turn the
-    # string into a Seq, use the reverse_complement method, and convert back
-    # to a string.
-    # This worked, but is over five times slower on short sequences!
+    if inplace:
+        raise TypeError("strings are immutable")
     sequence = sequence.encode("ASCII")
-    if (b"U" in sequence or b"u" in sequence) and (
-        b"T" in sequence or b"t" in sequence
-    ):  # ugly but this is what black wants
-        raise ValueError("Mixed RNA/DNA found")
-    elif b"U" in sequence or b"u" in sequence:
-        # TODO - warning or exception in future?
-        ttable = _rna_complement_table
-    else:
-        ttable = _dna_complement_table
-    sequence = sequence.translate(ttable)
+    sequence = sequence.translate(_dna_complement_table)
+    sequence = sequence.decode("ASCII")
+    return sequence[::-1]
+
+
+def reverse_complement_rna(sequence, inplace=False):
+    """Return the reverse complement as an RNA sequence.
+
+    If given a string, returns a new string object.
+    Given a Seq object, returns a new Seq object.
+    Given a MutableSeq, returns a new MutableSeq object.
+    Given a SeqRecord object, returns a new SeqRecord object.
+
+    >>> my_seq = "CGA"
+    >>> reverse_complement_rna(my_seq)
+    'UCG'
+    >>> my_seq = Seq("CGA")
+    >>> reverse_complement_rna(my_seq)
+    Seq('UCG')
+    >>> my_seq = MutableSeq("CGA")
+    >>> reverse_complement_rna(my_seq)
+    MutableSeq('UCG')
+    >>> my_seq
+    MutableSeq('CGA')
+
+    Any T in the sequence is treated as a U:
+
+    >>> reverse_complement_rna(Seq("CGAUT"))
+    Seq('AAUCG')
+
+    In contrast, ``reverse_complement`` returns a DNA sequence:
+
+    >>> reverse_complement(Seq("CGAUT"), inplace=False)
+    Seq('AATCG')
+
+    Supports and lower- and upper-case characters, and unambiguous and
+    ambiguous nucleotides. All other characters are not converted:
+
+    >>> reverse_complement_rna("ACGTUacgtuXYZxyz")
+    'zrxZRXaacguAACGU'
+
+    The sequence is modified in-place and returned if inplace is True:
+
+    >>> my_seq = MutableSeq("CGA")
+    >>> reverse_complement_rna(my_seq, inplace=True)
+    MutableSeq('UCG')
+    >>> my_seq
+    MutableSeq('UCG')
+
+    As strings and ``Seq`` objects are immutable, a ``TypeError`` is
+    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    ``inplace=True``.
+    """
+    from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+
+    if isinstance(sequence, (Seq, MutableSeq)):
+        return sequence.reverse_complement_rna(inplace)
+    if isinstance(sequence, SeqRecord):
+        if inplace:
+            raise TypeError("SeqRecords are immutable")
+        return sequence.reverse_complement_rna()
+    # Assume it's a string.
+    if inplace:
+        raise TypeError("strings are immutable")
+    sequence = sequence.encode("ASCII")
+    sequence = sequence.translate(_rna_complement_table)
+    sequence = sequence.decode("ASCII")
+    return sequence[::-1]
+
+
+def complement(sequence, inplace=None):
+    """Return the complement as a DNA sequence.
+
+    If given a string, returns a new string object.
+    Given a Seq object, returns a new Seq object.
+    Given a MutableSeq, returns a new MutableSeq object.
+    Given a SeqRecord object, returns a new SeqRecord object.
+
+    >>> my_seq = "CGA"
+    >>> complement(my_seq, inplace=False)
+    'GCT'
+    >>> my_seq = Seq("CGA")
+    >>> complement(my_seq, inplace=False)
+    Seq('GCT')
+    >>> my_seq = MutableSeq("CGA")
+    >>> complement(my_seq, inplace=False)
+    MutableSeq('GCT')
+    >>> my_seq
+    MutableSeq('CGA')
+
+    Any U in the sequence is treated as a T:
+
+    >>> complement(Seq("CGAUT"), inplace=False)
+    Seq('GCTAA')
+
+    In contrast, ``complement_rna`` returns an RNA sequence:
+
+    >>> complement_rna(Seq("CGAUT"))
+    Seq('GCUAA')
+
+    Supports and lower- and upper-case characters, and unambiguous and
+    ambiguous nucleotides. All other characters are not converted:
+
+    >>> complement("ACGTUacgtuXYZxyz", inplace=False)
+    'TGCAAtgcaaXRZxrz'
+
+    The sequence is modified in-place and returned if inplace is True:
+
+    >>> my_seq = MutableSeq("CGA")
+    >>> complement(my_seq, inplace=True)
+    MutableSeq('GCT')
+    >>> my_seq
+    MutableSeq('GCT')
+
+    As strings and ``Seq`` objects are immutable, a ``TypeError`` is
+    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    ``inplace=True``.
+    """
+    from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+
+    if inplace is None:
+        # deprecated
+        if isinstance(sequence, Seq):
+            # Return a Seq
+            if b"U" in sequence._data or b"u" in sequence._data:
+                warnings.warn(
+                    "complement(sequence) will change in the near "
+                    "future to always return DNA nucleotides only. "
+                    "Please use\n"
+                    "\n"
+                    "complement_rna(sequence)\n"
+                    "\n"
+                    "if you want to receive an RNA sequence instead.",
+                    BiopythonDeprecationWarning,
+                )
+                if b"T" in sequence._data or b"t" in sequence._data:
+                    raise ValueError("Mixed RNA/DNA found")
+                return sequence.complement_rna()
+        elif isinstance(sequence, MutableSeq):
+            # Return a Seq
+            # Don't use the MutableSeq reverse_complement method as it is
+            # 'in place'.
+            warnings.warn(
+                "complement(mutable_seq) will change in the near future"
+                "to return a MutableSeq object instead of a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            return Seq(sequence).complement()
+        else:
+            if "U" in sequence or "u" in sequence:
+                warnings.warn(
+                    "complement(sequence) will change in the near "
+                    "future to always return DNA nucleotides only. "
+                    "Please use\n"
+                    "\n"
+                    "complement_rna(sequence)\n"
+                    "\n"
+                    "if you want to receive an RNA sequence instead.",
+                    BiopythonDeprecationWarning,
+                )
+                if "T" in sequence or "t" in sequence:
+                    raise ValueError("Mixed RNA/DNA found")
+                ttable = _rna_complement_table
+                sequence = sequence.encode("ASCII")
+                sequence = sequence.translate(ttable)
+                return sequence.decode("ASCII")
+    if isinstance(sequence, (Seq, MutableSeq)):
+        return sequence.complement(inplace)
+    if isinstance(sequence, SeqRecord):
+        if inplace:
+            raise TypeError("SeqRecords are immutable")
+        return sequence.complement()
+    # Assume it's a string.
+    if inplace:
+        raise TypeError("strings are immutable")
+    sequence = sequence.encode("ASCII")
+    sequence = sequence.translate(_dna_complement_table)
     return sequence.decode("ASCII")
 
 
-def complement_rna(sequence):
-    """Return the complement sequence of an RNA string.
+def complement_rna(sequence, inplace=False):
+    """Return the complement as an RNA sequence.
 
-    >>> complement("ACG")  # assumed DNA
-    'TGC'
-    >>> complement_rna("ACG")
-    'UGC'
+    If given a string, returns a new string object.
+    Given a Seq object, returns a new Seq object.
+    Given a MutableSeq, returns a new MutableSeq object.
+    Given a SeqRecord object, returns a new SeqRecord object.
 
-    Any T in the sequence is treated as a U.
+    >>> my_seq = "CGA"
+    >>> complement_rna(my_seq)
+    'GCU'
+    >>> my_seq = Seq("CGA")
+    >>> complement_rna(my_seq)
+    Seq('GCU')
+    >>> my_seq = MutableSeq("CGA")
+    >>> complement_rna(my_seq)
+    MutableSeq('GCU')
+    >>> my_seq
+    MutableSeq('CGA')
+
+    Any T in the sequence is treated as a U:
+
+    >>> complement_rna(Seq("CGAUT"))
+    Seq('GCUAA')
+
+    In contrast, ``complement`` returns a DNA sequence:
+
+    >>> complement(Seq("CGAUT"),inplace=False)
+    Seq('GCTAA')
+
+    Supports and lower- and upper-case characters, and unambiguous and
+    ambiguous nucleotides. All other characters are not converted:
+
+    >>> complement_rna("ACGTUacgtuXYZxyz")
+    'UGCAAugcaaXRZxrz'
+
+    The sequence is modified in-place and returned if inplace is True:
+
+    >>> my_seq = MutableSeq("CGA")
+    >>> complement(my_seq, inplace=True)
+    MutableSeq('GCT')
+    >>> my_seq
+    MutableSeq('GCT')
+
+    As strings and ``Seq`` objects are immutable, a ``TypeError`` is
+    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    ``inplace=True``.
     """
-    if isinstance(sequence, Seq):
-        # Return a Seq
+    from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+
+    if isinstance(sequence, (Seq, MutableSeq)):
+        return sequence.complement_rna(inplace)
+    if isinstance(sequence, SeqRecord):
+        if inplace:
+            raise TypeError("SeqRecords are immutable")
         return sequence.complement_rna()
-    elif isinstance(sequence, MutableSeq):
-        # Return a Seq
-        return Seq(sequence).complement_rna()
+    # Assume it's a string.
+    if inplace:
+        raise TypeError("strings are immutable")
     sequence = sequence.encode("ASCII")
     sequence = sequence.translate(_rna_complement_table)
     return sequence.decode("ASCII")

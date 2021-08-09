@@ -90,6 +90,8 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             if sys.platform == "win32":
                 expected = 0xC0000005
+            elif sys.platform == "darwin":
+                expected = -11
             else:
                 expected = 139  # TODO: Check return codes on various other platforms
             self.assertEqual(expected, err.returncode)

@@ -14,11 +14,14 @@ class, used in the Bio.AlignIO module.
 """
 
 import sys
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
+
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -920,83 +923,316 @@ class MultipleSeqAlignment:
         return m
 
 
-class PairwiseAlignment:
-    """Represents a pairwise sequence alignment.
+class Alignment:
+    """Represents a sequence alignment.
 
-    Internally, the pairwise alignment is stored as the path through
-    the traceback matrix, i.e. a tuple of pairs of indices corresponding
-    to the vertices of the path in the traceback matrix.
+    Internally, the alignment is stored as a numpy array containing the
+    sequence coordinates defining the alignment.
+
+    Commonly used attributes (which may or may not be present):
+         - annotations        - A dictionary with annotations describing the
+                                alignment;
+         - column_annotations - A dictionary with annotations describing each
+                                column in the alignment;
+         - score              - The alignment score.
     """
 
-    def __init__(self, target, query, path, score):
-        """Initialize a new PairwiseAlignment object.
+    @classmethod
+    def infer_coordinates(cls, lines):
+        """Infer the coordinates from a printed alignment.
 
-        Arguments:
-         - target  - The first sequence, as a plain string, without gaps.
-         - query   - The second sequence, as a plain string, without gaps.
-         - path    - The path through the traceback matrix, defining an
-                     alignment.
-         - score   - The alignment score.
+        This method is primarily employed in Biopython's alignment parsers,
+        though it may be useful for other purposes.
 
-        You would normally obtain a PairwiseAlignment object by iterating
-        over a PairwiseAlignments object.
+        For an alignment consisting of N sequences, printed as N lines with
+        the same number of columns, where gaps are represented by dashes,
+        this method will calculate the sequence coordinates that define the
+        alignment. The coordinates are returned as a numpy array of integers,
+        and can be used to create an Alignment object.
+
+        This is an example for the alignment of three sequences TAGGCATACGTG,
+        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
+
+        >>> from Bio.Align import Alignment
+        >>> lines = ["TAGGCATACGTG",
+        ...          "AACG--TACGT-",
+        ...          "-ACGCATACTTG",
+        ...         ]
+        >>> sequences = [line.replace("-", "") for line in lines]
+        >>> sequences
+        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
+        >>> coordinates = Alignment.infer_coordinates(lines)
+        >>> coordinates
+        array([[ 0,  1,  4,  6, 11, 12],
+               [ 0,  1,  4,  4,  9,  9],
+               [ 0,  0,  3,  5, 10, 11]])
+        >>> alignment = Alignment(sequences, coordinates)
         """
-        self.target = target
-        self.query = query
-        self.score = score
-        self.path = path
+        import numpy
 
-    def __eq__(self, other):
-        """Check if two PairwiseAlignment objects have the same path."""
-        return self.path == other.path
-
-    def __ne__(self, other):
-        """Check if two PairwiseAlignment objects have different paths."""
-        return self.path != other.path
-
-    def __lt__(self, other):
-        """Check if self should come before other."""
-        return self.path < other.path
-
-    def __le__(self, other):
-        """Check if self should come before or is equal to other."""
-        return self.path <= other.path
-
-    def __gt__(self, other):
-        """Check if self should come after other."""
-        return self.path > other.path
-
-    def __ge__(self, other):
-        """Check if self should come after or is equal to other."""
-        return self.path >= other.path
-
-    def _construct_path(self, lines):
-        """Construct the path from a printed alignment."""
         n = len(lines)
         m = len(lines[0])
         for line in lines:
             assert m == len(line)
         path = []
-        indices = [0] * n
-        current_state = [None] * n
-        for i in range(m):
-            next_state = [line[i] != "-" for line in lines]
-            if next_state == current_state:
-                step += 1  # noqa: F821
-            else:
-                indices = [
-                    index + step if state else index
-                    for index, state in zip(indices, current_state)
-                ]
-                path.append(indices)
-                step = 1
-                current_state = next_state
-        indices = [
-            index + step if state else index
-            for index, state in zip(indices, current_state)
-        ]
-        path.append(indices)
-        return path
+        if m > 0:
+            indices = [0] * n
+            current_state = [None] * n
+            for i in range(m):
+                next_state = [line[i] != "-" for line in lines]
+                if next_state == current_state:
+                    step += 1  # noqa: F821
+                else:
+                    indices = [
+                        index + step if state else index
+                        for index, state in zip(indices, current_state)
+                    ]
+                    path.append(indices)
+                    step = 1
+                    current_state = next_state
+            indices = [
+                index + step if state else index
+                for index, state in zip(indices, current_state)
+            ]
+            path.append(indices)
+        coordinates = numpy.array(path).transpose()
+        return coordinates
+
+    def __init__(self, sequences, coordinates=None):
+        """Initialize a new Alignment object.
+
+        Arguments:
+         - sequences   - A list of the sequences that were aligned.
+         - coordinates - The sequence coordinates that define the alignment.
+                         If None (the default value), assume that the sequences
+                         align to each other without any gaps.
+        """
+        import numpy
+
+        self.sequences = sequences
+        if coordinates is None:
+            lengths = {len(sequence) for sequence in sequences}
+            if len(lengths) != 1:
+                raise ValueError(
+                    "sequences must have the same length if coordinates is None"
+                )
+            length = lengths.pop()
+            coordinates = numpy.array([[0, length]] * len(sequences))
+        self.coordinates = coordinates
+
+    @property
+    def target(self):
+        """Return self.sequences[0] for a pairwise alignment."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                % n
+            )
+        return self.sequences[0]
+
+    @target.setter
+    def target(self, value):
+        """For a pairwise alignment, set self.sequences[0]."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                % n
+            )
+        self.sequences[0] = value
+
+    @property
+    def query(self):
+        """Return self.sequences[1] for a pairwise alignment."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                % n
+            )
+        return self.sequences[1]
+
+    @query.setter
+    def query(self, value):
+        """For a pairwise alignment, set self.sequences[1]."""
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                % n
+            )
+        self.sequences[1] = value
+
+    def __eq__(self, other):
+        """Check if two Alignment objects specify the same alignment."""
+        import numpy
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left != right:
+                return False
+        return numpy.array_equal(self.coordinates, other.coordinates)
+
+    def __ne__(self, other):
+        """Check if two Alignment objects have different alignments."""
+        import numpy
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left != right:
+                return True
+
+        return not numpy.array_equal(self.coordinates, other.coordinates)
+
+    def __lt__(self, other):
+        """Check if self should come before other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return True
+            if left > right:
+                return False
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
+            left, right = tuple(left), tuple(right)
+            if left < right:
+                return True
+            if left > right:
+                return False
+        return False
+
+    def __le__(self, other):
+        """Check if self should come before or is equal to other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return True
+            if left > right:
+                return False
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
+            left, right = tuple(left), tuple(right)
+            if left < right:
+                return True
+            if left > right:
+                return False
+        return True
+
+    def __gt__(self, other):
+        """Check if self should come after other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return False
+            if left > right:
+                return True
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
+            left, right = tuple(left), tuple(right)
+            if left > right:
+                return True
+            if left < right:
+                return False
+        return False
+
+    def __ge__(self, other):
+        """Check if self should come after or is equal to other."""
+        from itertools import zip_longest
+
+        for left, right in zip_longest(self.sequences, other.sequences):
+            try:
+                left = left.seq
+            except AttributeError:
+                pass
+            try:
+                right = right.seq
+            except AttributeError:
+                pass
+            if left < right:
+                return False
+            if left > right:
+                return True
+        for left, right in zip(
+            self.coordinates.transpose(), other.coordinates.transpose()
+        ):
+            left, right = tuple(left), tuple(right)
+            if left > right:
+                return True
+            if left < right:
+                return False
+        return True
+
+    @property
+    def path(self):
+        """Return the path through the trace matrix."""
+        warnings.warn(
+            "The path attribute is deprecated; please use the coordinates "
+            "attribute instead. The coordinates attribute is a numpy array "
+            "containing the same values as the path attributes, after "
+            "transposition.",
+            BiopythonDeprecationWarning,
+        )
+        return tuple(tuple(row) for row in self.coordinates.transpose())
+
+    @path.setter
+    def path(self, value):
+        import numpy
+
+        warnings.warn(
+            "The path attribute is deprecated; please use the coordinates "
+            "attribute instead. The coordinates attribute is a numpy array "
+            "containing the same values as the path attributes, after "
+            "transposition.",
+            BiopythonDeprecationWarning,
+        )
+        self.coordinates = numpy.array(value).transpose()
 
     def __getitem__(self, key):
         """Return self[key].
@@ -1005,15 +1241,14 @@ class PairwiseAlignment:
 
         self[:, :]
 
-        return a copy of the PairwiseAlignment object;
+        return a copy of the Alignment object;
 
         self[:, i:]
         self[:, :j]
         self[:, i:j]
         self[:, iterable] (where iterable returns integers)
 
-        return a new PairwiseAlignment object spanning the selected
-        columns;
+        return a new Alignment object spanning the selected columns;
 
         self[k, i]
         self[k, i:]
@@ -1062,7 +1297,7 @@ class PairwiseAlignment:
         >>> alignment[:, 5]
         '-G'
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
-        <Bio.Align.PairwiseAlignment object at ...>
+        <Bio.Align.Alignment object (2 rows x 8 columns) at 0x...>
         >>> print(alignment[:, 1:])
         ACCGG-TTT
          |-||-||-
@@ -1099,21 +1334,26 @@ class PairwiseAlignment:
         -TG
         <BLANKLINE>
         """
+        import numpy
+
         if isinstance(key, slice):
             if key.indices(len(self)) == (0, 2, 1):
-                target = self.target
-                query = self.query
-                path = self.path
-                score = self.score
-                return PairwiseAlignment(target, query, path, score)
+                sequences = self.sequences
+                coordinates = self.coordinates.copy()
+                alignment = Alignment(sequences, coordinates)
+                alignment.score = self.score
+                return alignment
             raise NotImplementedError
-        sequences = [self.target, self.query]
-        path = self.path
+        sequences = list(self.sequences)
+        coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
-            if path[0][i] > path[-1][i]:  # mapped to reverse strand
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 n = len(sequences[i])
-                path = tuple(row[:i] + (n - row[i],) + row[i + 1 :] for row in path)
-                sequences[i] = reverse_complement(sequences[i])
+                coordinates[i, :] = n - coordinates[i, :]
+                try:  # reverse_complement function does not work on SeqRecord
+                    sequences[i] = sequences[i].reverse_complement()
+                except AttributeError:  # for str
+                    sequences[i] = reverse_complement(sequences[i])
         if isinstance(key, int):
             n, m = self.shape
             row = key
@@ -1122,20 +1362,23 @@ class PairwiseAlignment:
             if row < 0 or row >= n:
                 raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
             sequence = sequences[row]
+            try:
+                sequence = sequence.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
+            sequence = str(sequence)
             line = ""
-            starts = [sys.maxsize] * m
-            for ends in path:
-                step = max(e - s for s, e in zip(starts, ends))
-                if step < 0:
-                    index = 0
+            steps = numpy.diff(coordinates, 1)
+            gaps = steps[row] == 0  # seriously, flake8??
+            steps = steps.max(0)
+            i = coordinates[row, 0]
+            for step, gap in zip(steps, gaps):
+                if gap:
+                    line += "-" * step
                 else:
-                    index += step
-                    s, e = starts[row], ends[row]
-                    if s < e:
-                        line += sequence[s:e]
-                    elif s == e:
-                        line += "-" * step
-                starts = ends
+                    j = i + step
+                    line += sequence[i:j]
+                    i = j
             return line
         if isinstance(key, tuple):
             try:
@@ -1158,63 +1401,69 @@ class PairwiseAlignment:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    index = 0
-                    path_iterator = iter(path)
-                    starts = next(path_iterator)
-                    for ends in path_iterator:
-                        index += max(e - s for s, e in zip(starts, ends))
-                        if start_index < index:
-                            break
-                        starts = ends
-                    if starts[row] < ends[row]:
-                        offset = index - start_index
-                        i = ends[row] - offset
+                    steps = numpy.diff(coordinates, 1)
+                    indices = steps.max(0).cumsum()
+                    steps = steps[row]
+                    index = indices.searchsorted(start_index, side="right")
+                    if steps[index]:
+                        offset = start_index - indices[index]
+                        indices = coordinates[row, 0] + steps.cumsum()
+                        i = indices[index] + offset
                         line = sequences[row][i : i + 1]
                     else:
                         line = "-"
                     return line
                 if isinstance(col, slice):
                     sequence = sequences[row]
+                    try:
+                        sequence = sequence.seq  # SeqRecord confusion
+                    except AttributeError:
+                        pass
+                    sequence = str(sequence)
                     start_index, stop_index, step = col.indices(m)
-                    if step == 1:
-                        line = ""
-                        index = 0
-                        path_iterator = iter(path)
-                        starts = next(path_iterator)
-                        for ends in path_iterator:
-                            step = max(e - s for s, e in zip(starts, ends))
-                            index += step
-                            if start_index < index:
-                                offset = index - start_index
-                                if starts[row] < ends[row]:
-                                    i = ends[row] - offset
-                                else:
-                                    i = starts[row]
-                                step = offset
-                                break
-                            starts = ends
-                        while True:
-                            if stop_index <= index:
-                                offset = index - stop_index
-                                if starts[row] < ends[row]:
-                                    j = ends[row] - offset
-                                else:
-                                    j = starts[row]
-                                if i < j:
-                                    line += sequence[i:j]
-                                else:
-                                    line += "-" * (step - offset)
-                                break
-                            j = ends[row]
-                            if i < j:
-                                line += sequence[i:j]
+                    if start_index < stop_index and step == 1:
+                        steps = numpy.diff(coordinates, 1)
+                        gaps = steps[row] == 0  # come on flake8, this is ugly
+                        sequence_indices = coordinates[row, 0] + steps[row, :].cumsum()
+                        steps = steps.max(0)
+                        indices = steps.cumsum()
+                        i = indices.searchsorted(start_index, side="right")
+                        j = i + indices[i:].searchsorted(stop_index, side="right")
+                        if i == j:
+                            length = stop_index - start_index
+                            if gaps[i]:
+                                line = "-" * length
                             else:
-                                line += "-" * step
-                            i = j
-                            starts = ends
-                            ends = next(path_iterator)
-                            step = max(e - s for s, e in zip(starts, ends))
-                            index += step
+                                offset = start_index - indices[i]
+                                start = sequence_indices[i] + offset
+                                stop = start + length
+                                line = sequence[start:stop]
+                        else:
+                            length = indices[i] - start_index
+                            stop = sequence_indices[i]
+                            if gaps[i]:
+                                line = "-" * length
+                            else:
+                                start = stop - length
+                                line = sequence[start:stop]
+                            i += 1
+                            while i < j:
+                                step = steps[i]
+                                if gaps[i]:
+                                    line += "-" * step
+                                else:
+                                    start = stop
+                                    stop = start + step
+                                    line += sequence[start:stop]
+                                i += 1
+                            length = stop_index - indices[j - 1]
+                            if length > 0:
+                                if gaps[j]:
+                                    line += "-" * length
+                                else:
+                                    start = stop
+                                    stop = start + length
+                                    line += sequence[start:stop]
                         return line
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
@@ -1231,8 +1480,6 @@ class PairwiseAlignment:
                 else:
                     return line
             if isinstance(row, slice):
-                if row.indices(len(self)) != (0, 2, 1):
-                    raise NotImplementedError
                 n, m = self.shape
                 if isinstance(col, int):
                     if col < 0:
@@ -1241,71 +1488,71 @@ class PairwiseAlignment:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    index = 0
-                    path = iter(path)
-                    starts = next(path)
-                    for ends in path:
-                        index += max(e - s for s, e in zip(starts, ends))
-                        if col < index:
-                            break
+                    starts = numpy.full(n, sys.maxsize)
+                    for ends in coordinates.transpose():
+                        step = max(ends - starts)
+                        if step < 0:
+                            index = 0
+                        else:
+                            index += step
+                            if col < index:
+                                break
                         starts = ends
                     else:
                         raise IndexError("column index %d is out of bounds" % col)
                     offset = index - col
                     line = ""
-                    for s, e, sequence in zip(starts, ends, sequences):
+                    start, stop, step = row.indices(n)
+                    for i in range(start, stop, step):
+                        s = starts[i]
+                        e = ends[i]
                         if s == e:
                             line += "-"
                         else:
+                            sequence = sequences[i]
                             line += sequence[e - offset]
                     return line
+                if row.indices(n) != (0, n, 1):
+                    raise NotImplementedError
                 if isinstance(col, slice):
                     start_index, stop_index, step = col.indices(m)
-                    if step == 1:
-                        path_iterator = iter(path)
-                        path = []
-                        index = 0
-                        starts = next(path_iterator)
-                        for ends in path_iterator:
-                            index += max(e - s for s, e in zip(starts, ends))
-                            if start_index < index:
-                                offset = index - start_index
-                                point = tuple(
-                                    e - offset if s < e else s
-                                    for s, e in zip(starts, ends)
-                                )
-                                path.append(point)
-                                break
-                            starts = ends
-                        while True:
-                            if stop_index <= index:
-                                offset = index - stop_index
-                                point = tuple(
-                                    e - offset if s < e else s
-                                    for s, e in zip(starts, ends)
-                                )
-                                path.append(point)
-                                break
-                            path.append(ends)
-                            starts = ends
-                            ends = next(path_iterator)
-                            index += max(e - s for s, e in zip(starts, ends))
+                    if start_index < stop_index and step == 1:
+                        steps = numpy.diff(coordinates, 1)
+                        indices = steps.max(0).cumsum()
+                        i = indices.searchsorted(start_index, side="right")
+                        j = i + indices[i:].searchsorted(stop_index, side="left") + 1
+                        offset = steps[:, i] - indices[i] + start_index
+                        coordinates[:, i] += offset * (steps[:, i] > 0)
+                        offset = indices[j - 1] - stop_index
+                        coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
+                        coordinates = coordinates[:, i : j + 1]
                         for i, sequence in enumerate(sequences):
-                            if self.path[0][i] > self.path[-1][i]:
+                            if self.coordinates[i, 0] > self.coordinates[i, -1]:
                                 # mapped to reverse strand
-                                n = len(sequences[i])
-                                path = tuple(
-                                    row[:i] + (n - row[i],) + row[i + 1 :]
-                                    for row in path
-                                )
-                        path = tuple(path)
-                        target = self.target
-                        query = self.query
-                        if path == self.path:
-                            score = self.score
+                                n = len(sequence)
+                                coordinates[i, :] = n - coordinates[i, :]
+                        sequences = self.sequences
+                        alignment = Alignment(sequences, coordinates)
+                        if numpy.array_equal(coordinates, self.coordinates):
+                            try:
+                                alignment.score = self.score
+                            except AttributeError:
+                                pass
+                        try:
+                            column_annotations = self.column_annotations
+                        except AttributeError:
+                            pass
                         else:
-                            score = None
-                        return PairwiseAlignment(target, query, path, score)
+                            alignment.column_annotations = {}
+                            for key, value in column_annotations.items():
+                                value = value[start_index:stop_index]
+                                try:
+                                    value = value.copy()
+                                except AttributeError:
+                                    # immutable tuples like str, tuple
+                                    pass
+                                alignment.column_annotations[key] = value
+                        return alignment
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
                 # try if we can use col as an iterable
@@ -1319,10 +1566,22 @@ class PairwiseAlignment:
                         "second index must be an integer, slice, or iterable of integers"
                     ) from None
                 else:
-                    target, query = (line.replace("-", "") for line in lines)
-                    path = self._construct_path(lines)
-                    score = None
-                    alignment = PairwiseAlignment(target, query, path, score)
+                    sequences = [line.replace("-", "") for line in lines]
+                    coordinates = self.infer_coordinates(lines)
+                    alignment = Alignment(sequences, coordinates)
+                    try:
+                        column_annotations = self.column_annotations
+                    except AttributeError:
+                        pass
+                    else:
+                        alignment.column_annotations = {}
+                        for key, value in column_annotations.items():
+                            value_generator = (value[index] for index in indices)
+                            if isinstance(value, str):
+                                value = "".join(value_generator)
+                            else:
+                                value = value.__class__(value_generator)
+                            alignment.column_annotations[key] = value
                     return alignment
             raise TypeError("first index must be an integer or slice")
         raise TypeError("alignment indices must be integers, slices, or tuples")
@@ -1384,6 +1643,10 @@ class PairwiseAlignment:
                        `matches`, `misMatches`, or `repMatches` fields.
                        Default value is 'N'.
         """
+        if len(self.sequences) > 2:
+            raise NotImplementedError(
+                "format is currently implemented for pairwise alignments only"
+            )
         if fmt == "":
             return self._format_pretty(**kwargs)
         elif fmt == "psl":
@@ -1400,10 +1663,11 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        seq1 = self._convert_sequence_string(self.target)
+        target, query = self.sequences
+        seq1 = self._convert_sequence_string(target)
         if seq1 is None:
             return self._format_generalized()
-        seq2 = self._convert_sequence_string(self.query)
+        seq2 = self._convert_sequence_string(query)
         if seq2 is None:
             return self._format_generalized()
         n1 = len(seq1)
@@ -1411,11 +1675,13 @@ class PairwiseAlignment:
         aligned_seq1 = ""
         aligned_seq2 = ""
         pattern = ""
-        path = self.path
-        if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+        coordinates = self.coordinates
+        if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
             seq2 = reverse_complement(seq2)
-        end1, end2 = path[0]
+        coordinates = coordinates.transpose()
+        end1, end2 = coordinates[0, :]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
             aligned_seq1 += " " * (end - end1) + seq1[:end1]
@@ -1423,7 +1689,7 @@ class PairwiseAlignment:
             pattern += " " * end
         start1 = end1
         start2 = end2
-        for end1, end2 in path[1:]:
+        for end1, end2 in coordinates[1:]:
             if end1 == start1:
                 gap = end2 - start2
                 aligned_seq1 += "-" * gap
@@ -1455,13 +1721,11 @@ class PairwiseAlignment:
 
         Helper for self._format_pretty() .
         """
-        seq1 = self.target
-        seq2 = self.query
+        seq1, seq2 = self.sequences
         aligned_seq1 = []
         aligned_seq2 = []
         pattern = []
-        path = self.path
-        end1, end2 = path[0]
+        end1, end2 = self.coordinates[:, 0]
         if end1 > 0 or end2 > 0:
             if end1 <= end2:
                 for c2 in seq2[: end2 - end1]:
@@ -1479,7 +1743,7 @@ class PairwiseAlignment:
                     pattern.append(s2)
         start1 = end1
         start2 = end2
-        for end1, end2 in path[1:]:
+        for end1, end2 in self.coordinates[:, 1:].transpose():
             if end1 == start1:
                 for c2 in seq2[start2:end2]:
                     s2 = str(c2)
@@ -1530,8 +1794,7 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        query = self.query
-        target = self.target
+        target, query = self.sequences
         # variable names follow those in the BED file format specification
         try:
             chrom = target.id
@@ -1541,18 +1804,19 @@ class PairwiseAlignment:
             name = query.id
         except AttributeError:
             name = "query"
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        coordinates = self.coordinates
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             strand = "+"
         else:  # mapped to reverse strand
             strand = "-"
-            n2 = len(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            n = len(query)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n - coordinates[1, :]
         score = self.score
         blockSizes = []
         tStarts = []
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1596,11 +1860,10 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        path = self.path
-        if not path:  # alignment consists of gaps only
+        coordinates = self.coordinates
+        if not coordinates.size:  # alignment consists of gaps only
             return ""
-        query = self.query
-        target = self.target
+        target, query = self.sequences
         try:
             qName = query.id
         except AttributeError:
@@ -1625,13 +1888,14 @@ class PairwiseAlignment:
             seq1 = bytes(target, "ASCII")
         except UndefinedSequenceError:  # sequence contents is unknown
             seq1 = None
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             strand = "+"
             seq2 = query
         else:  # mapped to reverse strand
             strand = "-"
             seq2 = reverse_complement(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
         try:
             seq2 = bytes(seq2)
         except TypeError:  # string
@@ -1657,8 +1921,8 @@ class PairwiseAlignment:
         blockSizes = []
         qStarts = []
         tStarts = []
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1756,8 +2020,7 @@ class PairwiseAlignment:
 
         Helper for self.format() .
         """
-        query = self.query
-        target = self.target
+        target, query = self.sequences
         try:
             qName = query.id
         except AttributeError:
@@ -1776,22 +2039,23 @@ class PairwiseAlignment:
         qSize = n2
         tSize = n1
         cigar = []
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
+        coordinates = self.coordinates
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             flag = 0
             seq = query
         else:  # mapped to reverse strand
             flag = 16
             seq = reverse_complement(query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
         try:
             seq = bytes(seq)
         except TypeError:  # string
             pass
         else:
             seq = str(seq, "ASCII")
-        tStart, qStart = path[0]
-        for tEnd, qEnd in path[1:]:
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
             tCount = tEnd - tStart
             qCount = qEnd - qStart
             if tCount == 0:
@@ -1843,15 +2107,54 @@ class PairwiseAlignment:
         return line
 
     def __str__(self):
-        """Return a string representation of the PairwiseAlignment object.
+        """Return a string representation of the Alignment object.
 
-        Wrapper for self.format() .
+        Wrapper for self.format().
         """
+        if len(self.sequences) > 2:
+            raise NotImplementedError(
+                "__str__ is currently implemented for pairwise alignments only"
+            )
         return self.format()
 
+    def __repr__(self):
+        """Return a representation of the alignment, including its shape.
+
+        The representation cannot be used with eval() to recreate the object,
+        which is usually possible with simple python objects.  For example:
+
+        <Bio.Align.Alignment object (2 rows x 14 columns) at 0x10403d850>
+
+        The hex string is the memory address of the object and can be used to
+        distinguish different Alignment objects.  See help(id) for more
+        information.
+
+        >>> import numpy
+        >>> from Bio.Align import Alignment
+        >>> alignment = Alignment(("ACCGT", "ACGT"),
+        ...                       coordinates = numpy.array([[0, 2, 3, 5],
+        ...                                                  [0, 2, 2, 4],
+        ...                                                 ]))
+        >>> print(alignment)
+        ACCGT
+        ||-||
+        AC-GT
+        <BLANKLINE>
+        >>> alignment  # doctest:+ELLIPSIS
+        <Bio.Align.Alignment object (2 rows x 5 columns) at 0x...>
+        """
+        n, m = self.shape
+        return "<%s.%s object (%i rows x %i columns) at 0x%x>" % (
+            self.__module__,
+            self.__class__.__name__,
+            n,
+            m,
+            id(self),
+        )
+
     def __len__(self):
-        """Return the number of sequences in the alignment, which is always 2."""
-        return 2
+        """Return the number of sequences in the alignment."""
+        return len(self.sequences)
 
     @property
     def shape(self):
@@ -1895,16 +2198,16 @@ class PairwiseAlignment:
         >>> alignment.shape
         (2, 7)
         """
-        path = self.path
-        if path[0][1] > path[-1][1]:  # mapped to reverse strand
-            n2 = len(self.query)
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
-        start = path[0]
-        n = len(start)
-        m = 0
-        for end in path[1:]:
-            m += max(e - s for s, e in zip(start, end))
-            start = end
+        import numpy
+
+        coordinates = self.coordinates.copy()
+        n = len(coordinates)
+        for i in range(n):
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
+                k = len(self.sequences[i])
+                coordinates[i, :] = k - coordinates[i, :]
+        steps = numpy.diff(coordinates, 1).max(0)
+        m = sum(steps)
         return (n, m)
 
     @property
@@ -1931,7 +2234,11 @@ class PairwiseAlignment:
         GA--T
         <BLANKLINE>
         >>> alignment.aligned
-        (((0, 2), (4, 5)), ((0, 2), (2, 3)))
+        array([[[0, 2],
+                [4, 5]],
+        <BLANKLINE>
+               [[0, 2],
+                [2, 3]]])
         >>> alignment = alignments[1]
         >>> print(alignment)
         GAACT
@@ -1939,7 +2246,13 @@ class PairwiseAlignment:
         G-A-T
         <BLANKLINE>
         >>> alignment.aligned
-        (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+        array([[[0, 1],
+                [2, 3],
+                [4, 5]],
+        <BLANKLINE>
+               [[0, 1],
+                [1, 2],
+                [2, 3]]])
 
         Note that different alignments may have the same subsequences
         aligned to each other. In particular, this may occur if alignments
@@ -1955,45 +2268,49 @@ class PairwiseAlignment:
         AAA-GAAA
         <BLANKLINE>
         >>> alignments[0].aligned
-        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        array([[[0, 3],
+                [4, 7]],
+        <BLANKLINE>
+               [[0, 3],
+                [4, 7]]])
         >>> print(alignments[1])
         AAA-CAAA
         |||--|||
         AAAG-AAA
         <BLANKLINE>
         >>> alignments[1].aligned
-        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        array([[[0, 3],
+                [4, 7]],
+        <BLANKLINE>
+               [[0, 3],
+                [4, 7]]])
 
         The property can be used to identify alignments that are identical
         to each other in terms of their aligned sequences.
         """
-        segments1 = []
-        segments2 = []
-        path = self.path
-        if path[0][1] < path[-1][1]:  # mapped to forward strand
-            i1, i2 = path[0]
-            for node in path[1:]:
-                j1, j2 = node
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (i2, j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
-        else:  # mapped to reverse strand
-            n2 = len(self.query)
-            i1, i2 = path[0]
-            i2 = n2 - i2
-            for node in path[1:]:
-                j1, j2 = node
-                j2 = n2 - j2
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (n2 - i2, n2 - j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
-        return tuple(segments1), tuple(segments2)
+        import numpy
+
+        if len(self.sequences) > 2:
+            raise NotImplementedError(
+                "aligned is currently implemented for pairwise alignments only"
+            )
+        coordinates = self.coordinates.copy()
+        for i, sequence in enumerate(self.sequences):
+            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
+                n = len(sequence)
+                coordinates[i, :] = n - coordinates[i, :]
+        coordinates = coordinates.transpose()
+        steps = numpy.diff(coordinates, axis=0).min(1)
+        indices = numpy.flatnonzero(steps)
+        starts = coordinates[indices, :]
+        ends = coordinates[indices + 1, :]
+        segments = numpy.stack([starts, ends], axis=0).transpose()
+        for i, sequence in enumerate(self.sequences):
+            if self.coordinates[i, 0] > self.coordinates[i, -1]:
+                # mapped to reverse strand
+                n = len(sequence)
+                segments[i, :] = n - segments[i, :]
+        return segments
 
     def sort(self, key=None, reverse=False):
         """Sort the sequences of the alignment in place.
@@ -2044,8 +2361,7 @@ class PairwiseAlignment:
 
         The sequences are now sorted by decreasing GC content value.
         """
-        path = self.path
-        sequences = self.target, self.query
+        sequences = self.sequences
         if key is None:
             try:
                 values = [sequence.id for sequence in sequences]
@@ -2054,10 +2370,8 @@ class PairwiseAlignment:
         else:
             values = [key(sequence) for sequence in sequences]
         indices = sorted(range(len(sequences)), key=values.__getitem__, reverse=reverse)
-        sequences = [sequences[index] for index in indices]
-        self.target, self.query = sequences
-        path = tuple(tuple(row[index] for index in indices) for row in path)
-        self.path = path
+        self.sequences = [sequences[index] for index in indices]
+        self.coordinates = self.coordinates.take(indices, 0)
 
     def map(self, alignment):
         r"""Map the alignment to self.target and return the resulting alignment.
@@ -2116,7 +2430,7 @@ class PairwiseAlignment:
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
         """
-        from numpy import array
+        import numpy
 
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):
@@ -2126,40 +2440,41 @@ class PairwiseAlignment:
             )
         target = alignment1.target
         query = alignment2.query
-        path1 = alignment1.path
-        path2 = alignment2.path
+        coordinates1 = alignment1.coordinates
+        coordinates2 = alignment2.coordinates
         n1 = len(alignment1.query)
         n2 = len(alignment2.query)
-        if path1[0][1] < path1[-1][1]:  # mapped to forward strand
+        if coordinates1[1, 0] < coordinates1[1, -1]:  # mapped to forward strand
             strand1 = "+"
         else:  # mapped to reverse strand
             strand1 = "-"
-        if path2[0][1] < path2[-1][1]:  # mapped to forward strand
+        if coordinates2[1, 0] < coordinates2[1, -1]:  # mapped to forward strand
             strand2 = "+"
         else:  # mapped to reverse strand
             strand2 = "-"
-        path1 = array(path1)
-        path2 = array(path2)
         if strand1 == "+":
             if strand2 == "-":  # mapped to reverse strand
-                path2[:, 1] = n2 - path2[:, 1]
+                coordinates2 = coordinates2.copy()
+                coordinates2[1, :] = n2 - coordinates2[1, :]
         else:  # mapped to reverse strand
-            path1[:, 1] = n1 - path1[:, 1]
-            path2[:, 0] = n1 - path2[::-1, 0]
+            coordinates1 = coordinates1.copy()
+            coordinates1[1, :] = n1 - coordinates1[1, :]
+            coordinates2 = coordinates2.copy()
+            coordinates2[0, :] = n1 - coordinates2[0, ::-1]
             if strand2 == "+":
-                path2[:, 1] = n2 - path2[::-1, 1]
+                coordinates2[1, :] = n2 - coordinates2[1, ::-1]
             else:  # mapped to reverse strand
-                path2[:, 1] = path2[::-1, 1]
+                coordinates2[1, :] = coordinates2[1, ::-1]
         path = []
         tEnd, qEnd = sys.maxsize, sys.maxsize
-        path1 = iter(path1)
+        coordinates1 = iter(coordinates1.transpose())
         tStart1, qStart1 = sys.maxsize, sys.maxsize
-        for tEnd1, qEnd1 in path1:
+        for tEnd1, qEnd1 in coordinates1:
             if tStart1 < tEnd1 and qStart1 < qEnd1:
                 break
             tStart1, qStart1 = tEnd1, qEnd1
         tStart2, qStart2 = sys.maxsize, sys.maxsize
-        for tEnd2, qEnd2 in path2:
+        for tEnd2, qEnd2 in coordinates2.transpose():
             while qStart2 < qEnd2 and tStart2 < tEnd2:
                 while True:
                     if tStart2 < qStart1:
@@ -2186,7 +2501,7 @@ class PairwiseAlignment:
                         path.append([tEnd, qEnd])
                         break
                     tStart1, qStart1 = sys.maxsize, sys.maxsize
-                    for tEnd1, qEnd1 in path1:
+                    for tEnd1, qEnd1 in coordinates1:
                         if tStart1 < tEnd1 and qStart1 < qEnd1:
                             break
                         tStart1, qStart1 = tEnd1, qEnd1
@@ -2196,9 +2511,11 @@ class PairwiseAlignment:
                 qStart2 += size
                 tStart2 += size
             tStart2, qStart2 = tEnd2, qEnd2
+        coordinates = numpy.array(path).transpose()
         if strand1 != strand2:
-            path = tuple((c1, n2 - c2) for (c1, c2) in path)
-        alignment = PairwiseAlignment(target, query, path, None)
+            coordinates[1, :] = n2 - coordinates[1, :]
+        sequences = [target, query]
+        alignment = Alignment(sequences, coordinates)
         return alignment
 
     @property
@@ -2269,29 +2586,19 @@ class PairwiseAlignment:
         The total number of substitutions between T's and C's in the alignment
         is 3.5 + 3.5 = 7.
         """
-        target = self.target
-        try:
-            target = target.seq
-        except AttributeError:
-            pass
-        query = self.query
-        try:
-            query = query.seq
-        except AttributeError:
-            pass
-        sequences = (str(target), str(query))
+        sequences = self.sequences
         letters = set.union(*[set(sequence) for sequence in sequences])
         letters = "".join(sorted(letters))
         m = substitution_matrices.Array(letters, dims=2)
         n = len(sequences)
         for i1 in range(n):
-            path1 = [p[i1] for p in self.path]
+            coordinates1 = self.coordinates[i1, :]
             sequence1 = sequences[i1]
             for i2 in range(i1 + 1, n):
-                path2 = [p[i2] for p in self.path]
+                coordinates2 = self.coordinates[i2, :]
                 sequence2 = sequences[i2]
                 start1, start2 = sys.maxsize, sys.maxsize
-                for end1, end2 in zip(path1, path2):
+                for end1, end2 in zip(coordinates1, coordinates2):
                     if start1 < end1 and start2 < end2:  # aligned
                         segment1 = sequence1[start1:end1]
                         segment2 = sequence2[start2:end2]
@@ -2324,11 +2631,10 @@ class PairwiseAlignments:
          - paths - An iterator over the paths in the traceback matrix;
                    each path defines one alignment.
 
-        You would normally obtain an PairwiseAlignments object by calling
+        You would normally obtain a PairwiseAlignments object by calling
         aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
         """
-        self.seqA = seqA
-        self.seqB = seqB
+        self.sequences = [seqA, seqB]
         self.score = score
         self.paths = paths
         self.index = -1
@@ -2356,9 +2662,13 @@ class PairwiseAlignments:
         return self
 
     def __next__(self):
+        import numpy
+
         path = next(self.paths)
         self.index += 1
-        alignment = PairwiseAlignment(self.seqA, self.seqB, path, self.score)
+        coordinates = numpy.array(path).transpose()
+        alignment = Alignment(self.sequences, coordinates)
+        alignment.score = self.score
         self.alignment = alignment
         return alignment
 
@@ -2598,6 +2908,42 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             self.mismatch_score = state["mismatch_score"]
         else:
             self.substitution_matrix = substitution_matrix
+
+
+class PairwiseAlignment(Alignment):
+    """Represents a pairwise sequence alignment.
+
+    Internally, the pairwise alignment is stored as the path through
+    the traceback matrix, i.e. a tuple of pairs of indices corresponding
+    to the vertices of the path in the traceback matrix.
+    """
+
+    def __init__(self, target, query, path, score):
+        """Initialize a new PairwiseAlignment object.
+
+        Arguments:
+         - target  - The first sequence, as a plain string, without gaps.
+         - query   - The second sequence, as a plain string, without gaps.
+         - path    - The path through the traceback matrix, defining an
+                     alignment.
+         - score   - The alignment score.
+
+        You would normally obtain a PairwiseAlignment object by iterating
+        over a PairwiseAlignments object.
+        """
+        import numpy
+
+        warnings.warn(
+            "The PairwiseAlignment class is deprecated; please use the "
+            "Alignment class instead.  Note that the coordinates attribute of "
+            "an Alignment object is a numpy array and the transpose of the "
+            "path attribute of a PairwiseAlignment object.",
+            BiopythonDeprecationWarning,
+        )
+        sequences = [target, query]
+        coordinates = numpy.array(path).transpose()
+        super().__init__(sequences, coordinates)
+        self.score = score
 
 
 if __name__ == "__main__":

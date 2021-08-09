@@ -717,10 +717,7 @@ def to_dict(sequences, key_function=None):
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
 
-    Since Python 3.6, the default dict class maintains key order, meaning
-    this dictionary will reflect the order of records given to it. As of
-    Biopython 1.72, on older versions of Python we explicitly use an
-    OrderedDict so that you can always assume the record order is preserved.
+    This dictionary will reflect the order of records given to it.
     """
     # This is to avoid a lambda function:
 

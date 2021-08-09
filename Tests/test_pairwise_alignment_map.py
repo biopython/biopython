@@ -9,6 +9,15 @@ import os
 import random
 import unittest
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install numpy if you want to use Bio.Align.Alignment.map."
+    ) from None
+
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner
 
@@ -34,7 +43,9 @@ class TestSimple(unittest.TestCase):
         alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
+        self.assertTrue(
+            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+        )
         self.assertEqual(
             str(alignment1),
             """\
@@ -46,7 +57,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(alignment2.path, ((5, 0), (15, 10)))
+        self.assertTrue(
+            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [0, 10]]))
+        )
         self.assertEqual(
             str(alignment2),
             """\
@@ -56,9 +69,9 @@ GGGGGGGCCCCCGGGGGGA
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [17, 0])
-        self.assertSequenceEqual(alignment.path[1], [27, 10])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -106,9 +119,9 @@ AGGGGGCCCCCGGGGGGA
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [0, 2])
-        self.assertSequenceEqual(alignment.path[1], [11, 13])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 11], [2, 13]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -156,9 +169,9 @@ GGGGGGGCCCCCGGGGGGA
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [17, 0])
-        self.assertSequenceEqual(alignment.path[1], [27, 10])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -186,7 +199,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
         alignments1 = aligner.align(chromosome, transcript, strand="-")
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
+        self.assertTrue(
+            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+        )
         self.assertEqual(
             str(alignment1),
             """\
@@ -198,7 +213,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments2 = aligner.align(transcript, sequence, strand="-")
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(alignment2.path, ((4, 10), (14, 0)))
+        self.assertTrue(
+            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [10, 0]]))
+        )
         self.assertEqual(
             str(alignment2),
             """\
@@ -208,9 +225,9 @@ TCCCCCCGGGGGCCCCCCC
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [17, 0])
-        self.assertSequenceEqual(alignment.path[1], [27, 10])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -238,7 +255,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(alignment1.path, ((12, 0), (31, 19)))
+        self.assertTrue(
+            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+        )
         self.assertEqual(
             str(alignment1),
             """\
@@ -250,7 +269,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments2 = aligner.align(transcript, sequence, "-")
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(alignment2.path, ((5, 10), (15, 0)))
+        self.assertTrue(
+            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [10, 0]]))
+        )
         self.assertEqual(
             str(alignment2),
             """\
@@ -260,9 +281,9 @@ GGGGGGGCCCCCGGGGGGA
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [17, 10])
-        self.assertSequenceEqual(alignment.path[1], [27, 0])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -290,7 +311,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments1 = aligner.align(chromosome, transcript, "-")
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
-        self.assertEqual(alignment1.path, ((12, 19), (31, 0)))
+        self.assertTrue(
+            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+        )
         self.assertEqual(
             str(alignment1),
             """\
@@ -302,7 +325,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
         alignments2 = aligner.align(transcript, sequence)
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
-        self.assertEqual(alignment2.path, ((4, 0), (14, 10)))
+        self.assertTrue(
+            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [0, 10]]))
+        )
         self.assertEqual(
             str(alignment2),
             """\
@@ -312,9 +337,9 @@ TCCCCCCGGGGGCCCCCCC
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 2)
-        self.assertSequenceEqual(alignment.path[0], [17, 10])
-        self.assertSequenceEqual(alignment.path[1], [27, 0])
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -358,7 +383,7 @@ class TestComplex(unittest.TestCase):
         sequence.id = "sequence"
         alignments1 = aligner.align(chromosome, transcript)
         alignment1 = alignments1[0]
-        self.assertEqual(len(alignment1.path), 164)
+        self.assertEqual(alignment1.coordinates.shape[1], 164)
         self.assertEqual(
             str(alignment1),
             """\
@@ -369,7 +394,7 @@ GCCTACCGTATAACAATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAACGGCCTG
         )
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
-        self.assertEqual(len(alignment2.path), 12)
+        self.assertEqual(alignment2.coordinates.shape[1], 12)
         self.assertEqual(
             str(alignment2),
             """\
@@ -379,7 +404,7 @@ GGAATTTTAGCAGCCAAAGGACGGATCCTCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCA
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 76)
+        self.assertEqual(alignment.coordinates.shape[1], 76)
         self.assertEqual(
             str(alignment),
             """\
@@ -412,7 +437,7 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
         sequence.id = "sequence"
         alignments1 = aligner.align(chromosome, transcript)
         alignment1 = alignments1[0]
-        self.assertEqual(len(alignment1.path), 126)
+        self.assertEqual(alignment1.coordinates.shape[1], 126)
         self.assertEqual(
             str(alignment1),
             """\
@@ -423,7 +448,7 @@ CACCGGCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--------AGTA---C-
         )
         alignments2 = aligner.align(transcript, sequence)
         alignment2 = alignments2[0]
-        self.assertEqual(len(alignment2.path), 66)
+        self.assertEqual(alignment2.coordinates.shape[1], 66)
         self.assertEqual(
             str(alignment2),
             """\
@@ -433,7 +458,7 @@ CACCGGCGTCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAGTCATCTAAAAGT
 """,
         )
         alignment = alignment1.map(alignment2)
-        self.assertEqual(len(alignment.path), 78)
+        self.assertEqual(alignment.coordinates.shape[1], 78)
         self.assertEqual(
             str(alignment),
             """\
@@ -558,10 +583,10 @@ def perform_randomized_tests(n=1000):
         test_random(aligner, nBlocks1, nBlocks2, "+", "-")
         test_random(aligner, nBlocks1, nBlocks2, "-", "+")
         test_random(aligner, nBlocks1, nBlocks2, "-", "-")
-        test_random_sequences("+", "+")
-        test_random_sequences("+", "-")
-        test_random_sequences("-", "+")
-        test_random_sequences("-", "-")
+        test_random_sequences(aligner, "+", "+")
+        test_random_sequences(aligner, "+", "-")
+        test_random_sequences(aligner, "-", "+")
+        test_random_sequences(aligner, "-", "-")
 
 
 if __name__ == "__main__":
