@@ -4,18 +4,14 @@
 # as part of this package.
 """Unit tests for Bio.SeqIO.index(...) and index_db() functions."""
 
-try:
-    import sqlite3
-except ImportError:
-    # Try to run what tests we can in case sqlite3 was not installed
-    sqlite3 = None
-
+import gzip
 import os
-import unittest
+import sqlite3
 import tempfile
 import threading
-import gzip
+import unittest
 import warnings
+
 from io import BytesIO
 from io import StringIO
 
@@ -33,301 +29,300 @@ from test_SeqIO import SeqIOTestBaseClass
 CUR_DIR = os.getcwd()
 
 
-if sqlite3:
+def raw_filenames(index_filename):
+    """Open SQLite index and extract filenames (as is).
 
-    def raw_filenames(index_filename):
-        """Open SQLite index and extract filenames (as is).
+    Returns a 2-tuple, holding a list of strings, and the value
+    of the meta_data.filenames_relative_to_index (or None).
+    """
+    con = sqlite3.dbapi2.connect(index_filename)
 
-        Returns a 2-tuple, holding a list of strings, and the value
-        of the meta_data.filenames_relative_to_index (or None).
-        """
-        con = sqlite3.dbapi2.connect(index_filename)
+    filenames = [
+        row[0]
+        for row in con.execute(
+            "SELECT name FROM file_data ORDER BY file_number;"
+        ).fetchall()
+    ]
 
-        filenames = [
-            row[0]
-            for row in con.execute(
-                "SELECT name FROM file_data ORDER BY file_number;"
-            ).fetchall()
+    try:
+        (filenames_relative_to_index,) = con.execute(
+            "SELECT value FROM meta_data WHERE key=?;",
+            ("filenames_relative_to_index",),
+        ).fetchone()
+        filenames_relative_to_index = filenames_relative_to_index.upper() == "TRUE"
+    except TypeError:
+        filenames_relative_to_index = None
+
+    con.close()
+    return filenames, filenames_relative_to_index
+
+
+class OldIndexTest(unittest.TestCase):
+    """Testing a pre-built index (make sure cross platform etc).
+
+    >>> from Bio import SeqIO
+    >>> d = SeqIO.index_db("triple_sff.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"], "sff")
+    >>> len(d)
+    54
+    """
+
+    def setUp(self):
+        os.chdir(CUR_DIR)
+
+    def tearDown(self):
+        os.chdir(CUR_DIR)
+
+    def test_old(self):
+        """Load existing index with no options (from parent directory)."""
+        d = SeqIO.index_db("Roche/triple_sff.idx")
+        self.assertEqual(54, len(d))
+        self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+    def test_old_check_same_thread(self):
+        """Setting check_same_thread to False doesn't raise an exception."""
+        d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
+
+        def reader_thread():
+            try:
+                d["alpha"]
+            except sqlite3.ProgrammingError:
+                self.fail(
+                    "Raised sqlite3.ProgrammingError in violation of check_same_thread=False"
+                )
+
+        reader = threading.Thread(target=reader_thread)
+        reader.start()
+        reader.join()
+
+    def test_old_rel(self):
+        """Load existing index (with relative paths) with no options (from parent directory)."""
+        d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
+        self.assertEqual(54, len(d))
+        self.assertEqual(395, len(d["alpha"]))
+
+    def test_old_contents(self):
+        """Check actual filenames in existing indexes."""
+        filenames, flag = raw_filenames("Roche/triple_sff.idx")
+        self.assertIsNone(flag)
+        self.assertEqual(
+            filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
+        )
+
+        filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
+        self.assertTrue(flag)
+        self.assertEqual(
+            filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
+        )
+
+    def test_old_same_dir(self):
+        """Load existing index with no options (from same directory)."""
+        os.chdir("Roche")
+        d = SeqIO.index_db("triple_sff.idx")
+        self.assertEqual(54, len(d))
+        self.assertEqual(395, len(d["alpha"]))
+
+    def test_old_same_dir_rel(self):
+        """Load existing index (with relative paths) with no options (from same directory)."""
+        os.chdir("Roche")
+        d = SeqIO.index_db("triple_sff_rel_paths.idx")
+        self.assertEqual(54, len(d))
+        self.assertEqual(395, len(d["alpha"]))
+
+    def test_old_format(self):
+        """Load existing index with correct format."""
+        d = SeqIO.index_db("Roche/triple_sff.idx", format="sff")
+        self.assertEqual(54, len(d))
+
+    def test_old_format_wrong(self):
+        """Load existing index with wrong format."""
+        self.assertRaises(
+            ValueError, SeqIO.index_db, "Roche/triple_sff.idx", format="fasta"
+        )
+
+    def test_old_files(self):
+        """Load existing index with correct files (from parent directory)."""
+        d = SeqIO.index_db(
+            "Roche/triple_sff.idx",
+            ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"],
+        )
+        self.assertEqual(54, len(d))
+        self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+    def test_old_files_same_dir(self):
+        """Load existing index with correct files (from same directory)."""
+        os.chdir("Roche")
+        d = SeqIO.index_db(
+            "triple_sff.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"],
+        )
+        self.assertEqual(54, len(d))
+        self.assertEqual(395, len(d["alpha"]))
+
+    def test_old_files_wrong(self):
+        """Load existing index with wrong files."""
+        self.assertRaises(
+            ValueError,
+            SeqIO.index_db,
+            "Roche/triple_sff.idx",
+            ["a.sff", "b.sff", "c.sff"],
+        )
+
+    def test_old_files_wrong2(self):
+        """Load existing index with wrong number of files."""
+        self.assertRaises(
+            ValueError,
+            SeqIO.index_db,
+            "Roche/triple_sff.idx",
+            ["E3MFGYR02_no_manifest.sff", "greek.sff"],
+        )
+
+
+class NewIndexTest(unittest.TestCase):
+    """Check paths etc in newly built index."""
+
+    def setUp(self):
+        os.chdir(CUR_DIR)
+
+    def tearDown(self):
+        os.chdir(CUR_DIR)
+        for i in ["temp.idx", "Roche/temp.idx"]:
+            if os.path.isfile(i):
+                os.remove(i)
+
+    def check(self, index_file, sff_files, expt_sff_files):
+        if os.path.isfile(index_file):
+            os.remove(index_file)
+        # Build index...
+        d = SeqIO.index_db(index_file, sff_files, "sff")
+        self.assertEqual(395, len(d["alpha"]))
+        d._con.close()  # hack for PyPy
+        d.close()
+        self.assertEqual(
+            [os.path.abspath(f) for f in sff_files],
+            [os.path.abspath(f) for f in d._filenames],
+        )
+
+        # Now directly check the filenames inside the SQLite index:
+        filenames, flag = raw_filenames(index_file)
+        self.assertTrue(flag)
+        self.assertEqual(filenames, expt_sff_files)
+
+        # Load index...
+        d = SeqIO.index_db(index_file, sff_files)
+        self.assertEqual(395, len(d["alpha"]))
+        d._con.close()  # hack for PyPy
+        d.close()
+        self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
+
+        os.remove(index_file)
+
+    def test_child_folder_rel(self):
+        """Check relative links to child folder."""
+        # Note we expect relative paths recorded with Unix slashs!
+        expt_sff_files = [
+            "Roche/E3MFGYR02_no_manifest.sff",
+            "Roche/greek.sff",
+            "Roche/paired.sff",
         ]
 
-        try:
-            (filenames_relative_to_index,) = con.execute(
-                "SELECT value FROM meta_data WHERE key=?;",
-                ("filenames_relative_to_index",),
-            ).fetchone()
-            filenames_relative_to_index = filenames_relative_to_index.upper() == "TRUE"
-        except TypeError:
-            filenames_relative_to_index = None
-
-        con.close()
-        return filenames, filenames_relative_to_index
-
-    class OldIndexTest(unittest.TestCase):
-        """Testing a pre-built index (make sure cross platform etc).
-
-        >>> from Bio import SeqIO
-        >>> d = SeqIO.index_db("triple_sff.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"], "sff")
-        >>> len(d)
-        54
-        """
-
-        def setUp(self):
-            os.chdir(CUR_DIR)
-
-        def tearDown(self):
-            os.chdir(CUR_DIR)
-
-        def test_old(self):
-            """Load existing index with no options (from parent directory)."""
-            d = SeqIO.index_db("Roche/triple_sff.idx")
-            self.assertEqual(54, len(d))
-            self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
-
-        def test_old_check_same_thread(self):
-            """Setting check_same_thread to False doesn't raise an exception."""
-            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
-
-            def reader_thread():
-                try:
-                    d["alpha"]
-                except sqlite3.ProgrammingError:
-                    self.fail(
-                        "Raised sqlite3.ProgrammingError in violation of check_same_thread=False"
-                    )
-
-            reader = threading.Thread(target=reader_thread)
-            reader.start()
-            reader.join()
-
-        def test_old_rel(self):
-            """Load existing index (with relative paths) with no options (from parent directory)."""
-            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
-            self.assertEqual(54, len(d))
-            self.assertEqual(395, len(d["alpha"]))
-
-        def test_old_contents(self):
-            """Check actual filenames in existing indexes."""
-            filenames, flag = raw_filenames("Roche/triple_sff.idx")
-            self.assertIsNone(flag)
-            self.assertEqual(
-                filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
-            )
-
-            filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
-            self.assertTrue(flag)
-            self.assertEqual(
-                filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
-            )
-
-        def test_old_same_dir(self):
-            """Load existing index with no options (from same directory)."""
-            os.chdir("Roche")
-            d = SeqIO.index_db("triple_sff.idx")
-            self.assertEqual(54, len(d))
-            self.assertEqual(395, len(d["alpha"]))
-
-        def test_old_same_dir_rel(self):
-            """Load existing index (with relative paths) with no options (from same directory)."""
-            os.chdir("Roche")
-            d = SeqIO.index_db("triple_sff_rel_paths.idx")
-            self.assertEqual(54, len(d))
-            self.assertEqual(395, len(d["alpha"]))
-
-        def test_old_format(self):
-            """Load existing index with correct format."""
-            d = SeqIO.index_db("Roche/triple_sff.idx", format="sff")
-            self.assertEqual(54, len(d))
-
-        def test_old_format_wrong(self):
-            """Load existing index with wrong format."""
-            self.assertRaises(
-                ValueError, SeqIO.index_db, "Roche/triple_sff.idx", format="fasta"
-            )
-
-        def test_old_files(self):
-            """Load existing index with correct files (from parent directory)."""
-            d = SeqIO.index_db(
-                "Roche/triple_sff.idx",
-                ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"],
-            )
-            self.assertEqual(54, len(d))
-            self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
-
-        def test_old_files_same_dir(self):
-            """Load existing index with correct files (from same directory)."""
-            os.chdir("Roche")
-            d = SeqIO.index_db(
-                "triple_sff.idx",
-                ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"],
-            )
-            self.assertEqual(54, len(d))
-            self.assertEqual(395, len(d["alpha"]))
-
-        def test_old_files_wrong(self):
-            """Load existing index with wrong files."""
-            self.assertRaises(
-                ValueError,
-                SeqIO.index_db,
-                "Roche/triple_sff.idx",
-                ["a.sff", "b.sff", "c.sff"],
-            )
-
-        def test_old_files_wrong2(self):
-            """Load existing index with wrong number of files."""
-            self.assertRaises(
-                ValueError,
-                SeqIO.index_db,
-                "Roche/triple_sff.idx",
-                ["E3MFGYR02_no_manifest.sff", "greek.sff"],
-            )
-
-    class NewIndexTest(unittest.TestCase):
-        """Check paths etc in newly built index."""
-
-        def setUp(self):
-            os.chdir(CUR_DIR)
-
-        def tearDown(self):
-            os.chdir(CUR_DIR)
-            for i in ["temp.idx", "Roche/temp.idx"]:
-                if os.path.isfile(i):
-                    os.remove(i)
-
-        def check(self, index_file, sff_files, expt_sff_files):
-            if os.path.isfile(index_file):
-                os.remove(index_file)
-            # Build index...
-            d = SeqIO.index_db(index_file, sff_files, "sff")
-            self.assertEqual(395, len(d["alpha"]))
-            d._con.close()  # hack for PyPy
-            d.close()
-            self.assertEqual(
-                [os.path.abspath(f) for f in sff_files],
-                [os.path.abspath(f) for f in d._filenames],
-            )
-
-            # Now directly check the filenames inside the SQLite index:
-            filenames, flag = raw_filenames(index_file)
-            self.assertTrue(flag)
-            self.assertEqual(filenames, expt_sff_files)
-
-            # Load index...
-            d = SeqIO.index_db(index_file, sff_files)
-            self.assertEqual(395, len(d["alpha"]))
-            d._con.close()  # hack for PyPy
-            d.close()
-            self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
-
-            os.remove(index_file)
-
-        def test_child_folder_rel(self):
-            """Check relative links to child folder."""
-            # Note we expect relative paths recorded with Unix slashs!
-            expt_sff_files = [
+        self.check("temp.idx", expt_sff_files, expt_sff_files)
+        # Here index is given as abs
+        self.check(
+            os.path.abspath("temp.idx"),
+            [
                 "Roche/E3MFGYR02_no_manifest.sff",
-                "Roche/greek.sff",
-                "Roche/paired.sff",
-            ]
-
-            self.check("temp.idx", expt_sff_files, expt_sff_files)
-            # Here index is given as abs
-            self.check(
-                os.path.abspath("temp.idx"),
-                [
-                    "Roche/E3MFGYR02_no_manifest.sff",
-                    os.path.abspath("Roche/greek.sff"),
-                    "Roche/paired.sff",
-                ],
-                expt_sff_files,
-            )
-            # Here index is given as relative path
-            self.check(
-                "temp.idx",
-                [
-                    "Roche/E3MFGYR02_no_manifest.sff",
-                    os.path.abspath("Roche/greek.sff"),
-                    "Roche/paired.sff",
-                ],
-                expt_sff_files,
-            )
-
-        def test_same_folder(self):
-            """Check relative links in same folder."""
-            os.chdir("Roche")
-            expt_sff_files = ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
-
-            # Here everything is relative,
-            self.check("temp.idx", expt_sff_files, expt_sff_files)
-            self.check(
-                os.path.abspath("temp.idx"),
-                [
-                    "E3MFGYR02_no_manifest.sff",
-                    os.path.abspath("greek.sff"),
-                    "../Roche/paired.sff",
-                ],
-                expt_sff_files,
-            )
-            self.check(
-                "temp.idx",
-                [
-                    "E3MFGYR02_no_manifest.sff",
-                    os.path.abspath("greek.sff"),
-                    "../Roche/paired.sff",
-                ],
-                expt_sff_files,
-            )
-            self.check(
-                "../Roche/temp.idx",
-                [
-                    "E3MFGYR02_no_manifest.sff",
-                    os.path.abspath("greek.sff"),
-                    "../Roche/paired.sff",
-                ],
-                expt_sff_files,
-            )
-
-        def test_some_abs(self):
-            """Check absolute filenames in index.
-
-            Unless the repository and tests themselves are under the temp
-            directory (as detected by ``tempfile``), we expect the index to
-            use absolute filenames.
-            """
-            h, t = tempfile.mkstemp(prefix="index_test_", suffix=".idx")
-            os.close(h)
-            os.remove(t)
-
-            abs_sff_files = [
-                os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
                 os.path.abspath("Roche/greek.sff"),
-                os.path.abspath(os.path.join("Roche", "paired.sff")),
+                "Roche/paired.sff",
+            ],
+            expt_sff_files,
+        )
+        # Here index is given as relative path
+        self.check(
+            "temp.idx",
+            [
+                "Roche/E3MFGYR02_no_manifest.sff",
+                os.path.abspath("Roche/greek.sff"),
+                "Roche/paired.sff",
+            ],
+            expt_sff_files,
+        )
+
+    def test_same_folder(self):
+        """Check relative links in same folder."""
+        os.chdir("Roche")
+        expt_sff_files = ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
+
+        # Here everything is relative,
+        self.check("temp.idx", expt_sff_files, expt_sff_files)
+        self.check(
+            os.path.abspath("temp.idx"),
+            [
+                "E3MFGYR02_no_manifest.sff",
+                os.path.abspath("greek.sff"),
+                "../Roche/paired.sff",
+            ],
+            expt_sff_files,
+        )
+        self.check(
+            "temp.idx",
+            [
+                "E3MFGYR02_no_manifest.sff",
+                os.path.abspath("greek.sff"),
+                "../Roche/paired.sff",
+            ],
+            expt_sff_files,
+        )
+        self.check(
+            "../Roche/temp.idx",
+            [
+                "E3MFGYR02_no_manifest.sff",
+                os.path.abspath("greek.sff"),
+                "../Roche/paired.sff",
+            ],
+            expt_sff_files,
+        )
+
+    def test_some_abs(self):
+        """Check absolute filenames in index.
+
+        Unless the repository and tests themselves are under the temp
+        directory (as detected by ``tempfile``), we expect the index to
+        use absolute filenames.
+        """
+        h, t = tempfile.mkstemp(prefix="index_test_", suffix=".idx")
+        os.close(h)
+        os.remove(t)
+
+        abs_sff_files = [
+            os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+            os.path.abspath("Roche/greek.sff"),
+            os.path.abspath(os.path.join("Roche", "paired.sff")),
+        ]
+
+        if os.getcwd().startswith(os.path.dirname(t)):
+            # The tests are being run from within the temp directory,
+            # e.g. index filename /tmp/index_test_XYZ.idx
+            # and working directory of /tmp/biopython/Tests/
+            # This means the indexing will use a RELATIVE path
+            # e.g. biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+            # not /tmp/biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+            expt_sff_files = [
+                os.path.relpath(f, os.path.dirname(t)) for f in abs_sff_files
             ]
+        else:
+            expt_sff_files = abs_sff_files
 
-            if os.getcwd().startswith(os.path.dirname(t)):
-                # The tests are being run from within the temp directory,
-                # e.g. index filename /tmp/index_test_XYZ.idx
-                # and working directory of /tmp/biopython/Tests/
-                # This means the indexing will use a RELATIVE path
-                # e.g. biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
-                # not /tmp/biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
-                expt_sff_files = [
-                    os.path.relpath(f, os.path.dirname(t)) for f in abs_sff_files
-                ]
-            else:
-                expt_sff_files = abs_sff_files
-
-            # Providing absolute paths...
-            self.check(t, abs_sff_files, expt_sff_files)
-            # Now try with mix of abs and relative paths...
-            self.check(
-                t,
-                [
-                    os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
-                    os.path.join("Roche", "greek.sff"),
-                    os.path.abspath("Roche/paired.sff"),
-                ],
-                expt_sff_files,
-            )
+        # Providing absolute paths...
+        self.check(t, abs_sff_files, expt_sff_files)
+        # Now try with mix of abs and relative paths...
+        self.check(
+            t,
+            [
+                os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                os.path.join("Roche", "greek.sff"),
+                os.path.abspath("Roche/paired.sff"),
+            ],
+            expt_sff_files,
+        )
 
 
 class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
@@ -588,20 +583,17 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
-                if sqlite3:
-                    rec_dict_db = SeqIO.index_db(
-                        ":memory:", filename, fmt, key_function=str.lower,
-                    )
-        else:
-            rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
-            if sqlite3:
                 rec_dict_db = SeqIO.index_db(
                     ":memory:", filename, fmt, key_function=str.lower,
                 )
+        else:
+            rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
+            rec_dict_db = SeqIO.index_db(
+                ":memory:", filename, fmt, key_function=str.lower,
+            )
 
         self.assertCountEqual(id_list, rec_dict.keys(), msg=msg)
-        if sqlite3:
-            self.assertCountEqual(id_list, rec_dict_db.keys(), msg=msg)
+        self.assertCountEqual(id_list, rec_dict_db.keys(), msg=msg)
         for key in id_list:
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(key, rec_dict[key].id.lower(), msg=msg)
@@ -611,11 +603,10 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             self.assertTrue(raw.strip(), msg=msg)
             self.assertIn(raw, raw_file, msg=msg)
 
-            if sqlite3:
-                raw_db = rec_dict_db.get_raw(key)
-                # Via index using format-specific get_raw which scans the file,
-                # Via index_db in general using raw length found when indexing.
-                self.assertEqual(raw, raw_db, msg=msg)
+            raw_db = rec_dict_db.get_raw(key)
+            # Via index using format-specific get_raw which scans the file,
+            # Via index_db in general using raw length found when indexing.
+            self.assertEqual(raw, raw_db, msg=msg)
 
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
@@ -667,19 +658,17 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
         rec_dict.close()
         del rec_dict
 
-    if sqlite3:
-
-        def test_alpha_fails_db(self):
-            """Reject alphabet argument in Bio.SeqIO.index_db()."""
-            # In historic usage, alphabet=... would be a Bio.Alphabet object.
-            self.assertRaises(
-                ValueError,
-                SeqIO.index_db,
-                ":memory:",
-                ["Fasta/dups.fasta"],
-                "fasta",
-                alphabet="XXX",
-            )
+    def test_alpha_fails_db(self):
+        """Reject alphabet argument in Bio.SeqIO.index_db()."""
+        # In historic usage, alphabet=... would be a Bio.Alphabet object.
+        self.assertRaises(
+            ValueError,
+            SeqIO.index_db,
+            ":memory:",
+            ["Fasta/dups.fasta"],
+            "fasta",
+            alphabet="XXX",
+        )
 
     def test_alpha_fails(self):
         """Reject alphabet argument in Bio.SeqIO.index()."""
@@ -688,13 +677,11 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta", alphabet="XXX"
         )
 
-    if sqlite3:
-
-        def test_duplicates_index_db(self):
-            """Index file with duplicate identifiers with Bio.SeqIO.index_db()."""
-            self.assertRaises(
-                ValueError, SeqIO.index_db, ":memory:", ["Fasta/dups.fasta"], "fasta"
-            )
+    def test_duplicates_index_db(self):
+        """Index file with duplicate identifiers with Bio.SeqIO.index_db()."""
+        self.assertRaises(
+            ValueError, SeqIO.index_db, ":memory:", ["Fasta/dups.fasta"], "fasta"
+        )
 
     def test_duplicates_index(self):
         """Index file with duplicate identifiers with Bio.SeqIO.index()."""
@@ -748,25 +735,21 @@ class IndexOrderingSingleFile(unittest.TestCase):
         d = SeqIO.index(self.f, "fasta")
         self.assertEqual(self.ids, list(d))
 
-    if sqlite3:
-
-        def test_order_index_db(self):
-            """Check index_db preserves ordering indexed file."""
-            d = SeqIO.index_db(":memory:", [self.f], "fasta")
-            self.assertEqual(self.ids, list(d))
+    def test_order_index_db(self):
+        """Check index_db preserves ordering indexed file."""
+        d = SeqIO.index_db(":memory:", [self.f], "fasta")
+        self.assertEqual(self.ids, list(d))
 
 
-if sqlite3:
-
-    class IndexOrderingManyFiles(unittest.TestCase):
-        def test_order_index_db(self):
-            """Check index_db preserves order in multiple indexed files."""
-            files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
-            ids = []
-            for f in files:
-                ids.extend(r.id for r in SeqIO.parse(f, "fasta"))
-            d = SeqIO.index_db(":memory:", files, "fasta")
-            self.assertEqual(ids, list(d))
+class IndexOrderingManyFiles(unittest.TestCase):
+    def test_order_index_db(self):
+        """Check index_db preserves order in multiple indexed files."""
+        files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
+        ids = []
+        for f in files:
+            ids.extend(r.id for r in SeqIO.parse(f, "fasta"))
+        d = SeqIO.index_db(":memory:", files, "fasta")
+        self.assertEqual(ids, list(d))
 
 
 if __name__ == "__main__":
