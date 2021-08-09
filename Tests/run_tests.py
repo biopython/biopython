@@ -114,16 +114,6 @@ if numpy is None:
     )
 
 
-try:
-    import sqlite3
-
-    del sqlite3
-except ImportError:
-    # May be missing on self-compiled Python
-    EXCLUDE_DOCTEST_MODULES.append("Bio.SeqIO")
-    EXCLUDE_DOCTEST_MODULES.append("Bio.SearchIO")
-
-
 def find_modules(path):
     modules = set()
     for pkg in find_packages(path):
