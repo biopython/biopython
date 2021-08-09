@@ -9,12 +9,8 @@
 
 import os
 import gzip
+import sqlite3
 import unittest
-
-try:
-    import sqlite3
-except ImportError:
-    sqlite3 = None
 
 from Bio import SearchIO
 from Bio.SeqRecord import SeqRecord
@@ -84,14 +80,11 @@ class CheckRaw(unittest.TestCase):
         idx.close()
 
         # Now again, but using SQLite backend
-        if sqlite3:
-            idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
-            new = idx.get_raw(id)
-            self.assertIsInstance(
-                new, bytes, "Didn't get bytes from %s get_raw" % self.fmt
-            )
-            self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
-            idx.close()
+        idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
+        new = idx.get_raw(id)
+        self.assertIsInstance(new, bytes, "Didn't get bytes from %s get_raw" % self.fmt)
+        self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
+        idx.close()
 
         if os.path.isfile(filename + ".bgz"):
             # Do the tests again with the BGZF compressed file
@@ -116,15 +109,14 @@ class CheckIndex(SearchTestBaseClass):
             "Should be %i records in %s, index says %i"
             % (len(parsed), filename, len(indexed)),
         )
-        # compare values by index_db, only if sqlite3 is present
-        if sqlite3 is not None:
-            db_indexed = SearchIO.index_db(":memory:", [filename], format, **kwargs)
-            self.assertEqual(
-                len(parsed),
-                len(db_indexed),
-                "Should be %i records in %s, index_db says %i"
-                % (len(parsed), filename, len(db_indexed)),
-            )
+        # compare values by index_db
+        db_indexed = SearchIO.index_db(":memory:", [filename], format, **kwargs)
+        self.assertEqual(
+            len(parsed),
+            len(db_indexed),
+            "Should be %i records in %s, index_db says %i"
+            % (len(parsed), filename, len(db_indexed)),
+        )
 
         for qres in parsed:
             idx_qres = indexed[qres.id]
@@ -132,16 +124,14 @@ class CheckIndex(SearchTestBaseClass):
             self.assertNotEqual(id(qres), id(idx_qres))
             # but they should have the same attribute values
             self.compare_search_obj(qres, idx_qres)
-            # sqlite3 comparison, only if it's present
-            if sqlite3 is not None:
-                dbidx_qres = db_indexed[qres.id]
-                self.assertNotEqual(id(qres), id(dbidx_qres))
-                self.compare_search_obj(qres, dbidx_qres)
+            # sqlite3 comparison
+            dbidx_qres = db_indexed[qres.id]
+            self.assertNotEqual(id(qres), id(dbidx_qres))
+            self.compare_search_obj(qres, dbidx_qres)
 
         indexed.close()
-        if sqlite3 is not None:
-            db_indexed.close()
-            db_indexed._con.close()
+        db_indexed.close()
+        db_indexed._con.close()
 
         if os.path.isfile(filename + ".bgz"):
             # Do the tests again with the BGZF compressed file
