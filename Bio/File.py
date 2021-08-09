@@ -10,19 +10,14 @@
 Bio.File defines private classes used in Bio.SeqIO and Bio.SearchIO for
 indexing files. These are not intended for direct use.
 """
-
-import os
+import collections.abc
 import contextlib
 import itertools
-import collections.abc
+import os
+import sqlite3
 
-from abc import ABC, abstractmethod
-
-try:
-    import sqlite3
-except ImportError:
-    # May be missing if Python was compiled from source without its dependencies
-    sqlite3 = None
+from abc import ABC
+from abc import abstractmethod
 
 
 @contextlib.contextmanager
@@ -283,13 +278,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # Furthermore could compare a generator to the DB on reloading
         # (no need to turn it into a list)
 
-        if sqlite3 is None:
-            # Python was compiled without sqlite3 support
-            from Bio import MissingPythonDependencyError
-
-            raise MissingPythonDependencyError(
-                "Python was compiled without the sqlite3 module"
-            )
         if filenames is not None:
             filenames = list(filenames)  # In case it was a generator
 
