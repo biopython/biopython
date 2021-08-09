@@ -49,13 +49,23 @@ if "bdist_wheel" in sys.argv:
 # Make sure we have the right Python version.
 MIN_PY_VER = (3, 6)
 if sys.version_info[:2] < MIN_PY_VER:
-    sys.stderr.write(
+    # Don't use f-strings as want this to run on older Python!
+    sys.exit(
         ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
-    sys.exit(1)
 elif sys.version_info[:2] == (3, 6):
     sys.stderr.write("WARNING: Biopython will soon drop support for Python 3.6\n")
+
+# Make sure this Python was compiled with sqlite3 in standard lib:
+try:
+    import sqlite3  # noqa: F401
+except ImportError:
+    sys.exit(
+        "ERROR: Biopython requires Python with the sqlite3 library. "
+        "This can be missing if Python was self-compiled without all "
+        "the dependencies."
+    )
 
 
 class test_biopython(Command):
