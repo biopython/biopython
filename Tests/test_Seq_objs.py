@@ -1692,8 +1692,8 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(s1 + u2), "Seq({0: 'ABCD'}, length=13)")
         self.assertEqual(repr(s1 + p1), "Seq({0: 'ABCD', 7: 'KLM', 15: 'XYZ'}, length=21)")
         self.assertEqual(repr(s1 + p2), "Seq({0: 'ABCDPQRST', 12: 'HIJ'}, length=17)")
-        self.assertEqual(s2 + s1, Seq('EFGABCD'))
-        self.assertEqual(s2 + s2, Seq('EFGEFG'))
+        self.assertEqual(s2 + s1, Seq("EFGABCD"))
+        self.assertEqual(s2 + s2, Seq("EFGEFG"))
         self.assertEqual(repr(s2 + u1), "Seq({0: 'EFG'}, length=10)")
         self.assertEqual(repr(s2 + u2), "Seq({0: 'EFG'}, length=12)")
         self.assertEqual(repr(s2 + p1), "Seq({0: 'EFG', 6: 'KLM', 14: 'XYZ'}, length=20)")
@@ -1741,12 +1741,12 @@ class PartialSequenceTests(unittest.TestCase):
                          "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
         self.assertEqual(repr(u.complement(inplace=False)),
                          "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
-                         # TODO: remove inplace=False
+        # TODO: remove inplace=False
         self.assertEqual(repr(s.reverse_complement()),
                          "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
         self.assertEqual(repr(u.reverse_complement(inplace=False)),
                          "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
-                         # TODO: remove inplace=False
+        # TODO: remove inplace=False
         self.assertEqual(repr(s.complement_rna()),
                          "Seq({3: 'UUGG', 11: 'GCA'}, length=20)")
         self.assertEqual(repr(u.complement_rna()),

@@ -173,6 +173,7 @@ class SequenceDataAbstractBaseClass(ABC):
         if data is not None:
             # merge adjacent sequence segments
             end = -1
+            previous = None  # not needed here, but it keeps flake happy
             items = data.items()
             data = {}
             for start, seq in items:
@@ -3024,6 +3025,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 return _UndefinedSequenceData(size)
             # merge adjacent sequence segments
             end = -1
+            previous = None  # not needed here, but it keeps flake happy
             items = data.items()
             data = {}
             for start, seq in items:
@@ -3044,7 +3046,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             raise IndexError("sequence index out of range")
         else:
             for start, seq in self._data.items():
-                if start <= key and key < start + len(seqdate):
+                if start <= key and key < start + len(seq):
                     return seq[key - start]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
@@ -3061,6 +3063,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         items = self._data.items()
         data = {}
         end = -1
+        previous = None  # not needed here, but it keeps flake happy
         for i in range(other):
             for start, seq in items:
                 start += i * length
@@ -3070,7 +3073,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                     data[start] = seq
                     previous = start
             end = start + len(seq)
-        return _PartiallyDefinedSequenceData(length*other, data)
+        return _PartiallyDefinedSequenceData(length * other, data)
 
     def upper(self):
         """Return an upper case copy of the sequence."""
