@@ -341,7 +341,7 @@ class SequenceDataAbstractBaseClass(ABC):
         All characters occurring in the optional argument delete are removed.
         The remaining characters are mapped through the given translation table.
         """
-        return bytes(self).translate(table)
+        return bytes(self).translate(table, delete)
 
 
 class _SeqAbstractBaseClass(ABC):
@@ -1513,13 +1513,32 @@ class _SeqAbstractBaseClass(ABC):
                         BiopythonDeprecationWarning,
                     )
                     inplace = True
-                if b"U" in self._data or b"u" in self._data:
+                if isinstance(self._data, _PartiallyDefinedSequenceData):
+                    for seq in self._data._data.values():
+                        if b"U" in seq or b"u" in seq:
+                            warnings.warn(
+                                "seq.complement() will change in the near "
+                                "future to always return DNA nucleotides only. "
+                                "Please use\n"
+                                "\n"
+                                "seq.complement_rna()\n"
+                                "\n"
+                                "if you want to receive an RNA sequence instead.",
+                                BiopythonDeprecationWarning,
+                            )
+                            for seq in self._data._data.values():
+                                if b"t" in seq or b"T" in seq:
+                                    raise ValueError("Mixed RNA/DNA found")
+                            ttable = _rna_complement_table
+                            break
+
+                elif b"U" in self._data or b"u" in self._data:
                     warnings.warn(
-                        "mutable_seq.complement() will change in the near "
-                        "future to always return DNA nucleotides only. "
+                        "seq.complement() will change in the near future to "
+                        "always return DNA nucleotides only. "
                         "Please use\n"
                         "\n"
-                        "mutable_seq.complement_rna()\n"
+                        "seq.complement_rna()\n"
                         "\n"
                         "if you want to receive an RNA sequence instead.",
                         BiopythonDeprecationWarning,
@@ -1639,13 +1658,30 @@ class _SeqAbstractBaseClass(ABC):
                     inplace = True
                 else:
                     inplace = False
-                if b"U" in self._data or b"u" in self._data:
+                if isinstance(self._data, _PartiallyDefinedSequenceData):
+                    for seq in self._data._data.values():
+                        if b"U" in seq or b"u" in seq:
+                            warnings.warn(
+                                "seq.reverse_complement() will change in the near "
+                                "future to always return DNA nucleotides only. "
+                                "Please use\n"
+                                "\n"
+                                "seq.reverse_complement_rna()\n"
+                                "\n"
+                                "if you want to receive an RNA sequence instead.",
+                                BiopythonDeprecationWarning,
+                            )
+                            for seq in self._data._data.values():
+                                if b"t" in seq or b"T" in seq:
+                                    raise ValueError("Mixed RNA/DNA found")
+                            return self.reverse_complement_rna(inplace=inplace)
+                elif b"U" in self._data or b"u" in self._data:
                     warnings.warn(
-                        "mutable_seq.reverse_complement() will change in the "
-                        "near future to always return DNA nucleotides only. "
+                        "seq.reverse_complement() will change in the near "
+                        "future to always return DNA nucleotides only. "
                         "Please use\n"
                         "\n"
-                        "mutable_seq.reverse_complement_rna()\n"
+                        "seq.reverse_complement_rna()\n"
                         "\n"
                         "if you want to receive an RNA sequence instead.",
                         BiopythonDeprecationWarning,
@@ -2903,6 +2939,15 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         # sequence of the same length
         return _UndefinedSequenceData(self._length)
 
+    def replace(self, old, new):
+        """Return a copy with all occurrences of substring old replaced by new."""
+        # Replacing substring old by new in an undefined sequence will result
+        # in an undefined sequence of the same length, if old and new have the
+        # number of characters.
+        if len(old) != len(new):
+            raise UndefinedSequenceError("Sequence content is undefined")
+        return _UndefinedSequenceData(self._length)
+
 
 class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
@@ -3035,6 +3080,33 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     def lower(self):
         """Return a lower case copy of the sequence."""
         data = {start: seq.lower() for start, seq in self._data.items()}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def translate(self, table, delete=b""):
+        """Return a copy with each character mapped by the given translation table.
+
+          table
+            Translation table, which must be a bytes object of length 256.
+
+        All characters occurring in the optional argument delete are removed.
+        The remaining characters are mapped through the given translation table.
+        """
+        items = self._data.items()
+        data = {start: seq.translate(table, delete) for start, seq in items}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def replace(self, old, new):
+        """Return a copy with all occurrences of substring old replaced by new."""
+        # Replacing substring old by new in the undefined sequence segments
+        # will result in an undefined sequence segment of the same length, if
+        # old and new have the number of characters. If not, an error is raised,
+        # as the correct start positions cannot be calculated reliably.
+        if len(old) != len(new):
+            raise UndefinedSequenceError(
+                "Sequence content is only partially defined; substring \n"
+                "replacement cannot be performed reliably")
+        items = self._data.items()
+        data = {start: seq.replace(old, new) for start, seq in items}
         return _PartiallyDefinedSequenceData(self._length, data)
 
 

@@ -1734,6 +1734,43 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(m.upper()), "Seq({5: 'ABCD', 10: 'EFGH'}, length=20)")
         self.assertEqual(repr(m.lower()), "Seq({5: 'abcd', 10: 'efgh'}, length=20)")
 
+    def test_complement(self):
+        s = Seq({3: "AACC", 11: "CGT"}, length=20)
+        u = Seq({3: "AACC", 11: "CGU"}, length=20)
+        self.assertEqual(repr(s.complement()),
+                         "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(repr(u.complement(inplace=False)),
+                         "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
+                         # TODO: remove inplace=False
+        self.assertEqual(repr(s.reverse_complement()),
+                         "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
+        self.assertEqual(repr(u.reverse_complement(inplace=False)),
+                         "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
+                         # TODO: remove inplace=False
+        self.assertEqual(repr(s.complement_rna()),
+                         "Seq({3: 'UUGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(repr(u.complement_rna()),
+                         "Seq({3: 'UUGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(repr(s.reverse_complement_rna()),
+                         "Seq({6: 'ACG', 13: 'GGUU'}, length=20)")
+        self.assertEqual(repr(u.reverse_complement_rna()),
+                         "Seq({6: 'ACG', 13: 'GGUU'}, length=20)")
+
+    def test_replace(self):
+        s = Seq({3: "AACC", 11: "CGT"}, length=20)
+        self.assertEqual(repr(s.replace("A", "X")),
+                         "Seq({3: 'XXCC', 11: 'CGT'}, length=20)")
+        self.assertEqual(repr(s.replace("CC", "YY")),
+                         "Seq({3: 'AAYY', 11: 'CGT'}, length=20)")
+        self.assertRaises(UndefinedSequenceError, s.replace, "A", "XX")
+
+    def test_transcribe(self):
+        s = Seq({3: "acgt", 11: "ACGT"}, length=20)
+        u = s.transcribe()
+        self.assertEqual(repr(u), "Seq({3: 'acgu', 11: 'ACGU'}, length=20)")
+        s = u.back_transcribe()
+        self.assertEqual(repr(s), "Seq({3: 'acgt', 11: 'ACGT'}, length=20)")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
