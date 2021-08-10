@@ -955,8 +955,7 @@ class StringMethodTests(unittest.TestCase):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
         self.assertEqual(
-            "N" * 15,
-            spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
+            "N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
         )
 
         spacer1 = Seq("")
@@ -1018,12 +1017,10 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
         self.assertEqual(
-            "N" * 15,
-            spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
+            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
         )
         self.assertRaises(
-            TypeError,
-            spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
+            TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
         )
 
     def test_join_Seq_with_file(self):

@@ -2899,9 +2899,9 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
 
     Objects of this class can be used to create a Seq object to represent
     sequences with a known length, but an unknown sequence contents.
-    Calling __len__ returns the sequence length, calling __getitem__ raises a
-    ValueError except for requests of zero size, for which it returns an empty
-    bytes object.
+    Calling __len__ returns the sequence length, calling __getitem__ raises an
+    UndefinedSequenceError except for requests of zero size, for which it
+    returns an empty bytes object.
     """
 
     __slots__ = ("_length",)
@@ -2957,10 +2957,11 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
 
     Objects of this class can be used to create a Seq object to represent
-    sequences with a known length, but an unknown sequence contents.
-    Calling __len__ returns the sequence length, calling __getitem__ raises a
-    ValueError except for requests of zero size, for which it returns an empty
-    bytes object.
+    sequences with a known length, but with a sequence contents that is only
+    partially known.
+    Calling __len__ returns the sequence length, calling __getitem__ returns
+    the sequence contents if known, otherwise an UndefinedSequenceError is
+    raised.
     """
 
     __slots__ = ("_length", "_data")
