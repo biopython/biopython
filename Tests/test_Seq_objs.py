@@ -955,7 +955,8 @@ class StringMethodTests(unittest.TestCase):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
         self.assertEqual(
-            "N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
+            "N" * 15,
+            spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
         )
 
         spacer1 = Seq("")
@@ -1017,10 +1018,12 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
         self.assertEqual(
-            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
+            "N" * 15,
+            spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
         )
         self.assertRaises(
-            TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
+            TypeError,
+            spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
         )
 
     def test_join_Seq_with_file(self):
@@ -1690,13 +1693,17 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(s1 + s2, Seq("ABCDEFG"))
         self.assertEqual(repr(s1 + u1), "Seq({0: 'ABCD'}, length=11)")
         self.assertEqual(repr(s1 + u2), "Seq({0: 'ABCD'}, length=13)")
-        self.assertEqual(repr(s1 + p1), "Seq({0: 'ABCD', 7: 'KLM', 15: 'XYZ'}, length=21)")
+        self.assertEqual(
+            repr(s1 + p1), "Seq({0: 'ABCD', 7: 'KLM', 15: 'XYZ'}, length=21)"
+        )
         self.assertEqual(repr(s1 + p2), "Seq({0: 'ABCDPQRST', 12: 'HIJ'}, length=17)")
         self.assertEqual(s2 + s1, Seq("EFGABCD"))
         self.assertEqual(s2 + s2, Seq("EFGEFG"))
         self.assertEqual(repr(s2 + u1), "Seq({0: 'EFG'}, length=10)")
         self.assertEqual(repr(s2 + u2), "Seq({0: 'EFG'}, length=12)")
-        self.assertEqual(repr(s2 + p1), "Seq({0: 'EFG', 6: 'KLM', 14: 'XYZ'}, length=20)")
+        self.assertEqual(
+            repr(s2 + p1), "Seq({0: 'EFG', 6: 'KLM', 14: 'XYZ'}, length=20)"
+        )
         self.assertEqual(repr(s2 + p2), "Seq({0: 'EFGPQRST', 11: 'HIJ'}, length=16)")
         self.assertEqual(repr(u1 + s1), "Seq({7: 'ABCD'}, length=11)")
         self.assertEqual(repr(u1 + s2), "Seq({7: 'EFG'}, length=10)")
@@ -1710,18 +1717,37 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(u2 + u2), "Seq(None, length=18)")
         self.assertEqual(repr(u2 + p1), "Seq({12: 'KLM', 20: 'XYZ'}, length=26)")
         self.assertEqual(repr(u2 + p2), "Seq({9: 'PQRST', 17: 'HIJ'}, length=22)")
-        self.assertEqual(repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ABCD'}, length=21)")
-        self.assertEqual(repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZ', 17: 'EFG'}, length=20)")
+        self.assertEqual(
+            repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ABCD'}, length=21)"
+        )
+        self.assertEqual(
+            repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZ', 17: 'EFG'}, length=20)"
+        )
         self.assertEqual(repr(p1 + u1), "Seq({3: 'KLM', 11: 'XYZ'}, length=24)")
         self.assertEqual(repr(p1 + u2), "Seq({3: 'KLM', 11: 'XYZ'}, length=26)")
-        self.assertEqual(repr(p1 + p1), "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ'}, length=34)")
-        self.assertEqual(repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)")
-        self.assertEqual(repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)")
-        self.assertEqual(repr(p2 + s2), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'EFG'}, length=16)")
+        self.assertEqual(
+            repr(p1 + p1), "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ'}, length=34)"
+        )
+        self.assertEqual(
+            repr(p1 + p2),
+            "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)",
+        )
+        self.assertEqual(
+            repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)"
+        )
+        self.assertEqual(
+            repr(p2 + s2), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'EFG'}, length=16)"
+        )
         self.assertEqual(repr(p2 + u1), "Seq({0: 'PQRST', 8: 'HIJ'}, length=20)")
         self.assertEqual(repr(p2 + u2), "Seq({0: 'PQRST', 8: 'HIJ'}, length=22)")
-        self.assertEqual(repr(p2 + p1), "Seq({0: 'PQRST', 8: 'HIJ', 16: 'KLM', 24: 'XYZ'}, length=30)")
-        self.assertEqual(repr(p2 + p2), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)")
+        self.assertEqual(
+            repr(p2 + p1),
+            "Seq({0: 'PQRST', 8: 'HIJ', 16: 'KLM', 24: 'XYZ'}, length=30)",
+        )
+        self.assertEqual(
+            repr(p2 + p2),
+            "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)",
+        )
 
     def test_lower_upper(self):
         u = Seq({3: "KLM", 11: "XYZ"}, length=17)
@@ -1737,31 +1763,40 @@ class PartialSequenceTests(unittest.TestCase):
     def test_complement(self):
         s = Seq({3: "AACC", 11: "CGT"}, length=20)
         u = Seq({3: "AACC", 11: "CGU"}, length=20)
-        self.assertEqual(repr(s.complement()),
-                         "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
-        self.assertEqual(repr(u.complement(inplace=False)),
-                         "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(repr(s.complement()), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(
+            repr(u.complement(inplace=False)), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)"
+        )
         # TODO: remove inplace=False
-        self.assertEqual(repr(s.reverse_complement()),
-                         "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
-        self.assertEqual(repr(u.reverse_complement(inplace=False)),
-                         "Seq({6: 'ACG', 13: 'GGTT'}, length=20)")
+        self.assertEqual(
+            repr(s.reverse_complement()), "Seq({6: 'ACG', 13: 'GGTT'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.reverse_complement(inplace=False)),
+            "Seq({6: 'ACG', 13: 'GGTT'}, length=20)",
+        )
         # TODO: remove inplace=False
-        self.assertEqual(repr(s.complement_rna()),
-                         "Seq({3: 'UUGG', 11: 'GCA'}, length=20)")
-        self.assertEqual(repr(u.complement_rna()),
-                         "Seq({3: 'UUGG', 11: 'GCA'}, length=20)")
-        self.assertEqual(repr(s.reverse_complement_rna()),
-                         "Seq({6: 'ACG', 13: 'GGUU'}, length=20)")
-        self.assertEqual(repr(u.reverse_complement_rna()),
-                         "Seq({6: 'ACG', 13: 'GGUU'}, length=20)")
+        self.assertEqual(
+            repr(s.complement_rna()), "Seq({3: 'UUGG', 11: 'GCA'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.complement_rna()), "Seq({3: 'UUGG', 11: 'GCA'}, length=20)"
+        )
+        self.assertEqual(
+            repr(s.reverse_complement_rna()), "Seq({6: 'ACG', 13: 'GGUU'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.reverse_complement_rna()), "Seq({6: 'ACG', 13: 'GGUU'}, length=20)"
+        )
 
     def test_replace(self):
         s = Seq({3: "AACC", 11: "CGT"}, length=20)
-        self.assertEqual(repr(s.replace("A", "X")),
-                         "Seq({3: 'XXCC', 11: 'CGT'}, length=20)")
-        self.assertEqual(repr(s.replace("CC", "YY")),
-                         "Seq({3: 'AAYY', 11: 'CGT'}, length=20)")
+        self.assertEqual(
+            repr(s.replace("A", "X")), "Seq({3: 'XXCC', 11: 'CGT'}, length=20)"
+        )
+        self.assertEqual(
+            repr(s.replace("CC", "YY")), "Seq({3: 'AAYY', 11: 'CGT'}, length=20)"
+        )
         self.assertRaises(UndefinedSequenceError, s.replace, "A", "XX")
 
     def test_transcribe(self):

@@ -184,7 +184,10 @@ class SequenceDataAbstractBaseClass(ABC):
                     previous = start
                 end = start + len(seq)
             return _PartiallyDefinedSequenceData(length, data)
-        raise TypeError("unsupported operante type(s) for +: '%s' and '%s'" % (type(self).__name__, type(other).__name))
+        raise TypeError(
+            "unsupported operante type(s) for +: '%s' and '%s'"
+            % (type(self).__name__, type(other).__name)
+        )
 
     def __radd__(self, other):
         return SequenceDataAbstractBaseClass.__add__(other, self)
@@ -3107,7 +3110,8 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         if len(old) != len(new):
             raise UndefinedSequenceError(
                 "Sequence content is only partially defined; substring \n"
-                "replacement cannot be performed reliably")
+                "replacement cannot be performed reliably"
+            )
         items = self._data.items()
         data = {start: seq.replace(old, new) for start, seq in items}
         return _PartiallyDefinedSequenceData(self._length, data)
