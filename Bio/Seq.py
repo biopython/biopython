@@ -132,68 +132,17 @@ class SequenceDataAbstractBaseClass(ABC):
 
     def __add__(self, other):
         try:
-            left = bytes(self)
+            return bytes(self) + bytes(other)
         except UndefinedSequenceError:
-            left = self
-        try:
-            right = bytes(other)
-        except UndefinedSequenceError:
-            right = other
-        data = None
-        if isinstance(left, bytes):
-            if isinstance(right, bytes):
-                return left + right
-            length = len(left) + len(right)
-            data = {0: left}
-            if isinstance(right, _UndefinedSequenceData):
-                pass
-            elif isinstance(right, _PartiallyDefinedSequenceData):
-                for start, seq in right._data.items():
-                    data[len(left) + start] = seq
-        elif isinstance(left, _UndefinedSequenceData):
-            length = len(left) + len(right)
-            if isinstance(right, _UndefinedSequenceData):
-                return _UndefinedSequenceData(length)
-            if isinstance(right, bytes):
-                data = {len(left): right}
-            elif isinstance(right, _PartiallyDefinedSequenceData):
-                data = {}
-                for start, seq in right._data.items():
-                    data[len(left) + start] = seq
-        elif isinstance(left, _PartiallyDefinedSequenceData):
-            length = len(left) + len(right)
-            data = dict(left._data)
-            if isinstance(right, bytes):
-                data[len(left)] = right
-            elif isinstance(right, _UndefinedSequenceData):
-                pass
-            elif isinstance(right, _PartiallyDefinedSequenceData):
-                for start, seq in right._data.items():
-                    data[len(left) + start] = seq
-        if data is not None:
-            # merge adjacent sequence segments
-            end = -1
-            previous = None  # not needed here, but it keeps flake happy
-            items = data.items()
-            data = {}
-            for start, seq in items:
-                if end == start:
-                    data[previous] += seq
-                else:
-                    data[start] = seq
-                    previous = start
-                end = start + len(seq)
-            return _PartiallyDefinedSequenceData(length, data)
-        raise TypeError(
-            "unsupported operante type(s) for +: '%s' and '%s'"
-            % (type(self).__name__, type(other).__name)
-        )
+            return NotImplemented
+            # will be handled by _UndefinedSequenceData.__radd__ or
+            # by _PartiallyDefinedSequenceData.__radd__
 
     def __radd__(self, other):
-        return SequenceDataAbstractBaseClass.__add__(other, self)
+        return other + bytes(self)
 
     def __mul__(self, other):
-        return bytes(self) * other
+        return other * bytes(self)
 
     def __contains__(self, item):
         return bytes(self).__contains__(item)
@@ -542,7 +491,7 @@ class _SeqAbstractBaseClass(ABC):
         elif isinstance(other, str):
             return self.__class__(other.encode("ASCII") + self._data)
         else:
-            raise TypeError
+            return NotImplemented
 
     def __mul__(self, other):
         """Multiply sequence by integer.
@@ -2931,6 +2880,25 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
             return b""
         raise UndefinedSequenceError("Sequence content is undefined")
 
+    def __add__(self, other):
+        length = len(self) + len(other)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            if isinstance(other, _UndefinedSequenceData):
+                return _UndefinedSequenceData(length)
+            else:
+                return NotImplemented
+                # _PartiallyDefinedSequenceData.__radd__ will handle this
+        else:
+            data = {len(self): other}
+            return _PartiallyDefinedSequenceData(length, data)
+
+    def __radd__(self, other):
+        data = {0: bytes(other)}
+        length = len(other) + len(self)
+        return _PartiallyDefinedSequenceData(length, data)
+
     def upper(self):
         """Return an upper case copy of the sequence."""
         # An upper case copy of an undefined sequence is an undefined
@@ -3061,6 +3029,69 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         if self._length == 0:
             return b""
         raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def __add__(self, other):
+        length = len(self) + len(other)
+        data = dict(self._data)
+        items = list(self._data.items())
+        start, seq = items[-1]
+        end = start + len(seq)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            if isinstance(other, _UndefinedSequenceData):
+                pass
+            elif isinstance(other, _PartiallyDefinedSequenceData):
+                other_items = list(other._data.items())
+                if end == len(self):
+                    other_start, other_seq = other_items.pop(0)
+                    if other_start == 0:
+                        data[start] += other_seq
+                    else:
+                        data[len(self) + other_start] = other_seq
+                for other_start, other_seq in other_items:
+                    data[len(self) + other_start] = other_seq
+        else:
+            if end == len(self):
+                data[start] += other
+            else:
+                data[len(self)] = other
+        return _PartiallyDefinedSequenceData(length, data)
+
+    def __radd__(self, other):
+        length = len(other) + len(self)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            if isinstance(other, _UndefinedSequenceData):
+                data = {len(other) + start: seq for start, seq in self._data.items()}
+            elif isinstance(other, _PartiallyDefinedSequenceData):
+                data = dict(other._data)
+                other_items = list(other._data.items())
+                other_start, other_seq = other_items[-1]
+                other_end = other_start + len(other_seq)
+                if other_end == len(other):
+                    items = list(self._data.items())
+                    start, seq = items.pop(0)
+                    if start == 0:
+                        data[other_start] += seq
+                    else:
+                        data[len(other) + start] += seq
+                for start, seq in items:
+                    data[len(other) + start] = seq
+            else:
+                return NotImplemented
+        else:
+            data = {0: other}
+            items = list(self._data.items())
+            start, seq = items.pop(0)
+            if start == 0:
+                data[0] += seq
+            else:
+                data[len(other) + start] = seq
+            for start, seq in items:
+                data[len(other) + start] = seq
+        return _PartiallyDefinedSequenceData(length, data)
 
     def __mul__(self, other):
         length = self._length

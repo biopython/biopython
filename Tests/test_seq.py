@@ -240,8 +240,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s + {}
 
     def test_radd_method_using_wrong_object(self):
-        with self.assertRaises(TypeError):
-            self.s.__radd__({})
+        self.assertEqual(self.s.__radd__({}), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
@@ -595,8 +594,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s + 1234
 
     def test_radd_method_wrong_type(self):
-        with self.assertRaises(TypeError):
-            self.mutable_s.__radd__(1234)
+        self.assertEqual(self.mutable_s.__radd__(1234), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.mutable_s)
