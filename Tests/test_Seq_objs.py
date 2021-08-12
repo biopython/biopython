@@ -1687,7 +1687,7 @@ class PartialSequenceTests(unittest.TestCase):
         p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
         p2 = Seq({0: "PQRST", 8: "HIJ"}, length=13)
         records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
-        t = records['seq6'].seq  # ACGTacgtNNNNnn, lazy-loaded
+        t = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
         self.assertEqual(s1 + s1, Seq("ABCDABCD"))
         self.assertEqual(s1 + s2, Seq("ABCDEFG"))
         self.assertEqual(repr(s1 + u1), "Seq({0: 'ABCD'}, length=11)")
@@ -1736,8 +1736,7 @@ class PartialSequenceTests(unittest.TestCase):
             "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)",
         )
         self.assertEqual(
-            repr(p1 + t),
-            "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)",
+            repr(p1 + t), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)",
         )
         self.assertEqual(
             repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)"
@@ -1759,17 +1758,15 @@ class PartialSequenceTests(unittest.TestCase):
             repr(p2 + t),
             "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)",
         )
-        self.assertEqual(t + s1, Seq('ACGTacgtNNNNnnABCD'))
-        self.assertEqual(t + s2, Seq('ACGTacgtNNNNnnEFG'))
+        self.assertEqual(t + s1, Seq("ACGTacgtNNNNnnABCD"))
+        self.assertEqual(t + s2, Seq("ACGTacgtNNNNnnEFG"))
         self.assertEqual(repr(t + u1), "Seq({0: 'ACGTacgtNNNNnn'}, length=21)")
         self.assertEqual(repr(t + u2), "Seq({0: 'ACGTacgtNNNNnn'}, length=23)")
         self.assertEqual(
-            repr(t + p1),
-            "Seq({0: 'ACGTacgtNNNNnn', 17: 'KLM', 25: 'XYZ'}, length=31)"
+            repr(t + p1), "Seq({0: 'ACGTacgtNNNNnn', 17: 'KLM', 25: 'XYZ'}, length=31)"
         )
         self.assertEqual(
-            repr(t + p2),
-            "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
+            repr(t + p2), "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
         )
         self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
 
