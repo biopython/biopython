@@ -603,6 +603,13 @@ class StringMethodTests(unittest.TestCase):
         t = m.replace("AC", "XYZ", inplace=True)
         self.assertEqual(m, "AAGTXYZGT")
         self.assertEqual(t, "AAGTXYZGT")
+        u = Seq(None, length=20)
+        t = u.replace("AT", "CG")
+        self.assertEqual(repr(t), "Seq(None, length=20)")
+        with self.assertRaises(UndefinedSequenceError,
+                               msg="Sequence content is undefined"):
+            u.replace("AT", "ACGT")  # unequal length
+
 
     def test_str_encode(self):
         """Check matches the python string encode method."""
