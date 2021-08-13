@@ -473,7 +473,7 @@ def draw(
                     x_start=x_here,
                     x_here=xmax,
                     color=color,
-                    lw=( lw - 1 ),
+                    lw=(lw - 1),
                     linestyle="-.",
                 )
             # Add node/taxon labels
@@ -549,7 +549,7 @@ def draw(
                     y_bot=x_here,
                     y_top=xmax,
                     color=color,
-                    lw=( lw - 1 ),
+                    lw=(lw - 1),
                     linestyle="-.",
                 )
             # Add node/taxon labels
@@ -627,10 +627,10 @@ def draw(
         xmax = max(x_posns.values()) + max(x_posns.values()) / 30
 
         # convert the circular span from degrees to radians
-        rad = ( circular_span * np.pi / 180 ) / ymax
+        rad = (circular_span * np.pi / 180) / ymax
 
         x_here = x_posns[clade]
-        y_here = y_posns[clade]*rad
+        y_here = y_posns[clade] * rad
 
         # if x_here != 0:
         axes.plot([y_start, y_here], [x_start, x_here], color=color, lw=lw)
@@ -638,10 +638,10 @@ def draw(
         # labels then add a dashed line going from the end of the branch to
         # the start of the label
         if clade in tree.get_terminals() and align_labels:
-            axes.plot([y_start, y_here], [x_here, xmax], color=color, lw=( lw - 1 ), linestyle="-.")
+            axes.plot([y_start, y_here], [x_here, xmax], color=color, lw=(lw - 1), linestyle="-.")
 
         # plot the labels on branches and rotate them appropriately
-        rot = y_here * ( 180 / np.pi )
+        rot = y_here * (180 / np.pi)
         label = label_func(clade)
         if clade.name not in (None, clade.__class__.__name__):
             if align_labels and clade in tree.get_terminals():
@@ -682,7 +682,7 @@ def draw(
 
             locs = [ymin]
             for a in range(c1):
-                locs.append( ydiff / ( c1 + 1 ) + ymin )
+                locs.append(ydiff / (c1 + 1) + ymin)
             locs.append(ymax)
 
             # plot the children, ensuring that they start on one of the x locations
