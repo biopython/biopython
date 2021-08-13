@@ -285,7 +285,9 @@ def draw(
     import matplotlib.collections as mpcollections
 
     if orient_tree not in ["horizontal", "vertical", "circular"]:
-        raise ValueError("orient_tree must be one of 'horizontal', 'vertical' or 'circular'")
+        raise ValueError(
+            "orient_tree must be one of 'horizontal', 'vertical' or 'circular'"
+        )
     if orient_tree == "vertical" and vertical_direction not in ["right", "left"]:
         raise ValueError("vertical_direction must be one of 'right' or 'left'")
     elif orient_tree == "horizontal" and horizontal_direction not in ["up", "down"]:
@@ -403,7 +405,9 @@ def draw(
             axes.set_yticklabels([])
     elif orient_tree == "circular":
         if str(axes.name) != "polar":
-            raise ValueError("Axes %s must have projection='polar' for a circular plot" % axes)
+            raise ValueError(
+                "Axes %s must have projection='polar' for a circular plot" % axes
+            )
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
 
@@ -425,11 +429,16 @@ def draw(
         customized by altering this function.
         """
         if not use_linecollection and orientation == "horizontal":
-            axes.hlines(y_here, x_start, x_here, color=color, lw=lw, linestyle=linestyle)
+            axes.hlines(
+                y_here, x_start, x_here, color=color, lw=lw, linestyle=linestyle
+            )
         elif use_linecollection and orientation == "horizontal":
             horizontal_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw, linestyle=linestyle
+                    [[(x_start, y_here), (x_here, y_here)]],
+                    color=color,
+                    lw=lw,
+                    linestyle=linestyle,
                 )
             )
         elif not use_linecollection and orientation == "vertical":
@@ -437,7 +446,10 @@ def draw(
         elif use_linecollection and orientation == "vertical":
             vertical_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw, linestyle=linestyle
+                    [[(x_here, y_bot), (x_here, y_top)]],
+                    color=color,
+                    lw=lw,
+                    linestyle=linestyle,
                 )
             )
 
@@ -573,7 +585,7 @@ def draw(
                         verticalalignment=va,
                         horizontalalignment=ha,
                         color=get_label_color(label),
-                        rotation=90
+                        rotation=90,
                     )
 
             # Add label above the branch (optional)
@@ -638,7 +650,13 @@ def draw(
         # labels then add a dashed line going from the end of the branch to
         # the start of the label
         if clade in tree.get_terminals() and align_labels:
-            axes.plot([y_start, y_here], [x_here, xmax], color=color, lw=(lw - 1), linestyle="-.")
+            axes.plot(
+                [y_start, y_here],
+                [x_here, xmax],
+                color=color,
+                lw=(lw - 1),
+                linestyle="-.",
+            )
 
         # plot the labels on branches and rotate them appropriately
         rot = y_here * (180 / np.pi)
@@ -659,7 +677,16 @@ def draw(
                 va, ha = "center", "left"
 
             if draw_labels:
-                axes.text(y_here, xplc, label, color="k", rotation=rot, rotation_mode="anchor", va=va, ha=ha)
+                axes.text(
+                    y_here,
+                    xplc,
+                    label,
+                    color="k",
+                    rotation=rot,
+                    rotation_mode="anchor",
+                    va=va,
+                    ha=ha,
+                )
 
         if clade.clades:
 
