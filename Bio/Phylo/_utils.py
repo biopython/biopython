@@ -188,9 +188,9 @@ def draw(
     axes=None,
     branch_labels=None,
     label_colors=None,
-    orient_tree='vertical',
-    horizontal_direction='down',
-    vertical_direction='right',
+    orient_tree="vertical",
+    horizontal_direction="down",
+    vertical_direction="right",
     circular_span=355,
     draw_labels=True,
     align_labels=False,
@@ -251,24 +251,24 @@ def draw(
             None, the label will be shown in black.
         orient_tree : string of 'horizontal', 'vertical' or 'circular'
             Whether the tree should be vertically oriented (default; i.e. leaves
-            are plotted from top to bottom), horizontally oriented (i.e. leaves 
+            are plotted from top to bottom), horizontally oriented (i.e. leaves
             are plotted from left to right) or a circular tree. Note that confidence
             labels will not be plotted on a circular tree.
         vertical_direction : string of 'left' or 'right'
-            If the tree is vertical, whether the leaves should be on the left 
+            If the tree is vertical, whether the leaves should be on the left
             (default) or the right.
         horizontal_direction : string of 'up' or 'down'
             If the tree is horizontal, whether the leaves should be on the bottom
             (default - down) or the top (up).
         circular_span : int or float between 0 and 365
-            How much of a circle the circular plot should span. This value is in 
+            How much of a circle the circular plot should span. This value is in
             degrees and is 355 (i.e. a small gap between the first and last leaf)
             by default.
         draw_labels : boolean
             Whether labels should be added to the tree (both branches and leaves).
             True by default.
         align_labels : boolean
-            Whether leaf labels should be aligned so as they are all in the same 
+            Whether leaf labels should be aligned so as they are all in the same
             position and have a dotted line joining them. False by default.
 
     """
@@ -283,7 +283,7 @@ def draw(
             ) from None
 
     import matplotlib.collections as mpcollections
-    
+
     if orient_tree not in ["horizontal", "vertical", "circular"]:
         raise ValueError("orient_tree must be one of 'horizontal', 'vertical' or 'circular'")
     if orient_tree == "vertical" and vertical_direction not in ["right", "left"]:
@@ -462,9 +462,9 @@ def draw(
                 color=color,
                 lw=lw,
             )
-            #if this is one of the terminal branches and we want to align the 
-            #labels then add a dashed line going from the end of the branch to
-            #the start of the label
+            # if this is one of the terminal branches and we want to align the
+            # labels then add a dashed line going from the end of the branch to
+            # the start of the label
             if clade in tree.get_terminals() and align_labels:
                 draw_clade_lines(
                     use_linecollection=True,
@@ -473,14 +473,14 @@ def draw(
                     x_start=x_here,
                     x_here=xmax,
                     color=color,
-                    lw=lw-1,
+                    lw=( lw - 1 ),
                     linestyle="-.",
                 )
             # Add node/taxon labels
             label = label_func(clade)
             if label not in (None, clade.__class__.__name__):
                 if align_labels and clade in tree.get_terminals():
-                    xplc = max(x_posns.values())+max(x_posns.values())/30
+                    xplc = max(x_posns.values()) + max(x_posns.values()) / 30
                 else:
                     xplc = x_here
                 if draw_labels:
@@ -497,8 +497,8 @@ def draw(
                         verticalalignment=va,
                         horizontalalignment=ha,
                         color=get_label_color(label),
-                        )
-            
+                    )
+
             # Add label above the branch (optional)
             if draw_labels:
                 conf_label = format_branch_label(clade)
@@ -527,36 +527,36 @@ def draw(
                 # Draw descendents
                 for child in clade:
                     draw_clade(child, x_here, color, lw)
-                    
+
         elif orient_tree == "horizontal":
             draw_clade_lines(
                 use_linecollection=True,
-                orientation="vertical", 
-                x_here=y_here, 
-                y_bot=x_start, 
+                orientation="vertical",
+                x_here=y_here,
+                y_bot=x_start,
                 y_top=x_here,
                 color=color,
                 lw=lw,
             )
-            #if this is one of the terminal branches and we want to align the 
-            #labels then add a dashed line going from the end of the branch to
-            #the start of the label
+            # if this is one of the terminal branches and we want to align the
+            # labels then add a dashed line going from the end of the branch to
+            # the start of the label
             if clade in tree.get_terminals() and align_labels:
                 draw_clade_lines(
                     use_linecollection=True,
-                    orientation="vertical", 
-                    x_here=y_here, 
-                    y_bot=x_here, 
+                    orientation="vertical",
+                    x_here=y_here,
+                    y_bot=x_here,
                     y_top=xmax,
                     color=color,
-                    lw=lw-1,
+                    lw=( lw - 1 ),
                     linestyle="-.",
                 )
             # Add node/taxon labels
             label = label_func(clade)
             if label not in (None, clade.__class__.__name__):
                 if align_labels and clade in tree.get_terminals():
-                    xplc = max(x_posns.values())+max(x_posns.values())/30
+                    xplc = max(x_posns.values()) + max(x_posns.values()) / 30
                 else:
                     xplc = x_here
                 if draw_labels:
@@ -567,15 +567,15 @@ def draw(
                         va = "top"
                         ha = "center"
                     axes.text(
-                        y_here, 
-                        xplc,  
-                        " %s" % label, 
-                        verticalalignment=va, 
-                        horizontalalignment=ha, 
+                        y_here,
+                        xplc,
+                        " %s" % label,
+                        verticalalignment=va,
+                        horizontalalignment=ha,
                         color=get_label_color(label),
                         rotation=90
-                        )
-                    
+                    )
+
             # Add label above the branch (optional)
             if draw_labels:
                 conf_label = format_branch_label(clade)
@@ -604,103 +604,100 @@ def draw(
                 # Draw descendents
                 for child in clade:
                     draw_clade(child, x_here, color, lw)
-    
-    
+
     def draw_clade_polar(clade, color, lw, x_start=0, y_start=0):
-        
+
         try:
             import numpy as np
         except ImportError:
-                raise MissingPythonDependencyError(
-                    "Install numpy if you want to draw a circular tree."
-                ) from None
-        
+            raise MissingPythonDependencyError(
+                "Install numpy if you want to draw a circular tree."
+            ) from None
+
         try:
             from scipy.interpolate import interp1d
         except ImportError:
-                raise MissingPythonDependencyError(
-                    "Install scipy if you want to draw a circular tree."
-                ) from None
-        
-        #get the maximum y value and divide this by the circular span defined to give the angle that each y value is associated with
+            raise MissingPythonDependencyError(
+                "Install scipy if you want to draw a circular tree."
+            ) from None
+
+        # get the maximum y value and divide this by the circular span defined to give the angle that each y value is associated with
         ymax = max(y_posns.values())
-        yang = circular_span/ymax
-        xmax = max(x_posns.values())+max(x_posns.values())/30
-        
-        #convert the circular span from degrees to radians
-        rad = (circular_span*np.pi/180)/ymax
-    
+        yang = circular_span / ymax
+        xmax = max(x_posns.values()) + max(x_posns.values()) / 30
+
+        # convert the circular span from degrees to radians
+        rad = ( circular_span * np.pi / 180 ) / ymax
+
         x_here = x_posns[clade]
         y_here = y_posns[clade]*rad
-        
-        #if x_here != 0: 
+
+        # if x_here != 0:
         axes.plot([y_start, y_here], [x_start, x_here], color=color, lw=lw)
-        #if this is one of the terminal branches and we want to align the 
-        #labels then add a dashed line going from the end of the branch to
-        #the start of the label
+        # if this is one of the terminal branches and we want to align the
+        # labels then add a dashed line going from the end of the branch to
+        # the start of the label
         if clade in tree.get_terminals() and align_labels:
-            axes.plot([y_start, y_here], [x_here, xmax], color=color, lw=lw-1, linestyle='-.')
-        
-        #plot the labels on branches and rotate them appropriately
-        rot = y_here*(180/np.pi)
+            axes.plot([y_start, y_here], [x_here, xmax], color=color, lw=( lw - 1 ), linestyle="-.")
+
+        # plot the labels on branches and rotate them appropriately
+        rot = y_here * ( 180 / np.pi )
         label = label_func(clade)
         if clade.name not in (None, clade.__class__.__name__):
-            if align_labels and clade in tree.get_terminals(): 
+            if align_labels and clade in tree.get_terminals():
                 xplc = xmax
-            else: 
+            else:
                 xplc = x_here
-            
-            if rot <= 90: 
+
+            if rot <= 90:
                 va, ha = "center", "left"
-            elif rot <= 180: 
-                va, ha, rot = "center", "right", rot-180
-            elif rot <= 270: 
-                va, ha, rot = "center", "right", rot-180
-            else: 
+            elif rot <= 180:
+                va, ha, rot = "center", "right", rot - 180
+            elif rot <= 270:
+                va, ha, rot = "center", "right", rot - 180
+            else:
                 va, ha = "center", "left"
-            
-            if draw_labels: 
-                axes.text(y_here, xplc, label, color='k', rotation=rot, rotation_mode='anchor', va=va, ha=ha)
-            
+
+            if draw_labels:
+                axes.text(y_here, xplc, label, color="k", rotation=rot, rotation_mode="anchor", va=va, ha=ha)
 
         if clade.clades:
-            
-            #multiply the y values by the angle needed and convert this to radians
-            y_top = y_posns[clade.clades[0]]*yang*np.pi/180
-            y_bot = y_posns[clade.clades[-1]]*yang*np.pi/180
-            
-            #plot a curve between this angle and the previous angle along the x axis
+
+            # multiply the y values by the angle needed and convert this to radians
+            y_top = y_posns[clade.clades[0]] * yang * np.pi / 180
+            y_bot = y_posns[clade.clades[-1]] * yang * np.pi / 180
+
+            # plot a curve between this angle and the previous angle along the x axis
             curve = [[y_bot, y_top], [x_here, x_here]]
-            
+
             x = np.linspace(curve[0][0], curve[0][1], 500)
             y = interp1d(curve[0], curve[1])(x)
             axes.plot(x, y, color=color, lw=lw)
-            
-            #calculate the distance between each branch coming from this x line
+
+            # calculate the distance between each branch coming from this x line
             ymin, ymax = min(x), max(x)
-            ydiff = ymax-ymin
+            ydiff = ymax - ymin
             c1 = [1 for child in clade]
-            c1 = sum(c1)-2
-            
+            c1 = sum(c1) - 2
+
             locs = [ymin]
             for a in range(c1):
-                locs.append(ydiff/(c1+1)+ymin)
+                locs.append( ydiff / ( c1 + 1 ) + ymin )
             locs.append(ymax)
-            
-            #plot the children, ensuring that they start on one of the x locations
-            #along the branch that we've calculated
+
+            # plot the children, ensuring that they start on one of the x locations
+            # along the branch that we've calculated
             count = 0
             for child in clade:
-                if child in tree.get_terminals(): 
-                    y_start = y_posns[child]*rad
+                if child in tree.get_terminals():
+                    y_start = y_posns[child] * rad
                 else:
                     y_start = locs[count]
                 draw_clade_polar(child, color, lw, x_start=x_here, y_start=y_start)
                 count += 1
-        
-        
+
         return
-    
+
     if orient_tree in ["horizontal", "vertical"]:
         draw_clade(tree.root, 0, "k", plt.rcParams["lines.linewidth"])
         # If line collections were used to create clade lines, here they are added
@@ -709,7 +706,7 @@ def draw(
             axes.add_collection(i)
         for i in vertical_linecollections:
             axes.add_collection(i)
-        
+
         if orient_tree == "vertical":
             axes.set_xlabel("branch length")
             axes.set_ylabel("taxa")
@@ -737,18 +734,16 @@ def draw(
                 axes.set_ylim(-0.05 * xmax, 1.6 * xmax)
             else:
                 axes.set_ylim(-0.05 * xmax, 1.25 * xmax)
-            
-        
+
     elif orient_tree == "circular":
         draw_clade_polar(tree.root, "k", plt.rcParams["lines.linewidth"])
         xmax = max(x_posns.values())
         if draw_labels and align_labels:
-            axes.set_ylim([0, 1.5*xmax])
+            axes.set_ylim([0, 1.5 * xmax])
         elif draw_labels:
-            axes.set_ylim([0, 1.25*xmax])
+            axes.set_ylim([0, 1.25 * xmax])
         else:
             axes.set_ylim([0, xmax])
-
 
     # Aesthetics
 
@@ -759,7 +754,6 @@ def draw(
     else:
         if name:
             axes.set_title(name)
-    
 
     # Parse and process key word arguments as pyplot options
     for key, value in kwargs.items():
