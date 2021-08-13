@@ -30,6 +30,7 @@ possible, especially the following contributors:
 - Aziz Khan
 - Chenghao Zhu
 - Fabian Egli
+- Robyn Wright
 
 
 3 June 2021: Biopython 1.79
