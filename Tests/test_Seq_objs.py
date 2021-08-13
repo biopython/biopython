@@ -1489,6 +1489,12 @@ class ComparisonTests(unittest.TestCase):
 class PartialSequenceTests(unittest.TestCase):
     """Test Seq objects with partially defined sequences."""
 
+    def test_init(self):
+        seq = Seq({5: "ACGT"}, length=20)
+        self.assertEqual(repr(seq), "Seq({5: 'ACGT'}, length=20)")
+        with self.assertRaises(ValueError, msg="Length must not be negative"):
+            Seq({5: "ACGT"}, length=-10)
+
     def test_repr(self):
         seq = Seq({5: "ACGT", 14: "GGC"}, length=20)
         self.assertEqual(repr(seq), "Seq({5: 'ACGT', 14: 'GGC'}, length=20)")
