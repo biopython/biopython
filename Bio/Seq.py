@@ -466,14 +466,10 @@ class _SeqAbstractBaseClass(ABC):
             return self.__class__(self._data + other._data)
         elif isinstance(other, str):
             return self.__class__(self._data + other.encode("ASCII"))
-
-        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-
-        if isinstance(other, SeqRecord):
-            # Get the SeqRecord's __radd__ to handle this
-            return NotImplemented
         else:
-            raise TypeError
+            # If other is a SeqRecord, then SeqRecord's __radd__ will handle
+            # this. If not, returning NotImplemented will trigger a TypeError.
+            return NotImplemented
 
     def __radd__(self, other):
         """Add a sequence string on the left.
@@ -486,9 +482,7 @@ class _SeqAbstractBaseClass(ABC):
 
         Adding two sequence objects is handled via the __add__ method.
         """
-        if isinstance(other, _SeqAbstractBaseClass):
-            return self.__class__(other._data + self._data)
-        elif isinstance(other, str):
+        if isinstance(other, str):
             return self.__class__(other.encode("ASCII") + self._data)
         else:
             return NotImplemented
