@@ -1482,6 +1482,25 @@ class ComparisonTests(unittest.TestCase):
 class PartialSequenceTests(unittest.TestCase):
     """Test Seq objects with partially defined sequences."""
 
+    def test_repr(self):
+        seq = Seq({5: "ACGT", 14: "GGC"}, length=20)
+        self.assertEqual(repr(seq), "Seq({5: 'ACGT', 14: 'GGC'}, length=20)")
+        seq = Seq({5: "ACGT" * 25, 140: "GGC"}, length=143)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'GGC'}, length=143)",
+        )
+        seq = Seq({5: "ACGT" * 25, 140: "GGC"}, length=150)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'GGC'}, length=150)",
+        )
+        seq = Seq({5: "ACGT" * 25, 140: "acgt" * 20}, length=250)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtac...cgt'}, length=250)",
+        )
+
     def test_getitem(self):
         #           1    1    2
         # 0    5    0    5    0
