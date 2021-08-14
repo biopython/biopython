@@ -2986,7 +2986,10 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 if seq is not None and len(seq) == size:
                     return seq  # Fully defined sequence; return bytes
             if step < 0:
-                data = {start: data[start] for start in reversed(data)}
+                # use this after we drop Python 3.7:
+                # data = {start: data[start] for start in reversed(data)}
+                # use this as long as we support Python 3.7:
+                data = {start: data[start] for start in reversed(list(data.keys()))}
             return _PartiallyDefinedSequenceData(size, data)
         elif self._length <= key:
             raise IndexError("sequence index out of range")
