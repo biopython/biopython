@@ -1001,6 +1001,7 @@ class TestComplement(unittest.TestCase):
 
     def test_immutable(self):
         from Bio.SeqRecord import SeqRecord
+
         r = SeqRecord(Seq.Seq("ACGT"))
         with self.assertRaises(TypeError) as cm:
             Seq.complement(r, inplace=True)
@@ -1014,6 +1015,7 @@ class TestComplement(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq.complement_rna("ACGT", inplace=True)
         self.assertEqual(str(cm.exception), "strings are immutable")
+
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
@@ -1076,6 +1078,7 @@ class TestReverseComplement(unittest.TestCase):
 
     def test_immutable(self):
         from Bio.SeqRecord import SeqRecord
+
         r = SeqRecord(Seq.Seq("ACGT"))
         with self.assertRaises(TypeError) as cm:
             Seq.reverse_complement(r, inplace=True)
@@ -1089,6 +1092,7 @@ class TestReverseComplement(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq.reverse_complement_rna("ACGT", inplace=True)
         self.assertEqual(str(cm.exception), "strings are immutable")
+
 
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):

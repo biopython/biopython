@@ -800,10 +800,12 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq("ACGT").complement_rna(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
-        self.assertEqual(repr(Seq(None, length=20).complement()),
-                         "Seq(None, length=20)")
-        self.assertEqual(repr(Seq(None, length=20).complement_rna()),
-                         "Seq(None, length=20)")
+        self.assertEqual(
+            repr(Seq(None, length=20).complement()), "Seq(None, length=20)"
+        )
+        self.assertEqual(
+            repr(Seq(None, length=20).complement_rna()), "Seq(None, length=20)"
+        )
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
@@ -831,10 +833,12 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq("ACGT").reverse_complement_rna(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
-        self.assertEqual(repr(Seq(None, length=20).reverse_complement()),
-                         "Seq(None, length=20)")
-        self.assertEqual(repr(Seq(None, length=20).reverse_complement_rna()),
-                         "Seq(None, length=20)")
+        self.assertEqual(
+            repr(Seq(None, length=20).reverse_complement()), "Seq(None, length=20)"
+        )
+        self.assertEqual(
+            repr(Seq(None, length=20).reverse_complement_rna()), "Seq(None, length=20)"
+        )
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""
@@ -855,8 +859,9 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq("ACGT").transcribe(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
-        self.assertEqual(repr(Seq(None, length=20).transcribe()),
-                         "Seq(None, length=20)")
+        self.assertEqual(
+            repr(Seq(None, length=20).transcribe()), "Seq(None, length=20)"
+        )
 
     def test_the_back_transcription(self):
         """Check obj.back_transcribe() method."""
@@ -874,8 +879,9 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Seq("ACGU").back_transcribe(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
-        self.assertEqual(repr(Seq(None, length=20).back_transcribe()),
-                         "Seq(None, length=20)")
+        self.assertEqual(
+            repr(Seq(None, length=20).back_transcribe()), "Seq(None, length=20)"
+        )
 
     def test_the_translate(self):
         """Check obj.translate() method."""
@@ -901,7 +907,10 @@ class StringMethodTests(unittest.TestCase):
             Seq("ABCD").translate("XYZ")
         with self.assertWarns(BiopythonWarning) as cm:
             Seq(None, length=20).translate()
-        self.assertEqual(str(cm.warning), "Partial codon, len(sequence) not a multiple of three. This may become an error in future.")
+        self.assertEqual(
+            str(cm.warning),
+            "Partial codon, len(sequence) not a multiple of three. This may become an error in future.",
+        )
 
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
@@ -1021,7 +1030,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
-        self.assertRaises(ValueError, MutableSeq, array.array("i", [1,2,3,4]))
+        self.assertRaises(ValueError, MutableSeq, array.array("i", [1, 2, 3, 4]))
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for all non-iterable types."""
@@ -1598,7 +1607,9 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(str(cm.exception), "Sequence data are overlapping.")
         with self.assertRaises(ValueError) as cm:
             Seq({5: "PQRST"}, length=8)
-        self.assertEqual(str(cm.exception), "Provided sequence data extend beyond sequence length.")
+        self.assertEqual(
+            str(cm.exception), "Provided sequence data extend beyond sequence length."
+        )
 
     def test_repr(self):
         seq = Seq({5: "ACGT", 14: "GGC"}, length=20)
@@ -1948,16 +1959,27 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
         p1 = Seq({3: "KLM", 11: "XYZ"}, length=14)
         p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
-        self.assertEqual(repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)")
-        self.assertEqual(repr(p2 + p1), "Seq({0: 'PQRST', 8: 'HIJ', 14: 'KLM', 22: 'XYZ'}, length=25)")
+        self.assertEqual(
+            repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)"
+        )
+        self.assertEqual(
+            repr(p2 + p1),
+            "Seq({0: 'PQRST', 8: 'HIJ', 14: 'KLM', 22: 'XYZ'}, length=25)",
+        )
         self.assertEqual(repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZABCD'}, length=18)")
         self.assertEqual(repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZEFG'}, length=17)")
 
     def test_multiplication(self):
         p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
         p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
-        self.assertEqual(repr(3 * p1), "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ', 37: 'KLM', 45: 'XYZ'}, length=51)")
-        self.assertEqual(repr(3 * p2), "Seq({0: 'PQRST', 8: 'HIJPQRST', 19: 'HIJPQRST', 30: 'HIJ'}, length=33)")
+        self.assertEqual(
+            repr(3 * p1),
+            "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ', 37: 'KLM', 45: 'XYZ'}, length=51)",
+        )
+        self.assertEqual(
+            repr(3 * p2),
+            "Seq({0: 'PQRST', 8: 'HIJPQRST', 19: 'HIJPQRST', 30: 'HIJ'}, length=33)",
+        )
 
     def test_lower_upper(self):
         u = Seq({3: "KLM", 11: "XYZ"}, length=17)
