@@ -1730,12 +1730,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
-        try:
-            data = self._data.replace(b"T", b"U").replace(b"t", b"u")
-        except UndefinedSequenceError:
-            # transcribing an undefined sequence yields an undefined sequence
-            # of the same length
-            return self
+        data = self._data.replace(b"T", b"U").replace(b"t", b"u")
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1783,12 +1778,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
-        try:
-            data = self._data.replace(b"U", b"T").replace(b"u", b"t")
-        except UndefinedSequenceError:
-            # back-transcribing an undefined sequence yields an undefined
-            # sequence of the same length
-            return self
+        data = self._data.replace(b"U", b"T").replace(b"u", b"t")
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -3242,7 +3232,7 @@ def _translate_str(
                     "Use str(my_seq).translate(...) instead."
                 ) from None
             else:
-                raise
+                raise TypeError("table argument must be integer or string") from None
     except (AttributeError, TypeError):
         # Assume it's a CodonTable object
         if isinstance(table, CodonTable.CodonTable):

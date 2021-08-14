@@ -1268,8 +1268,13 @@ class TestTranslating(unittest.TestCase):
 
     def test_translation_with_bad_table_argument(self):
         table = {}
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "Bad table argument")
+        table = b"0x"
+        with self.assertRaises(TypeError) as cm:
+            Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "table argument must be integer or string")
 
     def test_translation_with_codon_table_as_table_argument(self):
         table = standard_dna_table

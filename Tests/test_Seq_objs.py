@@ -1636,6 +1636,29 @@ class PartialSequenceTests(unittest.TestCase):
         # ?????ABCD?????EFG???
         seq = Seq({5: "ABCD", 14: "EFG"}, length=20)
         self.assertEqual(repr(seq), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
+        # index
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[0]
+        self.assertEqual(str(cm.exception), "Sequence at position 0 is undefined")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[1]
+        self.assertEqual(str(cm.exception), "Sequence at position 1 is undefined")
+        self.assertEqual(seq[5], "A")
+        self.assertEqual(seq[6], "B")
+        self.assertEqual(seq[7], "C")
+        self.assertEqual(seq[8], "D")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[10]
+        self.assertEqual(str(cm.exception), "Sequence at position 10 is undefined")
+        self.assertEqual(seq[14], "E")
+        self.assertEqual(seq[15], "F")
+        self.assertEqual(seq[16], "G")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[17]
+        self.assertEqual(str(cm.exception), "Sequence at position 17 is undefined")
+        with self.assertRaises(IndexError) as cm:
+            seq[30]
+        self.assertEqual(str(cm.exception), "sequence index out of range")
         # step = 0
         with self.assertRaises(ValueError) as cm:
             s = seq[::0]
@@ -1848,22 +1871,6 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(s), "Seq({1: 'C', 3: 'G'}, length=6)")
         s = seq[4::4]
         self.assertEqual(repr(s), "Seq({1: 'DF'}, length=4)")
-        # test exceptions
-        with self.assertRaises(IndexError) as cm:
-            seq[30]
-        self.assertEqual(str(cm.exception), "sequence index out of range")
-        with self.assertRaises(UndefinedSequenceError) as cm:
-            seq[0]
-        self.assertEqual(str(cm.exception), "Sequence at position 0 is undefined")
-        with self.assertRaises(UndefinedSequenceError) as cm:
-            seq[1]
-        self.assertEqual(str(cm.exception), "Sequence at position 1 is undefined")
-        with self.assertRaises(UndefinedSequenceError) as cm:
-            seq[10]
-        self.assertEqual(str(cm.exception), "Sequence at position 10 is undefined")
-        with self.assertRaises(UndefinedSequenceError) as cm:
-            seq[17]
-        self.assertEqual(str(cm.exception), "Sequence at position 17 is undefined")
         # test length 0
         self.assertEqual(Seq({}, length=0), "")
 
