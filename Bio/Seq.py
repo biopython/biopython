@@ -39,8 +39,8 @@ def _maketrans(complement_mapping):
      - complement_mapping - a dictionary such as ambiguous_dna_complement
        and ambiguous_rna_complement from Data.IUPACData.
 
-    Returns a translation table (a string of length 256) for use with the
-    python string's translate method to use in a (reverse) complement.
+    Returns a translation table (a bytes object of length 256) for use with
+    the python string's translate method to use in a (reverse) complement.
 
     Compatible with lower case and upper case sequences.
 
@@ -1383,14 +1383,6 @@ class _SeqAbstractBaseClass(ABC):
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead
         """
-        if isinstance(table, str) and len(table) == 256:
-            raise ValueError(
-                "The MutableSeq object translate method DOES NOT "
-                "take a 256 character string mapping table like "
-                "the python string object's translate method. "
-                "Use str(my_seq).translate(...) instead."
-            )
-
         try:
             data = str(self)
         except UndefinedSequenceError:
@@ -2709,7 +2701,7 @@ class MutableSeq(_SeqAbstractBaseClass):
             elif isinstance(value, str):
                 self._data[index] = value.encode("ASCII")
             else:
-                raise TypeError("received unexpected type %s" % type(value))
+                raise TypeError("received unexpected type '%s'" % type(value).__name__)
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -2957,8 +2949,6 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     def __getitem__(self, key):
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
-            if step == 0:
-                raise ValueError("slice step cannot be zero")
             size = len(range(start, end, step))
             if size == 0:
                 return b""
@@ -3057,24 +3047,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         try:
             other = bytes(other)
         except UndefinedSequenceError:
-            if isinstance(other, _UndefinedSequenceData):
-                data = {len(other) + start: seq for start, seq in self._data.items()}
-            elif isinstance(other, _PartiallyDefinedSequenceData):
-                data = dict(other._data)
-                other_items = list(other._data.items())
-                other_start, other_seq = other_items[-1]
-                other_end = other_start + len(other_seq)
-                if other_end == len(other):
-                    items = list(self._data.items())
-                    start, seq = items.pop(0)
-                    if start == 0:
-                        data[other_start] += seq
-                    else:
-                        data[len(other) + start] += seq
-                for start, seq in items:
-                    data[len(other) + start] = seq
-            else:
-                return NotImplemented
+            data = {len(other) + start: seq for start, seq in self._data.items()}
         else:
             data = {0: other}
             items = list(self._data.items())
@@ -3258,8 +3231,18 @@ def _translate_str(
     except ValueError:
         # Assume it's a table name
         # The same table can be used for RNA or DNA
-        codon_table = CodonTable.ambiguous_generic_by_name[table]
-
+        try:
+            codon_table = CodonTable.ambiguous_generic_by_name[table]
+        except KeyError:
+            if isinstance(table, str):
+                raise ValueError(
+                    "The Bio.Seq translate methods and function DO NOT "
+                    "take a character string mapping table like the python "
+                    "string object's translate method. "
+                    "Use str(my_seq).translate(...) instead."
+                ) from None
+            else:
+                raise
     except (AttributeError, TypeError):
         # Assume it's a CodonTable object
         if isinstance(table, CodonTable.CodonTable):

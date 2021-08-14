@@ -5,6 +5,7 @@
 """Unittests for the Seq objects."""
 import unittest
 import warnings
+import array
 
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
@@ -18,6 +19,7 @@ from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
 from Bio.Seq import UnknownSeq
+from Bio.SeqRecord import SeqRecord
 
 try:
     import numpy
@@ -212,6 +214,9 @@ class StringMethodTests(unittest.TestCase):
             # Using search term GG as a Seq
             self.assertEqual(seq.count_overlap(Seq("GG")), exp)
             self.assertEqual(seq.count_overlap(Seq("G" * 5)), 0)
+            # Using search term GG as a MutableSeq
+            self.assertEqual(seq.count_overlap(MutableSeq("GG")), exp)
+            self.assertEqual(seq.count_overlap(MutableSeq("G" * 5)), 0)
 
     def test_count_overlap_start_end_GG(self):
         """Check our count_overlap method using GG with variable ends and starts."""
@@ -516,6 +521,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.strip(inplace=True), "ACGT")
         self.assertEqual(m, "ACGT")
+        with self.assertRaises(TypeError) as cm:
+            s.strip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_lstrip(self):
         """Check matches the python string lstrip method."""
@@ -530,6 +538,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.lstrip(inplace=True), "ACGT ")
         self.assertEqual(m, "ACGT ")
+        with self.assertRaises(TypeError) as cm:
+            s.lstrip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
@@ -544,6 +555,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.rstrip(inplace=True), " ACGT")
         self.assertEqual(m, " ACGT")
+        with self.assertRaises(TypeError) as cm:
+            s.rstrip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_split(self):
         """Check matches the python string split method."""
@@ -577,6 +591,9 @@ class StringMethodTests(unittest.TestCase):
             else:
                 example1 = example1.upper()
             self.assertEqual(example1, str1.upper())
+        with self.assertRaises(TypeError) as cm:
+            Seq("abcd").upper(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_lower(self):
         """Check matches the python string lower method."""
@@ -588,6 +605,9 @@ class StringMethodTests(unittest.TestCase):
             else:
                 example1 = example1.lower()
             self.assertEqual(example1, str1.lower())
+        with self.assertRaises(TypeError) as cm:
+            Seq("ABCD").lower(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_replace(self):
         """Check matches the python string replace method."""
@@ -606,10 +626,17 @@ class StringMethodTests(unittest.TestCase):
         u = Seq(None, length=20)
         t = u.replace("AT", "CG")
         self.assertEqual(repr(t), "Seq(None, length=20)")
-        with self.assertRaises(
-            UndefinedSequenceError, msg="Sequence content is undefined"
-        ):
+        with self.assertRaises(UndefinedSequenceError) as cm:
             u.replace("AT", "ACGT")  # unequal length
+        self.assertEqual(str(cm.exception), "Sequence content is undefined")
+        records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
+        v = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
+        s = Seq("xyzACGTacgtNNNNnnXYZ")
+        t = s.replace(v, "KLM")
+        self.assertEqual(t, "xyzKLMXYZ")
+        s = Seq("xyzKLMabcd")
+        t = s.replace("KLM", v)
+        self.assertEqual(t, "xyzACGTacgtNNNNnnabcd")
 
     def test_str_encode(self):
         """Check matches the python string encode method."""
@@ -702,6 +729,36 @@ class StringMethodTests(unittest.TestCase):
                                 )
                             else:
                                 self.assertEqual(example1[i:j:step], str1[i:j:step])
+        u = Seq(None, length=0)
+        self.assertEqual(u, "")
+
+    def test_MutableSeq_setitem(self):
+        """Check setting sequence contents of a MutableSeq object."""
+        m = MutableSeq("ABCD")
+        m[1] = "X"
+        self.assertEqual(m, "AXCD")
+        m[1:3] = MutableSeq("XY")
+        self.assertEqual(m, "AXYD")
+        m[1:3] = Seq("KL")
+        self.assertEqual(m, "AKLD")
+        m[1:3] = Seq("bc")
+        self.assertEqual(m, "AbcD")
+        with self.assertRaises(TypeError) as cm:
+            m[1:3] = 9
+        self.assertEqual(str(cm.exception), "received unexpected type 'int'")
+
+    def test_MutableSeq_extend(self):
+        """Check extending a MutableSeq object."""
+        m = MutableSeq("ABCD")
+        m.extend(MutableSeq("xyz"))
+        self.assertEqual(m, "ABCDxyz")
+        m.extend(Seq("KLM"))
+        self.assertEqual(m, "ABCDxyzKLM")
+        m.extend("PQRST")
+        self.assertEqual(m, "ABCDxyzKLMPQRST")
+        with self.assertRaises(TypeError) as cm:
+            m.extend(5)
+        self.assertEqual(str(cm.exception), "expected a string, Seq or MutableSeq")
 
     def test_tomutable(self):
         """Check creating a MutableSeq object."""
@@ -737,6 +794,16 @@ class StringMethodTests(unittest.TestCase):
                 # Default to DNA, e.g. complement("A") -> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping), comp)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").complement(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").complement_rna(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(repr(Seq(None, length=20).complement()),
+                         "Seq(None, length=20)")
+        self.assertEqual(repr(Seq(None, length=20).complement_rna()),
+                         "Seq(None, length=20)")
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
@@ -758,6 +825,16 @@ class StringMethodTests(unittest.TestCase):
                 # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping)[::-1], comp)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").reverse_complement(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").reverse_complement_rna(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(repr(Seq(None, length=20).reverse_complement()),
+                         "Seq(None, length=20)")
+        self.assertEqual(repr(Seq(None, length=20).reverse_complement_rna()),
+                         "Seq(None, length=20)")
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""
@@ -775,6 +852,11 @@ class StringMethodTests(unittest.TestCase):
                 # TODO - Check for or silence the expected warning?
                 continue
             self.assertEqual(str1.replace("T", "U").replace("t", "u"), tran)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").transcribe(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(repr(Seq(None, length=20).transcribe()),
+                         "Seq(None, length=20)")
 
     def test_the_back_transcription(self):
         """Check obj.back_transcribe() method."""
@@ -789,6 +871,11 @@ class StringMethodTests(unittest.TestCase):
                 tran = example1.back_transcribe()
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), tran)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGU").back_transcribe(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(repr(Seq(None, length=20).back_transcribe()),
+                         "Seq(None, length=20)")
 
     def test_the_translate(self):
         """Check obj.translate() method."""
@@ -810,6 +897,11 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(example1.translate(11), example1.translate(table=11))
 
             # TODO - check the actual translation, and all the optional args
+        with self.assertRaises(ValueError):
+            Seq("ABCD").translate("XYZ")
+        with self.assertWarns(BiopythonWarning) as cm:
+            Seq(None, length=20).translate()
+        self.assertEqual(str(cm.warning), "Partial codon, len(sequence) not a multiple of three. This may become an error in future.")
 
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
@@ -915,19 +1007,21 @@ class StringMethodTests(unittest.TestCase):
                         # TODO - Use the Bio.Data.IUPACData module for the
                         # ambiguous protein mappings?
 
-    def test_init_typeerror(self):
-        """Check Seq __init__ gives TypeError exceptions."""
+    def test_Seq_init_error(self):
+        """Check Seq __init__ raises the appropriate exceptions."""
         self.assertRaises(TypeError, Seq, ("A", "C", "G", "T"))
         self.assertRaises(TypeError, Seq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, Seq, 1)
         self.assertRaises(TypeError, Seq, 1.0)
+        self.assertRaises(ValueError, Seq, None)
 
-    def test_MutableSeq_init_typeerror(self):
-        """Check MutableSeq __init__ gives TypeError exceptions."""
+    def test_MutableSeq_init_error(self):
+        """Check MutableSeq __init__ raises the appropriate exceptions."""
         self.assertRaises(TypeError, MutableSeq, ("A", "C", "G", "T"))
         self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
+        self.assertRaises(ValueError, MutableSeq, array.array("i", [1,2,3,4]))
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for all non-iterable types."""
@@ -935,6 +1029,7 @@ class StringMethodTests(unittest.TestCase):
 
         spacer = Seq("NNNNN")
         self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, SeqRecord(Seq("ATG")))
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
     def test_join_UnknownSeq_TypeError_iter(self):
@@ -1492,8 +1587,18 @@ class PartialSequenceTests(unittest.TestCase):
     def test_init(self):
         seq = Seq({5: "ACGT"}, length=20)
         self.assertEqual(repr(seq), "Seq({5: 'ACGT'}, length=20)")
-        with self.assertRaises(ValueError, msg="Length must not be negative"):
+        with self.assertRaises(ValueError) as cm:
             Seq({5: "ACGT"}, length=-10)
+        self.assertEqual(str(cm.exception), "Length must not be negative.")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: 1.5}, length=10)
+        self.assertEqual(str(cm.exception), "Expected bytes-like objects or strings")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: "PQRST", 8: "KLM"}, length=10)
+        self.assertEqual(str(cm.exception), "Sequence data are overlapping.")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: "PQRST"}, length=8)
+        self.assertEqual(str(cm.exception), "Provided sequence data extend beyond sequence length.")
 
     def test_repr(self):
         seq = Seq({5: "ACGT", 14: "GGC"}, length=20)
@@ -1520,6 +1625,10 @@ class PartialSequenceTests(unittest.TestCase):
         # ?????ABCD?????EFG???
         seq = Seq({5: "ABCD", 14: "EFG"}, length=20)
         self.assertEqual(repr(seq), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
+        # step = 0
+        with self.assertRaises(ValueError) as cm:
+            s = seq[::0]
+        self.assertEqual(str(cm.exception), "slice step cannot be zero")
         # step = 1, stop = +inf
         s = seq[:]  # ?????ABCD?????EFG???
         self.assertEqual(repr(s), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
@@ -1710,6 +1819,42 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(s), "Seq('')")
         s = seq[:20:-2]  # empty sequence
         self.assertEqual(repr(s), "Seq('')")
+        # test merging segments
+        seq = Seq({5: "ABCD", 11: "EFGH"}, length=20)
+        s = seq[5::2]
+        self.assertEqual(repr(s), "Seq({0: 'AC', 3: 'EG'}, length=8)")
+        s = seq[5::3]
+        self.assertEqual(repr(s), "Seq({0: 'ADEH'}, length=5)")
+        s = seq[5::4]
+        self.assertEqual(repr(s), "Seq({0: 'A', 2: 'G'}, length=4)")
+        s = seq[5::5]
+        self.assertEqual(repr(s), "Seq({0: 'A'}, length=3)")
+        s = seq[4:]
+        self.assertEqual(repr(s), "Seq({1: 'ABCD', 7: 'EFGH'}, length=16)")
+        s = seq[4::2]
+        self.assertEqual(repr(s), "Seq({1: 'BD', 4: 'FH'}, length=8)")
+        s = seq[4::3]
+        self.assertEqual(repr(s), "Seq({1: 'C', 3: 'G'}, length=6)")
+        s = seq[4::4]
+        self.assertEqual(repr(s), "Seq({1: 'DF'}, length=4)")
+        # test exceptions
+        with self.assertRaises(IndexError) as cm:
+            seq[30]
+        self.assertEqual(str(cm.exception), "sequence index out of range")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[0]
+        self.assertEqual(str(cm.exception), "Sequence at position 0 is undefined")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[1]
+        self.assertEqual(str(cm.exception), "Sequence at position 1 is undefined")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[10]
+        self.assertEqual(str(cm.exception), "Sequence at position 10 is undefined")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[17]
+        self.assertEqual(str(cm.exception), "Sequence at position 17 is undefined")
+        # test length 0
+        self.assertEqual(Seq({}, length=0), "")
 
     def test_addition(self):
         s1 = Seq("ABCD")
@@ -1801,6 +1946,18 @@ class PartialSequenceTests(unittest.TestCase):
             repr(t + p2), "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
         )
         self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
+        p1 = Seq({3: "KLM", 11: "XYZ"}, length=14)
+        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
+        self.assertEqual(repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)")
+        self.assertEqual(repr(p2 + p1), "Seq({0: 'PQRST', 8: 'HIJ', 14: 'KLM', 22: 'XYZ'}, length=25)")
+        self.assertEqual(repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZABCD'}, length=18)")
+        self.assertEqual(repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZEFG'}, length=17)")
+
+    def test_multiplication(self):
+        p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
+        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
+        self.assertEqual(repr(3 * p1), "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ', 37: 'KLM', 45: 'XYZ'}, length=51)")
+        self.assertEqual(repr(3 * p2), "Seq({0: 'PQRST', 8: 'HIJPQRST', 19: 'HIJPQRST', 30: 'HIJ'}, length=33)")
 
     def test_lower_upper(self):
         u = Seq({3: "KLM", 11: "XYZ"}, length=17)

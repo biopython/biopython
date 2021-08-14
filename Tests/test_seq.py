@@ -999,6 +999,21 @@ class TestComplement(unittest.TestCase):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
 
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
@@ -1059,6 +1074,21 @@ class TestReverseComplement(unittest.TestCase):
         seq = "ATGAAACTG"
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
