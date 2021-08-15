@@ -321,6 +321,14 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
@@ -374,6 +382,14 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
@@ -406,6 +422,14 @@ class TestEmboss(unittest.TestCase):
                 alignment.coordinates,
                 numpy.array([[0, 22, 24, 97, 99, 131], [0, 22, 22, 95, 95, 127]]),
             )
+        )
+        self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
         )
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
@@ -442,6 +466,14 @@ class TestEmboss(unittest.TestCase):
                     [[0, 23, 24, 35, 39, 97, 99, 131], [0, 23, 23, 34, 34, 92, 92, 124]]
                 ),
             )
+        )
+        self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
         )
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
@@ -503,6 +535,22 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[2],
+            "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[3],
+            "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||:|||||||||:::::::  |||||:||||:::::|||||:|||||||:||||||||||||||||||||:::::::::::|||||||||||||  ||||:||||:|||||:|||||||::|||||||",
         )
@@ -551,6 +599,14 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "KILIVDD----QYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAK-PFDIDEIRDAV--------",
+        )
+        self.assertEqual(
+            alignment[1],
+            "-VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDGAQAVKLAGELHPRVVVMDCAMPGMSGMDATKQIRTQWPDIAVLMLTMHSEDTWVRLALEAGANGYILKSAIDLDLIQ-AVRRVANGET",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             " :|:.||    :.|.|::|.:  :.|.....:|.:|.||:.:..:..|.:|::|..:|||.|::..|:::....:|.|:::|.:.|...::.:.|.||..:..| ..|:|.|: ||        ",
         )
@@ -580,6 +636,14 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAKPFDIDEIRDAV--------",
+        )
+        self.assertEqual(
+            alignment[1],
+            "-ILIVDDEANTLASLSRAFRLAGHEATVCDNAVRALEIAKSKPFDLILSDVVMPGRDGLTLLEDLKTAGVQAPVVMMSGQAHIEMAVKATRLGALDFLEKPLSTDKLLLTVENALKLKR",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             " ||||||:......|:..|...|::.....|.::||:|...:..||:|.|:.:||.||:.:|:.:|.......|::|:....::|..::..||||....||...|::...|        ",
         )
@@ -607,6 +671,14 @@ class TestEmboss(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[0, 0, 111, 111], [0, 1, 112, 120]])
             )
+        )
+        self.assertEqual(
+            alignment[0],
+            "-KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAKPFDIDEIRDAV--------",
+        )
+        self.assertEqual(
+            alignment[1],
+            "LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHPVDLAIVDVYLGSTTGVEVLRRCRVHRPKLYAVIITGQISLEMAARSIAEGAVDYIQKPIDIDALLNIAERALEHKE",
         )
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
@@ -644,6 +716,14 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTK--ERPDLVLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHF-AKPFDID----EIRDAV",
+        )
+        self.assertEqual(
+            alignment[1],
+            "-VLLVEDEEALRAAAGDFLETRGYKIMTARDGTEALSMASKFAERIDVLITDLVMPGISGRVLAQELVKIHPETKVMYMSGYDD-ETVMVNGEIDSSSAFLRKPFRMDALSAKIREVL",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             " :|:|:|:..:|....:.....||:...|.:|.:||.:.:|  ||.|:::.|:.:||:.|..:.:.:..|....:|:.|:.|.: :.:..:.|:.:.:.| .|||.:|    :||:.:",
         )
@@ -677,6 +757,14 @@ class TestEmboss(unittest.TestCase):
                     ]
                 ),
             )
+        )
+        self.assertEqual(
+            alignment[0],
+            "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIV--TKERPDLVLLDMKIPGMDGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFA----KPFDIDEIRDAV--------",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVRESTQKIDMLLSDVVLVGMSGRELSERLRIQMPSLKVIYMSGYTDDAIVRH----GVLTESAEFLQKPFTSDSLLRKVRAVLQKRQ",
         )
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
@@ -829,8 +917,85 @@ class TestEmboss(unittest.TestCase):
             )
         )
         self.assertEqual(
+            alignment[0],
+            "TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGT------GTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTT------GAAATTTTTAGGTTATTTAGACC-----ATTTTTTTTT--GTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTT----TGGGGTTAAGACAAGGTGTCGT-TGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATA---------------------GGATCTACCTTTTATCTTTCTAAT--CTTTT----GTTTTAGT-ATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGC",
+        )
+        self.assertEqual(
+            alignment[1],
+            "------------------------------------------------------------------------------------------------------------------------------------------------------------------TTATTAA--------------------------------TCTTATGGTTTTGCCGTAAAATTTC--TTTCTTTATTTTTT----ATTG---------TTAGGATTTTGTTGATTTTATTTTTCTCAAG-AATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGT------TTAAAGTTTTATTA-----------------ATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTT-------------TT--GGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGG----AGTAAGAAT-----TTCGATTCAGCAA-CTTTAGTTCACAGTCTTTTTTTTTATTAAG-AAAGGTTT-------------------------------------------------------------------------------------------------",
+        )
+        self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "                                                                                                                                                                  .||||||                                .|||||.||      |||..|..||  ||||.||||.||.|    ||.|         ||.|.|||||.|||.||||.||||      | |||||||||||.|.|||||||     ||||||||.|  ||.|      |||.|.||||||||                 ||||||    .||||...||||..|||||..| |||||||||||             ||  ||.||.||.||                     ||..||.||.|.|||..||||.||  |||||    |    ||| |.|||     |||||||||.||| .||||||...|||||||||||||||||..| ||||||||                                                                                                 ",
+        )
+
+    def test_local_water2(self):
+        "Test parsing a local alignment."
+        path = "Emboss/water2.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "water")
+            self.assertEqual(alignments.rundate, "Sat Apr 04 2009 22:08:44")
+            self.assertEqual(
+                alignments.commandline,
+                "water -asequence asis:ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG -bsequence asis:CGTTTGAGTACTGGGATG -gapopen 10 -gapextend 0.5 -filter",
+            )
+            self.assertEqual(alignments.align_format, "srspair")
+            self.assertEqual(alignments.report_file, "stdout")
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 17)
+        self.assertEqual(alignment.annotations["similarity"], 17)
+        self.assertEqual(alignment.annotations["gaps"], 1)
+        self.assertAlmostEqual(alignment.annotations["score"], 75.0)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 18))
+        self.assertEqual(alignment.sequences[0].id, "asis")
+        self.assertEqual(alignment.sequences[1].id, "asis")
+        ## We would like to use a partially defined sequence:
+        # self.assertEqual(
+        #     repr(alignment.sequences[0].seq),
+        #     "Seq({78: 'CGTTTGAGTCTGGGATG'}, length=95)",
+        # )
+        ## Use the full sequence as a kludge. In this case, EMBOSS water was
+        ## called with the sequences shown explicitly on the command line. In
+        ## typical cases, the sequences are read from a file. The command line
+        ## will then show the file names only, and the full sequences are not
+        ## available from the output file generated by EMBOSS water.
+        from Bio.Seq import Seq
+
+        alignment.sequences[0].seq = Seq(
+            "ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG"
+        )
+        ## The following test will fail without the partially defined sequence
+        ## and without the kludge:
+        self.assertEqual(
+            alignment.sequences[0].seq[78:95], "CGTTTGAGTCTGGGATG",
+        )
+        ## The following test will pass, as the alignment shown in the output
+        ## file contains the full sequence:
+        self.assertEqual(
+            alignment.sequences[1].seq[0:18], "CGTTTGAGTACTGGGATG",
+        )
+        ## Note that the alignment coordinates are with respect to the full
+        ## sequence:
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[78, 87, 87, 95], [0, 9, 10, 18]]),
+            )
+        )
+        ## The following test will fail without the partially defined sequence
+        ## and without the kludge:
+        self.assertEqual(alignment[0], "CGTTTGAGT-CTGGGATG")
+        ## The following test will pass, as the alignment shown in the output
+        ## file contains the full sequence:
+        self.assertEqual(alignment[1], "CGTTTGAGTACTGGGATG")
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||",
         )
 
 
