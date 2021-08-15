@@ -19,6 +19,7 @@ except ImportError:
         "Install numpy if you want to use Bio.Align.emboss."
     ) from None
 
+# noqa: E266
 
 pair_example2 = """\
 ########################################
@@ -930,7 +931,7 @@ class TestEmboss(unittest.TestCase):
         )
 
     def test_local_water2(self):
-        "Test parsing a local alignment."
+        """Test parsing a local alignment."""
         path = "Emboss/water2.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
