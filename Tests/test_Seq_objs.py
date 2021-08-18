@@ -719,6 +719,8 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, UnknownSeq):
                 with self.assertWarns(BiopythonDeprecationWarning):
                     comp = example1.complement()
+            elif "u" in example1 or "U" in example1:
+                comp = example1.complement_rna()
             else:
                 comp = example1.complement()
             str1 = str(example1)
@@ -738,6 +740,8 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, UnknownSeq):
                 with self.assertWarns(BiopythonDeprecationWarning):
                     comp = example1.reverse_complement()
+            elif "u" in example1 or "U" in example1:
+                comp = example1.reverse_complement_rna()
             else:
                 comp = example1.reverse_complement()
             str1 = str(example1)

@@ -412,7 +412,7 @@ Note we create some \verb|SeqRecord| objects to construct the alignment from.
 >>> AlignIO.write(my_alignments, "my_example.phy", "phylip")
 \end{minted}
 
-\noindent And if you open this file in your favourite text editor it should look like this:
+\noindent And if you open this file in your favorite text editor it should look like this:
 
 \begin{minted}{text}
  3 12
@@ -961,7 +961,7 @@ ClustalW is a popular command line tool for multiple sequence alignment
 (and several others).
 
 Before trying to use ClustalW from within Python, you should first try running
-the ClustalW tool yourself by hand at the command line, to familiarise
+the ClustalW tool yourself by hand at the command line, to familiarize
 yourself the other options. You'll find the Biopython wrapper is very
 faithful to the actual command line API:
 
@@ -1408,7 +1408,7 @@ the full path to the tool, for example:
 new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
 
 At this point it might help to try running the EMBOSS tools yourself by hand at the
-command line, to familiarise yourself the other options and compare them to the
+command line, to familiarize yourself the other options and compare them to the
 Biopython help text:
 
 \begin{minted}{pycon}
@@ -1627,8 +1627,8 @@ Note that local alignments must, as defined by Smith \& Waterman, have a
 positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
 alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
 will not report alignments which are the result of the addition of zero-scoring
-extensions on either site. In the next example, the pairs serin/aspartate (S/D)
-and lysin/asparagin (K/N) both have a match score of 0. As you see, the aligned
+extensions on either site. In the next example, the pairs serine/aspartic acid (S/D)
+and lysine/asparagine (K/N) both have a match score of 0. As you see, the aligned
 part has not been extended:
 
 %doctest
@@ -1886,7 +1886,7 @@ Q -1.0  1.0  0.0  0.0 -3.0  5.0 ...
 >>> score
 19.0
 \end{minted}
-When using a substitution matrix, \verb+X+ is {\em not} interpreted as an unknown character. Instead, the score provided by the substutition matrix will be used:
+When using a substitution matrix, \verb+X+ is {\em not} interpreted as an unknown character. Instead, the score provided by the substitution matrix will be used:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -2213,7 +2213,7 @@ which is always 2 for a pairwise alignment:
 \end{minted}
 
 The \verb+shape+ property returns a tuple consisting of the length of the
-alignnment and the number of columns in the alignment as printed:
+alignment and the number of columns in the alignment as printed:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -3496,8 +3496,9 @@ To get a full list of available substitution matrices, use \verb+load+ without a
 ['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
 \end{minted}
 
-\hypertarget{codonmatrix}
+\hypertarget{codonmatrix}{
 Note that the substitution matrix provided by Schneider \textit{et al.} \cite{schneider2005} uses an alphabet consisting of three-nucleotide codons:
+}
 
 %cont-doctest
 \begin{minted}{pycon}

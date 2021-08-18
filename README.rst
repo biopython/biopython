@@ -1,19 +1,19 @@
-.. image:: https://img.shields.io/pypi/v/biopython.svg
+.. image:: https://img.shields.io/pypi/v/biopython.svg?logo=pypi
    :alt: Biopython on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/biopython
-.. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg
+.. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg?logo=conda-forge
    :alt: Biopython on the Conda package conda-forge channel
    :target: https://anaconda.org/conda-forge/biopython
-.. image:: https://img.shields.io/travis/biopython/biopython/master.svg?logo=travis
-   :alt: Linux testing with TravisCI
-   :target: https://travis-ci.org/biopython/biopython/branches
 .. image:: https://img.shields.io/circleci/build/github/biopython/biopython.svg?logo=circleci
    :alt: Linux testing with CircleCI
    :target: https://app.circleci.com/pipelines/github/biopython/biopython
 .. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
-.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
+.. image:: https://img.shields.io/github/workflow/status/biopython/biopython/Basic%20Checks?logo=github-actions
+   :alt: GitHub workflow status
+   :target: https://github.com/biopython/biopython/actions
+.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg

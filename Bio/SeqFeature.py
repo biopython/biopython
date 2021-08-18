@@ -1135,17 +1135,13 @@ class FeatureLocation:
                 parent_sequence = parent_sequence.seq
             except AttributeError:
                 pass
-        if isinstance(parent_sequence, MutableSeq):
-            # This avoids complications with reverse complements
-            # (the MutableSeq reverse complement acts in situ)
-            parent_sequence = Seq(parent_sequence)
         f_seq = parent_sequence[self.nofuzzy_start : self.nofuzzy_end]
+        if isinstance(f_seq, MutableSeq):
+            f_seq = Seq(f_seq)
         if self.strand == -1:
-            try:
-                f_seq = f_seq.reverse_complement()
-            except AttributeError:
-                assert isinstance(f_seq, str)
-                f_seq = reverse_complement(f_seq)
+            f_seq = reverse_complement(
+                f_seq, inplace=False
+            )  # TODO: remove inplace=False
         return f_seq
 
 
