@@ -167,14 +167,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if column == ncols:
                             # reached the end of the sequences
                             coordinates = Alignment.infer_coordinates(aligned_sequences)
-                            for i, start in enumerate(starts):
-                                start -= 1  # Python counting
-                                coordinates[i, :] += start
-                            sequences = [Seq(sequence) for sequence in sequences]
-                            records = [
-                                SeqRecord(sequence, id=identifier)
-                                for sequence, identifier in zip(sequences, identifiers)
-                            ]
+                            records = []
+                            n = len(sequences)
+                            for i in range(n):
+                                start = starts[i] - 1  # Python counting
+                                if start == 0:
+                                    sequence = Seq(sequences[i])
+                                else:
+                                    coordinates[i, :] += start
+                                    # create a partially defined sequence
+                                    length = start + len(sequences[i])
+                                    data = {start: sequences[i]}
+                                    sequence = Seq(data, length=length)
+                                record = SeqRecord(sequence, identifiers[i])
+                                records.append(record)
                             alignment = Alignment(records, coordinates)
                             if annotations:
                                 alignment.annotations = annotations

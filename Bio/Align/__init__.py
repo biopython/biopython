@@ -1366,7 +1366,6 @@ class Alignment:
                 sequence = sequence.seq  # SeqRecord confusion
             except AttributeError:
                 pass
-            sequence = str(sequence)
             line = ""
             steps = numpy.diff(coordinates, 1)
             gaps = steps[row] == 0  # seriously, flake8??
@@ -1379,7 +1378,8 @@ class Alignment:
                     j = i + step
                     line += sequence[i:j]
                     i = j
-            return line
+            # line may be a str or a Seq at this point.
+            return str(line)
         if isinstance(key, tuple):
             try:
                 row, col = key
