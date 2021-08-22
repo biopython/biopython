@@ -240,8 +240,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s + {}
 
     def test_radd_method_using_wrong_object(self):
-        with self.assertRaises(TypeError):
-            self.s.__radd__({})
+        self.assertEqual(self.s.__radd__({}), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
@@ -595,8 +594,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s + 1234
 
     def test_radd_method_wrong_type(self):
-        with self.assertRaises(TypeError):
-            self.mutable_s.__radd__(1234)
+        self.assertEqual(self.mutable_s.__radd__(1234), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.mutable_s)
@@ -926,12 +924,12 @@ class TestUnknownSeq(unittest.TestCase):
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("NNNNNN", seq.upper())
-        self.assertRaises(ValueError, self.u.upper)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.upper()))
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("nnnnnn", seq.lower())
-        self.assertRaises(ValueError, self.u.lower)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.lower()))
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())
@@ -1001,6 +999,23 @@ class TestComplement(unittest.TestCase):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
 
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
@@ -1060,6 +1075,23 @@ class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
+
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 
 class TestDoubleReverseComplement(unittest.TestCase):
@@ -1236,8 +1268,13 @@ class TestTranslating(unittest.TestCase):
 
     def test_translation_with_bad_table_argument(self):
         table = {}
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "Bad table argument")
+        table = b"0x"
+        with self.assertRaises(TypeError) as cm:
+            Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "table argument must be integer or string")
 
     def test_translation_with_codon_table_as_table_argument(self):
         table = standard_dna_table

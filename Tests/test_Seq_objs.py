@@ -5,6 +5,7 @@
 """Unittests for the Seq objects."""
 import unittest
 import warnings
+import array
 
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
@@ -16,8 +17,9 @@ from Bio.Data.IUPACData import ambiguous_rna_values
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.Seq import translate
-from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
 from Bio.Seq import UnknownSeq
+from Bio.SeqRecord import SeqRecord
 
 try:
     import numpy
@@ -212,6 +214,9 @@ class StringMethodTests(unittest.TestCase):
             # Using search term GG as a Seq
             self.assertEqual(seq.count_overlap(Seq("GG")), exp)
             self.assertEqual(seq.count_overlap(Seq("G" * 5)), 0)
+            # Using search term GG as a MutableSeq
+            self.assertEqual(seq.count_overlap(MutableSeq("GG")), exp)
+            self.assertEqual(seq.count_overlap(MutableSeq("G" * 5)), 0)
 
     def test_count_overlap_start_end_GG(self):
         """Check our count_overlap method using GG with variable ends and starts."""
@@ -516,6 +521,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.strip(inplace=True), "ACGT")
         self.assertEqual(m, "ACGT")
+        with self.assertRaises(TypeError) as cm:
+            s.strip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_lstrip(self):
         """Check matches the python string lstrip method."""
@@ -530,6 +538,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.lstrip(inplace=True), "ACGT ")
         self.assertEqual(m, "ACGT ")
+        with self.assertRaises(TypeError) as cm:
+            s.lstrip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
@@ -544,6 +555,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(m, " ACGT ")
         self.assertEqual(m.rstrip(inplace=True), " ACGT")
         self.assertEqual(m, " ACGT")
+        with self.assertRaises(TypeError) as cm:
+            s.rstrip("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_split(self):
         """Check matches the python string split method."""
@@ -577,6 +591,9 @@ class StringMethodTests(unittest.TestCase):
             else:
                 example1 = example1.upper()
             self.assertEqual(example1, str1.upper())
+        with self.assertRaises(TypeError) as cm:
+            Seq("abcd").upper(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_lower(self):
         """Check matches the python string lower method."""
@@ -588,6 +605,9 @@ class StringMethodTests(unittest.TestCase):
             else:
                 example1 = example1.lower()
             self.assertEqual(example1, str1.lower())
+        with self.assertRaises(TypeError) as cm:
+            Seq("ABCD").lower(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
 
     def test_str_replace(self):
         """Check matches the python string replace method."""
@@ -603,6 +623,20 @@ class StringMethodTests(unittest.TestCase):
         t = m.replace("AC", "XYZ", inplace=True)
         self.assertEqual(m, "AAGTXYZGT")
         self.assertEqual(t, "AAGTXYZGT")
+        u = Seq(None, length=20)
+        t = u.replace("AT", "CG")
+        self.assertEqual(repr(t), "Seq(None, length=20)")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            u.replace("AT", "ACGT")  # unequal length
+        self.assertEqual(str(cm.exception), "Sequence content is undefined")
+        records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
+        v = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
+        s = Seq("xyzACGTacgtNNNNnnXYZ")
+        t = s.replace(v, "KLM")
+        self.assertEqual(t, "xyzKLMXYZ")
+        s = Seq("xyzKLMabcd")
+        t = s.replace("KLM", v)
+        self.assertEqual(t, "xyzACGTacgtNNNNnnabcd")
 
     def test_str_encode(self):
         """Check matches the python string encode method."""
@@ -695,6 +729,36 @@ class StringMethodTests(unittest.TestCase):
                                 )
                             else:
                                 self.assertEqual(example1[i:j:step], str1[i:j:step])
+        u = Seq(None, length=0)
+        self.assertEqual(u, "")
+
+    def test_MutableSeq_setitem(self):
+        """Check setting sequence contents of a MutableSeq object."""
+        m = MutableSeq("ABCD")
+        m[1] = "X"
+        self.assertEqual(m, "AXCD")
+        m[1:3] = MutableSeq("XY")
+        self.assertEqual(m, "AXYD")
+        m[1:3] = Seq("KL")
+        self.assertEqual(m, "AKLD")
+        m[1:3] = Seq("bc")
+        self.assertEqual(m, "AbcD")
+        with self.assertRaises(TypeError) as cm:
+            m[1:3] = 9
+        self.assertEqual(str(cm.exception), "received unexpected type 'int'")
+
+    def test_MutableSeq_extend(self):
+        """Check extending a MutableSeq object."""
+        m = MutableSeq("ABCD")
+        m.extend(MutableSeq("xyz"))
+        self.assertEqual(m, "ABCDxyz")
+        m.extend(Seq("KLM"))
+        self.assertEqual(m, "ABCDxyzKLM")
+        m.extend("PQRST")
+        self.assertEqual(m, "ABCDxyzKLMPQRST")
+        with self.assertRaises(TypeError) as cm:
+            m.extend(5)
+        self.assertEqual(str(cm.exception), "expected a string, Seq or MutableSeq")
 
     def test_tomutable(self):
         """Check creating a MutableSeq object."""
@@ -730,6 +794,18 @@ class StringMethodTests(unittest.TestCase):
                 # Default to DNA, e.g. complement("A") -> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping), comp)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").complement(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").complement_rna(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(
+            repr(Seq(None, length=20).complement()), "Seq(None, length=20)"
+        )
+        self.assertEqual(
+            repr(Seq(None, length=20).complement_rna()), "Seq(None, length=20)"
+        )
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
@@ -751,6 +827,18 @@ class StringMethodTests(unittest.TestCase):
                 # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping)[::-1], comp)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").reverse_complement(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").reverse_complement_rna(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(
+            repr(Seq(None, length=20).reverse_complement()), "Seq(None, length=20)"
+        )
+        self.assertEqual(
+            repr(Seq(None, length=20).reverse_complement_rna()), "Seq(None, length=20)"
+        )
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""
@@ -768,6 +856,12 @@ class StringMethodTests(unittest.TestCase):
                 # TODO - Check for or silence the expected warning?
                 continue
             self.assertEqual(str1.replace("T", "U").replace("t", "u"), tran)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGT").transcribe(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(
+            repr(Seq(None, length=20).transcribe()), "Seq(None, length=20)"
+        )
 
     def test_the_back_transcription(self):
         """Check obj.back_transcribe() method."""
@@ -782,6 +876,12 @@ class StringMethodTests(unittest.TestCase):
                 tran = example1.back_transcribe()
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), tran)
+        with self.assertRaises(TypeError) as cm:
+            Seq("ACGU").back_transcribe(inplace=True)
+        self.assertEqual(str(cm.exception), "Sequence is immutable")
+        self.assertEqual(
+            repr(Seq(None, length=20).back_transcribe()), "Seq(None, length=20)"
+        )
 
     def test_the_translate(self):
         """Check obj.translate() method."""
@@ -803,6 +903,14 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(example1.translate(11), example1.translate(table=11))
 
             # TODO - check the actual translation, and all the optional args
+        with self.assertRaises(ValueError):
+            Seq("ABCD").translate("XYZ")
+        with self.assertWarns(BiopythonWarning) as cm:
+            Seq(None, length=20).translate()
+        self.assertEqual(
+            str(cm.warning),
+            "Partial codon, len(sequence) not a multiple of three. This may become an error in future.",
+        )
 
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
@@ -908,19 +1016,21 @@ class StringMethodTests(unittest.TestCase):
                         # TODO - Use the Bio.Data.IUPACData module for the
                         # ambiguous protein mappings?
 
-    def test_init_typeerror(self):
-        """Check Seq __init__ gives TypeError exceptions."""
+    def test_Seq_init_error(self):
+        """Check Seq __init__ raises the appropriate exceptions."""
         self.assertRaises(TypeError, Seq, ("A", "C", "G", "T"))
         self.assertRaises(TypeError, Seq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, Seq, 1)
         self.assertRaises(TypeError, Seq, 1.0)
+        self.assertRaises(ValueError, Seq, None)
 
-    def test_MutableSeq_init_typeerror(self):
-        """Check MutableSeq __init__ gives TypeError exceptions."""
+    def test_MutableSeq_init_error(self):
+        """Check MutableSeq __init__ raises the appropriate exceptions."""
         self.assertRaises(TypeError, MutableSeq, ("A", "C", "G", "T"))
         self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
+        self.assertRaises(ValueError, MutableSeq, array.array("i", [1, 2, 3, 4]))
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for all non-iterable types."""
@@ -928,6 +1038,7 @@ class StringMethodTests(unittest.TestCase):
 
         spacer = Seq("NNNNN")
         self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, SeqRecord(Seq("ATG")))
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
     def test_join_UnknownSeq_TypeError_iter(self):
@@ -1477,6 +1588,462 @@ class ComparisonTests(unittest.TestCase):
                 self.assertGreaterEqual(Seq("TT"), seq2[3:5], msg=msg)
                 self.assertGreaterEqual(MutableSeq("TT"), seq1[2:4], msg=msg)
                 self.assertGreaterEqual(MutableSeq("TT"), seq2[3:5], msg=msg)
+
+
+class PartialSequenceTests(unittest.TestCase):
+    """Test Seq objects with partially defined sequences."""
+
+    def test_init(self):
+        seq = Seq({5: "ACGT"}, length=20)
+        self.assertEqual(repr(seq), "Seq({5: 'ACGT'}, length=20)")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: "ACGT"}, length=-10)
+        self.assertEqual(str(cm.exception), "Length must not be negative.")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: 1.5}, length=10)
+        self.assertEqual(str(cm.exception), "Expected bytes-like objects or strings")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: "PQRST", 8: "KLM"}, length=10)
+        self.assertEqual(str(cm.exception), "Sequence data are overlapping.")
+        with self.assertRaises(ValueError) as cm:
+            Seq({5: "PQRST"}, length=8)
+        self.assertEqual(
+            str(cm.exception), "Provided sequence data extend beyond sequence length."
+        )
+
+    def test_repr(self):
+        seq = Seq({5: "ACGT", 14: "GGC"}, length=20)
+        self.assertEqual(repr(seq), "Seq({5: 'ACGT', 14: 'GGC'}, length=20)")
+        seq = Seq({5: "ACGT" * 25, 140: "GGC"}, length=143)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'GGC'}, length=143)",
+        )
+        seq = Seq({5: "ACGT" * 25, 140: "GGC"}, length=150)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'GGC'}, length=150)",
+        )
+        seq = Seq({5: "ACGT" * 25, 140: "acgt" * 20}, length=250)
+        self.assertEqual(
+            repr(seq),
+            "Seq({5: 'ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC...CGT', 140: 'acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtac...cgt'}, length=250)",
+        )
+
+    def test_getitem(self):
+        #           1    1    2
+        # 0    5    0    5    0
+        # ?????ABCD?????EFG???
+        seq = Seq({5: "ABCD", 14: "EFG"}, length=20)
+        self.assertEqual(repr(seq), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
+        # index
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[0]
+        self.assertEqual(str(cm.exception), "Sequence at position 0 is undefined")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[1]
+        self.assertEqual(str(cm.exception), "Sequence at position 1 is undefined")
+        self.assertEqual(seq[5], "A")
+        self.assertEqual(seq[6], "B")
+        self.assertEqual(seq[7], "C")
+        self.assertEqual(seq[8], "D")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[10]
+        self.assertEqual(str(cm.exception), "Sequence at position 10 is undefined")
+        self.assertEqual(seq[14], "E")
+        self.assertEqual(seq[15], "F")
+        self.assertEqual(seq[16], "G")
+        with self.assertRaises(UndefinedSequenceError) as cm:
+            seq[17]
+        self.assertEqual(str(cm.exception), "Sequence at position 17 is undefined")
+        with self.assertRaises(IndexError) as cm:
+            seq[30]
+        self.assertEqual(str(cm.exception), "sequence index out of range")
+        # step = 0
+        with self.assertRaises(ValueError) as cm:
+            s = seq[::0]
+        self.assertEqual(str(cm.exception), "slice step cannot be zero")
+        # step = 1, stop = +inf
+        s = seq[:]  # ?????ABCD?????EFG???
+        self.assertEqual(repr(s), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
+        s = seq[0:]  # ?????ABCD?????EFG???
+        self.assertEqual(repr(s), "Seq({5: 'ABCD', 14: 'EFG'}, length=20)")
+        s = seq[1:]  # ????ABCD?????EFG???
+        self.assertEqual(repr(s), "Seq({4: 'ABCD', 13: 'EFG'}, length=19)")
+        s = seq[4:]  # ?ABCD?????EFG???
+        self.assertEqual(repr(s), "Seq({1: 'ABCD', 10: 'EFG'}, length=16)")
+        s = seq[5:]  # ABCD?????EFG???
+        self.assertEqual(repr(s), "Seq({0: 'ABCD', 9: 'EFG'}, length=15)")
+        s = seq[6:]  # BCD?????EFG???
+        self.assertEqual(repr(s), "Seq({0: 'BCD', 8: 'EFG'}, length=14)")
+        s = seq[7:]  # CD?????EFG???
+        self.assertEqual(repr(s), "Seq({0: 'CD', 7: 'EFG'}, length=13)")
+        s = seq[8:]  # D?????EFG???
+        self.assertEqual(repr(s), "Seq({0: 'D', 6: 'EFG'}, length=12)")
+        s = seq[9:]  # ?????EFG???
+        self.assertEqual(repr(s), "Seq({5: 'EFG'}, length=11)")
+        s = seq[10:]  # ????EFG???
+        self.assertEqual(repr(s), "Seq({4: 'EFG'}, length=10)")
+        s = seq[13:]  # ?EFG???
+        self.assertEqual(repr(s), "Seq({1: 'EFG'}, length=7)")
+        s = seq[14:]  # EFG???
+        self.assertEqual(repr(s), "Seq({0: 'EFG'}, length=6)")
+        s = seq[15:]  # FG???
+        self.assertEqual(repr(s), "Seq({0: 'FG'}, length=5)")
+        s = seq[16:]  # G???
+        self.assertEqual(repr(s), "Seq({0: 'G'}, length=4)")
+        s = seq[17:]  # ???
+        self.assertEqual(repr(s), "Seq(None, length=3)")
+        s = seq[18:]  # ??
+        self.assertEqual(repr(s), "Seq(None, length=2)")
+        s = seq[19:]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[20:]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # step = 1, stop = 9
+        s = seq[:9]  # ?????ABCD
+        self.assertEqual(repr(s), "Seq({5: 'ABCD'}, length=9)")
+        s = seq[0:9]  # ?????ABCD
+        self.assertEqual(repr(s), "Seq({5: 'ABCD'}, length=9)")
+        s = seq[1:9]  # ????ABCD
+        self.assertEqual(repr(s), "Seq({4: 'ABCD'}, length=8)")
+        s = seq[4:9]  # ?ABCD
+        self.assertEqual(repr(s), "Seq({1: 'ABCD'}, length=5)")
+        s = seq[5:9]  # ABCD
+        self.assertEqual(s._data, b"ABCD")
+        s = seq[6:9]  # BCD
+        self.assertEqual(s._data, b"BCD")
+        s = seq[7:9]  # CD
+        self.assertEqual(s._data, b"CD")
+        s = seq[8:9]  # D
+        self.assertEqual(s._data, b"D")
+        s = seq[9:9]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        s = seq[10:9]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # step = 2, stop = +inf
+        s = seq[::2]  # ???BD??EG?
+        self.assertEqual(repr(s), "Seq({3: 'BD', 7: 'EG'}, length=10)")
+        s = seq[0::2]  # ???BD??EG?
+        self.assertEqual(repr(s), "Seq({3: 'BD', 7: 'EG'}, length=10)")
+        s = seq[1::2]  # ??AC???F??
+        self.assertEqual(repr(s), "Seq({2: 'AC', 7: 'F'}, length=10)")
+        s = seq[4::2]  # ?BD??EG?
+        self.assertEqual(repr(s), "Seq({1: 'BD', 5: 'EG'}, length=8)")
+        s = seq[5::2]  # AC???F??
+        self.assertEqual(repr(s), "Seq({0: 'AC', 5: 'F'}, length=8)")
+        s = seq[6::2]  # BD??EG?
+        self.assertEqual(repr(s), "Seq({0: 'BD', 4: 'EG'}, length=7)")
+        s = seq[7::2]  # C???F??
+        self.assertEqual(repr(s), "Seq({0: 'C', 4: 'F'}, length=7)")
+        s = seq[8::2]  # D??EG?
+        self.assertEqual(repr(s), "Seq({0: 'D', 3: 'EG'}, length=6)")
+        s = seq[9::2]  # ???F??
+        self.assertEqual(repr(s), "Seq({3: 'F'}, length=6)")
+        s = seq[10::2]  # ??EG?
+        self.assertEqual(repr(s), "Seq({2: 'EG'}, length=5)")
+        s = seq[13::2]  # ?F??
+        self.assertEqual(repr(s), "Seq({1: 'F'}, length=4)")
+        s = seq[14::2]  # EG?
+        self.assertEqual(repr(s), "Seq({0: 'EG'}, length=3)")
+        s = seq[15::2]  # F??
+        self.assertEqual(repr(s), "Seq({0: 'F'}, length=3)")
+        s = seq[16::2]  # G?
+        self.assertEqual(repr(s), "Seq({0: 'G'}, length=2)")
+        s = seq[17::2]  # ??
+        self.assertEqual(repr(s), "Seq(None, length=2)")
+        s = seq[18::2]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[19::2]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[20::2]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # step = -1, start = None
+        s = seq[::-1]  # ???GFE?????DCBA?????
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DCBA'}, length=20)")
+        s = seq[:0:-1]  # ???GFE?????DCBA????
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DCBA'}, length=19)")
+        s = seq[:1:-1]  # ???GFE?????DCBA???
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DCBA'}, length=18)")
+        s = seq[:4:-1]  # ???GFE?????DCBA
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DCBA'}, length=15)")
+        s = seq[:5:-1]  # ???GFE?????DCB
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DCB'}, length=14)")
+        s = seq[:6:-1]  # ???GFE?????DC
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'DC'}, length=13)")
+        s = seq[:7:-1]  # ???GFE?????D
+        self.assertEqual(repr(s), "Seq({3: 'GFE', 11: 'D'}, length=12)")
+        s = seq[:8:-1]  # ???GFE?????
+        self.assertEqual(repr(s), "Seq({3: 'GFE'}, length=11)")
+        s = seq[:9:-1]  # ???GFE????
+        self.assertEqual(repr(s), "Seq({3: 'GFE'}, length=10)")
+        s = seq[:10:-1]  # ???GFE???
+        self.assertEqual(repr(s), "Seq({3: 'GFE'}, length=9)")
+        s = seq[:13:-1]  # ???GFE
+        self.assertEqual(repr(s), "Seq({3: 'GFE'}, length=6)")
+        s = seq[:14:-1]  # ???GF
+        self.assertEqual(repr(s), "Seq({3: 'GF'}, length=5)")
+        s = seq[:15:-1]  # ???G
+        self.assertEqual(repr(s), "Seq({3: 'G'}, length=4)")
+        s = seq[:16:-1]  # ???
+        self.assertEqual(repr(s), "Seq(None, length=3)")
+        s = seq[:17:-1]  # ??
+        self.assertEqual(repr(s), "Seq(None, length=2)")
+        s = seq[:18:-1]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[:19:-1]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        s = seq[:20:-1]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # step = -1, stop = 9
+        s = seq[9::-1]  # ?DCBA?????
+        self.assertEqual(repr(s), "Seq({1: 'DCBA'}, length=10)")
+        s = seq[9:0:-1]  # ?DCBA????
+        self.assertEqual(repr(s), "Seq({1: 'DCBA'}, length=9)")
+        s = seq[9:1:-1]  # ?DCBA???
+        self.assertEqual(repr(s), "Seq({1: 'DCBA'}, length=8)")
+        s = seq[9:4:-1]  # ?DCBA
+        self.assertEqual(repr(s), "Seq({1: 'DCBA'}, length=5)")
+        s = seq[9:5:-1]  # ?DCB
+        self.assertEqual(repr(s), "Seq({1: 'DCB'}, length=4)")
+        s = seq[9:6:-1]  # ?DC
+        self.assertEqual(repr(s), "Seq({1: 'DC'}, length=3)")
+        s = seq[9:7:-1]  # ?D
+        self.assertEqual(repr(s), "Seq({1: 'D'}, length=2)")
+        s = seq[9:8:-1]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[9:9:-1]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        s = seq[9:10:-1]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # step = -2, stop = None
+        s = seq[::-2]  # ??F???CA??
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'CA'}, length=10)")
+        s = seq[:0:-2]  # ??F???CA??
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'CA'}, length=10)")
+        s = seq[:1:-2]  # ??F???CA?
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'CA'}, length=9)")
+        s = seq[:4:-2]  # ??F???CA
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'CA'}, length=8)")
+        s = seq[:5:-2]  # ??F???C
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'C'}, length=7)")
+        s = seq[:6:-2]  # ??F???C
+        self.assertEqual(repr(s), "Seq({2: 'F', 6: 'C'}, length=7)")
+        s = seq[:7:-2]  # ??F???
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=6)")
+        s = seq[:8:-2]  # ??F???
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=6)")
+        s = seq[:9:-2]  # ??F??
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=5)")
+        s = seq[:10:-2]  # ??F??
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=5)")
+        s = seq[:13:-2]  # ??F
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=3)")
+        s = seq[:14:-2]  # ??F
+        self.assertEqual(repr(s), "Seq({2: 'F'}, length=3)")
+        s = seq[:15:-2]  # ??
+        self.assertEqual(repr(s), "Seq(None, length=2)")
+        s = seq[:16:-2]  # ??
+        self.assertEqual(repr(s), "Seq(None, length=2)")
+        s = seq[:17:-2]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[:18:-2]  # ?
+        self.assertEqual(repr(s), "Seq(None, length=1)")
+        s = seq[:19:-2]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        s = seq[:20:-2]  # empty sequence
+        self.assertEqual(repr(s), "Seq('')")
+        # test merging segments
+        seq = Seq({5: "ABCD", 11: "EFGH"}, length=20)
+        s = seq[5::2]
+        self.assertEqual(repr(s), "Seq({0: 'AC', 3: 'EG'}, length=8)")
+        s = seq[5::3]
+        self.assertEqual(repr(s), "Seq({0: 'ADEH'}, length=5)")
+        s = seq[5::4]
+        self.assertEqual(repr(s), "Seq({0: 'A', 2: 'G'}, length=4)")
+        s = seq[5::5]
+        self.assertEqual(repr(s), "Seq({0: 'A'}, length=3)")
+        s = seq[4:]
+        self.assertEqual(repr(s), "Seq({1: 'ABCD', 7: 'EFGH'}, length=16)")
+        s = seq[4::2]
+        self.assertEqual(repr(s), "Seq({1: 'BD', 4: 'FH'}, length=8)")
+        s = seq[4::3]
+        self.assertEqual(repr(s), "Seq({1: 'C', 3: 'G'}, length=6)")
+        s = seq[4::4]
+        self.assertEqual(repr(s), "Seq({1: 'DF'}, length=4)")
+        # test length 0
+        self.assertEqual(Seq({}, length=0), "")
+
+    def test_addition(self):
+        s1 = Seq("ABCD")
+        s2 = Seq("EFG")
+        u1 = Seq(None, length=7)
+        u2 = Seq(None, length=9)
+        p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
+        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=13)
+        records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
+        t = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
+        self.assertEqual(s1 + s1, Seq("ABCDABCD"))
+        self.assertEqual(s1 + s2, Seq("ABCDEFG"))
+        self.assertEqual(repr(s1 + u1), "Seq({0: 'ABCD'}, length=11)")
+        self.assertEqual(repr(s1 + u2), "Seq({0: 'ABCD'}, length=13)")
+        self.assertEqual(
+            repr(s1 + p1), "Seq({0: 'ABCD', 7: 'KLM', 15: 'XYZ'}, length=21)"
+        )
+        self.assertEqual(repr(s1 + p2), "Seq({0: 'ABCDPQRST', 12: 'HIJ'}, length=17)")
+        self.assertEqual(s1 + t, Seq("ABCDACGTacgtNNNNnn"))
+        self.assertEqual(s2 + s1, Seq("EFGABCD"))
+        self.assertEqual(s2 + s2, Seq("EFGEFG"))
+        self.assertEqual(repr(s2 + u1), "Seq({0: 'EFG'}, length=10)")
+        self.assertEqual(repr(s2 + u2), "Seq({0: 'EFG'}, length=12)")
+        self.assertEqual(
+            repr(s2 + p1), "Seq({0: 'EFG', 6: 'KLM', 14: 'XYZ'}, length=20)"
+        )
+        self.assertEqual(repr(s2 + p2), "Seq({0: 'EFGPQRST', 11: 'HIJ'}, length=16)")
+        self.assertEqual(s2 + t, Seq("EFGACGTacgtNNNNnn"))
+        self.assertEqual(repr(u1 + s1), "Seq({7: 'ABCD'}, length=11)")
+        self.assertEqual(repr(u1 + s2), "Seq({7: 'EFG'}, length=10)")
+        self.assertEqual(repr(u1 + u1), "Seq(None, length=14)")
+        self.assertEqual(repr(u1 + u2), "Seq(None, length=16)")
+        self.assertEqual(repr(u1 + p1), "Seq({10: 'KLM', 18: 'XYZ'}, length=24)")
+        self.assertEqual(repr(u1 + p2), "Seq({7: 'PQRST', 15: 'HIJ'}, length=20)")
+        self.assertEqual(repr(u1 + t), "Seq({7: 'ACGTacgtNNNNnn'}, length=21)")
+        self.assertEqual(repr(u2 + s1), "Seq({9: 'ABCD'}, length=13)")
+        self.assertEqual(repr(u2 + s2), "Seq({9: 'EFG'}, length=12)")
+        self.assertEqual(repr(u2 + u1), "Seq(None, length=16)")
+        self.assertEqual(repr(u2 + u2), "Seq(None, length=18)")
+        self.assertEqual(repr(u2 + p1), "Seq({12: 'KLM', 20: 'XYZ'}, length=26)")
+        self.assertEqual(repr(u2 + p2), "Seq({9: 'PQRST', 17: 'HIJ'}, length=22)")
+        self.assertEqual(repr(u2 + t), "Seq({9: 'ACGTacgtNNNNnn'}, length=23)")
+        self.assertEqual(
+            repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ABCD'}, length=21)"
+        )
+        self.assertEqual(
+            repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZ', 17: 'EFG'}, length=20)"
+        )
+        self.assertEqual(repr(p1 + u1), "Seq({3: 'KLM', 11: 'XYZ'}, length=24)")
+        self.assertEqual(repr(p1 + u2), "Seq({3: 'KLM', 11: 'XYZ'}, length=26)")
+        self.assertEqual(
+            repr(p1 + p1), "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ'}, length=34)"
+        )
+        self.assertEqual(
+            repr(p1 + p2),
+            "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)",
+        )
+        self.assertEqual(
+            repr(p1 + t), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)",
+        )
+        self.assertEqual(
+            repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)"
+        )
+        self.assertEqual(
+            repr(p2 + s2), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'EFG'}, length=16)"
+        )
+        self.assertEqual(repr(p2 + u1), "Seq({0: 'PQRST', 8: 'HIJ'}, length=20)")
+        self.assertEqual(repr(p2 + u2), "Seq({0: 'PQRST', 8: 'HIJ'}, length=22)")
+        self.assertEqual(
+            repr(p2 + p1),
+            "Seq({0: 'PQRST', 8: 'HIJ', 16: 'KLM', 24: 'XYZ'}, length=30)",
+        )
+        self.assertEqual(
+            repr(p2 + p2),
+            "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)",
+        )
+        self.assertEqual(
+            repr(p2 + t),
+            "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)",
+        )
+        self.assertEqual(t + s1, Seq("ACGTacgtNNNNnnABCD"))
+        self.assertEqual(t + s2, Seq("ACGTacgtNNNNnnEFG"))
+        self.assertEqual(repr(t + u1), "Seq({0: 'ACGTacgtNNNNnn'}, length=21)")
+        self.assertEqual(repr(t + u2), "Seq({0: 'ACGTacgtNNNNnn'}, length=23)")
+        self.assertEqual(
+            repr(t + p1), "Seq({0: 'ACGTacgtNNNNnn', 17: 'KLM', 25: 'XYZ'}, length=31)"
+        )
+        self.assertEqual(
+            repr(t + p2), "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
+        )
+        self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
+        p1 = Seq({3: "KLM", 11: "XYZ"}, length=14)
+        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
+        self.assertEqual(
+            repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)"
+        )
+        self.assertEqual(
+            repr(p2 + p1),
+            "Seq({0: 'PQRST', 8: 'HIJ', 14: 'KLM', 22: 'XYZ'}, length=25)",
+        )
+        self.assertEqual(repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZABCD'}, length=18)")
+        self.assertEqual(repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZEFG'}, length=17)")
+
+    def test_multiplication(self):
+        p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
+        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
+        self.assertEqual(
+            repr(3 * p1),
+            "Seq({3: 'KLM', 11: 'XYZ', 20: 'KLM', 28: 'XYZ', 37: 'KLM', 45: 'XYZ'}, length=51)",
+        )
+        self.assertEqual(
+            repr(3 * p2),
+            "Seq({0: 'PQRST', 8: 'HIJPQRST', 19: 'HIJPQRST', 30: 'HIJ'}, length=33)",
+        )
+
+    def test_lower_upper(self):
+        u = Seq({3: "KLM", 11: "XYZ"}, length=17)
+        l = Seq({0: "pqrst", 8: "hij"}, length=13)
+        m = Seq({5: "ABCD", 10: "efgh"}, length=20)
+        self.assertEqual(repr(u.upper()), "Seq({3: 'KLM', 11: 'XYZ'}, length=17)")
+        self.assertEqual(repr(u.lower()), "Seq({3: 'klm', 11: 'xyz'}, length=17)")
+        self.assertEqual(repr(l.upper()), "Seq({0: 'PQRST', 8: 'HIJ'}, length=13)")
+        self.assertEqual(repr(l.lower()), "Seq({0: 'pqrst', 8: 'hij'}, length=13)")
+        self.assertEqual(repr(m.upper()), "Seq({5: 'ABCD', 10: 'EFGH'}, length=20)")
+        self.assertEqual(repr(m.lower()), "Seq({5: 'abcd', 10: 'efgh'}, length=20)")
+
+    def test_complement(self):
+        s = Seq({3: "AACC", 11: "CGT"}, length=20)
+        u = Seq({3: "AACC", 11: "CGU"}, length=20)
+        self.assertEqual(repr(s.complement()), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
+        self.assertEqual(
+            repr(u.complement(inplace=False)), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)"
+        )
+        # TODO: remove inplace=False
+        self.assertEqual(
+            repr(s.reverse_complement()), "Seq({6: 'ACG', 13: 'GGTT'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.reverse_complement(inplace=False)),
+            "Seq({6: 'ACG', 13: 'GGTT'}, length=20)",
+        )
+        # TODO: remove inplace=False
+        self.assertEqual(
+            repr(s.complement_rna()), "Seq({3: 'UUGG', 11: 'GCA'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.complement_rna()), "Seq({3: 'UUGG', 11: 'GCA'}, length=20)"
+        )
+        self.assertEqual(
+            repr(s.reverse_complement_rna()), "Seq({6: 'ACG', 13: 'GGUU'}, length=20)"
+        )
+        self.assertEqual(
+            repr(u.reverse_complement_rna()), "Seq({6: 'ACG', 13: 'GGUU'}, length=20)"
+        )
+
+    def test_replace(self):
+        s = Seq({3: "AACC", 11: "CGT"}, length=20)
+        self.assertEqual(
+            repr(s.replace("A", "X")), "Seq({3: 'XXCC', 11: 'CGT'}, length=20)"
+        )
+        self.assertEqual(
+            repr(s.replace("CC", "YY")), "Seq({3: 'AAYY', 11: 'CGT'}, length=20)"
+        )
+        self.assertRaises(UndefinedSequenceError, s.replace, "A", "XX")
+
+    def test_transcribe(self):
+        s = Seq({3: "acgt", 11: "ACGT"}, length=20)
+        u = s.transcribe()
+        self.assertEqual(repr(u), "Seq({3: 'acgu', 11: 'ACGU'}, length=20)")
+        s = u.back_transcribe()
+        self.assertEqual(repr(s), "Seq({3: 'acgt', 11: 'ACGT'}, length=20)")
 
 
 if __name__ == "__main__":
