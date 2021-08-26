@@ -52,6 +52,7 @@ Classes:
 
 """
 import functools
+import warnings
 
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
@@ -136,8 +137,7 @@ class SeqFeature:
         FeatureLocation must be specified via the appropriate position objects.
 
         Note that the strand, ref and ref_db arguments to the SeqFeature are
-        now obsolete and will be deprecated in a future release (which will
-        give warning messages) and later removed. Set them via the location
+        now deprecated and will later be removed. Set them via the location
         object instead.
 
         Note that location_operator and sub_features arguments can no longer
@@ -154,10 +154,18 @@ class SeqFeature:
         self.location = location
         self.type = type
         if location_operator:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the location_operator argument is deprecated, and will be removed in a future release. "
+                "Please do this via the CompoundLocation object instead.",
+                DeprecationWarning,
+            )
             self.location_operator = location_operator
         if strand is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the strand argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                DeprecationWarning,
+            )
             self.strand = strand
         self.id = id
         self.qualifiers = {}
@@ -166,10 +174,18 @@ class SeqFeature:
         if sub_features is not None:
             raise TypeError("Rather than sub_features, use a CompoundFeatureLocation")
         if ref is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the ref argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                DeprecationWarning,
+            )
             self.ref = ref
         if ref_db is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the ref_db argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                DeprecationWarning,
+            )
             self.ref_db = ref_db
 
     def _get_strand(self):
