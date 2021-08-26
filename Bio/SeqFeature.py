@@ -157,14 +157,14 @@ class SeqFeature:
             warnings.warn(
                 "Using the location_operator argument is deprecated, and will be removed in a future release. "
                 "Please do this via the CompoundLocation object instead.",
-                DeprecationWarning,
+                BiopythonDeprecationWarning,
             )
             self.location_operator = location_operator
         if strand is not None:
             warnings.warn(
                 "Using the strand argument is deprecated, and will be removed in a future release. "
                 "Please set it via the location object instead.",
-                DeprecationWarning,
+                BiopythonDeprecationWarning,
             )
             self.strand = strand
         self.id = id
@@ -177,14 +177,14 @@ class SeqFeature:
             warnings.warn(
                 "Using the ref argument is deprecated, and will be removed in a future release. "
                 "Please set it via the location object instead.",
-                DeprecationWarning,
+                BiopythonDeprecationWarning,
             )
             self.ref = ref
         if ref_db is not None:
             warnings.warn(
                 "Using the ref_db argument is deprecated, and will be removed in a future release. "
                 "Please set it via the location object instead.",
-                DeprecationWarning,
+                BiopythonDeprecationWarning,
             )
             self.ref_db = ref_db
 
