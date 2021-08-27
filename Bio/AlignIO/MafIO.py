@@ -38,9 +38,8 @@ from itertools import islice
 
 try:
     from sqlite3 import dbapi2
-    from sqlite3.dbapi2 import OperationalError, DatabaseError
 except ImportError:
-    dbapi2 = OperationalError = DatabaseError = None
+    dbapi2 = None
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -360,7 +359,7 @@ class MafIndex:
 
             return records_found
 
-        except (OperationalError, DatabaseError) as err:
+        except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err) from None
 
     def __make_new_index(self):
