@@ -6,6 +6,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Restriction</title>
   <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -15,6 +146,7 @@
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
     div.sourceCode { margin: 1em 0; }
     pre.sourceCode { margin: 0; }
@@ -74,6 +206,7 @@
     code span.va { color: #19177c; } /* Variable */
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -145,87 +278,85 @@
 <p>The restriction enzyme package is situated in <code>Bio.Restriction</code>. This package will allow you to work with restriction enzymes and realise restriction analysis on your sequence. Restriction make use of the facilities offered by <strong>REBASE</strong> and contains classes for more than 800 restriction enzymes. This chapter will lead you through a quick overview of the facilities offered by the <code>Restriction</code> package of Biopython. The chapter is constructed as an interactive Python session and the best way to read it is with a Python shell open alongside you.</p>
 <h4 id="importing-the-enzymes"><a name="1.1"></a> 1.1 Importing the enzymes</h4>
 <p>To import the enzymes, open a Python shell and type:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio <span class="im">import</span> Restriction</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">dir</span>()</span>
-<span id="cb1-3"><a href="#cb1-3"></a>[<span class="st">&#39;Restriction&#39;</span>, <span class="st">&#39;__annotations__&#39;</span>, <span class="st">&#39;__builtins__&#39;</span>, <span class="st">&#39;__doc__&#39;</span>, <span class="st">&#39;__loader__&#39;</span>, <span class="st">&#39;__name__&#39;</span>, <span class="st">&#39;__package__&#39;</span>, <span class="st">&#39;__spec__&#39;</span>]</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="op">&gt;&gt;&gt;</span> Restriction.EcoRI</span>
-<span id="cb1-5"><a href="#cb1-5"></a>EcoRI</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="op">&gt;&gt;&gt;</span> Restriction.EcoRI.site</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">&#39;GAATTC&#39;</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; from Bio import Restriction
+&gt;&gt;&gt; dir()
+[&#39;Restriction&#39;, &#39;__annotations__&#39;, &#39;__builtins__&#39;, &#39;__doc__&#39;, &#39;__loader__&#39;, &#39;__name__&#39;, &#39;__package__&#39;, &#39;__spec__&#39;]
+&gt;&gt;&gt; Restriction.EcoRI
+EcoRI
+&gt;&gt;&gt; Restriction.EcoRI.site
+&#39;GAATTC&#39;
+&gt;&gt;&gt;</code></pre>
 <p>You will certainly notice that the package is quite slow to load. This is normal as each enzyme possess its own class and there is a lot of them. This will not affect the speed of Python after the initial import.</p>
 <p>I don’t know for you but I find it quite cumbersome to have to prefix each operation with <code>Restriction.</code>, so here is another way to import the package.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Restriction <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI</span>
-<span id="cb2-3"><a href="#cb2-3"></a>EcoRI</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.site</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">&#39;GAATTC&#39;</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; from Bio.Restriction import *
+&gt;&gt;&gt; EcoRI
+EcoRI
+&gt;&gt;&gt; EcoRI.site
+&#39;GAATTC&#39;
+&gt;&gt;&gt;</code></pre>
 <p>However, this method has one big disadvantage: It is almost impossible to use the command <code>dir()</code> anymore as there is so much enzymes the results is hardly readable. A workaround is provided at the end of this tutorial. I let you decide which method you prefer. But in this tutorial I will use the second. If you prefer the first method you will need to prefix each call to a restriction enzyme with <code>Restriction.</code> in the remaining of the tutorial.</p>
 <h4 id="naming-convention"><a name="1.2"></a>1.2 Naming convention</h4>
 <p>To access an enzyme simply enter its name. You must respect the usual naming convention with the upper case letters and Latin numbering (in upper case as well):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI</span>
-<span id="cb3-2"><a href="#cb3-2"></a>EcoRI</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> ecori</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a>Traceback (most recent call last):</span>
-<span id="cb3-6"><a href="#cb3-6"></a>  File <span class="st">&quot;&lt;pyshell#25&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    ecori</span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="pp">NameError</span>: name <span class="st">&#39;ecori&#39;</span> <span class="kw">is</span> <span class="kw">not</span> defined</span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="op">&gt;&gt;&gt;</span> EcoR1</span>
-<span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a>Traceback (most recent call last):</span>
-<span id="cb3-12"><a href="#cb3-12"></a>  File <span class="st">&quot;&lt;pyshell#26&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>    EcoR1</span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="pp">NameError</span>: name <span class="st">&#39;EcoR1&#39;</span> <span class="kw">is</span> <span class="kw">not</span> defined</span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="op">&gt;&gt;&gt;</span> KpnI</span>
-<span id="cb3-16"><a href="#cb3-16"></a>KpnI</span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI
+EcoRI
+&gt;&gt;&gt; ecori
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#25&gt;&quot;, line 1, in -toplevel-
+    ecori
+NameError: name &#39;ecori&#39; is not defined
+&gt;&gt;&gt; EcoR1
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#26&gt;&quot;, line 1, in -toplevel-
+    EcoR1
+NameError: name &#39;EcoR1&#39; is not defined
+&gt;&gt;&gt; KpnI
+KpnI
+&gt;&gt;&gt;</code></pre>
 <p><code>ecori</code> or <code>EcoR1</code> are not enzymes, <code>EcoRI</code> and <code>KpnI</code> are.</p>
 <h4 id="searching-for-restriction-sites"><a name="1.3"></a>1.3 Searching for restriction sites</h4>
 <p>So what can we do with these restriction enzymes? To see that we will need a DNA sequence. Restriction enzymes support both <code>Bio.Seq.MutableSeq</code>and <code>Bio.Seq.Seq</code> objects. Your sequence must comply with the IUPAC alphabet. That means using A, C, G and T or U, plus N for any base, and various other standard codes like S for C or G, and V for A, C or G.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> my_seq <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAAAAA&#39;</span>)</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; from Bio.Seq import Seq
+&gt;&gt;&gt; my_seq = Seq(&#39;AAAAAAAAAAAAAA&#39;)</code></pre>
 <p>Searching a sequence for the presence of restriction site for your preferred enzyme is as simple as:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(my_seq)</span>
-<span id="cb5-2"><a href="#cb5-2"></a>[]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.search(my_seq)
+[]</code></pre>
 <p>The results is a list. Here the list is empty since there is obviously no EcoRI site in <em>my_seq</em>. Let’s try to get a sequence with an EcoRI site.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> ecoseq <span class="op">=</span> my_seq <span class="op">+</span> Seq(EcoRI.site) <span class="op">+</span> my_seq</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> ecoseq</span>
-<span id="cb6-3"><a href="#cb6-3"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(ecoseq)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>[<span class="dv">16</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; ecoseq = my_seq + Seq(EcoRI.site) + my_seq
+&gt;&gt;&gt; ecoseq
+Seq(&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;)
+&gt;&gt;&gt; EcoRI.search(ecoseq)
+[16]</code></pre>
 <p>We therefore have a site at position 16 of the sequence <em>ecoseq</em>. The position returned by the method search is the first base of the downstream segment produced by a restriction (i.e. the first base after the position where the enzyme will cut). The <code>Restriction</code> package follows biological convention (the first base of a sequence is base 1). No need to make difficult conversions between your recorded biological data and the results produced by the enzymes in this package.</p>
 <h4 id="retrieving-the-sequences-produced-by-a-digestion"><a name="1.4"></a>1.4 Retrieving the sequences produced by a digestion</h4>
 <p><code>Seq</code> objects as all Python sequences, have different conventions and the first base of a sequence is base 0. Therefore to get the sequences produced by an EcoRI digestion of <em>ecoseq</em>, one should do the following:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> ecoseq[:<span class="dv">15</span>], ecoseq[<span class="dv">15</span>:]</span>
-<span id="cb7-2"><a href="#cb7-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; ecoseq[:15], ecoseq[15:]
+(Seq(&#39;AAAAAAAAAAAAAAG&#39;), Seq(&#39;AATTCAAAAAAAAAAAAAA&#39;))</code></pre>
 <p>I hear you thinking “this is a cumbersome and error prone method to get these sequences”. To simplify your life, <code>Restriction</code> provides another method to get these sequences without hassle: <code>catalyse</code>. This method will return a tuple containing all the fragments produced by a complete digestion of the sequence. Using it is as simple as before:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(ecoseq)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.catalyse(ecoseq)
+(Seq(&#39;AAAAAAAAAAAAAAG&#39;), Seq(&#39;AATTCAAAAAAAAAAAAAA&#39;))</code></pre>
 <p>BTW, you can also use spell it the American way <code>catalyze</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyze(ecoseq)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.catalyze(ecoseq)
+(Seq(&#39;AAAAAAAAAAAAAAG&#39;), Seq(&#39;AATTCAAAAAAAAAAAAAA&#39;))</code></pre>
 <h4 id="analysing-circular-sequences"><a name="1.5"></a>1.5 Analysing circular sequences</h4>
 <p>Now, if you have entered the previous command in your shell you may have noticed that both <code>search</code> and <code>catalyse</code> can take a second argument <code>linear</code> which defaults to <code>True</code>. Using this will allow you to simulate circular sequences such as plasmids. Setting <code>linear</code> to <code>False</code> informs the enzyme to make the search over a circular sequence and to search for potential sites spanning over the boundaries of the sequence.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(ecoseq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>[<span class="dv">16</span>]</span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(ecoseq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>(Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG&#39;</span>),)</span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="op">&gt;&gt;&gt;</span> ecoseq  <span class="co"># for memory</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>)</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.search(ecoseq, linear=False)
+[16]
+&gt;&gt;&gt; EcoRI.catalyse(ecoseq, linear=False)
+(Seq(&#39;AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG&#39;),)
+&gt;&gt;&gt; ecoseq  # for memory
+Seq(&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;)</code></pre>
 <p>OK, this is quite a difference, we only get one fragment, which correspond to the linearised sequence. The beginning sequence has been shifted to take this fact into account. Moreover we can see another difference:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(new_seq)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>[]</span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb11-5"><a href="#cb11-5"></a>[<span class="dv">33</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; new_seq = Seq(&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;)
+&gt;&gt;&gt; EcoRI.search(new_seq)
+[]
+&gt;&gt;&gt; EcoRI.search(new_seq, linear=False)
+[33]</code></pre>
 <p>As you can see using <code>linear=False</code>, make a site appearing in the sequence <em>new_seq</em>. This site does not exist in a linear sequence as the EcoRI site is split into two halves at the start and the end of the sequence. In a circular sequence however, the site is effectively present when the beginning and end of the sequence are joined.</p>
 <h4 id="comparing-enzymes-with-each-others"><a name="1.6"></a>1.6 Comparing enzymes with each others</h4>
 <p><code>Restriction</code> enzymes define 4 comparative operators <code>==</code>, <code>!=</code>, <code>&gt;&gt;</code> and <code>%</code>. All these operator compares two enzymes together and either return <code>True</code> or <code>False</code>.</p>
 <dl class="incremental">
 <dt><code>==</code> (test identity)</dt>
-<dd>It will return <code>True</code> if the two sides of the operator are the same. *Same" is defined as: same name, same site, same overhang (i.e. the only thing which is equal to <code>EcoRI</code> is <code>EcoRI</code>).
+<dd>It will return <code>True</code> if the two sides of the operator are the same. *Same” is defined as: same name, same site, same overhang (i.e. the only thing which is equal to <code>EcoRI</code> is <code>EcoRI</code>).
 </dd>
 <dt><code>!=</code> (test for different site or cutting)</dt>
 <dd>It will return <code>True</code> if the two sides of the operator are different. Two enzymes are not different if the result produced by one enzyme will always be the same as the result produced by the other (i.e. true isoschizomers will not being the same enzymes, are not different since they are interchangeable).
@@ -238,524 +369,524 @@
 </dd>
 </dl>
 <p>Let’s use <code>Acc65I</code> and its isoschizomers as example:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.isoschizomers()</span>
-<span id="cb12-2"><a href="#cb12-2"></a>[Asp718I, KpnI]</span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.elucidate()</span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="co">&#39;G^GTAC_C&#39;</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="op">&gt;&gt;&gt;</span> Asp718I.elucidate()</span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">&#39;G^GTAC_C&#39;</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="op">&gt;&gt;&gt;</span> KpnI.elucidate()</span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">&#39;G_GTAC^C&#39;</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Asp718I and Acc65I are true isoschizomers,</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># they recognise the same site and cut it the</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># same way.</span></span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># KpnI is a neoschizomers of the 2 others.</span></span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Here are the results of the 4 operators</span></span>
-<span id="cb12-14"><a href="#cb12-14"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># for each pair of enzymes:</span></span>
-<span id="cb12-15"><a href="#cb12-15"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb12-16"><a href="#cb12-16"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">############# x == y  (x is y)</span></span>
-<span id="cb12-17"><a href="#cb12-17"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">==</span> Acc65I    <span class="co"># same enzyme =&gt; True</span></span>
-<span id="cb12-18"><a href="#cb12-18"></a><span class="va">True</span></span>
-<span id="cb12-19"><a href="#cb12-19"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">==</span> KpnI      <span class="co"># all other cases =&gt; False</span></span>
-<span id="cb12-20"><a href="#cb12-20"></a><span class="va">False</span></span>
-<span id="cb12-21"><a href="#cb12-21"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">==</span> Asp718I</span>
-<span id="cb12-22"><a href="#cb12-22"></a><span class="va">False</span></span>
-<span id="cb12-23"><a href="#cb12-23"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">==</span> EcoRI</span>
-<span id="cb12-24"><a href="#cb12-24"></a><span class="va">False</span></span>
-<span id="cb12-25"><a href="#cb12-25"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">############ x != y  (x and y are not true isoschizomers)</span></span>
-<span id="cb12-26"><a href="#cb12-26"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">!=</span> Acc65I    <span class="co"># same enzyme =&gt; False</span></span>
-<span id="cb12-27"><a href="#cb12-27"></a><span class="va">False</span></span>
-<span id="cb12-28"><a href="#cb12-28"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">!=</span> Asp718I   <span class="co"># different enzymes, but cut same manner =&gt; False</span></span>
-<span id="cb12-29"><a href="#cb12-29"></a><span class="va">False</span></span>
-<span id="cb12-30"><a href="#cb12-30"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">!=</span> KpnI      <span class="co"># all other cases =&gt; True</span></span>
-<span id="cb12-31"><a href="#cb12-31"></a><span class="va">True</span></span>
-<span id="cb12-32"><a href="#cb12-32"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">!=</span> EcoRI</span>
-<span id="cb12-33"><a href="#cb12-33"></a><span class="va">True</span></span>
-<span id="cb12-34"><a href="#cb12-34"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">###########  x &gt;&gt; y (x is neoschizomer of y)</span></span>
-<span id="cb12-35"><a href="#cb12-35"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">&gt;&gt;</span> Acc65I    <span class="co"># same enzyme =&gt; False</span></span>
-<span id="cb12-36"><a href="#cb12-36"></a><span class="va">False</span></span>
-<span id="cb12-37"><a href="#cb12-37"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">&gt;&gt;</span> Asp718I   <span class="co"># same site, same cut =&gt; False</span></span>
-<span id="cb12-38"><a href="#cb12-38"></a><span class="va">False</span></span>
-<span id="cb12-39"><a href="#cb12-39"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">&gt;&gt;</span> EcoRI     <span class="co"># different site =&gt; False</span></span>
-<span id="cb12-40"><a href="#cb12-40"></a><span class="va">False</span></span>
-<span id="cb12-41"><a href="#cb12-41"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">&gt;&gt;</span> KpnI      <span class="co"># same site, different cut =&gt; True</span></span>
-<span id="cb12-42"><a href="#cb12-42"></a><span class="va">True</span></span>
-<span id="cb12-43"><a href="#cb12-43"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">########### x % y   (fragments produced by x and fragments produced by y</span></span>
-<span id="cb12-44"><a href="#cb12-44"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">#            can be directly ligated to each other)</span></span>
-<span id="cb12-45"><a href="#cb12-45"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">%</span> Asp718I</span>
-<span id="cb12-46"><a href="#cb12-46"></a><span class="va">True</span></span>
-<span id="cb12-47"><a href="#cb12-47"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">%</span> Acc65I</span>
-<span id="cb12-48"><a href="#cb12-48"></a><span class="va">True</span></span>
-<span id="cb12-49"><a href="#cb12-49"></a><span class="op">&gt;&gt;&gt;</span> Acc65I <span class="op">%</span> KpnI   <span class="co"># KpnI -&gt; &#39;3 overhang, Acc65I-&gt; 5&#39; overhang =&gt; False</span></span>
-<span id="cb12-50"><a href="#cb12-50"></a><span class="va">False</span></span>
-<span id="cb12-51"><a href="#cb12-51"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb12-52"><a href="#cb12-52"></a><span class="op">&gt;&gt;&gt;</span> SunI.elucidate()</span>
-<span id="cb12-53"><a href="#cb12-53"></a><span class="co">&#39;C^GTAC_G&#39;</span></span>
-<span id="cb12-54"><a href="#cb12-54"></a><span class="op">&gt;&gt;&gt;</span> SunI <span class="op">==</span> Acc65I</span>
-<span id="cb12-55"><a href="#cb12-55"></a><span class="va">False</span></span>
-<span id="cb12-56"><a href="#cb12-56"></a><span class="op">&gt;&gt;&gt;</span> SunI <span class="op">!=</span> Acc65I</span>
-<span id="cb12-57"><a href="#cb12-57"></a><span class="va">True</span></span>
-<span id="cb12-58"><a href="#cb12-58"></a><span class="op">&gt;&gt;&gt;</span> SunI <span class="op">&gt;&gt;</span> Acc65I</span>
-<span id="cb12-59"><a href="#cb12-59"></a><span class="va">False</span></span>
-<span id="cb12-60"><a href="#cb12-60"></a><span class="op">&gt;&gt;&gt;</span> SunI <span class="op">%</span> Acc65I  <span class="co"># different site, same overhang (5&#39; GTAC) =&gt; True</span></span>
-<span id="cb12-61"><a href="#cb12-61"></a><span class="va">True</span></span>
-<span id="cb12-62"><a href="#cb12-62"></a><span class="op">&gt;&gt;&gt;</span> SmaI <span class="op">%</span> EcoRV   <span class="co"># 2 Blunt enzymes, all blunt enzymes are compatible =&gt; True</span></span>
-<span id="cb12-63"><a href="#cb12-63"></a><span class="va">True</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Acc65I.isoschizomers()
+[Asp718I, KpnI]
+&gt;&gt;&gt; Acc65I.elucidate()
+&#39;G^GTAC_C&#39;
+&gt;&gt;&gt; Asp718I.elucidate()
+&#39;G^GTAC_C&#39;
+&gt;&gt;&gt; KpnI.elucidate()
+&#39;G_GTAC^C&#39;
+&gt;&gt;&gt; # Asp718I and Acc65I are true isoschizomers,
+&gt;&gt;&gt; # they recognise the same site and cut it the
+&gt;&gt;&gt; # same way.
+&gt;&gt;&gt; # KpnI is a neoschizomers of the 2 others.
+&gt;&gt;&gt; # Here are the results of the 4 operators
+&gt;&gt;&gt; # for each pair of enzymes:
+&gt;&gt;&gt;
+&gt;&gt;&gt; ############# x == y  (x is y)
+&gt;&gt;&gt; Acc65I == Acc65I    # same enzyme =&gt; True
+True
+&gt;&gt;&gt; Acc65I == KpnI      # all other cases =&gt; False
+False
+&gt;&gt;&gt; Acc65I == Asp718I
+False
+&gt;&gt;&gt; Acc65I == EcoRI
+False
+&gt;&gt;&gt; ############ x != y  (x and y are not true isoschizomers)
+&gt;&gt;&gt; Acc65I != Acc65I    # same enzyme =&gt; False
+False
+&gt;&gt;&gt; Acc65I != Asp718I   # different enzymes, but cut same manner =&gt; False
+False
+&gt;&gt;&gt; Acc65I != KpnI      # all other cases =&gt; True
+True
+&gt;&gt;&gt; Acc65I != EcoRI
+True
+&gt;&gt;&gt; ###########  x &gt;&gt; y (x is neoschizomer of y)
+&gt;&gt;&gt; Acc65I &gt;&gt; Acc65I    # same enzyme =&gt; False
+False
+&gt;&gt;&gt; Acc65I &gt;&gt; Asp718I   # same site, same cut =&gt; False
+False
+&gt;&gt;&gt; Acc65I &gt;&gt; EcoRI     # different site =&gt; False
+False
+&gt;&gt;&gt; Acc65I &gt;&gt; KpnI      # same site, different cut =&gt; True
+True
+&gt;&gt;&gt; ########### x % y   (fragments produced by x and fragments produced by y
+&gt;&gt;&gt; #            can be directly ligated to each other)
+&gt;&gt;&gt; Acc65I % Asp718I
+True
+&gt;&gt;&gt; Acc65I % Acc65I
+True
+&gt;&gt;&gt; Acc65I % KpnI   # KpnI -&gt; &#39;3 overhang, Acc65I-&gt; 5&#39; overhang =&gt; False
+False
+&gt;&gt;&gt;
+&gt;&gt;&gt; SunI.elucidate()
+&#39;C^GTAC_G&#39;
+&gt;&gt;&gt; SunI == Acc65I
+False
+&gt;&gt;&gt; SunI != Acc65I
+True
+&gt;&gt;&gt; SunI &gt;&gt; Acc65I
+False
+&gt;&gt;&gt; SunI % Acc65I  # different site, same overhang (5&#39; GTAC) =&gt; True
+True
+&gt;&gt;&gt; SmaI % EcoRV   # 2 Blunt enzymes, all blunt enzymes are compatible =&gt; True
+True</code></pre>
 <h4 id="other-facilities-provided-by-the-enzyme-classes"><a name="1.7"></a>1.7 Other facilities provided by the enzyme classes</h4>
 <p>The <code>Restriction</code> class provides quite a number of others methods. We will not go through all of them, but only have a quick look to the most useful ones.</p>
 <p>Not all enzymes possess the same properties when it comes to the way they digest a DNA. If you want to know more about the way a particular enzyme cut you can use the three following methods. They are fairly straightforward to understand and refer to the ends that the enzyme produces: blunt, 5’ overhanging (also called 3’ recessed) sticky end and 3’ overhanging (or 5’ recessed) sticky end.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.is_blunt()</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="va">False</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.is_5overhang()</span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="va">True</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.is_3overhang()</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="va">False</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.is_blunt()
+False
+&gt;&gt;&gt; EcoRI.is_5overhang()
+True
+&gt;&gt;&gt; EcoRI.is_3overhang()
+False</code></pre>
 <p>A more detailled view of the restriction site can be produced using the <code>elucidate()</code> method. The <code>^</code> refers to the position of the cut in the sense strand of the sequence, <code>_</code> to the cut on the antisense or complementary strand. <code>^_</code> means blunt.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.elucidate()</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">&#39;G^AATT_C&#39;</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="op">&gt;&gt;&gt;</span> KpnI.elucidate()</span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">&#39;G_GTAC^C&#39;</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRV.elucidate()</span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="co">&#39;GAT^_ATC&#39;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.elucidate()
+&#39;G^AATT_C&#39;
+&gt;&gt;&gt; KpnI.elucidate()
+&#39;G_GTAC^C&#39;
+&gt;&gt;&gt; EcoRV.elucidate()
+&#39;GAT^_ATC&#39;</code></pre>
 <p>The method <code>frequency()</code> will give you the statistical frequency of the enzyme site.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.frequency()</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="dv">4096</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="op">&gt;&gt;&gt;</span> XhoII.elucidate()</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">&#39;R^GATC_Y&#39;</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="op">&gt;&gt;&gt;</span> XhoII.frequency()</span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="dv">1024</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.frequency()
+4096
+&gt;&gt;&gt; XhoII.elucidate()
+&#39;R^GATC_Y&#39;
+&gt;&gt;&gt; XhoII.frequency()
+1024</code></pre>
 <p>To get the length of a the recognition sequence of an enzyme use the built-in function <code>len()</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(EcoRI)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="dv">6</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="op">&gt;&gt;&gt;</span> BstXI.elucidate()</span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="co">&#39;CCAN_NNNN^NTGG&#39;</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(BstXI)</span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="dv">12</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="op">&gt;&gt;&gt;</span> FokI.site</span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">&#39;GGATG&#39;</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="op">&gt;&gt;&gt;</span> FokI.elucidate()    <span class="co"># FokI cut well outside its recognition site</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="co">&#39;GGATGNNNNNNNNN^NNNN_N&#39;</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(FokI)       <span class="co"># its length is the length of the recognition site</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="dv">5</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; len(EcoRI)
+6
+&gt;&gt;&gt; BstXI.elucidate()
+&#39;CCAN_NNNN^NTGG&#39;
+&gt;&gt;&gt; len(BstXI)
+12
+&gt;&gt;&gt; FokI.site
+&#39;GGATG&#39;
+&gt;&gt;&gt; FokI.elucidate()    # FokI cut well outside its recognition site
+&#39;GGATGNNNNNNNNN^NNNN_N&#39;
+&gt;&gt;&gt; len(FokI)       # its length is the length of the recognition site
+5</code></pre>
 <p>Also interesting are the methods dealing with isoschizomers. For memory, two enzymes are <em>isoschizomers</em> if they share a same recognition site. A further division is made between isoschizomers (same name, recognise the same sequence and cut the same way) and <em>neoschizomers</em> which cut at different positions. <em>Equischizomer</em> is an arbitrary choice to design “isoschizomers_that_are_not_neoschizomers” as this last one was a bit long. Another set of method <code>one_enzyme.is_*schizomers(one_other_enzyme)</code>, allow to test 2 enzymes against each other.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.isoschizomers()</span>
-<span id="cb17-2"><a href="#cb17-2"></a>[Asp718I, KpnI]</span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.neoschizomers()</span>
-<span id="cb17-4"><a href="#cb17-4"></a>[KpnI]</span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.equischizomers()</span>
-<span id="cb17-6"><a href="#cb17-6"></a>[Asp718I]</span>
-<span id="cb17-7"><a href="#cb17-7"></a><span class="op">&gt;&gt;&gt;</span> KpnI.elucidate()</span>
-<span id="cb17-8"><a href="#cb17-8"></a><span class="co">&#39;G_GTAC^C&#39;</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a><span class="op">&gt;&gt;&gt;</span> Acc65I.elucidate()</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co">&#39;G^GTAC_C&#39;</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_neoschizomer(Acc65I)</span>
-<span id="cb17-12"><a href="#cb17-12"></a><span class="va">True</span></span>
-<span id="cb17-13"><a href="#cb17-13"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_neoschizomer(KpnI)</span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="va">False</span></span>
-<span id="cb17-15"><a href="#cb17-15"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_isoschizomer(Acc65I)</span>
-<span id="cb17-16"><a href="#cb17-16"></a><span class="va">True</span></span>
-<span id="cb17-17"><a href="#cb17-17"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_isoschizomer(KpnI)</span>
-<span id="cb17-18"><a href="#cb17-18"></a><span class="va">True</span></span>
-<span id="cb17-19"><a href="#cb17-19"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_equischizomer(Acc65I)</span>
-<span id="cb17-20"><a href="#cb17-20"></a><span class="va">False</span></span>
-<span id="cb17-21"><a href="#cb17-21"></a><span class="op">&gt;&gt;&gt;</span> KpnI.is_equischizomer(KpnI)</span>
-<span id="cb17-22"><a href="#cb17-22"></a><span class="va">True</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Acc65I.isoschizomers()
+[Asp718I, KpnI]
+&gt;&gt;&gt; Acc65I.neoschizomers()
+[KpnI]
+&gt;&gt;&gt; Acc65I.equischizomers()
+[Asp718I]
+&gt;&gt;&gt; KpnI.elucidate()
+&#39;G_GTAC^C&#39;
+&gt;&gt;&gt; Acc65I.elucidate()
+&#39;G^GTAC_C&#39;
+&gt;&gt;&gt; KpnI.is_neoschizomer(Acc65I)
+True
+&gt;&gt;&gt; KpnI.is_neoschizomer(KpnI)
+False
+&gt;&gt;&gt; KpnI.is_isoschizomer(Acc65I)
+True
+&gt;&gt;&gt; KpnI.is_isoschizomer(KpnI)
+True
+&gt;&gt;&gt; KpnI.is_equischizomer(Acc65I)
+False
+&gt;&gt;&gt; KpnI.is_equischizomer(KpnI)
+True</code></pre>
 <p><code>suppliers()</code> will get you the list of all the suppliers of the enzyme. <code>all_suppliers()</code> will give you all the suppliers in the database.</p>
 <h3 id="the-restrictionbatch-class-a-class-to-deal-with-several-enzymes"><a name="2"></a>2. The RestrictionBatch class: a class to deal with several enzymes</h3>
 <p>If you want to make a restriction map of a sequence, using individual enzymes can become tedious and will endures a big overhead due to the repetitive conversion of the sequence to a <code>FormattedSeq</code> (see <a href="#5">Chapter 5</a>). <code>Restriction</code> provides a class to make easier the use of large number of enzymes in one go: <code>RestrictionBatch</code>. <code>RestrictionBatch</code> will help you to manipulate lots of enzymes with a single command. Moreover all the enzymes in the restriction batch will share the same converted sequence, reducing the overhead.</p>
 <h4 id="creating-a-restrictionbatch"><a name="2.1"></a><span class="mozTocH4"></span>2.1 Creating a RestrictionBatch</h4>
 <p>You can initiate a restriction batch by passing it a list of enzymes or enzyme names as argument.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([EcoRI])</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="op">&gt;&gt;&gt;</span> rb</span>
-<span id="cb18-3"><a href="#cb18-3"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>])</span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="op">&gt;&gt;&gt;</span> rb2 <span class="op">=</span> RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>])</span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="op">&gt;&gt;&gt;</span> rb2</span>
-<span id="cb18-6"><a href="#cb18-6"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>])</span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">==</span> rb2</span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="va">True</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb = RestrictionBatch([EcoRI])
+&gt;&gt;&gt; rb
+RestrictionBatch([&#39;EcoRI&#39;])
+&gt;&gt;&gt; rb2 = RestrictionBatch([&#39;EcoRI&#39;])
+&gt;&gt;&gt; rb2
+RestrictionBatch([&#39;EcoRI&#39;])
+&gt;&gt;&gt; rb == rb2
+True</code></pre>
 <p>Adding a new enzyme to a restriction batch is easy:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="op">&gt;&gt;&gt;</span> rb.add(KpnI)</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="op">&gt;&gt;&gt;</span> rb</span>
-<span id="cb19-3"><a href="#cb19-3"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">+=</span> EcoRV</span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="op">&gt;&gt;&gt;</span> rb</span>
-<span id="cb19-6"><a href="#cb19-6"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])])</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb.add(KpnI)
+&gt;&gt;&gt; rb
+RestrictionBatch([&#39;EcoRI&#39;, &#39;KpnI&#39;])
+&gt;&gt;&gt; rb += EcoRV
+&gt;&gt;&gt; rb
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;])])</code></pre>
 <p>Another way to create a RestrictionBatch is by simply adding restriction enzymes together, this is particularly useful for small batches:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">=</span> EcoRI <span class="op">+</span> KpnI <span class="op">+</span> EcoRV</span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb20-3"><a href="#cb20-3"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb3 = EcoRI + KpnI + EcoRV
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;])</code></pre>
 <h4 id="restricting-a-restrictionbatch-to-a-particular-supplier"><a name="2.2"></a>2.2 Restricting a RestrictionBatch to a particular supplier</h4>
 <p>The Restriction package is based upon the <strong>REBASE</strong> database. This database gives a list of suppliers for each enzyme. It would be a shame not to make use of this facility. You can produce a <code>RestrictionBatch</code> containing only enzymes from one or a few supplier(s). Here is how to do it:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="op">&gt;&gt;&gt;</span> rb_supp <span class="op">=</span> RestrictionBatch(first<span class="op">=</span>[], suppliers<span class="op">=</span>[<span class="st">&#39;C&#39;</span>,<span class="st">&#39;B&#39;</span>,<span class="st">&#39;E&#39;</span>,<span class="st">&#39;I&#39;</span>,<span class="st">&#39;K&#39;</span>,<span class="st">&#39;J&#39;</span>,<span class="st">&#39;M&#39;</span>,</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="st">&#39;O&#39;</span>,<span class="st">&#39;N&#39;</span>,<span class="st">&#39;Q&#39;</span>,<span class="st">&#39;S&#39;</span>,<span class="st">&#39;R&#39;</span>,<span class="st">&#39;V&#39;</span>,<span class="st">&#39;Y&#39;</span>,<span class="st">&#39;X&#39;</span>])</span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># This will create a RestrictionBatch with the all enzymes which possess a s</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a>upplier.</span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(rb_supp)  <span class="co"># May 2020</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="dv">621</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb_supp = RestrictionBatch(first=[], suppliers=[&#39;C&#39;,&#39;B&#39;,&#39;E&#39;,&#39;I&#39;,&#39;K&#39;,&#39;J&#39;,&#39;M&#39;,
+&#39;O&#39;,&#39;N&#39;,&#39;Q&#39;,&#39;S&#39;,&#39;R&#39;,&#39;V&#39;,&#39;Y&#39;,&#39;X&#39;])
+&gt;&gt;&gt; # This will create a RestrictionBatch with the all enzymes which possess a s
+upplier.
+&gt;&gt;&gt; len(rb_supp)  # May 2020
+621</code></pre>
 <p>The argument <code>suppliers</code> take a list of one or several single letter codes corresponding to the supplier(s). The codes are the same as defined in REBASE. As it would be a pain to have to remember each supplier code, <code>RestrictionBatch</code> provides a method which show the pair code &lt;=&gt; supplier:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="op">&gt;&gt;&gt;</span> RestrictionBatch.show_codes()  <span class="co"># as of May 2016 REBASE release.</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a>C <span class="op">=</span> Minotech Biotechnology</span>
-<span id="cb22-3"><a href="#cb22-3"></a>B <span class="op">=</span> Life Technologies</span>
-<span id="cb22-4"><a href="#cb22-4"></a>E <span class="op">=</span> Agilent Technologies</span>
-<span id="cb22-5"><a href="#cb22-5"></a>I <span class="op">=</span> SibEnzyme Ltd.</span>
-<span id="cb22-6"><a href="#cb22-6"></a>K <span class="op">=</span> Takara Bio Inc.</span>
-<span id="cb22-7"><a href="#cb22-7"></a>J <span class="op">=</span> Nippon Gene Co., Ltd.</span>
-<span id="cb22-8"><a href="#cb22-8"></a>M <span class="op">=</span> Roche Applied Science</span>
-<span id="cb22-9"><a href="#cb22-9"></a>O <span class="op">=</span> Toyobo Biochemicals</span>
-<span id="cb22-10"><a href="#cb22-10"></a>N <span class="op">=</span> New England Biolabs</span>
-<span id="cb22-11"><a href="#cb22-11"></a>Q <span class="op">=</span> Molecular Biology Resources <span class="op">-</span> CHIMERx</span>
-<span id="cb22-12"><a href="#cb22-12"></a>S <span class="op">=</span> Sigma Chemical Corporation</span>
-<span id="cb22-13"><a href="#cb22-13"></a>R <span class="op">=</span> Promega Corporation</span>
-<span id="cb22-14"><a href="#cb22-14"></a>V <span class="op">=</span> Vivantis Technologies</span>
-<span id="cb22-15"><a href="#cb22-15"></a>Y <span class="op">=</span> SinaClon BioScience Co.</span>
-<span id="cb22-16"><a href="#cb22-16"></a>X <span class="op">=</span> EURx Ltd.</span>
-<span id="cb22-17"><a href="#cb22-17"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># You can now choose a code and built your RestrictionBatch</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; RestrictionBatch.show_codes()  # as of May 2016 REBASE release.
+C = Minotech Biotechnology
+B = Life Technologies
+E = Agilent Technologies
+I = SibEnzyme Ltd.
+K = Takara Bio Inc.
+J = Nippon Gene Co., Ltd.
+M = Roche Applied Science
+O = Toyobo Biochemicals
+N = New England Biolabs
+Q = Molecular Biology Resources - CHIMERx
+S = Sigma Chemical Corporation
+R = Promega Corporation
+V = Vivantis Technologies
+Y = SinaClon BioScience Co.
+X = EURx Ltd.
+&gt;&gt;&gt; # You can now choose a code and built your RestrictionBatch</code></pre>
 <p>This way of producing a <code>RestrictionBatch</code> can drastically reduce the amount of useless output from a restriction analysis, limiting the search to enzymes that you can get hold of and limiting the risks of nervous breakdown. Nothing is more frustrating than to get the perfect enzyme for a sub-cloning only to find it’s not commercially available.</p>
 <h4 id="adding-enzymes-to-a-restrictionbatch"><a name="2.3"></a>2.3 Adding enzymes to a RestrictionBatch</h4>
 <p>Adding an enzyme to a batch if the enzyme is already present will not raise an exception, but will have no effects. Sometimes you want to get an enzyme from a <code>RestrictionBatch</code> or add it to the batch if it is not present. You will use the <code>get</code> method setting the second argument <code>add</code> to <code>True</code>.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb23-2"><a href="#cb23-2"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])</span>
-<span id="cb23-3"><a href="#cb23-3"></a><span class="op">&gt;&gt;&gt;</span> rb3.add(EcoRI)</span>
-<span id="cb23-4"><a href="#cb23-4"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb23-5"><a href="#cb23-5"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])</span>
-<span id="cb23-6"><a href="#cb23-6"></a><span class="op">&gt;&gt;&gt;</span> rb3.get(EcoRI)</span>
-<span id="cb23-7"><a href="#cb23-7"></a>EcoRI</span>
-<span id="cb23-8"><a href="#cb23-8"></a><span class="op">&gt;&gt;&gt;</span> rb3.get(SmaI)</span>
-<span id="cb23-9"><a href="#cb23-9"></a></span>
-<span id="cb23-10"><a href="#cb23-10"></a>Traceback (most recent call last):</span>
-<span id="cb23-11"><a href="#cb23-11"></a>  File <span class="st">&quot;&lt;pyshell#4&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a>    rb3.get(SmaI)</span>
-<span id="cb23-13"><a href="#cb23-13"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1800</span>, <span class="kw">in</span> get</span>
-<span id="cb23-14"><a href="#cb23-14"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>, <span class="st">&#39;enzyme </span><span class="sc">%s</span><span class="st"> is not in RestrictionBatch&#39;</span><span class="op">%</span>e.<span class="va">__name__</span></span>
-<span id="cb23-15"><a href="#cb23-15"></a><span class="pp">ValueError</span>: enzyme SmaI <span class="kw">is</span> <span class="kw">not</span> <span class="kw">in</span> RestrictionBatch</span>
-<span id="cb23-16"><a href="#cb23-16"></a><span class="op">&gt;&gt;&gt;</span> rb3.get(SmaI, add<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb23-17"><a href="#cb23-17"></a>SmaI</span>
-<span id="cb23-18"><a href="#cb23-18"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb23-19"><a href="#cb23-19"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;])
+&gt;&gt;&gt; rb3.add(EcoRI)
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;])
+&gt;&gt;&gt; rb3.get(EcoRI)
+EcoRI
+&gt;&gt;&gt; rb3.get(SmaI)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#4&gt;&quot;, line 1, in -toplevel-
+    rb3.get(SmaI)
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1800, in get
+    raise ValueError, &#39;enzyme %s is not in RestrictionBatch&#39;%e.__name__
+ValueError: enzyme SmaI is not in RestrictionBatch
+&gt;&gt;&gt; rb3.get(SmaI, add=True)
+SmaI
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;, &#39;SmaI&#39;])</code></pre>
 <h4 id="removing-enzymes-from-a-restrictionbatch"><a name="2.4"></a>2.4 Removing enzymes from a RestrictionBatch</h4>
 <p>Removing enzymes from a batch is done using the <code>remove()</code> method. If the enzyme is not present in the batch this will raise a <code>KeyError</code>. If the value you want to remove is not an enzyme this will raise a <code>ValueError</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="op">&gt;&gt;&gt;</span> rb3.remove(EcoRI)</span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb24-3"><a href="#cb24-3"></a>RestrictionBatch([<span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="op">&gt;&gt;&gt;</span> rb3.remove(EcoRI)</span>
-<span id="cb24-5"><a href="#cb24-5"></a></span>
-<span id="cb24-6"><a href="#cb24-6"></a>Traceback (most recent call last):</span>
-<span id="cb24-7"><a href="#cb24-7"></a>  File <span class="st">&quot;&lt;pyshell#14&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb24-8"><a href="#cb24-8"></a>    rb3.remove(<span class="st">&#39;EcoRI&#39;</span>)</span>
-<span id="cb24-9"><a href="#cb24-9"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1839</span>, <span class="kw">in</span> remove</span>
-<span id="cb24-10"><a href="#cb24-10"></a>    <span class="cf">return</span> Set.remove(<span class="va">self</span>, <span class="va">self</span>.<span class="bu">format</span>(other))</span>
-<span id="cb24-11"><a href="#cb24-11"></a>  File <span class="st">&quot;/usr/lib/Python2.3/sets.py&quot;</span>, line <span class="dv">534</span>, <span class="kw">in</span> remove</span>
-<span id="cb24-12"><a href="#cb24-12"></a>    <span class="kw">del</span> <span class="va">self</span>._data[element]</span>
-<span id="cb24-13"><a href="#cb24-13"></a><span class="pp">KeyError</span>: EcoRI</span>
-<span id="cb24-14"><a href="#cb24-14"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">+=</span> EcoRI</span>
-<span id="cb24-15"><a href="#cb24-15"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb24-16"><a href="#cb24-16"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb24-17"><a href="#cb24-17"></a><span class="op">&gt;&gt;&gt;</span> rb3.remove(<span class="st">&#39;EcoRI&#39;</span>)</span>
-<span id="cb24-18"><a href="#cb24-18"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb24-19"><a href="#cb24-19"></a>RestrictionBatch([<span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb24-20"><a href="#cb24-20"></a><span class="op">&gt;&gt;&gt;</span> rb3.remove(<span class="st">&#39;spam&#39;</span>)</span>
-<span id="cb24-21"><a href="#cb24-21"></a></span>
-<span id="cb24-22"><a href="#cb24-22"></a>Traceback (most recent call last):</span>
-<span id="cb24-23"><a href="#cb24-23"></a>  File <span class="st">&quot;&lt;pyshell#18&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb24-24"><a href="#cb24-24"></a>    rb3.remove(<span class="st">&#39;spam&#39;</span>)</span>
-<span id="cb24-25"><a href="#cb24-25"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1839</span>, <span class="kw">in</span> remove</span>
-<span id="cb24-26"><a href="#cb24-26"></a>    <span class="cf">return</span> Set.remove(<span class="va">self</span>, <span class="va">self</span>.<span class="bu">format</span>(other))</span>
-<span id="cb24-27"><a href="#cb24-27"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1871</span>, <span class="kw">in</span> <span class="bu">format</span></span>
-<span id="cb24-28"><a href="#cb24-28"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>, <span class="st">&#39;</span><span class="sc">%s</span><span class="st"> is not a RestrictionType&#39;</span><span class="op">%</span>y.__class__</span>
-<span id="cb24-29"><a href="#cb24-29"></a><span class="pp">ValueError</span>: <span class="op">&lt;</span><span class="bu">type</span> <span class="st">&#39;str&#39;</span><span class="op">&gt;</span> <span class="kw">is</span> <span class="kw">not</span> a RestrictionType</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb3.remove(EcoRI)
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRV&#39;, &#39;KpnI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3.remove(EcoRI)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#14&gt;&quot;, line 1, in -toplevel-
+    rb3.remove(&#39;EcoRI&#39;)
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1839, in remove
+    return Set.remove(self, self.format(other))
+  File &quot;/usr/lib/Python2.3/sets.py&quot;, line 534, in remove
+    del self._data[element]
+KeyError: EcoRI
+&gt;&gt;&gt; rb3 += EcoRI
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3.remove(&#39;EcoRI&#39;)
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRV&#39;, &#39;KpnI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3.remove(&#39;spam&#39;)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#18&gt;&quot;, line 1, in -toplevel-
+    rb3.remove(&#39;spam&#39;)
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1839, in remove
+    return Set.remove(self, self.format(other))
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1871, in format
+    raise ValueError, &#39;%s is not a RestrictionType&#39;%y.__class__
+ValueError: &lt;type &#39;str&#39;&gt; is not a RestrictionType</code></pre>
 <h4 id="manipulating-restrictionbatch"><a name="2.5"></a>2.5 Manipulating RestrictionBatch</h4>
 <p>You can not, however, add batches together, as they are Python <code>sets</code>. You must use the pipe operator <code>|</code> instead. You can find the intersection between 2 batches using <code>&amp;</code> (see the Python documentation about <code>sets</code> for more information.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">=</span> EcoRI <span class="op">+</span> KpnI <span class="op">+</span> EcoRV</span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="op">&gt;&gt;&gt;</span> rb3</span>
-<span id="cb25-3"><a href="#cb25-3"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>])</span>
-<span id="cb25-4"><a href="#cb25-4"></a><span class="op">&gt;&gt;&gt;</span> rb4 <span class="op">=</span> SmaI <span class="op">+</span> PstI</span>
-<span id="cb25-5"><a href="#cb25-5"></a><span class="op">&gt;&gt;&gt;</span> rb4</span>
-<span id="cb25-6"><a href="#cb25-6"></a>RestrictionBatch([<span class="st">&#39;PstI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb25-7"><a href="#cb25-7"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">+</span> rb4</span>
-<span id="cb25-8"><a href="#cb25-8"></a></span>
-<span id="cb25-9"><a href="#cb25-9"></a>Traceback (most recent call last):</span>
-<span id="cb25-10"><a href="#cb25-10"></a>  File <span class="st">&quot;&lt;pyshell#23&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">-</span>toplevel<span class="op">-</span></span>
-<span id="cb25-11"><a href="#cb25-11"></a>    rb3 <span class="op">+</span> rb4</span>
-<span id="cb25-12"><a href="#cb25-12"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1829</span>, <span class="kw">in</span> <span class="fu">__add__</span></span>
-<span id="cb25-13"><a href="#cb25-13"></a>    new.add(other)</span>
-<span id="cb25-14"><a href="#cb25-14"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1848</span>, <span class="kw">in</span> add</span>
-<span id="cb25-15"><a href="#cb25-15"></a>    <span class="cf">return</span> Set.add(<span class="va">self</span>, <span class="va">self</span>.<span class="bu">format</span>(other))</span>
-<span id="cb25-16"><a href="#cb25-16"></a>  File <span class="st">&quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">1871</span>, <span class="kw">in</span> <span class="bu">format</span></span>
-<span id="cb25-17"><a href="#cb25-17"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>, <span class="st">&#39;</span><span class="sc">%s</span><span class="st"> is not a RestrictionType&#39;</span><span class="op">%</span>y.__class__</span>
-<span id="cb25-18"><a href="#cb25-18"></a><span class="pp">ValueError</span>: <span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;Bio.Restriction.Restriction.RestrictionBatch&#39;</span><span class="op">&gt;</span> <span class="kw">is</span> <span class="kw">not</span> a RestrictionType</span>
-<span id="cb25-19"><a href="#cb25-19"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">|</span> rb4</span>
-<span id="cb25-20"><a href="#cb25-20"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;PstI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb25-21"><a href="#cb25-21"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">&amp;</span> rb4</span>
-<span id="cb25-22"><a href="#cb25-22"></a>RestrictionBatch([])</span>
-<span id="cb25-23"><a href="#cb25-23"></a><span class="op">&gt;&gt;&gt;</span> rb4 <span class="op">+=</span> EcoRI</span>
-<span id="cb25-24"><a href="#cb25-24"></a><span class="op">&gt;&gt;&gt;</span> rb4</span>
-<span id="cb25-25"><a href="#cb25-25"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;PstI&#39;</span>, <span class="st">&#39;SmaI&#39;</span>])</span>
-<span id="cb25-26"><a href="#cb25-26"></a><span class="op">&gt;&gt;&gt;</span> rb3 <span class="op">&amp;</span> rb4</span>
-<span id="cb25-27"><a href="#cb25-27"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>])</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb3 = EcoRI + KpnI + EcoRV
+&gt;&gt;&gt; rb3
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;])
+&gt;&gt;&gt; rb4 = SmaI + PstI
+&gt;&gt;&gt; rb4
+RestrictionBatch([&#39;PstI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3 + rb4
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#23&gt;&quot;, line 1, in -toplevel-
+    rb3 + rb4
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1829, in __add__
+    new.add(other)
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1848, in add
+    return Set.add(self, self.format(other))
+  File &quot;/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py&quot;, line 1871, in format
+    raise ValueError, &#39;%s is not a RestrictionType&#39;%y.__class__
+ValueError: &lt;class &#39;Bio.Restriction.Restriction.RestrictionBatch&#39;&gt; is not a RestrictionType
+&gt;&gt;&gt; rb3 | rb4
+RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;, &#39;PstI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3 &amp; rb4
+RestrictionBatch([])
+&gt;&gt;&gt; rb4 += EcoRI
+&gt;&gt;&gt; rb4
+RestrictionBatch([&#39;EcoRI&#39;, &#39;PstI&#39;, &#39;SmaI&#39;])
+&gt;&gt;&gt; rb3 &amp; rb4
+RestrictionBatch([&#39;EcoRI&#39;])</code></pre>
 <h4 id="analysing-sequences-with-a-restrictionbatch"><a name="2.6"></a>2.6 Analysing sequences with a RestrictionBatch</h4>
 <p>To analyse a sequence for potential site, you can use the <code>search</code> method of the batch, the same way you did for restriction enzymes. The results is no longer a list however, but a dictionary. The keys of the dictionary are the names of the enzymes and the value a list of position site. <code>RestrictionBatch</code> does not implement a <code>catalyse</code> method, as it would not have a real meaning when used with large batch.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="op">&gt;&gt;&gt;</span> rb.search(new_seq)</span>
-<span id="cb26-3"><a href="#cb26-3"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: [], <span class="st">&#39;EcoRI&#39;</span>: []}</span>
-<span id="cb26-4"><a href="#cb26-4"></a><span class="op">&gt;&gt;&gt;</span> rb.search(new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb26-5"><a href="#cb26-5"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: [], <span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; new_seq = Seq(&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;)
+&gt;&gt;&gt; rb.search(new_seq)
+{&#39;KpnI&#39;: [], &#39;EcoRV&#39;: [], &#39;EcoRI&#39;: []}
+&gt;&gt;&gt; rb.search(new_seq, linear=False)
+{&#39;KpnI&#39;: [], &#39;EcoRV&#39;: [], &#39;EcoRI&#39;: [33]}</code></pre>
 <h4 id="other-restrictionbatch-methods"><a name="2.7"></a>2.7 Other RestrictionBatch methods</h4>
 <p>Amongst the other methods provided by <code>RestrictionBatch</code>, <code>elements()</code> which return a list of all the element names alphabetically sorted, is certainly the most useful.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> EcoRI <span class="op">+</span> KpnI <span class="op">+</span> EcoRV</span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="op">&gt;&gt;&gt;</span> rb.elements()</span>
-<span id="cb27-3"><a href="#cb27-3"></a>[<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb = EcoRI + KpnI + EcoRV
+&gt;&gt;&gt; rb.elements()
+[&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;]</code></pre>
 <p>If you don’t care about the alphabetical order use the method <code>as_string()</code>, to get the same thing a bit faster. The list is not sorted. The order is random as Python sets are dictionary.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> EcoRI <span class="op">+</span> KpnI <span class="op">+</span> EcoRV</span>
-<span id="cb28-2"><a href="#cb28-2"></a><span class="op">&gt;&gt;&gt;</span> rb.as_string()</span>
-<span id="cb28-3"><a href="#cb28-3"></a>[<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;KpnI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rb = EcoRI + KpnI + EcoRV
+&gt;&gt;&gt; rb.as_string()
+[&#39;EcoRI&#39;, &#39;KpnI&#39;, &#39;EcoRV&#39;]</code></pre>
 <p>Other <code>RestrictionBatch</code> methods are generally used for particular purposes and will not be discussed here. See the <a href="https://github.com/biopython/biopython/tree/master/Bio/Restriction">source</a> if you are interested.</p>
 <h3 id="allenzymes-and-commonly-two-preconfigured-restrictionbatches"><a name="3"></a>3. AllEnzymes and CommOnly: two preconfigured RestrictionBatches</h3>
 <p>While it is sometime practical to produce a <code>RestrictionBatch</code> of your own you will certainly more frequently use the two batches provided with the <code>Restriction</code> packages: <code>AllEnzymes</code> and <code>CommOnly</code>. These two batches contain respectively all the enzymes in the database and only the enzymes which have a commercial supplier. They are rather big, but that’s what make them useful. With these batch you can produce a full description of a sequence with a single command. You can use these two batch as any other batch.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(AllEnzymes)</span>
-<span id="cb29-2"><a href="#cb29-2"></a><span class="dv">778</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(CommOnly)</span>
-<span id="cb29-4"><a href="#cb29-4"></a><span class="dv">622</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a><span class="op">&gt;&gt;&gt;</span> AllEnzymes.search(new_seq) ...</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; len(AllEnzymes)
+778
+&gt;&gt;&gt; len(CommOnly)
+622
+&gt;&gt;&gt; AllEnzymes.search(new_seq) ...</code></pre>
 <p>There is not a lot to say about them apart the fact that they are present. They are really normal batches, and you can use them as any other batch.</p>
 <h3 id="the-analysis-class-even-simpler-restriction-analysis"><a name="4"></a>4. The Analysis class: even simpler restriction analysis</h3>
 <p><code>RestrictionBatch</code> can give you a dictionary with the sites for all the enzymes in a batch. However, it is sometime nice to get something a bit easier to read than a Python dictionary. Complex restriction analysis are not easy with <code>RestrictionBatch</code>. Some refinements in the way to search a sequence for restriction sites will help. <code>Analysis</code> provides a serie of command to customise the results obtained from a pair restriction batch/sequence and some facilities to make the output sligthly more human readable.</p>
 <h4 id="setting-up-an-analysis"><a name="4.1"></a>4.1 Setting up an Analysis</h4>
 <p>To build a restriction analysis you will need a <code>RestrictionBatch</code> and a sequence and to tell it if the sequence is linear or circular. The first argument <code>Analysis</code> takes is the restriction batch, the second is the sequence. If the third argument is not provided, <code>Analysis</code> will assume the sequence is linear.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([EcoRI, KpnI, EcoRV])</span>
-<span id="cb30-3"><a href="#cb30-3"></a><span class="op">&gt;&gt;&gt;</span> Ana <span class="op">=</span> Analysis(rb, new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="op">&gt;&gt;&gt;</span> Ana</span>
-<span id="cb30-5"><a href="#cb30-5"></a>Analysis(RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>]),Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAA</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>),<span class="va">False</span>)</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; new_seq = Seq(&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;)
+&gt;&gt;&gt; rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
+&gt;&gt;&gt; Ana = Analysis(rb, new_seq, linear=False)
+&gt;&gt;&gt; Ana
+Analysis(RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;]),Seq(&#39;TTCAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAGAA&#39;),False)</code></pre>
 <h4 id="full-restriction-analysis"><a name="4.2"></a>4.2 Full restriction analysis</h4>
 <p>Once you have created your new <code>Analysis</code>, you can use it to get a restriction analysis of your sequence. The way to make a full restriction analysis of the sequence is:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="op">&gt;&gt;&gt;</span> Ana.full()</span>
-<span id="cb31-2"><a href="#cb31-2"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: [], <span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Ana.full()
+{&#39;KpnI&#39;: [], &#39;EcoRV&#39;: [], &#39;EcoRI&#39;: [33]}</code></pre>
 <p>This is much the same as the output of a <code>RestrictionBatch.search</code> method. You will get a more easy to read output with <code>print_that</code> used without argument:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># let&#39;s create a something a bit more complex to analyse.</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([], [<span class="st">&#39;C&#39;</span>])  <span class="co"># we will explain the meaning of the</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a><span class="op">&gt;&gt;&gt;</span>                               <span class="co"># double list argument later.</span></span>
-<span id="cb32-5"><a href="#cb32-5"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a><span class="op">&gt;&gt;&gt;</span> multi_site <span class="op">=</span> Seq.Seq(<span class="st">&#39;AAA&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span> <span class="st">&#39;G&#39;</span> <span class="op">+</span> KpnI.site <span class="op">+</span> EcoRV.site <span class="op">+</span></span>
-<span id="cb32-7"><a href="#cb32-7"></a>                     <span class="st">&#39;CT&#39;</span> <span class="op">+</span> SmaI.site <span class="op">+</span> <span class="st">&#39;GT&#39;</span> <span class="op">+</span> FokI.site <span class="op">+</span> <span class="st">&#39;GAAAGGGC&#39;</span> <span class="op">+</span></span>
-<span id="cb32-8"><a href="#cb32-8"></a>                      EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>)</span>
-<span id="cb32-9"><a href="#cb32-9"></a><span class="op">&gt;&gt;&gt;</span> Analong <span class="op">=</span> Analysis(rb, multi_site)</span>
-<span id="cb32-10"><a href="#cb32-10"></a><span class="op">&gt;&gt;&gt;</span> Analong.full()</span>
-<span id="cb32-11"><a href="#cb32-11"></a>{BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [<span class="dv">27</span>], S</span>
-<span id="cb32-12"><a href="#cb32-12"></a>alI: [], SlaI: [], NcoI: [], NotI: [], PstI: [], StyI: [], BseBI: [], PvuII: [],</span>
-<span id="cb32-13"><a href="#cb32-13"></a>HindIII: [], BglII: [], ApaLI: [], TaqI: [], BssAI: [], AluI: [], SstI: [], Bse</span>
-<span id="cb32-14"><a href="#cb32-14"></a>CI: [], Sau3AI: [], HpaI: [], SnaBI: [], NheI: [], BclI: [], KpnI: [<span class="dv">16</span>], NruI: [</span>
-<span id="cb32-15"><a href="#cb32-15"></a>], MspCI: [], BshFI: [], CspAI: [], RsaI: [<span class="dv">14</span>], EcoRV: [<span class="dv">20</span>], SphI: [], BamHI: []</span>
-<span id="cb32-16"><a href="#cb32-16"></a>, MboI: [], SgrBI: [], SspI: [], ScaI: [], XbaI: [], SseBI: [], NaeI: [], EcoRI:</span>
-<span id="cb32-17"><a href="#cb32-17"></a>[<span class="dv">5</span>, <span class="dv">47</span>], SmaI: [<span class="dv">28</span>], BseAI: []}</span>
-<span id="cb32-18"><a href="#cb32-18"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb32-19"><a href="#cb32-19"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># The results are here but it is difficult to read. let&#39;s try print_that</span></span>
-<span id="cb32-20"><a href="#cb32-20"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb32-21"><a href="#cb32-21"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that()</span>
-<span id="cb32-22"><a href="#cb32-22"></a></span>
-<span id="cb32-23"><a href="#cb32-23"></a>BsiSI      :  <span class="fl">27.</span></span>
-<span id="cb32-24"><a href="#cb32-24"></a>RsaI       :  <span class="fl">14.</span></span>
-<span id="cb32-25"><a href="#cb32-25"></a>EcoRI      :  <span class="dv">5</span>, <span class="fl">47.</span></span>
-<span id="cb32-26"><a href="#cb32-26"></a>EcoRV      :  <span class="fl">20.</span></span>
-<span id="cb32-27"><a href="#cb32-27"></a>KpnI       :  <span class="fl">16.</span></span>
-<span id="cb32-28"><a href="#cb32-28"></a>SmaI       :  <span class="fl">28.</span></span>
-<span id="cb32-29"><a href="#cb32-29"></a></span>
-<span id="cb32-30"><a href="#cb32-30"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb32-31"><a href="#cb32-31"></a></span>
-<span id="cb32-32"><a href="#cb32-32"></a>AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI</span>
-<span id="cb32-33"><a href="#cb32-33"></a>ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI</span>
-<span id="cb32-34"><a href="#cb32-34"></a>CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI</span>
-<span id="cb32-35"><a href="#cb32-35"></a>PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI</span>
-<span id="cb32-36"><a href="#cb32-36"></a>SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI</span>
-<span id="cb32-37"><a href="#cb32-37"></a>SfiI</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; # let&#39;s create a something a bit more complex to analyse.
+&gt;&gt;&gt;
+&gt;&gt;&gt; rb = RestrictionBatch([], [&#39;C&#39;])  # we will explain the meaning of the
+&gt;&gt;&gt;                               # double list argument later.
+&gt;&gt;&gt;
+&gt;&gt;&gt; multi_site = Seq.Seq(&#39;AAA&#39; + EcoRI.site + &#39;G&#39; + KpnI.site + EcoRV.site +
+                     &#39;CT&#39; + SmaI.site + &#39;GT&#39; + FokI.site + &#39;GAAAGGGC&#39; +
+                      EcoRI.site + &#39;ACGT&#39;)
+&gt;&gt;&gt; Analong = Analysis(rb, multi_site)
+&gt;&gt;&gt; Analong.full()
+{BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [27], S
+alI: [], SlaI: [], NcoI: [], NotI: [], PstI: [], StyI: [], BseBI: [], PvuII: [],
+HindIII: [], BglII: [], ApaLI: [], TaqI: [], BssAI: [], AluI: [], SstI: [], Bse
+CI: [], Sau3AI: [], HpaI: [], SnaBI: [], NheI: [], BclI: [], KpnI: [16], NruI: [
+], MspCI: [], BshFI: [], CspAI: [], RsaI: [14], EcoRV: [20], SphI: [], BamHI: []
+, MboI: [], SgrBI: [], SspI: [], ScaI: [], XbaI: [], SseBI: [], NaeI: [], EcoRI:
+[5, 47], SmaI: [28], BseAI: []}
+&gt;&gt;&gt;
+&gt;&gt;&gt; # The results are here but it is difficult to read. let&#39;s try print_that
+&gt;&gt;&gt;
+&gt;&gt;&gt; Analong.print_that()
+
+BsiSI      :  27.
+RsaI       :  14.
+EcoRI      :  5, 47.
+EcoRV      :  20.
+KpnI       :  16.
+SmaI       :  28.
+
+   Enzymes which do not cut the sequence.
+
+AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI
+ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI
+CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI
+PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
+SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
+SfiI</code></pre>
 <p>Much clearer, is’nt ? The output is optimised for a shell 80 columns wide. If the output seems odd, check that the width of your shell is at least 80 columns.</p>
 <h4 id="changing-the-title"><a name="4.3"></a>4.3 Changing the title</h4>
 <p>You can provide a title to the analysis and modify the sentence ‘Enzymes which do not cut the sequence’, by setting the two optional arguments of <code>print_that</code>, <code>title</code> and <code>s1</code>. No formatting will be done on these strings so if you have to include the newline (<code>\n</code>) as you see fit:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that(<span class="va">None</span>, title<span class="op">=</span><span class="st">&#39;sequence = multi_site</span><span class="ch">\n\n</span><span class="st">&#39;</span>)</span>
-<span id="cb33-2"><a href="#cb33-2"></a></span>
-<span id="cb33-3"><a href="#cb33-3"></a>sequence <span class="op">=</span> multi_site</span>
-<span id="cb33-4"><a href="#cb33-4"></a></span>
-<span id="cb33-5"><a href="#cb33-5"></a>BsiSI      :  <span class="fl">27.</span></span>
-<span id="cb33-6"><a href="#cb33-6"></a>RsaI       :  <span class="fl">14.</span></span>
-<span id="cb33-7"><a href="#cb33-7"></a>EcoRI      :  <span class="dv">5</span>, <span class="fl">47.</span></span>
-<span id="cb33-8"><a href="#cb33-8"></a>EcoRV      :  <span class="fl">20.</span></span>
-<span id="cb33-9"><a href="#cb33-9"></a>KpnI       :  <span class="fl">16.</span></span>
-<span id="cb33-10"><a href="#cb33-10"></a>SmaI       :  <span class="fl">28.</span></span>
-<span id="cb33-11"><a href="#cb33-11"></a></span>
-<span id="cb33-12"><a href="#cb33-12"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb33-13"><a href="#cb33-13"></a></span>
-<span id="cb33-14"><a href="#cb33-14"></a>AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI</span>
-<span id="cb33-15"><a href="#cb33-15"></a>ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI</span>
-<span id="cb33-16"><a href="#cb33-16"></a>CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI</span>
-<span id="cb33-17"><a href="#cb33-17"></a>PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI</span>
-<span id="cb33-18"><a href="#cb33-18"></a>SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI</span>
-<span id="cb33-19"><a href="#cb33-19"></a>SfiI</span>
-<span id="cb33-20"><a href="#cb33-20"></a></span>
-<span id="cb33-21"><a href="#cb33-21"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that(<span class="va">None</span>, title<span class="op">=</span><span class="st">&#39;sequence = multi_site</span><span class="ch">\n\n</span><span class="st">&#39;</span>,</span>
-<span id="cb33-22"><a href="#cb33-22"></a>                   s1<span class="op">=</span><span class="st">&#39;</span><span class="ch">\n</span><span class="st"> no site:</span><span class="ch">\n\n</span><span class="st">&#39;</span>)</span>
-<span id="cb33-23"><a href="#cb33-23"></a></span>
-<span id="cb33-24"><a href="#cb33-24"></a>sequence <span class="op">=</span> multi_site</span>
-<span id="cb33-25"><a href="#cb33-25"></a></span>
-<span id="cb33-26"><a href="#cb33-26"></a>BsiSI      :  <span class="fl">27.</span></span>
-<span id="cb33-27"><a href="#cb33-27"></a>RsaI       :  <span class="fl">14.</span></span>
-<span id="cb33-28"><a href="#cb33-28"></a>EcoRI      :  <span class="dv">5</span>, <span class="fl">47.</span></span>
-<span id="cb33-29"><a href="#cb33-29"></a>EcoRV      :  <span class="fl">20.</span></span>
-<span id="cb33-30"><a href="#cb33-30"></a>KpnI       :  <span class="fl">16.</span></span>
-<span id="cb33-31"><a href="#cb33-31"></a>SmaI       :  <span class="fl">28.</span></span>
-<span id="cb33-32"><a href="#cb33-32"></a></span>
-<span id="cb33-33"><a href="#cb33-33"></a> no site:</span>
-<span id="cb33-34"><a href="#cb33-34"></a></span>
-<span id="cb33-35"><a href="#cb33-35"></a>AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI</span>
-<span id="cb33-36"><a href="#cb33-36"></a>ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI</span>
-<span id="cb33-37"><a href="#cb33-37"></a>CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI</span>
-<span id="cb33-38"><a href="#cb33-38"></a>PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI</span>
-<span id="cb33-39"><a href="#cb33-39"></a>SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI</span>
-<span id="cb33-40"><a href="#cb33-40"></a>SfiI</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Analong.print_that(None, title=&#39;sequence = multi_site\n\n&#39;)
+
+sequence = multi_site
+
+BsiSI      :  27.
+RsaI       :  14.
+EcoRI      :  5, 47.
+EcoRV      :  20.
+KpnI       :  16.
+SmaI       :  28.
+
+   Enzymes which do not cut the sequence.
+
+AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI
+ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI
+CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI
+PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
+SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
+SfiI
+
+&gt;&gt;&gt; Analong.print_that(None, title=&#39;sequence = multi_site\n\n&#39;,
+                   s1=&#39;\n no site:\n\n&#39;)
+
+sequence = multi_site
+
+BsiSI      :  27.
+RsaI       :  14.
+EcoRI      :  5, 47.
+EcoRV      :  20.
+KpnI       :  16.
+SmaI       :  28.
+
+ no site:
+
+AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI
+ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI
+CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI
+PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
+SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
+SfiI</code></pre>
 <h4 id="customising-the-output"><a name="4.4"></a>4.4 Customising the output</h4>
 <p>You can modify some aspects of the output interactively. There is three main type of output, two listing types (alphabetically sorted and sorted by number of site) and map-like type. To change the output, use the method <code>print_as()</code> of <code>Analysis</code>. The change of output is permanent for the instance of <code>Analysis</code> (that is until the next time you use <code>print_as()</code>). The argument of <code>print_as()</code> are strings: <code>'map'</code>, <code>'number'</code> or <code>'alpha'</code>. As you have seen previously the default behaviour is an alphabetical list (<code>'alpha'</code>).</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_as(<span class="st">&#39;map&#39;</span>)</span>
-<span id="cb34-2"><a href="#cb34-2"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that()</span>
-<span id="cb34-3"><a href="#cb34-3"></a></span>
-<span id="cb34-4"><a href="#cb34-4"></a>    <span class="dv">5</span> EcoRI</span>
-<span id="cb34-5"><a href="#cb34-5"></a>    <span class="op">|</span></span>
-<span id="cb34-6"><a href="#cb34-6"></a>    <span class="op">|</span>        <span class="dv">14</span> RsaI</span>
-<span id="cb34-7"><a href="#cb34-7"></a>    <span class="op">|</span>        <span class="op">|</span></span>
-<span id="cb34-8"><a href="#cb34-8"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="dv">16</span> KpnI</span>
-<span id="cb34-9"><a href="#cb34-9"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span></span>
-<span id="cb34-10"><a href="#cb34-10"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="dv">20</span> EcoRV</span>
-<span id="cb34-11"><a href="#cb34-11"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span></span>
-<span id="cb34-12"><a href="#cb34-12"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="dv">27</span> BsiSI</span>
-<span id="cb34-13"><a href="#cb34-13"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="op">|</span></span>
-<span id="cb34-14"><a href="#cb34-14"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="op">|</span><span class="dv">28</span> SmaI</span>
-<span id="cb34-15"><a href="#cb34-15"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="op">||</span></span>
-<span id="cb34-16"><a href="#cb34-16"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="op">||</span>                  <span class="dv">47</span> EcoRI</span>
-<span id="cb34-17"><a href="#cb34-17"></a>    <span class="op">|</span>        <span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>      <span class="op">||</span>                  <span class="op">|</span></span>
-<span id="cb34-18"><a href="#cb34-18"></a>AAAGAATTCGGGTACCGATATCCTCCCGGGGTGGATGGAAAGGGCGAATTCACGT</span>
-<span id="cb34-19"><a href="#cb34-19"></a><span class="op">|||||||||||||||||||||||||||||||||||||||||||||||||||||||</span></span>
-<span id="cb34-20"><a href="#cb34-20"></a>TTTCTTAAGCCCATGGCTATAGGAGGGCCCCACCTACCTTTCCCGCTTAAGTGCA</span>
-<span id="cb34-21"><a href="#cb34-21"></a><span class="dv">1</span>                                                    <span class="dv">55</span></span>
-<span id="cb34-22"><a href="#cb34-22"></a></span>
-<span id="cb34-23"><a href="#cb34-23"></a></span>
-<span id="cb34-24"><a href="#cb34-24"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb34-25"><a href="#cb34-25"></a></span>
-<span id="cb34-26"><a href="#cb34-26"></a>AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI</span>
-<span id="cb34-27"><a href="#cb34-27"></a>ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI</span>
-<span id="cb34-28"><a href="#cb34-28"></a>CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI</span>
-<span id="cb34-29"><a href="#cb34-29"></a>PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI</span>
-<span id="cb34-30"><a href="#cb34-30"></a>SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI</span>
-<span id="cb34-31"><a href="#cb34-31"></a>SfiI</span>
-<span id="cb34-32"><a href="#cb34-32"></a></span>
-<span id="cb34-33"><a href="#cb34-33"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_as(<span class="st">&#39;number&#39;</span>)</span>
-<span id="cb34-34"><a href="#cb34-34"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that()</span>
-<span id="cb34-35"><a href="#cb34-35"></a></span>
-<span id="cb34-36"><a href="#cb34-36"></a></span>
-<span id="cb34-37"><a href="#cb34-37"></a></span>
-<span id="cb34-38"><a href="#cb34-38"></a>enzymes which cut <span class="dv">1</span> times :</span>
-<span id="cb34-39"><a href="#cb34-39"></a></span>
-<span id="cb34-40"><a href="#cb34-40"></a>BsiSI      :  <span class="fl">27.</span></span>
-<span id="cb34-41"><a href="#cb34-41"></a>RsaI       :  <span class="fl">14.</span></span>
-<span id="cb34-42"><a href="#cb34-42"></a>EcoRV      :  <span class="fl">20.</span></span>
-<span id="cb34-43"><a href="#cb34-43"></a>KpnI       :  <span class="fl">16.</span></span>
-<span id="cb34-44"><a href="#cb34-44"></a>SmaI       :  <span class="fl">28.</span></span>
-<span id="cb34-45"><a href="#cb34-45"></a></span>
-<span id="cb34-46"><a href="#cb34-46"></a></span>
-<span id="cb34-47"><a href="#cb34-47"></a>enzymes which cut <span class="dv">2</span> times :</span>
-<span id="cb34-48"><a href="#cb34-48"></a></span>
-<span id="cb34-49"><a href="#cb34-49"></a>EcoRI      :  <span class="dv">5</span>, <span class="fl">47.</span></span>
-<span id="cb34-50"><a href="#cb34-50"></a></span>
-<span id="cb34-51"><a href="#cb34-51"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb34-52"><a href="#cb34-52"></a></span>
-<span id="cb34-53"><a href="#cb34-53"></a>AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI</span>
-<span id="cb34-54"><a href="#cb34-54"></a>ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI</span>
-<span id="cb34-55"><a href="#cb34-55"></a>CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI</span>
-<span id="cb34-56"><a href="#cb34-56"></a>PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI</span>
-<span id="cb34-57"><a href="#cb34-57"></a>SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI</span>
-<span id="cb34-58"><a href="#cb34-58"></a>SfiI</span>
-<span id="cb34-59"><a href="#cb34-59"></a></span>
-<span id="cb34-60"><a href="#cb34-60"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Analong.print_as(&#39;map&#39;)
+&gt;&gt;&gt; Analong.print_that()
+
+    5 EcoRI
+    |
+    |        14 RsaI
+    |        |
+    |        | 16 KpnI
+    |        | |
+    |        | |   20 EcoRV
+    |        | |   |
+    |        | |   |      27 BsiSI
+    |        | |   |      |
+    |        | |   |      |28 SmaI
+    |        | |   |      ||
+    |        | |   |      ||                  47 EcoRI
+    |        | |   |      ||                  |
+AAAGAATTCGGGTACCGATATCCTCCCGGGGTGGATGGAAAGGGCGAATTCACGT
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+TTTCTTAAGCCCATGGCTATAGGAGGGCCCCACCTACCTTTCCCGCTTAAGTGCA
+1                                                    55
+
+
+   Enzymes which do not cut the sequence.
+
+AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI
+ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI
+CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI
+PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
+SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
+SfiI
+
+&gt;&gt;&gt; Analong.print_as(&#39;number&#39;)
+&gt;&gt;&gt; Analong.print_that()
+
+
+
+enzymes which cut 1 times :
+
+BsiSI      :  27.
+RsaI       :  14.
+EcoRV      :  20.
+KpnI       :  16.
+SmaI       :  28.
+
+
+enzymes which cut 2 times :
+
+EcoRI      :  5, 47.
+
+   Enzymes which do not cut the sequence.
+
+AluI      BshFI     MboI      Sau3AI    TaqI      BseBI     HinfI     PspPI
+ApaLI     AsuII     BamHI     BclI      BglII     BseAI     BseCI     BssAI
+CspAI     HindIII   HpaI      MspCI     NaeI      NcoI      NheI      NruI
+PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
+SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
+SfiI
+
+&gt;&gt;&gt;</code></pre>
 <p>To come back to the previous behaviour:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_as(<span class="st">&#39;alpha&#39;</span>)</span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="op">&gt;&gt;&gt;</span> Analong.print_that()</span>
-<span id="cb35-3"><a href="#cb35-3"></a></span>
-<span id="cb35-4"><a href="#cb35-4"></a>BsiSI      :  <span class="fl">27.</span></span>
-<span id="cb35-5"><a href="#cb35-5"></a>RsaI       :  <span class="fl">14.</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a>EcoRI      :  <span class="dv">5</span>, <span class="fl">47.</span></span>
-<span id="cb35-7"><a href="#cb35-7"></a>EcoRV      :  <span class="fl">20.</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a>etc ...</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Analong.print_as(&#39;alpha&#39;)
+&gt;&gt;&gt; Analong.print_that()
+
+BsiSI      :  27.
+RsaI       :  14.
+EcoRI      :  5, 47.
+EcoRV      :  20.
+etc ...</code></pre>
 <h4 id="fancier-restriction-analysis"><a name="4.5"></a>4.5 Fancier restriction analysis</h4>
 <p>I will not go into the detail for each single method, here are all the functions that are available. Most are perfectly self explanatory and the others are fairly well documented (use <code>help('Analysis.command_name')</code>). The methods are:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>full(<span class="va">self</span>,linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb36-2"><a href="#cb36-2"></a>blunt(<span class="va">self</span>,dct <span class="op">=</span> <span class="va">None</span>)</span>
-<span id="cb36-3"><a href="#cb36-3"></a>overhang5(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-4"><a href="#cb36-4"></a>overhang3(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-5"><a href="#cb36-5"></a>defined(<span class="va">self</span>,dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-6"><a href="#cb36-6"></a>with_sites(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-7"><a href="#cb36-7"></a>without_site(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-8"><a href="#cb36-8"></a>with_N_sites(<span class="va">self</span>, N, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-9"><a href="#cb36-9"></a>with_number_list(<span class="va">self</span>, <span class="bu">list</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-10"><a href="#cb36-10"></a>with_name(<span class="va">self</span>, names, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-11"><a href="#cb36-11"></a>with_site_size(<span class="va">self</span>, site_size, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-12"><a href="#cb36-12"></a>only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-13"><a href="#cb36-13"></a>between(<span class="va">self</span>,start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-14"><a href="#cb36-14"></a>show_only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-15"><a href="#cb36-15"></a>only_outside(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-16"><a href="#cb36-16"></a>outside(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-17"><a href="#cb36-17"></a>do_not_cut(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>full(<span class="va">self</span>,linear<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>blunt(<span class="va">self</span>,dct <span class="op">=</span> <span class="va">None</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>overhang5(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>overhang3(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>defined(<span class="va">self</span>,dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>with_sites(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>without_site(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>with_N_sites(<span class="va">self</span>, N, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>with_number_list(<span class="va">self</span>, <span class="bu">list</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>with_name(<span class="va">self</span>, names, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>with_site_size(<span class="va">self</span>, site_size, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>between(<span class="va">self</span>,start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>show_only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>only_outside(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>outside(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>do_not_cut(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
 <p>Using these methods is simple:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
-<span id="cb37-2"><a href="#cb37-2"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([EcoRI, KpnI, EcoRV])</span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="op">&gt;&gt;&gt;</span> Ana <span class="op">=</span> Analysis(rb, new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="op">&gt;&gt;&gt;</span> Ana</span>
-<span id="cb37-5"><a href="#cb37-5"></a>Analysis(RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>]),Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAA</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>),<span class="va">False</span>)</span>
-<span id="cb37-7"><a href="#cb37-7"></a><span class="op">&gt;&gt;&gt;</span> Ana.blunt()  <span class="co"># output only the result for enzymes which cut blunt</span></span>
-<span id="cb37-8"><a href="#cb37-8"></a>{<span class="st">&#39;EcoRV&#39;</span>: []}</span>
-<span id="cb37-9"><a href="#cb37-9"></a><span class="op">&gt;&gt;&gt;</span> Ana.full()  <span class="co"># all the enzymes in the RestrictionBatch</span></span>
-<span id="cb37-10"><a href="#cb37-10"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: [], <span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span>
-<span id="cb37-11"><a href="#cb37-11"></a><span class="op">&gt;&gt;&gt;</span> Ana.with_sites()  <span class="co"># output only the result for enzymes which have a site</span></span>
-<span id="cb37-12"><a href="#cb37-12"></a>{<span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span>
-<span id="cb37-13"><a href="#cb37-13"></a><span class="op">&gt;&gt;&gt;</span> Ana.without_site()  <span class="co"># output only the enzymes which have no site</span></span>
-<span id="cb37-14"><a href="#cb37-14"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: []}</span>
-<span id="cb37-15"><a href="#cb37-15"></a><span class="op">&gt;&gt;&gt;</span> Ana.only_between(<span class="dv">1</span>, <span class="dv">20</span>)  <span class="co"># the enzymes which cut between position 1 and 20</span></span>
-<span id="cb37-16"><a href="#cb37-16"></a>{}</span>
-<span id="cb37-17"><a href="#cb37-17"></a><span class="op">&gt;&gt;&gt;</span> Ana.only_between(<span class="dv">20</span>, <span class="dv">34</span>)  <span class="co"># etc...</span></span>
-<span id="cb37-18"><a href="#cb37-18"></a>{<span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span>
-<span id="cb37-19"><a href="#cb37-19"></a><span class="op">&gt;&gt;&gt;</span> Ana.only_outside(<span class="dv">20</span>, <span class="dv">34</span>)</span>
-<span id="cb37-20"><a href="#cb37-20"></a>{}</span>
-<span id="cb37-21"><a href="#cb37-21"></a><span class="op">&gt;&gt;&gt;</span> Ana.with_name([EcoRI])</span>
-<span id="cb37-22"><a href="#cb37-22"></a>{<span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span>
-<span id="cb37-23"><a href="#cb37-23"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; new_seq = Seq(&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;)
+&gt;&gt;&gt; rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
+&gt;&gt;&gt; Ana = Analysis(rb, new_seq, linear=False)
+&gt;&gt;&gt; Ana
+Analysis(RestrictionBatch([&#39;EcoRI&#39;, &#39;EcoRV&#39;, &#39;KpnI&#39;]),Seq(&#39;TTCAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAGAA&#39;),False)
+&gt;&gt;&gt; Ana.blunt()  # output only the result for enzymes which cut blunt
+{&#39;EcoRV&#39;: []}
+&gt;&gt;&gt; Ana.full()  # all the enzymes in the RestrictionBatch
+{&#39;KpnI&#39;: [], &#39;EcoRV&#39;: [], &#39;EcoRI&#39;: [33]}
+&gt;&gt;&gt; Ana.with_sites()  # output only the result for enzymes which have a site
+{&#39;EcoRI&#39;: [33]}
+&gt;&gt;&gt; Ana.without_site()  # output only the enzymes which have no site
+{&#39;KpnI&#39;: [], &#39;EcoRV&#39;: []}
+&gt;&gt;&gt; Ana.only_between(1, 20)  # the enzymes which cut between position 1 and 20
+{}
+&gt;&gt;&gt; Ana.only_between(20, 34)  # etc...
+{&#39;EcoRI&#39;: [33]}
+&gt;&gt;&gt; Ana.only_outside(20, 34)
+{}
+&gt;&gt;&gt; Ana.with_name([EcoRI])
+{&#39;EcoRI&#39;: [33]}
+&gt;&gt;&gt;</code></pre>
 <p>To get a nice output, you still use <code>print_that</code> but this time with the command you want executed as argument.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="op">&gt;&gt;&gt;</span> Ana.print_that(Ana.blunt())</span>
-<span id="cb38-2"><a href="#cb38-2"></a></span>
-<span id="cb38-3"><a href="#cb38-3"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb38-4"><a href="#cb38-4"></a></span>
-<span id="cb38-5"><a href="#cb38-5"></a>EcoRV</span>
-<span id="cb38-6"><a href="#cb38-6"></a></span>
-<span id="cb38-7"><a href="#cb38-7"></a><span class="op">&gt;&gt;&gt;</span> pt <span class="op">=</span> Ana.print_that</span>
-<span id="cb38-8"><a href="#cb38-8"></a><span class="op">&gt;&gt;&gt;</span> pt(Ana.with_sites())</span>
-<span id="cb38-9"><a href="#cb38-9"></a></span>
-<span id="cb38-10"><a href="#cb38-10"></a>EcoRI      :  <span class="fl">33.</span></span>
-<span id="cb38-11"><a href="#cb38-11"></a></span>
-<span id="cb38-12"><a href="#cb38-12"></a><span class="op">&gt;&gt;&gt;</span> pt(Ana.without_site())</span>
-<span id="cb38-13"><a href="#cb38-13"></a></span>
-<span id="cb38-14"><a href="#cb38-14"></a>   Enzymes which do <span class="kw">not</span> cut the sequence.</span>
-<span id="cb38-15"><a href="#cb38-15"></a></span>
-<span id="cb38-16"><a href="#cb38-16"></a>EcoRV     KpnI</span>
-<span id="cb38-17"><a href="#cb38-17"></a></span>
-<span id="cb38-18"><a href="#cb38-18"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># etc ...</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Ana.print_that(Ana.blunt())
+
+   Enzymes which do not cut the sequence.
+
+EcoRV
+
+&gt;&gt;&gt; pt = Ana.print_that
+&gt;&gt;&gt; pt(Ana.with_sites())
+
+EcoRI      :  33.
+
+&gt;&gt;&gt; pt(Ana.without_site())
+
+   Enzymes which do not cut the sequence.
+
+EcoRV     KpnI
+
+&gt;&gt;&gt; # etc ...</code></pre>
 <h4 id="more-complex-analysis"><a name="4.6"></a>4.6 More complex analysis</h4>
 <p>All of these methods (except <code>full()</code> which, well … do a full restriction analysis) can be supplied with an additional dictionary. If no dictionary is supplied a full restriction analysis is used as starting point. Otherwise the dictionary provided by the argument <code>dct</code> is used. The dictionary must be formatted as the result of <code>RestrictionBatch.search</code>. Therefore of the form <code>{'enzyme_name': [position1, position2],...}</code>, where <em>position1</em> and <em>position2</em> are integers. All methods list previously output such dictionaries and can be used as starting point.</p>
 <p>Using this method you can build really complex query by chaining several method one after the other. For example if you want all the enzymes which are 5’ overhang and cut the sequence only once, you have two ways to go:</p>
 <p>The hard way consist to build a restriction batch containing only 5’ overhang enzymes and use this batch to create a new <code>Analysis</code> instance and then use the method <code>with_N_sites()</code> as follow:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="op">&gt;&gt;&gt;</span> rbov5 <span class="op">=</span> RestrictionBatch([x <span class="cf">for</span> x <span class="kw">in</span> rb <span class="cf">if</span> x.is_5overhang()])</span>
-<span id="cb39-2"><a href="#cb39-2"></a><span class="op">&gt;&gt;&gt;</span> Anaov5 <span class="op">=</span> Analysis(rbov5, new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb39-3"><a href="#cb39-3"></a><span class="op">&gt;&gt;&gt;</span> Anaov5.with_N_sites(<span class="dv">1</span>)</span>
-<span id="cb39-4"><a href="#cb39-4"></a>{<span class="st">&#39;EcoRI&#39;</span> : [<span class="dv">33</span>]}</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; rbov5 = RestrictionBatch([x for x in rb if x.is_5overhang()])
+&gt;&gt;&gt; Anaov5 = Analysis(rbov5, new_seq, linear=False)
+&gt;&gt;&gt; Anaov5.with_N_sites(1)
+{&#39;EcoRI&#39; : [33]}</code></pre>
 <p>The easy solution is to chain several <code>Analysis</code> methods. This is possible since each method return a dictionary as results and is able to take a dictionary as input:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="op">&gt;&gt;&gt;</span> Ana.with_N_sites(<span class="dv">1</span>, Ana.overhang5())</span>
-<span id="cb40-2"><a href="#cb40-2"></a>{<span class="st">&#39;EcoRI&#39;</span>: [<span class="dv">33</span>]}</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; Ana.with_N_sites(1, Ana.overhang5())
+{&#39;EcoRI&#39;: [33]}</code></pre>
 <p>The dictionary is always the last argument whatever the command you use.</p>
 <p>The way to prefer certainly depends of the conditions you will use your <code>Analysis</code> instance. If you are likely to frequently reuse the same batch with different sequences, using a dedicated <code>RestrictionBatch</code> might be faster as the batch is likely to be smaller. Chaining methods is generally quicker when working with an interactive shell. In a script, the extended syntax may be easier to understand in a few months.</p>
 <h3 id="advanced-features-the-formattedseq-class"><a name="5"></a>5. Advanced features: the FormattedSeq class</h3>
@@ -763,72 +894,72 @@
 <p>While this conversion is done automatically by the enzymes if you provide them with a <code>Seq</code> or a <code>MutableSeq</code>, there is time where it will be more efficient to realise the conversion before hand. Each time a <code>Seq</code> object is passed to an enzyme for analysis you pay a overhead due to the conversion. When analysing the same sequence over and over, it will be faster to convert the sequence, store the conversion and then use only the converted sequence.</p>
 <h4 id="creating-a-formattedseq"><a name="5.1"></a>5.1 Creating a FormattedSeq</h4>
 <p>Creating a <code>FormattedSeq</code> from a <code>Bio.Seq</code> object is simple. The first argument of <code>FormattedSeq</code> is the sequence you wish to convert. You can specify a shape with the second argument <code>linear</code>, if you don’t the <code>FormattedSeq</code> will be linear:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Restriction <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="op">&gt;&gt;&gt;</span> seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>)</span>
-<span id="cb41-4"><a href="#cb41-4"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq <span class="op">=</span> FormattedSeq(seq, linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="op">&gt;&gt;&gt;</span> default_fseq <span class="op">=</span> FormattedSeq(seq)</span>
-<span id="cb41-6"><a href="#cb41-6"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">=</span> FormattedSeq(seq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq</span>
-<span id="cb41-8"><a href="#cb41-8"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb41-9"><a href="#cb41-9"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq.is_linear()</span>
-<span id="cb41-10"><a href="#cb41-10"></a><span class="va">True</span></span>
-<span id="cb41-11"><a href="#cb41-11"></a><span class="op">&gt;&gt;&gt;</span> default_fseq.is_linear()</span>
-<span id="cb41-12"><a href="#cb41-12"></a><span class="va">True</span></span>
-<span id="cb41-13"><a href="#cb41-13"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
-<span id="cb41-14"><a href="#cb41-14"></a><span class="va">False</span></span>
-<span id="cb41-15"><a href="#cb41-15"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb41-16"><a href="#cb41-16"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; from Bio.Restriction import *
+&gt;&gt;&gt; from Bio.Seq import Seq
+&gt;&gt;&gt; seq = Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;)
+&gt;&gt;&gt; linear_fseq = FormattedSeq(seq, linear=True)
+&gt;&gt;&gt; default_fseq = FormattedSeq(seq)
+&gt;&gt;&gt; circular_fseq = FormattedSeq(seq, linear=False)
+&gt;&gt;&gt; linear_fseq
+FormattedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=True)
+&gt;&gt;&gt; linear_fseq.is_linear()
+True
+&gt;&gt;&gt; default_fseq.is_linear()
+True
+&gt;&gt;&gt; circular_fseq.is_linear()
+False
+&gt;&gt;&gt; circular_fseq
+FormattedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=False)</code></pre>
 <h4 id="unlike-bio.seq-formattedseq-retains-information-about-their-shape"><a name="5.2"></a>5.2 Unlike Bio.Seq, FormattedSeq retains information about their shape</h4>
 <p><code>FormattedSeq</code> retains information about the shape of the sequence. Therefore unlike with <code>Seq</code> and <code>MutableSeq</code> you don’t need to specify the shape of the sequence when using <code>search()</code> or <code>catalyse()</code>:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(linear_fseq)</span>
-<span id="cb42-2"><a href="#cb42-2"></a>[<span class="dv">15</span>]</span>
-<span id="cb42-3"><a href="#cb42-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(circular_fseq)  <span class="co"># no need to specify the shape</span></span>
-<span id="cb42-4"><a href="#cb42-4"></a>[<span class="dv">15</span>, <span class="dv">25</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI.search(linear_fseq)
+[15]
+&gt;&gt;&gt; EcoRI.search(circular_fseq)  # no need to specify the shape
+[15, 25]</code></pre>
 <p>In fact, the shape of a FormattedSeq is not altered by the second argument of the commands <code>search()</code> and <code>catalyse()</code>:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># In fact the shape is blocked.</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># The 3 following commands give the same results</span></span>
-<span id="cb43-3"><a href="#cb43-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># which correspond to a circular sequence</span></span>
-<span id="cb43-4"><a href="#cb43-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(circular_fseq)</span>
-<span id="cb43-5"><a href="#cb43-5"></a>[<span class="dv">15</span>, <span class="dv">25</span>]</span>
-<span id="cb43-6"><a href="#cb43-6"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(circular_fseq, linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb43-7"><a href="#cb43-7"></a>[<span class="dv">15</span>, <span class="dv">25</span>]</span>
-<span id="cb43-8"><a href="#cb43-8"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(circular_fseq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb43-9"><a href="#cb43-9"></a>[<span class="dv">15</span>, <span class="dv">25</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; # In fact the shape is blocked.
+&gt;&gt;&gt; # The 3 following commands give the same results
+&gt;&gt;&gt; # which correspond to a circular sequence
+&gt;&gt;&gt; EcoRI.search(circular_fseq)
+[15, 25]
+&gt;&gt;&gt; EcoRI.search(circular_fseq, linear=True)
+[15, 25]
+&gt;&gt;&gt; EcoRI.search(circular_fseq, linear=False)
+[15, 25]</code></pre>
 <h4 id="changing-the-shape-of-a-formattedseq"><a name="5.3"></a>5.3 Changing the shape of a FormattedSeq</h4>
 <p>You can however change the shape of the <code>FormattedSeq</code>. The command to use are:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>FormattedSeq.to_circular() <span class="op">=&gt;</span> new FormattedSeq, shape will be circular.</span>
-<span id="cb44-2"><a href="#cb44-2"></a>FormattedSeq.to_linear()   <span class="op">=&gt;</span> new FormattedSeq, shape will be linear</span>
-<span id="cb44-3"><a href="#cb44-3"></a>FormattedSeq.circularise() <span class="op">=&gt;</span> change the shape of FormattedShape to circular</span>
-<span id="cb44-4"><a href="#cb44-4"></a>FormattedSeq.linearise()   <span class="op">=&gt;</span> change the shape of FormattedShape to linear</span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-2"><a href="#cb45-2"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb45-3"><a href="#cb45-3"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
-<span id="cb45-4"><a href="#cb45-4"></a><span class="va">False</span></span>
-<span id="cb45-5"><a href="#cb45-5"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">==</span> linear_fseq</span>
-<span id="cb45-6"><a href="#cb45-6"></a><span class="va">False</span></span>
-<span id="cb45-7"><a href="#cb45-7"></a><span class="op">&gt;&gt;&gt;</span> newseq <span class="op">=</span> circular_fseq.to_linear()</span>
-<span id="cb45-8"><a href="#cb45-8"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-9"><a href="#cb45-9"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb45-10"><a href="#cb45-10"></a><span class="op">&gt;&gt;&gt;</span> newseq</span>
-<span id="cb45-11"><a href="#cb45-11"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb45-12"><a href="#cb45-12"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.linearise()</span>
-<span id="cb45-13"><a href="#cb45-13"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-14"><a href="#cb45-14"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb45-15"><a href="#cb45-15"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
-<span id="cb45-16"><a href="#cb45-16"></a><span class="va">True</span></span>
-<span id="cb45-17"><a href="#cb45-17"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">==</span> linear_fseq</span>
-<span id="cb45-18"><a href="#cb45-18"></a><span class="va">True</span></span>
-<span id="cb45-19"><a href="#cb45-19"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(circular_fseq) <span class="co"># which is now linear</span></span>
-<span id="cb45-20"><a href="#cb45-20"></a>[<span class="dv">15</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_circular() <span class="op">=&gt;</span> new FormattedSeq, shape will be circular.</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_linear()   <span class="op">=&gt;</span> new FormattedSeq, shape will be linear</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>FormattedSeq.circularise() <span class="op">=&gt;</span> change the shape of FormattedShape to circular</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>FormattedSeq.linearise()   <span class="op">=&gt;</span> change the shape of FormattedShape to linear</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; circular_fseq
+FormatedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=False)
+&gt;&gt;&gt; circular_fseq.is_linear()
+False
+&gt;&gt;&gt; circular_fseq == linear_fseq
+False
+&gt;&gt;&gt; newseq = circular_fseq.to_linear()
+&gt;&gt;&gt; circular_fseq
+FormatedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=False)
+&gt;&gt;&gt; newseq
+FormatedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=True)
+&gt;&gt;&gt; circular_fseq.linearise()
+&gt;&gt;&gt; circular_fseq
+FormatedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=True)
+&gt;&gt;&gt; circular_fseq.is_linear()
+True
+&gt;&gt;&gt; circular_fseq == linear_fseq
+True
+&gt;&gt;&gt; EcoRI.search(circular_fseq) # which is now linear
+[15]</code></pre>
 <h4 id="using-and-operators-with-formattedseq"><a name="5.4"></a>5.4 Using / and // operators with FormattedSeq</h4>
 <p>Not having to specify the shape of the sequence to analyse gives you the opportunity to use the shorthand ‘/’ and ‘//’ with restriction enzymes:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI<span class="op">/</span>linear_fseq  <span class="co"># &lt;=&gt; EcoRI.search(linear_fseq)</span></span>
-<span id="cb46-2"><a href="#cb46-2"></a>[<span class="dv">15</span>]</span>
-<span id="cb46-3"><a href="#cb46-3"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq<span class="op">/</span>EcoRI  <span class="co"># &lt;=&gt; EcoRI.search(linear_fseq)</span></span>
-<span id="cb46-4"><a href="#cb46-4"></a>[<span class="dv">15</span>]</span>
-<span id="cb46-5"><a href="#cb46-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRI<span class="op">//</span>linear_fseq <span class="co"># &lt;=&gt; linear_fseq//EcoRI &lt;=&gt; EcoRI.catalyse(linear_fseq)</span></span>
-<span id="cb46-6"><a href="#cb46-6"></a>(Seq(<span class="st">&#39;TTCAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAGAA&#39;</span>))</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; EcoRI/linear_fseq  # &lt;=&gt; EcoRI.search(linear_fseq)
+[15]
+&gt;&gt;&gt; linear_fseq/EcoRI  # &lt;=&gt; EcoRI.search(linear_fseq)
+[15]
+&gt;&gt;&gt; EcoRI//linear_fseq # &lt;=&gt; linear_fseq//EcoRI &lt;=&gt; EcoRI.catalyse(linear_fseq)
+(Seq(&#39;TTCAAAAAAAAAAG&#39;), Seq(&#39;AATTCAAAAGAA&#39;))</code></pre>
 <p>Another way to avoid the overhead due to a repetitive conversion from a <code>Seq</code> object to a <code>FormattedSeq</code> is to use a <a href="#2"><code>RestrictionBatch</code></a>.</p>
 <p>To conclude, the performance gain achieved when using a <code>FormattedSeq</code> instead of a <code>Seq</code> is not huge. The analysis of a 10 kb sequence by all the enzymes in <code>AllEnzymes</code> (<code>for x in AllEnzymes: x.search(seq)</code>, 867 enzymes) is 7 % faster when using a <code>FormattedSeq</code> than a <code>Seq</code>. Using a <code>RestrictionBatch</code> (<code>AllEnzymes.search(seq)</code>) is about as fast as using a <code>FormattedSeq</code> the first time the search is run. This however is dramatically reduced in subsequent runs with the same sequence (<code>RestrictionBatch</code> keeps in memory the result of their last run while the sequence is not changed).</p>
 <h3 id="more-advanced-features"><a name="6"></a>6. More advanced features</h3>
@@ -840,162 +971,162 @@
 <p>Each month, <a href="http://rebase.neb.com/rebase/rebase.html">REBASE</a> release a new compilation of data about restriction enzymes. While the enzymes do not change so frequently, you may wish to update the restriction enzymes classes. The first thing to do is to get the last rebase file. You can find the release of REBASE at http://rebase.neb.com/rebase/rebase.files.html. The file you are interested in are in the EMBOSS format. You can download the files directly from the REBASE ftp server using your browser. The file are situated at ftp://ftp.neb.com/pub/rebase. You will have to download 3 files: <code>emboss_e.###</code>, <code>emboss_r.###</code>, and <code>emboss_s.###</code>. The <code>###</code> is a 3 digit number corresponding to the year and month of the release. The first digit is the year, the two last are the month: so July 2015 will be: 507; October 2016: 610, etc… Download the three file corresponding to the current month and place them in the same folder as your <code>rebase_update.py</code> and <code>ranacompiler.py</code> scripts.</p>
 <h5 id="fetching-the-recent-enzyme-files-with-rebase_update.py"><a name="6.1.2"></a>6.1.2 Fetching the recent enzyme files with rebase_update.py</h5>
 <p>Another way to do the same thing is to use the <code>rebase_update.py</code> script. It will connect directly to the rebase ftp server and download the last batch of emboss files. From a DOS or Unix shell do the following:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1"></a>$ <span class="bu">cd</span> path_to_the_update_script</span>
-<span id="cb47-2"><a href="#cb47-2"></a>$ <span class="ex">rebase_update.py</span> -p http://www.somewhere.com:8000</span>
-<span id="cb47-3"><a href="#cb47-3"></a></span>
-<span id="cb47-4"><a href="#cb47-4"></a><span class="ex">Please</span> wait, trying to connect to Rebase</span>
-<span id="cb47-5"><a href="#cb47-5"></a></span>
-<span id="cb47-6"><a href="#cb47-6"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_e.407</span>
-<span id="cb47-7"><a href="#cb47-7"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_e.407</span>
-<span id="cb47-8"><a href="#cb47-8"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_s.407</span>
-<span id="cb47-9"><a href="#cb47-9"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_s.407</span>
-<span id="cb47-10"><a href="#cb47-10"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_r.407</span>
-<span id="cb47-11"><a href="#cb47-11"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_r.407</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd path_to_the_update_script</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rebase_update.py <span class="at">-p</span> http://www.somewhere.com:8000</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Please</span> wait, trying to connect to Rebase</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_e.407</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_e.407</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_s.407</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_s.407</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="ex">copying</span> ftp://ftp.neb.com/pub/rebase/emboss_r.407</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="ex">to</span> /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_r.407</span></code></pre></div>
 <p>Some explanation are needed: <code>-p</code> is the switch to indicate to the script you are using a proxy. If you use a ftp proxy enter its address and the connection port after the ‘<code>:</code>’.</p>
 <h5 id="compiling-a-new-dictionary-with-ranacompiler.py"><a name="6.1.3"></a>6.1.3 Compiling a new dictionary with ranacompiler.py</h5>
 <p>Once you have got the recent emboss files you can compile a new module containing the data necessary to create restriction enzyme.</p>
 <p>Note: if the emboss files are not present in the current directory or if they are not up to date, <code>ranacompiler.py</code> will invoke the script <a href="#6.1.2"><code>rebase_update.py</code></a>, which needs to be installed in the same folder. You will need to use the same options as before (ie <code>-m</code> and <code>-p</code>). See the previous paragraph on <a href="#6.1.2"><code>rebase_update.py</code></a> for more details.</p>
 <p>For simplicity let’s assume we have put the emboss files in the same folder as the files which contains the script <code>ranacompiler.py</code>. You may have the change the mode of the file to make it executable:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1"></a>$ <span class="bu">cd</span> path_to_the_ranacompiler_script</span>
-<span id="cb48-2"><a href="#cb48-2"></a>$ <span class="fu">chmod</span> <span class="st">&#39;+x&#39;</span> ranacompiler.py</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd path_to_the_ranacompiler_script</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod <span class="st">&#39;+x&#39;</span> ranacompiler.py</span></code></pre></div>
 <p>Now execute the script:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1"></a>$ <span class="ex">Python</span> ranacompiler.py  <span class="co"># or ./ranacompiler.py</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> Python ranacompiler.py  <span class="co"># or ./ranacompiler.py</span></span></code></pre></div>
 <p>You get normally the following message:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1"></a>$ <span class="ex">./ranacompiler.py</span></span>
-<span id="cb50-2"><a href="#cb50-2"></a></span>
-<span id="cb50-3"><a href="#cb50-3"></a> <span class="ex">Using</span> the files : emboss_e.407, emboss_r.407, emboss_s.407</span>
-<span id="cb50-4"><a href="#cb50-4"></a></span>
-<span id="cb50-5"><a href="#cb50-5"></a><span class="ex">WARNING</span> : HaeIV cut twice with different overhang length each time.</span>
-<span id="cb50-6"><a href="#cb50-6"></a>        <span class="ex">Unable</span> to deal with this behaviour.</span>
-<span id="cb50-7"><a href="#cb50-7"></a>        <span class="ex">This</span> enzyme will not be included in the database. Sorry.</span>
-<span id="cb50-8"><a href="#cb50-8"></a>        <span class="ex">Checking</span> :</span>
-<span id="cb50-9"><a href="#cb50-9"></a><span class="ex">Anyway</span>, HaeIV is not commercially available.</span>
-<span id="cb50-10"><a href="#cb50-10"></a></span>
-<span id="cb50-11"><a href="#cb50-11"></a><span class="ex">WARNING</span> : HpyUM037X has two different sites.</span>
-<span id="cb50-12"><a href="#cb50-12"></a></span>
-<span id="cb50-13"><a href="#cb50-13"></a></span>
-<span id="cb50-14"><a href="#cb50-14"></a><span class="ex">The</span> new database contains 867 enzymes.</span>
-<span id="cb50-15"><a href="#cb50-15"></a></span>
-<span id="cb50-16"><a href="#cb50-16"></a><span class="ex">Writing</span> the dictionary containing the new Restriction classes...</span>
-<span id="cb50-17"><a href="#cb50-17"></a><span class="ex">OK.</span></span>
-<span id="cb50-18"><a href="#cb50-18"></a></span>
-<span id="cb50-19"><a href="#cb50-19"></a><span class="ex">Writing</span> the dictionary containing the suppliers datas...</span>
-<span id="cb50-20"><a href="#cb50-20"></a><span class="ex">OK.</span></span>
-<span id="cb50-21"><a href="#cb50-21"></a></span>
-<span id="cb50-22"><a href="#cb50-22"></a><span class="ex">Writing</span> the dictionary containing the Restriction types....</span>
-<span id="cb50-23"><a href="#cb50-23"></a><span class="ex">OK.</span></span>
-<span id="cb50-24"><a href="#cb50-24"></a></span>
-<span id="cb50-25"><a href="#cb50-25"></a> <span class="ex">******************************************************************************</span></span>
-<span id="cb50-26"><a href="#cb50-26"></a></span>
-<span id="cb50-27"><a href="#cb50-27"></a>                <span class="ex">Compilation</span> of the new dictionary : OK.</span>
-<span id="cb50-28"><a href="#cb50-28"></a>                <span class="ex">Installation</span> : No.</span>
-<span id="cb50-29"><a href="#cb50-29"></a></span>
-<span id="cb50-30"><a href="#cb50-30"></a> <span class="ex">You</span> will find the newly created <span class="st">&#39;Restriction_Dictionary.py&#39;</span> file</span>
-<span id="cb50-31"><a href="#cb50-31"></a> <span class="kw">in</span> <span class="ex">the</span>  :</span>
-<span id="cb50-32"><a href="#cb50-32"></a></span>
-<span id="cb50-33"><a href="#cb50-33"></a>        <span class="ex">/path/where/you/run/ranacompiler.py</span></span>
-<span id="cb50-34"><a href="#cb50-34"></a></span>
-<span id="cb50-35"><a href="#cb50-35"></a> <span class="ex">Make</span> a copy of <span class="st">&#39;Restriction_Dictionary.py&#39;</span> and place it with</span>
-<span id="cb50-36"><a href="#cb50-36"></a> <span class="ex">the</span> other Restriction libraries.</span>
-<span id="cb50-37"><a href="#cb50-37"></a></span>
-<span id="cb50-38"><a href="#cb50-38"></a> <span class="ex">note</span> :</span>
-<span id="cb50-39"><a href="#cb50-39"></a> <span class="ex">This</span> folder should be :</span>
-<span id="cb50-40"><a href="#cb50-40"></a></span>
-<span id="cb50-41"><a href="#cb50-41"></a>        <span class="ex">path_to_python/site-packages/Bio/Restriction</span></span>
-<span id="cb50-42"><a href="#cb50-42"></a></span>
-<span id="cb50-43"><a href="#cb50-43"></a> <span class="ex">******************************************************************************</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./ranacompiler.py</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">Using</span> the files : emboss_e.407, emboss_r.407, emboss_s.407</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="ex">WARNING</span> : HaeIV cut twice with different overhang length each time.</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        <span class="ex">Unable</span> to deal with this behaviour.</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>        <span class="ex">This</span> enzyme will not be included in the database. Sorry.</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>        <span class="ex">Checking</span> :</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Anyway,</span> HaeIV is not commercially available.</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="ex">WARNING</span> : HpyUM037X has two different sites.</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> new database contains 867 enzymes.</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Writing</span> the dictionary containing the new Restriction classes...</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="ex">OK.</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="ex">Writing</span> the dictionary containing the suppliers datas...</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="ex">OK.</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="ex">Writing</span> the dictionary containing the Restriction types....</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="ex">OK.</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a> <span class="ex">******************************************************************************</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>                <span class="ex">Compilation</span> of the new dictionary : OK.</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>                <span class="ex">Installation</span> : No.</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a> <span class="ex">You</span> will find the newly created <span class="st">&#39;Restriction_Dictionary.py&#39;</span> file</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a> <span class="er">in</span> <span class="ex">the</span>  :</span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>        <span class="ex">/path/where/you/run/ranacompiler.py</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a> <span class="ex">Make</span> a copy of <span class="st">&#39;Restriction_Dictionary.py&#39;</span> and place it with</span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a> <span class="ex">the</span> other Restriction libraries.</span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a> <span class="ex">note</span> :</span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a> <span class="ex">This</span> folder should be :</span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>        <span class="ex">path_to_python/site-packages/Bio/Restriction</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a> <span class="ex">******************************************************************************</span></span></code></pre></div>
 <p>The first line indicate which emboss files have been used for the present compilation. You can safely ignore the warnings as long as the <code>compilation of the new dictionary : OK.</code> is present in the last part of the output. They are here for debugging purpose. The number of enzymes in the new module is indicated as well as a list of the dictionary which have been compiled. The last part indicate that the module has been succesfully created but not installed. To finish the update you must copy the file <code>Restriction_Dictionary.py</code> into the folder <code>/your_python_path/site-packages/Bio/Restriction/</code> as indicated by the script. Looking into the present folder, you will see to new files: the newly created dictionary <code>Restriction_Dictionary.py</code> and <code>Restriction_Dictionary.old</code>. This last file containing the old dictionary to which you can revert in case anything the new file is corrupted (this should not happen since the script is happy enough the new dictionary is good, but if there is a problem it is always nice to know you can revert to the previous setting without having to reinstall the whole thing.</p>
 <p>If you whish, the script may install the folder for you as well, but you will have to run it as root if your normal user has no write access to your Python installation (and it should’nt). Use the command <code>ranacompiler.py -i</code> or <code>ranacompiler.py --install</code> for this.</p>
 <p>If anything goes wrong (you have no write access to the destination folder for example) the script will let you know it did not perform the installation. It will however still save the new module in the current directory.</p>
 <p>As you can see the script is not very bright and will redo the compilation each time it is invoked, no matter if a previous version of the module is already present.</p>
 <h4 id="subclassing-the-class-analysis"><a name="6.2"></a>6.2 Subclassing the class Analysis</h4>
 <p>As seen previously, you can modify some aspects of the <code>Analysis</code> output interactively. However if you want to write your own <code>Analysis</code> class, you may wish to provide others output facilities than is given in this package. Depending on what you want to do you may get away with simply changing the <code>make_format</code> method of your derived class or you will need to provide new methods. Rather than get into a long explanation, here is the implementation of a rather useless <code>Analysis</code> class:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">class</span> UselessAnalysis(Analysis):</span>
-<span id="cb51-2"><a href="#cb51-2"></a></span>
-<span id="cb51-3"><a href="#cb51-3"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, rb<span class="op">=</span>RestrictionBatch(), seq<span class="op">=</span>Seq(<span class="st">&#39;&#39;</span>), lin<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb51-4"><a href="#cb51-4"></a>    <span class="co">&quot;&quot;&quot;UselessAnalysis -&gt; A class that waste your time&quot;&quot;&quot;</span></span>
-<span id="cb51-5"><a href="#cb51-5"></a>    <span class="co">#</span></span>
-<span id="cb51-6"><a href="#cb51-6"></a>    <span class="co">#    Unless you want to do something more fancy all</span></span>
-<span id="cb51-7"><a href="#cb51-7"></a>    <span class="co">#    you need to do here is instantiate Analysis.</span></span>
-<span id="cb51-8"><a href="#cb51-8"></a>    <span class="co">#    Don&#39;t forget the self in __init__</span></span>
-<span id="cb51-9"><a href="#cb51-9"></a>    <span class="co">#</span></span>
-<span id="cb51-10"><a href="#cb51-10"></a>        Analysis.<span class="fu">__init__</span>(<span class="va">self</span>, rb, seq, lin)</span>
-<span id="cb51-11"><a href="#cb51-11"></a></span>
-<span id="cb51-12"><a href="#cb51-12"></a>    <span class="kw">def</span> make_format(<span class="va">self</span>, cut<span class="op">=</span>[], t<span class="op">=</span><span class="st">&#39;&#39;</span>, nc<span class="op">=</span>[], s<span class="op">=</span><span class="st">&#39;&#39;</span>):</span>
-<span id="cb51-13"><a href="#cb51-13"></a>    <span class="co">&quot;&quot;&quot;not funny&quot;&quot;&quot;</span></span>
-<span id="cb51-14"><a href="#cb51-14"></a>    <span class="co">#</span></span>
-<span id="cb51-15"><a href="#cb51-15"></a>    <span class="co">#    Generally, you don&#39;t need to do anything else here</span></span>
-<span id="cb51-16"><a href="#cb51-16"></a>    <span class="co">#    This will tell to your new class to default to the</span></span>
-<span id="cb51-17"><a href="#cb51-17"></a>    <span class="co">#    _make_joke format.</span></span>
-<span id="cb51-18"><a href="#cb51-18"></a>    <span class="co">#</span></span>
-<span id="cb51-19"><a href="#cb51-19"></a>        <span class="cf">return</span> <span class="va">self</span>._make_joke(cut, t, nc, s)</span>
-<span id="cb51-20"><a href="#cb51-20"></a></span>
-<span id="cb51-21"><a href="#cb51-21"></a>    <span class="kw">def</span> print_as(<span class="va">self</span>, what<span class="op">=</span><span class="st">&#39;joke&#39;</span>):</span>
-<span id="cb51-22"><a href="#cb51-22"></a>    <span class="co">&quot;&quot;&quot;Never know somebody might want to change the behaviour of</span></span>
-<span id="cb51-23"><a href="#cb51-23"></a><span class="co">    this class.&quot;&quot;&quot;</span></span>
-<span id="cb51-24"><a href="#cb51-24"></a>    <span class="co">#</span></span>
-<span id="cb51-25"><a href="#cb51-25"></a>    <span class="co">#    add your new option to print_as</span></span>
-<span id="cb51-26"><a href="#cb51-26"></a>    <span class="co">#</span></span>
-<span id="cb51-27"><a href="#cb51-27"></a>        <span class="cf">if</span> what <span class="op">==</span> <span class="st">&#39;joke&#39;</span>:</span>
-<span id="cb51-28"><a href="#cb51-28"></a>        <span class="va">self</span>.make_format <span class="op">=</span> <span class="va">self</span>._make_joke</span>
-<span id="cb51-29"><a href="#cb51-29"></a>            <span class="cf">return</span></span>
-<span id="cb51-30"><a href="#cb51-30"></a>    <span class="cf">else</span>:</span>
-<span id="cb51-31"><a href="#cb51-31"></a>        <span class="co">#</span></span>
-<span id="cb51-32"><a href="#cb51-32"></a>        <span class="co">#   The other options will be treated as before</span></span>
-<span id="cb51-33"><a href="#cb51-33"></a>        <span class="co">#</span></span>
-<span id="cb51-34"><a href="#cb51-34"></a>        <span class="cf">return</span> Analysis.print_as(<span class="va">self</span>, what)</span>
-<span id="cb51-35"><a href="#cb51-35"></a></span>
-<span id="cb51-36"><a href="#cb51-36"></a>    <span class="kw">def</span> _make_joke(<span class="va">self</span>, cut<span class="op">=</span>[], title<span class="op">=</span><span class="st">&#39;&#39;</span>, nc<span class="op">=</span>[], s1<span class="op">=</span><span class="st">&#39;&#39;</span>):</span>
-<span id="cb51-37"><a href="#cb51-37"></a>    <span class="co">&quot;&quot;&quot;UA._make_joke(cut, t, nc, s) -&gt; new analysis output&quot;&quot;&quot;</span></span>
-<span id="cb51-38"><a href="#cb51-38"></a>    <span class="co">#</span></span>
-<span id="cb51-39"><a href="#cb51-39"></a>    <span class="co">#    starting your new method with &#39;_make_&#39;</span></span>
-<span id="cb51-40"><a href="#cb51-40"></a>    <span class="co">#    will give a hint to what it is suppose to do</span></span>
-<span id="cb51-41"><a href="#cb51-41"></a>    <span class="co">#</span></span>
-<span id="cb51-42"><a href="#cb51-42"></a>    <span class="co">#    We will not process the non-cutting enzymes</span></span>
-<span id="cb51-43"><a href="#cb51-43"></a>    <span class="co">#    Their names are in nc</span></span>
-<span id="cb51-44"><a href="#cb51-44"></a>    <span class="co">#    s1 is the string printed before them</span></span>
-<span id="cb51-45"><a href="#cb51-45"></a>    <span class="co">#</span></span>
-<span id="cb51-46"><a href="#cb51-46"></a>    <span class="cf">if</span> <span class="kw">not</span> title:</span>
-<span id="cb51-47"><a href="#cb51-47"></a>        title <span class="op">=</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">You have guessed right the following enzymes:</span><span class="ch">\n\n</span><span class="st">&#39;</span></span>
-<span id="cb51-48"><a href="#cb51-48"></a>    <span class="cf">for</span> name, sites <span class="kw">in</span> cut:</span>
-<span id="cb51-49"><a href="#cb51-49"></a>        <span class="co">#</span></span>
-<span id="cb51-50"><a href="#cb51-50"></a>        <span class="co">#    cut contains:</span></span>
-<span id="cb51-51"><a href="#cb51-51"></a>        <span class="co">#    - the name of the enzymes which cut the sequence (name)</span></span>
-<span id="cb51-52"><a href="#cb51-52"></a>        <span class="co">#    - a list of the site positions (sites)</span></span>
-<span id="cb51-53"><a href="#cb51-53"></a>        <span class="co">#</span></span>
-<span id="cb51-54"><a href="#cb51-54"></a>        guess <span class="op">=</span> <span class="bu">raw_input</span>(<span class="st">&quot;next enzyme is </span><span class="sc">%s</span><span class="st">, Guess how many sites ?</span><span class="ch">\n</span><span class="st">&gt;&gt;&gt; &quot;</span><span class="op">%</span>name)</span>
-<span id="cb51-55"><a href="#cb51-55"></a>            <span class="cf">try</span>:</span>
-<span id="cb51-56"><a href="#cb51-56"></a>                guess <span class="op">=</span> <span class="bu">int</span>(guess)</span>
-<span id="cb51-57"><a href="#cb51-57"></a>            <span class="cf">except</span>:</span>
-<span id="cb51-58"><a href="#cb51-58"></a>                guess <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb51-59"><a href="#cb51-59"></a>            <span class="cf">if</span> guess <span class="op">==</span> <span class="bu">len</span>(sites):</span>
-<span id="cb51-60"><a href="#cb51-60"></a>                <span class="bu">print</span> <span class="st">&#39;You did guess right. Good. Next.&#39;</span></span>
-<span id="cb51-61"><a href="#cb51-61"></a>        result <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%i</span><span class="st"> site&#39;</span> <span class="op">%</span> guess</span>
-<span id="cb51-62"><a href="#cb51-62"></a>        <span class="cf">if</span> guess <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb51-63"><a href="#cb51-63"></a>            result <span class="op">+=</span> <span class="st">&#39;s&#39;</span></span>
-<span id="cb51-64"><a href="#cb51-64"></a></span>
-<span id="cb51-65"><a href="#cb51-65"></a>        <span class="co">#</span></span>
-<span id="cb51-66"><a href="#cb51-66"></a>        <span class="co">#    now we format the line. See the PrintFormat module</span></span>
-<span id="cb51-67"><a href="#cb51-67"></a>        <span class="co">#    for some examples</span></span>
-<span id="cb51-68"><a href="#cb51-68"></a>        <span class="co">#   PrintFormat.__section_list and _make_map are good start.</span></span>
-<span id="cb51-69"><a href="#cb51-69"></a>        <span class="co">#</span></span>
-<span id="cb51-70"><a href="#cb51-70"></a>                title<span class="op">=</span><span class="st">&#39;&#39;</span>.join((title, <span class="bu">str</span>(name).ljust(<span class="va">self</span>.NameWidth),</span>
-<span id="cb51-71"><a href="#cb51-71"></a>                <span class="st">&#39; :  &#39;</span>, result, <span class="st">&#39;.</span><span class="ch">\n</span><span class="st">&#39;</span>))</span>
-<span id="cb51-72"><a href="#cb51-72"></a>    <span class="bu">print</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">No more enzyme.&#39;</span></span>
-<span id="cb51-73"><a href="#cb51-73"></a>        <span class="cf">return</span>  title</span>
-<span id="cb51-74"><a href="#cb51-74"></a>    <span class="co">#</span></span>
-<span id="cb51-75"><a href="#cb51-75"></a>    <span class="co">#    I you want to print the non cutting enzymes use</span></span>
-<span id="cb51-76"><a href="#cb51-76"></a>    <span class="co">#    the following return instead of the previous one:</span></span>
-<span id="cb51-77"><a href="#cb51-77"></a>    <span class="co">#</span></span>
-<span id="cb51-78"><a href="#cb51-78"></a>    <span class="co">#return  title + t + self._make_nocut_only(nc,s1)</span></span>
-<span id="cb51-79"><a href="#cb51-79"></a></span>
-<span id="cb51-80"><a href="#cb51-80"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># You initiate and use it as before</span></span>
-<span id="cb51-81"><a href="#cb51-81"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([], [<span class="st">&#39;A&#39;</span>])</span>
-<span id="cb51-82"><a href="#cb51-82"></a><span class="op">&gt;&gt;&gt;</span> multi_site <span class="op">=</span> Seq(<span class="st">&#39;AAA&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span><span class="st">&#39;G&#39;</span> <span class="op">+</span> KpnI.site <span class="op">+</span> EcoRV.site <span class="op">+</span> <span class="st">&#39;CT&#39;</span> <span class="op">+\</span></span>
-<span id="cb51-83"><a href="#cb51-83"></a>SmaI.site <span class="op">+</span> <span class="st">&#39;GT&#39;</span> <span class="op">+</span> FokI.site <span class="op">+</span> <span class="st">&#39;GAAAGGGC&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>)</span>
-<span id="cb51-84"><a href="#cb51-84"></a><span class="op">&gt;&gt;&gt;</span></span>
-<span id="cb51-85"><a href="#cb51-85"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> UselessAnalysis(rb, multi_site)</span>
-<span id="cb51-86"><a href="#cb51-86"></a><span class="op">&gt;&gt;&gt;</span> b.print_that() <span class="co"># Well, I let you discover if you haven&#39;t already guessed</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; class UselessAnalysis(Analysis):
+
+    def __init__(self, rb=RestrictionBatch(), seq=Seq(&#39;&#39;), lin=True):
+    &quot;&quot;&quot;UselessAnalysis -&gt; A class that waste your time&quot;&quot;&quot;
+    #
+    #    Unless you want to do something more fancy all
+    #    you need to do here is instantiate Analysis.
+    #    Don&#39;t forget the self in __init__
+    #
+        Analysis.__init__(self, rb, seq, lin)
+
+    def make_format(self, cut=[], t=&#39;&#39;, nc=[], s=&#39;&#39;):
+    &quot;&quot;&quot;not funny&quot;&quot;&quot;
+    #
+    #    Generally, you don&#39;t need to do anything else here
+    #    This will tell to your new class to default to the
+    #    _make_joke format.
+    #
+        return self._make_joke(cut, t, nc, s)
+
+    def print_as(self, what=&#39;joke&#39;):
+    &quot;&quot;&quot;Never know somebody might want to change the behaviour of
+    this class.&quot;&quot;&quot;
+    #
+    #    add your new option to print_as
+    #
+        if what == &#39;joke&#39;:
+        self.make_format = self._make_joke
+            return
+    else:
+        #
+        #   The other options will be treated as before
+        #
+        return Analysis.print_as(self, what)
+
+    def _make_joke(self, cut=[], title=&#39;&#39;, nc=[], s1=&#39;&#39;):
+    &quot;&quot;&quot;UA._make_joke(cut, t, nc, s) -&gt; new analysis output&quot;&quot;&quot;
+    #
+    #    starting your new method with &#39;_make_&#39;
+    #    will give a hint to what it is suppose to do
+    #
+    #    We will not process the non-cutting enzymes
+    #    Their names are in nc
+    #    s1 is the string printed before them
+    #
+    if not title:
+        title = &#39;\nYou have guessed right the following enzymes:\n\n&#39;
+    for name, sites in cut:
+        #
+        #    cut contains:
+        #    - the name of the enzymes which cut the sequence (name)
+        #    - a list of the site positions (sites)
+        #
+        guess = raw_input(&quot;next enzyme is %s, Guess how many sites ?\n&gt;&gt;&gt; &quot;%name)
+            try:
+                guess = int(guess)
+            except:
+                guess = None
+            if guess == len(sites):
+                print &#39;You did guess right. Good. Next.&#39;
+        result = &#39;%i site&#39; % guess
+        if guess &gt; 1:
+            result += &#39;s&#39;
+
+        #
+        #    now we format the line. See the PrintFormat module
+        #    for some examples
+        #   PrintFormat.__section_list and _make_map are good start.
+        #
+                title=&#39;&#39;.join((title, str(name).ljust(self.NameWidth),
+                &#39; :  &#39;, result, &#39;.\n&#39;))
+    print &#39;\nNo more enzyme.&#39;
+        return  title
+    #
+    #    I you want to print the non cutting enzymes use
+    #    the following return instead of the previous one:
+    #
+    #return  title + t + self._make_nocut_only(nc,s1)
+
+&gt;&gt;&gt; # You initiate and use it as before
+&gt;&gt;&gt; rb = RestrictionBatch([], [&#39;A&#39;])
+&gt;&gt;&gt; multi_site = Seq(&#39;AAA&#39; + EcoRI.site +&#39;G&#39; + KpnI.site + EcoRV.site + &#39;CT&#39; +\
+SmaI.site + &#39;GT&#39; + FokI.site + &#39;GAAAGGGC&#39; + EcoRI.site + &#39;ACGT&#39;)
+&gt;&gt;&gt;
+&gt;&gt;&gt; b = UselessAnalysis(rb, multi_site)
+&gt;&gt;&gt; b.print_that() # Well, I let you discover if you haven&#39;t already guessed</code></pre>
 <p>Using this example, as a template you should now be able to subclass <code>Analysis</code> as you wish. You will found more implementation details in the module <code>Bio.Restriction.PrintFormat</code> which contains the class providing all the <code>_make_*</code> methods.</p>
 <h3 id="limitation-and-caveat"><a name="7"></a>7. Limitation and caveat</h3>
 <p>Particularly, the class <code>Analysis</code> is a quick and dirty implementation based on the facilities furnished by the package. Please check your results and report any fault.</p>
@@ -1006,110 +1137,110 @@
 <p>As before no support has been yet implemented to find site mis-recognised by enzymes under high salt concentration conditions, the so-called star activity. This will be implemented as soon as I can get a good source of information for that.</p>
 <h4 id="safe-to-use-with-degenerated-dna"><a name="7.3"></a>7.3 Safe to use with degenerated DNA</h4>
 <p>It is safe to use degenerated DNA as input for the query. You will not be flooded with meaningless results. But this come at a price: GAA<strong><em>N</em></strong>TC will not be recognised as a potential EcoRI site for example, in fact it will not be recognised at all. Degenerated sequences will not be analysed. If your sequence is not fully sequenced, you will certainly miss restriction sites:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr&#39;</span>)</span>
-<span id="cb52-2"><a href="#cb52-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(a)</span>
-<span id="cb52-3"><a href="#cb52-3"></a>[<span class="dv">36</span>]</span>
-<span id="cb52-4"><a href="#cb52-4"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr&#39;</span>)</span>
-<span id="cb52-5"><a href="#cb52-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(b)</span>
-<span id="cb52-6"><a href="#cb52-6"></a>[]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; a = Seq(&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr&#39;)
+&gt;&gt;&gt; EcoRI.search(a)
+[36]
+&gt;&gt;&gt; b = Seq(&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr&#39;)
+&gt;&gt;&gt; EcoRI.search(b)
+[]</code></pre>
 <h4 id="non-standard-bases-in-dna-are-not-allowed"><a name="7.4"></a>7.4 Non standard bases in DNA are not allowed</h4>
 <p>While you can use degenerated DNA, using non standard base alphabet will make the enzymes choke, even if <code>Bio.Seq.Seq</code> accepts them. However, space-like characters (’ ‘,’‘,’, …) and digit will be removed but will not stop the enzyme analysing the sequence. You can use them but the fragments produced by <code>catalyse</code> will have lost any formatting. <code>catalyse</code> tries to keep the original case of the sequence (i.e lower case sequences will generate lower case fragments, upper case sequences upper case fragments), but mixed case will return upper case fragments:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a><span class="op">&gt;&gt;&gt;</span> c <span class="op">=</span> Seq(<span class="st">&#39;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr&#39;</span>)</span>
-<span id="cb53-2"><a href="#cb53-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(c)</span>
-<span id="cb53-3"><a href="#cb53-3"></a></span>
-<span id="cb53-4"><a href="#cb53-4"></a>Traceback (most recent call last):</span>
-<span id="cb53-5"><a href="#cb53-5"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
-<span id="cb53-6"><a href="#cb53-6"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">553</span>, <span class="kw">in</span> search</span>
-<span id="cb53-7"><a href="#cb53-7"></a>    cls.dna <span class="op">=</span> FormattedSeq(dna, linear)</span>
-<span id="cb53-8"><a href="#cb53-8"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">171</span>, <span class="kw">in</span> <span class="fu">__init__</span></span>
-<span id="cb53-9"><a href="#cb53-9"></a>    <span class="va">self</span>.data <span class="op">=</span> _check_bases(stringy)</span>
-<span id="cb53-10"><a href="#cb53-10"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">122</span>, <span class="kw">in</span> _check_bases</span>
-<span id="cb53-11"><a href="#cb53-11"></a>    <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;Invalid character found in </span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> <span class="bu">repr</span>(seq_string))</span>
-<span id="cb53-12"><a href="#cb53-12"></a><span class="pp">TypeError</span>: Invalid character found <span class="kw">in</span> <span class="st">&#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR&#39;</span></span>
-<span id="cb53-13"><a href="#cb53-13"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">\</span></span>
-<span id="cb53-14"><a href="#cb53-14"></a><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">\</span></span>
-<span id="cb53-15"><a href="#cb53-15"></a><span class="st">51 r&#39;</span>)</span>
-<span id="cb53-16"><a href="#cb53-16"></a><span class="op">&gt;&gt;&gt;</span> d</span>
-<span id="cb53-17"><a href="#cb53-17"></a>Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">51 r&#39;</span>)</span>
-<span id="cb53-18"><a href="#cb53-18"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(d)</span>
-<span id="cb53-19"><a href="#cb53-19"></a>[<span class="dv">36</span>]</span>
-<span id="cb53-20"><a href="#cb53-20"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(d)</span>
-<span id="cb53-21"><a href="#cb53-21"></a>(Seq(<span class="st">&#39;AATTCRRRRRRRRRRR&#39;</span>), Seq(<span class="st">&#39;NNNNNNNNNNNNNNNNNNNNNNNNNNNN</span></span>
-<span id="cb53-22"><a href="#cb53-22"></a><span class="st">NNNNNNG&#39;</span>))</span>
-<span id="cb53-23"><a href="#cb53-23"></a><span class="op">&gt;&gt;&gt;</span> e <span class="op">=</span> Seq(<span class="st">&#39;nnnnGAATTCrr&#39;</span>)</span>
-<span id="cb53-24"><a href="#cb53-24"></a><span class="op">&gt;&gt;&gt;</span> f <span class="op">=</span> Seq(<span class="st">&#39;NNNNGAATTCRR&#39;</span>)</span>
-<span id="cb53-25"><a href="#cb53-25"></a><span class="op">&gt;&gt;&gt;</span> g <span class="op">=</span> Seq(<span class="st">&#39;nnnngaattcrr&#39;</span>)</span>
-<span id="cb53-26"><a href="#cb53-26"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(e)</span>
-<span id="cb53-27"><a href="#cb53-27"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>), Seq(<span class="st">&#39;AATTCRR&#39;</span>))</span>
-<span id="cb53-28"><a href="#cb53-28"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(f)</span>
-<span id="cb53-29"><a href="#cb53-29"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>), Seq(<span class="st">&#39;AATTCRR&#39;</span>))</span>
-<span id="cb53-30"><a href="#cb53-30"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(g)</span>
-<span id="cb53-31"><a href="#cb53-31"></a>(Seq(<span class="st">&#39;nnnng&#39;</span>), Seq(<span class="st">&#39;aattcrr&#39;</span>))</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; c = Seq(&#39;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr&#39;)
+&gt;&gt;&gt; EcoRI.search(c)
+
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;, line 553, in search
+    cls.dna = FormattedSeq(dna, linear)
+  File &quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;, line 171, in __init__
+    self.data = _check_bases(stringy)
+  File &quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;, line 122, in _check_bases
+    raise TypeError(&quot;Invalid character found in %s&quot; % repr(seq_string))
+TypeError: Invalid character found in &#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR&#39;
+&gt;&gt;&gt; d = Seq(&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\
+26 nnnnn nnnnG AATTC rrrrr rrrrr \n\
+51 r&#39;)
+&gt;&gt;&gt; d
+Seq(&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r&#39;)
+&gt;&gt;&gt; EcoRI.search(d)
+[36]
+&gt;&gt;&gt; EcoRI.catalyse(d)
+(Seq(&#39;AATTCRRRRRRRRRRR&#39;), Seq(&#39;NNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNG&#39;))
+&gt;&gt;&gt; e = Seq(&#39;nnnnGAATTCrr&#39;)
+&gt;&gt;&gt; f = Seq(&#39;NNNNGAATTCRR&#39;)
+&gt;&gt;&gt; g = Seq(&#39;nnnngaattcrr&#39;)
+&gt;&gt;&gt; EcoRI.catalyse(e)
+(Seq(&#39;NNNNG&#39;), Seq(&#39;AATTCRR&#39;))
+&gt;&gt;&gt; EcoRI.catalyse(f)
+(Seq(&#39;NNNNG&#39;), Seq(&#39;AATTCRR&#39;))
+&gt;&gt;&gt; EcoRI.catalyse(g)
+(Seq(&#39;nnnng&#39;), Seq(&#39;aattcrr&#39;))</code></pre>
 <p>Not allowing other letters than IUPAC might seems drastic but this is really to limit errors. It is not totally fool proof but it does help.</p>
 <h4 id="sites-found-at-the-edge-of-linear-dna-might-not-be-accessible-in-a-real-digestion"><a name="7.5"></a>7.5 Sites found at the edge of linear DNA might not be accessible in a real digestion</h4>
 <p>While sites clearly outsides a sequence will not be reported, nothing has been done to try to determine if a restriction site at the end of a linear sequence is valid:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG&#39;</span>)</span>
-<span id="cb54-2"><a href="#cb54-2"></a><span class="op">&gt;&gt;&gt;</span> FokI.site           <span class="co"># site present</span></span>
-<span id="cb54-3"><a href="#cb54-3"></a><span class="co">&#39;GGATG&#39;</span></span>
-<span id="cb54-4"><a href="#cb54-4"></a><span class="op">&gt;&gt;&gt;</span> FokI.elucidate()        <span class="co"># but cut outside the sequence</span></span>
-<span id="cb54-5"><a href="#cb54-5"></a><span class="co">&#39;GGATGNNNNNNNNN^NNNN_N&#39;</span></span>
-<span id="cb54-6"><a href="#cb54-6"></a><span class="op">&gt;&gt;&gt;</span> FokI.search(d)      <span class="co"># therefore no site found</span></span>
-<span id="cb54-7"><a href="#cb54-7"></a>[]</span>
-<span id="cb54-8"><a href="#cb54-8"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(d)</span>
-<span id="cb54-9"><a href="#cb54-9"></a>[<span class="dv">2</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; d = Seq(&#39;GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG&#39;)
+&gt;&gt;&gt; FokI.site           # site present
+&#39;GGATG&#39;
+&gt;&gt;&gt; FokI.elucidate()        # but cut outside the sequence
+&#39;GGATGNNNNNNNNN^NNNN_N&#39;
+&gt;&gt;&gt; FokI.search(d)      # therefore no site found
+[]
+&gt;&gt;&gt; EcoRI.search(d)
+[2]</code></pre>
 <p><code>EcoRI</code> finds a site at position 2 even if it is highly unlikely that EcoRI accepts to cut this site in a tube. It is generally considered that at about 5 nucleotides must separate the site from the edge of the sequence to be reasonably sure the enzyme will work correctly. This “security margin” is variable from one enzyme to the other. In doubt consult the documentation for the enzyme.</p>
 <h4 id="restriction-reports-cutting-sites-not-enzyme-recognition-sites"><a name="7.6"></a>7.6 Restriction reports cutting sites not enzyme recognition sites</h4>
 <p>Some enzymes will cut twice each time they encounter a restriction site. The enzymes in this package report both cut not the site. Other software may only reports restriction sites. Therefore the output given for some enzymes might seems to be the double when compared with the results of these software. It is not a bug.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1"></a><span class="op">&gt;&gt;&gt;</span> AloI.cut_twice()</span>
-<span id="cb55-2"><a href="#cb55-2"></a><span class="va">True</span></span>
-<span id="cb55-3"><a href="#cb55-3"></a><span class="op">&gt;&gt;&gt;</span> AloI.fst5              <span class="co"># first cut</span></span>
-<span id="cb55-4"><a href="#cb55-4"></a><span class="op">-</span><span class="dv">7</span></span>
-<span id="cb55-5"><a href="#cb55-5"></a><span class="op">&gt;&gt;&gt;</span> AloI.scd5          <span class="co"># second cut</span></span>
-<span id="cb55-6"><a href="#cb55-6"></a><span class="dv">25</span></span>
-<span id="cb55-7"><a href="#cb55-7"></a><span class="op">&gt;&gt;&gt;</span> AloI.site</span>
-<span id="cb55-8"><a href="#cb55-8"></a><span class="co">&#39;GAACNNNNNNTCC&#39;</span></span>
-<span id="cb55-9"><a href="#cb55-9"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAA&#39;</span><span class="op">+</span> AloI.site <span class="op">+</span> <span class="st">&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span>)</span>
-<span id="cb55-10"><a href="#cb55-10"></a><span class="op">&gt;&gt;&gt;</span> b</span>
-<span id="cb55-11"><a href="#cb55-11"></a>Seq(<span class="st">&#39;AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span>)</span>
-<span id="cb55-12"><a href="#cb55-12"></a><span class="op">&gt;&gt;&gt;</span> AloI.search(b)  <span class="co"># one site, two cuts -&gt; two positions</span></span>
-<span id="cb55-13"><a href="#cb55-13"></a>[<span class="dv">5</span>, <span class="dv">37</span>]</span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; AloI.cut_twice()
+True
+&gt;&gt;&gt; AloI.fst5              # first cut
+-7
+&gt;&gt;&gt; AloI.scd5          # second cut
+25
+&gt;&gt;&gt; AloI.site
+&#39;GAACNNNNNNTCC&#39;
+&gt;&gt;&gt; b = Seq(&#39;AAAAAAAAAAA&#39;+ AloI.site + &#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;)
+&gt;&gt;&gt; b
+Seq(&#39;AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;)
+&gt;&gt;&gt; AloI.search(b)  # one site, two cuts -&gt; two positions
+[5, 37]</code></pre>
 <h3 id="annex-modifying-dir-to-use-with-from-bio.restriction-import"><a name="8"></a>8. Annex: modifying dir() to use with from Bio.Restriction import *</h3>
 <p>Having all the enzymes imported directly in the shell is useful when working in an interactive shell (even if it is not recommended by the purists). Here is a little hack to get some sanity back when using dir() in those conditions:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># we will change the builtin dir() function to get ride of the enzyme names.</span></span>
-<span id="cb56-2"><a href="#cb56-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> sys</span>
-<span id="cb56-3"><a href="#cb56-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> <span class="bu">dir</span>(<span class="bu">object</span><span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb56-4"><a href="#cb56-4"></a>    <span class="co">&quot;&quot;&quot;dir([object]) -&gt; list of string.</span></span>
-<span id="cb56-5"><a href="#cb56-5"></a></span>
-<span id="cb56-6"><a href="#cb56-6"></a><span class="co">    over-ride the built-in function to get some clarity.&quot;&quot;&quot;</span></span>
-<span id="cb56-7"><a href="#cb56-7"></a>    <span class="cf">if</span> <span class="bu">object</span>:</span>
-<span id="cb56-8"><a href="#cb56-8"></a>        <span class="co"># we only want to modify dir(),</span></span>
-<span id="cb56-9"><a href="#cb56-9"></a>        <span class="co"># so here we return the result of the builtin function.</span></span>
-<span id="cb56-10"><a href="#cb56-10"></a>        <span class="cf">return</span> __builtins__.<span class="bu">dir</span>(<span class="bu">object</span>)</span>
-<span id="cb56-11"><a href="#cb56-11"></a>    <span class="cf">else</span>:</span>
-<span id="cb56-12"><a href="#cb56-12"></a>        <span class="co"># now the part we want to modify.</span></span>
-<span id="cb56-13"><a href="#cb56-13"></a>        <span class="co"># All the enzymes are in a RestrictionBatch (we will talk about</span></span>
-<span id="cb56-14"><a href="#cb56-14"></a>        <span class="co"># that later, for the moment simply believe me).</span></span>
-<span id="cb56-15"><a href="#cb56-15"></a>        <span class="co"># So if we remove from the results of dir() everything which is</span></span>
-<span id="cb56-16"><a href="#cb56-16"></a>        <span class="co"># in AllEnzymes we will get a much shorter list when we do dir()</span></span>
-<span id="cb56-17"><a href="#cb56-17"></a>        <span class="co">#</span></span>
-<span id="cb56-18"><a href="#cb56-18"></a>        <span class="co"># the current level is __main__ ie dir() is equivalent to</span></span>
-<span id="cb56-19"><a href="#cb56-19"></a>        <span class="co"># ask what&#39;s in __main__ at the moment.</span></span>
-<span id="cb56-20"><a href="#cb56-20"></a>        <span class="co"># we can&#39;t access __main__ directly.</span></span>
-<span id="cb56-21"><a href="#cb56-21"></a>        <span class="co"># so we will use sys.modules[&#39;__main__&#39;] to reach it.</span></span>
-<span id="cb56-22"><a href="#cb56-22"></a>        <span class="co"># the following list comprehension remove from the result of</span></span>
-<span id="cb56-23"><a href="#cb56-23"></a>        <span class="co"># dir() everything which is also present in AllEnzymes.</span></span>
-<span id="cb56-24"><a href="#cb56-24"></a>        <span class="co">#</span></span>
-<span id="cb56-25"><a href="#cb56-25"></a>        <span class="cf">return</span> [x <span class="cf">for</span> x <span class="kw">in</span> __builtins__.<span class="bu">dir</span>(sys.modules[<span class="st">&#39;__main__&#39;</span>])</span>
-<span id="cb56-26"><a href="#cb56-26"></a>            <span class="cf">if</span> <span class="kw">not</span> x <span class="kw">in</span> AllEnzymes]</span>
-<span id="cb56-27"><a href="#cb56-27"></a></span>
-<span id="cb56-28"><a href="#cb56-28"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># now let&#39;s see if it works.</span></span>
-<span id="cb56-29"><a href="#cb56-29"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">dir</span>()</span>
-<span id="cb56-30"><a href="#cb56-30"></a>[<span class="st">&#39;AllEnzymes&#39;</span>, <span class="st">&#39;Analysis&#39;</span>, <span class="st">&#39;CommOnly&#39;</span>, <span class="st">&#39;NonComm&#39;</span>, <span class="st">&#39;PrintFormat&#39;</span>, <span class="st">&#39;RanaConfig&#39;</span>,</span>
-<span id="cb56-31"><a href="#cb56-31"></a> <span class="st">&#39;Restriction&#39;</span>, <span class="st">&#39;RestrictionBatch&#39;</span>, <span class="st">&#39;Restriction_Dictionary&#39;</span>, <span class="st">&#39;__builtins__&#39;</span>,</span>
-<span id="cb56-32"><a href="#cb56-32"></a> <span class="st">&#39;__doc__&#39;</span>, <span class="st">&#39;__name__&#39;</span>, <span class="st">&#39;dir&#39;</span>, <span class="st">&#39;sys&#39;</span>]</span>
-<span id="cb56-33"><a href="#cb56-33"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># ok that&#39;s much better.</span></span>
-<span id="cb56-34"><a href="#cb56-34"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># The enzymes are still there</span></span>
-<span id="cb56-35"><a href="#cb56-35"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.site</span>
-<span id="cb56-36"><a href="#cb56-36"></a><span class="co">&#39;GAATTC&#39;</span></span></code></pre></div>
+<pre class="pycon"><code>&gt;&gt;&gt; # we will change the builtin dir() function to get ride of the enzyme names.
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; def dir(object=None):
+    &quot;&quot;&quot;dir([object]) -&gt; list of string.
+
+    over-ride the built-in function to get some clarity.&quot;&quot;&quot;
+    if object:
+        # we only want to modify dir(),
+        # so here we return the result of the builtin function.
+        return __builtins__.dir(object)
+    else:
+        # now the part we want to modify.
+        # All the enzymes are in a RestrictionBatch (we will talk about
+        # that later, for the moment simply believe me).
+        # So if we remove from the results of dir() everything which is
+        # in AllEnzymes we will get a much shorter list when we do dir()
+        #
+        # the current level is __main__ ie dir() is equivalent to
+        # ask what&#39;s in __main__ at the moment.
+        # we can&#39;t access __main__ directly.
+        # so we will use sys.modules[&#39;__main__&#39;] to reach it.
+        # the following list comprehension remove from the result of
+        # dir() everything which is also present in AllEnzymes.
+        #
+        return [x for x in __builtins__.dir(sys.modules[&#39;__main__&#39;])
+            if not x in AllEnzymes]
+
+&gt;&gt;&gt; # now let&#39;s see if it works.
+&gt;&gt;&gt; dir()
+[&#39;AllEnzymes&#39;, &#39;Analysis&#39;, &#39;CommOnly&#39;, &#39;NonComm&#39;, &#39;PrintFormat&#39;, &#39;RanaConfig&#39;,
+ &#39;Restriction&#39;, &#39;RestrictionBatch&#39;, &#39;Restriction_Dictionary&#39;, &#39;__builtins__&#39;,
+ &#39;__doc__&#39;, &#39;__name__&#39;, &#39;dir&#39;, &#39;sys&#39;]
+&gt;&gt;&gt; # ok that&#39;s much better.
+&gt;&gt;&gt; # The enzymes are still there
+&gt;&gt;&gt; EcoRI.site
+&#39;GAATTC&#39;</code></pre>
 </body>
 </html>
