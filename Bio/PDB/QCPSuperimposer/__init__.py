@@ -110,7 +110,7 @@ class QCPSuperimposer:
         """
         # clear everything from previous runs
         self._clear()
-        # store cordinates
+        # store coordinates
         self.reference_coords = reference_coords
         self.coords = coords
         n = reference_coords.shape

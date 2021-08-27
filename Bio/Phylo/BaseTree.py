@@ -1088,7 +1088,7 @@ class Clade(TreeElement, TreeMixin):
         return iter(self.clades)
 
     def __len__(self):
-        """Return the number of clades directy under the root."""
+        """Return the number of clades directly under the root."""
         return len(self.clades)
 
     def __bool__(self):

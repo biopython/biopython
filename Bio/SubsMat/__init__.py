@@ -387,7 +387,7 @@ def _build_obs_freq_mat(acc_rep_mat):
 
 
 def _exp_freq_table_from_obs_freq(obs_freq_mat):
-    """Build expected frequence table from observed frequences (PRIVATE)."""
+    """Build expected frequence table from observed frequencies (PRIVATE)."""
     exp_freq_table = {}
     for i in obs_freq_mat.alphabet:
         exp_freq_table[i] = 0.0

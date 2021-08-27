@@ -2798,7 +2798,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     <BLANKLINE>
 
     You can also set the value of attributes directly during construction
-    of the PairwiseAligner object by providing them as keyword arguemnts:
+    of the PairwiseAligner object by providing them as keyword arguments:
 
     >>> aligner = Align.PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
     >>> for alignment in aligner.align("TACCG", "ACG"):

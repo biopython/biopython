@@ -209,7 +209,7 @@ class Chromosome(_ChromosomeComponent):
          - scale_num - A number of scale the drawing by. This is useful if
            you want to draw multiple chromosomes of different sizes at the
            same scale. If this is not set, then the chromosome drawing will
-           be scaled by the number of segements in the chromosome (so each
+           be scaled by the number of segments in the chromosome (so each
            chromosome will be the exact same final size).
 
         """
@@ -641,13 +641,13 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         ReportLab color (string or object), and optional ReportLab fill color.
 
         Note we require 0 <= start <= end <= bp_length, and within the vertical
-        space allocated to this segmenet lines will be places according to the
+        space allocated to this segment lines will be places according to the
         start/end coordinates (starting from the top).
 
         Positive stand features are drawn on the right, negative on the left,
         otherwise all the way across.
 
-        We recommend using consisent units for all the segment's scale values
+        We recommend using consistent units for all the segment's scale values
         (e.g. their length in base pairs).
 
         When providing features as SeqFeature objects, the default color

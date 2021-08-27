@@ -534,7 +534,7 @@ class JASPAR5:
             """
             if all_versions:
                 for id in matrix_id:
-                    # ignore vesion here, this is a stupidity filter
+                    # ignore version here, this is a stupidity filter
                     (base_id, version) = jaspar.split_jaspar_id(id)
                     cur.execute("select ID from MATRIX where BASE_ID = %s", (base_id,))
 
@@ -542,7 +542,7 @@ class JASPAR5:
                     for row in rows:
                         int_ids.append(row[0])
             else:
-                # only the lastest version, or the requested version
+                # only the latest version, or the requested version
                 for id in matrix_id:
                     (base_id, version) = jaspar.split_jaspar_id(id)
 
@@ -753,7 +753,7 @@ class JASPAR5:
 
         if len(int_ids) < 1:
             warnings.warn(
-                "Zero motifs returned with current select critera", BiopythonWarning
+                "Zero motifs returned with current select criteria", BiopythonWarning
             )
 
         return int_ids

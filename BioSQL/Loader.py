@@ -1007,7 +1007,7 @@ class DatabaseLoader:
         # TODO - Record the location_operator (e.g. "join" or "order")
         # using the location_qualifier_value table (which we and BioPerl
         # have historically left empty).
-        # Note this will need an ontology term for the location qualifer
+        # Note this will need an ontology term for the location qualifier
         # (location_qualifier_value.term_id) for which oddly the schema
         # does not allow NULL.
         if feature.location_operator:

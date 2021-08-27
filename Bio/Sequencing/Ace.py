@@ -40,7 +40,7 @@ sorted into the right place.
 see _RecordConsumer for details.
 
 The second option is to  iterate over the contigs of an ace file one by one
-in the ususal way::
+in the usual way::
 
     from Bio.Sequencing import Ace
     contigs = Ace.parse(open('my_ace_file.ace'))

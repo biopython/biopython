@@ -79,7 +79,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
         handle = self._handle
         handle.seek(0)
-        # Alread did this in __init__ but need handle in right place
+        # Already did this in __init__ but need handle in right place
         (
             header_length,
             index_offset,

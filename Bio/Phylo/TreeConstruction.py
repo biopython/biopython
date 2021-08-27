@@ -67,7 +67,7 @@ class _Matrix:
     >>> m[0,1]
     7
 
-    Also you can delete or insert a column&row of elemets by index.
+    Also you can delete or insert a column&row of elements by index.
 
     >>> m
     _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
@@ -914,7 +914,7 @@ class NNITreeSearcher(TreeSearcher):
                     left_right = left.clades[1]
                     right_left = right.clades[0]
                     right_right = right.clades[1]
-                    # neightbor 1 (left_left + right_right)
+                    # neighbor 1 (left_left + right_right)
                     del left.clades[1]
                     del right.clades[1]
                     left.clades.append(right_right)

@@ -20,7 +20,7 @@ Bio.SearchIO.BlastIO was tested on the following BLAST+ flavors and versions:
 You should also be able to parse outputs from a local BLAST+ search or from
 NCBI's web interface. Although the module was not tested against all BLAST+,
 it should still be able to parse these other versions' outputs. Please submit
-a bug report if you stumble upon an unparseable file.
+a bug report if you stumble upon an unparsable file.
 
 Some output formats from the BLAST legacy suite (BLAST+'s predecessor) may
 still be parsed by this module. However, results are not guaranteed. You may

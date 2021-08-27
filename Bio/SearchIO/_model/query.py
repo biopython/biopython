@@ -698,7 +698,7 @@ class QueryResult(_BaseSearchObject):
         :param in_place: whether to do in-place sorting or no
         :type in_place: bool
 
-        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        ``sort`` defaults to sorting in-place, to mimic Python's ``list.sort``
         method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted QueryResult object and keep the initial one
         unsorted.

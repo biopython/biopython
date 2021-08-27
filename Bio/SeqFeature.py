@@ -2202,7 +2202,7 @@ class PositionGap:
     """Simple class to hold information about a gap between positions."""
 
     def __init__(self, gap_size):
-        """Intialize with a position object containing the gap information."""
+        """Initialize with a position object containing the gap information."""
         self.gap_size = gap_size
 
     def __repr__(self):

@@ -381,7 +381,7 @@ SOLEXA_SCORE_OFFSET = 64
 
 
 def solexa_quality_from_phred(phred_quality):
-    """Covert a PHRED quality (range 0 to about 90) to a Solexa quality.
+    """Convert a PHRED quality (range 0 to about 90) to a Solexa quality.
 
     PHRED and Solexa quality scores are both log transformations of a
     probality of error (high score = low probability of error). This function

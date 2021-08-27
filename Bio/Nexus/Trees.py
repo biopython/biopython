@@ -565,7 +565,7 @@ class Tree(Nodes.Chain):
         elif not taxon_list and ntax:
             taxon_list = ["taxon" + str(i + 1) for i in range(ntax)]
         elif not ntax and not taxon_list:
-            raise TreeError("Either numer of taxa or list of taxa must be specified.")
+            raise TreeError("Either number of taxa or list of taxa must be specified.")
         elif ntax != len(taxon_list):
             raise TreeError("Length of taxon list must correspond to ntax.")
         # initiate self with empty root
@@ -667,13 +667,13 @@ class Tree(Nodes.Chain):
                     info_string = ":0.00"
             elif self.branchlengths_only:  # write only branchlengths, ignore support
                 info_string = ":%1.5f" % (data.branchlength)
-            else:  # write suport and branchlengths (e.g. .con tree of mrbayes)
+            else:  # write support and branchlengths (e.g. .con tree of mrbayes)
                 if terminal:
                     info_string = ":%1.5f" % (data.branchlength)
                 else:
                     if (
                         data.branchlength is not None and data.support is not None
-                    ):  # we have blen and suppport
+                    ):  # we have blen and support
                         info_string = "%1.2f:%1.5f" % (data.support, data.branchlength)
                     elif data.branchlength is not None:  # we have only blen
                         info_string = "0.00000:%1.5f" % (data.branchlength)
@@ -849,7 +849,7 @@ class Tree(Nodes.Chain):
         )  # add branch to outgroup to unrooted tree
         _connect_subtree(root.id, ingroup_node)  # add ingroup
         _connect_subtree(root.id, outgroup_node)  # add outgroup
-        # if theres still a lonely node in self.chain, then it's the old root, and we delete it
+        # if there's still a lonely node in self.chain, then it's the old root, and we delete it
         oldroot = [
             i for i in self.all_ids() if self.node(i).prev is None and i != self.root
         ]

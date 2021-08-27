@@ -532,7 +532,7 @@ def _read_dt(record, line):
         date = cols[0].rstrip(",")
 
         # Re-use the historical property names, even though
-        # the meaning has changed slighty:
+        # the meaning has changed slightly:
         if "INTEGRATED" in uprline:
             record.created = date, version
         elif "SEQUENCE VERSION" in uprline:

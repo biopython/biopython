@@ -1311,7 +1311,7 @@ class affine_penalty:
 
 
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
-    """Calculate a penality score for the gap function."""
+    """Calculate a penalty score for the gap function."""
     if length <= 0:
         return 0.0
     penalty = open + extend * length

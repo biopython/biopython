@@ -762,7 +762,7 @@ class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
-        """Initilize the class."""
+        """Initialize the class."""
         if fileobj:
             assert filename is None
             handle = fileobj

@@ -405,7 +405,7 @@ def gafiterator(handle):
 
     Example: open, read, interat and filter results.
 
-    Original data file has been trimed to ~600 rows.
+    Original data file has been trimmed to ~600 rows.
 
     Original source ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/YEAST/goa_yeast.gaf.gz
 

@@ -610,7 +610,7 @@ class Feature:
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
-     - key - The key name of the featue (ie. source)
+     - key - The key name of the feature (ie. source)
      - location - The string specifying the location of the feature.
      - qualfiers - A list of Qualifier objects in the feature.
 

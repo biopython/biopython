@@ -540,7 +540,7 @@ def _mle(
 
 
 def _argmaxes(vector, allowance=None):
-    """Return indeces of the maximum values aong the vector (PRIVATE)."""
+    """Return indices of the maximum values aong the vector (PRIVATE)."""
     return [numpy.argmax(vector)]
 
 
