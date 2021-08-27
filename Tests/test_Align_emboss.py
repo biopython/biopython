@@ -229,7 +229,7 @@ class TestEmboss(unittest.TestCase):
     def test_simple_example(self):
         # Alignment file obtained from EMBOSS:
         # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
-        path = "Emboss/align.simple"
+        path = "Emboss/alignret.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "alignret")
