@@ -43,7 +43,7 @@ ap.add_argument(
     default="HSEb",
 )
 ap.add_argument(
-    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)",
+    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)"
 )
 ap.add_argument(
     "-r",

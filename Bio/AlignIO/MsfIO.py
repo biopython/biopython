@@ -316,7 +316,7 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w})
             for (i, s, w) in zip(ids, seqs, weights)
         )
 

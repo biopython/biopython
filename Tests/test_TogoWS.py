@@ -163,7 +163,7 @@ class TogoEntry(unittest.TestCase):
         data = Medline.read(handle)
         handle.close()
         self.assertEqual(
-            data["TI"], "From genomics to chemical genomics: new developments in KEGG.",
+            data["TI"], "From genomics to chemical genomics: new developments in KEGG."
         )
         self.assertEqual(
             data["AU"],

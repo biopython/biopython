@@ -2860,7 +2860,7 @@ TT-GGAA
             numpy.array_equal(
                 alignment.aligned,
                 numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]),
-            ),
+            )
         )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -3785,8 +3785,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.query_internal_extend_gap_score,
         )
         self.assertAlmostEqual(
-            aligner.query_left_open_gap_score,
-            pickled_aligner.query_left_open_gap_score,
+            aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score
         )
         self.assertAlmostEqual(
             aligner.query_left_extend_gap_score,
@@ -3870,8 +3869,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.query_internal_extend_gap_score,
         )
         self.assertAlmostEqual(
-            aligner.query_left_open_gap_score,
-            pickled_aligner.query_left_open_gap_score,
+            aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score
         )
         self.assertAlmostEqual(
             aligner.query_left_extend_gap_score,

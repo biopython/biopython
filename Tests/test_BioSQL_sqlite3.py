@@ -16,11 +16,7 @@ from seq_tests_common import SeqRecordTestBaseClass
 from common_BioSQL import *  # noqa: F403
 
 # Import these explicitly to avoid flake8 F405 below:
-from common_BioSQL import (
-    load_biosql_ini,
-    check_config,
-    temp_db_filename,
-)
+from common_BioSQL import load_biosql_ini, check_config, temp_db_filename
 
 # Constants for the database driver
 DBDRIVER = "sqlite3"

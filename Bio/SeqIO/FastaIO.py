@@ -203,7 +203,7 @@ class FastaIterator(SequenceIterator):
                     # Should we use SeqRecord default for no ID?
                     first_word = ""
                 yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title,
+                    Seq(sequence), id=first_word, name=first_word, description=title
                 )
 
 
@@ -239,7 +239,7 @@ class FastaTwoLineIterator(SequenceIterator):
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title,
+                Seq(sequence), id=first_word, name=first_word, description=title
             )
 
 

@@ -560,7 +560,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                     for acc in accs:
                         self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
                         self.assertEqual(
-                            acc, acc.strip(), "Bad accession in annotations: %r" % acc,
+                            acc, acc.strip(), "Bad accession in annotations: %r" % acc
                         )
                     self.assertEqual(
                         len(set(accs)),
@@ -570,7 +570,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 for ref in record.dbxrefs:
                     self.assertTrue(ref, "Bad cross reference in dbxrefs: %r" % ref)
                     self.assertEqual(
-                        ref, ref.strip(), "Bad cross reference in dbxrefs: %r" % ref,
+                        ref, ref.strip(), "Bad cross reference in dbxrefs: %r" % ref
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
@@ -3743,10 +3743,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00",
         ]
         lengths = [43, 43, 43, 43]
-        molecule_types = {
-            "seqxml": "protein",
-            "nexus": "protein",
-        }
+        molecule_types = {"seqxml": "protein", "nexus": "protein"}
         alignment = """\
  MMMEEE alignment column 0
  TQIVVV alignment column 1
@@ -4359,9 +4356,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["EBE03TV04IHLTF.77-243"]
         lengths = [30]
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "phd",
             False,
@@ -5063,9 +5058,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq",
             False,
@@ -5093,9 +5086,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq",
             False,
@@ -5123,9 +5114,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq-illumina",
             False,
@@ -5153,9 +5142,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq-solexa",
             False,
@@ -5357,9 +5344,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["3100"]
         lengths = [795]
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "abi",
             False,

@@ -318,10 +318,7 @@ class TestSeqAddition(unittest.TestCase):
             Seq.Seq("U.CAG"),
             "UGCAU",
         ]
-        self.nuc = [
-            Seq.Seq("ATCG"),
-            "UUUTTTACG",
-        ]
+        self.nuc = [Seq.Seq("ATCG"), "UUUTTTACG"]
         self.protein = [
             Seq.Seq("ATCGPK"),
             Seq.Seq("atcGPK"),
@@ -621,7 +618,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_setting_slices(self):
         self.assertEqual(
-            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
+            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq"
         )
 
         self.mutable_s[1:3] = "GAT"
@@ -640,7 +637,7 @@ class TestMutableSeq(unittest.TestCase):
         if numpy is not None:
             one, three, five, seven = numpy.array([1, 3, 5, 7])  # numpy integers
             self.assertEqual(
-                Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq",
+                Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq"
             )
 
             self.mutable_s[one:three] = "GAT"

@@ -252,7 +252,7 @@ class HSP:
         else:
             lines.append(
                 "Query:%8s %s...%s %s"
-                % (self.query_start, self.query[:45], self.query[-3:], self.query_end,)
+                % (self.query_start, self.query[:45], self.query[-3:], self.query_end)
             )
             lines.append("               %s...%s" % (self.match[:45], self.match[-3:]))
             lines.append(

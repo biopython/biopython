@@ -960,21 +960,17 @@ class TestEmboss(unittest.TestCase):
             repr(alignment.sequences[0].seq),
             "Seq({78: 'CGTTTGAGTCTGGGATG'}, length=95)",
         )
-        self.assertEqual(
-            alignment.sequences[0].seq[78:95], "CGTTTGAGTCTGGGATG",
-        )
-        self.assertEqual(
-            alignment.sequences[1].seq[0:18], "CGTTTGAGTACTGGGATG",
-        )
+        self.assertEqual(alignment.sequences[0].seq[78:95], "CGTTTGAGTCTGGGATG")
+        self.assertEqual(alignment.sequences[1].seq[0:18], "CGTTTGAGTACTGGGATG")
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates, numpy.array([[78, 87, 87, 95], [0, 9, 10, 18]]),
+                alignment.coordinates, numpy.array([[78, 87, 87, 95], [0, 9, 10, 18]])
             )
         )
         self.assertEqual(alignment[0], "CGTTTGAGT-CTGGGATG")
         self.assertEqual(alignment[1], "CGTTTGAGTACTGGGATG")
         self.assertEqual(
-            alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||",
+            alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||"
         )
 
 

@@ -1065,9 +1065,7 @@ class StringMethodTests(unittest.TestCase):
     def test_join_Seq(self):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
-        self.assertEqual(
-            "N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
-        )
+        self.assertEqual("N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]))
 
         spacer1 = Seq("")
         spacers = [spacer1, Seq("NNNNN"), Seq("GGG")]
@@ -1128,11 +1126,9 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
         self.assertEqual(
-            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
+            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")])
         )
-        self.assertRaises(
-            TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
-        )
+        self.assertRaises(TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]))
 
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
@@ -1185,11 +1181,7 @@ class StringMethodTests(unittest.TestCase):
         # Only expect it to take Seq objects and/or strings in an iterable!
 
         spacer1 = MutableSeq("")
-        spacers = [
-            spacer1,
-            MutableSeq("NNNNN"),
-            MutableSeq("GGG"),
-        ]
+        spacers = [spacer1, MutableSeq("NNNNN"), MutableSeq("GGG")]
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
         example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
 
@@ -1931,7 +1923,7 @@ class PartialSequenceTests(unittest.TestCase):
             "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)",
         )
         self.assertEqual(
-            repr(p1 + t), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)",
+            repr(p1 + t), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)"
         )
         self.assertEqual(
             repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)"
@@ -1950,8 +1942,7 @@ class PartialSequenceTests(unittest.TestCase):
             "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)",
         )
         self.assertEqual(
-            repr(p2 + t),
-            "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)",
+            repr(p2 + t), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)"
         )
         self.assertEqual(t + s1, Seq("ACGTacgtNNNNnnABCD"))
         self.assertEqual(t + s2, Seq("ACGTacgtNNNNnnEFG"))

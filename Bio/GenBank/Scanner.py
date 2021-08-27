@@ -529,7 +529,7 @@ class InsdcScanner:
                 yield record
 
     def parse_cds_features(
-        self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product"),
+        self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product")
     ):
         """Parse CDS features, return SeqRecord object iterator.
 

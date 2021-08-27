@@ -495,12 +495,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_addition(self):
         """Check can add Seq objects from BioSQL together."""
         test_seq = self.item.seq
-        for other in [
-            Seq("ACGT"),
-            MutableSeq("ACGT"),
-            "ACGT",
-            test_seq,
-        ]:
+        for other in [Seq("ACGT"), MutableSeq("ACGT"), "ACGT", test_seq]:
             test = test_seq + other
             self.assertEqual(test, str(test_seq) + str(other))
             self.assertIsInstance(test, Seq)

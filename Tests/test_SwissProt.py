@@ -3323,7 +3323,7 @@ class TestSwissProt(unittest.TestCase):
             "RecName: Full=Photosystem II reaction center protein L {ECO:0000255|HAMAP-Rule:MF_01317}; Short=PSII-L {ECO:0000255|HAMAP-Rule:MF_01317};",
         )
         self.assertEqual(
-            repr(seq_record.seq), "Seq('MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN')",
+            repr(seq_record.seq), "Seq('MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN')"
         )
 
         with open(datafile) as test_handle:

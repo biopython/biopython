@@ -362,7 +362,7 @@ class TestBaseClassMethods(unittest.TestCase):
             self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75)
         )
         self.assertEqual(
-            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100),
+            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100)
         )
         self.assertEqual(
             self.seq1_twobit.find("CT", None, 100),

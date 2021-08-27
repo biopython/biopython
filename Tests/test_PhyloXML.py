@@ -102,27 +102,27 @@ class ParseTests(unittest.TestCase):
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
     # lvl-2 clades, sub-clade counts, lvl-3 clades
-    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2)),),),)
-    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2))),))
+    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2))),))
     test_shape_phylo = _test_shape_factory(
         EX_PHYLO,
         (
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((0, ()), (2, (0, 0)),),
-            ((3, (0, 0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((0, ()), (2, (0, 0))),
+            ((3, (0, 0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
         ),
     )
-    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2))),))
 
 
 class TreeTests(unittest.TestCase):

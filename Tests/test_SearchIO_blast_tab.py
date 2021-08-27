@@ -771,11 +771,10 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1e-04, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
         self.assertEqual(
-            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL",
-            hsp.query.seq,
+            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", hsp.query.seq
         )
         self.assertEqual(
-            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", hsp.hit.seq,
+            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", hsp.hit.seq
         )
         self.assertEqual(70.0, hsp.bitscore_raw)
         self.assertEqual(20, hsp.ident_num)
@@ -969,11 +968,10 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1e-04, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
         self.assertEqual(
-            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL",
-            hsp.query.seq,
+            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", hsp.query.seq
         )
         self.assertEqual(
-            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", hsp.hit.seq,
+            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", hsp.hit.seq
         )
 
         # check if we've finished iteration over qresults

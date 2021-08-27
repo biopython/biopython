@@ -303,7 +303,7 @@ class GraphTest(unittest.TestCase):
 
         self.assertEqual(
             gd[4:16],
-            [(5, 15), (10, 20),],  # noqa 231
+            [(5, 15), (10, 20)],  # noqa 231
             "Unable to insert and retrieve points correctly",
         )
 

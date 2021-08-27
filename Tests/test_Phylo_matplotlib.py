@@ -64,14 +64,8 @@ class UtilTests(unittest.TestCase):
         pyplot.ioff()  # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, "phyloxml")
         apaf = Phylo.read(EX_APAF, "phyloxml")
-        label_colors_dollo = {
-            "f_50": "red",
-            "f_34": "blue",
-        }
-        label_colors_apaf = {
-            "22_MOUSE": "red",
-            "18_NEMVE": "blue",
-        }
+        label_colors_dollo = {"f_50": "red", "f_34": "blue"}
+        label_colors_apaf = {"22_MOUSE": "red", "18_NEMVE": "blue"}
         Phylo.draw(dollo, label_colors=label_colors_dollo, do_show=False)
         Phylo.draw(apaf, label_colors=label_colors_apaf, do_show=False)
 

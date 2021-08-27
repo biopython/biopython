@@ -549,10 +549,10 @@ class HmmscanCases(unittest.TestCase):
             hsp.aln_annotation["CS"],
         )
         self.assertEqual(
-            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk", hsp.hit.seq,
+            "rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk", hsp.hit.seq
         )
         self.assertEqual(
-            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR", hsp.query.seq,
+            "KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR", hsp.query.seq
         )
         self.assertEqual(
             "79****************************************************997",
