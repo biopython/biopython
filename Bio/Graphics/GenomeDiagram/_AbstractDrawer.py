@@ -18,7 +18,7 @@ Provides:
  - page_sizes - Method that returns a ReportLab pagesize when passed
    a valid ISO size
  - draw_box - Method that returns a closed path object when passed
-   the proper co-ordinates.  For HORIZONTAL boxes only.
+   the proper coordinates.  For HORIZONTAL boxes only.
  - angle2trig - Method that returns a tuple of values that are the
    vector for rotating a point through a passed angle,
    about an origin
@@ -252,7 +252,7 @@ def draw_arrow(
 
     # Depending on the orientation, we define the bottom left (x1, y1) and
     # top right (x2, y2) coordinates differently, but still draw the box
-    # using the same relative co-ordinates:
+    # using the same relative coordinates:
     xmin, ymin = min(x1, x2), min(y1, y2)
     xmax, ymax = max(x1, x2), max(y1, y2)
     if orientation == "right":

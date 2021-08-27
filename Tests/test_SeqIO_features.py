@@ -1174,7 +1174,7 @@ class NC_005816(NC_000932):
         self.assertEqual(len(fa_records), len(features))
         # This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features):
-            # TODO - check the FASTA ID line against the co-ordinates?
+            # TODO - check the FASTA ID line against the coordinates?
             f_seq = f.extract(gb_record.seq)
             self.assertEqual(fa_record.seq, f_seq)
             self.assertEqual(len(f_seq), len(f))
