@@ -1757,8 +1757,8 @@ class GenBankScanner(InsdcScanner):
                                 )
                                 structured_comment_key = re.search(regex, data)
                                 if structured_comment_key is not None:
-                                    structured_comment_key = structured_comment_key.group(
-                                        1
+                                    structured_comment_key = (
+                                        structured_comment_key.group(1)
                                     )
                                 else:
                                     comment_list.append(data)
