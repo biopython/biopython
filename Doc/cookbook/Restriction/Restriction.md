@@ -911,11 +911,11 @@ that are available. Most are perfectly self explanatory and the others are
 fairly well documented (use `help('Analysis.command_name')`). The methods are:
 
 ``` python
-full(self,linear=True)
-blunt(self,dct = None)
+full(self, linear=True)
+blunt(self, dct=None)
 overhang5(self, dct=None)
 overhang3(self, dct=None)
-defined(self,dct=None)
+defined(self, dct=None)
 with_sites(self, dct=None)
 without_site(self, dct=None)
 with_N_sites(self, N, dct=None)
@@ -923,11 +923,11 @@ with_number_list(self, list, dct=None)
 with_name(self, names, dct=None)
 with_site_size(self, site_size, dct=None)
 only_between(self, start, end, dct=None)
-between(self,start, end, dct=None)
+between(self, start, end, dct=None)
 show_only_between(self, start, end, dct=None)
-only_outside(self, start, end, dct =None)
+only_outside(self, start, end, dct=None)
 outside(self, start, end, dct=None)
-do_not_cut(self, start, end, dct =None)
+do_not_cut(self, start, end, dct=None)
 ```
 
 Using these methods is simple:
@@ -1102,10 +1102,10 @@ the commands `search()` and `catalyse()`:
 You can however change the shape of the `FormattedSeq`. The command to use are:
 
 ``` python
-FormattedSeq.to_circular() # new FormattedSeq, shape will be circular.
-FormattedSeq.to_linear()   # new FormattedSeq, shape will be linear
-FormattedSeq.circularise() # change the shape of FormattedShape to circular
-FormattedSeq.linearise()   # change the shape of FormattedShape to linear
+FormattedSeq.to_circular()  # new FormattedSeq, shape will be circular.
+FormattedSeq.to_linear()  # new FormattedSeq, shape will be linear
+FormattedSeq.circularise()  # change the shape of FormattedShape to circular
+FormattedSeq.linearise()  # change the shape of FormattedShape to linear
 ```
 
 ``` pycon

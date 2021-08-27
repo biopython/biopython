@@ -816,11 +816,11 @@ EcoRV      :  20.
 etc ...</code></pre>
 <h4 id="fancier-restriction-analysis"><a name="4.5"></a>4.5 Fancier restriction analysis</h4>
 <p>I will not go into the detail for each single method, here are all the functions that are available. Most are perfectly self explanatory and the others are fairly well documented (use <code>help('Analysis.command_name')</code>). The methods are:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>full(<span class="va">self</span>,linear<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>blunt(<span class="va">self</span>,dct <span class="op">=</span> <span class="va">None</span>)</span>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>full(<span class="va">self</span>, linear<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>blunt(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>overhang5(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>overhang3(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>defined(<span class="va">self</span>,dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>defined(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>with_sites(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>without_site(<span class="va">self</span>, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>with_N_sites(<span class="va">self</span>, N, dct<span class="op">=</span><span class="va">None</span>)</span>
@@ -828,11 +828,11 @@ etc ...</code></pre>
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>with_name(<span class="va">self</span>, names, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>with_site_size(<span class="va">self</span>, site_size, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>between(<span class="va">self</span>,start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>show_only_between(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>only_outside(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>only_outside(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>outside(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>do_not_cut(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>do_not_cut(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
 <p>Using these methods is simple:</p>
 <pre class="pycon"><code>&gt;&gt;&gt; new_seq = Seq(&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;)
 &gt;&gt;&gt; rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
@@ -928,10 +928,10 @@ FormattedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=False)</code></pr
 [15, 25]</code></pre>
 <h4 id="changing-the-shape-of-a-formattedseq"><a name="5.3"></a>5.3 Changing the shape of a FormattedSeq</h4>
 <p>You can however change the shape of the <code>FormattedSeq</code>. The command to use are:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_circular() <span class="op">=&gt;</span> new FormattedSeq, shape will be circular.</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_linear()   <span class="op">=&gt;</span> new FormattedSeq, shape will be linear</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>FormattedSeq.circularise() <span class="op">=&gt;</span> change the shape of FormattedShape to circular</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>FormattedSeq.linearise()   <span class="op">=&gt;</span> change the shape of FormattedShape to linear</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_circular()  <span class="co"># new FormattedSeq, shape will be circular.</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>FormattedSeq.to_linear()  <span class="co"># new FormattedSeq, shape will be linear</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>FormattedSeq.circularise()  <span class="co"># change the shape of FormattedShape to circular</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>FormattedSeq.linearise()  <span class="co"># change the shape of FormattedShape to linear</span></span></code></pre></div>
 <pre class="pycon"><code>&gt;&gt;&gt; circular_fseq
 FormatedSeq(Seq(&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;), linear=False)
 &gt;&gt;&gt; circular_fseq.is_linear()
