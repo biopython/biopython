@@ -54,6 +54,7 @@ Classes:
 import functools
 import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
