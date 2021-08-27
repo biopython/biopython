@@ -594,7 +594,7 @@ class CircularDrawer(AbstractDrawer):
                     strokeWidth=graph.linewidth,
                 )
             )
-            lastx, lasty, = x, y
+            lastx, lasty = x, y
         return line_elements
 
     def draw_bar_graph(self, graph):
