@@ -35,9 +35,9 @@ with the notable exception of existing module names which are not lower case.
 - http://www.python.org/dev/peps/pep-0257/
 
 To facilitate style checking, we make use of ``pre-commit`` to automatically
-run various ``flake8`` plugins as well as ``black``. We use the continuous
-integration service TravisCI to run these checks, but we strongly suggest you
-install and run ``pre-commit`` in your local machine (see below).
+run various ``flake8`` plugins as well as ``black``. We also use continuous
+integration on GitHub to run these checks, but we strongly suggest you install
+and run ``pre-commit`` in your local machine (see below).
 
 For docstrings (Python's in-code documentation), in addition to PEP257 we are
 using reStructuredText (RST) markup language which allows basic formatting
