@@ -20,12 +20,9 @@ except ImportError:
     ) from None
 
 
-with open("Emboss/needle.txt") as handle:
-    pair_example2 = handle.read()
-
-
-with open("Emboss/needle_overhang.txt") as handle:
-    pair_example3 = handle.read()
+# matcher_pair.txt
+# matcher_simple.txt
+# needle_asis.txt
 
 
 class TestEmboss(unittest.TestCase):
@@ -226,92 +223,18 @@ class TestEmboss(unittest.TestCase):
             "|||||:||||||||||||||||| |||||||||||    |||||||||||||:||||||||||||||||||||:|||||||||||||||||||||||  |||||||||||||||:||||||||:|||||||",
         )
 
-    def test_simple_example(self):
-        # Alignment file obtained from EMBOSS:
-        # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
-        path = "Emboss/alignret.txt"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "alignret")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:16:13 2002")
-            self.assertEqual(alignments.report_file, "stdout")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
-        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
-        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
-        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
-        self.assertEqual(alignment.annotations["identity"], 95)
-        self.assertEqual(alignment.annotations["similarity"], 127)
-        self.assertEqual(alignment.annotations["gaps"], 25)
-        self.assertAlmostEqual(alignment.annotations["score"], 100.0)
-        self.assertEqual(len(alignment), 4)
-        self.assertEqual(alignment.shape, (4, 131))
-        self.assertEqual(alignment.sequences[0].id, "IXI_234")
-        self.assertEqual(alignment.sequences[1].id, "IXI_235")
-        self.assertEqual(alignment.sequences[2].id, "IXI_236")
-        self.assertEqual(alignment.sequences[3].id, "IXI_237")
-        self.assertEqual(
-            alignment.sequences[0].seq,
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.sequences[1].seq,
-            "TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.sequences[2].seq,
-            "TSPASIRPPAGPSSRPAMVSSRRPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRGSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.sequences[3].seq,
-            "TSPASLRPPAGPSSRPAMVSSRRRPSPPGPRRPTCSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSRGSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array(
-                    [
-                        [0, 15, 22, 23, 24, 35, 39, 74, 84, 97, 99, 131],
-                        [0, 15, 15, 15, 15, 26, 30, 65, 65, 78, 80, 112],
-                        [0, 15, 22, 22, 22, 33, 37, 72, 82, 95, 95, 127],
-                        [0, 15, 22, 23, 23, 34, 34, 69, 79, 92, 92, 124],
-                    ]
-                ),
-            )
-        )
-        self.assertEqual(
-            alignment[0],
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment[1],
-            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment[2],
-            "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
-        )
-        self.assertEqual(
-            alignment[3],
-            "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.column_annotations["emboss_consensus"],
-            "|||||:|||||||||:::::::  |||||:||||:::::|||||:|||||||:||||||||||||||||||||:::::::::::|||||||||||||  ||||:||||:|||||:|||||||::|||||||",
-        )
-
     def test_pair_example2(self):
-        alignments = AlignmentIterator(StringIO(pair_example2))
-        self.assertEqual(alignments.program, "needle")
-        self.assertEqual(alignments.rundate, "Sun 27 Apr 2007 17:20:35")
-        self.assertEqual(
-            alignments.commandline,
-            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
-        )
-        self.assertEqual(alignments.align_format, "srspair")
-        self.assertEqual(alignments.report_file, "ref_rec .needle")
-        alignments = list(alignments)
+        with open("Emboss/needle.txt") as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "needle")
+            self.assertEqual(alignments.rundate, "Sun 27 Apr 2007 17:20:35")
+            self.assertEqual(
+                alignments.commandline,
+                "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+            )
+            self.assertEqual(alignments.align_format, "srspair")
+            self.assertEqual(alignments.report_file, "ref_rec .needle")
+            alignments = list(alignments)
         self.assertEqual(len(alignments), 5)
         alignment = alignments[0]
         self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
@@ -518,16 +441,17 @@ class TestEmboss(unittest.TestCase):
         )
 
     def test_pair_example3(self):
-        alignments = AlignmentIterator(StringIO(pair_example3))
-        self.assertEqual(alignments.program, "needle")
-        self.assertEqual(alignments.rundate, "Mon 14 Jul 2008 11:45:42")
-        self.assertEqual(
-            alignments.commandline,
-            "needle [-asequence] asis:TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGTGTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTTGAAATTTTTAGGTTATTTAGACCATTTTTTTTTGTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTTTGGGGTTAAGACAAGGTGTCGTTGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATAGGATCTACCTTTTATCTTTCTAATCTTTTGTTTTAGTATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGC [-bsequence] asis:TTATTAATCTTATGGTTTTGCCGTAAAATTTCTTTCTTTATTTTTTATTGTTAGGATTTTGTTGATTTTATTTTTCTCAAGAATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGTTTAAAGTTTTATTAATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTTTTGGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGGAGTAAGAATTTCGATTCAGCAACTTTAGTTCACAGTCTTTTTTTTTATTAAGAAAGGTTT -filter",
-        )
-        self.assertEqual(alignments.align_format, "srspair")
-        self.assertEqual(alignments.report_file, "stdout")
-        alignments = list(alignments)
+        with open("Emboss/needle_overhang.txt") as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "needle")
+            self.assertEqual(alignments.rundate, "Mon 14 Jul 2008 11:45:42")
+            self.assertEqual(
+                alignments.commandline,
+                "needle [-asequence] asis:TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGTGTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTTGAAATTTTTAGGTTATTTAGACCATTTTTTTTTGTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTTTGGGGTTAAGACAAGGTGTCGTTGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATAGGATCTACCTTTTATCTTTCTAATCTTTTGTTTTAGTATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGC [-bsequence] asis:TTATTAATCTTATGGTTTTGCCGTAAAATTTCTTTCTTTATTTTTTATTGTTAGGATTTTGTTGATTTTATTTTTCTCAAGAATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGTTTAAAGTTTTATTAATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTTTTGGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGGAGTAAGAATTTCGATTCAGCAACTTTAGTTCACAGTCTTTTTTTTTATTAAGAAAGGTTT -filter",
+            )
+            self.assertEqual(alignments.align_format, "srspair")
+            self.assertEqual(alignments.report_file, "stdout")
+            alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(alignment.annotations["matrix"], "EDNAFULL")
@@ -718,6 +642,334 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||"
         )
+
+    def test_pair_aln_full_blank_line(self):
+        with open("Emboss/emboss_pair_aln_full_blank_line.txt") as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "stretcher")
+            self.assertEqual(alignments.rundate, "Tue 15 May 2018 17:01:31")
+            self.assertEqual(
+                alignments.commandline,
+                "stretcher -auto -stdout -asequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.aupfile -bsequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.bupfile -datafile EDNAFULL -gapopen 16 -gapextend 4 -aformat3 pair -snucleotide1 -snucleotide2",
+            )
+            self.assertEqual(alignments.align_format, "pair")
+            self.assertEqual(alignments.report_file, "stdout")
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 16)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 4)
+        self.assertEqual(alignment.annotations["identity"], 441)
+        self.assertEqual(alignment.annotations["similarity"], 441)
+        self.assertEqual(alignment.annotations["gaps"], 847)
+        self.assertAlmostEqual(alignment.annotations["score"], -2623)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 1450))
+        self.assertEqual(alignment.sequences[0].id, "hg38_chrX_131691529_131830643_47210_48660")
+        self.assertEqual(alignment.sequences[1].id, "mm10_chrX_50555743_50635321_27140_27743")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCCAGCCCTGACAATGTAGAGAGACCCCGTCTCTTCAAAAAATACAAAAAATAGCCAGGCATGGTGACCTACAATGGAAGCCCTAGCTACGTAGGAGGCGGAAATGGGAGGATCACCTCAGCCCAGGGAGGCTGATGTTGCAGTGAGCCATGATCATGCCTCTACACTCCACCCTGGGCAACAGAGTAAGATGCTGTCTAAAATATATATATATGCATATCTGTGTGTATATATATATATATATATGTGTGTGTGTGTGTGTGTATATACATATGTGTGTGTATATACATATATGTGTATATATATATGTGTGTATATATACATATACATATTCAGCATCACCTTATATTCTTTGAATATATCTACATCAATACATACTTTTGAGTGCTTGAAATTTTTTATATTTTACTCTAGAAGAACTGTAAGAAATTATAAAGTAGAAAACTTGTGGTAGGTCAAACATAGTAAGAAGAAATAATCACTTTTTAAAGGTCTGTGCTAGGTACTATGATCTGTTCCCTATATATACATAATATGGACTTTTATAAACTAATGTTCAAATTCCCCTGTAGTATAACTTCTTGTTGTTGTTTATTTTTTTTTTTTTGTATTTTTCATTTTAGATATGGGGTTTCACTCTGTTGACCAGGCTGATCTCGAACCACTGGTCTCAAGCGATCCTCCCATCTTGGACTCCCAAAGTGCTAGGATTACAGGCACGAGGCACCTTGACTGGCCACCATGTACTATAGCTGTTAAAACAAGTTTGTTTCACTGATAACTGGAGTACTTTTCAAATATAATTAATAATTCATGGAAATAATGATAGCTTTAAAAGTATTGGCACTTTTAAAAACTGAGTTTGTAAACTTCATATAACATAAAATTAACCATTAAAATGTATTAATTTCAATGGCATTTAGGACACTCACAATGCAGTGCAAGCATTACCACTATGTAGTGGCAAATCATTTTCACTACCACAAAAGAAAATCCTGGACCCATTAGTTAGTCATTCCCCATTCCACTCTCTGCCCAGCCCCTGGCAAACACTCATCTGATTTCCCTCACTACTGATCATCACAACAAGTGGCCTTGTTCATCTTGTTGTGGGAACCAGGAGACCAGAGAGACCAATGGGTGGAACAGGAGGATTTTACTAGGTGGTCACCGACTCAGCAGATTAACATCCAAAGGCTGAGCCCCAAACCAAGAGAGGGCTTGACTTTTATACATATATCTGAAAAGGGCCCAAAACCTGTAAGGCCGGTAAGCAAGCTTACAGCAGAACAAAGGCAGTTTATCAAACAGTGACAGGTTTTACAGTTCAGGCATGTCTTGTGACCTTTGCCATAACTGCACAGCTGGAAAACAGGAACTTACAAAATCCTTACAAGCTTGCAGAAACAGTTACAAA",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "GTTCAAGGCCATCCGGGATTAAAGGTGTGGTAGAACTCTTCTGATGGAGACAATATAAGGACATTGGAAGAAGGGAGTCTTGCCCTTGCTCCTTCGCCTACTTGCTGTGTAAGACTGAGTAACTCCTAGACCCTTGGACTTCCATTTCAGCCACTACTGAACCATTGTTGGGAATTGGGCTGCAGACTGTAAGTCATCAATAAATTCCTTTACTATATAGAGACTATCCATAAATTCTGTGACTCTAGAGAACCCTGACAATACAACTGGGAAGCACGGACATCCTCTTTGAGATATAATTATCAACTGGCAAGTGTTTGTTTATTGATATTTTACTTAAGACAAAGTTAAACCTACTCCTGTCCTCTGGGCATGGTAGCATGGACTTATTCTGGAACTACCAGAGGAAAAGACAGAAGCCTACTGGAAAGGCCCAGGCCATCCTGCCTCTTGTAGTTCACTAGGACCAGGGCTCAGCATAGTCCTTGGCTTCTAAATCTGCTACCATATCTTTATCATGTAAAACTGACACAAAATTAAACATATCAAAATTTTATGAAAACCATTAAGTATCTGGAAAAGAAAAAAATCAACAGTTATAAA",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        [
+                            0,
+                            1,
+                            27,
+                            45,
+                            49,
+                            54,
+                            61,
+                            68,
+                            79,
+                            91,
+                            93,
+                            101,
+                            105,
+                            113,
+                            133,
+                            145,
+                            157,
+                            163,
+                            168,
+                            174,
+                            180,
+                            199,
+                            224,
+                            236,
+                            253,
+                            259,
+                            370,
+                            377,
+                            378,
+                            391,
+                            408,
+                            420,
+                            440,
+                            466,
+                            469,
+                            479,
+                            483,
+                            497,
+                            509,
+                            518,
+                            537,
+                            543,
+                            576,
+                            585,
+                            595,
+                            598,
+                            606,
+                            616,
+                            647,
+                            659,
+                            668,
+                            673,
+                            676,
+                            682,
+                            693,
+                            701,
+                            753,
+                            760,
+                            767,
+                            778,
+                            825,
+                            839,
+                            844,
+                            847,
+                            854,
+                            858,
+                            861,
+                            863,
+                            868,
+                            877,
+                            881,
+                            885,
+                            895,
+                            898,
+                            899,
+                            927,
+                            939,
+                            944,
+                            946,
+                            957,
+                            962,
+                            964,
+                            972,
+                            983,
+                            985,
+                            988,
+                            989,
+                            997,
+                            1008,
+                            1019,
+                            1021,
+                            1036,
+                            1042,
+                            1044,
+                            1064,
+                            1080,
+                            1087,
+                            1091,
+                            1106,
+                            1109,
+                            1133,
+                            1144,
+                            1189,
+                            1197,
+                            1210,
+                            1215,
+                            1228,
+                            1236,
+                            1247,
+                            1263,
+                            1269,
+                            1279,
+                            1285,
+                            1297,
+                            1299,
+                            1305,
+                            1308,
+                            1327,
+                            1329,
+                            1331,
+                            1334,
+                            1341,
+                            1357,
+                            1368,
+                            1376,
+                            1381,
+                            1386,
+                            1391,
+                            1395,
+                            1407,
+                            1414,
+                            1422,
+                            1438,
+                            1450,
+                        ],
+                        [
+                            0,
+                            1,
+                            1,
+                            19,
+                            19,
+                            24,
+                            24,
+                            31,
+                            31,
+                            43,
+                            43,
+                            51,
+                            51,
+                            59,
+                            59,
+                            71,
+                            71,
+                            77,
+                            77,
+                            83,
+                            83,
+                            102,
+                            102,
+                            114,
+                            114,
+                            120,
+                            120,
+                            127,
+                            127,
+                            140,
+                            140,
+                            152,
+                            152,
+                            178,
+                            178,
+                            188,
+                            188,
+                            202,
+                            202,
+                            211,
+                            211,
+                            217,
+                            217,
+                            226,
+                            226,
+                            229,
+                            229,
+                            239,
+                            239,
+                            251,
+                            251,
+                            256,
+                            256,
+                            262,
+                            262,
+                            270,
+                            270,
+                            277,
+                            277,
+                            288,
+                            288,
+                            302,
+                            302,
+                            305,
+                            305,
+                            309,
+                            309,
+                            311,
+                            311,
+                            320,
+                            320,
+                            324,
+                            324,
+                            327,
+                            327,
+                            355,
+                            355,
+                            360,
+                            360,
+                            371,
+                            371,
+                            373,
+                            373,
+                            384,
+                            384,
+                            387,
+                            387,
+                            395,
+                            395,
+                            406,
+                            406,
+                            421,
+                            421,
+                            423,
+                            423,
+                            439,
+                            439,
+                            443,
+                            443,
+                            446,
+                            446,
+                            457,
+                            457,
+                            465,
+                            465,
+                            470,
+                            470,
+                            478,
+                            478,
+                            494,
+                            494,
+                            504,
+                            504,
+                            516,
+                            516,
+                            522,
+                            522,
+                            541,
+                            541,
+                            543,
+                            543,
+                            550,
+                            550,
+                            561,
+                            561,
+                            566,
+                            566,
+                            571,
+                            571,
+                            583,
+                            583,
+                            591,
+                            591,
+                            603,
+                        ],
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(
+            alignment[0],
+            "GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCCAGCCCTGACAATGTAGAGAGACCCCGTCTCTTCAAAAAATACAAAAAATAGCCAGGCATGGTGACCTACAATGGAAGCCCTAGCTACGTAGGAGGCGGAAATGGGAGGATCACCTCAGCCCAGGGAGGCTGATGTTGCAGTGAGCCATGATCATGCCTCTACACTCCACCCTGGGCAACAGAGTAAGATGCTGTCTAAAATATATATATATGCATATCTGTGTGTATATATATATATATATATGTGTGTGTGTGTGTGTGTATATACATATGTGTGTGTATATACATATATGTGTATATATATATGTGTGTATATATACATATACATATTCAGCATCACCTTATATTCTTTGAATATATCTACATCAATACATACTTTTGAGTGCTTGAAATTTTTTATATTTTACTCTAGAAGAACTGTAAGAAATTATAAAGTAGAAAACTTGTGGTAGGTCAAACATAGTAAGAAGAAATAATCACTTTTTAAAGGTCTGTGCTAGGTACTATGATCTGTTCCCTATATATACATAATATGGACTTTTATAAACTAATGTTCAAATTCCCCTGTAGTATAACTTCTTGTTGTTGTTTATTTTTTTTTTTTTGTATTTTTCATTTTAGATATGGGGTTTCACTCTGTTGACCAGGCTGATCTCGAACCACTGGTCTCAAGCGATCCTCCCATCTTGGACTCCCAAAGTGCTAGGATTACAGGCACGAGGCACCTTGACTGGCCACCATGTACTATAGCTGTTAAAACAAGTTTGTTTCACTGATAACTGGAGTACTTTTCAAATATAATTAATAATTCATGGAAATAATGATAGCTTTAAAAGTATTGGCACTTTTAAAAACTGAGTTTGTAAACTTCATATAACATAAAATTAACCATTAAAATGTATTAATTTCAATGGCATTTAGGACACTCACAATGCAGTGCAAGCATTACCACTATGTAGTGGCAAATCATTTTCACTACCACAAAAGAAAATCCTGGACCCATTAGTTAGTCATTCCCCATTCCACTCTCTGCCCAGCCCCTGGCAAACACTCATCTGATTTCCCTCACTACTGATCATCACAACAAGTGGCCTTGTTCATCTTGTTGTGGGAACCAGGAGACCAGAGAGACCAATGGGTGGAACAGGAGGATTTTACTAGGTGGTCACCGACTCAGCAGATTAACATCCAAAGGCTGAGCCCCAAACCAAGAGAGGGCTTGACTTTTATACATATATCTGAAAAGGGCCCAAAACCTGTAAGGCCGGTAAGCAAGCTTACAGCAGAACAAAGGCAGTTTATCAAACAGTGACAGGTTTTACAGTTCAGGCATGTCTTGTGACCTTTGCCATAACTGCACAGCTGGAAAACAGGAACTTACAAAATCCTTACAAGCTTGCAGAAACAGTTACAAA",
+        )
+        self.assertEqual(
+            alignment[1],
+            "G--------------------------TTCAAGGCCATCCGGGAT----TAAAG-------GTGTGGT-----------AGAACTCTTCTG--ATGGAGAC----AATATAAG--------------------GACATTGGAAGA------------AGGGAG-----TCTTGC------CCTTGCTCCTTCGCCTACT-------------------------TGCTGTGTAAGA-----------------CTGAGT---------------------------------------------------------------------------------------------------------------AACTCCT-AGACCCTTGGACT-----------------TCCATTTCAGCC--------------------ACTACTGAACCATTGTTGGGAATTGG---GCTGCAGACT----GTAAGTCATCAATA------------AATTCCTTT-------------------ACTATA---------------------------------TAGAGACTA----------TCC--------ATAAATTCTG-------------------------------TGACTCTAGAGA---------ACCCT---GACAAT-----------ACAACTGG----------------------------------------------------GAAGCAC-------GGACATCCTCT-----------------------------------------------TTGAGATATAATTA-----TCA-------ACTG---GC-----AAGTGTTTG----TTTA----------TTG-ATATTTTACTTAAGACAAAGTTAAACCT------------ACTCC--TGTCCTCTGGG-----CA--------TGGTAGCATGG--ACT-TATTCTGG-----------AACTACCAGAG--GAAAAGACAGAAGCC------TA--------------------CTGGAAAGGCCCAGGC-------CATC---------------CTG------------------------CCTCTTGTAGT---------------------------------------------TCACTAGG-------------ACCAG-------------GGCTCAGC-----------ATAGTCCTTGGCTTCT------AAATCTGCTA------CCATATCTTTAT--CATGTA---AAACTGACACAAAATTAAA--CA---TATCAAA----------------ATTTTATGAAA--------ACCAT-----TAAGT----ATCTGGAAAAGA-------AAAAAATC----------------AACAGTTATAAA",
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|                          ||||||.|||.||..||.    ||.||       ||.|..|           |.||.|...|.|  ||||.|||    |||..|||                    ||.||.|||.||            ||||||     |.||||      ||.||.||.|.|..||||.                         ||||||.|||.|                 |||.||                                                                                                               |.|.||| |.|..|||.||.|                 |.|.|||.||..                    |||...|||..|.|||..|.||||..   |..|.|.|||    |||.||||...|||            |||..||||                   |||||.                                 ||.|.||||          |||        ||||.||||.                               |.|.|.||||.|         ||.||   |||.|.           ||.|||||                                                    ||.||||       ||.||.|.|.|                                               ||.|.|||||||||     |||       |.||   ||     ||||.||.|    ||||          ||| |.|.||.|..|||.|.|||.||||.|.|            |.|.|  ||.|.|.|.||     ||        ||..|||||..  ||| |.|..|||           .|||||||.|.  |||||..|.|.|.||      ||                    |||...||.|||.|||       ||||               |||                        |.||||||.||                                             |.||||||             |.|||             ||||.|||           |.||..||||.|||.|      |.|||||..|      |.|.|.||.||.  |..|||   ||.||.|||..|.|..|||  ||   |||||||                |.||.|.|.|.        |||.|     |||.|    |.||||||||.|       |.||||||                ||||||||.|||",
+        )
+
 
 
 if __name__ == "__main__":

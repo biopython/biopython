@@ -38,6 +38,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if line.rstrip() != "########################################":
             raise ValueError("Unexpected line: %s") % line
 
+        # assume srspair format (default) if not specified explicitly in
+        # the output file
+        self.align_format = "srspair"
         commandline = None
         for line in stream:
             if line.rstrip() == "########################################":
@@ -98,7 +101,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     aligned_sequences = [""] * number_of_sequences
                     consensus = ""
                     starts = [0] * number_of_sequences
-                    ends = [0] * number_of_sequences
                     column = 0
                     index = 0
                     continue
@@ -204,17 +206,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     sequence = aligned_sequence.replace("-", "")
                     if len(sequences[index]) > 0:
                         length = len(sequence)
-                        if length == 0:
-                            assert start == ends[index]
-                            assert end == ends[index]
+                        if length == 0 and self.align_format == "srspair":
+                            assert start == len(sequences[index])
+                            assert end == start
                         else:
-                            assert start == ends[index] + 1
-                            assert end == ends[index] + length
+                            assert start == len(sequences[index]) + 1
+                            assert end == start + length - 1
                     assert identifiers[index].startswith(identifier)
                     if starts[index] == 0:
                         # Record the start and end
                         starts[index] = start
-                    ends[index] = end
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:
