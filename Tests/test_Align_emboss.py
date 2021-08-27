@@ -32,7 +32,7 @@ class TestEmboss(unittest.TestCase):
     def test_pair_example(self):
         # Alignment file obtained from EMBOSS:
         # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
-        path = "Emboss/align.pair"
+        path = "Emboss/water.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "water")
