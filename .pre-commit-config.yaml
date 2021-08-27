@@ -1,7 +1,7 @@
 # pre-commit run --all-files
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.0.1
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
@@ -16,7 +16,7 @@ repos:
     -   id: black
         args: [--check]
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.1
+    rev: 3.9.2
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -30,7 +30,7 @@ repos:
             'pydocstyle>=6.0.0',
         ]
 -   repo: https://github.com/asottile/blacken-docs
-    rev: v1.6.0
+    rev: v1.10.0
     hooks:
     -   id: blacken-docs
         additional_dependencies: [black==19.10b0]
@@ -41,7 +41,7 @@ repos:
     -   id: rstcheck
         args: [--report=warning]
 -   repo: https://github.com/PyCQA/doc8
-    rev: 0.8.1
+    rev: 0.9.0
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
