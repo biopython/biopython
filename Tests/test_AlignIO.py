@@ -451,7 +451,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(
             alignment,
             [
-                ("Aegotheles", "AAAAAGGCATTGTGGTGGGAAT",),
+                ("Aegotheles", "AAAAAGGCATTGTGGTGGGAAT"),
                 ("Aerodramus", "?????????TTGTGGTGGGAAT"),
             ],
         )

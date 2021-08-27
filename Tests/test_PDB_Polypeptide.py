@@ -66,7 +66,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertIsInstance(s, Seq)
         # Here non-standard MSE are shown as M
         self.assertEqual(
-            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s,
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s
         )
 
     def test_ppbuilder_torsion(self):
@@ -164,7 +164,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertIsInstance(s, Seq)
         # Here non-standard MSE are shown as M
         self.assertEqual(
-            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s,
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s
         )
 
     def test_cappbuilder_tau(self):

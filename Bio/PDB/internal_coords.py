@@ -84,17 +84,7 @@ from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
 # for type checking only
-from typing import (
-    List,
-    Dict,
-    Set,
-    TextIO,
-    Union,
-    Tuple,
-    cast,
-    TYPE_CHECKING,
-    Optional,
-)
+from typing import List, Dict, Set, TextIO, Union, Tuple, cast, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue
@@ -606,7 +596,7 @@ class IC_Chain:
         a4shift[udFwd] = self.hedraIC[self.dH2ndx, 0][mdFwd]  # len12
 
         self.a4_pre_rotation[:, 2][self.dAtoms_needs_update] = numpy.add(
-            self.a4_pre_rotation[:, 2][self.dAtoms_needs_update], a4shift,
+            self.a4_pre_rotation[:, 2][self.dAtoms_needs_update], a4shift
         )  # so a2 at origin
 
         # build rz rotation matrix for dihedral angle
@@ -1649,7 +1639,7 @@ class IC_Residue:
             d.rcst = None
 
     def assemble(
-        self, resetLocation: bool = False, verbose: bool = False,
+        self, resetLocation: bool = False, verbose: bool = False
     ) -> Union[Dict["AtomKey", numpy.array], Dict[HKT, numpy.array], None]:
         """Compute atom coordinates for this residue from internal coordinates.
 
@@ -2841,11 +2831,7 @@ class Hedron(Edron):
 
         if "len12" in kwargs:
             self.lal = numpy.array(
-                (
-                    float(kwargs["len12"]),
-                    float(kwargs["angle"]),
-                    float(kwargs["len23"]),
-                )
+                (float(kwargs["len12"]), float(kwargs["angle"]), float(kwargs["len23"]))
             )
         else:
             self.lal = numpy.zeros(3)

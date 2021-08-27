@@ -416,7 +416,7 @@ def combine(matrices):
             combined.matrix[t] += Seq(
                 str(m.matrix[t])
                 .replace(m.gap, combined.gap)
-                .replace(m.missing, combined.missing),
+                .replace(m.missing, combined.missing)
             )
         # replace date of missing taxa with symbol for missing data
         for t in combined_only:
@@ -425,7 +425,7 @@ def combine(matrices):
             combined.matrix[t] = Seq(combined.missing * combined.nchar) + Seq(
                 str(m.matrix[t])
                 .replace(m.gap, combined.gap)
-                .replace(m.missing, combined.missing),
+                .replace(m.missing, combined.missing)
             )
         combined.taxlabels.extend(m_only)  # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
@@ -1052,7 +1052,7 @@ class Nexus:
             # Reformat sequence for non-standard datatypes
             if self.datatype != "standard":
                 iupac_seq = Seq(
-                    _replace_parenthesized_ambigs(chars, self.rev_ambiguous_values),
+                    _replace_parenthesized_ambigs(chars, self.rev_ambiguous_values)
                 )
                 # first taxon has the reference sequence if matchhar is used
                 if taxcount == 1:

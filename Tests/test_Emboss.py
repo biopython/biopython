@@ -305,7 +305,7 @@ class SeqRetSeqIOTests(SeqRetTests):
         # NOTE - EMBOSS considers "genbank" to be for nucleotides only,
         # and will turn "X" into "N" for GenBank output.
         self.check_SeqIO_to_EMBOSS(
-            "IntelliGenetics/VIF_mase-pro.txt", "ig", skip_formats=["genbank", "embl"],
+            "IntelliGenetics/VIF_mase-pro.txt", "ig", skip_formats=["genbank", "embl"]
         )
         # TODO - What does a % in an ig sequence mean?
         # e.g. "IntelliGenetics/vpu_nucaligned.txt"
@@ -457,13 +457,13 @@ class PairwiseAlignmentTests(unittest.TestCase):
                 # Local alignment
                 self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
                 self.assertIn(
-                    str(alignment[1].seq).replace("-", "").upper(), target.seq.upper(),
+                    str(alignment[1].seq).replace("-", "").upper(), target.seq.upper()
                 )
             else:
                 # Global alignment
                 self.assertEqual(query_seq, str(alignment[0].seq).replace("-", ""))
                 self.assertEqual(
-                    target.seq.upper(), str(alignment[1].seq).replace("-", "").upper(),
+                    target.seq.upper(), str(alignment[1].seq).replace("-", "").upper()
                 )
         return True
 

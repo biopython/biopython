@@ -321,7 +321,7 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
 
 def _retrieve_alphabet(adaptor, primary_id):
     results = adaptor.execute_and_fetchall(
-        "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,),
+        "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,)
     )
     assert len(results) == 1
     alphabets = results[0]

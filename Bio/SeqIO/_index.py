@@ -141,7 +141,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_seq_record(
-            handle, self._flows_per_read, self._flow_chars, self._key_sequence,
+            handle, self._flows_per_read, self._flow_chars, self._key_sequence
         )
 
     def get_raw(self, offset):

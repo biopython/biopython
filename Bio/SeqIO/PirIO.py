@@ -171,7 +171,7 @@ class PirIterator(SequenceIterator):
 
             # Return the record and then continue...
             record = SeqRecord(
-                Seq(seq[:-1]), id=identifier, name=identifier, description=description,
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description
             )
             record.annotations["PIR-type"] = pir_type
             if _pir_mol_type[pir_type]:

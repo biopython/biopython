@@ -2246,7 +2246,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual("AAT", hsp.aln_annotation_all[0]["hit_annotation"][0])
         self.assertEqual("TT", hsp.aln_annotation_all[0]["hit_annotation"][-1])
         self.assertEqual(
-            "XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE", hsp[-1].query.seq,
+            "XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE", hsp[-1].query.seq
         )
         self.assertEqual(
             "XNKILNRDPQFMSNSSFHQCVSLDSINTIEKDEEKNSDDDAGLQAATDARE", hsp[-1].hit.seq

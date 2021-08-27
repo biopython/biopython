@@ -220,7 +220,7 @@ class TestQblast(unittest.TestCase):
                CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
             0.0000001,
             None,
-            {"template_type": 0, "template_length": 18, "megablast": "on",},  # noqa 231
+            {"template_type": 0, "template_length": 18, "megablast": "on"},  # noqa 231
             ["XM_635681.1", "XM_008496783.1"],
         )
 

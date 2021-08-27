@@ -47,18 +47,7 @@ class CarTest(unittest.TestCase):
             ["Red", "Sports", "Imported"],
         ]
 
-        ycar = [
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "No",
-            "Yes",
-        ]
+        ycar = ["Yes", "No", "Yes", "No", "Yes", "No", "Yes", "No", "No", "Yes"]
 
         carmodel = NaiveBayes.train(xcar, ycar)
         self.assertEqual(

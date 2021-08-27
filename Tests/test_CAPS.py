@@ -20,7 +20,7 @@ def createAlignment(sequences):
         (
             SeqRecord(Seq(s), id="sequence%i" % (i + 1))
             for (i, s) in enumerate(sequences)
-        ),
+        )
     )
 
 
