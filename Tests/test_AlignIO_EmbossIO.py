@@ -62,49 +62,8 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 """  # noqa: E122 not clear to me, why this comes up here
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
-pair_example = """\
-########################################
-# Program:  water
-# Rundate:  Wed Jan 16 17:23:19 2002
-# Report_file: stdout
-########################################
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: IXI_234
-# 2: IXI_235
-# Matrix: EBLOSUM62
-# Gap_penalty: 10.0
-# Extend_penalty: 0.5
-#
-# Length: 131
-# Identity:     112/131 (85.5%)
-# Similarity:   112/131 (85.5%)
-# Gaps:          19/131 (14.5%)
-# Score: 591.5
-#
-#
-#=======================================
-
-IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
-                     |||||||||||||||         ||||||||||||||||||||||||||
-IXI_235            1 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQAT     41
-
-IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
-                     ||||||||||||||||||||||||          ||||||||||||||||
-IXI_235           42 GGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAG     81
-
-IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
-                     |||||||||||||||||||||||||||||||
-IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
-
-
-#---------------------------------------
-#---------------------------------------       
-
-
-"""  # noqa : W291
-
+with open("Emboss/water.txt") as handle:
+    pair_example = handle.read()
 
 with open("Emboss/needle.txt") as handle:
     pair_example2 = handle.read()
