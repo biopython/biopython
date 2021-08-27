@@ -120,7 +120,7 @@ class ChromosomeCounts:
     def get_segment_info(self):
         """Retrieve the color and label info about the segments.
 
-        Returns a list consiting of two tuples specifying the counts and
+        Returns a list consisting of two tuples specifying the counts and
         label name for each segment. The list is ordered according to the
         original listing of names. Labels are set as None if no label
         was specified.

@@ -475,12 +475,12 @@ def _sff_find_roche_index(handle):
     data = handle.read(fmt_size)
     if not data:
         raise ValueError(
-            "Premature end of file? Expected index of size %i at offest %i, found nothing"
+            "Premature end of file? Expected index of size %i at offset %i, found nothing"
             % (index_length, index_offset)
         )
     if len(data) < fmt_size:
         raise ValueError(
-            "Premature end of file? Expected index of size %i at offest %i, found %r"
+            "Premature end of file? Expected index of size %i at offset %i, found %r"
             % (index_length, index_offset, data)
         )
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
@@ -595,7 +595,7 @@ def _sff_read_roche_index(handle):
 
     Note that since only four bytes are used for the read offset, this is
     limited to 255^4 bytes (nearly 4GB). If you try to use the Roche sfffile
-    tool to combine SFF files beyound this limit, they issue a warning and
+    tool to combine SFF files beyond this limit, they issue a warning and
     omit the index (and manifest).
     """
     (

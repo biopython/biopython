@@ -577,7 +577,7 @@ class HiddenMarkovModel:
         pred_state_seq = {}
 
         # --- recursion
-        # loop over the training squence (i = 1 .. L)
+        # loop over the training sequence (i = 1 .. L)
         # NOTE: My index numbers are one less than what is given in Durbin
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.

@@ -18,7 +18,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
 class Entity:
-    """Basic container object for PDB heirachy.
+    """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.

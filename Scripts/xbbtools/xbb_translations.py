@@ -96,7 +96,7 @@ class xbb_translations:
         return GC(seq)
 
     def gcframe(self, seq, translation_table=1, direction="both"):
-        """Print a pretty print tranlation in several frames."""
+        """Print a pretty print translation in several frames."""
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
         anti = self.reverse(comp)

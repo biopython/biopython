@@ -18,7 +18,7 @@ from .Residues import Residues
 class Record:
     """Holds information for one SCOP domain.
 
-    Attribues:
+    Attributes:
      - sid - The SCOP ID of the entry, e.g. d1anu1
      - residues - The domain definition as a Residues object
      - hierarchy - A string specifying where this domain is in the hierarchy.

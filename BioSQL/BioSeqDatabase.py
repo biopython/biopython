@@ -152,7 +152,7 @@ def open_database(driver="MySQLdb", **kwargs):
 
 
 class DBServer:
-    """Represents a BioSQL database continaing namespaces (sub-databases).
+    """Represents a BioSQL database containing namespaces (sub-databases).
 
     This acts like a Python dictionary, giving access to each namespace
     (defined by a row in the biodatabase table) as a BioSeqDatabase object.

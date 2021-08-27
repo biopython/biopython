@@ -21,7 +21,7 @@ construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 
-Due to the on going maintainance burden or keeping command line application
+Due to the on going maintenance burden or keeping command line application
 wrappers up to date, we have decided to deprecate and eventually remove them.
 We instead now recommend building your command line and invoking it directly
 with the subprocess module.

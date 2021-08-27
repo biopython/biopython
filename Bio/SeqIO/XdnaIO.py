@@ -133,7 +133,7 @@ def _read_feature(handle, record):
 
     # Assemble the feature
     # Shift start by -1 as XDNA feature coordinates are 1-based
-    # while Biopython uses 0-based couting.
+    # while Biopython uses 0-based counting.
     location = FeatureLocation(start - 1, end, strand=strand)
     qualifiers = {}
     if name:

@@ -224,7 +224,7 @@ peptide_scad = """
 //    You may wish to modify it here to adjust the appearance of the model in terms of atom sphere
 //    or bond cylinder diameter, however the bond lengths are fixed with the supplied value when
 //    the data matrices are generated.  Atom sphere and bond cylinder radii may be individually
-//    adusted below as well.
+//    adjusted below as well.
 //
 //  $fn (fragment number) is an OpenSCAD parameter controlling the smoothness of the model surface.
 //    Smaller values will render faster, but yield more 'blocky' models.
@@ -411,7 +411,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
 //  bl : bond length
 //  br : bond radius
 //  scal : protein_scale
-//  key : option symbols dfined below
+//  key : option symbols defined below
 //  atm : atomic element symbol, used for color and radius by atom() routine above
 //  ver : make rotatable bonds slightly different based on value; currently unused
 //  supporSel : enable print-in-place support for rotatable bonds
@@ -657,7 +657,7 @@ amideOnly = false; // make only the first amide
                 }
             }
         } else if (h[h_residue] == "P") {
-            color("darkgray")   // hightlight Prolines in OpenSCAD renderer
+            color("darkgray")   // highlight Prolines in OpenSCAD renderer
                 hedron(h, rev, scal);
         } else {
             echo("unrecognised hedron", h[h_class]);
@@ -701,7 +701,7 @@ module dihedron(d,hedra,scal)
 /*
 //
 // Generate a residue consisting of the set of dihedra in the parameter 'r', referring to hedra the
-//   table speicified in the parameter 'hedra'.
+//   table specified in the parameter 'hedra'.
 //
 */
 module residue(r,hedra, scal)

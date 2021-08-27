@@ -268,7 +268,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
 
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
-    """Extend a codon list to include all possible ambigous codons.
+    """Extend a codon list to include all possible ambiguous codons.
 
     e.g.::
 

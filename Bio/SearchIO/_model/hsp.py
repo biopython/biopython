@@ -185,7 +185,7 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
 
     For all types of HSP objects, the property will return the values in a list.
-    Shorcuts are only applicable for HSPs with one fragment. Except the ones
+    Shortcuts are only applicable for HSPs with one fragment. Except the ones
     noted, if they are used on an HSP with more than one fragments, an exception
     will be raised.
 

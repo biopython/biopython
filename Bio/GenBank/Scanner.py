@@ -391,7 +391,7 @@ class InsdcScanner:
         return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
-        """Handle the LOCUS/ID line, passing data to the comsumer (PRIVATE).
+        """Handle the LOCUS/ID line, passing data to the consumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -400,7 +400,7 @@ class InsdcScanner:
         pass
 
     def _feed_header_lines(self, consumer, lines):
-        """Handle the header lines (list of strings), passing data to the comsumer (PRIVATE).
+        """Handle the header lines (list of strings), passing data to the consumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -410,7 +410,7 @@ class InsdcScanner:
 
     @staticmethod
     def _feed_feature_table(consumer, feature_tuples):
-        """Handle the feature table (list of tuples), passing data to the comsumer (PRIVATE).
+        """Handle the feature table (list of tuples), passing data to the consumer (PRIVATE).
 
         Used by the parse_records() and parse() methods.
         """
@@ -537,7 +537,7 @@ class InsdcScanner:
 
         Arguments:
          - alphabet - Obsolete, should be left as None.
-         - tags2id  - Tupple of three strings, the feature keys to use
+         - tags2id  - Tuple of three strings, the feature keys to use
            for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
@@ -982,7 +982,7 @@ class EmblScanner(InsdcScanner):
                         if not line:
                             break
                         elif line.startswith("CO   "):
-                            # Don't need to preseve the whitespace here.
+                            # Don't need to preserve the whitespace here.
                             contig_location += line[5:].strip()
                         else:
                             raise ValueError(
@@ -1883,7 +1883,7 @@ class GenBankScanner(InsdcScanner):
                         if not line:
                             break
                         elif line[: self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            # Don't need to preseve the whitespace here.
+                            # Don't need to preserve the whitespace here.
                             contig_location += line[self.GENBANK_INDENT :].rstrip()
                         elif line.startswith("ORIGIN"):
                             # Strange, seen this in GenPept files via Entrez gbwithparts

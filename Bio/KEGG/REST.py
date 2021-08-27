@@ -66,7 +66,7 @@ def kegg_info(database):
 
     """
     # TODO - return a string (rather than the handle?)
-    # TODO - chache and validate the organism code / T numbers?
+    # TODO - cache and validate the organism code / T numbers?
     # TODO - can we parse the somewhat formatted output?
     #
     # http://rest.kegg.jp/info/<database>

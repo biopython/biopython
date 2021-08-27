@@ -30,7 +30,7 @@ class Record:
 
     Attributes:
      - entry       The entry identifier.
-     - name        A list of the compund names.
+     - name        A list of the compound names.
      - formula     The chemical formula for the compound
      - mass        The molecular weight for the compound
      - pathway     A list of 3-tuples: ('PATH', pathway id, pathway)

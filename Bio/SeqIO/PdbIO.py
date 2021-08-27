@@ -44,7 +44,7 @@ def AtomIterator(pdb_id, structure):
     module may be used by SeqIO modules wishing to parse sequences from lists
     of residues.
 
-    Calling funtions must pass a Bio.PDB.Structure.Structure object.
+    Calling functions must pass a Bio.PDB.Structure.Structure object.
 
 
     See Bio.SeqIO.PdbIO.PdbAtomIterator and Bio.SeqIO.PdbIO.CifAtomIterator for

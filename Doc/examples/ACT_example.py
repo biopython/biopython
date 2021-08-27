@@ -105,7 +105,7 @@ for i, crunch_file in enumerate(comparisons):
             )
             gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
             # NOTE: We are using the same colour for all the matches,
-            # with transparency. This means overlayed matches will appear darker.
+            # with transparency. This means overlaid matches will appear darker.
             # It also means the drawing order not very important.
             # Note ACT puts long hits at the back, and colours by hit score
 
