@@ -11,55 +11,8 @@ from io import StringIO
 from Bio.AlignIO.EmbossIO import EmbossIterator
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
-simple_example = """\
-########################################
-# Program:  alignret
-# Rundate:  Wed Jan 16 17:16:13 2002
-# Report_file: stdout
-########################################
-#=======================================
-#
-# Aligned_sequences: 4
-# 1: IXI_234
-# 2: IXI_235
-# 3: IXI_236
-# 4: IXI_237
-# Matrix: EBLOSUM62
-# Gap_penalty: 10.0
-# Extend_penalty: 0.5
-#
-# Length: 131
-# Identity:      95/131 (72.5%)
-# Similarity:   127/131 (96.9%)
-# Gaps:          25/131 (19.1%)
-# Score: 100.0
-#
-#
-#=======================================
-
-IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
-IXI_235            1 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQAT     41
-IXI_236            1 TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQAT     48
-IXI_237            1 TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQAT     45
-                     |||||:|||||||||:::::::  |||||:||||:::::|||||:|||||
-
-IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
-IXI_235           42 GGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAG     81
-IXI_236           49 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--G     96
-IXI_237           46 GGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--G     93
-                     ||:||||||||||||||||||||:::::::::::|||||||||||||  |
-
-IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
-IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
-IXI_236           97 SRPPRFAPPLMSSCITSTTGPPPPAGDRSHE    127
-IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
-                     |||:||||:|||||:|||||||::|||||||
-
-
-#---------------------------------------
-#---------------------------------------
-
-"""  # noqa: E122 not clear to me, why this comes up here
+with open("Emboss/alignret.txt") as handle:
+    simple_example = handle.read()
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
 with open("Emboss/water.txt") as handle:
