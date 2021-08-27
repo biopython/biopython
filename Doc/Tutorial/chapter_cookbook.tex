@@ -179,7 +179,9 @@ def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(
-        Seq("".join(nuc_list)), id=new_id, description="Based on %s" % original_rec.id,
+        Seq("".join(nuc_list)),
+        id=new_id,
+        description="Based on %s" % original_rec.id,
     )
 
 
