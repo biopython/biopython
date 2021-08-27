@@ -323,12 +323,9 @@ class TestQblast(unittest.TestCase):
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:
-                    if expected_hit == descr.accession or expected_hit in descr.title.split(
-                        None, 1
-                    )[
-                        0
-                    ].split(
-                        "|"
+                    if (
+                        expected_hit == descr.accession
+                        or expected_hit in descr.title.split(None, 1)[0].split("|")
                     ):
                         found_result = True
                         break

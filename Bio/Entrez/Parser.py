@@ -831,10 +831,14 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.strings[name] = allowed_tags
             return
         # List-type elements
-        if model[0] in (
-            expat.model.XML_CTYPE_CHOICE,
-            expat.model.XML_CTYPE_SEQ,
-        ) and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP):
+        if (
+            model[0]
+            in (
+                expat.model.XML_CTYPE_CHOICE,
+                expat.model.XML_CTYPE_SEQ,
+            )
+            and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP)
+        ):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
