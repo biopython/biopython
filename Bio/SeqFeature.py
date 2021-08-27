@@ -1308,7 +1308,7 @@ class CompoundLocation:
         join{[15:17], [20:30], [40:50], [60:70]}
 
         Also, as with the FeatureLocation, adding an integer shifts the
-        location's co-ordinates by that offset:
+        location's coordinates by that offset:
 
         >>> print(f1 + 100)
         join{[115:117], [120:130]}

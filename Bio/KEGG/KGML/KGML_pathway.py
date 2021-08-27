@@ -399,7 +399,7 @@ class Entry:
     def bounds(self):
         """Coordinate bounds for all Graphics elements in the Entry.
 
-        Return the [(xmin, ymin), (xmax, ymax)] co-ordinates for the Entry
+        Return the [(xmin, ymin), (xmax, ymax)] coordinates for the Entry
         Graphics elements.
         """
         xlist, ylist = [], []
@@ -466,7 +466,7 @@ class Graphics:
      - name         Label for the graphics object
      - x            X-axis position of the object (int)
      - y            Y-axis position of the object (int)
-     - coords       polyline co-ordinates, list of (int, int) tuples
+     - coords       polyline coordinates, list of (int, int) tuples
      - type         object shape
      - width        object width (int)
      - height       object height (int)
@@ -543,7 +543,7 @@ class Graphics:
         _getheight, _setheight, _delheight, "The height of the graphics element."
     )
 
-    # We make sure that the polyline co-ordinates are integers, too
+    # We make sure that the polyline coordinates are integers, too
     def _getcoords(self):
         return self._coords
 
@@ -628,7 +628,7 @@ class Graphics:
         """Coordinate bounds for the Graphics element.
 
         Return the bounds of the Graphics object as an [(xmin, ymin),
-        (xmax, ymax)] tuple.  Co-ordinates give the centre of the
+        (xmax, ymax)] tuple.  Coordinates give the centre of the
         circle, rectangle, roundrectangle elements, so we have to
         adjust for the relevant width/height.
         """

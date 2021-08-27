@@ -381,7 +381,7 @@ class LinearDrawer(AbstractDrawer):
                 "Tick at %i, but showing %r to %r for track"
                 % (tickpos, track.start, track.end)
             )
-        fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
+        fragment, tickx = self.canvas_location(tickpos)  # Tick coordinates
         assert fragment >= 0, "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]  # Center line of the track
         tickx += self.x0  # Tick X co-ord
@@ -1049,14 +1049,14 @@ class LinearDrawer(AbstractDrawer):
 
         Arguments:
          - feature       Feature object
-         - x0            Start X co-ordinate on diagram
-         - x1            End X co-ordinate on diagram
+         - x0            Start X coordinate on diagram
+         - x1            End X coordinate on diagram
          - fragment      The fragment on which the feature appears
 
         Returns a drawable indicator of the feature, and any required label
         for it.
         """
-        # Establish co-ordinates for drawing
+        # Establish coordinates for drawing
         x0, x1 = self.x0 + x0, self.x0 + x1
         btm, ctr, top = self.track_offsets[self.current_track_level]
         try:
