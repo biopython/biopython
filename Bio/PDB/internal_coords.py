@@ -1243,7 +1243,8 @@ class IC_Residue:
     # chain)
     accept_resnames = ("CYG", "YCM", "UNK")
 
-    AllBonds: bool = False  # For OpenSCAD, generate explicit hedra covering all bonds if True.
+    # For OpenSCAD, generate explicit hedra covering all bonds if True.
+    AllBonds: bool = False
 
     def __init__(self, parent: "Residue", NO_ALTLOC: bool = False) -> None:
         """Initialize IC_Residue with parent Biopython Residue.
