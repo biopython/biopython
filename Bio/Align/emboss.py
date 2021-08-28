@@ -202,27 +202,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     identifier, start = prefix.split(None, 1)
                     assert identifiers[index].startswith(identifier)
                     aligned_sequence, end = line[21:].split(None, 1)
-                    start = int(start)
+                    start = int(start) - 1  # Python counting
                     end = int(end)
                     length = len(sequences[index])
                     sequence = aligned_sequence.replace("-", "")
-                    start -= 1  # Python counting
-                    if self.align_format == "srspair":
-                        if length > 0:
-                            if len(sequence) > 0:
-                                assert start == length
-                            else:
-                                assert start + 1 == length
-                        elif len(sequence) > 0:
-                            # Record the start
-                            starts[index] = start
+                    if length == 0 and len(sequence) > 0:
+                        # Record the start
+                        starts[index] = start
                     else:
-                        if length > 0:
-                            assert start == starts[index] + length
-                        else:
-                            # Record the start
-                            starts[index] = start
-                    assert end == starts[index] + length + len(sequence)
+                        if self.align_format == "srspair" and len(sequence) == 0:
+                            start += 1
+                        assert start == starts[index] + length
+                    assert end == start + len(sequence)
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:
