@@ -6,8 +6,8 @@
 # package.
 """Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
-This module contains a parser for the EMBOSS pair/simple file format, for
-example from the needle, water, and stretcher tools.
+This module contains a parser for the EMBOSS srspair/pair/simple file format,
+for example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -172,7 +172,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             records = []
                             n = len(sequences)
                             for i in range(n):
-                                start = starts[i] - 1  # Python counting
+                                start = starts[i]
                                 if start == 0:
                                     sequence = Seq(sequences[i])
                                 else:
@@ -200,22 +200,34 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     consensus += line[21:71]
                 else:
                     identifier, start = prefix.split(None, 1)
+                    assert identifiers[index].startswith(identifier)
                     aligned_sequence, end = line[21:].split(None, 1)
                     start = int(start)
                     end = int(end)
+                    length = len(sequences[index])
                     sequence = aligned_sequence.replace("-", "")
-                    if len(sequences[index]) > 0:
-                        length = len(sequence)
-                        if length == 0 and self.align_format == "srspair":
-                            assert start == len(sequences[index])
-                            assert end == start
+                    if self.align_format == "srspair":
+                        if length > 0:
+                            if len(sequence) > 0:
+                                start -= 1  # Python counting
+                                assert start == length
+                                assert end == length + len(sequence)
+                            else:
+                                assert start == length
+                                assert end == length
                         else:
-                            assert start == len(sequences[index]) + 1
-                            assert end == start + length - 1
-                    assert identifiers[index].startswith(identifier)
-                    if starts[index] == 0:
-                        # Record the start and end
-                        starts[index] = start
+                            start -= 1  # Python counting
+                            # Record the start
+                            starts[index] = start
+                    else:
+                        if length > 0:
+                            start -= 1  # Python counting
+                            assert start == starts[index] + length
+                            assert end == start + len(sequence)
+                        else:
+                            start -= 1  # Python counting
+                            # Record the start
+                            starts[index] = start
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:
