@@ -191,10 +191,12 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "HBA_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "HBB_HUMAN")
         self.assertEqual(
-            repr(alignment.sequences[0].seq), "Seq({60: 'KKVADALTNAVAH'}, length=73)",
+            repr(alignment.sequences[0].seq),
+            "Seq({60: 'KKVADALTNAVAH'}, length=73)",
         )
         self.assertEqual(
-            repr(alignment.sequences[1].seq), "Seq({131: 'QKVVAGVANALAH'}, length=144)",
+            repr(alignment.sequences[1].seq),
+            "Seq({131: 'QKVVAGVANALAH'}, length=144)",
         )
         self.assertEqual(alignment.sequences[0].seq[60:73], "KKVADALTNAVAH")
         self.assertEqual(alignment.sequences[1].seq[131:144], "QKVVAGVANALAH")
@@ -251,10 +253,12 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "HBA_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "HBB_HUMAN")
         self.assertEqual(
-            repr(alignment.sequences[0].seq), "Seq({80: 'LSALSDLHAH'}, length=90)",
+            repr(alignment.sequences[0].seq),
+            "Seq({80: 'LSALSDLHAH'}, length=90)",
         )
         self.assertEqual(
-            repr(alignment.sequences[1].seq), "Seq({68: 'LGAFSDGLAH'}, length=78)",
+            repr(alignment.sequences[1].seq),
+            "Seq({68: 'LGAFSDGLAH'}, length=78)",
         )
         self.assertEqual(alignment.sequences[0].seq[80:90], "LSALSDLHAH")
         self.assertEqual(alignment.sequences[1].seq[68:78], "LGAFSDGLAH")
@@ -278,10 +282,12 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "HBA_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "HBB_HUMAN")
         self.assertEqual(
-            repr(alignment.sequences[0].seq), "Seq({10: 'VKAAWGKVGA'}, length=20)",
+            repr(alignment.sequences[0].seq),
+            "Seq({10: 'VKAAWGKVGA'}, length=20)",
         )
         self.assertEqual(
-            repr(alignment.sequences[1].seq), "Seq({126: 'VQAAYQKVVA'}, length=136)",
+            repr(alignment.sequences[1].seq),
+            "Seq({126: 'VQAAYQKVVA'}, length=136)",
         )
         self.assertEqual(alignment.sequences[0].seq[10:20], "VKAAWGKVGA")
         self.assertEqual(alignment.sequences[1].seq[126:136], "VQAAYQKVVA")
