@@ -71,6 +71,50 @@ class TestEmboss(unittest.TestCase):
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
 
+    def test_local_water2(self):
+        """Test parsing a local alignment."""
+        path = "Emboss/water2.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "water")
+            self.assertEqual(alignments.rundate, "Sat Apr 04 2009 22:08:44")
+            self.assertEqual(
+                alignments.commandline,
+                "water -asequence asis:ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG -bsequence asis:CGTTTGAGTACTGGGATG -gapopen 10 -gapextend 0.5 -filter",
+            )
+            self.assertEqual(alignments.align_format, "srspair")
+            self.assertEqual(alignments.report_file, "stdout")
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
+        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["identity"], 17)
+        self.assertEqual(alignment.annotations["similarity"], 17)
+        self.assertEqual(alignment.annotations["gaps"], 1)
+        self.assertAlmostEqual(alignment.annotations["score"], 75.0)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 18))
+        self.assertEqual(alignment.sequences[0].id, "asis")
+        self.assertEqual(alignment.sequences[1].id, "asis")
+        self.assertEqual(
+            repr(alignment.sequences[0].seq),
+            "Seq({78: 'CGTTTGAGTCTGGGATG'}, length=95)",
+        )
+        self.assertEqual(alignment.sequences[0].seq[78:95], "CGTTTGAGTCTGGGATG")
+        self.assertEqual(alignment.sequences[1].seq[0:18], "CGTTTGAGTACTGGGATG")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[78, 87, 87, 95], [0, 9, 10, 18]])
+            )
+        )
+        self.assertEqual(alignment[0], "CGTTTGAGT-CTGGGATG")
+        self.assertEqual(alignment[1], "CGTTTGAGTACTGGGATG")
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||"
+        )
+
     def test_matcher_simple(self):
         path = "Emboss/matcher_simple.txt"
         with open(path) as stream:
