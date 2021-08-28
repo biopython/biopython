@@ -877,7 +877,7 @@ Root:  16
         with self.assertRaises(Exception) as context:
             tree.randomize()
         self.assertIn(
-            "Either numer of taxa or list of taxa must be specified.",
+            "Either number of taxa or list of taxa must be specified.",
             str(context.exception),
         )
         tree_rand = Trees.Tree(ts1c)
