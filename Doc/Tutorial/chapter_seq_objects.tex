@@ -721,7 +721,7 @@ MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA')
 MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 \end{minted}
 
-Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
+Note that the \verb|MutableSeq| object's \verb|reverse()| method, like the \verb|reverse()| method of a Python list, reverses the sequence in place.
 
 An important technical difference between mutable and immutable objects in Python means that you can't use a \verb|MutableSeq| object as a dictionary key, but you can use a Python string or a \verb|Seq| object in this way.
 
