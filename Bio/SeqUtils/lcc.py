@@ -134,9 +134,9 @@ def lcc_simp(seq):
     wsize = len(seq)
     upper = str(seq).upper()
     l4 = math.log(4)
+    # Check to avoid calculating the log of 0.
     if "A" not in seq:
         term_a = 0
-        # Check to avoid calculating the log of 0.
     else:
         term_a = ((upper.count("A")) / float(wsize)) * (
             (math.log((upper.count("A")) / float(wsize))) / l4

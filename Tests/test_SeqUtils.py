@@ -302,8 +302,7 @@ class SeqUtilsTests(unittest.TestCase):
 
     def test_lcc_mult(self):
         s1 = "ACGATAGC"
-        windows_size = len(s1)
-        llc_lst = lcc_mult(s1, windows_size)
+        llc_lst = lcc_mult(s1, len(s1))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
 
