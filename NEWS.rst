@@ -21,7 +21,8 @@ where appropriate by ``collections.defaultsdict``.
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
 
-The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses base 4 log instead of 2.
+The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
+base 4 log instead of 2.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
