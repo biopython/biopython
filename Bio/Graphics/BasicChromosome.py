@@ -18,7 +18,7 @@ breaking the general drawing capabilities of the system. The
 relationship between classes is that everything derives from
 _ChromosomeComponent, which specifies the overall interface. The parts
 then are related so that an Organism contains Chromosomes, and these
-Chromosomes contain ChromosomeSegments. This representation differents
+Chromosomes contain ChromosomeSegments. This representation differs
 from the canonical composite structure in that we don't really have
 'leaf' nodes here -- all components can potentially hold sub-components.
 

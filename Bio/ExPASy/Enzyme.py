@@ -65,10 +65,10 @@ class Record(dict):
     - AN: Alternative names (if any)
     - CA: Catalytic activity
     - CF: Cofactors (if any)
-    - PR: Pointers to the Prosite documentation entrie(s) that
-      correspond to the enzyme (if any)
-    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-      that correspond to the enzyme (if any)
+    - PR: Pointers to any Prosite documentation entries that correspond to the
+      enzyme
+    - DR: Pointers to any Swiss-Prot protein sequence entries that correspond
+      to the enzyme
     - CC: Comments
 
     """

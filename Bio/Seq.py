@@ -761,7 +761,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         The location of the typical start codon before that can be found by
-        ending the search at positon 15:
+        ending the search at position 15:
 
         >>> my_rna.rfind("AUG", end=15)
         3
@@ -850,7 +850,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         The location of the typical start codon before that can be found by
-        ending the search at positon 15:
+        ending the search at position 15:
 
         >>> my_rna.rindex("AUG", end=15)
         3

@@ -25,11 +25,11 @@ Examples
     BmeDI      :  1, 2, 7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19...
     AccII      :  98.
     AciI       :  86, 90, 96, 98...
-    
+
     Enzymes which do not cut the sequence.
 
-    AspLEI    BstHHI    CfoI      CviAII    FaeI      FaiI      FatI      GlaI      
-    HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI     
+    AspLEI    BstHHI    CfoI      CviAII    FaeI      FaiI      FatI      GlaI
+    HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI
     MaeII     MseI      NlaIII    SaqAI     TaiI      Tru1I     Tru9I...
     <BLANKLINE>
     >>> b = a.blunt()  # Analysis with blunt enzmyes
@@ -45,7 +45,7 @@ Examples
 
     Enzymes which do not cut the sequence.
 
-    FaiI      GlaI      CdiI      MlyI      SchI      SspD5I    AanI...    
+    FaiI      GlaI      CdiI      MlyI      SchI      SspD5I    AanI...
     <BLANKLINE>
 
 """  # noqa: W291, W293
@@ -137,7 +137,7 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 # #    #   types are not kept in the locals() dictionary. It is therefore
 # #    #   impossible to import them.
 # #    #   Now, if you have look at the dictionary, you will see that not all
-# #    #   thet ypes are present as those without corresponding enzymes have
+# #    #   the types are present as those without corresponding enzymes have
 # #    #   been removed by Dictionary_Builder().
 # #    #
 # #    #   The values are tuples which contain
