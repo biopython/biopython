@@ -115,26 +115,26 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
     sb_res = None
 
     with as_handle(file, mode="r") as handle:
-        for aline in handle.readlines():
-            if aline.startswith("#"):
+        for line in handle.readlines():
+            if line.startswith("#"):
                 pass  # skip comment lines
-            elif aline.startswith("HEADER "):
-                m = pdb_hdr_re.match(aline)
+            elif line.startswith("HEADER "):
+                m = pdb_hdr_re.match(line)
                 if m:
                     header_dict["head"] = m.group("cf")  # classification
                     header_dict["idcode"] = m.group("id")
                     header_dict["deposition_date"] = m.group("dd")
                 elif verbose:
-                    print("Reading pic file", file, "HEADER parse fail: ", aline)
-            elif aline.startswith("TITLE "):
-                m = pdb_ttl_re.match(aline)
+                    print("Reading pic file", file, "HEADER parse fail: ", line)
+            elif line.startswith("TITLE "):
+                m = pdb_ttl_re.match(line)
                 if m:
                     header_dict["name"] = m.group("ttl").strip()
                     # print('TTL: ', m.group('ttl').strip())
                 elif verbose:
-                    print("Reading pic file", file, "TITLE parse fail:, ", aline)
-            elif aline.startswith("("):  # Biopython ID line for Residue
-                m = biop_id_re.match(aline)
+                    print("Reading pic file", file, "TITLE parse fail:, ", line)
+            elif line.startswith("("):  # Biopython ID line for Residue
+                m = biop_id_re.match(line)
                 if m:
                     # check SMCS = Structure, Model, Chain, SegID
                     segid = m.group(9)
@@ -172,12 +172,10 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
                     # print(report_IC(struct_builder.get_structure()))
                 else:
                     if verbose:
-                        print(
-                            "Reading pic file", file, "residue ID parse fail: ", aline
-                        )
+                        print("Reading pic file", file, "residue ID parse fail: ", line)
                     return None
-            elif aline.startswith("ATOM "):
-                m = pdb_atm_re.match(aline)
+            elif line.startswith("ATOM "):
+                m = pdb_atm_re.match(line)
                 if m:
                     if sb_res is None:
                         # ATOM without res spec already loaded, not a pic file
@@ -186,7 +184,7 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
                                 "Reading pic file",
                                 file,
                                 "ATOM without residue configured:, ",
-                                aline,
+                                line,
                             )
                         return None
                     if sb_res.resname != m.group("res") or sb_res.id[1] != int(
@@ -200,7 +198,7 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
                                 sb_res.resname,
                                 str(sb_res.id),
                                 "):",
-                                aline,
+                                line,
                             )
                         return None
                     coord = numpy.array(
@@ -220,9 +218,9 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
 
                     # print('atom: ', m.groupdict())
                 # elif verbose:
-                #     print("Reading pic file", file, "ATOM parse fail:", aline)
-            elif aline.startswith("BFAC: "):
-                m = bfac_re.match(aline)
+                #     print("Reading pic file", file, "ATOM parse fail:", line)
+            elif line.startswith("BFAC: "):
+                m = bfac_re.match(line)
                 if m:
                     for bfac_pair in m.groups():
                         if bfac_pair is not None:
@@ -231,9 +229,9 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
                                 rp = sb_res.internal_coord
                                 rp.bfactors[m2.group(1)] = float(m2.group(2))
                 # else:
-                #    print('Reading pic file', file, 'B-factor line fail: ', aline)
+                #    print('Reading pic file', file, 'B-factor line fail: ', line)
             else:
-                m = Edron.edron_re.match(aline)
+                m = Edron.edron_re.match(line)
                 if m and sb_res is not None:
                     sb_res.internal_coord.load_PIC(m.groupdict())
                 elif m:
@@ -241,12 +239,12 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
                         "PIC file: ",
                         file,
                         " error: no residue info before reading (di/h)edron data: ",
-                        aline,
+                        line,
                     )
                     return None
-                elif aline.strip():
+                elif line.strip():
                     if verbose:
-                        print("Reading PIC file", file, "parse fail on: .", aline, ".")
+                        print("Reading PIC file", file, "parse fail on: .", line, ".")
                     return None
 
     struct = struct_builder.get_structure()
