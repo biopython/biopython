@@ -295,7 +295,7 @@ class _Scanner:
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
         # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch
         # [blastall] ERROR:  [000.000]  AT1G08320: Blast:
-        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at leas
+        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least
         # done
         # Reported by David Weisman.
         # Check for these error lines and ignore them for now.  Let

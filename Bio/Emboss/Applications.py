@@ -345,7 +345,7 @@ class FDNADistCommandline(_EmbossCommandLine):
     """Commandline object for the fdnadist program from EMBOSS.
 
     fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
-    calulating distance matrices from DNA sequence files.
+    calculating distance matrices from DNA sequence files.
     """
 
     def __init__(self, cmd="fdnadist", **kwargs):
@@ -383,7 +383,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
     """Commandline object for the ftreedist program from EMBOSS.
 
     ftreedist is an EMBOSS wrapper for the PHYLIP program treedist used for
-    calulating distance measures between phylogentic trees.
+    calculating distance measures between phylogentic trees.
     """
 
     def __init__(self, cmd="ftreedist", **kwargs):
@@ -414,7 +414,7 @@ class FNeighborCommandline(_EmbossCommandLine):
     """Commandline object for the fneighbor program from EMBOSS.
 
     fneighbor is an EMBOSS wrapper for the PHYLIP program neighbor used for
-    calulating neighbor-joining or UPGMA trees from distance matrices.
+    calculating neighbor-joining or UPGMA trees from distance matrices.
     """
 
     def __init__(self, cmd="fneighbor", **kwargs):
@@ -428,7 +428,7 @@ class FNeighborCommandline(_EmbossCommandLine):
             ),
             _Option(
                 ["-matrixtype", "matrixtype"],
-                "is martrix [S]quare pr [u]pper or [l]ower",
+                "is martrix square (S), upper (U) or lower (L)",
             ),
             _Option(["-treetype", "treetype"], "nj or UPGMA tree (n/u)"),
             _Option(["-outgrno", "outgrno"], "taxon to use as OG"),
@@ -709,7 +709,7 @@ class NeedleCommandline(_EmbossCommandLine):
             ),
             _Option(
                 ["-endextend", "endextend"],
-                "The score added to the end gap penality for each base or "
+                "The score added to the end gap penalty for each base or "
                 "residue in the end gap.",
             ),
             _Switch(
@@ -766,7 +766,7 @@ class NeedleallCommandline(_EmbossCommandLine):
             ),
             _Option(
                 ["-endextend", "endextend"],
-                "The score added to the end gap penality for each base or "
+                "The score added to the end gap penalty for each base or "
                 "residue in the end gap.",
             ),
             _Switch(

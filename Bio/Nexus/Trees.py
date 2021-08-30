@@ -189,7 +189,7 @@ class Tree(Nodes.Chain):
             nodecomment = text[nc_start : nc_end + 1]
             text = text[:nc_start] + text[nc_end + 1 :]
 
-        # pase out supports and branchlengths, with internal node taxa info
+        # parse out supports and branchlengths, with internal node taxa info
         values = []
         taxonomy = None
         for part in [t.strip() for t in text.split(":")]:

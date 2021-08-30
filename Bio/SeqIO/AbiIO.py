@@ -282,7 +282,7 @@ _INSTRUMENT_SPECIFIC_TAGS["abi_3530/3530xl"] = {
     "ScPa1": "The parameter string of size caller",
     "ScSt1": "Raw data start point. Set to 0 for 3500 data collection.",
     "SpeN1": "Active spectral calibration name",
-    "TrPa1": "Timming parameters",
+    "TrPa1": "Trimming parameters",
     "TrSc1": "Trace score.",
     "TrSc2": 'One of "Pass", "Fail", or "Check"',
     "phAR1": "Trace peak aria ratio",
