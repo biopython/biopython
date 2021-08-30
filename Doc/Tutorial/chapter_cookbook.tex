@@ -1182,7 +1182,7 @@ smoother plot than this.
 \subsection{Nucleotide dot plots}
 A dot plot is a way of visually comparing two nucleotide sequences for similarity to
 each other.  A sliding window is used to compare short sub-sequences to each other,
-often with a mis-match threshold.  Here for simplicity we'll only look for perfect
+often with a mismatch threshold.  Here for simplicity we'll only look for perfect
 matches (shown in black
 \begin{latexonly}
 in Figure~\ref{fig:nuc-dot-plot}).
@@ -1302,9 +1302,9 @@ for (seq, section_dict) in [
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}
-\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
+\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ coordinates:
 \begin{minted}{python}
-# Create lists of x and y co-ordinates for scatter plot
+# Create lists of x and y coordinates for scatter plot
 x = []
 y = []
 for section in matches:
