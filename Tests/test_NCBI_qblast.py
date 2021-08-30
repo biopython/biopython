@@ -54,12 +54,12 @@ if not requires_internet.check.available:
     # we mock urlopen, so that it returns files from the blast folder
 
     def mock_response():
-        """Mimick an NCBI qblast response."""
+        """Mimic an NCBI qblast response."""
         # Each use of NCBIWWW.qblast makes two urlopen calls with different responses:
         # a. the 'wait' page, and b. the result.
-        wait = ["Blast/mock_wait.html"]  # This mimicks the 'wait' page
+        wait = ["Blast/mock_wait.html"]  # This mimics the 'wait' page
 
-        # These mimick the results. Add new mock files here, if you add more tests.
+        # These mimic the results. Add new mock files here, if you add more tests.
         # Note: The test are run in alphabetical order, so place new files at the
         # correct position.
         response_list = [

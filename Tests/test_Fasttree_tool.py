@@ -80,7 +80,7 @@ class FastTreeTestCase(unittest.TestCase):
     def check(self, path, length):
         input_records = SeqIO.to_dict(SeqIO.parse(path, "fasta"))
         self.assertEqual(len(input_records), length)
-        # Any filesnames with spaces should get escaped with quotes
+        # Any filenames with spaces should get escaped with quotes
         #  automatically.
         # Using keyword arguments here.
         cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=path, nt=True)
