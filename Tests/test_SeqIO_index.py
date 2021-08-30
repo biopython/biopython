@@ -222,7 +222,7 @@ if sqlite3:
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-            # Note we expect relative paths recorded with Unix slashs!
+            # Note we expect relative paths recorded with Unix slashes!
             expt_sff_files = [
                 "Roche/E3MFGYR02_no_manifest.sff",
                 "Roche/greek.sff",
@@ -413,7 +413,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(id, rec_dict[key].id, msg=msg)
             self.assertEqual(id, rec_dict.get(key).id, msg=msg)
-        # Check non-existant keys,
+        # Check non-existent keys,
         assert chr(0) not in keys, "Bad example in test"
         with self.assertRaises(KeyError, msg=msg):
             rec = rec_dict[chr(0)]

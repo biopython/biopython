@@ -1239,7 +1239,7 @@ class TransferTest(SeqRecordTestBaseClass):
 
 
 class InDepthLoadTest(unittest.TestCase):
-    """Make sure we are loading and retreiving in a semi-lossless fashion."""
+    """Make sure we are loading and retrieving in a semi-lossless fashion."""
 
     def setUp(self):
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")

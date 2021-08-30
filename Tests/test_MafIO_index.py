@@ -494,7 +494,7 @@ if sqlite3:
             https://github.com/biopython/biopython/pull/504
             https://github.com/biopython/biopython/pull/1086#issuecomment-285080702
 
-            We get the alignement corresponding to the following whole MAF block
+            We get the alignment corresponding to the following whole MAF block
             and check that the lengths of its sequences are correct:
 
             a score=40840.000000
@@ -532,7 +532,7 @@ if sqlite3:
         def test_correct_spliced_sequences_1(self):
             """Checking that spliced sequences are correct.
 
-            We get the alignement corresponding to the following whole MAF block
+            We get the alignment corresponding to the following whole MAF block
             and check that the sequences are correct:
 
             a score=40840.000000

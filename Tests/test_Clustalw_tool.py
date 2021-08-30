@@ -183,7 +183,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             pass
 
         if os.path.isfile(input_file + ".aln"):
-            # Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            # Clustalw 2.1 made an empty aln file, clustalw 1.83 did not
             self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):

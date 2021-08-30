@@ -50,7 +50,7 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         alignment = pairwise2.align.globalxx("A", "")
         self.assertEqual(alignment, [])
 
-        # Gap scores must be negativ
+        # Gap scores must be negative
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", 5, -1)
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", -5, 1)
         # Gap open penalty must be higher than gap extension penalty
@@ -288,7 +288,7 @@ zA-Bz
 
 
 class TestScoreOnly(unittest.TestCase):
-    """Test paramater ``score_only``."""
+    """Test parameter ``score_only``."""
 
     def test_score_only_global(self):
         """Test ``score_only`` in a global alignment."""

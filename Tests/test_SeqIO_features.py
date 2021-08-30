@@ -110,7 +110,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             if key in ["db_xref", "protein_id", "product", "note"]:
                 # EMBL and GenBank files are use different references/notes/etc
                 continue
-            err_msg = "qualifier mis-match for %s" % key
+            err_msg = "qualifier mismatch for %s" % key
             if msg:
                 err_msg = "%s; %s" % (msg, err_msg)
             self.assertEqual(old.qualifiers[key], new.qualifiers[key], msg=err_msg)
