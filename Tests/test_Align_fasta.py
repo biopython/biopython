@@ -6,7 +6,7 @@
 """Tests for Bio.Align.fasta module."""
 import unittest
 
-# from Bio.Align.fasta import AlignmentIterator
+from Bio.Align.fasta_m8 import AlignmentIterator
 
 try:
     import numpy
@@ -19,122 +19,17 @@ except ImportError:
 
 
 class TestFasta(unittest.TestCase):
-    def test_m8(self):
-        # Alignment file obtained by running
-        # fasta36 -q -m 8 seq/mgstm1.aa seq/prot_test.lseg
-        # in the fasta36 source distribution
-        path = "Fasta/output_m8.txt"
-        return
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:23:19 2002")
-            self.assertEqual(alignments.report_file, "stdout")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
-        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
-        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
-        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
-        self.assertEqual(alignment.annotations["identity"], 112)
-        self.assertEqual(alignment.annotations["similarity"], 112)
-        self.assertEqual(alignment.annotations["gaps"], 19)
-        self.assertAlmostEqual(alignment.annotations["score"], 591.5)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.shape, (2, 131))
-        self.assertEqual(alignment.sequences[0].id, "IXI_234")
-        self.assertEqual(alignment.sequences[1].id, "IXI_235")
-        self.assertEqual(
-            alignment.sequences[0].seq,
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.sequences[1].seq,
-            "TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[0, 15, 24, 74, 84, 131], [0, 15, 15, 65, 65, 112]]),
-            )
-        )
-        self.assertEqual(
-            alignment[0],
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment[1],
-            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.column_annotations["emboss_consensus"],
-            "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
-        )
-
-    def test_m8C(self):
-        # Alignment file obtained by running
-        # fasta36 -q -m 8C seq/mgstm1.aa seq/prot_test.lseg
-        # in the fasta36 source distribution
-        path = "Fasta/output_m8C.txt"
-        return
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:23:19 2002")
-            self.assertEqual(alignments.report_file, "stdout")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
-        self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
-        self.assertAlmostEqual(alignment.annotations["gap_penalty"], 10.0)
-        self.assertAlmostEqual(alignment.annotations["extend_penalty"], 0.5)
-        self.assertEqual(alignment.annotations["identity"], 112)
-        self.assertEqual(alignment.annotations["similarity"], 112)
-        self.assertEqual(alignment.annotations["gaps"], 19)
-        self.assertAlmostEqual(alignment.annotations["score"], 591.5)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.shape, (2, 131))
-        self.assertEqual(alignment.sequences[0].id, "IXI_234")
-        self.assertEqual(alignment.sequences[1].id, "IXI_235")
-        self.assertEqual(
-            alignment.sequences[0].seq,
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.sequences[1].seq,
-            "TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[0, 15, 24, 74, 84, 131], [0, 15, 15, 65, 65, 112]]),
-            )
-        )
-        self.assertEqual(
-            alignment[0],
-            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment[1],
-            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
-        )
-        self.assertEqual(
-            alignment.column_annotations["emboss_consensus"],
-            "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
-        )
 
     def test_m8CB(self):
         # Alignment file obtained by running
-        # fasta36 -q -m 8B seq/mgstm1.aa seq/prot_test.lseg
+        # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/output_m8CB.txt"
-        return
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:23:19 2002")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.commandline, "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg")
             alignments = list(alignments)
+        return
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
@@ -180,13 +75,11 @@ class TestFasta(unittest.TestCase):
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/output_m8CC.txt"
-        return
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:23:19 2002")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.commandline, "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg")
             alignments = list(alignments)
+        return
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(alignment.annotations["matrix"], "EBLOSUM62")
