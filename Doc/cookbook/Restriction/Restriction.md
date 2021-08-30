@@ -690,9 +690,9 @@ are really normal batches, and you can use them as any other batch.
 in a batch. However, it is sometime nice to get something a bit easier to read
 than a Python dictionary. Complex restriction analysis are not easy with
 `RestrictionBatch`. Some refinements in the way to search a sequence for
-restriction sites will help. `Analysis` provides a serie of command to customise
-the results obtained from a pair restriction batch/sequence and some facilities
-to make the output sligthly more human readable.
+restriction sites will help. `Analysis` provides a series of command to
+customise the results obtained from a pair restriction batch/sequence and some
+facilities to make the output sligthly more human readable.
 
 #### <a name="4.1"></a>4.1 Setting up an Analysis
 
@@ -1309,7 +1309,7 @@ enough the new dictionary is good, but if there is a problem it is always nice
 to know you can revert to the previous setting without having to reinstall the
 whole thing.
 
-If you whish, the script may install the folder for you as well, but you will
+If you wish, the script may install the folder for you as well, but you will
 have to run it as root if your normal user has no write access to your Python
 installation (and it should'nt). Use the command `ranacompiler.py -i` or
 `ranacompiler.py --install` for this.
