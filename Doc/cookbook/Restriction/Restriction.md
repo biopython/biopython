@@ -247,7 +247,7 @@ being the same enzymes, are not different since they are interchangeable).
 : `True` if the enzymes recognise the same site, but cut it in a different way
 (i.e. the enzymes are neoschizomers).
 
-`%` (test compatibilty)
+`%` (test compatibility)
 : Test the compatibility of the ending produced by the enzymes (will be `True`
 if the fragments produced with one of the enzyme can directly be ligated to
 fragments produced by the other).
@@ -340,7 +340,7 @@ True
 False
 ```
 
-A more detailled view of the restriction site can be produced using the
+A more detailed view of the restriction site can be produced using the
  `elucidate()` method. The `^` refers to the position of the cut in the sense
 strand of the sequence, `_` to the cut on the antisense or complementary strand.
 `^_` means blunt.
@@ -692,7 +692,7 @@ than a Python dictionary. Complex restriction analysis are not easy with
 `RestrictionBatch`. Some refinements in the way to search a sequence for
 restriction sites will help. `Analysis` provides a series of command to
 customise the results obtained from a pair restriction batch/sequence and some
-facilities to make the output sligthly more human readable.
+facilities to make the output slightly more human readable.
 
 #### <a name="4.1"></a>4.1 Setting up an Analysis
 
@@ -765,7 +765,7 @@ SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
 SfiI
 ```
 
-Much clearer, is'nt ? The output is optimised for a shell 80 columns wide. If
+Much clearer, isn't ? The output is optimised for a shell 80 columns wide. If
 the output seems odd, check that the width of your shell is at least 80 columns.
 
 #### <a name="4.3"></a>4.3 Changing the title
@@ -1265,7 +1265,7 @@ The new database contains 867 enzymes.
 Writing the dictionary containing the new Restriction classes...
 OK.
 
-Writing the dictionary containing the suppliers datas...
+Writing the dictionary containing the suppliers data...
 OK.
 
 Writing the dictionary containing the Restriction types....
@@ -1297,7 +1297,7 @@ compilation. You can safely ignore the warnings as long as the
 `compilation of the new dictionary : OK.` is present in the last part of the
 output. They are here for debugging purpose. The number of enzymes in the new
 module is indicated as well as a list of the dictionary which have been
-compiled. The last part indicate that the module has been succesfully created
+compiled. The last part indicate that the module has been successfully created
 but not installed. To finish the update you must copy the file
 `Restriction_Dictionary.py` into the folder
 `/your_python_path/site-packages/Bio/Restriction/` as indicated by the script.
@@ -1311,7 +1311,7 @@ whole thing.
 
 If you wish, the script may install the folder for you as well, but you will
 have to run it as root if your normal user has no write access to your Python
-installation (and it should'nt). Use the command `ranacompiler.py -i` or
+installation (and it shouldn't). Use the command `ranacompiler.py -i` or
 `ranacompiler.py --install` for this.
 
 If anything goes wrong (you have no write access to the destination folder for
