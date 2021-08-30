@@ -279,7 +279,7 @@ class ModTest(unittest.TestCase):
             self.assertIn("site-class model", results, version_msg)
             self.assertEqual(results["site-class model"], "discrete", version_msg)
             self.assertIn("NSsites", results, version_msg)
-            # There should be 1 NSsites classe: 3
+            # There should be 1 NSsites class: 3
             self.assertEqual(len(results["NSsites"]), 1, version_msg)
             # Each site class model should have 5 sub-items: 'lnL', 'tree',
             # 'description', 'parameters', & 'tree length'. It should

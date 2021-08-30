@@ -122,7 +122,7 @@ class TaxonomyTest(unittest.TestCase):
 
         test_record = self.db.lookup(accession="X55053")
 
-        # make sure that the ncbi taxonomy id is corrent
+        # make sure that the ncbi taxonomy id is correct
         self.assertEqual(test_record.annotations["ncbi_taxid"], 3702)
         # make sure that the taxonomic lineage is the same as reported
         # using the Entrez module
