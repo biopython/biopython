@@ -262,7 +262,7 @@ generated automatically.
 
 Sometimes, you are neither not able to ensure the same order or the same
 id. ``codonalign.build`` method provides you an manual approach to tell
-the program nucleotide sequence and protein sequence correspondance by
+the program nucleotide sequence and protein sequence correspondence by
 generating a ``corr_dict``. ``corr_dict`` should be a dictionary that
 uses protein record id as key and nucleotide record id as item. Let’s
 look at an example:
@@ -300,7 +300,7 @@ anchor to the nucleotide sequence to figure out where the mismatch and
 frameshift events lie. Other options available for ``codonalign.build``
 includes ``anchor_len`` (default 10) and ``max_score`` (maximum
 tolerance of unexpected events, default 10). You may want to refer the
-Biopython build-in help to get more information about these options.
+Biopython built-in help to get more information about these options.
 
 Now let’s look at a real example of building codon alignment. Here we
 will use epidermal growth factor (EGFR) gene to demonstrate how to
@@ -309,7 +309,7 @@ EGFR sequences for Homo sapiens, Bos taurus, Rattus norvegicus, Sus
 scrofa and Drosophila melanogaster. The three files used in this example
 (``egfr_nucl.fa`` with the nucleotide sequences of EGFR,
 ``egfr_pro.aln`` with the EGFR protein sequence alignment in ``clustal``
-format, and ``egfr_id`` with the id correspondance between protein
+format, and ``egfr_id`` with the id correspondence between protein
 records and nucleotide records) is available from the ‘Tests/codonalign‘
 directory in the Biopython distribution. You can then try the following
 code (make sure the files are in your current python working directory):
@@ -344,7 +344,7 @@ per site (dS). ``codonalign`` currently support three counting based
 methods (NG86, LWL85, YN00) and maximum likelihood method to estimate dN
 and dS. The function to conduct dN, dS estimation is called
 ``cal_dn_ds``. When you obtained a codon alignment, it is quite easy to
-calculate dN and dS. For example (assuming you have EGFR codon alignmnet
+calculate dN and dS. For example (assuming you have EGFR codon alignment
 in the python working space):
 
 .. code:: pycon
