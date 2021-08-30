@@ -8041,7 +8041,7 @@ class LineOneTests(unittest.TestCase):
     def test_topology_genbank(self):
         """Check GenBank LOCUS line parsing."""
         # This is a bit low level,
-        # but can test pasing the LOCUS line only
+        # but can test parsing the LOCUS line only
         tests = [
             ("LOCUS       U00096", None, None, None, None),
             # This example is actually fungal,
@@ -8124,7 +8124,7 @@ class LineOneTests(unittest.TestCase):
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test parsing the ID line only
         tests = [
             # Modern examples with sequence version
             (
@@ -8190,7 +8190,7 @@ class LineOneTests(unittest.TestCase):
 
     def test_first_line_imgt(self):
         """Check IMGT ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test parsing the ID line only
         tests = [
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
             ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
