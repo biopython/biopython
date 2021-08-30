@@ -2603,7 +2603,7 @@ class Edron:
 
     """
 
-    # regular expresion to capture hedron and dihedron specifications, as in
+    # regular expression to capture hedron and dihedron specifications, as in
     #  .pic files
     edron_re = re.compile(
         # pdbid and chain id
@@ -2796,7 +2796,7 @@ class Hedron(Edron):
         angle = angle (degrees) formed by 3 atoms
         len23 = distance between 2nd and 3rd atoms
 
-    atoms: 3x4 numpy arrray (view on chain array)
+    atoms: 3x4 numpy array (view on chain array)
         3 homogeneous atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
     atomsR: 3x4 numpy array (view on chain array)
         atoms reversed, 1st on +Z, 2nd at origin, 3rd on XZ plane
@@ -2808,7 +2808,7 @@ class Hedron(Edron):
     set_length()
         set bond length for specified atom pair
     angle(), len12(), len23()
-        gettters and setters for relevant attributes (angle in degrees)
+        getters and setters for relevant attributes (angle in degrees)
     """
 
     def __init__(self, *args: Union[List["AtomKey"], HKT], **kwargs: str) -> None:
@@ -3118,7 +3118,7 @@ class AtomKey:
     atom_re: compiled regex (Class Attribute)
         A compiled regular expression matching the string form of the key
     endnum_re: compiled regex (Class Attribute)
-        A compiled regular expresion capturing digits at end of a string
+        A compiled regular expression capturing digits at end of a string
     d2h: bool (Class Attribute)
         Convert D atoms to H on input; must also modify IC_Residue.accept_atoms
     missing: bool default False

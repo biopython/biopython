@@ -130,7 +130,7 @@ class PlateRecord:
     >>> plate == plate2
     True
 
-    Two PlateRecord object can be summed up or subracted from each other: the
+    Two PlateRecord object can be summed up or subtracted from each other: the
     the signals of each well will be summed up or subtracted. The id of the
     left operand will be kept:
 
