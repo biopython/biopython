@@ -9,12 +9,20 @@
 This module contains a parser for output from the FASTA programs generated with
 the '-m 8CB' or '-m 8CC' output formats.
 """
+import re
+import enum
 import numpy
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+
+class State(enum.Enum):
+    MATCH = enum.auto()
+    QUERY_GAP = enum.auto()
+    TARGET_GAP = enum.auto()
+    NONE = enum.auto()
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """FASTA output alignment iterator.
@@ -136,68 +144,41 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def parse_btop(self, btop):
         target_coordinates = []
         query_coordinates = []
-        target_position = 0
-        query_position = 0
-        target_coordinates.append(target_position)
-        query_coordinates.append(query_position)
-        digits = ""
-        aligned = 0
-        letters = iter(btop)
-        state = None
-        for letter in letters:
-            if letter in '0123456789':
-                state = "match"
-                digits += letter
+        target_coordinates.append(0)
+        query_coordinates.append(0)
+        state = State.NONE
+        tokens = re.findall('([A-Z-]{2}|\d+)', btop)
+        # each token is now
+        # - an integer
+        # - a pair of characters, which may include dashes
+        for token in tokens:
+            if token.startswith("-"):
+                if state != State.QUERY_GAP:
+                    target_coordinates.append(target_coordinates[-1])
+                    query_coordinates.append(query_coordinates[-1])
+                    state = State.QUERY_GAP
+                target_coordinates[-1] += 1
+            elif token.endswith("-"):
+                if state != State.TARGET_GAP:
+                    target_coordinates.append(target_coordinates[-1])
+                    query_coordinates.append(query_coordinates[-1])
+                    state = State.TARGET_GAP
+                query_coordinates[-1] += 1
             else:
-                query_letter = letter
-                target_letter = next(letters)
-                if query_letter == "-":
-                    if state == "match":
-                        number = aligned
-                        if digits:
-                            number += int(digits)
-                        target_position += number
-                        query_position += number
-                        target_coordinates.append(target_position)
-                        query_coordinates.append(query_position)
-                        digits = ""
-                        aligned = 0
-                    elif state == "target_gap":
-                        target_coordinates.append(target_position)
-                        query_coordinates.append(query_position)
-                    state = "query_gap"
-                    target_position += 1
-                elif target_letter == "-":
-                    if state == "match":
-                        number = aligned
-                        if digits:
-                            number += int(digits)
-                        target_position += number
-                        query_position += number
-                        target_coordinates.append(target_position)
-                        query_coordinates.append(query_position)
-                        digits = ""
-                        aligned = 0
-                    elif state == "query_gap":
-                        target_coordinates.append(target_position)
-                        query_coordinates.append(query_position)
-                    state = "target_gap"
-                    query_position += 1
+                try:
+                    length = int(token)
+                except ValueError:
+                    # pair of mismatched letters
+                    length = 1
+                if state == State.MATCH:
+                    target_coordinates[-1] += length
+                    query_coordinates[-1] += length
                 else:
-                    # mismatch; stay in match state
-                    if state == "match":
-                        if digits:
-                            aligned += int(digits)
-                            digits = ""
-                    else:
-                        query_coordinates.append(query_position)
-                        target_coordinates.append(target_position)
-                        state = "match"
-                        aligned = 0
-                    aligned += 1
-        target_coordinates.append(target_position)
-        query_coordinates.append(query_position)
-        return numpy.array([target_coordinates, query_coordinates])
+                    target_coordinates.append(target_coordinates[-1] + length)
+                    query_coordinates.append(query_coordinates[-1] + length)
+                    state = State.MATCH
+        coordinates = numpy.array([target_coordinates, query_coordinates])
+        return coordinates
 
     def parse_cigar(self, cigar):
         return None
