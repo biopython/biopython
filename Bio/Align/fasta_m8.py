@@ -115,11 +115,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         percentage_identity = float(columns[2])
         alignment_length = int(columns[3])
         mismatches = int(columns[4])
+        matches = alignment_length - mismatches
+        difference = abs(100 * matches / alignment_length - percentage_identity)
+        assert difference < 0.015
         gap_opens = int(columns[5])
         query_start = int(columns[6]) - 1
         query_end = int(columns[7])
         target_start = int(columns[8]) - 1
         target_end = int(columns[9])
+        annotations['mismatches'] = mismatches
         annotations['evalue'] = float(columns[10])
         annotations['bit_score'] = float(columns[11])
         if self._alignment_representation == "BTOP":
