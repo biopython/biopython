@@ -130,6 +130,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             coordinates = self.parse_btop(columns[12])
         elif self._alignment_representation == "CIGAR":
             coordinates = self.parse_cigar(columns[12])
+        coordinates[0, :] += target_start
+        coordinates[1, :] += query_start
         if self._query_size is None:
             query_size = query_end
         else:
