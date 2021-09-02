@@ -24,6 +24,7 @@ class State(enum.Enum):
     TARGET_GAP = enum.auto()
     NONE = enum.auto()
 
+
 class AlignmentIterator(interfaces.AlignmentIterator):
     """FASTA output alignment iterator.
 
@@ -62,7 +63,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 line = next(stream)
                 prefix = "# Query: "
                 assert line.startswith(prefix)
-                query_line, query_size = line[len(prefix):].strip().rsplit(" - ", 1)
+                query_line, query_size = line[len(prefix) :].strip().rsplit(" - ", 1)
                 query_size, unit = query_size.split()
                 self._query_size = int(query_size)
                 assert unit in ("nt", "aa")
@@ -70,11 +71,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 line = next(stream)
                 prefix = "# Database: "
                 assert line.startswith(prefix)
-                database = line[len(prefix):].strip()
+                database = line[len(prefix) :].strip()
                 line = next(stream)
                 prefix = "# Fields: "
                 assert line.startswith(prefix)
-                fields = line[len(prefix):].strip().split(", ")
+                fields = line[len(prefix) :].strip().split(", ")
                 assert fields[0] == "query id"
                 assert fields[1] == "subject id"
                 assert fields[2] == "% identity"
@@ -98,7 +99,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert line.startswith("# ")
                 suffix = " hits found"
                 assert line.endswith(suffix)
-                hits = int(line[2:-len(suffix)])
+                hits = int(line[2 : -len(suffix)])
             else:
                 yield self.create_alignment(line)
 
@@ -107,7 +108,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         assert len(columns) == 13
         annotations = {}
         if self._program is not None:
-            annotations['program'] = self._program
+            annotations["program"] = self._program
         if self._query_id is not None:
             assert columns[0] == self._query_id
         query_id = columns[0]
@@ -123,9 +124,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_end = int(columns[7])
         target_start = int(columns[8]) - 1
         target_end = int(columns[9])
-        annotations['mismatches'] = mismatches
-        annotations['evalue'] = float(columns[10])
-        annotations['bit_score'] = float(columns[11])
+        annotations["mismatches"] = mismatches
+        annotations["evalue"] = float(columns[10])
+        annotations["bit_score"] = float(columns[11])
         if self._alignment_representation == "BTOP":
             coordinates = self.parse_btop(columns[12])
         elif self._alignment_representation == "CIGAR":
@@ -153,7 +154,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_coordinates.append(0)
         query_coordinates.append(0)
         state = State.NONE
-        tokens = re.findall('([A-Z-]{2}|\d+)', btop)
+        tokens = re.findall("([A-Z-]{2}|\d+)", btop)
         # each token is now
         # - an integer
         # - a pair of characters, which may include dashes
@@ -187,4 +188,29 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return coordinates
 
     def parse_cigar(self, cigar):
-        return None
+        target_coordinates = []
+        query_coordinates = []
+        target_coordinate = 0
+        query_coordinate = 0
+        target_coordinates.append(target_coordinate)
+        query_coordinates.append(query_coordinate)
+        state = State.NONE
+        tokens = re.findall("(M|D|I|\d+)", cigar)
+        # each token is now
+        # - the length of the operation
+        # - the operation
+        for length, operation in zip(tokens[::2], tokens[1::2]):
+            length = int(length)
+            if operation == "M":
+                target_coordinate += length
+                query_coordinate += length
+            elif operation == "I":
+                target_coordinate += length
+            elif operation == "D":
+                query_coordinate += length
+            else:
+                raise ValueError("Unexpected operation '%s'" % operation)
+            target_coordinates.append(target_coordinate)
+            query_coordinates.append(query_coordinate)
+        coordinates = numpy.array([target_coordinates, query_coordinates])
+        return coordinates

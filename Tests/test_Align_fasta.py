@@ -168,9 +168,7 @@ class TestFasta(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]
-                ),
+                numpy.array([[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]),
             )
         )
         query = self.query
@@ -205,8 +203,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT")
-        self.assertEqual(alignment[1], "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT")
+        self.assertEqual(
+            alignment[0],
+            "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT",
+        )
+        self.assertEqual(
+            alignment[1],
+            "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = alignments[4]
         self.assertEqual(len(alignment), 2)
@@ -245,9 +249,11 @@ class TestFasta(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([
-                    [ 15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
-                    [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190]],
+                numpy.array(
+                    [
+                        [15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
+                        [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190],
+                    ],
                 ),
             )
         )
@@ -257,8 +263,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG")
-        self.assertEqual(alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG")
+        self.assertEqual(
+            alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG"
+        )
+        self.assertEqual(
+            alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = alignments[6]
         self.assertEqual(len(alignment), 2)
@@ -275,8 +285,10 @@ class TestFasta(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array(
-                    [[27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
-                     [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193]],
+                    [
+                        [27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
+                        [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193],
+                    ],
                 ),
             )
         )
@@ -286,8 +298,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK")
-        self.assertEqual(alignment[1], "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK")
+        self.assertEqual(
+            alignment[0],
+            "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK",
+        )
+        self.assertEqual(
+            alignment[1],
+            "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = alignments[7]
         self.assertEqual(len(alignment), 2)
@@ -303,8 +321,8 @@ class TestFasta(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[12, 26, 26, 36, 38, 49, 52, 62],
-                             [43, 57, 61, 71, 71, 82, 82, 92]]
+                numpy.array(
+                    [[12, 26, 26, 36, 38, 49, 52, 62], [43, 57, 61, 71, 71, 82, 82, 92]]
                 ),
             )
         )
@@ -314,8 +332,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE")
-        self.assertEqual(alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE")
+        self.assertEqual(
+            alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE"
+        )
+        self.assertEqual(
+            alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = alignments[8]
         self.assertEqual(len(alignment), 2)
@@ -356,7 +378,8 @@ class TestFasta(unittest.TestCase):
         self.assertAlmostEqual(alignment.annotations["bit_score"], 14.7)
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates, numpy.array([[14,  18], [170, 174]]),
+                alignment.coordinates,
+                numpy.array([[14, 18], [170, 174]]),
             )
         )
         query = self.query
@@ -382,7 +405,7 @@ class TestFasta(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[398, 408, 409, 437], [ 73, 83, 83, 111]]),
+                numpy.array([[398, 408, 409, 437], [73, 83, 83, 111]]),
             )
         )
         query = self.query
@@ -417,8 +440,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK")
-        self.assertEqual(alignment[1], "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK")
+        self.assertEqual(
+            alignment[0],
+            "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK",
+        )
+        self.assertEqual(
+            alignment[1],
+            "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
+        )
 
     def test_m8CC(self):
         # Alignment file obtained by running
@@ -443,8 +472,8 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P09488|GSTM1_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 48)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 6.1e-78)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 275.6)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 7.6e-83)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 291.9)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -475,8 +504,8 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P00502|GSTA1_RAT")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 144)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.1e-13)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 60.7)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.4e-14)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 63.5)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -546,14 +575,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P69905|HBA_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 27)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 0.19)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 20.9)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.15)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 21.2)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]
-                ),
+                numpy.array([[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]),
             )
         )
         query = self.query
@@ -574,8 +601,8 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P00517|KAPCA_BOVIN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 53)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.4)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 19.2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.2)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 19.4)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -588,8 +615,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT")
-        self.assertEqual(alignment[1], "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT")
+        self.assertEqual(
+            alignment[0],
+            "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT",
+        )
+        self.assertEqual(
+            alignment[1],
+            "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = alignments[4]
         self.assertEqual(len(alignment), 2)
@@ -600,8 +633,8 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P14960|RBS_GUITH")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 3)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.6)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 17.7)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.5)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 17.8)
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[46, 53], [6, 13]]))
         )
@@ -623,14 +656,16 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P01593|KV101_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 22)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 2.5)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.6)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.4)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.7)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([
-                    [ 15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
-                    [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190]],
+                numpy.array(
+                    [
+                        [15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
+                        [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190],
+                    ],
                 ),
             )
         )
@@ -640,8 +675,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG")
-        self.assertEqual(alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG")
+        self.assertEqual(
+            alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG"
+        )
+        self.assertEqual(
+            alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = alignments[6]
         self.assertEqual(len(alignment), 2)
@@ -653,13 +692,15 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 40)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.7)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.4)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.5)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array(
-                    [[27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
-                     [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193]],
+                    [
+                        [27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
+                        [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193],
+                    ],
                 ),
             )
         )
@@ -669,8 +710,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK")
-        self.assertEqual(alignment[1], "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK")
+        self.assertEqual(
+            alignment[0],
+            "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK",
+        )
+        self.assertEqual(
+            alignment[1],
+            "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = alignments[7]
         self.assertEqual(len(alignment), 2)
@@ -681,13 +728,13 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P02585|TNNC2_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 31)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.9)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.4)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.8)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 16.5)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[12, 26, 26, 36, 38, 49, 52, 62],
-                             [43, 57, 61, 71, 71, 82, 82, 92]]
+                numpy.array(
+                    [[12, 26, 26, 36, 38, 49, 52, 62], [43, 57, 61, 71, 71, 82, 82, 92]]
                 ),
             )
         )
@@ -697,8 +744,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE")
-        self.assertEqual(alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE")
+        self.assertEqual(
+            alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE"
+        )
+        self.assertEqual(
+            alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
+        )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = alignments[8]
         self.assertEqual(len(alignment), 2)
@@ -735,12 +786,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P03435|HEMA_I75A3")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 27)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 4.7)
-        self.assertAlmostEqual(alignment.annotations["bit_score"], 17.9)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.4)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 18.1)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[398, 408, 409, 437], [ 73, 83, 83, 111]]),
+                numpy.array([[398, 408, 409, 437], [73, 83, 83, 111]]),
             )
         )
         query = self.query
@@ -761,11 +812,12 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P00193|FER_PEPAS")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 2)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 4.2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.4)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 14.7)
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates, numpy.array([[14,  18], [170, 174]]),
+                alignment.coordinates,
+                numpy.array([[14, 18], [170, 174]]),
             )
         )
         query = self.query
@@ -786,7 +838,7 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P01834|IGKC_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 54)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 6.3)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 14.9)
         self.assertTrue(
             numpy.array_equal(
@@ -800,8 +852,14 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(len(alignment.sequences[1].seq), 218)
         alignment.sequences[0].seq = Seq(target)
         alignment.sequences[1].seq = Seq(query)
-        self.assertEqual(alignment[0], "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK")
-        self.assertEqual(alignment[1], "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK")
+        self.assertEqual(
+            alignment[0],
+            "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK",
+        )
+        self.assertEqual(
+            alignment[1],
+            "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
+        )
 
 
 if __name__ == "__main__":
