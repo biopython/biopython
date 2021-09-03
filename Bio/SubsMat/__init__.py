@@ -12,9 +12,8 @@
 General:
 --------
 
-This module provides a class and a few routines for generating
-substitution matrices, similar ot BLOSUM or PAM matrices, but based on
-user-provided data.
+This module provides a class and a few routines for generating substitution
+matrices, similar to BLOSUM or PAM matrices, but based on user-provided data.
 The class used for these matrices is SeqMat
 
 Matrices are implemented as a dictionary. Each index contains a 2-tuple,
