@@ -146,7 +146,9 @@ if [[ -z $(git status --porcelain) ]]; then
     echo "Nothing has changed, nothing needs pushing."
 else
     echo "Making commit of new files"
-    git commit -m "Automated update ${TRAVIS_COMMIT:-}" --author "Sphinx <sphinx@example.org>"
+    git config user.email "sphinx@example.org"
+    git config user.name "Sphinx"
+    git commit -m "Automated update ${TRAVIS_COMMIT:-}"
     echo "Finally, pushing to $DEST_SLUG gh-pages branch"
     git push origin gh-pages
     echo "Documentation deployed!"
