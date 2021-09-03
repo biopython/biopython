@@ -50,6 +50,17 @@ repos:
     -   id: doc8
         additional_dependencies: [pygments]
         args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+    -   id: codespell
+        files: \.(rst|md|tex)$
+        args: [
+            --ignore-regex,
+            '(^|\W)([A-Z]{2,3})(\W|$)',
+            -L,
+            'ser,hsa,hist,fpr'
+        ]
 -   repo: local
     hooks:
     -   id: doi-link-style
