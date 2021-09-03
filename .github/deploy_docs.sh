@@ -103,15 +103,7 @@ if [ `grep -c "^\-\-\-\-\-" $HOME/.biopython_doc_deploy.key` -ne 2 ]; then
     false
 fi
 chmod 600 $HOME/.biopython_doc_deploy.key
-export GIT_SSH=${TRAVIS_BUILD_DIR:-$PWD}/.github/ssh_via_deploy_key.sh
-
-if ! [[ -f "$GIT_SSH" ]]; then
-    echo "Error, set GIT_SSH="$GIT_SSH" but does not exist"
-    false
-elif ! [[ -x "$GIT_SSH" ]]; then
-    echo "Error, set GIT_SSH="$GIT_SSH" but not executable"
-    false
-fi;
+mv $HOME/.biopython_doc_deploy.key $HOME/.ssh/id_rsa
 
 echo "Setting up clone of $DEST_SLUG locally at $WORKING_DIR"
 
