@@ -67,11 +67,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_size, unit = query_size.split()
                 self._query_size = int(query_size)
                 assert unit in ("nt", "aa")
-                self._query_id, self._query_description = query_line.split(None, 1)
+                try:
+                    self._query_id, self._query_description = query_line.split(None, 1)
+                except ValueError:
+                    self._query_id = query_line.strip()
+                    self._query_description = None
                 line = next(stream)
                 prefix = "# Database: "
                 assert line.startswith(prefix)
-                database = line[len(prefix) :].strip()
+                self._database = line[len(prefix) :].strip()
                 line = next(stream)
                 prefix = "# Fields: "
                 assert line.startswith(prefix)
@@ -107,8 +111,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         columns = line.split()
         assert len(columns) == 13
         annotations = {}
-        if self._program is not None:
-            annotations["program"] = self._program
+        annotations["program"] = self._program
+        annotations["database"] = self._database
         if self._query_id is not None:
             assert columns[0] == self._query_id
         query_id = columns[0]

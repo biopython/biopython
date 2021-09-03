@@ -44,6 +44,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(len(alignments), 12)
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
         alignment = alignments[0]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 218)
@@ -76,6 +78,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         alignment = alignments[1]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 205)
@@ -147,6 +151,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         alignment = alignments[2]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 37)
@@ -173,6 +179,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         alignment = alignments[3]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 70)
@@ -205,6 +213,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = alignments[4]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 7)
@@ -228,6 +238,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         alignment = alignments[5]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 40)
@@ -263,6 +275,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = alignments[6]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 58)
@@ -300,6 +314,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = alignments[7]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 45)
@@ -332,6 +348,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = alignments[8]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 9)
@@ -358,6 +376,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         alignment = alignments[9]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 4)
@@ -384,6 +404,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         alignment = alignments[10]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 38)
@@ -410,6 +432,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         alignment = alignments[11]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 67)
@@ -456,6 +480,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(len(alignments), 12)
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
         alignment = alignments[0]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 218)
@@ -488,6 +514,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         alignment = alignments[1]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 205)
@@ -559,6 +587,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         alignment = alignments[2]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 37)
@@ -585,6 +615,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         alignment = alignments[3]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 70)
@@ -617,6 +649,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = alignments[4]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 7)
@@ -640,6 +674,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         alignment = alignments[5]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 40)
@@ -675,6 +711,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = alignments[6]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 58)
@@ -712,6 +750,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = alignments[7]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 45)
@@ -744,6 +784,8 @@ class TestFastaProtein(unittest.TestCase):
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = alignments[8]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 9)
@@ -770,6 +812,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         alignment = alignments[9]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 38)
@@ -796,6 +840,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         alignment = alignments[10]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 4)
@@ -822,6 +868,8 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         alignment = alignments[11]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/prot_test.lseg")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 67)
@@ -862,6 +910,187 @@ class TestFastaNucleotide(unittest.TestCase):
     records = SeqIO.parse(filename, 'fasta')
     targets = {record.id: record.seq.upper() for record in records}
 
+    def test_m8CB(self):
+        # Alignment file obtained by running
+        # fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib
+        # in the fasta36 source distribution
+        path = "Fasta/nucleotide_m8CB.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(
+                alignments.commandline,
+                "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
+            )
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 12)
+        # pGT875   pGT875
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 657)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 657)
+        self.assertEqual(alignment.shape, (2, 657 + 0))
+        self.assertEqual(alignment.sequences[0].id, "pGT875")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 666.0)
+        # pGT875   RABGLTR
+        alignment = alignments[1]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 646)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 646)
+        self.assertEqual(alignment.shape, (2, 646 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGLTR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 135)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 414.4)
+        # pGT875   BTGST
+        alignment = alignments[2]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 413)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 413)
+        self.assertEqual(alignment.shape, (2, 413 + 21))
+        self.assertEqual(alignment.sequences[0].id, "BTGST")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 167)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 46.4)
+        # pGT875   RABGSTB
+        alignment = alignments[3]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 127)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 127)
+        self.assertEqual(alignment.shape, (2, 127 + 8))
+        self.assertEqual(alignment.sequences[0].id, "RABGSTB")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 42)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 45.6)
+        # pGT875   OCDHPR
+        alignment = alignments[4]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 23)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 23)
+        self.assertEqual(alignment.shape, (2, 23 + 1))
+        self.assertEqual(alignment.sequences[0].id, "OCDHPR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0092)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 30.1)
+        # pGT875   RABALP1A
+        alignment = alignments[5]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 42)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 42)
+        self.assertEqual(alignment.shape, (2, 42 + 4))
+        self.assertEqual(alignment.sequences[0].id, "RABALP1A")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 10)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.036)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 28.1)
+        # pGT875   OCDHPR
+        alignment = alignments[6]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 12)
+        self.assertEqual(alignment.shape, (2, 12 + 0))
+        self.assertEqual(alignment.sequences[0].id, "OCDHPR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        # pGT875   RABALP1A
+        alignment = alignments[7]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 12)
+        self.assertEqual(alignment.shape, (2, 12 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABALP1A")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        # pGT875   RABGSTB
+        alignment = alignments[8]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 16)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 16)
+        self.assertEqual(alignment.shape, (2, 16 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGSTB")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 26.2)
+        # pGT875   RABGLTR
+        alignment = alignments[9]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 84)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 84)
+        self.assertEqual(alignment.shape, (2, 84 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGLTR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 39)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
+        # pGT875   pGT875   100.00
+        alignment = alignments[10]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 10)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 10)
+        self.assertEqual(alignment.shape, (2, 10 + 0))
+        self.assertEqual(alignment.sequences[0].id, "pGT875")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
+        # pGT875   BTGST
+        alignment = alignments[11]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 71)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 71)
+        self.assertEqual(alignment.shape, (2, 71 + 3))
+        self.assertEqual(alignment.sequences[0].id, "BTGST")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 29)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.56)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 24.2)
 
 
 if __name__ == "__main__":
