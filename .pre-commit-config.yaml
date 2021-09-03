@@ -29,7 +29,6 @@ repos:
             'flake8-comprehensions',
             'flake8-docstrings',
             'flake8-implicit-str-concat',
-            'flake8-quotes',
             'flake8-rst-docstrings>=0.2.3',
             'pydocstyle>=6.0.0',
         ]
