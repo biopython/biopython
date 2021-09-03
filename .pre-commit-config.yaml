@@ -1,4 +1,8 @@
-# pre-commit run --all-files
+# See CONTRIBUTING.rst, we expect this to be run via a git pre-commit hook.
+# You can also run the checks directly at the terminal, e.g.
+#
+# $ pre-commit run --all-files
+#
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -54,3 +58,10 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
+ci:
+    # Settings for the https://pre-commit.ci/ continuous integration service
+    autofix_prs: false
+    # Default message is more verbose
+    autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
+    # Default is weekly
+    autoupdate_schedule: quarterly
