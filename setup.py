@@ -33,7 +33,7 @@ try:
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "
-        "Try runnning: python -m ensurepip"
+        "Try running: python -m ensurepip"
     )
 
 if "bdist_wheel" in sys.argv:
