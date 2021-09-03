@@ -169,7 +169,7 @@ explicitly, for example record1.id == record2.id or record1.seq == record.seq
 Bio.Seq sequence equality
 -------------------------
 As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
-use string-like equality testing and hashing (ingoring any difference in
+use string-like equality testing and hashing (ignoring any difference in
 alphabet except to issue warnings).
 
 Prior releases used Python's object comparison. Warnings of this change
