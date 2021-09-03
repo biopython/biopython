@@ -64,7 +64,7 @@ class TestFastaProtein(unittest.TestCase):
         )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
-        self.assertEqual(len(alignment.sequences[0].seq), len(target))
+        self.assertEqual(len(alignment.sequences[0].seq), 218)
         self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
@@ -138,7 +138,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 218)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -172,7 +172,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 73)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
@@ -200,7 +200,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 300)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -231,7 +231,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 53)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
@@ -264,7 +264,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 64)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -301,7 +301,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 88)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -337,7 +337,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 62)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -369,7 +369,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 94)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
@@ -397,7 +397,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 18)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
@@ -425,7 +425,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 437)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
@@ -453,7 +453,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 82)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -500,7 +500,7 @@ class TestFastaProtein(unittest.TestCase):
         )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
-        self.assertEqual(len(alignment.sequences[0].seq), len(target))
+        self.assertEqual(len(alignment.sequences[0].seq), 218)
         self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
@@ -574,7 +574,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 218)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -608,7 +608,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 73)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
@@ -636,7 +636,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 300)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -667,7 +667,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 53)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
@@ -700,7 +700,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 64)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -737,7 +737,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 88)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -773,7 +773,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 62)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -805,7 +805,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 94)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
@@ -833,7 +833,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 437)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
@@ -861,7 +861,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 18)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
@@ -889,7 +889,7 @@ class TestFastaProtein(unittest.TestCase):
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 82)
-        self.assertEqual(len(alignment.sequences[1].seq), 218)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
         alignment.sequences[0].seq = target
         alignment.sequences[1].seq = query
         self.assertEqual(
@@ -937,6 +937,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 666.0)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 694)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG")
+        self.assertEqual(alignment[1], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG")
         # pGT875   RABGLTR
         alignment = alignments[1]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -951,6 +959,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 135)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 414.4)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 679)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "ATGCCCATGACGCTGGGTTACTGGGACGTCCGTGGGCTGGCTCTGCCAATCCGCATGCTCCTGGAATACACGGACACCAGCTATGAGGAAAAGAAATACACCATGGGGGATGCTCCCAACTATGACCAAAGCAAGTGGCTGAGTGAGAAGTTCACCCTGGGCCTGGACTTTCCCAATCTGCCCTACCTAATTGATGGGACTCACAAGCTCACGCAGAGCAACGCCATCCTGCGCTACCTGGCCCGCAAGCACGGCCTGTGTGGGGAGACGGAAGAGGAGAGGATTCGCGTGGACATTCTGGAGAATCAGCTGATGGACAACCGCTTCCAACTTGTAAACGTCTGCTACAGTCCCGACTTTGAGAAGCTCAAGCCCGAGTACCTGAAGGGGCTCCCTGAGAAGCTGCAGCTGTACTCGCAGTTCCTGGGAAGCCTCCCCTGGTTCGCAGGGGACAAGATCACCTTCGCCGATTTCCTTGTCTACGACGTTCTTGACCAGAACCGGATATTTGTGCCTGGGTGCCTGGACGCGTTCCCAAACCTGAAGGACTTTCATGTCCGCTTTGAGGGCCTGCCGAAGATCTCTGCCTACATGAAGTCCAGCCGCTTTATCCGAGTCCCTGTGTTTTTAAAGAAGGCCACGTGGA")
+        self.assertEqual(alignment[1], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA")
         # pGT875   BTGST
         alignment = alignments[2]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -965,6 +981,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 167)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 46.4)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 655)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "AGCTCCCCAAGTTCCAGGACGGAGACCTCACGCTGTACCAGTCCAATGCCATCCTGCGGCACCTGGGCCGCACCCTCGGGCTGTATGGGAAGGACCAGCAGGAGGCGGCCCTGGTGGACATGGTGAATGACGGTGTAGAGGACCTTCGC-TGCAAATACGTCTCCCTCATTTACA---CCAACTACGAGGCGGGCAAGGAGGACTATGTGAAGGCGCTGCCCCAGCACCTGAAGCCTTTCGAGACCCTGCTGTCCCAGAACAAGGGTGGCCAGGCCTTCATCGTGGGCGACCAGATCTCCTTTGCGGACTACAACCTGCT--GGACCTGCTTCGGATTCACCAGGTCCTGGCCCCCAGCTGTCTGGACTCCTTCCCCCTGCTCTCAGCCTACGTGGCCCGTCTCAACTCCCGGCCCAAGCTCAAGGCCTTCCTG")
+        self.assertEqual(alignment[1], "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG")
         # pGT875   RABGSTB
         alignment = alignments[3]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -979,6 +1003,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 42)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 45.6)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 287)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GGGTATTGATGTTCCAGCAAGTGCCCATGGTTGA--GATTGATGGGATGAAGCTGGTGCAGACCAGAGCCATTTTCAACTACATTGCAGACAAGCACAACCTGTATGGGAAAGACATA-AAGGAGA-GAGCCCTG")
+        self.assertEqual(alignment[1], "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   OCDHPR
         alignment = alignments[4]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -993,6 +1025,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.0092)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 30.1)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 2325)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
+        self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   RABALP1A
         alignment = alignments[5]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1007,6 +1047,14 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 10)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.036)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 28.1)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 5016)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
+        self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
         # pGT875   OCDHPR
         alignment = alignments[6]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1014,13 +1062,21 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 12)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 12)
         self.assertEqual(alignment.shape, (2, 12 + 0))
         self.assertEqual(alignment.sequences[0].id, "OCDHPR")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1511)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCATGACCTGGT")
+        self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABALP1A
         alignment = alignments[7]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1028,13 +1084,21 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 12)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 12)
         self.assertEqual(alignment.shape, (2, 12 + 0))
         self.assertEqual(alignment.sequences[0].id, "RABALP1A")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1511)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCATGACCTGGT")
+        self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABGSTB
         alignment = alignments[8]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1042,13 +1106,21 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 16)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 16)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 16)
         self.assertEqual(alignment.shape, (2, 16 + 0))
         self.assertEqual(alignment.sequences[0].id, "RABGSTB")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 26.2)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 506)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
+        self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
         # pGT875   RABGLTR
         alignment = alignments[9]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1056,27 +1128,43 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 84)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 84)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 84)
         self.assertEqual(alignment.shape, (2, 84 + 0))
         self.assertEqual(alignment.sequences[0].id, "RABGLTR")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 39)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
-        # pGT875   pGT875   100.00
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1200)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GCATGGCTGGGTGGGGCAGGATTAGTGTGGGGGGAGTTGGGTGCTCAGGCAGGGCTATGAGGGATCTTGTTCATTTCCGGGCCC")
+        self.assertEqual(alignment[1], "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC")
+        # pGT875   pGT875
         alignment = alignments[10]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
         self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 10)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 10)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 10)
         self.assertEqual(alignment.shape, (2, 10 + 0))
         self.assertEqual(alignment.sequences[0].id, "pGT875")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 802)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCTGGTTCTC")
+        self.assertEqual(alignment[1], "CCTGGTTCTC")
         # pGT875   BTGST
         alignment = alignments[11]
         self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
@@ -1084,13 +1172,21 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         aligned = alignment.aligned
         self.assertEqual(sum(end - start for start, end in aligned[0]), 71)
-        self.assertEqual(sum(end - start for start, end in aligned[1]), 71)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 71)
         self.assertEqual(alignment.shape, (2, 71 + 3))
         self.assertEqual(alignment.sequences[0].id, "BTGST")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 29)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.56)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 24.2)
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 351)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CTGCGGCACCTGGGCCGCACCCTC-GGGCTGTA--TGGGAAGGACCAGCAGGAGGCGGCCCTGGTGGACATGGT")
+        self.assertEqual(alignment[1], "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT")
 
 
 if __name__ == "__main__":

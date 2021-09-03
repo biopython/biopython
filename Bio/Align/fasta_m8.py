@@ -136,7 +136,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif self._alignment_representation == "CIGAR":
             coordinates = self.parse_cigar(columns[12])
         coordinates[0, :] += target_start
-        coordinates[1, :] += query_start
+        if query_start < query_end:
+            coordinates[1, :] += query_start
+        else:
+            # mapped to reverse strand
+            coordinates[1, :] = query_start - coordinates[1, :] + 1
         if self._query_size is None:
             query_size = query_end
         else:
