@@ -5,8 +5,10 @@
 # as part of this package.
 """Tests for Bio.Align.fasta module."""
 import unittest
+import os
 
 from Bio.Seq import Seq
+from Bio import SeqIO
 from Bio.Align.fasta_m8 import AlignmentIterator
 
 try:
@@ -19,29 +21,19 @@ except ImportError:
     ) from None
 
 
-class TestFasta(unittest.TestCase):
+class TestFastaProtein(unittest.TestCase):
 
-    query = "MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK"
-    targets = {
-        "sp|P09488|GSTM1_HUMAN": "MPMILGYWDIRGLAHAIRLLLEYTDSSYEEKKYTMGDAPDYDRSQWLNEKFKLGLDFPNLPYLIDGAHKITQSNAILCYIARKHNLCGETEEEKIRVDILENQTMDNHMQLGMICYNPEFEKLKPKYLEELPEKLKLYSEFLGKRPWFAGNKITFVDFLVYDVLDLHRIFEPKCLDAFPNLKDFISRFEGLEKISAYMKSSRFLPRPVFSKMAVWGNK",
-        "sp|P00502|GSTA1_RAT": "MSGKPVLHYFNARGRMECIRWLLAAAGVEFDEKFIQSPEDLEKLKKDGNLMFDQVPMVEIDGMKLAQTRAILNYIATKYDLYGKDMKERALIDMYTEGILDLTEMIMQLVICPPDQKEAKTALAKDRTKNRYLPAFEKVLKSHGQDYLVGNRLTRVDIHLLELLLYVEEFDASLLTSFPLLKAFKSRISSLPNVKKFLQPGSQRKLPVDAKQIEEARKIFKF",
-        "sp|P69905|HBA_HUMAN": "MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR",
-        "sp|P00517|KAPCA_BOVIN": "MGNAAAAKKGSEQESVKEFLAKAKEDFLKKWENPAQNTAHLDQFERIKTLGTGSFGRVMLVKHMETGNHYAMKILDKQKVVKLKQIEHTLNEKRILQAVNFPFLVKLEFSFKDNSNLYMVMEYVPGGEMFSHLRRIGRFSEPHARFYAAQIVLTFEYLHSLDLIYRDLKPENLLIDQQGYIQVTDFGFAKRVKGRTWTLCGTPEYLAPEIILSKGYNKAVDWWALGVLIYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFATTDWIAIYQRKVEAPFIPKFKGPGDTSNFDDYEEEEIRVSINEKCGKEFSEF",
-        "sp|P14960|RBS_GUITH": "MRLTQGAFSFLPDLTDEQIVKQIQYAISKNWALNVEWTDDPHPRNAYWDLWGLPLFGIKDPAAVMFEINACRKAKPACYVKVNAFDNSRGVESCCLSFIVQRPTSNEPGFQLIRSEVDSRNIRYTIQSYASTRPEGERY",
-        "sp|P01593|KV101_HUMAN": "DIQMTQSPSSLSASVGDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDASNLETGVPSRFSGSGFGTDFTFTISGLQPEDIATYYCQQYDTLPRTFGQGTKLEIKR",
-        "sp|P99998|CYC_PANTR": "MGDVEKGKKIFIMKCSQCHTVEKGGKHKTGPNLHGLFGRKTGQAPGYSYTAANKNKGIIWGEDTLMEYLENPKKYIPGTKMIFVGIKKKEERADLIAYLKKATNE",
-        "sp|P02585|TNNC2_HUMAN": "MTDQQAEARSYLSEEMIAEFKAAFDMFDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEEVDEDGSGTIDFEEFLVMMVRQMKEDAKGKSEEELAECFRIFDRNADGYIDPEELAEIFRASGEHVTDEEIESLMKDGDKNNDGRIDFDEFLKMMEGVQ",
-        "sp|P03435|HEMA_I75A3": "MKTIIALSYIFCLVFAQDLPGNDNNSTATLCLGHHAVPNGTLVKTITNDQIEVTNATELVQSSSTGKICNNPHRILDGINCTLIDALLGDPHCDGFQNEKWDLFVERSKAFSNCYPYDVPDYASLRSLVASSGTLEFINEGFNWTGVTQNGGSSACKRGPDSGFFSRLNWLYKSGSTYPVQNVTMPNNDNSDKLYIWGVHHPSTDKEQTNLYVQASGKVTVSTKRSQQTIIPNVGSRPWVRGLSSRISIYWTIVKPGDILVINSNGNLIAPRGYFKMRTGKSSIMRSDAPIGTCSSECITPNGSIPNDKPFQNVNKITYGACPKYVKQNTLKLATGMRNVPEKQTRGIFGAIAGFIENGWEGMIDGWYGFRHQNSEGTGQAADLKSTQAAIDQINGKLNRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDLWSYNAELLVALENQHTIDLTDSEMNKLFEKTRRQLRENAEDMGNGCFKIYHKCDNACIGSIRNGTYDHDVYRDEALNNRFQIKGVELKSGYKDWILWISFAISCFLLCVVLLGFIMWACQKGNIRCNICI",
-        "sp|P60615|NXL1A_BUNMU": "MKtllltlvvvtIVCLDLGYTIVCHTTATSPISAVTCPPGENLCYRKMWCDAFCSSRGKVVELGCAATCPSKKPYEEVTCCSTDKCNPHPKQRPG",
-        "sp|P00193|FER_PEPAS": "AYVINDSCIACGACKPECPVNIQQGSIYAIDADSCIDCGSCASVCPVGAPNPED",
-        "sp|P01834|IGKC_HUMAN": "TVAAPSVFIFPPSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHKVYACEVTHQGLSSPVTKSFNRGEC",
-    }
+    query = Seq("MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK")
+
+    filename = os.path.join("Fasta", "protein_lib.fa")
+    records = SeqIO.parse(filename, 'fasta')
+    targets = {record.id: record.seq.upper() for record in records}
 
     def test_m8CB(self):
         # Alignment file obtained by running
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
-        path = "Fasta/output_m8CB.txt"
+        path = "Fasta/protein_m8CB.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(
@@ -72,8 +64,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), len(target))
         self.assertEqual(len(alignment.sequences[1].seq), len(query))
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "MPMILGYWDIRGLAHAIRLLLEYTDSSYEEKKYTMGDAPDYDRSQWLNEKFKLGLDFPNLPYLIDGAHKITQSNAILCYIARKHNLCGETEEEKIRVDILENQTMDNHMQLGMICYNPEFEKLKPKYLEELPEKLKLYSEFLGKRPWFAGNKITFVDFLVYDVLDLHRIFEPKCLDAFPNLKDFISRFEGLEKISAYMKSSRFLPRPVFSKMAVWGNK",
@@ -143,8 +135,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 218)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "VLHYFNARGRMECIRWLLAAAGVEFDEK---------FIQSPEDLEKLKKDGNLMFDQVPMVEIDG-MKLAQTRAILNYIATKYDLYGKDMKERALIDMYTEGILDLTEMIMQLVICPPDQKEAKTALAKDRTKNRYLPAFEKVLKSHGQDYLVGNRLTRVDIHLLELLLYVEEFDASLLTSFPLLKAFKSRISSLPNVKKFLQPGSQRKLPVDAKQIEEARK",
@@ -175,8 +167,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 73)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
@@ -201,8 +193,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 300)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT",
@@ -230,8 +222,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 53)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
@@ -261,8 +253,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 64)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG"
         )
@@ -296,8 +288,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 88)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK",
@@ -330,8 +322,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 62)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE"
         )
@@ -360,8 +352,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 94)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
@@ -386,8 +378,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 18)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
@@ -412,8 +404,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 437)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
@@ -438,8 +430,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 82)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK",
@@ -453,7 +445,7 @@ class TestFasta(unittest.TestCase):
         # Alignment file obtained by running
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
-        path = "Fasta/output_m8CC.txt"
+        path = "Fasta/protein_m8CC.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(
@@ -484,8 +476,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), len(target))
         self.assertEqual(len(alignment.sequences[1].seq), len(query))
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "MPMILGYWDIRGLAHAIRLLLEYTDSSYEEKKYTMGDAPDYDRSQWLNEKFKLGLDFPNLPYLIDGAHKITQSNAILCYIARKHNLCGETEEEKIRVDILENQTMDNHMQLGMICYNPEFEKLKPKYLEELPEKLKLYSEFLGKRPWFAGNKITFVDFLVYDVLDLHRIFEPKCLDAFPNLKDFISRFEGLEKISAYMKSSRFLPRPVFSKMAVWGNK",
@@ -555,8 +547,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 218)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "VLHYFNARGRMECIRWLLAAAGVEFDEK---------FIQSPEDLEKLKKDGNLMFDQVPMVEIDG-MKLAQTRAILNYIATKYDLYGKDMKERALIDMYTEGILDLTEMIMQLVICPPDQKEAKTALAKDRTKNRYLPAFEKVLKSHGQDYLVGNRLTRVDIHLLELLLYVEEFDASLLTSFPLLKAFKSRISSLPNVKKFLQPGSQRKLPVDAKQIEEARK",
@@ -587,8 +579,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 73)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
@@ -613,8 +605,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 300)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "IYEMAAGYPPFFADQPIQIYEKIVSGKVRFPSHFSSDLKDLLRNLLQVDLTKRFGNLKNGVNDIKNHKWFAT",
@@ -642,8 +634,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 53)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
@@ -673,8 +665,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 64)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0], "GDRVTITCQASQDINHYLNWYQQGPKKAPKILIYDA-SNLETGVPSRFSG"
         )
@@ -708,8 +700,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 88)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "KTGPNLHGLFGRKTGQAPGYSYTAANKNKGI-IWGEDTLMEY-LENPK--KYIPGTKMI---FVGIKK",
@@ -742,8 +734,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 62)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0], "SEEMIAEFKAAFDM----FDADGGGDISVKELGTVMRMLGQTPTKEELDAIIEE"
         )
@@ -772,8 +764,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 94)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
@@ -798,8 +790,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 437)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
@@ -824,8 +816,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 18)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
@@ -850,8 +842,8 @@ class TestFasta(unittest.TestCase):
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 82)
         self.assertEqual(len(alignment.sequences[1].seq), 218)
-        alignment.sequences[0].seq = Seq(target)
-        alignment.sequences[1].seq = Seq(query)
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
         self.assertEqual(
             alignment[0],
             "PSDEQLKSGTASVVCLLNNFYPREAKVQWKVDNALQSGNSQESVTEQDSKDSTYSLSSTLTLSKADYEKHK",
@@ -860,6 +852,16 @@ class TestFasta(unittest.TestCase):
             alignment[1],
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
         )
+
+
+class TestFastaNucleotide(unittest.TestCase):
+
+    query = Seq("ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG")
+
+    filename = os.path.join("Fasta", "nucleotide_lib.fa")
+    records = SeqIO.parse(filename, 'fasta')
+    targets = {record.id: record.seq.upper() for record in records}
+
 
 
 if __name__ == "__main__":
