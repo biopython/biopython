@@ -19,6 +19,8 @@ from Bio.SeqRecord import SeqRecord
 
 
 class State(enum.Enum):
+    """Enumerate alignment states needed when parsing a BTOP string."""
+
     MATCH = enum.auto()
     QUERY_GAP = enum.auto()
     TARGET_GAP = enum.auto()
@@ -33,13 +35,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """
 
     def __init__(self, source):
-        """Create an Iterator object.
+        """Create an AlignmentIterator object.
 
         Arguments:
          - source   - input data or file name
 
         """
-        super().__init__(source, mode="t", fmt="EMBOSS")
+        super().__init__(source, mode="t", fmt="FASTA")
         stream = self.stream
         try:
             line = next(stream)
@@ -108,6 +110,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 yield self.create_alignment(line)
 
     def create_alignment(self, line):
+        """Parse one line of FASTA output and return an Alignment object."""
         columns = line.split()
         assert len(columns) == 13
         annotations = {}
@@ -157,6 +160,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return alignment
 
     def parse_btop(self, btop):
+        """Parse a BTOP string and return alignment coordinates.
+
+        A BTOP (Blast trace-back operations) string is used by BLAST to
+        describe a sequence alignment.
+        """
         target_coordinates = []
         query_coordinates = []
         target_coordinates.append(0)
@@ -196,6 +204,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return coordinates
 
     def parse_cigar(self, cigar):
+        """Parse a CIGAR string and return alignment coordinates.
+
+        A CIGAR string, as defined by the SAM Sequence Alignment/Map format,
+        describes a sequence alignment as a series of lengths and operation
+        (alignment/insertion/deletion) codes.
+        """
         target_coordinates = []
         query_coordinates = []
         target_coordinate = 0
