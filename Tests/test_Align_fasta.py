@@ -937,6 +937,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 666.0)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[ 37, 694], [  0, 657]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 694)
@@ -959,6 +965,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 135)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 414.4)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[ 33, 679], [  0, 646]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 679)
@@ -981,6 +993,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 167)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 46.4)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472, 473, 486, 488, 501, 505, 535, 537, 543, 543, 655], [175, 324, 325, 332, 332, 349, 352, 412, 412, 418, 418, 431, 431, 444, 444, 474, 474, 480, 482, 594]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 655)
@@ -1003,6 +1021,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 42)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 45.6)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[156, 171, 173, 190, 190, 201, 202, 260, 261, 272, 272, 279, 279, 287], [158, 173, 173, 190, 192, 203, 203, 261, 261, 272, 273, 280, 281, 289]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 287)
@@ -1025,6 +1049,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.0092)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 30.1)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[2302, 2319, 2319, 2325], [ 265,  282,  283,  289]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 2325)
@@ -1047,6 +1077,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 10)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.036)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 28.1)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016], [ 240,  254,  256,  259,  260,  272,  272,  285]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 5016)
@@ -1069,6 +1105,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1499, 1511], [ 316,  304]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 1511)
@@ -1091,6 +1133,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 27.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1499, 1511], [ 316,  304]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 1511)
@@ -1113,6 +1161,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 26.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[490, 506], [160, 144]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 506)
@@ -1135,6 +1189,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 39)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1116, 1200], [ 242,  158]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 1200)
@@ -1157,6 +1217,12 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 25.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[792, 802], [310, 300]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 802)
@@ -1179,6 +1245,362 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 29)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.56)
         self.assertAlmostEqual(alignment.annotations["bit_score"], 24.2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 351)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CTGCGGCACCTGGGCCGCACCCTC-GGGCTGTA--TGGGAAGGACCAGCAGGAGGCGGCCCTGGTGGACATGGT")
+        self.assertEqual(alignment[1], "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT")
+
+    def test_m8CC(self):
+        # Alignment file obtained by running
+        # fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib
+        # in the fasta36 source distribution
+        path = "Fasta/nucleotide_m8CC.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(
+                alignments.commandline,
+                "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
+            )
+            alignments = list(alignments)
+        self.assertEqual(len(alignments), 12)
+        # pGT875   pGT875
+        alignment = alignments[0]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 657)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 657)
+        self.assertEqual(alignment.shape, (2, 657 + 0))
+        self.assertEqual(alignment.sequences[0].id, "pGT875")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 655.6)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[ 37, 694], [  0, 657]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 694)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG")
+        self.assertEqual(alignment[1], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG")
+        # pGT875   RABGLTR
+        alignment = alignments[1]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 646)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 646)
+        self.assertEqual(alignment.shape, (2, 646 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGLTR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 135)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 408.0)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[ 33, 679], [  0, 646]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 679)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "ATGCCCATGACGCTGGGTTACTGGGACGTCCGTGGGCTGGCTCTGCCAATCCGCATGCTCCTGGAATACACGGACACCAGCTATGAGGAAAAGAAATACACCATGGGGGATGCTCCCAACTATGACCAAAGCAAGTGGCTGAGTGAGAAGTTCACCCTGGGCCTGGACTTTCCCAATCTGCCCTACCTAATTGATGGGACTCACAAGCTCACGCAGAGCAACGCCATCCTGCGCTACCTGGCCCGCAAGCACGGCCTGTGTGGGGAGACGGAAGAGGAGAGGATTCGCGTGGACATTCTGGAGAATCAGCTGATGGACAACCGCTTCCAACTTGTAAACGTCTGCTACAGTCCCGACTTTGAGAAGCTCAAGCCCGAGTACCTGAAGGGGCTCCCTGAGAAGCTGCAGCTGTACTCGCAGTTCCTGGGAAGCCTCCCCTGGTTCGCAGGGGACAAGATCACCTTCGCCGATTTCCTTGTCTACGACGTTCTTGACCAGAACCGGATATTTGTGCCTGGGTGCCTGGACGCGTTCCCAAACCTGAAGGACTTTCATGTCCGCTTTGAGGGCCTGCCGAAGATCTCTGCCTACATGAAGTCCAGCCGCTTTATCCGAGTCCCTGTGTTTTTAAAGAAGGCCACGTGGA")
+        self.assertEqual(alignment[1], "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA")
+        # pGT875   BTGST
+        alignment = alignments[2]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 413)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 413)
+        self.assertEqual(alignment.shape, (2, 413 + 21))
+        self.assertEqual(alignment.sequences[0].id, "BTGST")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 167)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-07)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 45.7)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472, 473, 486, 488, 501, 505, 535, 537, 543, 543, 655], [175, 324, 325, 332, 332, 349, 352, 412, 412, 418, 418, 431, 431, 444, 444, 474, 474, 480, 482, 594]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 655)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "AGCTCCCCAAGTTCCAGGACGGAGACCTCACGCTGTACCAGTCCAATGCCATCCTGCGGCACCTGGGCCGCACCCTCGGGCTGTATGGGAAGGACCAGCAGGAGGCGGCCCTGGTGGACATGGTGAATGACGGTGTAGAGGACCTTCGC-TGCAAATACGTCTCCCTCATTTACA---CCAACTACGAGGCGGGCAAGGAGGACTATGTGAAGGCGCTGCCCCAGCACCTGAAGCCTTTCGAGACCCTGCTGTCCCAGAACAAGGGTGGCCAGGCCTTCATCGTGGGCGACCAGATCTCCTTTGCGGACTACAACCTGCT--GGACCTGCTTCGGATTCACCAGGTCCTGGCCCCCAGCTGTCTGGACTCCTTCCCCCTGCTCTCAGCCTACGTGGCCCGTCTCAACTCCCGGCCCAAGCTCAAGGCCTTCCTG")
+        self.assertEqual(alignment[1], "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG")
+        # pGT875   RABGSTB
+        alignment = alignments[3]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 127)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 127)
+        self.assertEqual(alignment.shape, (2, 127 + 8))
+        self.assertEqual(alignment.sequences[0].id, "RABGSTB")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 42)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.2e-07)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 45.0)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[156, 171, 173, 190, 190, 201, 202, 260, 261, 272, 272, 279, 279, 287], [158, 173, 173, 190, 192, 203, 203, 261, 261, 272, 273, 280, 281, 289]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 287)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GGGTATTGATGTTCCAGCAAGTGCCCATGGTTGA--GATTGATGGGATGAAGCTGGTGCAGACCAGAGCCATTTTCAACTACATTGCAGACAAGCACAACCTGTATGGGAAAGACATA-AAGGAGA-GAGCCCTG")
+        self.assertEqual(alignment[1], "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG")
+        # pGT875   OCDHPR
+        alignment = alignments[4]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 23)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 23)
+        self.assertEqual(alignment.shape, (2, 23 + 1))
+        self.assertEqual(alignment.sequences[0].id, "OCDHPR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.012)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 29.7)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[2302, 2319, 2319, 2325], [ 265,  282,  283,  289]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 2325)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
+        self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
+        # pGT875   RABALP1A
+        alignment = alignments[5]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 42)
+        self.assertEqual(sum(end - start for start, end in aligned[1]), 42)
+        self.assertEqual(alignment.shape, (2, 42 + 4))
+        self.assertEqual(alignment.sequences[0].id, "RABALP1A")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 10)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.046)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 27.8)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016], [ 240,  254,  256,  259,  260,  272,  272,  285]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 5016)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
+        self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
+        # pGT875   OCDHPR
+        alignment = alignments[6]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 12)
+        self.assertEqual(alignment.shape, (2, 12 + 0))
+        self.assertEqual(alignment.sequences[0].id, "OCDHPR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.09)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 26.8)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1499, 1511], [ 316,  304]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1511)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCATGACCTGGT")
+        self.assertEqual(alignment[1], "CCATGACCTGGT")
+        # pGT875   RABALP1A
+        alignment = alignments[7]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 12)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 12)
+        self.assertEqual(alignment.shape, (2, 12 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABALP1A")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.09)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 26.8)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1499, 1511], [ 316,  304]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1511)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCATGACCTGGT")
+        self.assertEqual(alignment[1], "CCATGACCTGGT")
+        # pGT875   RABGSTB
+        alignment = alignments[8]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 16)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 16)
+        self.assertEqual(alignment.shape, (2, 16 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGSTB")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 2)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.18)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 25.8)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[490, 506], [160, 144]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 506)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
+        self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
+        # pGT875   RABGLTR
+        alignment = alignments[9]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 84)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 84)
+        self.assertEqual(alignment.shape, (2, 84 + 0))
+        self.assertEqual(alignment.sequences[0].id, "RABGLTR")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 39)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.35)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 24.9)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1116, 1200], [ 242,  158]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 1200)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "GCATGGCTGGGTGGGGCAGGATTAGTGTGGGGGGAGTTGGGTGCTCAGGCAGGGCTATGAGGGATCTTGTTCATTTCCGGGCCC")
+        self.assertEqual(alignment[1], "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC")
+        # pGT875   pGT875
+        alignment = alignments[10]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 10)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 10)
+        self.assertEqual(alignment.shape, (2, 10 + 0))
+        self.assertEqual(alignment.sequences[0].id, "pGT875")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 0)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.35)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 24.9)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[792, 802], [310, 300]]),
+            )
+        )
+        query = self.query
+        target = self.targets[alignment.sequences[0].id]
+        self.assertEqual(len(alignment.sequences[0].seq), 802)
+        self.assertEqual(len(alignment.sequences[1].seq), len(query))
+        alignment.sequences[0].seq = target
+        alignment.sequences[1].seq = query
+        self.assertEqual(alignment[0], "CCTGGTTCTC")
+        self.assertEqual(alignment[1], "CCTGGTTCTC")
+        # pGT875   BTGST
+        alignment = alignments[11]
+        self.assertEqual(alignment.annotations["program"], "FASTA 36.3.8h May, 2020")
+        self.assertEqual(alignment.annotations["database"], "seq/gst.nlib")
+        self.assertEqual(len(alignment), 2)
+        aligned = alignment.aligned
+        self.assertEqual(sum(end - start for start, end in aligned[0]), 71)
+        self.assertEqual(sum(start - end for start, end in aligned[1]), 71)
+        self.assertEqual(alignment.shape, (2, 71 + 3))
+        self.assertEqual(alignment.sequences[0].id, "BTGST")
+        self.assertEqual(alignment.sequences[1].id, "pGT875")
+        self.assertEqual(alignment.annotations["mismatches"], 29)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.68)
+        self.assertAlmostEqual(alignment.annotations["bit_score"], 23.9)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]),
+            )
+        )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
         self.assertEqual(len(alignment.sequences[0].seq), 351)
