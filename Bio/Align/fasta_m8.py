@@ -170,7 +170,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_coordinates.append(0)
         query_coordinates.append(0)
         state = State.NONE
-        tokens = re.findall("([A-Z-]{2}|\d+)", btop)
+        tokens = re.findall("([A-Z-]{2}|\\d+)", btop)
         # each token is now
         # - an integer
         # - a pair of characters, which may include dashes
@@ -217,7 +217,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_coordinates.append(target_coordinate)
         query_coordinates.append(query_coordinate)
         state = State.NONE
-        tokens = re.findall("(M|D|I|\d+)", cigar)
+        tokens = re.findall("(M|D|I|\\d+)", cigar)
         # each token is now
         # - the length of the operation
         # - the operation
