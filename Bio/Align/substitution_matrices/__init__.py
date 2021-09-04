@@ -508,6 +508,12 @@ def load(name=None):
     subdirectory = os.path.join(directory, "data")
     if name is None:
         filenames = os.listdir(subdirectory)
+        try:
+            filenames.remove("README.txt")
+            # The README.txt file is not present in usual Biopython
+            # installations, but is included in a development install.
+        except ValueError:
+            pass
         return sorted(filenames)
     path = os.path.join(subdirectory, name)
     matrix = read(path)
