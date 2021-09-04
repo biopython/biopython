@@ -171,7 +171,6 @@ PACKAGES = [
     "Bio.SeqUtils",
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
-    "Bio.SubsMat",
     "Bio.SVDSuperimposer",
     "Bio.PDB.QCPSuperimposer",
     "Bio.SwissProt",
