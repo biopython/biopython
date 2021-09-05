@@ -11,6 +11,9 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
+When instantiating a ``SeqRecord`` the supplied features parameter is now
+required to be a list of ``SeqFeature`` s.
+
 Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
 "status" information for sequence features as ``SeqFeature`` qualifiers.
 

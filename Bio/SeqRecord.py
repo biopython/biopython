@@ -15,6 +15,7 @@ import numbers
 
 from Bio import StreamModeError
 from Bio.Seq import UndefinedSequenceError
+from .SeqFeature import SeqFeature
 
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
@@ -238,10 +239,10 @@ class SeqRecord:
         # annotations about parts of the sequence
         if features is None:
             features = []
-        elif not isinstance(features, list):
-            raise TypeError(
-                "features argument should be a list (of SeqFeature objects)"
-            )
+        elif not isinstance(features, list) and all(
+            [isinstance(f, SeqFeature) for f in features]
+        ):
+            raise TypeError("features must be a list (of SeqFeature objects)")
         self.features = features
 
     # TODO - Just make this a read only property?
