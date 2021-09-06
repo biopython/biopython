@@ -20,8 +20,8 @@ First supported in release 1.73.
 
 Python 3.6
 ----------
-Triggers a deprecation warning as of release 1.79.
-First supported in release 1.69.
+No longer supported as of Release 1.80, having triggered a deprecation
+warning as of release 1.79. First supported in release 1.69.
 
 Python 3.5
 ----------
