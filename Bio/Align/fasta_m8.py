@@ -144,10 +144,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             # mapped to reverse strand
             coordinates[1, :] = query_start - coordinates[1, :] + 1
-        if self._query_size is None:
-            query_size = query_end
-        else:
-            query_size = self._query_size
+        query_size = self._query_size
         query_sequence = Seq(None, length=query_size)
         query = SeqRecord(query_sequence, id=query_id)
         if self._query_description is not None:

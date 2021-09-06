@@ -1865,6 +1865,15 @@ class TestFastaNucleotide(unittest.TestCase):
         )
 
 
+class TestFastaBasic(unittest.TestCase):
+    def test_empty(self):
+        import io
+
+        stream = io.StringIO()
+        with self.assertRaisesRegex(ValueError, "Empty file."):
+            AlignmentIterator(stream)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
