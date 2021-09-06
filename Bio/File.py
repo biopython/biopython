@@ -179,6 +179,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         self._key_function = key_function
         self._repr = repr
         self._obj_repr = obj_repr
+        self._cached_prev_record = (None, None)  # (key, record)
         if key_function:
             offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
         else:
@@ -222,7 +223,14 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         return iter(self._offsets)
 
     def __getitem__(self, key):
-        """Return record for the specified key."""
+        """Return record for the specified key.
+
+        As an optimitation when repeatedly asked to look up the same record,
+        the key and record are cached so that if the *same* record is
+        requested next time, it can be returned without going to disk.
+        """
+        if key == self._cached_prev_record[0]:
+            return self._cached_prev_record[1]
         # Pass the offset to the proxy
         record = self._proxy.get(self._offsets[key])
         if self._key_function:
@@ -231,6 +239,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
             key2 = record.id
         if key != key2:
             raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+        self._cached_prev_record = (key, record)
         return record
 
     def get_raw(self, key):
