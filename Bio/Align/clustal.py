@@ -94,7 +94,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
     def __init__(self, source):
-        """Create an Iterator object.
+        """Create an AlignmentIterator object.
 
         Arguments:
          - source   - input data or file name
