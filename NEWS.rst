@@ -11,8 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
-Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
-"status" information for sequence features as ``SeqFeature`` qualifiers.
+This release of Biopython supports Python 3.7, 3.8 and 3.8. It has also been
+tested on PyPy3.7 v7.3.5.
 
 Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
@@ -30,10 +30,12 @@ possible, especially the following contributors:
 - Aziz Khan
 - Chenghao Zhu
 - Fabian Egli
+- Michiel de Hoon
+- Peter Cock
 
 
 3 June 2021: Biopython 1.79
-================================
+===========================
 
 This is intended to be our final release supporting Python 3.6. It also
 supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.

@@ -61,9 +61,9 @@ https://doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-Python 3.6 onwards, include the package management system "pip" which should
-allow you to install Biopython (and its dependency NumPy if needed), upgrade
-or uninstall with just one terminal command::
+Python includes the package management system "pip" which should allow you to
+install Biopython (and its dependency NumPy if needed), upgrade or uninstall
+with just one terminal command::
 
     pip install biopython
     pip install --upgrade biopython
@@ -85,12 +85,9 @@ We currently recommend using Python 3.9 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.6, 3.7, 3.8, 3.9 -- see http://www.python.org
+- Python 3.7, 3.8, 3.9 -- see http://www.python.org
 
-- PyPy3.6 v7.3.1 -- or later, see http://www.pypy.org
-
-Biopython 1.68 was our final release to support Python 2.6, while Biopython
-1.76 was our final release to support Python 2.7 and Python 3.5.
+- PyPy3.7 v7.3.5 -- or later, see http://www.pypy.org
 
 
 Optional Dependencies
