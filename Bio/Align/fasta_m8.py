@@ -227,8 +227,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_coordinate += length
             elif operation == "D":
                 query_coordinate += length
-            else:
-                raise ValueError("Unexpected operation '%s'" % operation)
             target_coordinates.append(target_coordinate)
             query_coordinates.append(query_coordinate)
         coordinates = numpy.array([target_coordinates, query_coordinates])
