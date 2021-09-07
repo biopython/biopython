@@ -20,7 +20,6 @@ jobs:
   # since it is used in most actions.
   # Adapted from: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
   linux_prep:
-    needs: [style]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -69,7 +68,6 @@ jobs:
         python setup.py sdist --formats=gztar,zip
 
   build_wheels:
-    needs: [style]
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -113,13 +111,13 @@ jobs:
   # tests install only numpy (lightweight version).
   # NOTE: PyPy only runs on Linux with minimal dependencies because it's running slowly.
   #
-  # Tests trigger only of the style and build steps succeed.
+  # Tests trigger only if the build steps succeed.
   #
 
   # Linux is where the thorough tests run. Install all dependencies and run all (offline) tests.
   test_linux:
     timeout-minutes: 15
-    needs: [style, build, build_wheels, linux_prep]
+    needs: [build, build_wheels, linux_prep]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -169,7 +167,7 @@ jobs:
 
   test_macos:
     timeout-minutes: 15
-    needs: [style, build, build_wheels]
+    needs: [build, build_wheels]
     runs-on: macos-latest
     strategy:
       matrix:
@@ -202,7 +200,7 @@ jobs:
 
   test_windows:
     timeout-minutes: 15
-    needs: [style, build, build_wheels]
+    needs: [build, build_wheels]
     runs-on: windows-latest
     strategy:
       matrix:
@@ -235,7 +233,7 @@ jobs:
 
   test_pypy:
     timeout-minutes: 20  # a little more time
-    needs: [style, build, build_wheels]
+    needs: [build, build_wheels]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -303,18 +301,6 @@ jobs:
   #   - name: Debug Info
   #     run: |
   #       pip freeze
-
-  #   - name: Check RST formatting
-  #     run: |
-  #       # Check sort order (bash call work around for pipe character)
-  #       bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
-  #       # Check copyright date
-  #       bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
-  #       # Check no __docformat__ lines
-  #       bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
-  #       # Black style check:
-  #       black --check --diff .
-  #     shell: bash
 
   docs:
     needs: [check_tests]
