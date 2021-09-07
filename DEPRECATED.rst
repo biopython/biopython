@@ -267,6 +267,13 @@ Bio.SeqFeature
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated. It was removed in Release 1.68.
 
+Note that in Release 1.80 the location_operator argument can no longer be
+used, instead do this via the CompoundLocation object.
+
+The strand, ref and ref_db arguments to the SeqFeature were deprecated in
+Release 1.80, and will later be removed. Set them via the location object
+instead.
+
 Bio.Motif
 ---------
 Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
