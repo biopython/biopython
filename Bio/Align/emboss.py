@@ -6,8 +6,8 @@
 # package.
 """Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
-This module contains a parser for the EMBOSS pair/simple file format, for
-example from the needle, water, and stretcher tools.
+This module contains a parser for the EMBOSS srspair/pair/simple file format,
+for example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -38,6 +38,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if line.rstrip() != "########################################":
             raise ValueError("Unexpected line: %s") % line
 
+        # assume srspair format (default) if not specified explicitly in
+        # the output file
+        self.align_format = "srspair"
         commandline = None
         for line in stream:
             if line.rstrip() == "########################################":
@@ -98,7 +101,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     aligned_sequences = [""] * number_of_sequences
                     consensus = ""
                     starts = [0] * number_of_sequences
-                    ends = [0] * number_of_sequences
                     column = 0
                     index = 0
                     continue
@@ -170,7 +172,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             records = []
                             n = len(sequences)
                             for i in range(n):
-                                start = starts[i] - 1  # Python counting
+                                start = starts[i]
                                 if start == 0:
                                     sequence = Seq(sequences[i])
                                 else:
@@ -198,23 +200,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     consensus += line[21:71]
                 else:
                     identifier, start = prefix.split(None, 1)
-                    aligned_sequence, end = line[21:].split(None, 1)
-                    start = int(start)
-                    end = int(end)
-                    sequence = aligned_sequence.replace("-", "")
-                    if len(sequences[index]) > 0:
-                        length = len(sequence)
-                        if length == 0:
-                            assert start == ends[index]
-                            assert end == ends[index]
-                        else:
-                            assert start == ends[index] + 1
-                            assert end == ends[index] + length
                     assert identifiers[index].startswith(identifier)
-                    if starts[index] == 0:
-                        # Record the start and end
+                    aligned_sequence, end = line[21:].split(None, 1)
+                    start = int(start) - 1  # Python counting
+                    end = int(end)
+                    length = len(sequences[index])
+                    sequence = aligned_sequence.replace("-", "")
+                    if length == 0 and len(sequence) > 0:
+                        # Record the start
                         starts[index] = start
-                    ends[index] = end
+                    else:
+                        if self.align_format == "srspair" and len(sequence) == 0:
+                            start += 1
+                        assert start == starts[index] + length
+                    assert end == start + len(sequence)
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:
