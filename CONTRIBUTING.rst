@@ -91,7 +91,7 @@ Continuous Integration
 ----------------------
 
 Once you submit your pull request on GitHub, several automated tests should be
-run via continous integration services, and their results reported on the pull
+run via continuous integration services, and their results reported on the pull
 request. These will run most of the Biopython tests (although not with all the
 optional dependencies included), plus also style checks using ``pre-commit``
 (also used for git pre-commit checks, see above).
