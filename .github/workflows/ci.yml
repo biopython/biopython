@@ -50,7 +50,6 @@ jobs:
   # - tarball on Linux
   # - wheels on all supported OSes and Linux, MacOS, and Windows
   build:
-    needs: [style]
     runs-on: ubuntu-latest
 
     steps:
