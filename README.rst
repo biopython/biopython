@@ -14,7 +14,7 @@
    :alt: GitHub workflow status
    :target: https://github.com/biopython/biopython/actions
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
-   :alt: TravisCI test coverage
+   :alt: Test coverage on CodeCov
    :target: https://codecov.io/github/biopython/biopython/
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
@@ -61,9 +61,9 @@ https://doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-Python 3.6 onwards, include the package management system "pip" which should
-allow you to install Biopython (and its dependency NumPy if needed), upgrade
-or uninstall with just one terminal command::
+Python includes the package management system "pip" which should allow you to
+install Biopython (and its dependency NumPy if needed), upgrade or uninstall
+with just one terminal command::
 
     pip install biopython
     pip install --upgrade biopython
@@ -85,12 +85,9 @@ We currently recommend using Python 3.9 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.6, 3.7, 3.8, 3.9 -- see http://www.python.org
+- Python 3.7, 3.8, 3.9 -- see http://www.python.org
 
-- PyPy3.6 v7.3.1 -- or later, see http://www.pypy.org
-
-Biopython 1.68 was our final release to support Python 2.6, while Biopython
-1.76 was our final release to support Python 2.7 and Python 3.5.
+- PyPy3.7 v7.3.5 -- or later, see http://www.pypy.org
 
 
 Optional Dependencies
@@ -147,7 +144,7 @@ at compile time:
 - Python including development header files like ``python.h``, which on Linux
   are often not installed by default (trying looking for and installing a
   package named ``python-dev`` or ``python-devel`` as well as the ``python``
-  pacakge).
+  package).
 
 - Appropriate C compiler for your version of Python, for example GCC on Linux,
   MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple's
@@ -168,13 +165,13 @@ Now change directory to the Biopython source code folder and run::
 Substitute ``python`` with your specific version if required, for example
 ``python3``, or ``pypy3``.
 
-To exlude tests that require an internet connection (and which may take a long
-time), use the ``--offline`` option::
+To exclude tests that require an internet connection (and which may take a
+long time), use the ``--offline`` option::
 
     python setup.py test --offline
 
-If you need to do additional configuration, e.g. changing the install directory
-prefix, please type ``python setup.py``.
+If you need to do additional configuration, e.g. changing the install
+directory prefix, please type ``python setup.py``.
 
 
 Testing

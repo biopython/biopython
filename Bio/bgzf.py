@@ -600,7 +600,7 @@ class BgzfReader:
             return
         # Must hit the disk... first check cache limits,
         while len(self._buffers) >= self.max_cache:
-            # TODO - Implemente LRU cache removal?
+            # TODO - Implement LRU cache removal?
             self._buffers.popitem()
         # Now load the block
         handle = self._handle

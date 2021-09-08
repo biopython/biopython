@@ -811,7 +811,7 @@ class DiagramTest(unittest.TestCase):
 
         gdd = Diagram(
             "Test Diagram",
-            # For the circular diagram we don't want a closed cirle:
+            # For the circular diagram we don't want a closed circle:
             circular=False,
         )
         # Add a track of features,

@@ -106,7 +106,7 @@ For example, consider the following short FASTQ file::
 This contains three reads of length 25.  From the read length these were
 probably originally from an early Solexa/Illumina sequencer but this file
 follows the Sanger FASTQ convention (PHRED style qualities with an ASCII
-offet of 33).  This means we can parse this file using Bio.SeqIO using
+offset of 33).  This means we can parse this file using Bio.SeqIO using
 "fastq" as the format name:
 
 >>> from Bio import SeqIO

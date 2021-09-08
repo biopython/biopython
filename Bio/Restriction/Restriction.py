@@ -658,7 +658,7 @@ class NoCut(AbstractCut):
     """Implement the methods specific to the enzymes that do not cut.
 
     These enzymes are generally enzymes that have been only partially
-    characterised and the way they cut the DNA is unknow or enzymes for
+    characterised and the way they cut the DNA is unknown or enzymes for
     which the pattern of cut is to complex to be recorded in Rebase
     (ncuts values of 0 in emboss_e.###).
 
@@ -2153,7 +2153,7 @@ class RestrictionBatch(set):
         return self
 
     def __add__(self, other):
-        """Overide '+' for use with sets.
+        """Override '+' for use with sets.
 
         b + other -> new RestrictionBatch.
         """
@@ -2251,7 +2251,7 @@ class RestrictionBatch(set):
 
     @classmethod
     def suppl_codes(cls):
-        """Return a dicionary with supplier codes.
+        """Return a dictionary with supplier codes.
 
         Letter code for the suppliers.
         """

@@ -26,7 +26,7 @@ class Record:
     Attributes:
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
-     - children - Sequence of childrens sunids
+     - children - Sequence of children sunids
 
     """
 

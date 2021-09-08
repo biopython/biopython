@@ -43,7 +43,7 @@ class PDBParser:
         """Create a PDBParser object.
 
         The PDB parser call a number of standard methods in an aggregated
-        StructureBuilder object. Normally this object is instanciated by the
+        StructureBuilder object. Normally this object is instantiated by the
         PDBParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
 
@@ -52,7 +52,7 @@ class PDBParser:
            constructing the SMCRA data structure are fatal. If true (DEFAULT),
            the exceptions are caught, but some residues or atoms will be missing.
            THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
-         - get_header - unused argument kept for historical compatibilty.
+         - get_header - unused argument kept for historical compatibility.
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.

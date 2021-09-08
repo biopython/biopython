@@ -20,8 +20,8 @@ First supported in release 1.73.
 
 Python 3.6
 ----------
-Triggers a deprecation warning as of release 1.79.
-First supported in release 1.69.
+No longer supported as of Release 1.80, having triggered a deprecation
+warning as of release 1.79. First supported in release 1.69.
 
 Python 3.5
 ----------
@@ -169,7 +169,7 @@ explicitly, for example record1.id == record2.id or record1.seq == record.seq
 Bio.Seq sequence equality
 -------------------------
 As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
-use string-like equality testing and hashing (ingoring any difference in
+use string-like equality testing and hashing (ignoring any difference in
 alphabet except to issue warnings).
 
 Prior releases used Python's object comparison. Warnings of this change
@@ -266,6 +266,13 @@ Bio.SeqFeature
 --------------
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated. It was removed in Release 1.68.
+
+Note that in Release 1.80 the location_operator argument can no longer be
+used, instead do this via the CompoundLocation object.
+
+The strand, ref and ref_db arguments to the SeqFeature were deprecated in
+Release 1.80, and will later be removed. Set them via the location object
+instead.
 
 Bio.Motif
 ---------
@@ -620,8 +627,8 @@ The methods ``letter_sum`` and ``all_letters_sum`` were removed from the
 ``SeqMat`` class in Bio.SubsMat in Release 1.57.
 The methods ``print_full_mat`` and ``print_mat`` were removed from the
 `SeqMat`` class in Bio.SubsMat in Release 1.79.
-The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
-please consider using Bio.Align.substitution_matrices.
+The Bio.SubsMat module was deprecated in Release 1.78, and removed in Release
+1.80. As an alternative, please consider using Bio.Align.substitution_matrices.
 
 Bio.Align
 ---------

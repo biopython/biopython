@@ -469,7 +469,7 @@ def _kill_comments_and_break_lines(text):
     Special [&...] and [\...] comments remain untouched, if not inside standard comment.
     Quotes inside special [& and [\ are treated as normal characters,
     but no nesting inside these special comments allowed (like [&   [\   ]]).
-    ';' ist deleted from end of line.
+    ';' is deleted from end of line.
 
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
@@ -1336,7 +1336,7 @@ class Nexus:
                     if not identifier:  # end of list?
                         break
                     start = self._resolve(identifier, set_type=set_type)
-                    if options_buffer.peek_nonwhitespace() == "-":  # followd by -
+                    if options_buffer.peek_nonwhitespace() == "-":  # followed by -
                         end = start
                         step = 1
                         # get hyphen and end of range
@@ -1347,7 +1347,7 @@ class Nexus:
                         if set_type == CHARSET:
                             if (
                                 options_buffer.peek_nonwhitespace() == "\\"
-                            ):  # followd by \
+                            ):  # followed by \
                                 backslash = options_buffer.next_nonwhitespace()
                                 step = int(
                                     options_buffer.next_word()

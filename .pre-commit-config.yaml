@@ -1,4 +1,8 @@
-# pre-commit run --all-files
+# See CONTRIBUTING.rst, we expect this to be run via a git pre-commit hook.
+# You can also run the checks directly at the terminal, e.g.
+#
+# $ pre-commit run --all-files
+#
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -25,7 +29,6 @@ repos:
             'flake8-comprehensions',
             'flake8-docstrings',
             'flake8-implicit-str-concat',
-            'flake8-quotes',
             'flake8-rst-docstrings>=0.2.3',
             'pydocstyle>=6.0.0',
         ]
@@ -46,6 +49,17 @@ repos:
     -   id: doc8
         additional_dependencies: [pygments]
         args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+    -   id: codespell
+        files: \.(rst|md|tex)$
+        args: [
+            --ignore-regex,
+            '(^|\W)([A-Z]{2,3})(\W|$)',
+            -L,
+            'ser,hsa,hist,fpr'
+        ]
 -   repo: local
     hooks:
     -   id: doi-link-style
@@ -54,3 +68,10 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
+ci:
+    # Settings for the https://pre-commit.ci/ continuous integration service
+    autofix_prs: false
+    # Default message is more verbose
+    autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
+    # Default is weekly
+    autoupdate_schedule: quarterly

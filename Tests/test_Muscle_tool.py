@@ -311,7 +311,7 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("diags", True)  # Default None treated as False!
         # Use clustal output
         cmdline.set_parameter("clwstrict", True)  # Default None treated as False!
-        # Shoudn't need this, but just to make sure it is accepted
+        # Shouldn't need this, but just to make sure it is accepted
         cmdline.set_parameter("maxhours", 0.1)
         # No progress reports to stderr
         cmdline.set_parameter("quiet", True)  # Default None treated as False!

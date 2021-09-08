@@ -32,8 +32,9 @@ nucleotide_alphabet = IUPACData.unambiguous_dna_letters
 protein_alphabet = IUPACData.protein_letters
 
 
-class Test_basics(unittest.TestCase):
+class TestBasics(unittest.TestCase):
     def test_basics_vector(self):
+        """Test basic vector operations."""
         counts = substitution_matrices.Array("XYZ")
         self.assertEqual(
             str(counts),
@@ -63,6 +64,7 @@ Z  5.5
             counts[8]
 
     def test_basics_matrix(self):
+        """Test basic matrix operations."""
         counts = substitution_matrices.Array("XYZ", dims=2)
         self.assertEqual(
             str(counts),
@@ -108,6 +110,7 @@ Z  0.0
         )
 
     def test_read_write(self):
+        """Test reading and writing substitution matrices."""
         path = os.path.join("Align", "hg38.chrom.sizes")
         sizes = substitution_matrices.read(path, numpy.int64)
         # Note that sum(sizes) below is larger than 2147483647, and won't
@@ -128,6 +131,7 @@ Z  0.0
         self.assertEqual(lines[4], "chr5 181538259")
 
     def test_nucleotide_freq(self):
+        """Test nucleotide frequency calculations."""
         counts = Counter()
         path = os.path.join("Align", "ecoli.fa")
         records = SeqIO.parse(path, "fasta")
@@ -180,6 +184,7 @@ Z  0.0
         self.assertAlmostEqual(frequencies["T"], 0.2025723472668810)
 
     def test_protein_freq(self):
+        """Test amino acid frequency calculations."""
         counts = Counter()
         path = os.path.join("Align", "cow.fa")
         records = SeqIO.parse(path, "fasta")
@@ -264,6 +269,7 @@ Z  0.0
         self.assertAlmostEqual(frequencies["Y"], 0.031515526)
 
     def test_pickling(self):
+        """Test pickling a substitution matrix."""
         matrix = substitution_matrices.load("BLOSUM62")
         pickled = pickle.dumps(matrix)
         loaded = pickle.loads(pickled)
@@ -314,6 +320,7 @@ class TestScoringMatrices(unittest.TestCase):
         cls.observed = observed
 
     def test1_observed_frequencies(self):
+        """Test calculating substitution frequencies."""
         observed = self.observed
         self.assertEqual(observed.alphabet, protein_alphabet)
         self.assertEqual(observed.shape, (20, 20))
@@ -719,6 +726,7 @@ class TestScoringMatrices(unittest.TestCase):
         self.assertAlmostEqual(observed["Y", "Y"], 352)
 
     def test2_observed_probabilities(self):
+        """Test calculating substitution probabilities."""
         observed = self.observed
         # convert observed frequencies to probabilities
         total = observed.sum()
@@ -1127,6 +1135,7 @@ class TestScoringMatrices(unittest.TestCase):
         self.assertAlmostEqual(observed["Y", "Y"], 0.028664495)
 
     def test3_observed_symmetric_probabilities(self):
+        """Test symmetrizing substitution probabilities."""
         observed = self.observed
         # make a symmetric matrix
         observed[:, :] = 0.5 * (observed + observed.transpose())
@@ -1534,9 +1543,10 @@ class TestScoringMatrices(unittest.TestCase):
         self.assertAlmostEqual(observed["Y", "Y"], 0.028664495)
 
     def test4_aminoacid_probabilities(self):
+        """Test calculating expected amino acid probabilities."""
         observed = self.observed
         # calculate probabilities expected under a null model
-        probabilities = numpy.sum(observed, 0)  # Be sure to use numpy"s sum
+        probabilities = numpy.sum(observed, 0)  # Be sure to use numpy's sum
         self.assertEqual(probabilities.shape, (20,))
         self.assertAlmostEqual(probabilities["A"], 0.070358306)
         self.assertAlmostEqual(probabilities["C"], 0.024959283)
@@ -1561,6 +1571,7 @@ class TestScoringMatrices(unittest.TestCase):
         TestScoringMatrices.probabilities = probabilities
 
     def test5_expected_probabilities(self):
+        """Test calculating expected amino acid substitution probabilities."""
         probabilities = self.probabilities
         expected = numpy.dot(probabilities[:, None], probabilities[None, :])
         self.assertEqual(expected.alphabet, protein_alphabet)
@@ -1968,6 +1979,7 @@ class TestScoringMatrices(unittest.TestCase):
         TestScoringMatrices.expected = expected
 
     def test6_scores(self):
+        """Test calculating amino acid substitution log-ratios."""
         observed = self.observed
         expected = self.expected
         # calculate the log-ratio
@@ -2376,6 +2388,7 @@ class TestScoringMatrices(unittest.TestCase):
         self.assertAlmostEqual(scores["Y", "Y"], 4.795691579)
 
     def test_ident(self):
+        """Test calculating the +6/-1 matrix as an approximation of BLOSUM62."""
         # Calculate the +6/-1 matrix as an approximation of the BLOSUM62 matrix.
         # Steven Henikoff & Jorja G. Henikoff:
         # Amino acid substitution matrices from protein blocks.
@@ -2391,6 +2404,17 @@ class TestScoringMatrices(unittest.TestCase):
         )
         self.assertAlmostEqual(match_score, 6.0)
         self.assertAlmostEqual(mismatch_score, -1.0)
+
+
+class TestLoading(unittest.TestCase):
+    def test_loading(self):
+        """Confirm that all provided substitution matrices can be loaded."""
+        names = substitution_matrices.load()
+        for name in names:
+            try:
+                m = substitution_matrices.load(name)
+            except Exception:
+                self.fail("Failed to load subsitution matrix '%s'" % name)
 
 
 if __name__ == "__main__":

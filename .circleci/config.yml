@@ -61,10 +61,10 @@ jobs:
           name: Sphinx
           command: |
             make -C Doc/api/ html
-      - deploy:
-          name: Deploy Sphinx documentation
-          command: |
-            .github/deploy_docs.sh
+#      - deploy:
+#          name: Deploy Sphinx documentation
+#          command: |
+#            .github/deploy_docs.sh
       - run:
           name: Test
           command: |

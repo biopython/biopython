@@ -17,7 +17,7 @@ from Bio.SeqIO.FastaIO import SimpleFastaParser
 def title_to_ids(title):
     """Convert a FASTA title line into the id, name, and description.
 
-    This is just a quick-n-dirty implementation, and is definetely not meant
+    This is just a quick-n-dirty implementation, and is definitely not meant
     to handle every FASTA title line case.
     """
     # first split the id information from the description

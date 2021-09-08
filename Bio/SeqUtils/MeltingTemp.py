@@ -19,7 +19,7 @@ temperature of oligonucleotides:
    additives are available.
 
 Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
-however, recommended to use Tm_NN instead, since Tm_staluc may be depreceated
+however, recommended to use Tm_NN instead, since Tm_staluc may be deprecated
 in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
 with default parameters gives (essentially) the same results.
 
@@ -437,7 +437,7 @@ def make_table(oldtable=None, values=None):
 
 
 def _check(seq, method):
-    """Return a sequence which fullfils the requirements of the given method (PRIVATE).
+    """Return a sequence which fulfills the requirements of the given method (PRIVATE).
 
     All Tm methods in this package require the sequence in uppercase format.
     Most methods make use of the length of the sequence (directly or
@@ -892,7 +892,7 @@ def Tm_NN(
 
         - RNA_NN1: values from Freier et al. (1986)
         - RNA_NN2: values from Xia et al. (1998)
-        - RNA_NN3: valuse from Chen et al. (2012)
+        - RNA_NN3: values from Chen et al. (2012)
 
        For RNA/DNA hybridizations:
 
@@ -1087,7 +1087,7 @@ def Tm_NN(
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     """Return DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
 
-    This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
+    This method may be deprecated in the future. Use Tm_NN instead. Tm_NN
     with default values gives the same result as Tm_staluc.
 
     s is the sequence as string or Seq object
