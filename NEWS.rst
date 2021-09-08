@@ -35,6 +35,8 @@ possible, especially the following contributors:
 - Chenghao Zhu
 - Fabian Egli
 - Sebastian Bassi
+- Michiel de Hoon
+- Peter Cock
 
 3 June 2021: Biopython 1.79
 ================================
