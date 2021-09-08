@@ -16,10 +16,50 @@ on:
       - master
 
 jobs:
+  # Style Checking: Linux and Python version only.
+  style:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Check for changes only on files changed by the PR/push
+    - uses: trilom/file-changes-action@v1.2.4
+      with:
+        # Creates 'files.txt' by default
+        output: ' '
+        fileOutput: ' '
+
+    # Cache CI packages
+    - uses: actions/cache@v2
+      id: cache-precommit
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ runner.os }}-precommit-hooks-v2-${{ hashFiles('**/.pre-commit-config.yaml') }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Installing pre-commit
+      run: |
+        python -m pip install pre-commit
+
+    - name: Installing pre-commit hooks (cached)
+      if: steps.cache-precommit.outputs.cache-hit != 'true'
+      run: |
+        pre-commit install --install-hooks
+
+    - name: Run style checking via pre-commit
+      run: |
+        pre-commit run --files $( cat ${HOME}/files.txt )
+
   # Cache pip & python dependencies for Linux runner
   # since it is used in most actions.
   # Adapted from: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
   linux_prep:
+    needs: [style]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,6 +89,7 @@ jobs:
   # - tarball on Linux
   # - wheels on all supported OSes and Linux, MacOS, and Windows
   build:
+    needs: [style]
     runs-on: ubuntu-latest
 
     steps:
@@ -68,6 +109,7 @@ jobs:
         python setup.py sdist --formats=gztar,zip
 
   build_wheels:
+    needs: [style]
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -111,13 +153,13 @@ jobs:
   # tests install only numpy (lightweight version).
   # NOTE: PyPy only runs on Linux with minimal dependencies because it's running slowly.
   #
-  # Tests trigger only if the build steps succeed.
+  # Tests trigger only of the style and build steps succeed.
   #
 
   # Linux is where the thorough tests run. Install all dependencies and run all (offline) tests.
   test_linux:
     timeout-minutes: 15
-    needs: [build, build_wheels, linux_prep]
+    needs: [style, build, build_wheels, linux_prep]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -167,7 +209,7 @@ jobs:
 
   test_macos:
     timeout-minutes: 15
-    needs: [build, build_wheels]
+    needs: [style, build, build_wheels]
     runs-on: macos-latest
     strategy:
       matrix:
@@ -200,7 +242,7 @@ jobs:
 
   test_windows:
     timeout-minutes: 15
-    needs: [build, build_wheels]
+    needs: [style, build, build_wheels]
     runs-on: windows-latest
     strategy:
       matrix:
@@ -233,7 +275,7 @@ jobs:
 
   test_pypy:
     timeout-minutes: 20  # a little more time
-    needs: [build, build_wheels]
+    needs: [style, build, build_wheels]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -301,6 +343,18 @@ jobs:
   #   - name: Debug Info
   #     run: |
   #       pip freeze
+
+  #   - name: Check RST formatting
+  #     run: |
+  #       # Check sort order (bash call work around for pipe character)
+  #       bash -c \' grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f \'
+  #       # Check copyright date
+  #       bash -c \' grep "1999-`date +'%Y'`" LICENSE.rst \'
+  #       # Check no __docformat__ lines
+  #       bash -c "if grep --include '*.py' -rn '^__docformat__ ' Bio BioSQL Tests Scripts Doc ; then echo 'Remove __docformat__ line(s), we assume restructuredtext.'; false; fi"
+  #       # Black style check:
+  #       black --check --diff .
+  #     shell: bash
 
   docs:
     needs: [check_tests]
