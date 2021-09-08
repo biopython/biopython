@@ -306,7 +306,7 @@ A-G
         query = reverse_complement(query)
         sequences = (target, query)
         coordinates = numpy.array(
-            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
+            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 7, 6, 5, 4, 4, 2, 2, 1, 1, 0]]
         )
         alignment = Align.Alignment(sequences, coordinates)
         alignment.score = 6.0
@@ -921,7 +921,7 @@ TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG""
         self.check_indexing_slicing(alignment, msg)
         alignment.sequences[2] = alignment.sequences[2].reverse_complement()
         n = len(alignment.sequences[2])
-        alignment.coordinates[2, :] = n - alignment.coordinates[2, :]
+        alignment.coordinates[2, :] = alignment.coordinates[2, ::-1]
         msg = "reverse strand"
         self.check_indexing_slicing(alignment, msg)
 

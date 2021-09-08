@@ -139,12 +139,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif self._alignment_representation == "CIGAR":
             coordinates = self.parse_cigar(columns[12])
         coordinates[0, :] += target_start
+        query_size = self._query_size
         if query_start < query_end:
             coordinates[1, :] += query_start
         else:
             # mapped to reverse strand
-            coordinates[1, :] = query_start - coordinates[1, :] + 1
-        query_size = self._query_size
+            coordinates[1, :] = coordinates[1, ::-1]
+            coordinates[1, :] += query_size - query_start - 1
         query_sequence = Seq(None, length=query_size)
         query = SeqRecord(query_sequence, id=query_id)
         if self._query_description is not None:
