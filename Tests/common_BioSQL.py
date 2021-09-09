@@ -470,7 +470,7 @@ class SeqInterfaceTest(unittest.TestCase):
         test_seq = self.item.seq
         string_rep = str(test_seq)
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
-        self.assertEqual(type(string_rep), type(""))
+        self.assertEqual(type(string_rep), str)
         self.assertEqual(len(test_seq), 880)
         self.assertEqual(test_seq[879], "A")
         self.assertEqual(test_seq[-1], "A")
