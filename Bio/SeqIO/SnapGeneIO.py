@@ -110,7 +110,7 @@ def _parse_cookie_packet(length, data, record):
 
 
 def _parse_location(rangespec, strand, record):
-    start, end = [int(x) for x in rangespec.split("-")]
+    start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
     if start > end:

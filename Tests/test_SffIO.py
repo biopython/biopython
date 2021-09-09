@@ -77,7 +77,7 @@ class TestUAN(unittest.TestCase):
                 region = int(fields[-1])
                 self.test_annotations[current_name]["region"] = region
             elif "XY" in line:
-                x, y = [int(v) for v in fields[-1].split("_")]
+                x, y = (int(v) for v in fields[-1].split("_"))
                 self.test_annotations[current_name]["coords"] = (x, y)
 
     def test_time(self):

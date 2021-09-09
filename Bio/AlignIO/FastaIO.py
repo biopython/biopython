@@ -301,7 +301,7 @@ handle.name: {handle.name}
             # Next line(s) should be consensus seq...
         elif line.startswith("; "):
             if ": " in line:
-                key, value = [s.strip() for s in line[2:].split(": ", 1)]
+                key, value = (s.strip() for s in line[2:].split(": ", 1))
             else:
                 import warnings
                 from Bio import BiopythonParserWarning
@@ -312,7 +312,7 @@ handle.name: {handle.name}
                     "Missing colon in line: %r" % line, BiopythonParserWarning
                 )
                 try:
-                    key, value = [s.strip() for s in line[2:].split(" ", 1)]
+                    key, value = (s.strip() for s in line[2:].split(" ", 1))
                 except ValueError:
                     raise ValueError("Bad line: %r" % line) from None
             if state == state_QUERY_HEADER:
