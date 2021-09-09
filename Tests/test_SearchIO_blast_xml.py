@@ -3997,7 +3997,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             self.assertEqual(
                 exp_warning,
                 len(w),
-                "Expected {0} warning(s), got {1}".format(exp_warning, len(w)),
+                f"Expected {exp_warning} warning(s), got {len(w)}",
             )
 
         self.assertEqual(qresult.blast_id, "Query_1")
@@ -4027,7 +4027,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             self.assertEqual(
                 exp_warning,
                 len(w),
-                "Expected {0} warning(s), got {1}".format(exp_warning, len(w)),
+                f"Expected {exp_warning} warning(s), got {len(w)}",
             )
 
         self.assertEqual(qresult.blast_id, "Query_1")
@@ -4057,7 +4057,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             self.assertEqual(
                 exp_warning,
                 len(w),
-                "Expected {0} warning(s), got {1}".format(exp_warning, len(w)),
+                f"Expected {exp_warning} warning(s), got {len(w)}",
             )
 
         self.assertEqual(qresult.id, "Query_1")

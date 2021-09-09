@@ -169,7 +169,7 @@ def _parse_features_packet(length, data, record):
             if strand == -1:
                 # Reverse segment indexes and order for reverse-strand features
                 subparts = reversed([[n_parts - i + 1, name] for i, name in subparts])
-            quals["parts"] = [";".join("{}:{}".format(i, name) for i, name in subparts)]
+            quals["parts"] = [";".join(f"{i}:{name}" for i, name in subparts)]
 
         if not location:
             raise ValueError("Missing feature location")
