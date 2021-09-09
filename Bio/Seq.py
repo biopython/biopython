@@ -326,7 +326,7 @@ class _SeqAbstractBaseClass(ABC):
                 if len(seq) > 60:
                     start = seq[:54].decode("ASCII")
                     end = seq[-3:].decode("ASCII")
-                    seq = "%s...%s" % (start, end)
+                    seq = f"{start}...{end}"
                 else:
                     seq = seq.decode("ASCII")
                 d[position] = seq
