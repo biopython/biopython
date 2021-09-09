@@ -17,10 +17,7 @@ from Bio.Align import MultipleSeqAlignment
 def createAlignment(sequences):
     """Create an Alignment object from a list of sequences."""
     return MultipleSeqAlignment(
-        (
-            SeqRecord(Seq(s), id="sequence%i" % (i + 1))
-            for (i, s) in enumerate(sequences)
-        )
+        SeqRecord(Seq(s), id="sequence%i" % (i + 1)) for (i, s) in enumerate(sequences)
     )
 
 
