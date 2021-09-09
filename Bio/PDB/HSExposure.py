@@ -225,12 +225,12 @@ class HSExposureCA(_AbstractHSExposure):
             fp.write("from pymol import cmd\n")
             fp.write("obj=[\n")
             fp.write("BEGIN, LINES,\n")
-            fp.write("COLOR, %.2f, %.2f, %.2f,\n" % (1.0, 1.0, 1.0))
+            fp.write(f"COLOR, {1.0:.2f}, {1.0:.2f}, {1.0:.2f},\n")
             for (ca, cb) in self.ca_cb_list:
                 x, y, z = ca.get_array()
-                fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
+                fp.write(f"VERTEX, {x:.2f}, {y:.2f}, {z:.2f},\n")
                 x, y, z = cb.get_array()
-                fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
+                fp.write(f"VERTEX, {x:.2f}, {y:.2f}, {z:.2f},\n")
             fp.write("END]\n")
             fp.write("cmd.load_cgo(obj, 'HS')\n")
 
