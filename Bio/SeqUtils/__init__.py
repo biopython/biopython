@@ -377,7 +377,7 @@ def molecular_weight(
             weight -= water
     except KeyError as e:
         raise ValueError(
-            "%s is not a valid unambiguous letter for %s" % (e, seq_type)
+            f"{e} is not a valid unambiguous letter for {seq_type}"
         ) from None
 
     if double_stranded:
@@ -435,7 +435,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     # create header
     if length > 20:
-        short = "%s ... %s" % (seq[:10], seq[-10:])
+        short = f"{seq[:10]} ... {seq[-10:]}"
     else:
         short = seq
     header = "GC_Frame:"
