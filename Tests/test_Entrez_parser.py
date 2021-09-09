@@ -44,14 +44,14 @@ class GeneralTests(unittest.TestCase):
     def test_read_text_handle(self):
         """Test reading a handle opened in text mode."""
         message = "^file should be opened in binary mode$"
-        with open("Entrez/pubmed1.xml", "rt") as handle:
+        with open("Entrez/pubmed1.xml") as handle:
             with self.assertRaisesRegex(TypeError, message):
                 Entrez.read(handle)
 
     def test_parse_text_handle(self):
         """Test parsing a handle opened in text mode."""
         message = "^file should be opened in binary mode$"
-        with open("Entrez/einfo1.xml", "rt") as handle:
+        with open("Entrez/einfo1.xml") as handle:
             records = Entrez.parse(handle)
             with self.assertRaisesRegex(TypeError, message):
                 next(records)
