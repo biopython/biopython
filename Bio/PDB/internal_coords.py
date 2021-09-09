@@ -2226,7 +2226,7 @@ class IC_Residue:
             s += "\n"
         for d in sorted(self.dihedra.values()):
             try:
-                s += base + d.id + " " + "{:9.5f}".format(set_accuracy_95(d.angle))
+                s += base + d.id + " " + f"{set_accuracy_95(d.angle):9.5f}"
             except KeyError:
                 pass
             s += "\n"
