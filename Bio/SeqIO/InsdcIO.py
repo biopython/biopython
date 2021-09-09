@@ -376,7 +376,7 @@ class _InsdcWriter(SequenceWriter):
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if value is None:
             # Value-less entry like /pseudo
-            self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
+            self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
         if type(value) == str:
@@ -393,9 +393,9 @@ class _InsdcWriter(SequenceWriter):
             else:
                 quote = True
         if quote:
-            line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f'{self.QUALIFIER_INDENT_STR}/{key}="{value}"'
         else:
-            line = "%s/%s=%s" % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f"{self.QUALIFIER_INDENT_STR}/{key}={value}"
         if len(line) <= self.MAX_WIDTH:
             self.handle.write(line + "\n")
             return
@@ -546,7 +546,7 @@ class GenBankWriter(_InsdcWriter):
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
                 warnings.warn(
-                    "Annotation %r too long for %r line" % (text, tag), BiopythonWarning
+                    f"Annotation {text!r} too long for {tag!r} line", BiopythonWarning
                 )
             else:
                 # Can't give such a precise warning
@@ -1025,7 +1025,7 @@ class GenBankWriter(_InsdcWriter):
 
         self._write_single_line("ACCESSION", accession)
         if gi != ".":
-            self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version, gi))
+            self._write_single_line("VERSION", f"{acc_with_version}  GI:{gi}")
         else:
             self._write_single_line("VERSION", "%s" % acc_with_version)
 

@@ -148,12 +148,10 @@ class ContentHandler(handler.ContentHandler):
         namespace, localname = name
         if namespace is not None:
             raise ValueError(
-                "Unexpected namespace '%s' for %s element" % (namespace, localname)
+                f"Unexpected namespace '{namespace}' for {localname} element"
             )
         if qname is not None:
-            raise RuntimeError(
-                "Unexpected qname '%s' for %s element" % (qname, localname)
-            )
+            raise RuntimeError(f"Unexpected qname '{qname}' for {localname} element")
         if localname == "species":
             return self.startSpeciesElement(attrs)
         if localname == "description":
@@ -296,7 +294,7 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError("Unexpected data found: '%s'" % self.data)
         self.data = ""
         record = self.records[-1]
-        dbxref = "%s:%s" % (source, ID)
+        dbxref = f"{source}:{ID}"
         if dbxref not in record.dbxrefs:
             record.dbxrefs.append(dbxref)
         self.endElementNS = self.endDBRefElement

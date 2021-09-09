@@ -541,7 +541,7 @@ def _sff_find_roche_index(handle):
         )
     else:
         raise ValueError(
-            "Unknown magic number %r in SFF index header:\n%r" % (magic_number, data)
+            f"Unknown magic number {magic_number!r} in SFF index header:\n{data!r}"
         )
 
 

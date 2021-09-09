@@ -125,7 +125,7 @@ class PhdWriter(SequenceWriter):
         if record.description.startswith("%s " % record.id):
             title = record.description
         else:
-            title = "%s %s" % (record.id, record.description)
+            title = f"{record.id} {record.description}"
         self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" % self.clean(title))
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
@@ -138,7 +138,7 @@ class PhdWriter(SequenceWriter):
             else:
                 value = record.annotations.get(annot)
             if value or value == 0:
-                self.handle.write("%s: %s\n" % (annot.upper(), value))
+                self.handle.write(f"{annot.upper()}: {value}\n")
 
         self.handle.write("END_COMMENT\nBEGIN_DNA\n")
         for i, site in enumerate(record.seq):

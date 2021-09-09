@@ -92,7 +92,7 @@ def AtomIterator(pdb_id, structure):
         else:
             # No gaps
             res_out = [_res2aacode(x) for x in residues]
-        record_id = "%s:%s" % (pdb_id, chn_id)
+        record_id = f"{pdb_id}:{chn_id}"
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)
         # if len(structure) > 1 :
