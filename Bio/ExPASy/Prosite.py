@@ -203,7 +203,7 @@ def __read(handle):
             for col in cols:
                 if not col:
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
+                qual, data = (word.lstrip() for word in col.split("="))
                 if qual == "/RELEASE":
                     release, seqs = data.split(",")
                     record.nr_sp_release = release
@@ -247,7 +247,7 @@ def __read(handle):
                     # For example, from Bug 2403, in PS50293 have:
                     # CC /AUTHOR=K_Hofmann; N_Hulo
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
+                qual, data = (word.lstrip() for word in col.split("="))
                 if qual == "/TAXO-RANGE":
                     record.cc_taxo_range = data
                 elif qual == "/MAX-REPEAT":
@@ -278,7 +278,7 @@ def __read(handle):
             for ref in refs:
                 if not ref:
                     continue
-                acc, name, type = [word.strip() for word in ref.split(",")]
+                acc, name, type = (word.strip() for word in ref.split(","))
                 if type == "T":
                     record.dr_positive.append((acc, name))
                 elif type == "F":

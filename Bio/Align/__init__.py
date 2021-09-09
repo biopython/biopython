@@ -895,7 +895,7 @@ class MultipleSeqAlignment:
             ('A', 'C') : 0.8 * 1.0 = 0.8
 
         """
-        letters = set.union(*[set(record.seq) for record in self])
+        letters = set.union(*(set(record.seq) for record in self))
         try:
             letters.remove("-")
         except KeyError:
@@ -2587,7 +2587,7 @@ class Alignment:
         is 3.5 + 3.5 = 7.
         """
         sequences = self.sequences
-        letters = set.union(*[set(sequence) for sequence in sequences])
+        letters = set.union(*(set(sequence) for sequence in sequences))
         letters = "".join(sorted(letters))
         m = substitution_matrices.Array(letters, dims=2)
         n = len(sequences)

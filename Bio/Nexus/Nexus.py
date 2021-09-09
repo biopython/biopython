@@ -1972,9 +1972,9 @@ class Nexus:
             return cm
         undelete = [t for t in self.taxlabels if t in cm]
         if seqobjects:
-            sitesm = list(zip(*[str(cm[t]) for t in undelete]))
+            sitesm = list(zip(*(str(cm[t]) for t in undelete)))
         else:
-            sitesm = list(zip(*[cm[t] for t in undelete]))
+            sitesm = list(zip(*(cm[t] for t in undelete)))
         bootstrapsitesm = [
             sitesm[random.randint(0, len(sitesm) - 1)] for _ in range(len(sitesm))
         ]
@@ -2043,7 +2043,7 @@ class Nexus:
             raise NexusError("Illegal gap position: %d" % pos)
         if n == 0:
             return
-        sitesm = list(zip(*[str(self.matrix[t]) for t in self.taxlabels]))
+        sitesm = list(zip(*(str(self.matrix[t]) for t in self.taxlabels)))
         sitesm[pos:pos] = [["-"] * len(self.taxlabels)] * n
         mapped = ["".join(x) for x in zip(*sitesm)]
         listed = [(taxon, Seq(mapped[i])) for i, taxon in enumerate(self.taxlabels)]
@@ -2097,7 +2097,7 @@ class Nexus:
         gap = set(self.gap)
         if include_missing:
             gap.add(self.missing)
-        sitesm = zip(*[str(self.matrix[t]) for t in self.taxlabels])
+        sitesm = zip(*(str(self.matrix[t]) for t in self.taxlabels))
         return [i for i, site in enumerate(sitesm) if set(site).issubset(gap)]
 
     def terminal_gap_to_missing(self, missing=None, skip_n=True):
