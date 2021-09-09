@@ -266,7 +266,7 @@ class Vector:
     def __repr__(self):
         """Return vector 3D coordinates."""
         x, y, z = self._ar
-        return "<Vector %.2f, %.2f, %.2f>" % (x, y, z)
+        return f"<Vector {x:.2f}, {y:.2f}, {z:.2f}>"
 
     def __neg__(self):
         """Return Vector(-x, -y, -z)."""

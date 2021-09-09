@@ -46,7 +46,7 @@ class Residue(Entity):
         atom_id = atom.get_id()
         if self.has_id(atom_id):
             raise PDBConstructionException(
-                "Atom %s defined twice in residue %s" % (atom_id, self)
+                f"Atom {atom_id} defined twice in residue {self}"
             )
         Entity.add(self, atom)
 

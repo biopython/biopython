@@ -311,7 +311,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        return "<Polypeptide start=%s end=%s>" % (start, end)
+        return f"<Polypeptide start={start} end={end}>"
 
 
 class _PPBuilder:
