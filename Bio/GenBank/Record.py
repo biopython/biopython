@@ -427,7 +427,7 @@ class Record:
                     count_info = count_parts.pop(0)
                     count_type = count_parts.pop(0)
 
-                    output += "%7s %s" % (count_info, count_type)
+                    output += f"{count_info:>7} {count_type}"
             # deal with ugly ORIGIN lines like:
             # 1311257 a2224835 c2190093 g1309889 t
             # by just outputting the raw information
@@ -624,7 +624,7 @@ class Feature:
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Feature(key=%r, location=%r)" % (self.key, self.location)
+        return f"Feature(key={self.key!r}, location={self.location!r})"
 
     def __str__(self):
         """Return feature as a GenBank format string."""
@@ -653,7 +653,7 @@ class Qualifier:
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Qualifier(key=%r, value=%r)" % (self.key, self.value)
+        return f"Qualifier(key={self.key!r}, value={self.value!r})"
 
     def __str__(self):
         """Return feature qualifier as a GenBank format string."""
