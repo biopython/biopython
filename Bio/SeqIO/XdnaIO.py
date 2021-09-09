@@ -333,7 +333,7 @@ class XdnaWriter(SequenceWriter):
                 for val in feature.qualifiers[qname]:
                     if len(description) > 0:
                         description = description + "\x0D"
-                    description = description + '%s="%s"' % (qname, val)
+                    description = description + f'{qname}="{val}"'
             self._write_pstring(description)
 
             self._write_pstring(feature.type)

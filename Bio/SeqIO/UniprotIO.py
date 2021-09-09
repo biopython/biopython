@@ -158,7 +158,7 @@ class Parser:
                         if taxon_element.tag == NS + "taxon":
                             append_to_annotations("taxonomy", taxon_element.text)
             if sci_name and com_name:
-                organism_name = "%s (%s)" % (sci_name, com_name)
+                organism_name = f"{sci_name} ({com_name})"
             elif sci_name:
                 organism_name = sci_name
             elif com_name:
@@ -287,11 +287,9 @@ class Parser:
                 mass = element.attrib["mass"]
                 method = element.attrib["method"]
                 if start == end == 0:
-                    append_to_annotations(ann_key, "undefined:%s|%s" % (mass, method))
+                    append_to_annotations(ann_key, f"undefined:{mass}|{method}")
                 else:
-                    append_to_annotations(
-                        ann_key, "%s..%s:%s|%s" % (start, end, mass, method)
-                    )
+                    append_to_annotations(ann_key, f"{start}..{end}:{mass}|{method}")
             elif element.attrib["type"] == "sequence caution":
                 pass  # not parsed: few information, complex structure
             elif element.attrib["type"] == "online information":
