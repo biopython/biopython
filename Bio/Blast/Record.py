@@ -242,9 +242,13 @@ class HSP:
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
-            lines.append(f"Query:{self.query_start:>8} {self.query} {self.query_end}")
+            lines.append(
+                "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
+            )
             lines.append("               %s" % self.match)
-            lines.append(f"Sbjct:{self.sbjct_start:>8} {self.sbjct} {self.sbjct_end}")
+            lines.append(
+                "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
+            )
         else:
             lines.append(
                 "Query:%8s %s...%s %s"
