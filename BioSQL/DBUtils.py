@@ -36,7 +36,7 @@ class Generic_dbutils:
         """Return the last used id for a table."""
         # XXX: Unsafe without transactions isolation
         table = self.tname(table)
-        sql = "select max(%s_id) from %s" % (table, table)
+        sql = f"select max({table}_id) from {table}"
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]

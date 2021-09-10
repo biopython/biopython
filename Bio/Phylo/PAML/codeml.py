@@ -93,9 +93,9 @@ class Codeml(Paml):
                     # control file it is specified as a series of numbers
                     # separated by spaces.
                     NSsites = " ".join(str(site) for site in option[1])
-                    ctl_handle.write("%s = %s\n" % (option[0], NSsites))
+                    ctl_handle.write(f"{option[0]} = {NSsites}\n")
                 else:
-                    ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+                    ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance."""
@@ -159,9 +159,9 @@ class Codeml(Paml):
                 # control file it is specified as a series of numbers
                 # separated by spaces.
                 NSsites = " ".join(str(site) for site in option[1])
-                print("%s = %s" % (option[0], NSsites))
+                print(f"{option[0]} = {NSsites}")
             else:
-                print("%s = %s" % (option[0], option[1]))
+                print(f"{option[0]} = {option[1]}")
 
     def _set_rel_paths(self):
         """Make all file/directory paths relative to the PWD (PRIVATE).

@@ -86,6 +86,6 @@ class Residues:
             if chain:
                 s.append("%s:" % chain)
             if start:
-                s.append("%s-%s" % (start, end))
+                s.append(f"{start}-{end}")
             strs.append("".join(s))
         return prefix + ",".join(strs)

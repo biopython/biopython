@@ -615,7 +615,7 @@ def _read_rc(reference, value):
             reference.comments.append(comment)
         else:
             comment = reference.comments[-1]
-            comment = "%s %s" % (comment, col)
+            comment = f"{comment} {col}"
             reference.comments[-1] = comment
     return unread
 
@@ -768,9 +768,9 @@ def _read_ft(record, line):
         # this line is a continuation of the description of the previous feature
         old_description = feature.qualifiers["description"]
         if old_description.endswith("-"):
-            description = "%s%s" % (old_description, description)
+            description = f"{old_description}{description}"
         else:
-            description = "%s %s" % (old_description, description)
+            description = f"{old_description} {description}"
 
         if feature.type in ("VARSPLIC", "VAR_SEQ"):  # special case
             # Remove unwanted spaces in sequences.
@@ -831,9 +831,9 @@ def _read_ft(record, line):
         description = value.rstrip('"')
         old_description = feature.qualifiers[key]
         if key == "evidence" or old_description.endswith("-"):
-            description = "%s%s" % (old_description, description)
+            description = f"{old_description}{description}"
         else:
-            description = "%s %s" % (old_description, description)
+            description = f"{old_description} {description}"
         if feature.type == "VAR_SEQ":  # see VARSPLIC above
             try:
                 first_seq, second_seq = description.split(" -> ")

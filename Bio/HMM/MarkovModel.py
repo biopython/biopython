@@ -362,7 +362,7 @@ class MarkovModelBuilder:
             self.transition_pseudo[(from_state, to_state)] = pseudocount
         else:
             raise KeyError(
-                "Transition from %s to %s is already allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is already allowed."
             )
 
     def destroy_transition(self, from_state, to_state):
@@ -392,7 +392,7 @@ class MarkovModelBuilder:
             self.transition_prob[(from_state, to_state)] = probability
         else:
             raise KeyError(
-                "Transition from %s to %s is not allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is not allowed."
             )
 
     def set_transition_pseudocount(self, from_state, to_state, count):
@@ -412,7 +412,7 @@ class MarkovModelBuilder:
             self.transition_pseudo[(from_state, to_state)] = count
         else:
             raise KeyError(
-                "Transition from %s to %s is not allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is not allowed."
             )
 
     # --- functions to deal with emissions from the sequence
@@ -428,7 +428,7 @@ class MarkovModelBuilder:
             self.emission_prob[(seq_state, emission_state)] = probability
         else:
             raise KeyError(
-                "Emission of %s from %s is not allowed." % (emission_state, seq_state)
+                f"Emission of {emission_state} from {seq_state} is not allowed."
             )
 
     def set_emission_pseudocount(self, seq_state, emission_state, count):
@@ -448,7 +448,7 @@ class MarkovModelBuilder:
             self.emission_pseudo[(seq_state, emission_state)] = count
         else:
             raise KeyError(
-                "Emission of %s from %s is not allowed." % (emission_state, seq_state)
+                f"Emission of {emission_state} from {seq_state} is not allowed."
             )
 
 

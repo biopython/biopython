@@ -236,7 +236,7 @@ class Writer:
         """Create new labels for the NeXML writer."""
         counter = "%s_counter" % obj_type
         setattr(self, counter, getattr(self, counter) + 1)
-        return "%s%s" % (obj_type, getattr(self, counter))
+        return f"{obj_type}{getattr(self, counter)}"
 
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
@@ -259,7 +259,7 @@ class Writer:
         trees = ElementTree.SubElement(
             root_node,
             "trees",
-            **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"}
+            **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"},
         )
         count = 0
         tus = set()

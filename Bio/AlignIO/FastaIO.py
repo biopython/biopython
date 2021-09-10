@@ -99,7 +99,7 @@ def FastaM10Iterator(handle, seq_count=None):
 
     def build_hsp():
         if not query_tags and not match_tags:
-            raise ValueError("No data for query %r, match %r" % (query_id, match_id))
+            raise ValueError(f"No data for query {query_id!r}, match {match_id!r}")
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
@@ -324,7 +324,7 @@ handle.name: {handle.name}
             elif state == state_ALIGN_MATCH:
                 match_tags[key] = value
             else:
-                raise RuntimeError("Unexpected state %r, %r" % (state, line))
+                raise RuntimeError(f"Unexpected state {state!r}, {line!r}")
         elif state == state_ALIGN_QUERY:
             query_seq += line.strip()
         elif state == state_ALIGN_MATCH:

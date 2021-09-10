@@ -478,7 +478,7 @@ def _load_bgzf_block(handle, text_mode=False):
     else:
         crc = struct.pack("<I", crc)
     if expected_crc != crc:
-        raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
+        raise RuntimeError(f"CRC is {crc}, not {expected_crc}")
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         # (i.e. ASCII), but critically is a single byte encoding

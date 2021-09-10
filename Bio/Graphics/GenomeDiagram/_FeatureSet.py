@@ -188,7 +188,7 @@ class FeatureSet:
         if not verbose:  # Short account only required
             return "%s" % self
         else:  # Long account desired
-            outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+            outstr = [f"\n<{self.__class__}: {self.name}>"]
             outstr.append("%d features" % len(self.features))
             for key in self.features:
                 outstr.append("feature: %s" % self.features[key])

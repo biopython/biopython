@@ -215,9 +215,7 @@ def __read(handle):
                 elif qual in ["/TOTAL", "/POSITIVE", "/UNKNOWN", "/FALSE_POS"]:
                     m = re.match(r"(\d+)\((\d+)\)", data)
                     if not m:
-                        raise Exception(
-                            "Broken data %s in comment line\n%r" % (data, line)
-                        )
+                        raise Exception(f"Broken data {data} in comment line\n{line!r}")
                     hits = tuple(map(int, m.groups()))
                     if qual == "/TOTAL":
                         record.nr_total = hits
@@ -228,9 +226,7 @@ def __read(handle):
                     elif qual == "/FALSE_POS":
                         record.nr_false_pos = hits
                 else:
-                    raise ValueError(
-                        "Unknown qual %s in comment line\n%r" % (qual, line)
-                    )
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
         elif keyword == "CC":
             # Expect CC lines like this:
             # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
@@ -270,9 +266,7 @@ def __read(handle):
                 elif qual == "/VERSION":
                     record.cc_version = data
                 else:
-                    raise ValueError(
-                        "Unknown qual %s in comment line\n%r" % (qual, line)
-                    )
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
         elif keyword == "DR":
             refs = value.split(";")
             for ref in refs:

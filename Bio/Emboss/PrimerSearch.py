@@ -23,7 +23,7 @@ class InputRecord:
         """Summarize the primersearch input record as a string."""
         output = ""
         for name, primer1, primer2 in self.primer_info:
-            output += "%s %s %s\n" % (name, primer1, primer2)
+            output += f"{name} {primer1} {primer2}\n"
         return output
 
     def add_primer_set(self, primer_name, first_primer_seq, second_primer_seq):

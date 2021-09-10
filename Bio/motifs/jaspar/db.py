@@ -101,7 +101,7 @@ class JASPAR5:
 
     def __str__(self):
         """Return a string represention of the JASPAR5 DB connection."""
-        return r"%s\@%s:%s" % (self.user, self.host, self.name)
+        return fr"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
         """Fetch a single JASPAR motif from the DB by its JASPAR matrix ID.

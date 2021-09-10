@@ -39,7 +39,7 @@ def get_prodoc_entry(
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _open("%s?%s" % (cgi, id))
+    return _open(f"{cgi}?{id}")
 
 
 def get_prosite_entry(
@@ -60,7 +60,7 @@ def get_prosite_entry(
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _open("%s?%s" % (cgi, id))
+    return _open(f"{cgi}?{id}")
 
 
 def get_prosite_raw(id, cgi=None):

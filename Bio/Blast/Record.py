@@ -87,7 +87,7 @@ class Description:
 
     def __str__(self):
         """Return the description as a string."""
-        return "%-66s %5s  %s" % (self.title, self.score, self.e)
+        return f"{self.title:<66} {self.score:>5}  {self.e}"
 
 
 class DescriptionExt(Description):
@@ -128,7 +128,7 @@ class DescriptionExtItem:
 
     def __str__(self):
         """Return the description identifier and title as a string."""
-        return "%s %s" % (self.id, self.title)
+        return f"{self.id} {self.title}"
 
 
 class Alignment:
@@ -242,19 +242,15 @@ class HSP:
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
-            lines.append(
-                "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
-            )
+            lines.append(f"Query:{self.query_start:>8} {self.query} {self.query_end}")
             lines.append("               %s" % self.match)
-            lines.append(
-                "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
-            )
+            lines.append(f"Sbjct:{self.sbjct_start:>8} {self.sbjct} {self.sbjct_end}")
         else:
             lines.append(
                 "Query:%8s %s...%s %s"
                 % (self.query_start, self.query[:45], self.query[-3:], self.query_end)
             )
-            lines.append("               %s...%s" % (self.match[:45], self.match[-3:]))
+            lines.append(f"               {self.match[:45]}...{self.match[-3:]}")
             lines.append(
                 "Sbjct:%8s %s...%s %s"
                 % (self.sbjct_start, self.sbjct[:45], self.sbjct[-3:], self.sbjct_end)

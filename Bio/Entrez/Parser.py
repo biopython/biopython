@@ -108,7 +108,7 @@ class IntegerElement(int):
             attributes = self.attributes
         except AttributeError:
             return text
-        return "IntegerElement(%s, attributes=%r)" % (text, attributes)
+        return f"IntegerElement({text}, attributes={attributes!r})"
 
 
 class StringElement(str):
@@ -130,7 +130,7 @@ class StringElement(str):
         attributes = self.attributes
         if not attributes:
             return text
-        return "StringElement(%s, attributes=%r)" % (text, attributes)
+        return f"StringElement({text}, attributes={attributes!r})"
 
 
 class ListElement(list):
@@ -152,7 +152,7 @@ class ListElement(list):
         attributes = self.attributes
         if not attributes:
             return text
-        return "ListElement(%s, attributes=%r)" % (text, attributes)
+        return f"ListElement({text}, attributes={attributes!r})"
 
     def store(self, value):
         """Append an element to the list, checking tags."""
@@ -185,7 +185,7 @@ class DictionaryElement(dict):
         attributes = self.attributes
         if not attributes:
             return text
-        return "DictElement(%s, attributes=%r)" % (text, attributes)
+        return f"DictElement({text}, attributes={attributes!r})"
 
     def store(self, value):
         """Add an entry to the dictionary, checking tags."""
@@ -463,7 +463,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             elif prefix == "xlink":
                 assert uri == "http://www.w3.org/1999/xlink"
             else:
-                raise ValueError("Unknown prefix '%s' with uri '%s'" % (prefix, uri))
+                raise ValueError(f"Unknown prefix '{prefix}' with uri '{uri}'")
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
 
@@ -630,14 +630,14 @@ class DataHandler(metaclass=DataHandlerMeta):
                 if self.namespace_level[prefix] == 1:
                     attrs = {"xmlns": uri}
         if prefix:
-            key = "%s:%s" % (prefix, name)
+            key = f"{prefix}:{name}"
         else:
             key = name
         # self.allowed_tags is ignored for now. Anyway we know what to do
         # with this tag.
         tag = "<%s" % name
         for key, value in attrs.items():
-            tag += ' %s="%s"' % (key, value)
+            tag += f' {key}="{value}"'
         tag += ">"
         self.data.append(tag)
         self.parser.EndElementHandler = self.endRawElementHandler
@@ -933,7 +933,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         try:
             handle = open(path, "wb")
         except OSError:
-            warnings.warn("Failed to save %s at %s" % (filename, path))
+            warnings.warn(f"Failed to save {filename} at {path}")
         else:
             handle.write(text)
             handle.close()
@@ -944,7 +944,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         try:
             handle = open(path, "wb")
         except OSError:
-            warnings.warn("Failed to save %s at %s" % (filename, path))
+            warnings.warn(f"Failed to save {filename} at {path}")
         else:
             handle.write(text)
             handle.close()
@@ -987,9 +987,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             try:
                 handle = urlopen(url)
             except OSError:
-                raise RuntimeError(
-                    "Failed to access %s at %s" % (filename, url)
-                ) from None
+                raise RuntimeError(f"Failed to access {filename} at {url}") from None
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
