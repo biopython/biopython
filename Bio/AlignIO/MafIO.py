@@ -355,15 +355,15 @@ class MafIndex:
         # make the tables
         self._con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('version', %s);"
-            % MAFINDEX_VERSION
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("version", MAFINDEX_VERSION),
         )
         self._con.execute(
             "INSERT INTO meta_data (key, value) VALUES ('record_count', -1);"
         )
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');"
-            % (self._target_seqname,)
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("target_seqname", self._target_seqname),
         )
         # Determine whether to store maf file as relative to the index or absolute
         # See https://github.com/biopython/biopython/pull/381
@@ -391,7 +391,8 @@ class MafIndex:
             # example: /home/bli/src/biopython/Tests/MAF/ucsc_mm9_chr10.maf
             mafpath = os.path.abspath(self._maf_file)
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (mafpath,)
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("filename", mafpath),
         )
         self._con.execute(
             "CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);"
