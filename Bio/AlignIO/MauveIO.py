@@ -139,7 +139,7 @@ class MauveWriter(SequentialAlignmentWriter):
             # Sequence1Entry	1
             # Sequence1Format	FastA
             for i in range(1, count + 1):
-                self.handle.write("#Sequence%sEntry\t%s\n" % (i, i))
+                self.handle.write(f"#Sequence{i}Entry\t{i}\n")
 
         for idx, record in enumerate(alignment):
             self._write_record(record, record_idx=idx)

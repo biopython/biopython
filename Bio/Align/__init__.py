@@ -219,7 +219,7 @@ class MultipleSeqAlignment:
         """
         if record.seq.__class__.__name__ == "CodonSeq":
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" % (
                     record.seq[: length - 3],
@@ -228,7 +228,7 @@ class MultipleSeqAlignment:
                 )
         else:
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" % (
                     record.seq[: length - 6],
@@ -1713,7 +1713,7 @@ class Alignment:
             start2 = end2
         aligned_seq1 += seq1[end1:]
         aligned_seq2 += seq2[end2:]
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_generalized(self):
         """Return generalized string representation (PRIVATE).
@@ -1786,7 +1786,7 @@ class Alignment:
         aligned_seq1 = " ".join(aligned_seq1)
         aligned_seq2 = " ".join(aligned_seq2)
         pattern = " ".join(pattern)
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_bed(self):
         """Return BED file format string representation (PRIVATE).

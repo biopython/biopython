@@ -98,7 +98,7 @@ class MafWriter(SequentialAlignmentWriter):
         try:
             anno = " ".join(
                 [
-                    "%s=%s" % (x, y)
+                    f"{x}={y}"
                     for x, y in alignment._annotations.items()
                     if x in ("score", "pass")
                 ]
@@ -106,7 +106,7 @@ class MafWriter(SequentialAlignmentWriter):
         except AttributeError:
             anno = "score=0.00"
 
-        self.handle.write("a %s\n" % (anno,))
+        self.handle.write(f"a {anno}\n")
 
         recs_out = 0
 
@@ -231,9 +231,7 @@ def MafIterator(handle, seq_count=None):
                 annotations = []
                 records = []
             else:
-                raise ValueError(
-                    "Error parsing alignment - unexpected line:\n%s" % (line,)
-                )
+                raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         elif line.startswith("a"):
             # start a bundle of records
             in_a_bundle = True
@@ -720,7 +718,7 @@ class MafIndex:
             # https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
             else:
                 raise ValueError(
-                    "Did not find %s in alignment bundle" % (self._target_seqname,)
+                    f"Did not find {self._target_seqname} in alignment bundle"
                 )
 
             # the true, chromosome/contig/etc position in the target seqname
