@@ -180,9 +180,7 @@ def _object_matcher(obj):
         return _attribute_matcher(obj)
     if callable(obj):
         return _function_matcher(obj)
-    raise ValueError(
-        "%s (type %s) is not a valid type for comparison." % (obj, type(obj))
-    )
+    raise ValueError(f"{obj} (type {type(obj)}) is not a valid type for comparison.")
 
 
 def _combine_matchers(target, kwargs, require_spec):
@@ -248,8 +246,8 @@ class TreeElement:
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
                 val = val[:57] + "..." if len(val) > 60 else val
-                return "%s='%s'" % (key, val)
-            return "%s=%s" % (key, val)
+                return f"{key}='{val}'"
+            return f"{key}={val}"
 
         return "%s(%s)" % (
             self.__class__.__name__,
@@ -289,7 +287,7 @@ class TreeMixin:
             order_func = order_opts[order]
         except KeyError:
             raise ValueError(
-                "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
+                f"Invalid order '{order}'; must be one of: {tuple(order_opts)}"
             ) from None
 
         if follow_attrs:
@@ -1222,7 +1220,7 @@ class BranchColor:
         '#0cc864'
 
         """
-        return "#%02x%02x%02x" % (self.red, self.green, self.blue)
+        return f"#{self.red:02x}{self.green:02x}{self.blue:02x}"
 
     def to_rgb(self):
         """Return a tuple of RGB values (0 to 255) representing this color.

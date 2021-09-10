@@ -391,7 +391,7 @@ class Tree(Nodes.Chain):
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
-                    print("%s %s" % (n, self.set_subtree(n)))
+                    print(f"{n} {self.set_subtree(n)}")
                 print([self.set_subtree(n) for n in self.node(node).succ])
                 raise
 
@@ -674,7 +674,7 @@ class Tree(Nodes.Chain):
                     if (
                         data.branchlength is not None and data.support is not None
                     ):  # we have blen and support
-                        info_string = "%1.2f:%1.5f" % (data.support, data.branchlength)
+                        info_string = f"{data.support:1.2f}:{data.branchlength:1.5f}"
                     elif data.branchlength is not None:  # we have only blen
                         info_string = "0.00000:%1.5f" % (data.branchlength)
                     elif data.support is not None:  # we have only support

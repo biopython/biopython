@@ -399,10 +399,10 @@ def combine(matrices):
 
     # rename taxon sets and character sets and name them with prefix
     for cn, cs in combined.charsets.items():
-        combined.charsets["%s.%s" % (name, cn)] = cs
+        combined.charsets[f"{name}.{cn}"] = cs
         del combined.charsets[cn]
     for tn, ts in combined.taxsets.items():
-        combined.taxsets["%s.%s" % (name, tn)] = ts
+        combined.taxsets[f"{name}.{tn}"] = ts
         del combined.taxsets[tn]
     # previous partitions usually don't make much sense in combined matrix
     # just initiate one new partition parted by single matrices
@@ -429,14 +429,12 @@ def combine(matrices):
             )
         combined.taxlabels.extend(m_only)  # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
-            combined.charsets["%s.%s" % (n, cn)] = [x + combined.nchar for x in cs]
+            combined.charsets[f"{n}.{cn}"] = [x + combined.nchar for x in cs]
         if m.taxsets:
             if not combined.taxsets:
                 combined.taxsets = {}
             # update taxon sets
-            combined.taxsets.update(
-                {"%s.%s" % (n, tn): ts for tn, ts in m.taxsets.items()}
-            )
+            combined.taxsets.update({f"{n}.{tn}": ts for tn, ts in m.taxsets.items()})
         # update new charpartition
         combined.charpartitions["combined"][n] = list(
             range(combined.nchar, combined.nchar + m.nchar)
@@ -1315,7 +1313,7 @@ class Nexus:
             if qualifier.lower() == "vector":
                 raise NexusError("Unsupported VECTOR format in line %s" % (opts))
             elif qualifier.lower() != "standard":
-                raise NexusError("Unknown qualifier %s in line %s" % (qualifier, opts))
+                raise NexusError(f"Unknown qualifier {qualifier} in line {opts}")
         if opts.next_nonwhitespace() != separator:
             raise NexusError("Formatting error in line: %s " % rest)
         return name
@@ -1615,9 +1613,7 @@ class Nexus:
                 clkeys = sorted(newcharlabels)
                 fh.write(
                     "charlabels "
-                    + ", ".join(
-                        "%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys
-                    )
+                    + ", ".join(f"{k + 1} {safename(newcharlabels[k])}" for k in clkeys)
                     + ";\n"
                 )
             fh.write("matrix\n")
@@ -1633,7 +1629,7 @@ class Nexus:
                 # to excluded characters
                 seek = 0
                 for p in names:
-                    fh.write("[%s: %s]\n" % (interleave_by_partition, p))
+                    fh.write(f"[{interleave_by_partition}: {p}]\n")
                     if len(newpartition[p]) > 0:
                         for taxon in undelete:
                             fh.write(
@@ -1726,9 +1722,7 @@ class Nexus:
             for n, ns in self.charsets.items():
                 cset = [offlist[c] for c in ns if c not in exclude]
                 if cset:
-                    setsb.append(
-                        "charset %s = %s" % (safename(n), _compact4nexus(cset))
-                    )
+                    setsb.append(f"charset {safename(n)} = {_compact4nexus(cset)}")
             for n, s in self.taxsets.items():
                 tset = [safename(t, mrbayes=mrbayes) for t in s if t not in delete]
                 if tset:
@@ -1758,7 +1752,7 @@ class Nexus:
                         command,
                         safename(n),
                         ", ".join(
-                            "%s: %s" % (sn, _compact4nexus(newpartition[sn]))
+                            f"{sn}: {_compact4nexus(newpartition[sn])}"
                             for sn in names
                             if sn in newpartition
                         ),
@@ -1833,7 +1827,7 @@ class Nexus:
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
             for taxon in self.taxlabels:
-                fh.write("%s %s\n" % (safename(taxon), str(self.matrix[taxon])))
+                fh.write(f"{safename(taxon)} {str(self.matrix[taxon])}\n")
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):
