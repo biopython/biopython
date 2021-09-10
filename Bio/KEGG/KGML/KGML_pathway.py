@@ -94,7 +94,7 @@ class Pathway:
         # We insist that the node ID is an integer
         if not isinstance(entry.id, int):
             raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+                f"Node ID must be an integer, got {type(entry.id)} ({entry.id})"
             )
         entry._pathway = self  # Let the entry know about the pathway
         self.entries[entry.id] = entry
@@ -103,7 +103,7 @@ class Pathway:
         """Remove an Entry element from the pathway."""
         if not isinstance(entry.id, int):
             raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+                f"Node ID must be an integer, got {type(entry.id)} ({entry.id})"
             )
         # We need to remove the entry from any other elements that may
         # contain it, which means removing those elements

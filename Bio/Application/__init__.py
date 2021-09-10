@@ -351,13 +351,13 @@ class AbstractCommandline:
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
-        answer = "%s(cmd=%r" % (self.__class__.__name__, self.program_name)
+        answer = f"{self.__class__.__name__}(cmd={self.program_name!r}"
         for parameter in self.parameters:
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
                 else:
-                    answer += ", %s=%r" % (parameter.names[-1], parameter.value)
+                    answer += f", {parameter.names[-1]}={parameter.value!r}"
         answer += ")"
         return answer
 
@@ -432,7 +432,7 @@ class AbstractCommandline:
                 )
             if not is_good:
                 raise ValueError(
-                    "Invalid parameter value %r for parameter %s" % (value, name)
+                    f"Invalid parameter value {value!r} for parameter {name}"
                 )
 
     def __setattr__(self, name, value):
@@ -634,7 +634,7 @@ class _Option(_AbstractParameter):
     ):
         self.names = names
         if not isinstance(description, str):
-            raise TypeError("Should be a string: %r for %s" % (description, names[-1]))
+            raise TypeError(f"Should be a string: {description!r} for {names[-1]}")
         # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
@@ -661,9 +661,9 @@ class _Option(_AbstractParameter):
         else:
             v = str(self.value)
         if self.equate:
-            return "%s=%s " % (self.names[0], v)
+            return f"{self.names[0]}={v} "
         else:
-            return "%s %s " % (self.names[0], v)
+            return f"{self.names[0]} {v} "
 
 
 class _Switch(_AbstractParameter):
@@ -730,7 +730,7 @@ class _Argument(_AbstractParameter):
         #                     "single entry list with a PEP8 property name.")
         self.names = names
         if not isinstance(description, str):
-            raise TypeError("Should be a string: %r for %s" % (description, names[-1]))
+            raise TypeError(f"Should be a string: {description!r} for {names[-1]}")
         # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function

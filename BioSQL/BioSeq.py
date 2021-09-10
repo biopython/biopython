@@ -153,10 +153,10 @@ def _retrieve_dbxrefs(adaptor, primary_id):
     )
     for dbname, accession, version in dbxrefs:
         if version and version != "0":
-            v = "%s.%s" % (accession, version)
+            v = f"{accession}.{version}"
         else:
             v = accession
-        _dbxrefs.append("%s:%s" % (dbname, v))
+        _dbxrefs.append(f"{dbname}:{v}")
     return _dbxrefs
 
 
@@ -190,7 +190,7 @@ def _retrieve_features(adaptor, primary_id):
             (seqfeature_id,),
         )
         for qv_name, qv_value in qvs:
-            value = "%s:%s" % (qv_name, qv_value)
+            value = f"{qv_name}:{qv_value}"
             qualifiers.setdefault("db_xref", []).append(value)
         # Get locations
         results = adaptor.execute_and_fetchall(
@@ -244,7 +244,7 @@ def _retrieve_features(adaptor, primary_id):
         lookup = {}
         for location_id, dbname, accession, version in remote_results:
             if version and version != "0":
-                v = "%s.%s" % (accession, version)
+                v = f"{accession}.{version}"
             else:
                 v = accession
             # subfeature remote location db_ref are stored as a empty string
@@ -502,7 +502,7 @@ class DBSeqRecord(SeqRecord):
             (self._primary_id,),
         )
         if version and version != "0":
-            self.id = "%s.%s" % (accession, version)
+            self.id = f"{accession}.{version}"
         else:
             self.id = accession
         # We don't yet record any per-letter-annotations in the

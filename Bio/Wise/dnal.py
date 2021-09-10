@@ -132,7 +132,7 @@ def align(
     mismatch=_SCORE_MISMATCH,
     gap=_SCORE_GAP_START,
     extension=_SCORE_GAP_EXTENSION,
-    **keywds
+    **keywds,
 ):
     """Align a pair of DNA files using dnal and calculate the statistics of the alignment."""
     cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
@@ -154,7 +154,7 @@ def main():
     stats = align(sys.argv[1:3])
     print(
         "\n".join(
-            "%s: %s" % (attr, getattr(stats, attr))
+            f"{attr}: {getattr(stats, attr)}"
             for attr in ("matches", "mismatches", "gaps", "extensions")
         )
     )

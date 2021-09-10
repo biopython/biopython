@@ -1131,7 +1131,7 @@ class Record:
             while counter < n:
                 for j in index:
                     if clusterids[j] == cluster:
-                        outputfile.write("%s\t%s\n" % (names[j], cluster))
+                        outputfile.write(f"{names[j]}\t{cluster}\n")
                         sortedindex[counter] = j
                         counter += 1
                 cluster += 1
@@ -1183,9 +1183,7 @@ class Record:
             for i in geneindex:
                 if gid:
                     outputfile.write("GENE%dX\t" % i)
-                outputfile.write(
-                    "%s\t%s\t%f" % (self.geneid[i], genename[i], gweight[i])
-                )
+                outputfile.write(f"{self.geneid[i]}\t{genename[i]}\t{gweight[i]:f}")
                 for j in expindex:
                     outputfile.write("\t")
                     if mask[i, j]:

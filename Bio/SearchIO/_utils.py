@@ -153,7 +153,7 @@ def fragcascade(attr, seq_type, doc=""):
 
     """
     assert seq_type in ("hit", "query")
-    attr_name = "_%s_%s" % (seq_type, attr)
+    attr_name = f"_{seq_type}_{attr}"
 
     def getter(self):
         return getattr(self, attr_name)

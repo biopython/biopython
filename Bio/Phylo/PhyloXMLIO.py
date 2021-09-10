@@ -148,7 +148,7 @@ def _split_namespace(tag):
 
 def _ns(tag, namespace=NAMESPACES["phy"]):
     """Format an XML tag with the given namespace (PRIVATE)."""
-    return "{%s}%s" % (namespace, tag)
+    return f"{{{namespace}}}{tag}"
 
 
 def _get_child_as(parent, tag, construct):
@@ -512,7 +512,7 @@ class Parser:
             confidence=_get_child_as(elem, "confidence", self.confidence),
             properties=_get_children_as(elem, "property", self.property),
             uri=_get_child_as(elem, "uri", self.uri),
-            **elem.attrib
+            **elem.attrib,
         )
 
     def binary_characters(self, elem):

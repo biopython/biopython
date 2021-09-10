@@ -47,22 +47,22 @@ class Record:
             if isinstance(contents, list):
                 for item in contents:
                     try:
-                        output += "%s: %s\n" % (key, item[:40])
+                        output += f"{key}: {item[:40]}\n"
                         output += out_block(item[40:])
                     except Exception:  # TODO: IndexError?
                         pass
             elif isinstance(contents, str):
-                output += "%s: %s\n" % (key, contents[:40])
+                output += f"{key}: {contents[:40]}\n"
                 output += out_block(contents[40:])
             else:
                 print(contents)
-                output += "%s: %s\n" % (key, contents[:40])
+                output += f"{key}: {contents[:40]}\n"
                 output += out_block(contents[40:])
         col_keys = sorted(self.col_defs)
         output += "Column Header Definitions\n"
         for key in col_keys:
             val = self.col_defs[key]
-            output += "    %s: %s\n" % (key, val[:40])
+            output += f"    {key}: {val[:40]}\n"
             output += out_block(val[40:], "    ")
         # May have to display VERY large tables,
         # so only show the first 20 lines of data
@@ -87,6 +87,6 @@ def out_block(text, prefix=""):
     """Format text in blocks of 80 chars with an additional optional prefix."""
     output = ""
     for j in range(0, len(text), 80):
-        output += "%s%s\n" % (prefix, text[j : j + 80])
+        output += f"{prefix}{text[j : j + 80]}\n"
     output += "\n"
     return output

@@ -265,15 +265,13 @@ class MsfIterator(AlignmentIterator):
                         # expect a line with name and a block of trailing ~ here.
                         pass
                     else:
-                        raise ValueError(
-                            "Expected sequence for %s, got: %r" % (name, line)
-                        )
+                        raise ValueError(f"Expected sequence for {name}, got: {line!r}")
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
                     seqs[idx].extend(words[1:])
                 else:
-                    raise ValueError("Expected sequence for %r, got: %r" % (name, line))
+                    raise ValueError(f"Expected sequence for {name!r}, got: {line!r}")
             # TODO - check the sequence lengths thus far are consistent
             # with blocks of 50?
             completed_length += 50

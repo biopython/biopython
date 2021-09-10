@@ -51,9 +51,7 @@ def pretty_print_prediction(
             "%s%s"
             % (emission_title, emissions[cur_position : cur_position + seq_length])
         )
-        print(
-            "%s%s" % (real_title, real_state[cur_position : cur_position + seq_length])
-        )
+        print(f"{real_title}{real_state[cur_position : cur_position + seq_length]}")
         print(
             "%s%s\n"
             % (

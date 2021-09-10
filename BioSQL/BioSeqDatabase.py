@@ -657,7 +657,7 @@ class BioSeqDatabase:
 
     def __repr__(self):
         """Return a short summary of the BioSeqDatabase."""
-        return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
+        return f"BioSeqDatabase({self.adaptor!r}, {self.name!r})"
 
     def get_Seq_by_id(self, name):
         """Get a DBSeqRecord object by its name.
