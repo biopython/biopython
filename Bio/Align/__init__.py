@@ -1349,10 +1349,7 @@ class Alignment:
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 coordinates[i, :] = coordinates[i, ::-1]
-                try:  # reverse_complement function does not work on SeqRecord
-                    sequences[i] = sequences[i].reverse_complement()
-                except AttributeError:  # for str
-                    sequences[i] = reverse_complement(sequences[i])
+                sequences[i] = reverse_complement(sequences[i], inplace=False)
         if isinstance(key, int):
             n, m = self.shape
             row = key
@@ -1678,7 +1675,7 @@ class Alignment:
         if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
             coordinates = coordinates.copy()
             coordinates[1, :] = coordinates[1, ::-1]
-            seq2 = reverse_complement(seq2)
+            seq2 = reverse_complement(seq2, inplace=False)
         coordinates = coordinates.transpose()
         end1, end2 = coordinates[0, :]
         if end1 > 0 or end2 > 0:
@@ -1891,7 +1888,7 @@ class Alignment:
             seq2 = query
         else:  # mapped to reverse strand
             strand = "-"
-            seq2 = reverse_complement(query)
+            seq2 = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
             coordinates[1, :] = coordinates[1, ::-1]
         try:
@@ -2043,7 +2040,7 @@ class Alignment:
             seq = query
         else:  # mapped to reverse strand
             flag = 16
-            seq = reverse_complement(query)
+            seq = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
             coordinates[1, :] = coordinates[1, ::-1]
         try:
@@ -2840,7 +2837,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
-            sB = reverse_complement(seqB)
+            sB = reverse_complement(seqB, inplace=False)
         if isinstance(sB, (Seq, MutableSeq)):
             sB = bytes(sB)
         score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
@@ -2852,7 +2849,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         if isinstance(seqA, (Seq, MutableSeq)):
             seqA = bytes(seqA)
         if strand == "-":
-            seqB = reverse_complement(seqB)
+            seqB = reverse_complement(seqB, inplace=False)
         if isinstance(seqB, (Seq, MutableSeq)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
