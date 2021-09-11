@@ -1,0 +1,33 @@
+#FormatVersion Mauve1
+#Sequence1File	combined.fa
+#Sequence1Entry	1
+#Sequence1Format	FastA
+#Sequence2File	combined.fa
+#Sequence2Entry	2
+#Sequence2Format	FastA
+#Sequence3File	combined.fa
+#Sequence3Entry	3
+#Sequence3Format	FastA
+#BackboneFile	combined.xmfa.bbcols
+> 1:2-49 - combined.fa
+AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT
+> 2:0-0 + combined.fa
+-------------------------------------------------
+> 3:2-48 + combined.fa
+AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
+=
+> 1:1-1 + combined.fa
+G
+=
+> 1:50-50 + combined.fa
+A
+=
+> 2:1-41 + combined.fa
+GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
+=
+> 3:1-1 + combined.fa
+C
+=
+> 3:49-49 + combined.fa
+C
+=
