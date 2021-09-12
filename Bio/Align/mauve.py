@@ -4,10 +4,9 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.AlignIO support for "xmfa" output from Mauve/ProgressiveMauve.
+"""Bio.Align support for "xmfa" output from Mauve/ProgressiveMauve.
 
-You are expected to use this module via the Bio.AlignIO functions (or the
-Bio.SeqIO functions if you want to work directly with the gapped sequences).
+You are expected to use this module via the Bio.Align functions.
 
 For example, consider a progressiveMauve alignment file containing the following::
 
@@ -43,10 +42,10 @@ For example, consider a progressiveMauve alignment file containing the following
     AAATGAGGGCCCAGGGTATGCTT
 
 This is a multiple sequence alignment with multiple aligned sections, so you
-would probably load this using the Bio.AlignIO.parse() function:
+would probably load this using the Bio.Align.parse() function:
 
-    >>> from Bio import AlignIO
-    >>> align = AlignIO.parse("Mauve/simple_short.xmfa", "mauve")
+    >>> from Bio import Align
+    >>> align = Align.parse("Mauve/simple_short.xmfa", "mauve")
     >>> alignments = list(align)
     >>> for aln in alignments:
     ...     print(aln)
@@ -76,143 +75,112 @@ the annotation attribute of each record::
       start: 9475, end: 10076, strand: -1
 
 """
-import re
 
 from Bio.Align import interfaces, Alignment
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 
 
-ID_LINE_FMT = "> {seq_name}:{start}-{end} {strand} {filename} # {ugly_hack}"
-
-
-class MauveWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize the class."""
-        super().__init__(*args, **kwargs)
-        self._wrote_header = False
-        self._wrote_first = False
+    def write_header(self, alignments):
+        """Write the file header to the output file."""
+        stream = self.stream
+        metadata = alignments.metadata
+        format_version = metadata.get("FormatVersion", "Mauve1")
+        line = f"#FormatVersion {format_version}\n"
+        stream.write(line)
+        alignment = alignments[0]
+        if len(alignment) > 1:
+            # this is a real alignment and includes all sequences
+            names = [sequence.id for sequence in alignment.sequences]
+        else:
+            # this is a single sequence; file contains no real alignments
+            # but lists the individual sequences only
+            names = [alignment.sequences[0].id for alignment in alignments]
+        name = names[0]
+        try:
+            filename, index = name.rsplit(":", 1)
+        except ValueError:
+            # sequences came from separate files
+            for index, name in enumerate(names):
+                number = index + 1
+                line = f"#Sequence{number}File\t{name}\n"
+                stream.write(line)
+                line = f"#Sequence{number}Format\tFastA\n"
+                stream.write(line)
+            self.names = names
+        else:
+            # sequences came from one combined file
+            for number in range(1, len(names) + 1):
+                line = f"#Sequence{number}File\t{filename}\n"
+                stream.write(line)
+                line = f"#Sequence{number}Entry\t{number}\n"
+                stream.write(line)
+                line = f"#Sequence{number}Format\tFastA\n"
+                stream.write(line)
+        backbone_file = metadata.get("BackboneFile", None)
+        if backbone_file is not None:
+            line = f"#BackboneFile\t{backbone_file}\n"
+            stream.write(line)
+
+    def write_file(self, alignments):
+        """Write a file with the alignments, and return the number of alignments.
+
+        alignments - A Bio.Align.mauve.AlignmentIterator object.
+        """
+        class ListWithAttributes(list):
+            pass
+        try:
+            metadata = alignments.metadata
+        except AttributeError:
+            metadata = {}
+        alignments = ListWithAttributes(alignments)
+        alignments.metadata = metadata
+        count = interfaces.AlignmentWriter.write_file(self, alignments)
+        return count
 
     def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file.
+        """Use this to write (another) single alignment to an open file."""
+        n, m = alignment.shape
 
-        Note that sequences and their annotation are recorded
-        together (rather than having a block of annotation followed
-        by a block of aligned sequences).
-        """
-        count = len(alignment)
-
-        self._length_of_sequences = alignment.get_alignment_length()
-
-        # NOTE - For now, the alignment object does not hold any per column
-        # or per alignment annotation - only per sequence.
-
-        if count == 0:
+        if n == 0:
             raise ValueError("Must have at least one sequence")
-        if self._length_of_sequences == 0:
+        if m == 0:
             raise ValueError("Non-empty sequences are required")
 
-        if not self._wrote_header:
-            self._wrote_header = True
-            self.handle.write("#FormatVersion Mauve1\n")
-            # There are some more headers, but we ignore those for now.
-            # Sequence1File	unknown.fa
-            # Sequence1Entry	1
-            # Sequence1Format	FastA
-            for i in range(1, count + 1):
-                self.handle.write("#Sequence%sEntry\t%s\n" % (i, i))
-
-        for idx, record in enumerate(alignment):
-            self._write_record(record, record_idx=idx)
-        self.handle.write("=\n")
-
-    def _write_record(self, record, record_idx=0):
-        """Write a single SeqRecord to the file (PRIVATE)."""
-        if self._length_of_sequences != len(record.seq):
-            raise ValueError("Sequences must all be the same length")
-
-        seq_name = record.name
-        try:
-            seq_name = str(int(record.name))
-        except ValueError:
-            seq_name = str(record_idx + 1)
-
-        # We remove the "/{start}-{end}" before writing, as it cannot be part
-        # of the produced XMFA file.
-        if "start" in record.annotations and "end" in record.annotations:
-            suffix0 = "/%s-%s" % (
-                record.annotations["start"],
-                record.annotations["end"],
-            )
-            suffix1 = "/%s-%s" % (
-                record.annotations["start"] + 1,
-                record.annotations["end"],
-            )
-            if seq_name[-len(suffix0) :] == suffix0:
-                seq_name = seq_name[: -len(suffix0)]
-            if seq_name[-len(suffix1) :] == suffix1:
-                seq_name = seq_name[: -len(suffix1)]
-
-        if (
-            "start" in record.annotations
-            and "end" in record.annotations
-            and "strand" in record.annotations
-        ):
-            id_line = ID_LINE_FMT.format(
-                seq_name=seq_name,
-                start=record.annotations["start"] + 1,
-                end=record.annotations["end"],
-                strand=("+" if record.annotations["strand"] == 1 else "-"),
-                filename=record.name + ".fa",
-                ugly_hack=record.id,
-            )
-            lacking_annotations = False
-        else:
-            id_line = ID_LINE_FMT.format(
-                seq_name=seq_name,
-                start=0,
-                end=0,
-                strand="+",
-                filename=record.name + ".fa",
-                ugly_hack=record.id,
-            )
-            lacking_annotations = True
-
-        # If the sequence is an empty one, skip writing it out
-        if (":0-0 " in id_line or ":1-0 " in id_line) and not lacking_annotations:
-            # Except in the first LCB
-            if not self._wrote_first:
-                self._wrote_first = True
-                # The first LCB we write out is special, and must list ALL
-                # sequences, for the Mauve GUI
-                # http://darlinglab.org/mauve/user-guide/files.html#non-standard-xmfa-formatting-used-by-the-mauve-gui
-                id_line = ID_LINE_FMT.format(
-                    seq_name=seq_name,
-                    start=0,
-                    end=0,
-                    strand="+",
-                    filename=record.name + ".fa",
-                    ugly_hack=record.id,
-                )
-                id_line = id_line.replace("\n", " ").replace("\r", " ")
-                self.handle.write(id_line + "\n\n")
-            # Alignments lacking a start/stop/strand were generated by
-            # Biopython on load, and shouldn't exist according to XMFA
-        else:
-            # In other blocks, we only write sequences if they exist in a given
-            # alignment.
-            id_line = id_line.replace("\n", " ").replace("\r", " ")
-            self.handle.write(id_line + "\n")
-            for i in range(0, len(record.seq), 80):
-                self.handle.write("%s\n" % record.seq[i : i + 80])
+        stream = self.stream
+        for i in range(n):
+            filename = alignment.sequences[i].id
+            try:
+                filename, number = filename.rsplit(":", 1)
+            except ValueError:
+                number = self.names.index(filename)
+            else:
+                number = int(number)
+            start = alignment.coordinates[i, 0]
+            end = alignment.coordinates[i, -1]
+            if start <= end:
+                strand = "+"
+            else:
+                strand = "-"
+                start, end = end, start
+            if start == end:
+                assert start == 0
+            else:
+                start += 1  # switch to 1-based counting
+            number += 1  # switch to 1-based counting
+            sequence = alignment[i]
+            line = f"> {number}:{start}-{end} {strand} {filename}\n"
+            stream.write(line)
+            line = f"{sequence}\n"
+            stream.write(line)
+        stream.write("=\n")
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Mauve xmfa alignment iterator."""
-
-    _ids = []  # for caching IDs between __next__ calls
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -289,9 +257,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         del self._line
         description = self._parse_description(line)
         identifier, start, end, strand, comments = description
-        if end > 0:
-            descriptions.append(description)
-            seqs.append("")
+        descriptions.append(description)
+        seqs.append("")
 
         for line in stream:
             line = line.strip()
@@ -327,8 +294,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif line.startswith(">"):
                 description = self._parse_description(line)
                 identifier, start, end, strand, comments = description
-                if end > 0:
-                    descriptions.append(description)
-                    seqs.append("")
-            elif end > 0:
+                descriptions.append(description)
+                seqs.append("")
+            else:
                 seqs[-1] += line

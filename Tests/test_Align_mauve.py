@@ -11,8 +11,7 @@ from io import StringIO
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import SeqIO
-from Bio.Align.mauve import AlignmentIterator
-# from Bio.AlignIO.MauveIO import MauveWriter
+from Bio.Align.mauve import AlignmentIterator, AlignmentWriter
 
 
 try:
@@ -43,8 +42,8 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignments.metadata["BackboneFile"], "combined.xmfa.bbcols")
             alignment = next(alignments)
             saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 2)
-            self.assertEqual(len(alignment.sequences), 2)
+            self.assertEqual(len(alignment), 3)
+            self.assertEqual(len(alignment.sequences), 3)
             self.assertEqual(alignment.sequences[0].id, "combined.fa:0")
             self.assertEqual(
                 repr(alignment.sequences[0].seq),
@@ -56,23 +55,32 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(start, 1)
             self.assertEqual(end, 49)
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment.sequences[1].id, "combined.fa:2")
-            self.assertEqual(
-                repr(alignment.sequences[1].seq),
-                "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)"
-            )
+            self.assertEqual(alignment.sequences[1].id, "combined.fa:1")
+            self.assertEqual(alignment.sequences[1].seq, "")
             start = alignment.coordinates[1, 0]
             end = alignment.coordinates[1, -1]
+            self.assertEqual(start, 0)
+            self.assertEqual(end, 0)
+            self.assertEqual(alignment.sequences[2].id, "combined.fa:2")
+            self.assertEqual(
+                repr(alignment.sequences[2].seq),
+                "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)"
+            )
+            start = alignment.coordinates[2, 0]
+            end = alignment.coordinates[2, -1]
             self.assertEqual(start, 1)
             self.assertEqual(end, 48)
-            sequence = self.sequences[alignment.sequences[1].id][start:end]
-            self.assertEqual(alignment.sequences[1].seq[start:end], sequence)
+            sequence = self.sequences[alignment.sequences[2].id][start:end]
+            self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
             self.assertEqual(alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT")
-            self.assertEqual(alignment[1], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
+            self.assertEqual(alignment[1], "-------------------------------------------------")
+            self.assertEqual(alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                    numpy.array([[49, 40, 38, 21, 21, 1], [1, 10, 10, 27, 28, 48]]),
+                    numpy.array([[49, 40, 38, 21, 21, 1],
+                                 [0, 0, 0, 0, 0, 0],
+                                 [1, 10, 10, 27, 28, 48]]),
                 )
             )
             alignment = next(alignments)
@@ -203,7 +211,8 @@ class TestCombinedFile(unittest.TestCase):
             index = int(index)
             record.seq = sequences[index]
             self.assertEqual(alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT")
-            self.assertEqual(alignment[1], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
+            self.assertEqual(alignment[1], "-------------------------------------------------")
+            self.assertEqual(alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
         alignment = saved_alignments[1]
         for record in alignment.sequences:
             filename, index = record.id.split(":")
@@ -236,20 +245,21 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment[0], "C")
 
     def test_write_read(self):
-        return
-        with open(self.SIMPLE_XMFA) as stream:
-            aln_list = list(MauveIterator(stream))
+        path = os.path.join("Mauve", "combined.xmfa")
+        with open(path) as stream:
+            data = stream.read()
 
         stream = StringIO()
-        MauveWriter(stream).write_file(aln_list)
+        stream.write(data)
         stream.seek(0)
-        aln_list_out = list(MauveIterator(stream))
+        alignments = AlignmentIterator(stream)
+        output = StringIO()
+        writer = AlignmentWriter(output)
 
-        for a1, a2 in zip(aln_list, aln_list_out):
-            self.assertEqual(len(a1), len(a2))
-            for r1, r2 in zip(a1, a2):
-                self.assertEqual(r1.id, r2.id)
-                self.assertEqual(r1.seq, r2.seq)
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 6)
+        output.seek(0)
+        self.assertEqual(output.read(), data)
 
 
 class TestSeparateFiles(unittest.TestCase):
@@ -272,33 +282,40 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignments.metadata["BackboneFile"], "separate.xmfa.bbcols")
             alignment = next(alignments)
             saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 2)
-            self.assertEqual(len(alignment.sequences), 2)
-            self.assertEqual(alignment.sequences[0].id, "canFam2.fa")
-            self.assertEqual(
-                repr(alignment.sequences[0].seq),
-                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)"
-            )
+            self.assertEqual(len(alignment), 3)
+            self.assertEqual(len(alignment.sequences), 3)
+            self.assertEqual(alignment.sequences[0].id, "equCab1.fa")
+            self.assertEqual(alignment.sequences[0].seq, "")
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
-            sequence = self.sequences[alignment.sequences[0].id]
+            self.assertEqual(start, 0)
+            self.assertEqual(end, 0)
+            self.assertEqual(alignment.sequences[1].id, "canFam2.fa")
+            self.assertEqual(
+                repr(alignment.sequences[1].seq),
+                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)"
+            )
+            start = alignment.coordinates[1, 0]
+            end = alignment.coordinates[1, -1]
+            sequence = self.sequences[alignment.sequences[1].id]
             self.assertEqual(start, 25)
             self.assertEqual(end, 49)
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment.sequences[1].id, "mm9.fa")
+            self.assertEqual(alignment.sequences[1].seq[start:end], sequence[start:end])
+            self.assertEqual(alignment.sequences[2].id, "mm9.fa")
 
-            sequence = alignment.sequences[1].seq
-            start = len(sequence) - alignment.coordinates[1, 0]
-            end = len(sequence) - alignment.coordinates[1, -1]
+            sequence = alignment.sequences[2].seq
+            start = len(sequence) - alignment.coordinates[2, 0]
+            end = len(sequence) - alignment.coordinates[2, -1]
             self.assertEqual(start, 0)
             self.assertEqual(end, 24)
-            sequence = self.sequences[alignment.sequences[1].id][start:end]
-            self.assertEqual(alignment.sequences[1].seq[start:end], sequence)
-            self.assertEqual(alignment[0], "GTCCCGGGCCCTGCTTTCCTTTTC")
-            self.assertEqual(alignment[1], "GCCAGGGATCTACTTTTCCTCTTC")
+            sequence = self.sequences[alignment.sequences[2].id][start:end]
+            self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
+            self.assertEqual(alignment[0], "------------------------")
+            self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
+            self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
             self.assertTrue(
                 numpy.array_equal(
-                    alignment.coordinates, numpy.array([[25, 49], [24, 0]]),
+                    alignment.coordinates, numpy.array([[0, 0], [25, 49], [24, 0]]),
                 )
             )
             alignment = next(alignments)
@@ -392,8 +409,9 @@ class TestSeparateFiles(unittest.TestCase):
         for record in alignment.sequences:
             filename = record.id
             record.seq = sequences[filename]
-            self.assertEqual(alignment[0], "GTCCCGGGCCCTGCTTTCCTTTTC")
-            self.assertEqual(alignment[1], "GCCAGGGATCTACTTTTCCTCTTC")
+            self.assertEqual(alignment[0], "------------------------")
+            self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
+            self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
         alignment = saved_alignments[1]
         for record in alignment.sequences:
             filename = record.id
@@ -411,20 +429,21 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
 
     def test_write_read(self):
-        return
-        with open(self.SIMPLE_XMFA) as stream:
-            aln_list = list(MauveIterator(stream))
+        path = os.path.join("Mauve", "separate.xmfa")
+        with open(path) as stream:
+            data = stream.read()
 
         stream = StringIO()
-        MauveWriter(stream).write_file(aln_list)
+        stream.write(data)
         stream.seek(0)
-        aln_list_out = list(MauveIterator(stream))
+        alignments = AlignmentIterator(stream)
+        output = StringIO()
+        writer = AlignmentWriter(output)
 
-        for a1, a2 in zip(aln_list, aln_list_out):
-            self.assertEqual(len(a1), len(a2))
-            for r1, r2 in zip(a1, a2):
-                self.assertEqual(r1.id, r2.id)
-                self.assertEqual(r1.seq, r2.seq)
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 4)
+        output.seek(0)
+        self.assertEqual(output.read(), data)
 
 
 if __name__ == "__main__":
