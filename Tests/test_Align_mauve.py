@@ -254,48 +254,161 @@ class TestCombinedFile(unittest.TestCase):
 
 class TestSeparateFiles(unittest.TestCase):
 
+    def setUp(self):
+        self.sequences = {}
+        for species in ("equCab1", "canFam2", "mm9"):
+            filename = f"{species}.fa"
+            path = os.path.join("Mauve", filename)
+            record = SeqIO.read(path, "fasta")
+            self.sequences[filename] = record.seq
+
     def test_parse(self):
-        ids = []
         path = os.path.join("Mauve", "separate.xmfa")
+        saved_alignments = []
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(len(alignments.metadata), 2)
             self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
             self.assertEqual(alignments.metadata["BackboneFile"], "separate.xmfa.bbcols")
-            for alignment in alignments:
-                for sequence in alignment.sequences:
-                    ids.append(sequence.id)
+            alignment = next(alignments)
+            saved_alignments.append(alignment)
+            self.assertEqual(len(alignment), 2)
+            self.assertEqual(len(alignment.sequences), 2)
+            self.assertEqual(alignment.sequences[0].id, "canFam2.fa")
+            self.assertEqual(
+                repr(alignment.sequences[0].seq),
+                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)"
+            )
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            sequence = self.sequences[alignment.sequences[0].id]
+            self.assertEqual(start, 25)
+            self.assertEqual(end, 49)
+            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+            self.assertEqual(alignment.sequences[1].id, "mm9.fa")
 
-        self.assertEqual(
-            ids, ["canFam2.fa", "mm9.fa", "equCab1.fa", "canFam2.fa", "mm9.fa"],
-        )
-        return
-
-        expected = expected.replace(" ", "").replace("\n", "")
-        self.assertEqual(
-            repr(sequence),
-            "Seq({11410: '%s'})" % expected,
-        )
-
-    def test_sequence_positions(self):
-        seqs = {}
-        for species in ("canFam2", "equCab1", "mm9"):
-            filename = "%s.fa" % species
-            path = os.path.join("Mauve", filename)
-            record = SeqIO.read(path, "fasta")
-            seqs[filename] = record.seq
-
-        path = "Mauve/separate.xmfa"
-        with open(path) as stream:
-            aln_list = list(AlignmentIterator(stream))
-
-        for aln in aln_list:
-            for index, record in enumerate(aln.sequences):
+            sequence = alignment.sequences[1].seq
+            start = len(sequence) - alignment.coordinates[1, 0]
+            end = len(sequence) - alignment.coordinates[1, -1]
+            self.assertEqual(start, 0)
+            self.assertEqual(end, 24)
+            sequence = self.sequences[alignment.sequences[1].id][start:end]
+            self.assertEqual(alignment.sequences[1].seq[start:end], sequence)
+            self.assertEqual(alignment[0], "GTCCCGGGCCCTGCTTTCCTTTTC")
+            self.assertEqual(alignment[1], "GCCAGGGATCTACTTTTCCTCTTC")
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates, numpy.array([[25, 49], [24, 0]]),
+                )
+            )
+            alignment = next(alignments)
+            saved_alignments.append(alignment)
+            self.assertEqual(len(alignment), 1)
+            self.assertEqual(len(alignment.sequences), 1)
+            self.assertEqual(alignment.sequences[0].id, "equCab1.fa")
+            self.assertEqual(alignment.sequences[0].seq, "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+            sequence = self.sequences[alignment.sequences[0].id]
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+            self.assertEqual(alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
+            )
+            alignment = next(alignments)
+            saved_alignments.append(alignment)
+            self.assertEqual(len(alignment), 1)
+            self.assertEqual(len(alignment.sequences), 1)
+            self.assertEqual(alignment.sequences[0].id, "canFam2.fa")
+            self.assertEqual(alignment.sequences[0].seq, "CAAGCCCTGCGCGCTCAGCCGGAGT")
+            sequence = self.sequences[alignment.sequences[0].id]
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+            self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
+            )
+            alignment = next(alignments)
+            saved_alignments.append(alignment)
+            self.assertEqual(len(alignment), 1)
+            self.assertEqual(len(alignment.sequences), 1)
+            self.assertEqual(alignment.sequences[0].id, "mm9.fa")
+            sequence = self.sequences[alignment.sequences[0].id]
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            self.assertEqual(start, 24)
+            self.assertEqual(end, 41)
+            self.assertEqual(alignment.sequences[0].seq[start:end], "GTCCGGAGCTGGGACGT")
+            sequence = self.sequences[alignment.sequences[0].id]
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+            self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
+            )
+            self.assertRaises(StopIteration, next, alignments)
+        # As each nucleotide in each sequence is stored exactly once in an XMFA
+        # file, we can reconstitute the full sequences:
+        self.assertEqual(len(saved_alignments), 4)
+        filenames = []
+        for alignment in saved_alignments:
+            for record in alignment.sequences:
                 filename = record.id
-                fasta_seq = seqs[filename]
-                start = aln.coordinates[index, 0]
-                end = aln.coordinates[index, -1]
-                self.assertEqual(record.seq[start:end], fasta_seq[start:end])
+                filenames.append(filename)
+        filenames = set(filenames)
+        n = len(filenames)
+        self.assertEqual(n, 3)
+        lengths = {filename: 0 for filename in filenames} 
+        for alignment in saved_alignments:
+            for record in alignment.sequences:
+                filename = record.id
+                length = len(record.seq)
+                if length > lengths[filename]:
+                    lengths[filename] = length
+        self.assertEqual(lengths["equCab1.fa"], 50)
+        self.assertEqual(lengths["canFam2.fa"], 49)
+        self.assertEqual(lengths["mm9.fa"], 41)
+        sequences = {}
+        for filename, length in lengths.items():
+            sequences[filename] = MutableSeq("N" * length)
+        # Now fill up the sequences:
+        for alignment in saved_alignments:
+            for row, record in zip(alignment.coordinates, alignment.sequences):
+                filename = record.id
+                start = row[0]
+                end = row[-1]
+                if start > end:
+                    start, end = end, start
+                sequences[filename][start:end] = record.seq[start:end]
+        # Confirm that the fully defined sequences agree with the Fasta file:
+        for filename, sequence in sequences.items():
+            sequences[filename] = Seq(sequence)
+            self.assertEqual(sequences[filename], self.sequences[filename])
+        # Make sure we can replace the partially defined sequences by these
+        # fully defined sequences, and get the same alignment:
+        alignment = saved_alignments[0]
+        for record in alignment.sequences:
+            filename = record.id
+            record.seq = sequences[filename]
+            self.assertEqual(alignment[0], "GTCCCGGGCCCTGCTTTCCTTTTC")
+            self.assertEqual(alignment[1], "GCCAGGGATCTACTTTTCCTCTTC")
+        alignment = saved_alignments[1]
+        for record in alignment.sequences:
+            filename = record.id
+            record.seq = sequences[filename]
+            self.assertEqual(alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+        alignment = saved_alignments[2]
+        for record in alignment.sequences:
+            filename = record.id
+            record.seq = sequences[filename]
+            self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
+        alignment = saved_alignments[3]
+        for record in alignment.sequences:
+            filename = record.id
+            record.seq = sequences[filename]
+            self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
 
     def test_write_read(self):
         return
