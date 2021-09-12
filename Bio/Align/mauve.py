@@ -308,8 +308,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if strand == "+":
                         pass
                     elif strand == "-":
-                        seq = reverse_complement(seq)
-                        coordinates[index, :] = coordinates[index, ::-1]
+                        seq = reverse_complement(seq, inplace=False)
+                        coordinates[index, :] = len(seq) - coordinates[index, :]
                     else:
                         raise ValueError("Unexpected strand '%s'" % strand)
                     coordinates[index] += start
