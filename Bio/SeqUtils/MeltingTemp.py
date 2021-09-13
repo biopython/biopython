@@ -833,7 +833,7 @@ def _key_error(neighbors, strict):
     """Throw an error or a warning if there is no data for the neighbors (PRIVATE)."""
     # We haven't found the key in the tables
     if strict:
-        raise ValueError("no thermodynamic data for neighbors %r available" % neighbors)
+        raise ValueError(f"no thermodynamic data for neighbors {neighbors!r} available")
     else:
         warnings.warn(
             "no themodynamic data for neighbors %r available. "

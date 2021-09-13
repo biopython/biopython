@@ -228,17 +228,13 @@ class PdbSeqresIterator(SequenceIterator):
             record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
-                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-                record.description = "%s:%s %s" % (
-                    m["database"],
-                    m["db_acc"],
-                    m["db_id_code"],
-                )
+                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
                 for melem in metadata[chn_id]:
                     record.dbxrefs.extend(
                         [
-                            "%s:%s" % (melem["database"], melem["db_acc"]),
-                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                            f"{melem['database']}:{melem['db_acc']}",
+                            f"{melem['database']}:{melem['db_id_code']}",
                         ]
                     )
             else:
@@ -432,17 +428,13 @@ def CifSeqresIterator(source):
         record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = "%s:%s %s" % (
-                m["database"],
-                m["db_acc"],
-                m["db_id_code"],
-            )
+            record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+            record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend(
                     [
-                        "%s:%s" % (melem["database"], melem["db_acc"]),
-                        "%s:%s" % (melem["database"], melem["db_id_code"]),
+                        f"{melem['database']}:{melem['db_acc']}",
+                        f"{melem['database']}:{melem['db_id_code']}",
                     ]
                 )
         else:

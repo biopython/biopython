@@ -139,7 +139,7 @@ class NibWriter(SequenceWriter):
         elif byteorder == "big":  # big-endian
             signature = "6be93d3a"
         else:
-            raise RuntimeError("unexpected system byte order %s" % byteorder)
+            raise RuntimeError(f"unexpected system byte order {byteorder}")
         handle.write(bytes.fromhex(signature))
 
     def write_record(self, record):
