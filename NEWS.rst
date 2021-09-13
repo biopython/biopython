@@ -25,6 +25,9 @@ The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
 base 4 log instead of 2 as stated in the original reference Konopka (2005),
 Sequence Complexity and Composition. https://doi.org/10.1038/npg.els.0005260
 
+The experimental warning was dropped from ``Bio.phenotype`` (which was new in
+Biopython 1.67).
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
