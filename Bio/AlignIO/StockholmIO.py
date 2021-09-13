@@ -229,7 +229,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         seq_name = seq_name.replace(" ", "_")
 
         if "start" in record.annotations and "end" in record.annotations:
-            suffix = "/%s-%s" % (record.annotations["start"], record.annotations["end"])
+            suffix = f"/{record.annotations['start']}-{record.annotations['end']}"
             if seq_name[-len(suffix) :] != suffix:
                 seq_name = "%s/%s-%s" % (
                     seq_name,
@@ -238,7 +238,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 )
 
         if seq_name in self._ids_written:
-            raise ValueError("Duplicate record identifier: %s" % seq_name)
+            raise ValueError(f"Duplicate record identifier: {seq_name}")
         self._ids_written.append(seq_name)
         self.handle.write(f"{seq_name} {record.seq}\n")
 
@@ -256,8 +256,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         # AC = Accession
         if "accession" in record.annotations:
             self.handle.write(
-                "#=GS %s AC %s\n"
-                % (seq_name, self.clean(record.annotations["accession"]))
+                f"#=GS {seq_name} AC {self.clean(record.annotations['accession'])}\n"
             )
         elif record.id:
             self.handle.write(f"#=GS {seq_name} AC {self.clean(record.id)}\n")
