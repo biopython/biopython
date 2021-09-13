@@ -76,7 +76,7 @@ class MafWriter(SequentialAlignmentWriter):
             "%15s" % record.annotations.get("srcSize", 0),
             str(record.seq),
         ]
-        self.handle.write("%s\n" % " ".join(fields))
+        self.handle.write(f"{' '.join(fields)}\n")
 
     def write_alignment(self, alignment):
         """Write a complete alignment to a MAF block.
@@ -313,8 +313,7 @@ class MafIndex:
             if tmp_mafpath != os.path.abspath(self._maf_file):
                 # Original and given absolute paths differ.
                 raise ValueError(
-                    "Index uses a different file (%s != %s)"
-                    % (filename, self._maf_file)
+                    f"Index uses a different file ({filename} != {self._maf_file})"
                 )
 
             db_target = self._con.execute(
@@ -346,7 +345,7 @@ class MafIndex:
             return records_found
 
         except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
-            raise ValueError("Problem with SQLite database: %s" % err) from None
+            raise ValueError(f"Problem with SQLite database: {err}") from None
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index (PRIVATE)."""
@@ -423,8 +422,7 @@ class MafIndex:
         self._con.execute("CREATE INDEX IF NOT EXISTS end_index ON offset_data(end);")
 
         self._con.execute(
-            "UPDATE meta_data SET value = '%s' WHERE key = 'record_count'"
-            % (insert_count,)
+            f"UPDATE meta_data SET value = '{insert_count}' WHERE key = 'record_count'"
         )
 
         self._con.commit()
@@ -643,7 +641,7 @@ class MafIndex:
         """
         # validate strand
         if strand not in (1, -1):
-            raise ValueError("Strand must be 1 or -1, got %s" % strand)
+            raise ValueError(f"Strand must be 1 or -1, got {strand}")
 
         # pull all alignments that span the desired intervals
         fetched = list(self.search(starts, ends))

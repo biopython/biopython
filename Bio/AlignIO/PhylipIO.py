@@ -131,7 +131,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                     seq_segment = sequence[i : i + 10]
                     # TODO - Force any gaps to be '-' character?
                     # TODO - How to cope with '?' or '.' in the sequence?
-                    handle.write(" %s" % seq_segment)
+                    handle.write(f" {seq_segment}")
                     if i + 10 > length_of_seqs:
                         break
                 handle.write("\n")
@@ -275,7 +275,7 @@ class RelaxedPhylipWriter(PhylipWriter):
         # Check inputs
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):
-                raise ValueError("Whitespace not allowed in identifier: %s" % name)
+                raise ValueError(f"Whitespace not allowed in identifier: {name}")
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
