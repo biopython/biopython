@@ -274,7 +274,7 @@ def open(filename, mode="rb"):
     elif "w" in mode.lower() or "a" in mode.lower():
         return BgzfWriter(filename, mode)
     else:
-        raise ValueError("Bad mode %r" % mode)
+        raise ValueError(f"Bad mode {mode!r}")
 
 
 def make_virtual_offset(block_start_offset, within_block_offset):
@@ -768,7 +768,7 @@ class BgzfWriter:
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
-                raise ValueError("Must use write or append mode, not %r" % mode)
+                raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
                 raise NotImplementedError("Append mode is not implemented yet")
                 # handle = _open(filename, "ab")
