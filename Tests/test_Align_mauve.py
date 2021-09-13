@@ -465,6 +465,13 @@ class TestSeparateFiles(unittest.TestCase):
         self.assertEqual(output.read(), data)
 
 
+class TestMauveBasic(unittest.TestCase):
+    def test_empty(self):
+        stream = StringIO()
+        with self.assertRaisesRegex(ValueError, "Empty file."):
+            AlignmentIterator(stream)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
