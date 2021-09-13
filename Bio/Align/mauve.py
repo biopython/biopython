@@ -25,13 +25,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         line = f"#FormatVersion {format_version}\n"
         stream.write(line)
         alignment = alignments[0]
-        if len(alignment) > 1:
-            # this is a real alignment and includes all sequences
-            names = [sequence.id for sequence in alignment.sequences]
-        else:
-            # this is a single sequence; file contains no real alignments
-            # but lists the individual sequences only
-            names = [alignment.sequences[0].id for alignment in alignments]
+        # first alignment always seems to contain all sequences
+        names = [sequence.id for sequence in alignment.sequences]
         name = names[0]
         try:
             filename, index = name.rsplit(":", 1)
