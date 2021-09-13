@@ -26,6 +26,9 @@ Tests/test_AlignIO* @peterjc
 Bio/bgzf.py @peterjc
 Tests/test_bgzf*.py @peterjc
 
+Bio/phenotype/* @mgalardini
+Tests/test_phenotype*.py @mgalardini
+
 Bio/Cluster/* @mdehoon
 Tests/test_Cluster*.py @mdehoon
 
