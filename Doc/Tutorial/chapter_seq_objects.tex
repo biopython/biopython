@@ -737,79 +737,12 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
-\section{UnknownSeq objects}
-
-\textbf{Note that }\texttt{UnknownSeq} \textbf{is deprecated. To represent a sequence of known length but unknown sequence contents, please use } \texttt{Seq(None, length)}\textbf{.}
-
-The \verb|UnknownSeq| object is a subclass of the basic \verb|Seq| object
-and its purpose is to represent a
-sequence where we know the length, but not the actual letters making it up.
-You could of course use a normal \verb|Seq| object in this situation, but it wastes
-rather a lot of memory to hold a string of a million ``N'' characters when you could
-just store a single letter ``N'' and the desired length as an integer.
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import UnknownSeq
->>> unk = UnknownSeq(20)
->>> unk
-UnknownSeq(20, character='?')
->>> print(unk)
-????????????????????
->>> len(unk)
-20
-\end{minted}
-
-For DNA or RNA sequences, unknown nucleotides are commonly denoted by the letter ``N'', while for proteins ``X'' is commonly used for unknown amino acids. When creating an `UnknownSeq`, you can specify the character to be used instead of ``?'' to represent unknown letters. For example
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import UnknownSeq
->>> unk_dna = UnknownSeq(20, character="N")
->>> unk_dna
-UnknownSeq(20, character='N')
->>> print(unk_dna)
-NNNNNNNNNNNNNNNNNNNN
-\end{minted}
-
-You can use all the usual \verb|Seq| object methods too, note these give back
-memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> unk_dna
-UnknownSeq(20, character='N')
->>> unk_dna.complement()
-UnknownSeq(20, character='N')
->>> unk_dna.reverse_complement()
-UnknownSeq(20, character='N')
->>> unk_dna.transcribe()
-UnknownSeq(20, character='N')
->>> unk_protein = unk_dna.translate()
->>> unk_protein
-UnknownSeq(6, character='X')
->>> print(unk_protein)
-XXXXXX
->>> len(unk_protein)
-6
-\end{minted}
-
-You may be able to find a use for the \verb|UnknownSeq| object in your own
-code, but it is more likely that you will first come across them in a
-\verb|SeqRecord| object created by \verb|Bio.SeqIO|
-(see Chapter~\ref{chapter:seqio}).
-Some sequence file formats don't always include the actual sequence, for
-example GenBank and EMBL files may include a list of features but for the
-sequence just present the contig information.  Alternatively, the QUAL files
-used in sequencing work hold quality scores but they \emph{never} contain a
-sequence -- instead there is a partner FASTA file which \emph{does} have the
-sequence.
-
 \section{Working with strings directly}
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
 there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
-\verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
+\verb|Seq| objects or \verb|MutableSeq| objects:
 
 %doctest
 \begin{minted}{pycon}
