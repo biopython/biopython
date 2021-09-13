@@ -337,7 +337,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
-                raise ValueError("Invalid between location %r" % loc_str) from None
+                raise ValueError(f"Invalid between location {loc_str!r}") from None
             return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
@@ -730,7 +730,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.annotations["topology"] = topology
 
@@ -739,7 +739,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -749,7 +749,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
@@ -983,8 +983,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # otherwise raise an error
         else:
             raise ValueError(
-                "Could not parse base info %s in record %s"
-                % (ref_base_info, self.data.id)
+                f"Could not parse base info {ref_base_info} in record {self.data.id}"
             )
 
         self._cur_reference.location = all_locations
@@ -1264,7 +1263,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         cur_feature.location = None
         warnings.warn(
             BiopythonParserWarning(
-                "Couldn't parse feature location: %r" % location_line
+                f"Couldn't parse feature location: {location_line!r}"
             )
         )
 
@@ -1404,7 +1403,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # we have a bug if we get here
             else:
                 raise ValueError(
-                    "Could not determine molecule_type for seq_type %s" % self._seq_type
+                    f"Could not determine molecule_type for seq_type {self._seq_type}"
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
@@ -1453,7 +1452,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
         if "dna" in content or "rna" in content:
             warnings.warn(
-                "Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
+                f"Invalid seq_type ({content}): DNA/RNA should be uppercase.",
                 BiopythonParserWarning,
             )
         self.data.residue_type = content
@@ -1477,7 +1476,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -1487,7 +1486,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
@@ -1501,7 +1500,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.topology = topology
 
@@ -1650,7 +1649,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         for content in content_list:
             # the record parser keeps the /s -- add them if we don't have 'em
             if not content.startswith("/"):
-                content = "/%s" % content
+                content = f"/{content}"
             # add on a qualifier if we've got one
             if self._cur_qualifier is not None:
                 self._cur_feature.qualifiers.append(self._cur_qualifier)
@@ -1661,7 +1660,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
         if "=" not in self._cur_qualifier.key:
-            self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
+            self._cur_qualifier.key = f"{self._cur_qualifier.key}="
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
         # are not important
