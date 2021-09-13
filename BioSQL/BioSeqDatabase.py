@@ -185,7 +185,7 @@ class DBServer:
 
     def __repr__(self):
         """Return a short description of the class name and database connection."""
-        return self.__class__.__name__ + "(%r)" % self.adaptor.conn
+        return f"{self.__class__.__name__}({self.adaptor.conn!r})"
 
     def __getitem__(self, name):
         """Return a BioSeqDatabase object.
@@ -279,9 +279,7 @@ class DBServer:
             for sql_line in sql_parts[:-1]:
                 self.adaptor.cursor.execute(sql_line)
         else:
-            raise ValueError(
-                "Module %s not supported by the loader." % (self.module_name)
-            )
+            raise ValueError(f"Module {self.module_name} not supported by the loader.")
 
     def commit(self):
         """Commit the current transaction to the database."""
@@ -385,7 +383,7 @@ class Adaptor:
         )
         rv = self.cursor.fetchall()
         if not rv:
-            raise KeyError("Cannot find biodatabase with name %r" % dbname)
+            raise KeyError(f"Cannot find biodatabase with name {dbname!r}")
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
@@ -405,9 +403,9 @@ class Adaptor:
         self.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
-            raise IndexError("Cannot find display id %r" % name)
+            raise IndexError(f"Cannot find display id {name!r}")
         if len(rv) > 1:
-            raise IndexError("More than one entry with display id %r" % name)
+            raise IndexError(f"More than one entry with display id {name!r}")
         return rv[0][0]
 
     def fetch_seqid_by_accession(self, dbid, name):
@@ -427,9 +425,9 @@ class Adaptor:
         self.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
-            raise IndexError("Cannot find accession %r" % name)
+            raise IndexError(f"Cannot find accession {name!r}")
         if len(rv) > 1:
-            raise IndexError("More than one entry with accession %r" % name)
+            raise IndexError(f"More than one entry with accession {name!r}")
         return rv[0][0]
 
     def fetch_seqids_by_accession(self, dbid, name):
@@ -459,7 +457,7 @@ class Adaptor:
         """
         acc_version = name.split(".")
         if len(acc_version) > 2:
-            raise IndexError("Bad version %r" % name)
+            raise IndexError(f"Bad version {name!r}")
         acc = acc_version[0]
         if len(acc_version) == 2:
             version = acc_version[1]
@@ -473,9 +471,9 @@ class Adaptor:
         self.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
-            raise IndexError("Cannot find version %r" % name)
+            raise IndexError(f"Cannot find version {name!r}")
         if len(rv) > 1:
-            raise IndexError("More than one entry with version %r" % name)
+            raise IndexError(f"More than one entry with version {name!r}")
         return rv[0][0]
 
     def fetch_seqid_by_identifier(self, dbid, identifier):
@@ -496,7 +494,7 @@ class Adaptor:
         self.execute(sql, fields)
         rv = self.cursor.fetchall()
         if not rv:
-            raise IndexError("Cannot find display id %r" % identifier)
+            raise IndexError(f"Cannot find display id {identifier!r}")
         return rv[0][0]
 
     def list_biodatabase_names(self):
@@ -713,14 +711,14 @@ class BioSeqDatabase:
         """
         record = BioSeq.DBSeqRecord(self.adaptor, key)
         if record._biodatabase_id != self.dbid:
-            raise KeyError("Entry %r does exist, but not in current name space" % key)
+            raise KeyError(f"Entry {key!r} does exist, but not in current name space")
         return record
 
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
             raise KeyError(
-                "Entry %r cannot be deleted. It was not found or is invalid" % key
+                f"Entry {key!r} cannot be deleted. It was not found or is invalid"
             )
         # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry WHERE biodatabase_id=%s AND bioentry_id=%s;"
@@ -779,8 +777,7 @@ class BioSeqDatabase:
         k, v = list(kwargs.items())[0]
         if k not in _allowed_lookups:
             raise TypeError(
-                "lookup() expects one of %r, not %r"
-                % (list(_allowed_lookups.keys()), k)
+                f"lookup() expects one of {list(_allowed_lookups.keys())!r}, not {k!r}"
             )
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
