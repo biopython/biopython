@@ -25,12 +25,13 @@ except ImportError:
 
 
 class TestCombinedFile(unittest.TestCase):
-
     def setUp(self):
         filename = "combined.fa"
         path = os.path.join("Mauve", filename)
         records = SeqIO.parse(path, "fasta")
-        self.sequences = {f"{filename}:{index}": record.seq for index, record in enumerate(records)}
+        self.sequences = {
+            f"{filename}:{index}": record.seq for index, record in enumerate(records)
+        }
 
     def test_parse(self):
         path = os.path.join("Mauve", "combined.xmfa")
@@ -39,7 +40,9 @@ class TestCombinedFile(unittest.TestCase):
             alignments = AlignmentIterator(stream)
             self.assertEqual(len(alignments.metadata), 2)
             self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
-            self.assertEqual(alignments.metadata["BackboneFile"], "combined.xmfa.bbcols")
+            self.assertEqual(
+                alignments.metadata["BackboneFile"], "combined.xmfa.bbcols"
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 3)
@@ -47,7 +50,7 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment.sequences[0].id, "combined.fa:0")
             self.assertEqual(
                 repr(alignment.sequences[0].seq),
-                "Seq({1: 'AAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTT'}, length=49)"
+                "Seq({1: 'AAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTT'}, length=49)",
             )
             sequence = self.sequences[alignment.sequences[0].id]
             start = len(sequence) - alignment.coordinates[0, 0]
@@ -64,7 +67,7 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment.sequences[2].id, "combined.fa:2")
             self.assertEqual(
                 repr(alignment.sequences[2].seq),
-                "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)"
+                "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)",
             )
             start = alignment.coordinates[2, 0]
             end = alignment.coordinates[2, -1]
@@ -72,15 +75,25 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(end, 48)
             sequence = self.sequences[alignment.sequences[2].id][start:end]
             self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
-            self.assertEqual(alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT")
-            self.assertEqual(alignment[1], "-------------------------------------------------")
-            self.assertEqual(alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
+            self.assertEqual(
+                alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT"
+            )
+            self.assertEqual(
+                alignment[1], "-------------------------------------------------"
+            )
+            self.assertEqual(
+                alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                    numpy.array([[49, 40, 38, 21, 21, 1],
-                                 [0, 0, 0, 0, 0, 0],
-                                 [1, 10, 10, 27, 28, 48]]),
+                    numpy.array(
+                        [
+                            [49, 40, 38, 21, 21, 1],
+                            [0, 0, 0, 0, 0, 0],
+                            [1, 10, 10, 27, 28, 48],
+                        ]
+                    ),
                 )
             )
             alignment = next(alignments)
@@ -103,8 +116,7 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(len(alignment.sequences), 1)
             self.assertEqual(alignment.sequences[0].id, "combined.fa:0")
             self.assertEqual(
-                repr(alignment.sequences[0].seq),
-                "Seq({49: 'A'}, length=50)"
+                repr(alignment.sequences[0].seq), "Seq({49: 'A'}, length=50)"
             )
             sequence = self.sequences[alignment.sequences[0].id]
             start = alignment.coordinates[0, 0]
@@ -119,7 +131,9 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(len(alignment), 1)
             self.assertEqual(len(alignment.sequences), 1)
             self.assertEqual(alignment.sequences[0].id, "combined.fa:1")
-            self.assertEqual(alignment.sequences[0].seq, "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
+            self.assertEqual(
+                alignment.sequences[0].seq, "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT"
+            )
             sequence = self.sequences[alignment.sequences[0].id]
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
@@ -148,8 +162,7 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(len(alignment.sequences), 1)
             self.assertEqual(alignment.sequences[0].id, "combined.fa:2")
             self.assertEqual(
-                repr(alignment.sequences[0].seq),
-                "Seq({48: 'C'}, length=49)"
+                repr(alignment.sequences[0].seq), "Seq({48: 'C'}, length=49)"
             )
             sequence = self.sequences[alignment.sequences[0].id]
             start = alignment.coordinates[0, 0]
@@ -210,9 +223,15 @@ class TestCombinedFile(unittest.TestCase):
             filename, index = record.id.split(":")
             index = int(index)
             record.seq = sequences[index]
-            self.assertEqual(alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT")
-            self.assertEqual(alignment[1], "-------------------------------------------------")
-            self.assertEqual(alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT")
+            self.assertEqual(
+                alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT"
+            )
+            self.assertEqual(
+                alignment[1], "-------------------------------------------------"
+            )
+            self.assertEqual(
+                alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
+            )
         alignment = saved_alignments[1]
         for record in alignment.sequences:
             filename, index = record.id.split(":")
@@ -263,7 +282,6 @@ class TestCombinedFile(unittest.TestCase):
 
 
 class TestSeparateFiles(unittest.TestCase):
-
     def setUp(self):
         self.sequences = {}
         for species in ("equCab1", "canFam2", "mm9"):
@@ -279,7 +297,9 @@ class TestSeparateFiles(unittest.TestCase):
             alignments = AlignmentIterator(stream)
             self.assertEqual(len(alignments.metadata), 2)
             self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
-            self.assertEqual(alignments.metadata["BackboneFile"], "separate.xmfa.bbcols")
+            self.assertEqual(
+                alignments.metadata["BackboneFile"], "separate.xmfa.bbcols"
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 3)
@@ -293,7 +313,7 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment.sequences[1].id, "canFam2.fa")
             self.assertEqual(
                 repr(alignment.sequences[1].seq),
-                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)"
+                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)",
             )
             start = alignment.coordinates[1, 0]
             end = alignment.coordinates[1, -1]
@@ -315,7 +335,8 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
             self.assertTrue(
                 numpy.array_equal(
-                    alignment.coordinates, numpy.array([[0, 0], [25, 49], [24, 0]]),
+                    alignment.coordinates,
+                    numpy.array([[0, 0], [25, 49], [24, 0]]),
                 )
             )
             alignment = next(alignments)
@@ -323,12 +344,17 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(len(alignment), 1)
             self.assertEqual(len(alignment.sequences), 1)
             self.assertEqual(alignment.sequences[0].id, "equCab1.fa")
-            self.assertEqual(alignment.sequences[0].seq, "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+            self.assertEqual(
+                alignment.sequences[0].seq,
+                "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+            )
             sequence = self.sequences[alignment.sequences[0].id]
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+            self.assertEqual(
+                alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
+            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
             )
@@ -377,7 +403,7 @@ class TestSeparateFiles(unittest.TestCase):
         filenames = set(filenames)
         n = len(filenames)
         self.assertEqual(n, 3)
-        lengths = {filename: 0 for filename in filenames} 
+        lengths = {filename: 0 for filename in filenames}
         for alignment in saved_alignments:
             for record in alignment.sequences:
                 filename = record.id
@@ -416,7 +442,9 @@ class TestSeparateFiles(unittest.TestCase):
         for record in alignment.sequences:
             filename = record.id
             record.seq = sequences[filename]
-            self.assertEqual(alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA")
+            self.assertEqual(
+                alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
+            )
         alignment = saved_alignments[2]
         for record in alignment.sequences:
             filename = record.id

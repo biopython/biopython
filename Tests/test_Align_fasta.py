@@ -1223,7 +1223,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [353, 341]]),
+                numpy.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -1251,7 +1251,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [353, 341]]),
+                numpy.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -1279,7 +1279,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[490, 506], [513, 497]]),
+                numpy.array([[490, 506], [160, 144]]),
             )
         )
         query = self.query
@@ -1307,7 +1307,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1116, 1200], [499, 415]]),
+                numpy.array([[1116, 1200], [242, 158]]),
             )
         )
         query = self.query
@@ -1341,7 +1341,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[792, 802], [357, 347]]),
+                numpy.array([[792, 802], [310, 300]]),
             )
         )
         query = self.query
@@ -1370,7 +1370,7 @@ class TestFastaNucleotide(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array(
-                    [[280, 304, 304, 312, 312, 351], [353, 314, 312, 304, 303, 279]]
+                    [[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]
                 ),
             )
         )
@@ -1698,7 +1698,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [353, 341]]),
+                numpy.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -1726,7 +1726,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [353, 341]]),
+                numpy.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -1754,7 +1754,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[490, 506], [513, 497]]),
+                numpy.array([[490, 506], [160, 144]]),
             )
         )
         query = self.query
@@ -1782,7 +1782,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[1116, 1200], [499, 415]]),
+                numpy.array([[1116, 1200], [242, 158]]),
             )
         )
         query = self.query
@@ -1816,7 +1816,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[792, 802], [357, 347]]),
+                numpy.array([[792, 802], [310, 300]]),
             )
         )
         query = self.query
@@ -1845,7 +1845,7 @@ class TestFastaNucleotide(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array(
-                    [[280, 304, 304, 312, 312, 351], [353, 314, 312, 304, 303, 279]]
+                    [[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]
                 ),
             )
         )

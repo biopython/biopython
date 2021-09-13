@@ -7,73 +7,6 @@
 """Bio.Align support for "xmfa" output from Mauve/ProgressiveMauve.
 
 You are expected to use this module via the Bio.Align functions.
-
-For example, consider a progressiveMauve alignment file containing the following::
-
-    #FormatVersion Mauve1
-    #Sequence1File	a.fa
-    #Sequence1Entry	1
-    #Sequence1Format	FastA
-    #Sequence2File	b.fa
-    #Sequence2Entry	2
-    #Sequence2Format	FastA
-    #Sequence3File	c.fa
-    #Sequence3Entry	3
-    #Sequence3Format	FastA
-    #BackboneFile	three.xmfa.bbcols
-    > 1:0-0 + a.fa
-    --------------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-    > 2:5417-5968 + b.fa
-    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACGTGAGAGGAGCGCCCTAAGCTTTGGGAAATTCAAGC-
-    --------------------------------------------------------------------------------
-    CTGGAACGTACTTGCTGGTTTCGCTACTATTTCAAACAAGTTAGAGGCCGTTACCTCGGGCGAACGTATAAACCATTCTG
-    > 3:9476-10076 - c.fa
-    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-GGGAGGAGATCGCCCCAAACGTATGGTGAGTCGGGCG
-    TTTCCTATAGCTATAGGACCAATCCACTTACCATACGCCCGGCGTCGCCCAGTCCGGTTCGGTACCCTCCATGACCCACG
-    ---------------------------------------------------------AAATGAGGGCCCAGGGTATGCTT
-    =
-    > 2:5969-6015 + b.fa
-    -----------------------
-    GGGCGAACGTATAAACCATTCTG
-    > 3:9429-9476 - c.fa
-    TTCGGTACCCTCCATGACCCACG
-    AAATGAGGGCCCAGGGTATGCTT
-
-This is a multiple sequence alignment with multiple aligned sections, so you
-would probably load this using the Bio.Align.parse() function:
-
-    >>> from Bio import Align
-    >>> align = Align.parse("Mauve/simple_short.xmfa", "mauve")
-    >>> alignments = list(align)
-    >>> for aln in alignments:
-    ...     print(aln)
-    ...
-    Alignment with 3 rows and 240 columns
-    --------------------------------------------...--- a.fa
-    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG b.fa/5416-5968
-    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT c.fa/9475-10076
-    Alignment with 2 rows and 46 columns
-    -----------------------GGGCGAACGTATAAACCATTCTG b.fa/5968-6015
-    TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT c.fa/9428-9476
-
-Additional information is extracted from the XMFA file and available through
-the annotation attribute of each record::
-
-    >>> for record in alignments[0]:
-    ...     print(record.id, len(record))
-    ...     print("  start: %d, end: %d, strand: %d" %(
-    ...         record.annotations['start'], record.annotations['end'],
-    ...         record.annotations['strand']))
-    ...
-    a.fa 240
-      start: 0, end: 0, strand: 1
-    b.fa/5416-5968 240
-      start: 5416, end: 5968, strand: 1
-    c.fa/9475-10076 240
-      start: 9475, end: 10076, strand: -1
-
 """
 
 from Bio.Align import interfaces, Alignment
@@ -130,8 +63,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         alignments - A Bio.Align.mauve.AlignmentIterator object.
         """
+
         class ListWithAttributes(list):
             pass
+
         try:
             metadata = alignments.metadata
         except AttributeError:
@@ -208,7 +143,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         break
                 else:
                     raise ValueError("Unexpected keyword '%s'" % key)
-                seq_num = int(key[len(prefix):-len(suffix)])
+                seq_num = int(key[len(prefix) : -len(suffix)])
                 id_info[suffix].append(value)
                 assert seq_num == len(id_info[suffix])  # Mauve uses 1-based counting
             else:
