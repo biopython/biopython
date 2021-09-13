@@ -122,11 +122,11 @@ class PhdWriter(SequenceWriter):
                 )
         if None in phred_qualities:
             raise ValueError("A quality value of None was found")
-        if record.description.startswith("%s " % record.id):
+        if record.description.startswith(f"{record.id} "):
             title = record.description
         else:
             title = f"{record.id} {record.description}"
-        self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" % self.clean(title))
+        self.handle.write(f"BEGIN_SEQUENCE {self.clean(title)}\nBEGIN_COMMENT\n")
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
             if annot == "trim":
@@ -134,7 +134,7 @@ class PhdWriter(SequenceWriter):
                     value = "%s %s %.4f" % record.annotations["trim"]
             elif annot == "trace_peak_area_ratio":
                 if record.annotations.get("trace_peak_area_ratio"):
-                    value = "%.4f" % record.annotations["trace_peak_area_ratio"]
+                    value = f"{record.annotations['trace_peak_area_ratio']:.4f}"
             else:
                 value = record.annotations.get(annot)
             if value or value == 0:

@@ -294,9 +294,7 @@ class ProteinAnalysis:
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write(
-                    "warning: %s  is not a standard amino acid.\n" % middle
-                )
+                sys.stderr.write(f"warning: {middle} is not a standard amino acid.\n")
 
             scores.append(score / sum_of_weights)
 

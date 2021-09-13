@@ -134,7 +134,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text="GC %3.2f%%" % (GC(seq)))
+    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -182,7 +182,7 @@ def nt_search(seq, subseq):
         if len(value) == 1:
             pattern += value
         else:
-            pattern += "[%s]" % value
+            pattern += f"[{value}]"
 
     pos = -1
     result = [pattern]
@@ -364,7 +364,7 @@ def molecular_weight(
         else:
             weight_table = IUPACData.protein_weights
     else:
-        raise ValueError("Allowed seq_types are DNA, RNA or protein, not %r" % seq_type)
+        raise ValueError(f"Allowed seq_types are DNA, RNA or protein, not {seq_type!r}")
 
     if monoisotopic:
         water = 18.010565

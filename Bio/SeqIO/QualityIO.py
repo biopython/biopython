@@ -470,7 +470,7 @@ def solexa_quality_from_phred(phred_quality):
         return -5.0
     else:
         raise ValueError(
-            "PHRED qualities must be positive (or zero), not %r" % phred_quality
+            f"PHRED qualities must be positive (or zero), not {phred_quality!r}"
         )
 
 
@@ -517,7 +517,7 @@ def phred_quality_from_solexa(solexa_quality):
         return None
     if solexa_quality < -5:
         warnings.warn(
-            "Solexa quality less than -5 passed, %r" % solexa_quality, BiopythonWarning
+            f"Solexa quality less than -5 passed, {solexa_quality!r}", BiopythonWarning
         )
     return 10 * log(10 ** (solexa_quality / 10.0) + 1, 10)
 
@@ -1493,7 +1493,7 @@ class FastqPhredWriter(SequenceWriter):
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:
-            raise ValueError("No sequence for record %s" % record.id)
+            raise ValueError(f"No sequence for record {record.id}")
         qualities_str = _get_sanger_quality_str(record)
         if len(qualities_str) != len(seq):
             raise ValueError(
@@ -1615,7 +1615,7 @@ class QualPhredWriter(SequenceWriter):
                 title = f"{id} {description}"
             else:
                 title = id
-        handle.write(">%s\n" % title)
+        handle.write(f">{title}\n")
 
         qualities = _get_phred_quality(record)
         try:
@@ -1668,7 +1668,7 @@ def as_qual(record):
         title = f"{id} {description}"
     else:
         title = id
-    lines = [">%s\n" % title]
+    lines = [f">{title}\n"]
 
     qualities = _get_phred_quality(record)
     try:
@@ -1749,7 +1749,7 @@ class FastqSolexaWriter(SequenceWriter):
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:
-            raise ValueError("No sequence for record %s" % record.id)
+            raise ValueError(f"No sequence for record {record.id}")
         qualities_str = _get_solexa_quality_str(record)
         if len(qualities_str) != len(seq):
             raise ValueError(
@@ -1833,7 +1833,7 @@ class FastqIlluminaWriter(SequenceWriter):
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:
-            raise ValueError("No sequence for record %s" % record.id)
+            raise ValueError(f"No sequence for record {record.id}")
         qualities_str = _get_illumina_quality_str(record)
         if len(qualities_str) != len(seq):
             raise ValueError(
@@ -1975,8 +1975,7 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
             )
         if len(f_rec) != len(q_rec.letter_annotations["phred_quality"]):
             raise ValueError(
-                "Sequence length and number of quality scores disagree for %s"
-                % f_rec.id
+                f"Sequence length and number of quality scores disagree for {f_rec.id}"
             )
         # Merge the data....
         f_rec.letter_annotations["phred_quality"] = q_rec.letter_annotations[
@@ -2210,7 +2209,7 @@ def _fastq_convert_fasta(in_file, out_file):
     with as_handle(out_file, "w") as out_handle:
         for title, seq, qual in FastqGeneralIterator(in_file):
             count += 1
-            out_handle.write(">%s\n" % title)
+            out_handle.write(f">{title}\n")
             # Do line wrapping
             for i in range(0, len(seq), 60):
                 out_handle.write(seq[i : i + 60] + "\n")
@@ -2246,7 +2245,7 @@ def _fastq_convert_qual(in_file, out_file, mapping):
     with as_handle(out_file, "w") as out_handle:
         for title, seq, qual in FastqGeneralIterator(in_file):
             count += 1
-            out_handle.write(">%s\n" % title)
+            out_handle.write(f">{title}\n")
             # map the qual... note even with Sanger encoding max 2 digits
             try:
                 qualities_strs = [mapping[ascii] for ascii in qual]
