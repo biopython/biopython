@@ -186,7 +186,7 @@ class InsdcScanner:
                 continue
             if len(line) < self.FEATURE_QUALIFIER_INDENT:
                 warnings.warn(
-                    "line too short to contain a feature: %r" % line,
+                    f"line too short to contain a feature: {line!r}",
                     BiopythonParserWarning,
                 )
                 line = self.handle.readline()
@@ -211,7 +211,7 @@ class InsdcScanner:
                     feature_key, line = line[2:].strip().split(None, 1)
                     feature_lines = [line]
                     warnings.warn(
-                        "Over indented %s feature?" % feature_key,
+                        f"Over indented {feature_key} feature?",
                         BiopythonParserWarning,
                     )
                 else:
@@ -637,7 +637,7 @@ class EmblScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[: self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Footer format unexpected: '%s'" % self.line)
+            raise ValueError(f"Footer format unexpected: '{self.line}'")
 
         # Note that the SQ line can be split into several lines...
         misc_lines = []
@@ -652,7 +652,7 @@ class EmblScanner(InsdcScanner):
             self.line[: self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
             or self.line.strip() == "//"
         ):
-            raise ValueError("Unexpected content after SQ or CO line: %r" % self.line)
+            raise ValueError(f"Unexpected content after SQ or CO line: {self.line!r}")
 
         seq_lines = []
         line = self.line
@@ -835,7 +835,7 @@ class EmblScanner(InsdcScanner):
     @staticmethod
     def _feed_seq_length(consumer, text):
         length_parts = text.split()
-        assert len(length_parts) == 2, "Invalid sequence length string %r" % text
+        assert len(length_parts) == 2, f"Invalid sequence length string {text!r}"
         assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
         consumer.size(length_parts[0])
 
@@ -885,7 +885,7 @@ class EmblScanner(InsdcScanner):
                         for bases in data.split(",")
                         if bases.strip()
                     ]
-                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
+                    consumer.reference_bases(f"(bases {'; '.join(parts)})")
             elif line_type == "RT":
                 # Remove the enclosing quotes and trailing semi colon.
                 # Note the title can be split over multiple lines.
@@ -966,7 +966,7 @@ class EmblScanner(InsdcScanner):
                 getattr(consumer, consumer_dict[line_type])(data)
             else:
                 if self.debug:
-                    print("Ignoring EMBL header line:\n%s" % line)
+                    print(f"Ignoring EMBL header line:\n{line}")
 
     def _feed_misc_lines(self, consumer, lines):
         # TODO - Should we do something with the information on the SQ line(s)?
@@ -1193,7 +1193,7 @@ class GenBankScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[: self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Footer format unexpected:  '%s'" % self.line)
+            raise ValueError(f"Footer format unexpected:  '{self.line}'")
 
         misc_lines = []
         while (
@@ -1207,7 +1207,7 @@ class GenBankScanner(InsdcScanner):
                 raise ValueError("Premature end of file")
 
         if self.line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
-            raise ValueError("Eh? '%s'" % self.line)
+            raise ValueError(f"Eh? '{self.line}'")
 
         # Now just consume the sequence lines until reach the // marker
         # or a CONTIG line
@@ -1237,7 +1237,7 @@ class GenBankScanner(InsdcScanner):
                 )
                 line = line[1:]
                 if len(line) > 9 and line[9:10] != " ":
-                    raise ValueError("Sequence line mal-formed, '%s'" % line)
+                    raise ValueError(f"Sequence line mal-formed, '{line}'")
             seq_lines.append(line[10:])  # remove spaces later
             line = self.handle.readline()
 
@@ -1389,7 +1389,7 @@ class GenBankScanner(InsdcScanner):
                 # See issue #1656 e.g.
                 # LOCUS       pEH010                  5743 bp    DNA     circular
                 warnings.warn(
-                    "Truncated LOCUS line found - is this correct?\n:%r" % line,
+                    f"Truncated LOCUS line found - is this correct?\n:{line!r}",
                     BiopythonParserWarning,
                 )
                 padding_len = 79 - len(line)
@@ -1495,7 +1495,7 @@ class GenBankScanner(InsdcScanner):
                 # Must just have just "LOCUS       ", is this even legitimate?
                 # We should be able to continue parsing... we need real world testcases!
                 warnings.warn(
-                    "Minimal LOCUS line found - is this correct?\n:%r" % line,
+                    f"Minimal LOCUS line found - is this correct?\n:{line!r}",
                     BiopythonParserWarning,
                 )
         elif (
@@ -1552,7 +1552,7 @@ class GenBankScanner(InsdcScanner):
             # Cope with EMBOSS seqret output where it seems the locus id can cause
             # the other fields to overflow.  We just IGNORE the other fields!
             warnings.warn(
-                "Malformed LOCUS line found - is this correct?\n:%r" % line,
+                f"Malformed LOCUS line found - is this correct?\n:{line!r}",
                 BiopythonParserWarning,
             )
             consumer.locus(line.split()[1])
@@ -1562,7 +1562,7 @@ class GenBankScanner(InsdcScanner):
             #   "LOCUS       RNA5 complete       1718 bp"
             # Treat everything between LOCUS and the size as the identifier.
             warnings.warn(
-                "Malformed LOCUS line found - is this correct?\n:%r" % line,
+                f"Malformed LOCUS line found - is this correct?\n:{line!r}",
                 BiopythonParserWarning,
             )
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())

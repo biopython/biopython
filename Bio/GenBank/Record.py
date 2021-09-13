@@ -287,7 +287,7 @@ class Record:
 
             acc_info = ""
             for accession in self.accession:
-                acc_info += "%s " % accession
+                acc_info += f"{accession} "
             # strip off an extra space at the end
             acc_info = acc_info.rstrip()
             output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
@@ -302,7 +302,7 @@ class Record:
             output = Record.BASE_FORMAT % "VERSION"
             output += self.version
             output += "  GI:"
-            output += "%s\n" % self.gi
+            output += f"{self.gi}\n"
         else:
             output = ""
         return output
@@ -311,7 +311,7 @@ class Record:
         output = ""
         if len(self.projects) > 0:
             output = Record.BASE_FORMAT % "PROJECT"
-            output += "%s\n" % "  ".join(self.projects)
+            output += f"{'  '.join(self.projects)}\n"
         return output
 
     def _dblink_line(self):
@@ -326,7 +326,7 @@ class Record:
         """Output for the NID line. Use of NID is obsolete in GenBank files (PRIVATE)."""
         if self.nid:
             output = Record.BASE_FORMAT % "NID"
-            output += "%s\n" % self.nid
+            output += f"{self.nid}\n"
         else:
             output = ""
         return output
@@ -335,7 +335,7 @@ class Record:
         """Output for PID line. Presumedly, PID usage is also obsolete (PRIVATE)."""
         if self.pid:
             output = Record.BASE_FORMAT % "PID"
-            output += "%s\n" % self.pid
+            output += f"{self.pid}\n"
         else:
             output = ""
         return output
@@ -347,7 +347,7 @@ class Record:
             output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:
-                keyword_info += "%s; " % keyword
+                keyword_info += f"{keyword}; "
             # replace the ; at the end with a period
             keyword_info = keyword_info[:-2]
             keyword_info += "."
@@ -360,7 +360,7 @@ class Record:
         """Output for DBSOURCE line (PRIVATE)."""
         if self.db_source:
             output = Record.BASE_FORMAT % "DBSOURCE"
-            output += "%s\n" % self.db_source
+            output += f"{self.db_source}\n"
         else:
             output = ""
         return output
@@ -387,7 +387,7 @@ class Record:
         output += " " * Record.GB_BASE_INDENT
         taxonomy_info = ""
         for tax in self.taxonomy:
-            taxonomy_info += "%s; " % tax
+            taxonomy_info += f"{tax}; "
         # replace the ; at the end with a period
         taxonomy_info = taxonomy_info[:-2]
         taxonomy_info += "."
@@ -460,7 +460,7 @@ class Record:
                     start_pos = cur_seq_pos + section * 10
                     end_pos = start_pos + 10
                     seq_section = self.sequence[start_pos:end_pos]
-                    output += " %s" % seq_section.lower()
+                    output += f" {seq_section.lower()}"
 
                     # stop looping if we are out of sequence
                     if end_pos > len(self.sequence):
@@ -542,9 +542,9 @@ class Reference:
         if self.number:
             if self.bases:
                 output += "%-3s" % self.number
-                output += "%s" % self.bases
+                output += f"{self.bases}"
             else:
-                output += "%s" % self.number
+                output += f"{self.number}"
 
         output += "\n"
         return output
