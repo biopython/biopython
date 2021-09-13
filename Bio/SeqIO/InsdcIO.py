@@ -1027,7 +1027,7 @@ class GenBankWriter(_InsdcWriter):
         if gi != ".":
             self._write_single_line("VERSION", f"{acc_with_version}  GI:{gi}")
         else:
-            self._write_single_line("VERSION", "%s" % acc_with_version)
+            self._write_single_line("VERSION", acc_with_version)
 
         # The NCBI initially expected two types of link,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
