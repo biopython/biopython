@@ -26,22 +26,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(line)
         alignment = alignments[0]
         # first alignment always seems to contain all sequences
-        names = [sequence.id for sequence in alignment.sequences]
-        name = names[0]
-        try:
-            filename, index = name.rsplit(":", 1)
-        except ValueError:
+        identifiers = [sequence.id for sequence in alignment.sequences]
+        filename = metadata.get("File")
+        if filename is None:
             # sequences came from separate files
-            for index, name in enumerate(names):
+            for index, filename in enumerate(identifiers):
                 number = index + 1
-                line = f"#Sequence{number}File\t{name}\n"
+                line = f"#Sequence{number}File\t{filename}\n"
                 stream.write(line)
                 line = f"#Sequence{number}Format\tFastA\n"
                 stream.write(line)
-            self.names = names
+            self._filenames = identifiers
         else:
             # sequences came from one combined file
-            for number in range(1, len(names) + 1):
+            for number, identifier in enumerate(identifiers):
+                assert number == int(identifier)
+                number += 1
                 line = f"#Sequence{number}File\t{filename}\n"
                 stream.write(line)
                 line = f"#Sequence{number}Entry\t{number}\n"
@@ -68,6 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             metadata = {}
         alignments = ListWithAttributes(alignments)
         alignments.metadata = metadata
+        self._filename = metadata.get("File")
         count = interfaces.AlignmentWriter.write_file(self, alignments)
         return count
 
@@ -80,15 +81,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if m == 0:
             raise ValueError("Non-empty sequences are required")
 
+        filename = self._filename
         stream = self.stream
         for i in range(n):
-            filename = alignment.sequences[i].id
-            try:
-                filename, number = filename.rsplit(":", 1)
-            except ValueError:
-                number = self.names.index(filename)
-            else:
-                number = int(number)
+            identifier = alignment.sequences[i].id
             start = alignment.coordinates[i, 0]
             end = alignment.coordinates[i, -1]
             if start <= end:
@@ -100,9 +96,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 assert start == 0
             else:
                 start += 1  # switch to 1-based counting
-            number += 1  # switch to 1-based counting
             sequence = alignment[i]
-            line = f"> {number}:{start}-{end} {strand} {filename}\n"
+            if filename is None:
+                number = (
+                    self._filenames.index(identifier) + 1
+                )  # Switch to 1-based counting
+                line = f"> {number}:{start}-{end} {strand} {identifier}\n"
+            else:
+                number = int(identifier) + 1  # Switch to 1-based counting
+                line = f"> {number}:{start}-{end} {strand} {filename}\n"
             stream.write(line)
             line = f"{sequence}\n"
             stream.write(line)
@@ -138,6 +140,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         break
                 else:
                     raise ValueError("Unexpected keyword '%s'" % key)
+                if suffix == "Entry":
+                    value = int(value) - 1  # Switch to 0-based counting
                 seq_num = int(key[len(prefix) : -len(suffix)])
                 id_info[suffix].append(value)
                 assert seq_num == len(id_info[suffix])  # Mauve uses 1-based counting
@@ -147,15 +151,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if not metadata:
                 raise ValueError("Empty file.") from None
         if len(set(id_info["File"])) == 1:
-            self._identifiers = []
-            # Use filename + entry number as ID
-            for filename, entry in zip(id_info["File"], id_info["Entry"]):
-                entry = int(entry) - 1  # Use 0-based counting
-                identifier = "%s:%d" % (filename, entry)
-                self._identifiers.append(identifier)
+            # A single file containing all sequences was provided as input;
+            # store the file name once, and use the entry number as ID
+            metadata["File"] = id_info["File"][0]
+            self._identifiers = [str(entry) for entry in id_info["Entry"]]
         else:
             assert len(set(id_info["File"])) == len(id_info["File"])
-            # All filenames are unique
+            # Separate files for each of the sequences were provided as input;
+            # use the sequence file as ID
             self._identifiers = id_info["File"]
         self.metadata = metadata
 
