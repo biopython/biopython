@@ -83,18 +83,9 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
-from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from . import phen_micro
 
-import warnings
-
-
-warnings.warn(
-    "Bio.phenotype is an experimental submodule which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 # Convention for format names is "mainname-format" in lower case.
 
