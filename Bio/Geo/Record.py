@@ -39,8 +39,8 @@ class Record:
     def __str__(self):
         """Return the GEO record as a string."""
         output = ""
-        output += "GEO Type: %s\n" % self.entity_type
-        output += "GEO Id: %s\n" % self.entity_id
+        output += f"GEO Type: {self.entity_type}\n"
+        output += f"GEO Id: {self.entity_id}\n"
         att_keys = sorted(self.entity_attributes)
         for key in att_keys:
             contents = self.entity_attributes[key]
@@ -68,16 +68,16 @@ class Record:
         # so only show the first 20 lines of data
         MAX_ROWS = 20 + 1  # include header in count
         for row in self.table_rows[0:MAX_ROWS]:
-            output += "%s: " % self.table_rows.index(row)
+            output += f"{self.table_rows.index(row)}: "
             for col in row:
-                output += "%s\t" % col
+                output += f"{col}\t"
             output += "\n"
         if len(self.table_rows) > MAX_ROWS:
             output += "...\n"
             row = self.table_rows[-1]
-            output += "%s: " % self.table_rows.index(row)
+            output += f"{self.table_rows.index(row)}: "
             for col in row:
-                output += "%s\t" % col
+                output += f"{col}\t"
             output += "\n"
 
         return output

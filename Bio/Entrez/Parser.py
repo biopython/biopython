@@ -85,7 +85,7 @@ class NoneElement:
             attributes = self.attributes
         except AttributeError:
             return "NoneElement"
-        return "NoneElement(attributes=%r)" % attributes
+        return f"NoneElement(attributes={attributes!r})"
 
 
 class IntegerElement(int):
@@ -158,7 +158,7 @@ class ListElement(list):
         """Append an element to the list, checking tags."""
         key = value.key
         if self.allowed_tags is not None and key not in self.allowed_tags:
-            raise ValueError("Unexpected item '%s' in list" % key)
+            raise ValueError(f"Unexpected item '{key}' in list")
         self.append(value)
 
 
@@ -192,7 +192,7 @@ class DictionaryElement(dict):
         key = value.key
         tag = value.tag
         if self.allowed_tags is not None and tag not in self.allowed_tags:
-            raise ValueError("Unexpected item '%s' in dictionary" % key)
+            raise ValueError(f"Unexpected item '{key}' in dictionary")
         if self.repeated_tags and key in self.repeated_tags:
             self[key].append(value)
         else:
@@ -481,7 +481,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def schemaHandler(self, name, attrs):
         """Process the XML schema (before processing the element)."""
-        key = "%s noNamespaceSchemaLocation" % self.schema_namespace
+        key = f"{self.schema_namespace} noNamespaceSchemaLocation"
         schema = attrs[key]
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
@@ -567,7 +567,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 self.parser.EndElementHandler = self.endStringElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
             else:
-                raise ValueError("Unknown item type %s" % name)
+                raise ValueError(f"Unknown item type {name}")
         elif tag in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             self.parser.CharacterDataHandler = self.characterDataHandler
@@ -635,7 +635,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             key = name
         # self.allowed_tags is ignored for now. Anyway we know what to do
         # with this tag.
-        tag = "<%s" % name
+        tag = f"<{name}"
         for key, value in attrs.items():
             tag += f' {key}="{value}"'
         tag += ">"
@@ -681,7 +681,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 uri, name = name.split()
             except ValueError:
                 pass
-        tag = "</%s>" % name
+        tag = f"</{name}>"
         self.data.append(tag)
 
     def endSkipElementHandler(self, name):
@@ -976,7 +976,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             # urls always have a forward slash, don't use os.path.join
             url = source.rstrip("/") + "/" + systemId
         else:
-            raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
+            raise ValueError(f"Unexpected URL scheme {urlinfo.scheme!r}")
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)

@@ -63,11 +63,11 @@ def _get_entry_dbs():
 
 
 def _get_entry_fields(db):
-    return _get_fields(_BASE_URL + "/entry/%s?fields" % db)
+    return _get_fields(_BASE_URL + f"/entry/{db}?fields")
 
 
 def _get_entry_formats(db):
-    return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
+    return _get_fields(_BASE_URL + f"/entry/{db}?formats")
 
 
 def _get_convert_formats():
@@ -106,7 +106,7 @@ def entry(db, id, format=None, field=None):
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
         raise ValueError(
-            "TogoWS entry fetch does not officially support database '%s'." % db
+            f"TogoWS entry fetch does not officially support database '{db}'."
         )
     if field:
         try:
@@ -179,7 +179,7 @@ def search_count(db, query):
     data = handle.read()
     handle.close()
     if not data:
-        raise ValueError("TogoWS returned no data from URL %s" % url)
+        raise ValueError(f"TogoWS returned no data from URL {url}")
     try:
         return int(data.strip())
     except ValueError:
@@ -226,7 +226,7 @@ def search_iter(db, query, limit=None, batch=100):
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch" % identifier)
+                raise RuntimeError(f"Result {identifier} was in previous batch")
             yield identifier
         offset += batch
         remain -= batch
@@ -283,13 +283,13 @@ def search(db, query, offset=None, limit=None, format=None):
             offset = int(offset)
         except ValueError:
             raise ValueError(
-                "Offset should be an integer (at least one), not %r" % offset
+                f"Offset should be an integer (at least one), not {offset!r}"
             ) from None
         try:
             limit = int(limit)
         except ValueError:
             raise ValueError(
-                "Limit should be an integer (at least one), not %r" % limit
+                f"Limit should be an integer (at least one), not {limit!r}"
             ) from None
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)
@@ -323,7 +323,7 @@ def convert(data, in_format, out_format):
         _convert_formats = _get_convert_formats()
     if [in_format, out_format] not in _convert_formats:
         msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
-        raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
+        raise ValueError(f"Unsupported conversion. Choose from:\n{msg}")
     url = _BASE_URL + f"/convert/{in_format}.{out_format}"
     # TODO - Should we just accept a string not a handle? What about a filename?
     try:

@@ -115,7 +115,7 @@ def write(plates, handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(plates, phen_micro.PlateRecord):
         plates = [plates]
@@ -126,7 +126,7 @@ def write(plates, handle, format):
             writer_class = _FormatToWriter[format]
             count = writer_class(plates).write(fp)
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
         if not isinstance(count, int):
             raise TypeError(
@@ -166,7 +166,7 @@ def parse(handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     with as_handle(handle) as fp:
         # Map the file format to a sequence iterator:
@@ -174,7 +174,7 @@ def parse(handle, format):
             iterator_generator = _FormatToIterator[format]
             i = iterator_generator(fp)
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
         yield from i
 
 

@@ -85,14 +85,14 @@ class Statistics:
 
     def __init__(self, filename, match, mismatch, gap, extension):
         """Initialize the class."""
-        self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
-        self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)
-        self.gaps = _fgrep_count('"INSERT" %s' % gap, filename)
+        self.matches = _fgrep_count(f'"SEQUENCE" {match}', filename)
+        self.mismatches = _fgrep_count(f'"SEQUENCE" {mismatch}', filename)
+        self.gaps = _fgrep_count(f'"INSERT" {gap}', filename)
 
         if gap == extension:
             self.extensions = 0
         else:
-            self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
+            self.extensions = _fgrep_count(f'"INSERT" {extension}', filename)
 
         self.score = (
             match * self.matches
@@ -158,8 +158,8 @@ def main():
             for attr in ("matches", "mismatches", "gaps", "extensions")
         )
     )
-    print("identity_fraction: %s" % stats.identity_fraction())
-    print("coords: %s" % stats.coords)
+    print(f"identity_fraction: {stats.identity_fraction()}")
+    print(f"coords: {stats.coords}")
 
 
 def _test(*args, **keywds):

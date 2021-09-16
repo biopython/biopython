@@ -154,7 +154,7 @@ class Alignment:
     def __str__(self):
         """Return the BLAST alignment as a formatted string."""
         lines = self.title.split("\n")
-        lines.append("Length = %s\n" % self.length)
+        lines.append(f"Length = {self.length}\n")
         return "\n           ".join(lines)
 
 
@@ -245,7 +245,7 @@ class HSP:
             lines.append(
                 "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
             )
-            lines.append("               %s" % self.match)
+            lines.append(f"               {self.match}")
             lines.append(
                 "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
             )

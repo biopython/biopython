@@ -236,7 +236,7 @@ class CodonSeq(Seq):
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, %s" % repr(gap))
+            raise ValueError(f"Unexpected gap character, {repr(gap)}")
         return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod

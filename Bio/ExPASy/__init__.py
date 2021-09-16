@@ -85,9 +85,9 @@ def get_prosite_raw(id, cgi=None):
     ValueError: Failed to find entry 'DOES_NOT_EXIST' on ExPASy
 
     """
-    handle = _open("https://prosite.expasy.org/%s.txt" % id)
+    handle = _open(f"https://prosite.expasy.org/{id}.txt")
     if handle.url == "https://www.expasy.org/":
-        raise ValueError("Failed to find entry '%s' on ExPASy" % id) from None
+        raise ValueError(f"Failed to find entry '{id}' on ExPASy") from None
     return handle
 
 
@@ -114,10 +114,10 @@ def get_sprot_raw(id):
 
     """
     try:
-        handle = _open("http://www.uniprot.org/uniprot/%s.txt" % id)
+        handle = _open(f"http://www.uniprot.org/uniprot/{id}.txt")
     except HTTPError as exception:
         if exception.code == 404:
-            raise ValueError("Failed to find SwissProt entry '%s'" % id) from None
+            raise ValueError(f"Failed to find SwissProt entry '{id}'") from None
         else:
             raise
     return handle

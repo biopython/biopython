@@ -120,7 +120,7 @@ def build(
                 for record in nucl_seqs:
                     key = record.id
                     if key in d:
-                        raise ValueError("Duplicate key '%s'" % key)
+                        raise ValueError(f"Duplicate key '{key}'")
                     d[key] = record
                 nucl_seqs = d
             corr_method = 2
@@ -156,7 +156,7 @@ def build(
             try:
                 nucl_id = corr_dict[pro_rec.id]
             except KeyError:
-                print("Protein record (%s) is not in corr_dict!" % pro_rec.id)
+                print(f"Protein record ({pro_rec.id}) is not in corr_dict!")
                 exit(1)
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 

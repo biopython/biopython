@@ -50,7 +50,7 @@ class Record:
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 6:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
         self.residues = Residues.Residues(residues)
