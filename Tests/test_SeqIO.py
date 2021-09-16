@@ -3204,10 +3204,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(db_source, read_db_source)
 
     def test_genbank23(self):
-        """Test that peptide genbank files can be written with long names"""
-        record = SeqRecord(Seq("MAGICCATS"),id="REALLYREALLYREALLYREALLYLONGID",description="")
+        """Test that peptide genbank files can be written with long names."""
+        record = SeqRecord(
+            Seq("MAGICCATS"), id="REALLYREALLYREALLYREALLYLONGID", description=""
+        )
         record.annotations["molecule_type"] = "protein"
-        record.annotations['topology'] = 'linear'
+        record.annotations["topology"] = "linear"
 
         handle = StringIO()
         with warnings.catch_warnings():
