@@ -177,7 +177,7 @@ class KGMLParser:
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(
-                    "Warning: tag %s not implemented in parser" % element.tag,
+                    f"Warning: tag {element.tag} not implemented in parser",
                     BiopythonParserWarning,
                 )
         return self.pathway

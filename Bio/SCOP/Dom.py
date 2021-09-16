@@ -49,7 +49,7 @@ class Record:
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 4:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
         self.sid, pdbid, res, self.hierarchy = columns
         self.residues = Residues(res)
         self.residues.pdbid = pdbid
