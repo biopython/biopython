@@ -146,7 +146,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         #
         # //
         names = []
-        remaining = {}
+        remaining = []
         checks = []
         weights = []
         for line in stream:
@@ -169,7 +169,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if name in names:
                     raise ValueError(f"Duplicated ID of {name!r}")
                 names.append(name)
-                remaining[name] = length
+                remaining.append(length)
                 checks.append(check)
                 weights.append(weight)
         else:
@@ -183,46 +183,51 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             raise ValueError("After // line, expected blank line before sequences.")
 
         # Now load the sequences
-        seqs = {name: "" for name in names]  # list of empty lists
-        for line in handle:
-            # Note might have a coordinate header line (seems to be optional)
-            if line.startswith(" "):
+        seqs = [""] * len(names)
+        for line in stream:
+            words = line.split()
+            if not words:
                 continue
-            line = line.strip()
-            if not line:
-                continue
-            words = line.strip().split()
             name = words[0]
+            try:
+                index = names.index(name)
+            except ValueError:
+                # This may be a coordinate line
+                for word in words:
+                    if not word.isdigit():
+                        break
+                else:
+                    # all words are integers; assume this is a coordinate line
+                    continue
+                raise ValueError(f"Unexpected line '{line}' in input") from None
             seq = "".join(words[1:])
-            length = remaining.get(name)
-            if length is None:
-                raise ValueError("Received longer sequence than expeced for %s" % name)
-            length -= (len(seq) - seq.count("-"))
-            if length == 0:
-                del remaining[name]
-            seqs[name] += seq
-            if not remaining:
+            length = remaining[index] - (len(seq) - seq.count("-"))
+            if length < 0:
+                raise ValueError("Received longer sequence than expected for %s" % name)
+            seqs[index] += seq
+            remaining[index] = length
+            if all(length == 0 for length in remaining):
                 break
         else:
             raise ValueError("End of file where expecting sequence data.")
 
         # Combine list of strings into single string, remap gaps
-        for name, seq in seqs.items():
+        for index, seq in enumerate(seqs):
             seq = "".join(seq).replace("~", "-").replace(".", "-")
             if len(seq) < aln_length:
                 seq += "-" * (aln_length - len(seq))
-            seqs[name] = seq
+            seqs[index] = seq
 
         coordinates = Alignment.infer_coordinates(seqs)
-        seqs = Seq(s.replace("-", "")) for seq in seqs.values()
-        records = (
+        seqs = (Seq(seq.replace("-", "")) for seq in seqs)
+        records = [
             SeqRecord(seq, id=name, name=name, description=name, annotations={"weight": weight})
             for (name, seq, weight) in zip(names, seqs, weights)
-        )
+        ]
 
         alignment = Alignment(records, coordinates)
         # This will check alignment lengths are self-consistent:
-        rows, columns = align.shape
+        rows, columns = alignment.shape
         if columns != aln_length:
             raise ValueError(
                 "GCG MSF headers said alignment length %i, but have %i"
