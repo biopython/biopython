@@ -13,10 +13,13 @@ output format.
 
 You are expected to use this module via the Bio.Align functions.
 """
+import warnings
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+from Bio import BiopythonParserWarning
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -108,10 +111,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         #
         parts = line.split()
         offset = parts.index("MSF:")
-        if (
-            parts[offset + 2] != "Type:"
-            or parts[-3] not in ("Check:", "CompCheck:")
-        ):
+        if parts[offset + 2] != "Type:" or parts[-3] not in ("Check:", "CompCheck:"):
             raise ValueError(
                 "GCG MSF header line should be "
                 "'<optional text> MSF: <int> Type: <letter> <optional date> Check: <int> ..', "
@@ -162,10 +162,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     index_check = words.index("Check:")
                 except ValueError:
                     raise ValueError(f"Malformed GCG MSF name line: {line!r}") from None
-                name = words[index_name+1]
-                length = int(words[index_len+1])
-                weight = float(words[index_weight+1])
-                check = words[index_check+1]
+                name = words[index_name + 1]
+                length = int(words[index_len + 1])
+                weight = float(words[index_weight + 1])
+                check = words[index_check + 1]
                 if name in names:
                     raise ValueError(f"Duplicated ID of {name!r}")
                 names.append(name)
@@ -211,6 +211,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("End of file where expecting sequence data.")
 
+        length = max(len(seq) for seq in seqs)
+        if length != aln_length:
+            warnings.warn(
+                "GCG MSF headers said alignment length %i, but found %i"
+                % (aln_length, length),
+                BiopythonParserWarning,
+            )
+            aln_length = length
+
         # Combine list of strings into single string, remap gaps
         for index, seq in enumerate(seqs):
             seq = "".join(seq).replace("~", "-").replace(".", "-")
@@ -221,7 +230,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates = Alignment.infer_coordinates(seqs)
         seqs = (Seq(seq.replace("-", "")) for seq in seqs)
         records = [
-            SeqRecord(seq, id=name, name=name, description=name, annotations={"weight": weight})
+            SeqRecord(
+                seq,
+                id=name,
+                name=name,
+                description=name,
+                annotations={"weight": weight},
+            )
             for (name, seq, weight) in zip(names, seqs, weights)
         ]
 
@@ -230,7 +245,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         rows, columns = alignment.shape
         if columns != aln_length:
             raise ValueError(
-                "GCG MSF headers said alignment length %i, but have %i"
+                "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
         yield alignment
