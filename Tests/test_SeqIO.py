@@ -3203,6 +3203,24 @@ class TestSeqIO(SeqIOTestBaseClass):
 
         self.assertEqual(db_source, read_db_source)
 
+    def test_genbank23(self):
+        """Test that peptide genbank files can be written with long names"""
+        record = SeqRecord(Seq("MAGICCATS"),id="REALLYREALLYREALLYREALLYLONGID",description="")
+        record.annotations["molecule_type"] = "protein"
+        record.annotations['topology'] = 'linear'
+
+        handle = StringIO()
+        with warnings.catch_warnings():
+            # ignore the warning about line length
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+
+        handle.seek(0)
+        read_record = SeqIO.read(handle, "genbank")
+        self.assertEqual(str(read_record.seq), str(record.seq))
+        self.assertEqual(read_record.id, record.id)
+        self.assertEqual(read_record.description, record.description)
+
     def test_embl1(self):
         sequences = [None]
         ids = ["DS830848.1"]
