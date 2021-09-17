@@ -501,7 +501,7 @@ class TestUniprot(SeqRecordTestBaseClass):
                 # TODO - Why is this a list vs str?
                 continue
             self.assertIsInstance(
-                old.annotations[key], type(new.annotations[key]), msg="key=%s" % key
+                old.annotations[key], type(new.annotations[key]), msg=f"key={key}"
             )
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
@@ -528,7 +528,7 @@ class TestUniprot(SeqRecordTestBaseClass):
                 )
             else:
                 self.assertEqual(
-                    old.annotations[key], new.annotations[key], msg="key=%s" % key
+                    old.annotations[key], new.annotations[key], msg=f"key={key}"
                 )
         self.assertEqual(
             len(old.features),

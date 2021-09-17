@@ -209,7 +209,7 @@ class TestReadAndWrite(unittest.TestCase):
         self.assertIn(
             '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>',
             text,
-            msg="Missing expected <species> tag: %r" % text,
+            msg=f"Missing expected <species> tag: {text!r}",
         )
 
 

@@ -171,13 +171,13 @@ class PrankConversion(unittest.TestCase):
             d=self.input,
             convert=True,
             f=prank_number,
-            o='"%s"' % self.output,
+            o=f'"{self.output}"',
         )
         self.assertEqual(
             str(cmdline),
             _escape_filename(prank_exe)
-            + " -d=%s" % self.input
-            + ' -o="%s"' % self.output
+            + f" -d={self.input}"
+            + f' -o="{self.output}"'
             + " -f=%i" % prank_number
             + " -convert",
         )

@@ -258,7 +258,7 @@ class TestAlignIO_reading(unittest.TestCase):
             letters = IUPACData.protein_letters
             all_letters = IUPACData.protein_letters
         else:
-            raise ValueError("Unknown molecule type '%s'" % molecule_type)
+            raise ValueError(f"Unknown molecule type '{molecule_type}'")
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()

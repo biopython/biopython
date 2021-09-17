@@ -76,7 +76,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][10], ["Q29524", "LIPL_SHEEP"])
         self.assertTrue(
             str(record).startswith("ID: 3.1.1.34\nDE: Lipoprotein lipase.\n"),
-            "Did not expect:\n%s" % record,
+            f"Did not expect:\n{record}",
         )
 
     def test_proline(self):
@@ -99,7 +99,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][8], ["Q66II5", "PRCM_XENTR"])
         self.assertTrue(
             str(record).startswith("ID: 5.1.1.4\nDE: Proline racemase.\n"),
-            "Did not expect:\n%s" % record,
+            f"Did not expect:\n{record}",
         )
 
     def test_valine(self):
@@ -115,7 +115,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(len(record["DR"]), 0)
         self.assertTrue(
             str(record).startswith("ID: 4.1.1.14\nDE: Valine decarboxylase.\n"),
-            "Did not expect:\n%s" % record,
+            f"Did not expect:\n{record}",
         )
 
     def test_lactate(self):
@@ -133,7 +133,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(len(record["DR"]), 0)
         self.assertTrue(
             str(record).startswith("ID: 5.1.2.1\nDE: Lactate racemase.\n"),
-            "Did not expect:\n%s" % record,
+            f"Did not expect:\n{record}",
         )
 
 

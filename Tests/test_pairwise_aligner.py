@@ -2473,16 +2473,14 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: global
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
@@ -2559,16 +2557,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: global
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
@@ -2668,12 +2664,11 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
+  target_gap_function: {gap_score}
   query_internal_open_gap_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
@@ -2681,8 +2676,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-"""
-            % gap_score,
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -2727,16 +2721,14 @@ TTG--GAA
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {gap_score}
+  query_gap_function: {gap_score}
   mode: global
-"""
-            % (gap_score, gap_score),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -8.0)
@@ -2906,16 +2898,14 @@ TTG--GAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: local
-"""
-            % (nogaps, specificgaps),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
@@ -3011,16 +3001,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: local
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
@@ -3112,12 +3100,11 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
+  target_gap_function: {gap_score}
   query_internal_open_gap_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
@@ -3125,8 +3112,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: local
-"""
-            % gap_score,
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -3195,16 +3181,14 @@ TTGGAA
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {gap_score}
+  query_gap_function: {gap_score}
   mode: local
-"""
-            % (gap_score, gap_score),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
