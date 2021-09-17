@@ -538,16 +538,16 @@ class LinearDrawer(AbstractDrawer):
                         minval, maxval = quartiles[0], quartiles[4]
                         if graph.center is None:
                             midval = (maxval + minval) / 2.0
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                         else:
                             diff = max((graph.center - minval), (maxval - graph.center))
                             minval = graph.center - diff
                             maxval = graph.center + diff
                             midval = graph.center
-                            graph_label_mid.append("%.3f" % midval)
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_mid.append(f"{midval:.3f}")
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                     for fragment in range(
                         start_f, end_f + 1
                     ):  # Add to all used fragment axes
@@ -1071,7 +1071,7 @@ class LinearDrawer(AbstractDrawer):
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
-            print("FEATURE\n%s" % feature)
+            print(f"FEATURE\n{feature}")
             raise
 
         # Distribution dictionary for various ways of drawing the feature

@@ -70,9 +70,7 @@ class _ChromosomeComponent(Widget):
     def add(self, component):
         """Add a sub_component to the list of components under this item."""
         if not isinstance(component, _ChromosomeComponent):
-            raise TypeError(
-                "Expected a _ChromosomeComponent object, got %s" % component
-            )
+            raise TypeError(f"Expected a _ChromosomeComponent object, got {component}")
 
         self._sub_components.append(component)
 
@@ -86,7 +84,7 @@ class _ChromosomeComponent(Widget):
             self._sub_components.remove(component)
         except ValueError:
             raise ValueError(
-                "Component %s not found in sub_components." % component
+                f"Component {component} not found in sub_components."
             ) from None
 
     def draw(self):

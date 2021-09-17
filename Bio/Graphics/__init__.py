@@ -73,7 +73,7 @@ def _write(drawing, output_file, format, dpi=72):
         drawmethod = formatdict[format.upper()]  # select drawing method
     except (KeyError, AttributeError):
         raise ValueError(
-            "Output format should be one of %s" % ", ".join(formatdict)
+            f"Output format should be one of {', '.join(formatdict)}"
         ) from None
 
     if drawmethod is None:
