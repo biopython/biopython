@@ -1,271 +1,1641 @@
-
-
 <!--
-This DTD was written to define a set of articles from NLM 
-Archive and Interchange DTD (http://dtd.nlm.nih.gov). 
-All of these articles should be 
-valid against the archivearticle.dtd 
-(http://dtd.nlm.nih.gov/2.0/archivearticle.dtd).
+4 Dec 2009: This DTD was written to accomodate multiple articles
+tagged in any version of the NLM Archiving and Interchange Tag
+Suite (http://dtd.nlm.nih.gov) and gathered in one pmc-articleset
+wrapper tag.
 
+Each individual article should be valid against a version of the Archiving
+DTD. The articles may not be valid against the same version. 
 
-
+February, 2012: Updated with NISO Z39.96 JATS elements and attributes
+through draft 1.0.
 -->
 
 <!--    Public document type definition. Typical invocation:
-<!DOCTYPE nlm-articleset PUBLIC "-//NLM//DTD ARTICLE SET 2.0//EN" []>
+<!DOCTYPE nlm-articleset PUBLIC "-//NLM//DTD ARTICLE SET 2.0//EN" 
+"http://dtd.nlm.nih.gov/ncbi/pmc/articleset/nlm-articleset-2.0.dtd">
 -->
-<!--
 
-<!ENTITY % id-att
-	"id	   CDATA      #IMPLIED">
-
-<!ENTITY % id-att-required
-	"id	   CDATA      #REQUIRED">
-
-<!ENTITY % figr-atts
-	"fid 		CDATA 		#REQUIRED
-	 to  		CDATA 		#IMPLIED">
-
-<!ENTITY % tblr-atts
-	"tid 		CDATA 		#REQUIRED
-	 to  		CDATA 		#IMPLIED">
-
-<!ENTITY % abbr-atts
-	"bid 		CDATA 		#REQUIRED
-	 to  		CDATA 		#IMPLIED">
-
-<!ENTITY % rid-atts
-	"rid     CDATA       #REQUIRED">
-
-<!ENTITY % fnr-atts
-	"rid     CDATA       #REQUIRED
-	 to      CDATA       #IMPLIED">
-	 
-<!ENTITY % insr-atts
-	"iid     CDATA       #IMPLIED">
-
-<!ENTITY %	supplr-atts
-	"sid     CDATA       #REQUIRED
-	 to      CDATA       #IMPLIED">
-
-<!ENTITY %	secr-atts
-	"sid     CDATA       #REQUIRED"> -->
-
-<!-- Because articles were created to stand alone, ID/CDATA pairs may 
-     crash when articles are combined in one file. All attributes of
-	  ID and CDATA have been changed to CDATA in <pmc-articleset>
-	  -->
-
-<!ATTLIST	 abbrev
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 ack
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 address
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 aff
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 alt-text
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 app
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 array
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 author-notes
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 bio
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 boxed-text
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 caption
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 chem-struct
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 chem-struct-wrapper
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 citation
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 col
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 colgroup
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 collab
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 contract-num
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 contract-sponsor
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 contrib
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-<!ATTLIST	 corresp
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 def
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-
-<!ATTLIST	 def-item
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 disp-formula
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 disp-quote
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 ext-link
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 fig
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 fig-group
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 fn
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 glossary
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 glyph-data
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 graphic
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 inline-formula
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 inline-graphic
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 inline-supplementary-material
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 institution
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 kwd
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 kwd-group
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 long-desc
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 media
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 mml:math
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 named-content
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 note
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 notes
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 p
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 preformat
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 ref
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 related-article
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 sec
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 speech
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 statement
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 supplementary-material
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 table
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 table-wrap
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 table-wrap-group
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 target
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 tbody
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 td
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 term
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>		
-
-<!ATTLIST	 tfoot
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 th
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 thead
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 tr
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 verse-group
-			id	CDATA #IMPLIED>
-
-<!ATTLIST	 xref
-			id	CDATA #IMPLIED
-			rid	CDATA	#IMPLIED>
-
-
-<!ENTITY % archive-article  PUBLIC "-//NLM//DTD Journal Archiving and Interchange DTD v2.0 20040830//EN" "../2.0/archivearticle.dtd">
-
-
+<!ENTITY % atts 		"
+abbr    CDATA    #IMPLIED
+abbrev-type    CDATA    #IMPLIED
+abstract-type    CDATA    #IMPLIED
+accent    CDATA    #IMPLIED
+accentunder    CDATA    #IMPLIED
+actiontype    CDATA    #IMPLIED
+align    CDATA    #IMPLIED
+alignmentscope    CDATA    #IMPLIED
+alt    CDATA    #IMPLIED
+alt-title-type    CDATA    #IMPLIED
+alt-version    CDATA    #IMPLIED
+alternate-form-of    CDATA    #IMPLIED
+altimg    CDATA    #IMPLIED
+altimg-height    CDATA    #IMPLIED
+altimg-valign    CDATA    #IMPLIED
+altimg-width    CDATA    #IMPLIED
+alttext    CDATA    #IMPLIED
+arrange    CDATA    #IMPLIED
+article-type    CDATA    #IMPLIED
+assigning-authority    CDATA    #IMPLIED
+authenticated   CDATA    #IMPLIED
+award-type    CDATA    #IMPLIED
+axis    CDATA    #IMPLIED
+baseline    CDATA    #IMPLIED
+baseline-shift    CDATA    #IMPLIED
+bevelled    CDATA    #IMPLIED
+border    CDATA    #IMPLIED
+calendar    CDATA    #IMPLIED
+cellpadding    CDATA    #IMPLIED
+cellspacing    CDATA    #IMPLIED
+char    CDATA    #IMPLIED
+charalign    CDATA    #IMPLIED
+charoff    CDATA    #IMPLIED
+citation-type    CDATA    #IMPLIED
+class    CDATA    #IMPLIED
+close    CDATA    #IMPLIED
+code-type    CDATA    #IMPLIED
+ccollab-type    CDATA    #IMPLIED
+color    CDATA    #IMPLIED
+colspan    CDATA    #IMPLIED
+columnalign    CDATA    #IMPLIED
+columnlines    CDATA    #IMPLIED
+columnspacing    CDATA    #IMPLIED
+columnspan    CDATA    #IMPLIED
+columnwidth    CDATA    #IMPLIED
+content-type    CDATA    #IMPLIED
+continued-from    CDATA    #IMPLIED
+contrib-id-type    CDATA    #IMPLIED
+contrib-type    CDATA    #IMPLIED
+corresp    CDATA    #IMPLIED
+count    CDATA    #IMPLIED
+count-type    CDATA    #IMPLIED
+country    CDATA    #IMPLIED
+crossout    CDATA    #IMPLIED
+currency    CDATA    #IMPLIED
+date-type    CDATA    #IMPLIED
+deceased    CDATA    #IMPLIED
+decimalpoint    CDATA    #IMPLIED
+denomalign    CDATA    #IMPLIED
+depth    CDATA    #IMPLIED
+description    CDATA    #IMPLIED
+designator    CDATA    #IMPLIED
+dir    CDATA    #IMPLIED
+disp-level    CDATA    #IMPLIED
+display    CDATA    #IMPLIED
+displaystyle    CDATA    #IMPLIED
+document-id    CDATA    #IMPLIED
+document-id-type    CDATA    #IMPLIED
+document-type    CDATA    #IMPLIED
+dtd-version    CDATA    #IMPLIED
+edge    CDATA    #IMPLIED
+elocation-id    CDATA    #IMPLIED
+equal-contrib    CDATA    #IMPLIED
+ext-link-type    CDATA    #IMPLIED
+fence    CDATA    #IMPLIED
+fig-type    CDATA    #IMPLIED
+fn-type    CDATA    #IMPLIED
+fontchar    CDATA    #IMPLIED
+fontname    CDATA    #IMPLIED
+form    CDATA    #IMPLIED
+format    CDATA    #IMPLIED
+frame    CDATA    #IMPLIED
+framespacing    CDATA    #IMPLIED
+glyph-data    CDATA    #IMPLIED
+groupalign    CDATA    #IMPLIED
+headers    CDATA    #IMPLIED
+height    CDATA    #IMPLIED
+href    CDATA    #IMPLIED
+id    CDATA    #IMPLIED
+indentalign    CDATA    #IMPLIED
+indentalignfirst    CDATA    #IMPLIED
+indentalignlast    CDATA    #IMPLIED
+indentshift    CDATA    #IMPLIED
+indentshiftfirst    CDATA    #IMPLIED
+indentshiftlast    CDATA    #IMPLIED
+indenttarget    CDATA    #IMPLIED
+infixlinebreakstyle    CDATA    #IMPLIED
+initials    CDATA    #IMPLIED
+institution-id-type    CDATA    #IMPLIED
+iso-8061-date    CDATA    #IMPLIED
+issue    CDATA    #IMPLIED
+journal-id    CDATA    #IMPLIED
+journal-id-type    CDATA    #IMPLIED
+kwd-group-type    CDATA    #IMPLIED
+largeop    CDATA    #IMPLIED
+length    CDATA    #IMPLIED
+license-type    CDATA    #IMPLIED
+linebreaking    CDATA    #IMPLIED
+linebreakmultchar    CDATA    #IMPLIED
+linebreakstyle    CDATA    #IMPLIED
+lineleading    CDATA    #IMPLIED
+linethickness    CDATA    #IMPLIED
+link-type    CDATA    #IMPLIED
+list-content    CDATA    #IMPLIED
+list-continued    CDATA    #IMPLIED
+list-type    CDATA    #IMPLIED
+location    CDATA    #IMPLIED
+longdivstyle    CDATA    #IMPLIED
+lspace    CDATA    #IMPLIED
+macros    CDATA    #IMPLIED
+mathbackground    CDATA    #IMPLIED
+mathcolor    CDATA    #IMPLIED
+mathsize    CDATA    #IMPLIED
+mathvariant    CDATA    #IMPLIED
+maxsize    CDATA    #IMPLIED
+mime-subtype    CDATA    #IMPLIED
+mimetype    CDATA    #IMPLIED
+minlabelspacing    CDATA    #IMPLIED
+minsize    CDATA    #IMPLIED
+mode    CDATA    #IMPLIED
+movablelimits    CDATA    #IMPLIED
+mstack    CDATA    #IMPLIED
+munder    CDATA    #IMPLIED
+name    CDATA    #IMPLIED
+name-style    CDATA    #IMPLIED
+notation    CDATA    #IMPLIED
+notes-type    CDATA    #IMPLIED
+numalign    CDATA    #IMPLIED
+object-id-type    CDATA    #IMPLIED
+object-type    CDATA    #IMPLIED
+open    CDATA    #IMPLIED
+orientation    CDATA    #IMPLIED
+other    CDATA    #IMPLIED
+overflow    CDATA    #IMPLIED
+page    CDATA    #IMPLIED
+page-sharing    CDATA    #IMPLIED
+person-group-type    CDATA    #IMPLIED
+position    CDATA    #IMPLIED
+prefix-word    CDATA    #IMPLIED
+preformat-type    CDATA    #IMPLIED
+product-type    CDATA    #IMPLIED
+pub-id-type    CDATA    #IMPLIED
+pub-type    CDATA    #IMPLIED
+publication-format    CDATA    #IMPLIED
+publication-type    CDATA    #IMPLIED
+publisher-type    CDATA    #IMPLIED
+rationale    CDATA    #IMPLIED
+ref-type    CDATA    #IMPLIED
+related-article-type    CDATA    #IMPLIED
+resolution    CDATA    #IMPLIED
+response-type    CDATA    #IMPLIED
+rid    CDATA    #IMPLIED
+rowalign    CDATA    #IMPLIED
+rowlines    CDATA    #IMPLIED
+rowspacing    CDATA    #IMPLIED
+rowspan    CDATA    #IMPLIED
+rspace    CDATA    #IMPLIED
+rules    CDATA    #IMPLIED
+scope    CDATA    #IMPLIED
+scriptlevel    CDATA    #IMPLIED
+scriptminsize    CDATA    #IMPLIED
+scriptsizemultiplier    CDATA    #IMPLIED
+sec-type    CDATA    #IMPLIED
+selection    CDATA    #IMPLIED
+separator    CDATA    #IMPLIED
+separators    CDATA    #IMPLIED
+seq    CDATA    #IMPLIED
+shift    CDATA    #IMPLIED
+source-id    CDATA    #IMPLIED
+source-id-type    CDATA    #IMPLIED
+source-type    CDATA    #IMPLIED
+span    CDATA    #IMPLIED
+specific-use    CDATA    #IMPLIED
+src    CDATA    #IMPLIED
+stackalign    CDATA    #IMPLIED
+stretchy    CDATA    #IMPLIED
+style    CDATA    #IMPLIED
+style-type    CDATA    #IMPLIED
+subj-group-type    CDATA    #IMPLIED
+summary    CDATA    #IMPLIED
+supplement-type    CDATA    #IMPLIED
+symbol    CDATA    #IMPLIED
+symmetric    CDATA    #IMPLIED
+target-type    CDATA    #IMPLIED
+type    CDATA    #IMPLIED
+underline-style    CDATA    #IMPLIED
+units    CDATA    #IMPLIED
+valign    CDATA    #IMPLIED
+version    CDATA    #IMPLIED
+voffset    CDATA    #IMPLIED
+vol    CDATA    #IMPLIED
+width    CDATA    #IMPLIED
+x-size    CDATA    #IMPLIED
+xlink:actuate    CDATA    #IMPLIED
+xlink:href    CDATA    #IMPLIED
+xlink:role    CDATA    #IMPLIED
+xlink:show    CDATA    #IMPLIED
+xlink:title    CDATA    #IMPLIED
+xlink:type    CDATA    #IMPLIED
+xml:base    CDATA    #IMPLIED
+xml:lang    CDATA    #IMPLIED
+xml:space    CDATA    #IMPLIED
+xmlns:ali    CDATA    #IMPLIED
+xmlns:mml    CDATA    #IMPLIED
+xmlns:xlink    CDATA    #IMPLIED
+xmlns:xsi    CDATA    #IMPLIED
+xref    CDATA    #IMPLIED
+xsi:schemaLocation    CDATA    #IMPLIED
+y-size    CDATA    #IMPLIED
+			">
+			
 <!ELEMENT pmc-articleset (article+) >
+<!ELEMENT nlm-articleset (article+) >
 
-%archive-article;
+<!ELEMENT abbrev	ANY >
+<!ATTLIST  abbrev	%atts; >
+		
+<!ELEMENT ali:free_to_read	ANY >
+<!ATTLIST  ali:free_to_read	%atts; >
+		
+<!ELEMENT ali:license_ref	ANY >
+<!ATTLIST  ali:license_ref	%atts; >
+		
+<!ELEMENT abbrev-journal-title	ANY >
+<!ATTLIST abbrev-journal-title	%atts; >
+		
+<!ELEMENT abstract	ANY >
+<!ATTLIST abstract	%atts; >
+		
+<!ELEMENT access-date	ANY >
+<!ATTLIST access-date	%atts; >
+		
+<!ELEMENT ack	ANY >
+<!ATTLIST ack	%atts; >
+		
+<!ELEMENT addr-line	ANY >
+<!ATTLIST addr-line	%atts; >
+		
+<!ELEMENT address	ANY >
+<!ATTLIST address	%atts; >
+		
+<!ELEMENT aff	ANY >
+<!ATTLIST aff	%atts; >
+		
+<!ELEMENT aff-alternatives	ANY >
+<!ATTLIST aff-alternatives	%atts; >
+		
+<!ELEMENT alt-text	ANY >
+<!ATTLIST alt-text	%atts; >
+		
+<!ELEMENT alt-title	ANY >
+<!ATTLIST alt-title	%atts; >
+		
+<!ELEMENT alternatives	ANY >
+<!ATTLIST alternatives	%atts; >
+		
+<!ELEMENT annotation	ANY >
+<!ATTLIST annotation	%atts; >
+		
+<!ELEMENT anonymous	ANY >
+<!ATTLIST anonymous	%atts; >
+		
+<!ELEMENT app	ANY >
+<!ATTLIST app	%atts; >
+		
+<!ELEMENT app-group	ANY >
+<!ATTLIST app-group	%atts; >
+		
+<!ELEMENT array	ANY >
+<!ATTLIST array	%atts; >
+		
+<!ELEMENT article	ANY >
+<!ATTLIST article	%atts; >
+		
+<!ELEMENT article-categories	ANY >
+<!ATTLIST article-categories	%atts; >
+		
+<!ELEMENT article-id	ANY >
+<!ATTLIST article-id	%atts; >
+		
+<!ELEMENT article-meta	ANY >
+<!ATTLIST article-meta	%atts; >
+		
+<!ELEMENT article-title	ANY >
+<!ATTLIST article-title	%atts; >
+		
+<!ELEMENT attrib	ANY >
+<!ATTLIST attrib	%atts; >
+		
+<!ELEMENT author-comment	ANY >
+<!ATTLIST author-comment	%atts; >
+		
+<!ELEMENT author-notes	ANY >
+<!ATTLIST author-notes	%atts; >
+		
+<!ELEMENT award-group	ANY >
+<!ATTLIST award-group	%atts; >
+		
+<!ELEMENT award-id	ANY >
+<!ATTLIST award-id	%atts; >
+		
+<!ELEMENT back	ANY >
+<!ATTLIST back	%atts; >
+		
+<!ELEMENT binding	ANY >
+<!ATTLIST binding	%atts; >
+		
+<!ELEMENT bio	ANY >
+<!ATTLIST bio	%atts; >
+		
+<!ELEMENT body	ANY >
+<!ATTLIST body	%atts; >
+		
+<!ELEMENT bold	ANY >
+<!ATTLIST bold	%atts; >
+		
+<!ELEMENT book-title	ANY >
+<!ATTLIST book-title	%atts; >
+		
+<!ELEMENT book-subtitle	ANY >
+<!ATTLIST book-subtitle	%atts; >
+		
+<!ELEMENT boxed-text	ANY >
+<!ATTLIST boxed-text	%atts; >
+		
+<!ELEMENT break	ANY >
+<!ATTLIST break	%atts; >
+		
+<!ELEMENT caption	ANY >
+<!ATTLIST caption	%atts; >
+		
+<!ELEMENT ccc-statement	ANY >
+<!ATTLIST ccc-statement	%atts; >
+		
+<!ELEMENT chapter-title	ANY >
+<!ATTLIST chapter-title	%atts; >
+		
+<!ELEMENT chem-struct	ANY >
+<!ATTLIST chem-struct	%atts; >
+		
+<!ELEMENT chem-struct-wrapper	ANY >
+<!ATTLIST chem-struct-wrapper	%atts; >
+		
+<!ELEMENT chem-struct-wrap	ANY >
+<!ATTLIST chem-struct-wrap	%atts; >
+		
+<!ELEMENT citation	ANY >
+<!ATTLIST citation	%atts; >
+		
+<!ELEMENT citation-alternatives	ANY >
+<!ATTLIST citation-alternatives	%atts; >
+		
+<!ELEMENT city	ANY >
+<!ATTLIST city	%atts; >
+		
+<!ELEMENT code	ANY >
+<!ATTLIST code	%atts; >
+		
+<!ELEMENT col	ANY >
+<!ATTLIST col	%atts; >
+		
+<!ELEMENT colgroup	ANY >
+<!ATTLIST colgroup	%atts; >
+		
+<!ELEMENT collab	ANY >
+<!ATTLIST collab	%atts; >
+		
+<!ELEMENT collab-alternatives	ANY >
+<!ATTLIST collab-alternatives	%atts; >
+		
+<!ELEMENT comment	ANY >
+<!ATTLIST comment	%atts; >
+		
+<!ELEMENT compund-kwd	ANY >
+<!ATTLIST compund-kwd	%atts; >
+		
+<!ELEMENT compound-kwd-part	ANY >
+<!ATTLIST compound-kwd-part	%atts; >
+		
+<!ELEMENT compound-subject	ANY >
+<!ATTLIST compound-subject	%atts; >
+		
+<!ELEMENT compound-subject-part	ANY >
+<!ATTLIST compound-subject-part	%atts; >
+		
+<!ELEMENT conf-acronym	ANY >
+<!ATTLIST conf-acronym	%atts; >
+		
+<!ELEMENT conf-date	ANY >
+<!ATTLIST conf-date	%atts; >
+		
+<!ELEMENT conf-loc	ANY >
+<!ATTLIST conf-loc	%atts; >
+		
+<!ELEMENT conf-name	ANY >
+<!ATTLIST conf-name	%atts; >
+		
+<!ELEMENT conf-num	ANY >
+<!ATTLIST conf-num	%atts; >
+		
+<!ELEMENT conf-sponsor	ANY >
+<!ATTLIST conf-sponsor	%atts; >
+		
+<!ELEMENT conf-theme	ANY >
+<!ATTLIST conf-theme	%atts; >
+		
+<!ELEMENT conference	ANY >
+<!ATTLIST conference	%atts; >
+		
+<!ELEMENT contract-num	ANY >
+<!ATTLIST contract-num	%atts; >
+		
+<!ELEMENT contract-sponsor	ANY >
+<!ATTLIST contract-sponsor	%atts; >
+		
+<!ELEMENT contrib	ANY >
+<!ATTLIST contrib	%atts; >
+		
+<!ELEMENT contrib-group	ANY >
+<!ATTLIST contrib-group	%atts; >
+		
+<!ELEMENT contrib-id	ANY >
+<!ATTLIST contrib-id	%atts; >
+		
+<!ELEMENT copyright-holder	ANY >
+<!ATTLIST copyright-holder	%atts; >
+		
+<!ELEMENT copyright-statement	ANY >
+<!ATTLIST copyright-statement	%atts; >
+		
+<!ELEMENT copyright-year	ANY >
+<!ATTLIST copyright-year	%atts; >
+		
+<!ELEMENT corresp	ANY >
+<!ATTLIST corresp	%atts; >
+		
+<!ELEMENT country	ANY >
+<!ATTLIST country	%atts; >
+		
+<!ELEMENT counts	ANY >
+<!ATTLIST counts	%atts; >
+		
+<!ELEMENT custom-meta	ANY >
+<!ATTLIST custom-meta	%atts; >
+		
+<!ELEMENT custom-meta-group	ANY >
+<!ATTLIST custom-meta-group	%atts; >
+		
+<!ELEMENT custom-meta-wrap	ANY >
+<!ATTLIST custom-meta-wrap	%atts; >
+		
+<!ELEMENT data-title	ANY >
+<!ATTLIST data-title	%atts; >
+		
+<!ELEMENT date	ANY >
+<!ATTLIST date	%atts; >
+		
+<!ELEMENT date-in-citation	ANY >
+<!ATTLIST date-in-citation	%atts; >
+		
+<!ELEMENT day	ANY >
+<!ATTLIST day	%atts; >
+		
+<!ELEMENT def	ANY >
+<!ATTLIST def	%atts; >
+		
+<!ELEMENT def-head	ANY >
+<!ATTLIST def-head	%atts; >
+		
+<!ELEMENT def-item	ANY >
+<!ATTLIST def-item	%atts; >
+		
+<!ELEMENT def-list	ANY >
+<!ATTLIST def-list	%atts; >
+		
+<!ELEMENT degrees	ANY >
+<!ATTLIST degrees	%atts; >
+		
+<!ELEMENT disp-formula	ANY >
+<!ATTLIST disp-formula	%atts; >
+		
+<!ELEMENT disp-formula-group	ANY >
+<!ATTLIST disp-formula-group	%atts; >
+		
+<!ELEMENT disp-quote	ANY >
+<!ATTLIST disp-quote	%atts; >
+		
+<!ELEMENT edition	ANY >
+<!ATTLIST edition	%atts; >
+		
+<!ELEMENT element-citation	ANY >
+<!ATTLIST element-citation	%atts; >
+		
+<!ELEMENT elocation-id	ANY >
+<!ATTLIST elocation-id	%atts; >
+		
+<!ELEMENT email	ANY >
+<!ATTLIST email	%atts; >
+		
+<!ELEMENT equation-count	ANY >
+<!ATTLIST equation-count	%atts; >
+		
+<!ELEMENT era	ANY >
+<!ATTLIST era	%atts; >
+		
+<!ELEMENT etal	ANY >
+<!ATTLIST etal	%atts; >
+		
+<!ELEMENT ext-link	ANY >
+<!ATTLIST ext-link	%atts; >
+		
+<!ELEMENT fax	ANY >
+<!ATTLIST fax	%atts; >
+		
+<!ELEMENT fig	ANY >
+<!ATTLIST fig	%atts; >
+		
+<!ELEMENT fig-count	ANY >
+<!ATTLIST fig-count	%atts; >
+		
+<!ELEMENT fig-group	ANY >
+<!ATTLIST fig-group	%atts; >
+		
+<!ELEMENT floats-group	ANY >
+<!ATTLIST floats-group	%atts; >
+		
+<!ELEMENT floats-wrap	ANY >
+<!ATTLIST floats-wrap	%atts; >
+		
+<!ELEMENT fn	ANY >
+<!ATTLIST fn	%atts; >
+		
+<!ELEMENT fn-group	ANY >
+<!ATTLIST fn-group	%atts; >
+		
+<!ELEMENT fixed-case	ANY >
+<!ATTLIST fixed-case	%atts; >
+		
+<!ELEMENT font	ANY >
+<!ATTLIST font	%atts; >
+		
+<!ELEMENT fpage	ANY >
+<!ATTLIST fpage	%atts; >
+		
+<!ELEMENT front	ANY >
+<!ATTLIST front	%atts; >
+		
+<!ELEMENT front-stub	ANY >
+<!ATTLIST front-stub	%atts; >
+		
+<!ELEMENT funding-group	ANY >
+<!ATTLIST funding-group	%atts; >
+		
+<!ELEMENT funding-source	ANY >
+<!ATTLIST funding-source	%atts; >
+		
+<!ELEMENT funding-statement	ANY >
+<!ATTLIST funding-statement	%atts; >
+		
+<!ELEMENT given-names	ANY >
+<!ATTLIST given-names	%atts; >
+		
+<!ELEMENT gloss-group	ANY >
+<!ATTLIST gloss-group	%atts; >
+		
+<!ELEMENT glossary	ANY >
+<!ATTLIST glossary	%atts; >
+		
+<!ELEMENT glyph-data	ANY >
+<!ATTLIST glyph-data	%atts; >
+		
+<!ELEMENT glyph-ref	ANY >
+<!ATTLIST glyph-ref	%atts; >
+		
+<!ELEMENT gov	ANY >
+<!ATTLIST gov	%atts; >
+		
+<!ELEMENT grant-num	ANY >
+<!ATTLIST grant-num	%atts; >
+		
+<!ELEMENT grant-sponsor	ANY >
+<!ATTLIST grant-sponsor	%atts; >
+		
+<!ELEMENT graphic	ANY >
+<!ATTLIST graphic	%atts; >
+		
+<!ELEMENT history	ANY >
+<!ATTLIST history	%atts; >
+		
+<!ELEMENT hr	ANY >
+<!ATTLIST hr	%atts; >
+		
+<!ELEMENT inline-formula	ANY >
+<!ATTLIST inline-formula	%atts; >
+		
+<!ELEMENT inline-graphic	ANY >
+<!ATTLIST inline-graphic	%atts; >
+		
+<!ELEMENT inline-supplementary-material	ANY >
+<!ATTLIST inline-supplementary-material	%atts; >
+		
+<!ELEMENT institution	ANY >
+<!ATTLIST institution	%atts; >
+		
+<!ELEMENT institution-id	ANY >
+<!ATTLIST institution-id	%atts; >
 
+<!ELEMENT institution-wrap	ANY >
+<!ATTLIST institution-wrap	%atts; >		
+		
+<!ELEMENT isbn	ANY >
+<!ATTLIST isbn	%atts; >
+		
+<!ELEMENT issn	ANY >
+<!ATTLIST issn	%atts; >
+		
+<!ELEMENT issn-l	ANY >
+<!ATTLIST issn-l	%atts; >
+		
+<!ELEMENT issue	ANY >
+<!ATTLIST issue	%atts; >
+		
+<!ELEMENT issue-id	ANY >
+<!ATTLIST issue-id	%atts; >
+		
+<!ELEMENT issue-part	ANY >
+<!ATTLIST issue-part	%atts; >
+		
+<!ELEMENT issue-sponsor	ANY >
+<!ATTLIST issue-sponsor	%atts; >
+		
+<!ELEMENT issue-title	ANY >
+<!ATTLIST issue-title	%atts; >
+		
+<!ELEMENT italic	ANY >
+<!ATTLIST italic	%atts; >
+		
+<!ELEMENT journal-id	ANY >
+<!ATTLIST journal-id	%atts; >
+		
+<!ELEMENT journal-meta	ANY >
+<!ATTLIST journal-meta	%atts; >
+		
+<!ELEMENT journal-subtitle	ANY >
+<!ATTLIST journal-subtitle	%atts; >
+		
+<!ELEMENT journal-title	ANY >
+<!ATTLIST journal-title	%atts; >
+		
+<!ELEMENT journal-title-group	ANY >
+<!ATTLIST journal-title-group	%atts; >
+
+<!ELEMENT kwd	ANY >
+<!ATTLIST kwd	%atts; >
+		
+<!ELEMENT kwd-group	ANY >
+<!ATTLIST kwd-group	%atts; >
+		
+<!ELEMENT label	ANY >
+<!ATTLIST label	%atts; >
+		
+<!ELEMENT license	ANY >
+<!ATTLIST license	%atts; >
+		
+<!ELEMENT license-p	ANY >
+<!ATTLIST license-p	%atts; >
+		
+<!ELEMENT list	ANY >
+<!ATTLIST list	%atts; >
+		
+<!ELEMENT list-item	ANY >
+<!ATTLIST list-item	%atts; >
+		
+<!ELEMENT long-desc	ANY >
+<!ATTLIST long-desc	%atts; >
+		
+<!ELEMENT lpage	ANY >
+<!ATTLIST lpage	%atts; >
+		
+<!ELEMENT media	ANY >
+<!ATTLIST media	%atts; >
+		
+<!ELEMENT meta-name	ANY >
+<!ATTLIST meta-name	%atts; >
+		
+<!ELEMENT meta-value	ANY >
+<!ATTLIST meta-value	%atts; >
+		
+<!ELEMENT milestone-end	ANY >
+<!ATTLIST milestone-end	%atts; >
+		
+<!ELEMENT milestone-start	ANY >
+<!ATTLIST milestone-start	%atts; >
+		
+<!ELEMENT mixed-citation	ANY >
+<!ATTLIST mixed-citation	%atts; >
+		
+<!ELEMENT mml:abs	ANY >
+<!ATTLIST mml:abs	%atts; >
+		
+<!ELEMENT mml:and	ANY >
+<!ATTLIST mml:and	%atts; >
+		
+<!ELEMENT mml:annotation	ANY >
+<!ATTLIST mml:annotation	%atts; >
+		
+<!ELEMENT mml:annotation-xml	ANY >
+<!ATTLIST mml:annotation-xml	%atts; >
+		
+<!ELEMENT mml:apply	ANY >
+<!ATTLIST mml:apply	%atts; >
+		
+<!ELEMENT mml:approx	ANY >
+<!ATTLIST mml:approx	%atts; >
+		
+<!ELEMENT mml:arccos	ANY >
+<!ATTLIST mml:arccos	%atts; >
+		
+<!ELEMENT mml:arccosh	ANY >
+<!ATTLIST mml:arccosh	%atts; >
+		
+<!ELEMENT mml:arccot	ANY >
+<!ATTLIST mml:arccot	%atts; >
+		
+<!ELEMENT mml:arccoth	ANY >
+<!ATTLIST mml:arccoth	%atts; >
+		
+<!ELEMENT mml:arccsc	ANY >
+<!ATTLIST mml:arccsc	%atts; >
+		
+<!ELEMENT mml:arccsch	ANY >
+<!ATTLIST mml:arccsch	%atts; >
+		
+<!ELEMENT mml:arcsec	ANY >
+<!ATTLIST mml:arcsec	%atts; >
+		
+<!ELEMENT mml:arcsech	ANY >
+<!ATTLIST mml:arcsech	%atts; >
+		
+<!ELEMENT mml:arcsin	ANY >
+<!ATTLIST mml:arcsin	%atts; >
+		
+<!ELEMENT mml:arcsinh	ANY >
+<!ATTLIST mml:arcsinh	%atts; >
+		
+<!ELEMENT mml:arctan	ANY >
+<!ATTLIST mml:arctan	%atts; >
+		
+<!ELEMENT mml:arctanh	ANY >
+<!ATTLIST mml:arctanh	%atts; >
+		
+<!ELEMENT mml:arg	ANY >
+<!ATTLIST mml:arg	%atts; >
+		
+<!ELEMENT mml:bvar	ANY >
+<!ATTLIST mml:bvar	%atts; >
+		
+<!ELEMENT mml:card	ANY >
+<!ATTLIST mml:card	%atts; >
+		
+<!ELEMENT mml:cartesianproduct	ANY >
+<!ATTLIST mml:cartesianproduct	%atts; >
+		
+<!ELEMENT mml:ceiling	ANY >
+<!ATTLIST mml:ceiling	%atts; >
+		
+<!ELEMENT mml:ci	ANY >
+<!ATTLIST mml:ci	%atts; >
+		
+<!ELEMENT mml:cn	ANY >
+<!ATTLIST mml:cn	%atts; >
+		
+<!ELEMENT mml:codomain	ANY >
+<!ATTLIST mml:codomain	%atts; >
+		
+<!ELEMENT mml:complexes	ANY >
+<!ATTLIST mml:complexes	%atts; >
+		
+<!ELEMENT mml:compose	ANY >
+<!ATTLIST mml:compose	%atts; >
+		
+<!ELEMENT mml:condition	ANY >
+<!ATTLIST mml:condition	%atts; >
+		
+<!ELEMENT mml:conjugate	ANY >
+<!ATTLIST mml:conjugate	%atts; >
+		
+<!ELEMENT mml:cos	ANY >
+<!ATTLIST mml:cos	%atts; >
+		
+<!ELEMENT mml:cosh	ANY >
+<!ATTLIST mml:cosh	%atts; >
+		
+<!ELEMENT mml:cot	ANY >
+<!ATTLIST mml:cot	%atts; >
+		
+<!ELEMENT mml:coth	ANY >
+<!ATTLIST mml:coth	%atts; >
+		
+<!ELEMENT mml:csc	ANY >
+<!ATTLIST mml:csc	%atts; >
+		
+<!ELEMENT mml:csch	ANY >
+<!ATTLIST mml:csch	%atts; >
+		
+<!ELEMENT mml:csymbol	ANY >
+<!ATTLIST mml:csymbol	%atts; >
+		
+<!ELEMENT mml:curl	ANY >
+<!ATTLIST mml:curl	%atts; >
+		
+<!ELEMENT mml:declare	ANY >
+<!ATTLIST mml:declare	%atts; >
+		
+<!ELEMENT mml:degree	ANY >
+<!ATTLIST mml:degree	%atts; >
+		
+<!ELEMENT mml:determinant	ANY >
+<!ATTLIST mml:determinant	%atts; >
+		
+<!ELEMENT mml:diff	ANY >
+<!ATTLIST mml:diff	%atts; >
+		
+<!ELEMENT mml:divergence	ANY >
+<!ATTLIST mml:divergence	%atts; >
+		
+<!ELEMENT mml:divide	ANY >
+<!ATTLIST mml:divide	%atts; >
+		
+<!ELEMENT mml:domain	ANY >
+<!ATTLIST mml:domain	%atts; >
+		
+<!ELEMENT mml:domainofapplication	ANY >
+<!ATTLIST mml:domainofapplication	%atts; >
+		
+<!ELEMENT mml:emptyset	ANY >
+<!ATTLIST mml:emptyset	%atts; >
+		
+<!ELEMENT mml:eq	ANY >
+<!ATTLIST mml:eq	%atts; >
+		
+<!ELEMENT mml:equivalent	ANY >
+<!ATTLIST mml:equivalent	%atts; >
+		
+<!ELEMENT mml:eulergamma	ANY >
+<!ATTLIST mml:eulergamma	%atts; >
+		
+<!ELEMENT mml:exists	ANY >
+<!ATTLIST mml:exists	%atts; >
+		
+<!ELEMENT mml:exp	ANY >
+<!ATTLIST mml:exp	%atts; >
+		
+<!ELEMENT mml:exponentiale	ANY >
+<!ATTLIST mml:exponentiale	%atts; >
+		
+<!ELEMENT mml:factorial	ANY >
+<!ATTLIST mml:factorial	%atts; >
+		
+<!ELEMENT mml:factorof	ANY >
+<!ATTLIST mml:factorof	%atts; >
+		
+<!ELEMENT mml:false	ANY >
+<!ATTLIST mml:false	%atts; >
+		
+<!ELEMENT mml:floor	ANY >
+<!ATTLIST mml:floor	%atts; >
+		
+<!ELEMENT mml:fn	ANY >
+<!ATTLIST mml:fn	%atts; >
+		
+<!ELEMENT mml:forall	ANY >
+<!ATTLIST mml:forall	%atts; >
+		
+<!ELEMENT mml:gcd	ANY >
+<!ATTLIST mml:gcd	%atts; >
+		
+<!ELEMENT mml:geq	ANY >
+<!ATTLIST mml:geq	%atts; >
+		
+<!ELEMENT mml:grad	ANY >
+<!ATTLIST mml:grad	%atts; >
+		
+<!ELEMENT mml:gt	ANY >
+<!ATTLIST mml:gt	%atts; >
+		
+<!ELEMENT mml:ident	ANY >
+<!ATTLIST mml:ident	%atts; >
+		
+<!ELEMENT mml:image	ANY >
+<!ATTLIST mml:image	%atts; >
+		
+<!ELEMENT mml:imaginary	ANY >
+<!ATTLIST mml:imaginary	%atts; >
+		
+<!ELEMENT mml:imaginaryi	ANY >
+<!ATTLIST mml:imaginaryi	%atts; >
+		
+<!ELEMENT mml:implies	ANY >
+<!ATTLIST mml:implies	%atts; >
+		
+<!ELEMENT mml:in	ANY >
+<!ATTLIST mml:in	%atts; >
+		
+<!ELEMENT mml:infinity	ANY >
+<!ATTLIST mml:infinity	%atts; >
+		
+<!ELEMENT mml:int	ANY >
+<!ATTLIST mml:int	%atts; >
+		
+<!ELEMENT mml:integers	ANY >
+<!ATTLIST mml:integers	%atts; >
+		
+<!ELEMENT mml:intersect	ANY >
+<!ATTLIST mml:intersect	%atts; >
+		
+<!ELEMENT mml:interval	ANY >
+<!ATTLIST mml:interval	%atts; >
+		
+<!ELEMENT mml:inverse	ANY >
+<!ATTLIST mml:inverse	%atts; >
+		
+<!ELEMENT mml:lambda	ANY >
+<!ATTLIST mml:lambda	%atts; >
+		
+<!ELEMENT mml:laplacian	ANY >
+<!ATTLIST mml:laplacian	%atts; >
+		
+<!ELEMENT mml:lcm	ANY >
+<!ATTLIST mml:lcm	%atts; >
+		
+<!ELEMENT mml:leq	ANY >
+<!ATTLIST mml:leq	%atts; >
+		
+<!ELEMENT mml:limit	ANY >
+<!ATTLIST mml:limit	%atts; >
+		
+<!ELEMENT mml:list	ANY >
+<!ATTLIST mml:list	%atts; >
+		
+<!ELEMENT mml:ln	ANY >
+<!ATTLIST mml:ln	%atts; >
+		
+<!ELEMENT mml:log	ANY >
+<!ATTLIST mml:log	%atts; >
+		
+<!ELEMENT mml:logbase	ANY >
+<!ATTLIST mml:logbase	%atts; >
+		
+<!ELEMENT mml:lowlimit	ANY >
+<!ATTLIST mml:lowlimit	%atts; >
+		
+<!ELEMENT mml:lt	ANY >
+<!ATTLIST mml:lt	%atts; >
+		
+<!ELEMENT mml:maction	ANY >
+<!ATTLIST mml:maction	%atts; >
+		
+<!ELEMENT mml:maligngroup	ANY >
+<!ATTLIST mml:maligngroup	%atts; >
+		
+<!ELEMENT mml:malignmark	ANY >
+<!ATTLIST mml:malignmark	%atts; >
+		
+<!ELEMENT mml:math	ANY >
+<!ATTLIST mml:math	%atts; >
+		
+<!ELEMENT mml:matrix	ANY >
+<!ATTLIST mml:matrix	%atts; >
+		
+<!ELEMENT mml:matrixrow	ANY >
+<!ATTLIST mml:matrixrow	%atts; >
+		
+<!ELEMENT mml:max	ANY >
+<!ATTLIST mml:max	%atts; >
+		
+<!ELEMENT mml:mean	ANY >
+<!ATTLIST mml:mean	%atts; >
+		
+<!ELEMENT mml:median	ANY >
+<!ATTLIST mml:median	%atts; >
+		
+<!ELEMENT mml:menclose	ANY >
+<!ATTLIST mml:menclose	%atts; >
+		
+<!ELEMENT mml:merror	ANY >
+<!ATTLIST mml:merror	%atts; >
+		
+<!ELEMENT mml:mfenced	ANY >
+<!ATTLIST mml:mfenced	%atts; >
+		
+<!ELEMENT mml:mfrac	ANY >
+<!ATTLIST mml:mfrac	%atts; >
+		
+<!ELEMENT mml:mglyph	ANY >
+<!ATTLIST mml:mglyph	%atts; >
+		
+<!ELEMENT mml:mi	ANY >
+<!ATTLIST mml:mi	%atts; >
+		
+<!ELEMENT mml:min	ANY >
+<!ATTLIST mml:min	%atts; >
+		
+<!ELEMENT mml:minus	ANY >
+<!ATTLIST mml:minus	%atts; >
+		
+<!ELEMENT mml:mlabeledtr	ANY >
+<!ATTLIST mml:mlabeledtr	%atts; >
+		
+<!ELEMENT mml:mmultiscripts	ANY >
+<!ATTLIST mml:mmultiscripts	%atts; >
+		
+<!ELEMENT mml:mn	ANY >
+<!ATTLIST mml:mn	%atts; >
+		
+<!ELEMENT mml:mo	ANY >
+<!ATTLIST mml:mo	%atts; >
+		
+<!ELEMENT mml:mode	ANY >
+<!ATTLIST mml:mode	%atts; >
+		
+<!ELEMENT mml:moment	ANY >
+<!ATTLIST mml:moment	%atts; >
+		
+<!ELEMENT mml:momentabout	ANY >
+<!ATTLIST mml:momentabout	%atts; >
+		
+<!ELEMENT mml:mover	ANY >
+<!ATTLIST mml:mover	%atts; >
+		
+<!ELEMENT mml:mpadded	ANY >
+<!ATTLIST mml:mpadded	%atts; >
+		
+<!ELEMENT mml:mphantom	ANY >
+<!ATTLIST mml:mphantom	%atts; >
+		
+<!ELEMENT mml:mprescripts	ANY >
+<!ATTLIST mml:mprescripts	%atts; >
+		
+<!ELEMENT mml:mroot	ANY >
+<!ATTLIST mml:mroot	%atts; >
+		
+<!ELEMENT mml:mrow	ANY >
+<!ATTLIST mml:mrow	%atts; >
+		
+<!ELEMENT mml:ms	ANY >
+<!ATTLIST mml:ms	%atts; >
+		
+<!ELEMENT mml:mspace	ANY >
+<!ATTLIST mml:mspace	%atts; >
+		
+<!ELEMENT mml:msqrt	ANY >
+<!ATTLIST mml:msqrt	%atts; >
+		
+<!ELEMENT mml:mstyle	ANY >
+<!ATTLIST mml:mstyle	%atts; >
+		
+<!ELEMENT mml:msub	ANY >
+<!ATTLIST mml:msub	%atts; >
+		
+<!ELEMENT mml:msubsup	ANY >
+<!ATTLIST mml:msubsup	%atts; >
+		
+<!ELEMENT mml:msup	ANY >
+<!ATTLIST mml:msup	%atts; >
+		
+<!ELEMENT mml:mtable	ANY >
+<!ATTLIST mml:mtable	%atts; >
+		
+<!ELEMENT mml:mtd	ANY >
+<!ATTLIST mml:mtd	%atts; >
+		
+<!ELEMENT mml:mtext	ANY >
+<!ATTLIST mml:mtext		%atts; >
+		
+<!ELEMENT mml:mtr	ANY >
+<!ATTLIST mml:mtr	%atts; >
+		
+<!ELEMENT mml:munder	ANY >
+<!ATTLIST mml:munder	%atts; >
+		
+<!ELEMENT mml:munderover	ANY >
+<!ATTLIST mml:munderover	%atts; >
+		
+<!ELEMENT mml:naturalnumbers	ANY >
+<!ATTLIST mml:naturalnumbers	%atts; >
+		
+<!ELEMENT mml:neq	ANY >
+<!ATTLIST mml:neq	%atts; >
+		
+<!ELEMENT mml:none	ANY >
+<!ATTLIST mml:none	%atts; >
+		
+<!ELEMENT mml:not	ANY >
+<!ATTLIST mml:not	%atts; >
+		
+<!ELEMENT mml:notanumber	ANY >
+<!ATTLIST mml:notanumber	%atts; >
+		
+<!ELEMENT mml:notin	ANY >
+<!ATTLIST mml:notin	%atts; >
+		
+<!ELEMENT mml:notprsubset	ANY >
+<!ATTLIST mml:notprsubset	%atts; >
+		
+<!ELEMENT mml:notsubset	ANY >
+<!ATTLIST mml:notsubset	%atts; >
+		
+<!ELEMENT mml:or	ANY >
+<!ATTLIST mml:or	%atts; >
+		
+<!ELEMENT mml:otherwise	ANY >
+<!ATTLIST mml:otherwise	%atts; >
+		
+<!ELEMENT mml:outerproduct	ANY >
+<!ATTLIST mml:outerproduct	%atts; >
+		
+<!ELEMENT mml:partialdiff	ANY >
+<!ATTLIST mml:partialdiff	%atts; >
+		
+<!ELEMENT mml:pi	ANY >
+<!ATTLIST mml:pi	%atts; >
+		
+<!ELEMENT mml:piece	ANY >
+<!ATTLIST mml:piece	%atts; >
+		
+<!ELEMENT mml:piecewise	ANY >
+<!ATTLIST mml:piecewise	%atts; >
+		
+<!ELEMENT mml:plus	ANY >
+<!ATTLIST mml:plus	%atts; >
+		
+<!ELEMENT mml:power	ANY >
+<!ATTLIST mml:power	%atts; >
+		
+<!ELEMENT mml:primes	ANY >
+<!ATTLIST mml:primes	%atts; >
+		
+<!ELEMENT mml:product	ANY >
+<!ATTLIST mml:product	%atts; >
+		
+<!ELEMENT mml:prsubset	ANY >
+<!ATTLIST mml:prsubset	%atts; >
+		
+<!ELEMENT mml:quotient	ANY >
+<!ATTLIST mml:quotient	%atts; >
+		
+<!ELEMENT mml:rationals	ANY >
+<!ATTLIST mml:rationals	%atts; >
+		
+<!ELEMENT mml:real	ANY >
+<!ATTLIST mml:real	%atts; >
+		
+<!ELEMENT mml:reals	ANY >
+<!ATTLIST mml:reals	%atts; >
+		
+<!ELEMENT mml:reln	ANY >
+<!ATTLIST mml:reln	%atts; >
+		
+<!ELEMENT mml:rem	ANY >
+<!ATTLIST mml:rem	%atts; >
+		
+<!ELEMENT mml:root	ANY >
+<!ATTLIST mml:root	%atts; >
+		
+<!ELEMENT mml:scalarproduct	ANY >
+<!ATTLIST mml:scalarproduct	%atts; >
+		
+<!ELEMENT mml:sdev	ANY >
+<!ATTLIST mml:sdev	%atts; >
+		
+<!ELEMENT mml:sec	ANY >
+<!ATTLIST mml:sec	%atts; >
+		
+<!ELEMENT mml:sech	ANY >
+<!ATTLIST mml:sech	%atts; >
+		
+<!ELEMENT mml:selector	ANY >
+<!ATTLIST mml:selector	%atts; >
+		
+<!ELEMENT mml:semantics	ANY >
+<!ATTLIST mml:semantics	%atts; >
+		
+<!ELEMENT mml:sep	ANY >
+<!ATTLIST mml:sep	%atts; >
+		
+<!ELEMENT mml:set	ANY >
+<!ATTLIST mml:set	%atts; >
+		
+<!ELEMENT mml:setdiff	ANY >
+<!ATTLIST mml:setdiff	%atts; >
+		
+<!ELEMENT mml:sin	ANY >
+<!ATTLIST mml:sin	%atts; >
+		
+<!ELEMENT mml:sinh	ANY >
+<!ATTLIST mml:sinh	%atts; >
+		
+<!ELEMENT mml:subset	ANY >
+<!ATTLIST mml:subset	%atts; >
+		
+<!ELEMENT mml:sum	ANY >
+<!ATTLIST mml:sum	%atts; >
+		
+<!ELEMENT mml:tan	ANY >
+<!ATTLIST mml:tan	%atts; >
+		
+<!ELEMENT mml:tanh	ANY >
+<!ATTLIST mml:tanh	%atts; >
+		
+<!ELEMENT mml:tendsto	ANY >
+<!ATTLIST mml:tendsto	%atts; >
+		
+<!ELEMENT mml:times	ANY >
+<!ATTLIST mml:times	%atts; >
+		
+<!ELEMENT mml:transpose	ANY >
+<!ATTLIST mml:transpose	%atts; >
+		
+<!ELEMENT mml:true	ANY >
+<!ATTLIST mml:true	%atts; >
+		
+<!ELEMENT mml:union	ANY >
+<!ATTLIST mml:union	%atts; >
+		
+<!ELEMENT mml:uplimit	ANY >
+<!ATTLIST mml:uplimit	%atts; >
+		
+<!ELEMENT mml:variance	ANY >
+<!ATTLIST mml:variance	%atts; >
+		
+<!ELEMENT mml:vector	ANY >
+<!ATTLIST mml:vector	%atts; >
+		
+<!ELEMENT mml:vectorproduct	ANY >
+<!ATTLIST mml:vectorproduct	%atts; >
+		
+<!ELEMENT mml:xor 	ANY >
+<!ATTLIST mml:xor	%atts; >
+				
+<!ELEMENT monospace	ANY >
+<!ATTLIST monospace	%atts; >
+		
+<!ELEMENT month	ANY >
+<!ATTLIST month	%atts; >
+		
+<!ELEMENT name	ANY >
+<!ATTLIST name	%atts; >
+		
+<!ELEMENT name-alternatives	ANY >
+<!ATTLIST name-alternatives	%atts; >
+		
+<!ELEMENT named-content	ANY >
+<!ATTLIST named-content	%atts; >
+		
+<!ELEMENT nested-kwd	ANY >
+<!ATTLIST nested-kwd	%atts; >
+		
+<!ELEMENT nlm-citation	ANY >
+<!ATTLIST nlm-citation	%atts; >
+		
+<!ELEMENT note	ANY >
+<!ATTLIST note	%atts; >
+		
+<!ELEMENT notes	ANY >
+<!ATTLIST notes	%atts; >
+		
+<!ELEMENT object-id	ANY >
+<!ATTLIST object-id	%atts; >
+		
+<!ELEMENT on-behalf-of	ANY >
+<!ATTLIST on-behalf-of	%atts; >
+		
+<!ELEMENT open-access	ANY >
+<!ATTLIST open-access	%atts; >
+		
+<!ELEMENT overline	ANY >
+<!ATTLIST overline	%atts; >
+		
+<!ELEMENT overline-end	ANY >
+<!ATTLIST overline-end	%atts; >
+		
+<!ELEMENT overline-start	ANY >
+<!ATTLIST overline-start	%atts; >
+		
+<!ELEMENT p	ANY >
+<!ATTLIST p	%atts; >
+		
+<!ELEMENT page-count	ANY >
+<!ATTLIST page-count	%atts; >
+		
+<!ELEMENT page-range	ANY >
+<!ATTLIST page-range	%atts; >
+		
+<!ELEMENT part-title	ANY >
+<!ATTLIST part-title	%atts; >
+		
+<!ELEMENT patent	ANY >
+<!ATTLIST patent	%atts; >
+		
+<!ELEMENT permissions	ANY >
+<!ATTLIST permissions	%atts; >
+		
+<!ELEMENT person-group	ANY >
+<!ATTLIST person-group	%atts; >
+		
+<!ELEMENT phone	ANY >
+<!ATTLIST phone	%atts; >
+		
+<!ELEMENT postal-code	ANY >
+<!ATTLIST postal-code	%atts; >
+		
+<!ELEMENT prefix	ANY >
+<!ATTLIST prefix	%atts; >
+		
+<!ELEMENT preformat	ANY >
+<!ATTLIST preformat	%atts; >
+		
+<!ELEMENT price	ANY >
+<!ATTLIST price	%atts; >
+		
+<!ELEMENT principal-award-recipient	ANY >
+<!ATTLIST principal-award-recipient	%atts; >
+		
+<!ELEMENT principal-investigator	ANY >
+<!ATTLIST principal-investigator	%atts; >
+		
+<!ELEMENT private-char	ANY >
+<!ATTLIST private-char	%atts; >
+		
+<!ELEMENT product	ANY >
+<!ATTLIST product	%atts; >
+		
+<!ELEMENT pub-date	ANY >
+<!ATTLIST pub-date	%atts; >
+		
+<!ELEMENT pub-id	ANY >
+<!ATTLIST pub-id	%atts; >
+		
+<!ELEMENT publisher	ANY >
+<!ATTLIST publisher	%atts; >
+		
+<!ELEMENT publisher-loc	ANY >
+<!ATTLIST publisher-loc	%atts; >
+		
+<!ELEMENT publisher-name	ANY >
+<!ATTLIST publisher-name	%atts; >
+		
+<!ELEMENT ref	ANY >
+<!ATTLIST ref	%atts; >
+		
+<!ELEMENT ref-count	ANY >
+<!ATTLIST ref-count	%atts; >
+		
+<!ELEMENT ref-list	ANY >
+<!ATTLIST ref-list	%atts; >
+		
+<!ELEMENT related-article	ANY >
+<!ATTLIST related-article	%atts; >
+		
+<!ELEMENT related-object	ANY >
+<!ATTLIST related-object	%atts; >
+		
+<!ELEMENT response	ANY >
+<!ATTLIST response	%atts; >
+		
+<!ELEMENT role	ANY >
+<!ATTLIST role	%atts; >
+		
+<!ELEMENT roman	ANY >
+<!ATTLIST roman	%atts; >
+		
+<!ELEMENT ruby	ANY >
+<!ATTLIST ruby	%atts; >
+
+<!ELEMENT rb	ANY >
+<!ATTLIST rb	%atts; >
+		
+<!ELEMENT rp	ANY >
+<!ATTLIST rp	%atts; >
+		
+<!ELEMENT rt	ANY >
+<!ATTLIST rt	%atts; >
+			
+<!ELEMENT sans-serif	ANY >
+<!ATTLIST sans-serif	%atts; >
+		
+<!ELEMENT sc	ANY >
+<!ATTLIST sc	%atts; >
+		
+<!ELEMENT season	ANY >
+<!ATTLIST season	%atts; >
+		
+<!ELEMENT sec	ANY >
+<!ATTLIST sec	%atts; >
+		
+<!ELEMENT sec-meta	ANY >
+<!ATTLIST sec-meta	%atts; >
+		
+<!ELEMENT self-uri	ANY >
+<!ATTLIST self-uri	%atts; >
+		
+<!ELEMENT series	ANY >
+<!ATTLIST series	%atts; >
+		
+<!ELEMENT series-text	ANY >
+<!ATTLIST series-text	%atts; >
+		
+<!ELEMENT series-title	ANY >
+<!ATTLIST series-title	%atts; >
+		
+<!ELEMENT sig	ANY >
+<!ATTLIST sig	%atts; >
+		
+<!ELEMENT sig-block	ANY >
+<!ATTLIST sig-block	%atts; >
+		
+<!ELEMENT size	ANY >
+<!ATTLIST size	%atts; >
+		
+<!ELEMENT source	ANY >
+<!ATTLIST source	%atts; >
+		
+<!ELEMENT source-subtitle	ANY >
+<!ATTLIST source-subtitle	%atts; >
+		
+<!ELEMENT speaker	ANY >
+<!ATTLIST speaker	%atts; >
+		
+<!ELEMENT speech	ANY >
+<!ATTLIST speech	%atts; >
+		
+<!ELEMENT state	ANY >
+<!ATTLIST state	%atts; >
+		
+<!ELEMENT statement	ANY >
+<!ATTLIST statement	%atts; >
+		
+<!ELEMENT std	ANY >
+<!ATTLIST std	%atts; >
+		
+<!ELEMENT std-organization	ANY >
+<!ATTLIST std-organization	%atts; >
+		
+<!ELEMENT strike	ANY >
+<!ATTLIST strike	%atts; >
+		
+<!ELEMENT string-conf	ANY >
+<!ATTLIST string-conf	%atts; >
+		
+<!ELEMENT string-date	ANY >
+<!ATTLIST string-date	%atts; >
+		
+<!ELEMENT string-kwd	ANY >
+<!ATTLIST string-kwd	%atts; >
+		
+<!ELEMENT string-name	ANY >
+<!ATTLIST string-name	%atts; >
+		
+<!ELEMENT styled-content	ANY >
+<!ATTLIST styled-content	%atts; >
+		
+<!ELEMENT sub	ANY >
+<!ATTLIST sub	%atts; >
+		
+<!ELEMENT sub-article	ANY >
+<!ATTLIST sub-article	%atts; >
+		
+<!ELEMENT subj-group	ANY >
+<!ATTLIST subj-group	%atts; >
+		
+<!ELEMENT subject	ANY >
+<!ATTLIST subject	%atts; >
+		
+<!ELEMENT subtitle	ANY >
+<!ATTLIST subtitle	%atts; >
+		
+<!ELEMENT suffix	ANY >
+<!ATTLIST suffix	%atts; >
+		
+<!ELEMENT sup	ANY >
+<!ATTLIST sup	%atts; >
+		
+<!ELEMENT supplement	ANY >
+<!ATTLIST supplement	%atts; >
+		
+<!ELEMENT supplementary-material	ANY >
+<!ATTLIST supplementary-material	%atts; >
+		
+<!ELEMENT surname	ANY >
+<!ATTLIST surname	%atts; >
+		
+<!ELEMENT table	ANY >
+<!ATTLIST table	%atts; >
+		
+<!ELEMENT table-count	ANY >
+<!ATTLIST table-count	%atts; >
+		
+<!ELEMENT table-wrap	ANY >
+<!ATTLIST table-wrap	%atts; >
+		
+<!ELEMENT table-wrap-foot	ANY >
+<!ATTLIST table-wrap-foot	%atts; >
+		
+<!ELEMENT table-wrap-group	ANY >
+<!ATTLIST table-wrap-group	%atts; >
+		
+<!ELEMENT target	ANY >
+<!ATTLIST target	%atts; >
+		
+<!ELEMENT tbody	ANY >
+<!ATTLIST tbody	%atts; >
+		
+<!ELEMENT td	ANY >
+<!ATTLIST td	%atts; >
+		
+<!ELEMENT term	ANY >
+<!ATTLIST term	%atts; >
+		
+<!ELEMENT term-head	ANY >
+<!ATTLIST term-head	%atts; >
+		
+<!ELEMENT tex-math	ANY >
+<!ATTLIST tex-math	%atts; >
+		
+<!ELEMENT textual-form	ANY >
+<!ATTLIST textual-form	%atts; >
+		
+<!ELEMENT tfoot	ANY >
+<!ATTLIST tfoot	%atts; >
+		
+<!ELEMENT th	ANY >
+<!ATTLIST th	%atts; >
+		
+<!ELEMENT thead	ANY >
+<!ATTLIST thead	%atts; >
+		
+<!ELEMENT time-stamp	ANY >
+<!ATTLIST time-stamp	%atts; >
+		
+<!ELEMENT title	ANY >
+<!ATTLIST title	%atts; >
+		
+<!ELEMENT title-group	ANY >
+<!ATTLIST title-group	%atts; >
+		
+<!ELEMENT tr	ANY >
+<!ATTLIST tr	%atts; >
+		
+<!ELEMENT trans-abstract	ANY >
+<!ATTLIST trans-abstract	%atts; >
+		
+<!ELEMENT trans-source	ANY >
+<!ATTLIST trans-source	%atts; >
+		
+<!ELEMENT trans-subtitle	ANY >
+<!ATTLIST trans-subtitle	%atts; >
+		
+<!ELEMENT trans-title	ANY >
+<!ATTLIST trans-title	%atts; >
+		
+<!ELEMENT trans-title-group	ANY >
+<!ATTLIST trans-title-group	%atts; >
+		
+<!ELEMENT underline	ANY >
+<!ATTLIST underline	%atts; >
+		
+<!ELEMENT underline-end	ANY >
+<!ATTLIST underline-end	%atts; >
+		
+<!ELEMENT underline-start	ANY >
+<!ATTLIST underline-start	%atts; >
+		
+<!ELEMENT unstructured-kwd-group	ANY >
+<!ATTLIST unstructured-kwd-group	%atts; >
+		
+<!ELEMENT uri	ANY >
+<!ATTLIST uri	%atts; >
+		
+<!ELEMENT verse-group	ANY >
+<!ATTLIST verse-group	%atts; >
+		
+<!ELEMENT verse-line	ANY >
+<!ATTLIST verse-line	%atts; >
+		
+<!ELEMENT version	ANY >
+<!ATTLIST version	%atts; >
+		
+<!ELEMENT volume	ANY >
+<!ATTLIST volume	%atts; >
+		
+<!ELEMENT volume-id	ANY >
+<!ATTLIST volume-id	%atts; >
+		
+<!ELEMENT volume-series	ANY >
+<!ATTLIST volume-series	%atts; >
+		
+<!ELEMENT word-count	ANY >
+<!ATTLIST word-count	%atts; >
+		
+<!ELEMENT x	ANY >
+<!ATTLIST x	%atts; >
+		
+<!ELEMENT xref	ANY >
+<!ATTLIST xref	%atts; >
+		
+<!ELEMENT year	ANY >
+<!ATTLIST year	%atts; >
+		
+<!ELEMENT zipcode	ANY >
+<!ATTLIST zipcode	%atts; >
+		
