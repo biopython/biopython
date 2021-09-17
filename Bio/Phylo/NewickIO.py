@@ -35,7 +35,7 @@ tokens = [
     (r"\;", "semicolon"),
     (r"\n", "newline"),
 ]
-tokenizer = re.compile("(%s)" % "|".join(token[0] for token in tokens))
+tokenizer = re.compile(f"({'|'.join(token[0] for token in tokens)})")
 token_dict = {name: re.compile(token) for token, name in tokens}
 
 
@@ -205,7 +205,7 @@ class Parser:
         try:
             next_token = next(tokens)
             raise NewickError(
-                "Text after semicolon in Newick tree: %s" % next_token.group()
+                f"Text after semicolon in Newick tree: {next_token.group()}"
             )
         except StopIteration:
             pass
@@ -298,7 +298,7 @@ class Writer:
                 return label + make_info_string(clade, terminal=True)
             else:
                 subtrees = (newickize(sub) for sub in clade)
-                return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+                return f"({','.join(subtrees)}){label + make_info_string(clade)}"
 
         # Convert each tree to a string
         for tree in self.trees:
@@ -312,7 +312,7 @@ class Writer:
             # Nexus-style (?) notation before the raw Newick tree
             treeline = ["tree", (tree.name or "a_tree"), "="]
             if tree.weight != 1:
-                treeline.append("[&W%s]" % round(float(tree.weight), 3))
+                treeline.append(f"[&W{round(float(tree.weight), 3)}]")
             if tree.rooted:
                 treeline.append("[&R]")
             treeline.append(rawtree)

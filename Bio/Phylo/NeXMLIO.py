@@ -59,7 +59,7 @@ def qUri(s):
 
 def cdao_to_obo(s):
     """Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI."""
-    return "obo:%s" % cdao_elements[s[len("cdao:") :]]
+    return f"obo:{cdao_elements[s[len('cdao:'):]]}"
 
 
 def matches(s):
@@ -234,7 +234,7 @@ class Writer:
 
     def new_label(self, obj_type):
         """Create new labels for the NeXML writer."""
-        counter = "%s_counter" % obj_type
+        counter = f"{obj_type}_counter"
         setattr(self, counter, getattr(self, counter) + 1)
         return f"{obj_type}{getattr(self, counter)}"
 
@@ -249,7 +249,7 @@ class Writer:
         root_node.set("xsi:schemaLocation", SCHEMA)
 
         for prefix, uri in NAMESPACES.items():
-            root_node.set("xmlns:%s" % prefix, uri)
+            root_node.set(f"xmlns:{prefix}", uri)
 
         otus = ElementTree.SubElement(
             root_node, "otus", **{"id": "tax", "label": "RootTaxaBlock"}
@@ -334,7 +334,7 @@ class Writer:
                         {
                             "property": convert_uri("cdao:has_Support_Value"),
                             "datatype": "xsd:float",
-                            "content": "%1.2f" % confidence,
+                            "content": f"{confidence:1.2f}",
                         }
                     )
             node = ElementTree.SubElement(tree, "edge", **attrib)
