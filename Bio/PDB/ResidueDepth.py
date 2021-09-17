@@ -124,7 +124,7 @@ def _get_atom_radius(atom, rtype="united"):
         typekey = 2
     else:
         raise ValueError(
-            "Radius type (%r) not understood. Must be 'explicit' or 'united'" % rtype
+            f"Radius type ({rtype!r}) not understood. Must be 'explicit' or 'united'"
         )
 
     resname = atom.parent.resname
@@ -536,7 +536,7 @@ def get_surface(model, MSMS="msms"):
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
         raise RuntimeError(
-            "Failed to generate surface file using command:\n%s" % make_surface
+            f"Failed to generate surface file using command:\n{make_surface}"
         )
 
     # read surface vertices from vertex file

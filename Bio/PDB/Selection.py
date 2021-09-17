@@ -52,7 +52,7 @@ def unfold_entities(entity_list, target_level):
 
     """
     if target_level not in entity_levels:
-        raise PDBException("%s: Not an entity level." % target_level)
+        raise PDBException(f"{target_level}: Not an entity level.")
     if entity_list == []:
         return []
     if isinstance(entity_list, (Entity, Atom)):

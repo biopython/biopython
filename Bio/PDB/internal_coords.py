@@ -857,9 +857,7 @@ class IC_Chain:
             )
         )
         fp.write(
-            "{}, {}, ".format(
-                (0 if d.h1key in hedraSet else 1), (0 if d.h2key in hedraSet else 1)
-            )
+            f"{0 if d.h1key in hedraSet else 1}, {0 if d.h2key in hedraSet else 1}, "
         )
         fp.write(
             "    // {} [ {} -- {} ] {}\n".format(
@@ -2910,7 +2908,7 @@ class Hedron(Edron):
             pair of atoms in this Hedron
         """
         if 2 > len(ak_tpl):
-            raise TypeError("Require exactly 2 AtomKeys: %s" % (str(ak_tpl)))
+            raise TypeError(f"Require exactly 2 AtomKeys: {str(ak_tpl)}")
         elif all(ak in self.aks[:2] for ak in ak_tpl):
             self.lal[0] = newLength  # len12
         elif all(ak in self.aks[1:] for ak in ak_tpl):

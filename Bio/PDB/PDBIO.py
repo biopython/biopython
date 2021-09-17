@@ -343,7 +343,7 @@ class PDBIO(StructureIO):
                 if not preserve_atom_numbering:
                     atom_number = 1
                 if model_flag:
-                    fhandle.write("MODEL      %s\n" % model.serial_num)
+                    fhandle.write(f"MODEL      {model.serial_num}\n")
 
                 for chain in model.get_list():
                     if not select.accept_chain(chain):

@@ -302,7 +302,7 @@ class PDBList:
                 archive_fn,
             )
         else:
-            url = "http://mmtf.rcsb.org/v1.0/full/%s" % code
+            url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -327,12 +327,12 @@ class PDBList:
         if not overwrite:
             if os.path.exists(final_file):
                 if self._verbose:
-                    print("Structure exists: '%s' " % final_file)
+                    print(f"Structure exists: '{final_file}' ")
                 return final_file
 
         # Retrieve the file
         if self._verbose:
-            print("Downloading PDB structure '%s'..." % pdb_code)
+            print(f"Downloading PDB structure '{pdb_code}'...")
         try:
             urlcleanup()
             urlretrieve(url, filename)
@@ -365,34 +365,34 @@ class PDBList:
             try:
                 self.retrieve_pdb_file(pdb_code, file_format=file_format)
             except Exception:
-                print("error %s\n" % pdb_code)
+                print(f"error {pdb_code}\n")
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
         # Move the obsolete files to a special folder
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, "pdb%s.ent" % pdb_code)
+                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.ent")
                 new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], "pdb%s.ent" % pdb_code
+                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.ent"
                 )
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, "pdb%s.ent" % pdb_code)
+            new_file = os.path.join(new_dir, f"pdb{pdb_code}.ent")
             if os.path.isfile(old_file):
                 if not os.path.isdir(new_dir):
                     os.mkdir(new_dir)
                 try:
                     shutil.move(old_file, new_file)
                 except Exception:
-                    print("Could not move %s to obsolete folder" % old_file)
+                    print(f"Could not move {old_file} to obsolete folder")
             elif os.path.isfile(new_file):
                 if self._verbose:
-                    print("Obsolete file %s already moved" % old_file)
+                    print(f"Obsolete file {old_file} already moved")
             else:
                 if self._verbose:
-                    print("Obsolete file %s is missing" % old_file)
+                    print(f"Obsolete file {old_file} is missing")
 
     def download_pdb_files(
         self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
