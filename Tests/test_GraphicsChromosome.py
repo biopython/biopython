@@ -248,22 +248,21 @@ class OrganismGraphicTest(unittest.TestCase):
         self.assertIn(
             expected_string,
             properties,
-            "Unexpected results from dumpProperties: \n %s" % properties,
+            f"Unexpected results from dumpProperties: \n {properties}",
         )
 
         properties = test_widget.getProperties()
         self.assertEqual(
             properties["label_size"],
             6,
-            "Unexpected results from getProperties: %s" % properties,
+            f"Unexpected results from getProperties: {properties}",
         )
 
         test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(
             test_widget.start_x_position,
             12,
-            "setProperties doesn't seem to work right: %s"
-            % test_widget.start_x_position,
+            f"setProperties doesn't seem to work right: {test_widget.start_x_position}",
         )
 
 
@@ -311,7 +310,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
         for name, acc, length, features, color in entries:
             if False:
                 # How I generated the values above... and tested passing in SeqFeatures
-                filename = "/Users/pjcock/Documents/comp_genomics/seed/%s.gbk" % acc
+                filename = f"/Users/pjcock/Documents/comp_genomics/seed/{acc}.gbk"
                 import os
 
                 if not os.path.isfile(filename):

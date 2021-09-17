@@ -67,7 +67,7 @@ class TogoFields(unittest.TestCase):
         }
         self.assertTrue(
             dbs.issuperset(expected),
-            "Missing DB: %s" % ", ".join(sorted(expected.difference(dbs))),
+            f"Missing DB: {', '.join(sorted(expected.difference(dbs)))}",
         )
 
     def test_pubmed(self):
@@ -591,7 +591,7 @@ class TogoSearch(unittest.TestCase):
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:
-            self.assertIn(match, search_iter, "Expected %s in results" % match)
+            self.assertIn(match, search_iter, f"Expected {match} in results")
 
 
 class TogoConvert(unittest.TestCase):

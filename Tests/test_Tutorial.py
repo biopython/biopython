@@ -151,7 +151,7 @@ def extract_doctests(latex_filename):
             elif line.startswith("%doctest"):
                 if lines:
                     if not lines[0].startswith(">>> "):
-                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                        raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
                     yield name, "".join(lines), folder, deps
                     lines = []
                 deps = [x.strip() for x in line.split()[1:]]
@@ -166,7 +166,7 @@ def extract_doctests(latex_filename):
                 line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
-            raise ValueError("Should start '>>> ' not %r" % lines[0])
+            raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
         yield name, "".join(lines), folder, deps
     # yield "dummy", ">>> 2 + 2\n5\n"
 
@@ -218,7 +218,7 @@ for latex in files:
 
         setattr(
             TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ", "_"),
+            f"doctest_{name.replace(' ', '_')}",
             funct(name, example, folder),
         )
         del funct
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     if missing_deps:
         print("Skipping tests needing the following:")
         for dep in sorted(missing_deps):
-            print(" - %s" % dep)
+            print(f" - {dep}")
     print("Running Tutorial doctests...")
     tests = doctest.testmod()
     if tests.failed:

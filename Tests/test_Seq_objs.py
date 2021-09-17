@@ -166,8 +166,7 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(
                                 i,
                                 j,
-                                "%r.%s(%r, %s, %s)"
-                                % (example1, method_name, str2, start, end),
+                                f"{example1!r}.{method_name}({str2!r}, {start}, {end})",
                             )
 
     def test_str_count(self):
@@ -973,7 +972,7 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
-            msg = "Translating %s should fail" % codon
+            msg = f"Translating {codon} should fail"
             nuc = Seq(codon)
             with self.assertRaises(TranslationError, msg=msg):
                 nuc.translate()

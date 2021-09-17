@@ -113,7 +113,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                     # Maybe a string turning into a list of strings?
                     self.assertEqual([old_f.qualifiers[key]], new_f.qualifiers[key])
                 else:
-                    self.fail("Problem with feature's '%s' qualifier" % key)
+                    self.fail(f"Problem with feature's '{key}' qualifier")
             else:
                 # Should both be lists of strings...
                 self.assertEqual(old_f.qualifiers[key], new_f.qualifiers[key])
@@ -216,7 +216,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertEqual(
             len(new_keys),
             0,
-            msg="Unexpected new annotation keys: %s" % ", ".join(new_keys),
+            msg=f"Unexpected new annotation keys: {', '.join(new_keys)}",
         )
         missing_keys = set(old.annotations).difference(new.annotations)
         missing_keys = missing_keys.difference(
@@ -225,7 +225,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertEqual(
             len(missing_keys),
             0,
-            msg="Unexpectedly missing annotation keys: %s" % ", ".join(missing_keys),
+            msg=f"Unexpectedly missing annotation keys: {', '.join(missing_keys)}",
         )
 
         # In the short term, just compare any shared keys:
@@ -265,7 +265,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     old.annotations[key],
                     new.annotations[key],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
             elif isinstance(old.annotations[key], str) and isinstance(
                 new.annotations[key], list
@@ -275,7 +275,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     [old.annotations[key]],
                     new.annotations[key],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
             elif isinstance(old.annotations[key], list) and isinstance(
                 new.annotations[key], str
@@ -283,7 +283,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     old.annotations[key],
                     [new.annotations[key]],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
 
     def compare_records(self, old_list, new_list):

@@ -329,7 +329,7 @@ class TestQblast(unittest.TestCase):
                     ):
                         found_result = True
                         break
-            msg = "Missing all of %s in descriptions" % expected_hit
+            msg = f"Missing all of {expected_hit} in descriptions"
             self.assertTrue(found_result, msg=msg)
 
     def test_parse_qblast_ref_page(self):

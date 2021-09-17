@@ -42,8 +42,8 @@ class TestBasics(unittest.TestCase):
             test_line = test_handle.readline()
             if not good_line and not test_line:
                 break
-            self.assertTrue(good_line, "Extra info in Test: %r" % test_line)
-            self.assertTrue(test_line, "Extra info in Expected: %r" % good_line)
+            self.assertTrue(good_line, f"Extra info in Test: {test_line!r}")
+            self.assertTrue(test_line, f"Extra info in Expected: {good_line!r}")
             test_normalized = " ".join(x for x in test_line.split() if x)
             good_normalized = " ".join(x for x in good_line.split() if x)
             self.assertEqual(test_normalized, good_normalized)
@@ -7830,7 +7830,7 @@ KEYWORDS    """,
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
             line = handle.readline()
-            self.assertIn(" %s " % name, line)
+            self.assertIn(f" {name} ", line)
             self.assertIn(" %i bp " % seq_len, line)
             # Splitting based on whitespace rather than position due to
             # updated GenBank specification

@@ -45,7 +45,7 @@ def _test_read_factory(source, count):
         self.assertEqual(len(phx), count[0])
         self.assertEqual(len(phx.other), count[1])
 
-    test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
+    test_read.__doc__ = f"Read {fname} to produce a phyloXML object."
     return test_read
 
 
@@ -61,7 +61,7 @@ def _test_parse_factory(source, count):
         trees = PhyloXMLIO.parse(source)
         self.assertEqual(len(list(trees)), count)
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % fname
+    test_parse.__doc__ = f"Parse the phylogenies in {fname}."
     return test_parse
 
 
@@ -82,7 +82,7 @@ def _test_shape_factory(source, shapes):
                 for subclade, len_expect in zip(clade, sub_expect[1]):
                     self.assertEqual(len(subclade), len_expect)
 
-    test_shape.__doc__ = "Check the branching structure of %s." % fname
+    test_shape.__doc__ = f"Check the branching structure of {fname}."
     return test_shape
 
 

@@ -2414,7 +2414,7 @@ class TestLoading(unittest.TestCase):
             try:
                 m = substitution_matrices.load(name)
             except Exception:
-                self.fail("Failed to load subsitution matrix '%s'" % name)
+                self.fail(f"Failed to load subsitution matrix '{name}'")
 
 
 if __name__ == "__main__":

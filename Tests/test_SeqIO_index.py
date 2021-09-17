@@ -626,7 +626,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             elif mode == "t":
                 handle = StringIO(raw.decode())
             else:
-                raise RuntimeError("Unexpected mode %s" % mode)
+                raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,

@@ -148,11 +148,10 @@ def main(argv):
     # Q. Then, why ".."?
     # A. Because Martel may not be in ../build/lib.*
     test_path = sys.path[0] or "."
-    source_path = os.path.abspath("%s/.." % test_path)
+    source_path = os.path.abspath(f"{test_path}/..")
     sys.path.insert(1, source_path)
     build_path = os.path.abspath(
-        "%s/../build/lib.%s-%s"
-        % (test_path, distutils.util.get_platform(), sys.version[:3])
+        f"{test_path}/../build/lib.{distutils.util.get_platform()}-{sys.version[:3]}"
     )
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
@@ -207,7 +206,7 @@ def main(argv):
         if args[arg_num][-3:] == ".py":
             args[arg_num] = args[arg_num][:-3]
 
-    print("Python version: %s" % sys.version)
+    print(f"Python version: {sys.version}")
     print(f"Operating system: {os.name} {sys.platform}")
 
     # run the tests
@@ -269,7 +268,7 @@ class TestRunner(unittest.TextTestRunner):
             sys.stdout = output
             if name.startswith("test_"):
                 # It's a unittest
-                sys.stderr.write("%s ... " % name)
+                sys.stderr.write(f"{name} ... ")
                 loader = unittest.TestLoader()
                 suite = loader.loadTestsFromName(name)
                 if hasattr(loader, "errors") and loader.errors:
@@ -283,18 +282,18 @@ class TestRunner(unittest.TextTestRunner):
                             # Remove the traceback etc
                             msg = msg[msg.find("Bio.Missing") :]
                             msg = msg[msg.find("Error: ") :]
-                            sys.stderr.write("skipping. %s\n" % msg)
+                            sys.stderr.write(f"skipping. {msg}\n")
                             return True
                     # Looks like a real failure
                     sys.stderr.write("loading tests failed:\n")
                     for msg in loader.errors:
-                        sys.stderr.write("%s\n" % msg)
+                        sys.stderr.write(f"{msg}\n")
                     return False
                 if suite.countTestCases() == 0:
-                    raise RuntimeError("No tests found in %s" % name)
+                    raise RuntimeError(f"No tests found in {name}")
             else:
                 # It's a doc test
-                sys.stderr.write("%s docstring test ... " % name)
+                sys.stderr.write(f"{name} docstring test ... ")
                 try:
                     module = __import__(name, fromlist=name.split("."))
                 except MissingPythonDependencyError:
@@ -311,11 +310,11 @@ class TestRunner(unittest.TextTestRunner):
             if self.testdir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
                 result.stream.write(result.separator1 + "\n")
-                result.stream.write("ERROR: %s\n" % name)
+                result.stream.write(f"ERROR: {name}\n")
                 result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
-                result.stream.write("Was: %s\n" % self.testdir)
-                result.stream.write("Now: %s\n" % os.path.abspath("."))
+                result.stream.write(f"Was: {self.testdir}\n")
+                result.stream.write(f"Now: {os.path.abspath('.')}\n")
                 os.chdir(self.testdir)
                 if not result.wasSuccessful():
                     result.printErrors()
@@ -330,13 +329,13 @@ class TestRunner(unittest.TextTestRunner):
         except MissingExternalDependencyError as msg:
             # Seems this isn't always triggered on Python 3.5,
             # exception messages can be in loader.errors instead.
-            sys.stderr.write("skipping. %s\n" % msg)
+            sys.stderr.write(f"skipping. {msg}\n")
             return True
         except Exception as msg:
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1 + "\n")
-            result.stream.write("ERROR: %s\n" % name)
+            result.stream.write(f"ERROR: {name}\n")
             result.stream.write(result.separator2 + "\n")
             result.stream.write(traceback.format_exc())
             return False
