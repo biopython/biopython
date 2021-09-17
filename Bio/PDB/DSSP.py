@@ -593,7 +593,7 @@ class DSSP(AbstractResiduePropertyMap):
                     aa = "C"
             # Take care of HETATM again
             if (resname != aa) and (res.id[0] == " " or aa != "X"):
-                raise PDBException("Structure/DSSP mismatch at %s" % res)
+                raise PDBException(f"Structure/DSSP mismatch at {res}")
 
             dssp_vals = (
                 dssp_index,

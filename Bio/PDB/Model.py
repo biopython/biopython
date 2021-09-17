@@ -35,7 +35,7 @@ class Model(Entity):
 
     def __repr__(self):
         """Return model identifier."""
-        return "<Model id=%s>" % self.get_id()
+        return f"<Model id={self.get_id()}>"
 
     def get_chains(self):
         """Return chains."""
