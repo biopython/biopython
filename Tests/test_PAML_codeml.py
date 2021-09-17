@@ -195,7 +195,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(
                 self.cml._options[key],
                 target_options[key],
-                "%s: %r vs %r" % (key, self.cml._options[key], target_options[key]),
+                f"{key}: {self.cml._options[key]!r} vs {target_options[key]!r}",
             )
 
     def testCtlFileExistsOnRead(self):
@@ -494,7 +494,7 @@ class ModTest(unittest.TestCase):
                     7,
                     version_msg
                     + ": wrong number of parsed parameters"
-                    + " for %s-%s" % (seq1, seq2),
+                    + f" for {seq1}-{seq2}",
                 )
                 for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
                     self.assertIn(

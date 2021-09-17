@@ -75,7 +75,7 @@ class TestPhenoMicro(unittest.TestCase):
             # I want to see the output when called from the test harness,
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            self.fail("%s\n\n%r\n\n%r" % (e, handle.read(), records))
+            self.fail(f"{e}\n\n{handle.read()!r}\n\n{records!r}")
 
         self.assertEqual(p1, records[0])
 

@@ -60,7 +60,7 @@ class SearchTestBaseClass(unittest.TestCase):
         # compare objects recursively if it's not an HSPFragment
         if not isinstance(obj_a, SearchIO.HSPFragment):
             # check the number of hits contained
-            msg = "comparing %r vs %r" % (obj_a, obj_b)
+            msg = f"comparing {obj_a!r} vs {obj_b!r}"
             self.assertEqual(len(obj_a), len(obj_b), msg=msg)
 
             for item_a, item_b in zip(obj_a, obj_b):

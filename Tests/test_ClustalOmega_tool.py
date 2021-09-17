@@ -105,7 +105,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
                 message,
             )
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -118,7 +118,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
@@ -127,7 +127,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
         err = str(cm.exception)
         # Ideally we'd catch the return code and raise the specific
         # error for "invalid format".

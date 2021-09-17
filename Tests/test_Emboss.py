@@ -211,7 +211,7 @@ class SeqRetSeqIOTests(SeqRetTests):
             new_records = list(
                 emboss_piped_SeqIO_convert(records, temp_format, "fasta")
             )
-            msg = "converting %s from %s to %s" % (in_filename, in_format, temp_format)
+            msg = f"converting {in_filename} from {in_format} to {temp_format}"
             self.compare_records(records, new_records, msg)
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format, skip_formats=()):
@@ -241,7 +241,7 @@ class SeqRetSeqIOTests(SeqRetTests):
             ) as child:
                 child.stdin.close()
                 new_records = list(SeqIO.parse(child.stdout, new_format))
-            msg = "converting %s from %s to %s" % (filename, old_format, new_format)
+            msg = f"converting {filename} from {old_format} to {new_format}"
             self.compare_records(old_records, new_records, msg)
 
     def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=()):
@@ -374,7 +374,7 @@ class SeqRetAlignIOTests(SeqRetTests):
             ) as child:
                 child.stdin.close()
                 new_aligns = list(AlignIO.parse(child.stdout, new_format))
-            msg = "converting %s from %s to %s" % (filename, old_format, new_format)
+            msg = f"converting {filename} from {old_format} to {new_format}"
             self.compare_alignments(old_aligns, new_aligns, msg)
 
     def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=()):
@@ -404,7 +404,7 @@ class SeqRetAlignIOTests(SeqRetTests):
                     ),
                 )
                 continue
-            msg = "converting %s from %s to %s" % (in_filename, in_format, temp_format)
+            msg = f"converting {in_filename} from {in_format} to {temp_format}"
             self.compare_alignments(old_aligns, new_aligns, msg)
 
     def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=()):
@@ -449,7 +449,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         for target, alignment in zip(targets, alignments):
             self.assertEqual(len(alignment), 2)
             # self.assertEqual(target.id, alignment[1].id) #too strict
-            msg = "%s vs %s or %s" % (alignment[1].id, target.id, target.name)
+            msg = f"{alignment[1].id} vs {target.id} or {target.name}"
             self.assertTrue(
                 alignment[1].id in target.id or alignment[1].id in target.name, msg=msg
             )
@@ -477,7 +477,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             self.assertEqual(stdout.strip(), "")
             self.assertTrue(
                 os.path.isfile(cline.outfile),
-                "Missing output file %r from:\n%s" % (cline.outfile, cline),
+                f"Missing output file {cline.outfile!r} from:\n{cline}",
             )
         else:
             # Don't use this yet... could return stdout handle instead?
@@ -565,7 +565,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         filename = cline.outfile
         self.assertTrue(
             os.path.isfile(filename),
-            "Missing output file %r from:\n%s" % (filename, cline),
+            f"Missing output file {filename!r} from:\n{cline}",
         )
         # Check we can parse the output...
         align = AlignIO.read(filename, "emboss")
@@ -908,7 +908,7 @@ class TranslationTests(unittest.TestCase):
         # More details...
         for i, amino in enumerate(translation):
             codon = sequence[i * 3 : i * 3 + 3]
-            msg = "codon %s, table %s" % (codon, table)
+            msg = f"codon {codon}, table {table}"
             self.assertEqual(amino, codon.translate(table), msg=msg)
 
     def check(self, sequence):

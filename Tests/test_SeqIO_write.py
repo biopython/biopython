@@ -240,7 +240,7 @@ class WriterTests(SeqIOTestBaseClass):
             self.check_simple(records, fmt, descr)
 
     def check_simple(self, records, fmt, descr):
-        msg = "Test failure %s for %s" % (fmt, descr)
+        msg = f"Test failure {fmt} for {descr}"
         mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()
@@ -267,7 +267,7 @@ class WriterTests(SeqIOTestBaseClass):
         handle.close()
 
     def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):
-        msg = "Test failure %s for %s" % (fmt, descr)
+        msg = f"Test failure {fmt} for {descr}"
         mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()
