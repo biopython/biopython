@@ -194,7 +194,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
         err = str(cm.exception)
         # Ideally we'd catch the return code and raise the specific
         # error for "invalid format", rather than just notice there

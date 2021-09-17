@@ -576,7 +576,7 @@ class TogoSearch(unittest.TestCase):
         try:
             search_count = TogoWS.search_count(database, search_term)
         except HTTPError as err:
-            raise ValueError("%s from %s" % (err, err.url)) from None
+            raise ValueError(f"{err} from {err.url}") from None
         if expected_matches:
             self.assertGreaterEqual(search_count, len(expected_matches))
         if search_count > 5000 and not limit:

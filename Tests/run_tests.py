@@ -208,7 +208,7 @@ def main(argv):
             args[arg_num] = args[arg_num][:-3]
 
     print("Python version: %s" % sys.version)
-    print("Operating system: %s %s" % (os.name, sys.platform))
+    print(f"Operating system: {os.name} {sys.platform}")
 
     # run the tests
     runner = TestRunner(args, verbosity)
@@ -302,7 +302,7 @@ class TestRunner(unittest.TextTestRunner):
                     return True
                 except ImportError as e:
                     sys.stderr.write("FAIL, ImportError\n")
-                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.stream.write(f"ERROR while importing {name}: {e}\n")
                     result.printErrors()
                     return False
                 suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)

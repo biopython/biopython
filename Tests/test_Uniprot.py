@@ -547,7 +547,7 @@ class TestUniprot(SeqRecordTestBaseClass):
             self.assertEqual(
                 repr(f1.location),
                 repr(f2.location),
-                "%s %s vs %s %s" % (f1.location, f1.type, f2.location, f2.type),
+                f"{f1.location} {f1.type} vs {f2.location} {f2.type}",
             )
 
     def test_Q13639(self):

@@ -72,12 +72,8 @@ def _test_write_factory(source):
                 pass
             else:
                 # Can't sort lists with None on Python 3 ...
-                self.assertNotIn(
-                    None, p1, "Bad input values for %s: %r" % (prop_name, p1)
-                )
-                self.assertNotIn(
-                    None, p2, "Bad output values for %s: %r" % (prop_name, p2)
-                )
+                self.assertNotIn(None, p1, f"Bad input values for {prop_name}: {p1!r}")
+                self.assertNotIn(None, p2, f"Bad output values for {prop_name}: {p2!r}")
                 self.assertEqual(sorted(p1), sorted(p2))
 
     test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source

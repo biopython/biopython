@@ -247,7 +247,7 @@ class TestQblast(unittest.TestCase):
                     hitlist_size=10,
                     entrez_query=entrez_filter,
                     expect=e_value,
-                    **additional_args
+                    **additional_args,
                 )
             else:
                 handle = NCBIWWW.qblast(
@@ -259,7 +259,7 @@ class TestQblast(unittest.TestCase):
                     hitlist_size=10,
                     entrez_query=entrez_filter,
                     expect=e_value,
-                    **additional_args
+                    **additional_args,
                 )
         except HTTPError:
             # e.g. a proxy error
@@ -284,7 +284,7 @@ class TestQblast(unittest.TestCase):
             self.assertIn(
                 query,
                 record.query_id.split("|"),
-                "Expected %r within query_id %r" % (query, record.query_id),
+                f"Expected {query!r} within query_id {record.query_id!r}",
             )
 
         # Check the recorded input parameters agree with those requested
