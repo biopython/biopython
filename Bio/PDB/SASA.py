@@ -90,6 +90,7 @@ class ShrakeRupley:
         :type radii_dict: dict
 
         Examples:
+
         >>> sr = ShrakeRupley()
         >>> sr = ShrakeRupley(n_points=960)
         >>> sr = ShrakeRupley(radii_dict={"O": 3.1415})
@@ -159,6 +160,7 @@ class ShrakeRupley:
         :type entity: Bio.PDB.Entity
 
         Example:
+
         >>> from Bio.PDB import PDBParser
         >>> p = PDBParser(QUIET=1)
         >>> struct = p.get_structure("1LCD", "PDB/1LCD.pdb")
