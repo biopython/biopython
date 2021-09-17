@@ -76,13 +76,13 @@ def page_sizes(size):
     try:
         return sizes[size]
     except KeyError:
-        raise ValueError("%s not in list of page sizes" % size) from None
+        raise ValueError(f"{size} not in list of page sizes") from None
 
 
 def _stroke_and_fill_colors(color, border):
     """Deal with  border and fill colors (PRIVATE)."""
     if not isinstance(color, colors.Color):
-        raise ValueError("Invalid color %r" % color)
+        raise ValueError(f"Invalid color {color!r}")
 
     if color == colors.white and border is None:
         # Force black border on white boxes with undefined border
@@ -91,7 +91,7 @@ def _stroke_and_fill_colors(color, border):
         strokecolor = color  # use fill color
     elif border:
         if not isinstance(border, colors.Color):
-            raise ValueError("Invalid border color %r" % border)
+            raise ValueError(f"Invalid border color {border!r}")
         strokecolor = border
     else:
         # e.g. False
@@ -131,7 +131,7 @@ def draw_box(
         strokeColor=strokecolor,
         fillColor=color,
         strokewidth=0,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -178,7 +178,7 @@ def draw_cut_corner_box(
         strokeWidth=1,
         strokeLineJoin=1,  # 1=round
         fillColor=color,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -212,7 +212,7 @@ def draw_polygon(
         strokeColor=strokecolor,
         fillColor=color,
         strokewidth=0,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -225,7 +225,7 @@ def draw_arrow(
     head_length_ratio=0.5,
     orientation="right",
     colour=None,
-    **kwargs
+    **kwargs,
 ):
     """Draw an arrow.
 
@@ -261,7 +261,7 @@ def draw_arrow(
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
     else:
         raise ValueError(
-            "Invalid orientation %r, should be 'left' or 'right'" % orientation
+            f"Invalid orientation {orientation!r}, should be 'left' or 'right'"
         )
 
     # We define boxheight and boxwidth accordingly, and calculate the shaft
@@ -304,7 +304,7 @@ def draw_arrow(
         # default is mitre/miter which can stick out too much:
         strokeLineJoin=1,  # 1=round
         fillColor=color,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -471,12 +471,12 @@ class AbstractDrawer:
         elif isinstance(pagesize, tuple):  # A tuple, so don't translate
             pass
         else:
-            raise ValueError("Page size %s not recognised" % pagesize)
+            raise ValueError(f"Page size {pagesize} not recognised")
         shortside, longside = min(pagesize), max(pagesize)
 
         orientation = orientation.lower()
         if orientation not in ("landscape", "portrait"):
-            raise ValueError("Orientation %s not recognised" % orientation)
+            raise ValueError(f"Orientation {orientation} not recognised")
         if orientation == "landscape":
             self.pagesize = (longside, shortside)
         else:
