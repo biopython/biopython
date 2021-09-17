@@ -206,6 +206,7 @@ class OrderedListElement(list):
     A, B, C, A, B, C, A, B, C ... where each set of A, B, C forms a group. This
     is then stored as [[A, B, C], [A, B, C], [A, B, C], ...]
     """
+
     def __init__(self, tag, attributes, allowed_tags, first_tag, key=None):
         """Create an OrderedListElement."""
         self.tag = tag
@@ -842,7 +843,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             allowed_tags = frozenset(keys)
             if len(keys) == 1 and keys == multiple:
                 assert not isSimpleContent
-                args = (allowed_tags, )
+                args = (allowed_tags,)
                 self.constructors[name] = (ListElement, args)
             elif len(keys) >= 1:
                 assert not isSimpleContent
@@ -920,7 +921,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                     self.constructors[name] = (OrderedListElement, args)
                     return
                 assert len(children) == 1
-            self.constructors[name] = (ListElement, (allowed_tags, ))
+            self.constructors[name] = (ListElement, (allowed_tags,))
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -962,7 +963,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         count(model)
         if len(single) == 0 and len(multiple) == 1:
             allowed_tags = frozenset(multiple)
-            self.constructors[name] = (ListElement, (allowed_tags, ))
+            self.constructors[name] = (ListElement, (allowed_tags,))
         else:
             allowed_tags = frozenset(single + multiple)
             repeated_tags = frozenset(multiple)
