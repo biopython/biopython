@@ -842,8 +842,8 @@ class DiagramTest(unittest.TestCase):
             # of ReportLab.  You need ReportLab 2.4 or later
             try:
                 url = (
-                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                    + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                    + str(feature.qualifiers["protein_id"][0])
                 )
             except KeyError:
                 url = None
@@ -949,8 +949,8 @@ class DiagramTest(unittest.TestCase):
                 # of ReportLab.  You need ReportLab 2.4 or later
                 try:
                     url = (
-                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                        + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                        + str(feature.qualifiers["protein_id"][0])
                     )
                 except KeyError:
                     url = None
