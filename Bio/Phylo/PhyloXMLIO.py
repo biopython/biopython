@@ -705,7 +705,7 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
             elem.text = _serialize(obj.value)
         return elem
 
-    wrapped.__doc__ = "Serialize a %s and its subnodes, in order." % tag
+    wrapped.__doc__ = f"Serialize a {tag} and its subnodes, in order."
     return wrapped
 
 
@@ -718,7 +718,7 @@ def _handle_simple(tag):
         elem.text = _serialize(obj)
         return elem
 
-    wrapped.__doc__ = "Serialize a simple %s node." % tag
+    wrapped.__doc__ = f"Serialize a simple {tag} node."
     return wrapped
 
 

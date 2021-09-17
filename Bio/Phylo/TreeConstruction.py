@@ -499,15 +499,13 @@ class DistanceCalculator:
                     max_score1 += self.scoring_matrix[l1, l1]
                 except IndexError:
                     raise ValueError(
-                        "Bad letter '%s' in sequence '%s' at position '%s'"
-                        % (l1, seq1.id, i)
+                        f"Bad letter '{l1}' in sequence '{seq1.id}' at position '{i}'"
                     ) from None
                 try:
                     max_score2 += self.scoring_matrix[l2, l2]
                 except IndexError:
                     raise ValueError(
-                        "Bad letter '%s' in sequence '%s' at position '%s'"
-                        % (l2, seq2.id, i)
+                        f"Bad letter '{l2}' in sequence '{seq2.id}' at position '{i}'"
                     ) from None
                 score += self.scoring_matrix[l1, l2]
             # Take the higher score if the matrix is asymmetrical
