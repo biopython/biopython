@@ -1163,7 +1163,7 @@ class Record:
             outputfile.write("\tNAME\tGWEIGHT")
             # Now add headers for data columns.
             for j in expindex:
-                outputfile.write("\t%s" % self.expid[j])
+                outputfile.write(f"\t{self.expid[j]}")
             outputfile.write("\n")
             if aid:
                 outputfile.write("AID")
@@ -1178,7 +1178,7 @@ class Record:
                 outputfile.write("\t")
             outputfile.write("\t\t")
             for j in expindex:
-                outputfile.write("\t%f" % eweight[j])
+                outputfile.write(f"\t{eweight[j]:f}")
             outputfile.write("\n")
             for i in geneindex:
                 if gid:

@@ -163,7 +163,7 @@ def __read(handle):
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
-                raise ValueError("I don't understand identification line\n%s" % line)
+                raise ValueError(f"I don't understand identification line\n{line}")
             record.name = cols[0]
             record.type = cols[1].rstrip(".")  # don't want '.'
         elif keyword == "AC":
@@ -177,17 +177,17 @@ def __read(handle):
                 # Remove last word
                 record.created = dates[0].rsplit(" ", 1)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
             if dates[1].endswith((" (DATA UPDATE)", " DATA UPDATE")):
                 # Remove last two words
                 record.data_update = dates[1].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
             if dates[2].endswith((" (INFO UPDATE)", " INFO UPDATE")):
                 # Remove last two words
                 record.info_update = dates[2].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
         elif keyword == "DE":
             record.description = value
         elif keyword == "PA":
@@ -284,7 +284,7 @@ def __read(handle):
                 elif type == "?":
                     record.dr_unknown.append((acc, name))
                 else:
-                    raise ValueError("I don't understand type flag %s" % type)
+                    raise ValueError(f"I don't understand type flag {type}")
         elif keyword == "3D":
             cols = value.split()
             for id in cols:
@@ -300,7 +300,7 @@ def __read(handle):
                 continue
             break
         else:
-            raise ValueError("Unknown keyword %s found" % keyword)
+            raise ValueError(f"Unknown keyword {keyword} found")
     else:
         return
     if not record:
