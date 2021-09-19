@@ -89,8 +89,6 @@ class ShrakeRupley:
             default ATOMIC_RADII dictionary.
         :type radii_dict: dict
 
-        Examples:
-
         >>> sr = ShrakeRupley()
         >>> sr = ShrakeRupley(n_points=960)
         >>> sr = ShrakeRupley(radii_dict={"O": 3.1415})
@@ -158,8 +156,6 @@ class ShrakeRupley:
             "S" (Structure). The ASA value of an entity is the sum of all ASA
             values of its children. Defaults to "A".
         :type entity: Bio.PDB.Entity
-
-        Example:
 
         >>> from Bio.PDB import PDBParser
         >>> p = PDBParser(QUIET=1)
