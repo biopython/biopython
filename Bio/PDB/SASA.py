@@ -162,7 +162,9 @@ class ShrakeRupley:
         Example:
 
         >>> from Bio.PDB import PDBParser
+        >>> from Bio.PDB import SASA
         >>> p = PDBParser(QUIET=1)
+        >>> # This assumes you have a local copy of 1LCD.pdb in a directory called "PDB"
         >>> struct = p.get_structure("1LCD", "PDB/1LCD.pdb")
         >>> sr = ShrakeRupley()
         >>> sr.compute(struct, level="S")
