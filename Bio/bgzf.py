@@ -568,9 +568,8 @@ class BgzfReader:
             raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
             if "b" not in fileobj.mode.lower():
-                raise ValueError("fileobj not open in binary mode")
-            else:
-                handle = fileobj
+                raise ValueError("fileobj not opened in binary mode")
+            handle = fileobj
         else:
             if "w" in mode.lower() or "a" in mode.lower():
                 raise ValueError(
@@ -776,7 +775,7 @@ class BgzfWriter:
             raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
             if "b" not in fileobj.mode.lower():
-                raise ValueError("fileobj not open in binary mode")
+                raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
