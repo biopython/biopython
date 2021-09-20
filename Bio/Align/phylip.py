@@ -31,8 +31,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 name = name.replace(char, "|")
             name = name[:_PHYLIP_ID_WIDTH]
             names.append(name)
-            if "." in record.seq:
-                raise ValueError("PHYLIP format no longer allows dots in sequence")
 
         stream = self.stream
 
@@ -101,8 +99,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             name = line[:_PHYLIP_ID_WIDTH].strip()
             seq = line[_PHYLIP_ID_WIDTH:].strip().replace(" ", "")
             names.append(name)
-            if "." in seq:
-                raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([seq])
 
     def _parse_interleaved_other_blocks(self, stream, seqs):
