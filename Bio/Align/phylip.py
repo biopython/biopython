@@ -158,7 +158,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
-
         names, seqs = self._read_file(stream)
 
         seqs = ["".join(seq) for seq in seqs]
