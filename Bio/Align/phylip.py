@@ -51,8 +51,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         # happy.
         for name, sequence in zip(names, alignment):
             stream.write(name[:_PHYLIP_ID_WIDTH].ljust(_PHYLIP_ID_WIDTH))
-            # Write the entire sequence to one line (see sequential format
-            # notes in the AlignmentIterator docstring)
+            # Write the entire sequence to one line
             stream.write(sequence)
             stream.write("\n")
 
@@ -62,8 +61,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     Record names are limited to at most 10 characters.
 
-    It only copes with interleaved phylip files!  Sequential files won't work
-    where the sequences are split over multiple lines.
+    The parser determines from the file contents if the file format is
+    sequential or interleaved, and parses the file accordingly.
 
     For more information on the file format, please see:
     http://evolution.genetics.washington.edu/phylip/doc/sequence.html
@@ -92,28 +91,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 return
             except ValueError:
                 pass
-        raise ValueError("Expected two integers in the first line, received '%s'" % line)
+        raise ValueError(
+            "Expected two integers in the first line, received '%s'" % line
+        )
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-
-        names = []
-        seqs = []
-        i = 0
-        for line in stream:
+    def _parse_interleaved_first_block(self, lines, seqs, names):
+        for line in lines:
             line = line.rstrip()
-            if not line:
-                break
-            name = line[: _PHYLIP_ID_WIDTH].strip()
-            seq = line[_PHYLIP_ID_WIDTH :].strip().replace(" ", "")
+            name = line[:_PHYLIP_ID_WIDTH].strip()
+            seq = line[_PHYLIP_ID_WIDTH:].strip().replace(" ", "")
             names.append(name)
             if "." in seq:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([seq])
-            i += 1
 
-        if i != self.number_of_seqs:
-            raise ValueError("Unexpected file format")
+    def _parse_interleaved_other_blocks(self, stream, seqs):
         i = 0
         for line in stream:
             line = line.rstrip()
@@ -127,15 +119,60 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if i != 0 and i != self.number_of_seqs:
             raise ValueError("Unexpected file format")
 
+    def _parse_sequential(self, lines, seqs, names, length):
+        for line in lines:
+            if length == 0:
+                line = line.rstrip()
+                name = line[:_PHYLIP_ID_WIDTH].strip()
+                seq = line[_PHYLIP_ID_WIDTH:].strip()
+                names.append(name)
+                seqs.append([])
+            else:
+                seq = line.strip()
+            seq = seq.replace(" ", "")
+            seqs[-1].append(seq)
+            length += len(seq)
+            if length == self.length_of_seqs:
+                length = 0
+        return length
+
+    def _read_file(self, stream):
+        names = []
+        seqs = []
+        lines = [next(stream) for i in range(self.number_of_seqs)]
+        try:
+            line = next(stream)
+        except StopIteration:
+            pass
+        else:
+            if line.rstrip():
+                # sequential file format
+                lines.append(line)
+                length = self._parse_sequential(lines, seqs, names, 0)
+                self._parse_sequential(stream, seqs, names, length)
+                return names, seqs
+        # interleaved file format
+        self._parse_interleaved_first_block(lines, seqs, names)
+        self._parse_interleaved_other_blocks(stream, seqs)
+        return names, seqs
+
+    def parse(self, stream):
+        """Parse the next alignment from the stream."""
+
+        names, seqs = self._read_file(stream)
+
         seqs = ["".join(seq) for seq in seqs]
         if len(seqs) != self.number_of_seqs:
             raise ValueError(
                 "Found %i records in this alignment, told to expect %i"
-                % (len(seqs), number_of_seqs)
+                % (len(seqs), self.number_of_seqs)
             )
         for seq in seqs:
             if len(seq) != self.length_of_seqs:
-                raise ValueError("Expected all sequences to have length %d; found %d" % (length_of_seqs, len(seq)))
+                raise ValueError(
+                    "Expected all sequences to have length %d; found %d"
+                    % (self.length_of_seqs, len(seq))
+                )
             if "." in seq:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
 

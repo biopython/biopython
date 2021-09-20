@@ -82,10 +82,10 @@ class TestPhylipIO(unittest.TestCase):
         with open(path) as handle:
             self.assertRaises(ValueError, list, PhylipIterator(handle))
 
-    def test_five_a(self):
+    def test_six(self):
         # File derived rom here:
         # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
-        path = "Phylip/five_a.dat"
+        path = "Phylip/six.dat"
         with open(path) as handle:
             list5 = list(PhylipIterator(handle))
         self.assertEqual(len(list5), 1)
@@ -107,7 +107,7 @@ class TestPhylipIO(unittest.TestCase):
         self.assertEqual(len(list(PhylipIterator(handle))), 3)
 
     def test_write_read(self):
-        path = "Phylip/five_a.dat"
+        path = "Phylip/six.dat"
         with open(path) as handle:
             list5 = list(PhylipIterator(handle))
 
