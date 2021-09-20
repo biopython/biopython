@@ -170,16 +170,16 @@ class MsfIterator(AlignmentIterator):
                         # T-COFFEE oddity, ignore this
                         name = name[:-3]
                     if name in ids:
-                        raise ValueError("Duplicated ID of %r" % name)
+                        raise ValueError(f"Duplicated ID of {name!r}")
                     if " " in name:
-                        raise NotImplementedError("Space in ID %r" % name)
+                        raise NotImplementedError(f"Space in ID {name!r}")
                     ids.append(name)
                     # Expect aln_length <= int(length.strip()), see below
                     lengths.append(int(length.strip()))
                     checks.append(int(check.strip()))
                     weights.append(float(weight.strip()))
                 else:
-                    raise ValueError("Malformed GCG MSF name line: %r" % line)
+                    raise ValueError(f"Malformed GCG MSF name line: {line!r}")
         if not line:
             raise ValueError("End of file while looking for end of header // line.")
 
@@ -265,21 +265,19 @@ class MsfIterator(AlignmentIterator):
                         # expect a line with name and a block of trailing ~ here.
                         pass
                     else:
-                        raise ValueError(
-                            "Expected sequence for %s, got: %r" % (name, line)
-                        )
+                        raise ValueError(f"Expected sequence for {name}, got: {line!r}")
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
                     seqs[idx].extend(words[1:])
                 else:
-                    raise ValueError("Expected sequence for %r, got: %r" % (name, line))
+                    raise ValueError(f"Expected sequence for {name!r}, got: {line!r}")
             # TODO - check the sequence lengths thus far are consistent
             # with blocks of 50?
             completed_length += 50
             line = handle.readline()
             if line.strip():
-                raise ValueError("Expected blank line, got: %r" % line)
+                raise ValueError(f"Expected blank line, got: {line!r}")
 
         # Skip over any whitespace at the end...
         while True:
@@ -295,7 +293,7 @@ class MsfIterator(AlignmentIterator):
                 self._header = line
                 break
             else:
-                raise ValueError("Unexpected line after GCG MSF alignment: %r" % line)
+                raise ValueError(f"Unexpected line after GCG MSF alignment: {line!r}")
 
         # Combine list of strings into single string, remap gaps
         seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
@@ -316,7 +314,7 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w})
             for (i, s, w) in zip(ids, seqs, weights)
         )
 

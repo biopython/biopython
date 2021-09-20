@@ -22,7 +22,7 @@ models:
 
 Although model testing were not exhaustive, ExonerateIO should be able to cope
 with all Exonerate models. Please file a bug report if you stumble upon an
-unparseable file.
+unparsable file.
 
 More information on Exonerate is available on its home page at
 www.ebi.ac.uk/~guy/exonerate/

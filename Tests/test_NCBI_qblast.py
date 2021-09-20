@@ -54,12 +54,12 @@ if not requires_internet.check.available:
     # we mock urlopen, so that it returns files from the blast folder
 
     def mock_response():
-        """Mimick an NCBI qblast response."""
+        """Mimic an NCBI qblast response."""
         # Each use of NCBIWWW.qblast makes two urlopen calls with different responses:
         # a. the 'wait' page, and b. the result.
-        wait = ["Blast/mock_wait.html"]  # This mimicks the 'wait' page
+        wait = ["Blast/mock_wait.html"]  # This mimics the 'wait' page
 
-        # These mimick the results. Add new mock files here, if you add more tests.
+        # These mimic the results. Add new mock files here, if you add more tests.
         # Note: The test are run in alphabetical order, so place new files at the
         # correct position.
         response_list = [
@@ -220,7 +220,7 @@ class TestQblast(unittest.TestCase):
                CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
             0.0000001,
             None,
-            {"template_type": 0, "template_length": 18, "megablast": "on",},  # noqa 231
+            {"template_type": 0, "template_length": 18, "megablast": "on"},  # noqa 231
             ["XM_635681.1", "XM_008496783.1"],
         )
 
@@ -247,7 +247,7 @@ class TestQblast(unittest.TestCase):
                     hitlist_size=10,
                     entrez_query=entrez_filter,
                     expect=e_value,
-                    **additional_args
+                    **additional_args,
                 )
             else:
                 handle = NCBIWWW.qblast(
@@ -259,7 +259,7 @@ class TestQblast(unittest.TestCase):
                     hitlist_size=10,
                     entrez_query=entrez_filter,
                     expect=e_value,
-                    **additional_args
+                    **additional_args,
                 )
         except HTTPError:
             # e.g. a proxy error
@@ -284,7 +284,7 @@ class TestQblast(unittest.TestCase):
             self.assertIn(
                 query,
                 record.query_id.split("|"),
-                "Expected %r within query_id %r" % (query, record.query_id),
+                f"Expected {query!r} within query_id {record.query_id!r}",
             )
 
         # Check the recorded input parameters agree with those requested
@@ -323,16 +323,13 @@ class TestQblast(unittest.TestCase):
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:
-                    if expected_hit == descr.accession or expected_hit in descr.title.split(
-                        None, 1
-                    )[
-                        0
-                    ].split(
-                        "|"
+                    if (
+                        expected_hit == descr.accession
+                        or expected_hit in descr.title.split(None, 1)[0].split("|")
                     ):
                         found_result = True
                         break
-            msg = "Missing all of %s in descriptions" % expected_hit
+            msg = f"Missing all of {expected_hit} in descriptions"
             self.assertTrue(found_result, msg=msg)
 
     def test_parse_qblast_ref_page(self):

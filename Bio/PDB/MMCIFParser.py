@@ -24,7 +24,7 @@ class MMCIFParser:
         """Create a PDBParser object.
 
         The mmCIF parser calls a number of standard methods in an aggregated
-        StructureBuilder object. Normally this object is instanciated by the
+        StructureBuilder object. Normally this object is instantiated by the
         MMCIParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
 
@@ -309,7 +309,7 @@ class FastMMCIFParser:
         """Create a FastMMCIFParser object.
 
         The mmCIF parser calls a number of standard methods in an aggregated
-        StructureBuilder object. Normally this object is instanciated by the
+        StructureBuilder object. Normally this object is instantiated by the
         parser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
 

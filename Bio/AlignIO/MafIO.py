@@ -35,7 +35,11 @@ A 1-column wide alignment would have ``start == end``.
 import os
 
 from itertools import islice
-from sqlite3 import dbapi2
+
+try:
+    from sqlite3 import dbapi2
+except ImportError:
+    dbapi2 = None
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -76,7 +80,7 @@ class MafWriter(SequentialAlignmentWriter):
             "%15s" % record.annotations.get("srcSize", 0),
             str(record.seq),
         ]
-        self.handle.write("%s\n" % " ".join(fields))
+        self.handle.write(f"{' '.join(fields)}\n")
 
     def write_alignment(self, alignment):
         """Write a complete alignment to a MAF block.
@@ -98,7 +102,7 @@ class MafWriter(SequentialAlignmentWriter):
         try:
             anno = " ".join(
                 [
-                    "%s=%s" % (x, y)
+                    f"{x}={y}"
                     for x, y in alignment._annotations.items()
                     if x in ("score", "pass")
                 ]
@@ -106,7 +110,7 @@ class MafWriter(SequentialAlignmentWriter):
         except AttributeError:
             anno = "score=0.00"
 
-        self.handle.write("a %s\n" % (anno,))
+        self.handle.write(f"a {anno}\n")
 
         recs_out = 0
 
@@ -231,9 +235,7 @@ def MafIterator(handle, seq_count=None):
                 annotations = []
                 records = []
             else:
-                raise ValueError(
-                    "Error parsing alignment - unexpected line:\n%s" % (line,)
-                )
+                raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         elif line.startswith("a"):
             # start a bundle of records
             in_a_bundle = True
@@ -258,6 +260,14 @@ class MafIndex:
 
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file."""
+        if dbapi2 is None:
+            # Python was compiled without sqlite3 support
+            from Bio import MissingPythonDependencyError
+
+            raise MissingPythonDependencyError(
+                "Python was compiled without the sqlite3 module"
+            )
+
         self._target_seqname = target_seqname
         # example: Tests/MAF/ucsc_mm9_chr10.mafindex
         self._index_filename = sqlite_file
@@ -315,8 +325,7 @@ class MafIndex:
             if tmp_mafpath != os.path.abspath(self._maf_file):
                 # Original and given absolute paths differ.
                 raise ValueError(
-                    "Index uses a different file (%s != %s)"
-                    % (filename, self._maf_file)
+                    f"Index uses a different file ({filename} != {self._maf_file})"
                 )
 
             db_target = self._con.execute(
@@ -348,22 +357,22 @@ class MafIndex:
             return records_found
 
         except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
-            raise ValueError("Problem with SQLite database: %s" % err) from None
+            raise ValueError(f"Problem with SQLite database: {err}") from None
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index (PRIVATE)."""
         # make the tables
         self._con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('version', %s);"
-            % MAFINDEX_VERSION
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("version", MAFINDEX_VERSION),
         )
         self._con.execute(
             "INSERT INTO meta_data (key, value) VALUES ('record_count', -1);"
         )
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');"
-            % (self._target_seqname,)
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("target_seqname", self._target_seqname),
         )
         # Determine whether to store maf file as relative to the index or absolute
         # See https://github.com/biopython/biopython/pull/381
@@ -391,7 +400,8 @@ class MafIndex:
             # example: /home/bli/src/biopython/Tests/MAF/ucsc_mm9_chr10.maf
             mafpath = os.path.abspath(self._maf_file)
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (mafpath,)
+            "INSERT INTO meta_data (key, value) VALUES (?, ?);",
+            ("filename", mafpath),
         )
         self._con.execute(
             "CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);"
@@ -424,8 +434,7 @@ class MafIndex:
         self._con.execute("CREATE INDEX IF NOT EXISTS end_index ON offset_data(end);")
 
         self._con.execute(
-            "UPDATE meta_data SET value = '%s' WHERE key = 'record_count'"
-            % (insert_count,)
+            f"UPDATE meta_data SET value = '{insert_count}' WHERE key = 'record_count'"
         )
 
         self._con.commit()
@@ -644,7 +653,7 @@ class MafIndex:
         """
         # validate strand
         if strand not in (1, -1):
-            raise ValueError("Strand must be 1 or -1, got %s" % strand)
+            raise ValueError(f"Strand must be 1 or -1, got {strand}")
 
         # pull all alignments that span the desired intervals
         fetched = list(self.search(starts, ends))
@@ -719,7 +728,7 @@ class MafIndex:
             # https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
             else:
                 raise ValueError(
-                    "Did not find %s in alignment bundle" % (self._target_seqname,)
+                    f"Did not find {self._target_seqname} in alignment bundle"
                 )
 
             # the true, chromosome/contig/etc position in the target seqname
@@ -815,7 +824,11 @@ class MafIndex:
         for seqid, seq in subseq.items():
             seq = Seq(seq)
 
-            seq = seq if strand == ref_first_strand else seq.reverse_complement()
+            seq = (
+                seq
+                if strand == ref_first_strand
+                else seq.reverse_complement(inplace=False)
+            )  # TODO: remove inplace=False
 
             result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
 

@@ -163,7 +163,7 @@ def __read(handle):
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
-                raise ValueError("I don't understand identification line\n%s" % line)
+                raise ValueError(f"I don't understand identification line\n{line}")
             record.name = cols[0]
             record.type = cols[1].rstrip(".")  # don't want '.'
         elif keyword == "AC":
@@ -177,17 +177,17 @@ def __read(handle):
                 # Remove last word
                 record.created = dates[0].rsplit(" ", 1)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
             if dates[1].endswith((" (DATA UPDATE)", " DATA UPDATE")):
                 # Remove last two words
                 record.data_update = dates[1].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
             if dates[2].endswith((" (INFO UPDATE)", " INFO UPDATE")):
                 # Remove last two words
                 record.info_update = dates[2].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
+                raise ValueError(f"I don't understand date line\n{line}")
         elif keyword == "DE":
             record.description = value
         elif keyword == "PA":
@@ -203,7 +203,7 @@ def __read(handle):
             for col in cols:
                 if not col:
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
+                qual, data = (word.lstrip() for word in col.split("="))
                 if qual == "/RELEASE":
                     release, seqs = data.split(",")
                     record.nr_sp_release = release
@@ -215,9 +215,7 @@ def __read(handle):
                 elif qual in ["/TOTAL", "/POSITIVE", "/UNKNOWN", "/FALSE_POS"]:
                     m = re.match(r"(\d+)\((\d+)\)", data)
                     if not m:
-                        raise Exception(
-                            "Broken data %s in comment line\n%r" % (data, line)
-                        )
+                        raise Exception(f"Broken data {data} in comment line\n{line!r}")
                     hits = tuple(map(int, m.groups()))
                     if qual == "/TOTAL":
                         record.nr_total = hits
@@ -228,9 +226,7 @@ def __read(handle):
                     elif qual == "/FALSE_POS":
                         record.nr_false_pos = hits
                 else:
-                    raise ValueError(
-                        "Unknown qual %s in comment line\n%r" % (qual, line)
-                    )
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
         elif keyword == "CC":
             # Expect CC lines like this:
             # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
@@ -247,7 +243,7 @@ def __read(handle):
                     # For example, from Bug 2403, in PS50293 have:
                     # CC /AUTHOR=K_Hofmann; N_Hulo
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
+                qual, data = (word.lstrip() for word in col.split("="))
                 if qual == "/TAXO-RANGE":
                     record.cc_taxo_range = data
                 elif qual == "/MAX-REPEAT":
@@ -270,15 +266,13 @@ def __read(handle):
                 elif qual == "/VERSION":
                     record.cc_version = data
                 else:
-                    raise ValueError(
-                        "Unknown qual %s in comment line\n%r" % (qual, line)
-                    )
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
         elif keyword == "DR":
             refs = value.split(";")
             for ref in refs:
                 if not ref:
                     continue
-                acc, name, type = [word.strip() for word in ref.split(",")]
+                acc, name, type = (word.strip() for word in ref.split(","))
                 if type == "T":
                     record.dr_positive.append((acc, name))
                 elif type == "F":
@@ -290,7 +284,7 @@ def __read(handle):
                 elif type == "?":
                     record.dr_unknown.append((acc, name))
                 else:
-                    raise ValueError("I don't understand type flag %s" % type)
+                    raise ValueError(f"I don't understand type flag {type}")
         elif keyword == "3D":
             cols = value.split()
             for id in cols:
@@ -306,7 +300,7 @@ def __read(handle):
                 continue
             break
         else:
-            raise ValueError("Unknown keyword %s found" % keyword)
+            raise ValueError(f"Unknown keyword {keyword} found")
     else:
         return
     if not record:

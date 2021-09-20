@@ -37,15 +37,15 @@ class SearchTestBaseClass(unittest.TestCase):
             if attr in ("_hit", "_query") and (val_a is not None and val_b is not None):
                 # compare seq directly if it's a contiguous hsp
                 if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
-                    msg = "Comparing attribute %s" % attr
+                    msg = f"Comparing attribute {attr}"
                     self.assertEqual(str(val_a.seq), str(val_b.seq), msg=msg)
                 elif isinstance(val_a, list) and isinstance(val_b, list):
                     for seq_a, seq_b in zip(val_a, val_b):
-                        msg = "Comparing attribute %s" % attr
+                        msg = f"Comparing attribute {attr}"
                         self.assertEqual(str(seq_a.seq), str(seq_b.seq), msg=msg)
             else:
                 self.assertIsInstance(val_b, type(val_a))
-                msg = "Comparing attribute %s" % attr
+                msg = f"Comparing attribute {attr}"
                 self.assertEqual(val_a, val_b)
 
     def compare_search_obj(self, obj_a, obj_b):
@@ -60,7 +60,7 @@ class SearchTestBaseClass(unittest.TestCase):
         # compare objects recursively if it's not an HSPFragment
         if not isinstance(obj_a, SearchIO.HSPFragment):
             # check the number of hits contained
-            msg = "comparing %r vs %r" % (obj_a, obj_b)
+            msg = f"comparing {obj_a!r} vs {obj_b!r}"
             self.assertEqual(len(obj_a), len(obj_b), msg=msg)
 
             for item_a, item_b in zip(obj_a, obj_b):
@@ -79,7 +79,7 @@ class CheckRaw(unittest.TestCase):
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)
-        self.assertIsInstance(new, bytes, "Didn't get bytes from %s get_raw" % self.fmt)
+        self.assertIsInstance(new, bytes, f"Didn't get bytes from {self.fmt} get_raw")
         self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
         idx.close()
 
@@ -88,14 +88,14 @@ class CheckRaw(unittest.TestCase):
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             new = idx.get_raw(id)
             self.assertIsInstance(
-                new, bytes, "Didn't get bytes from %s get_raw" % self.fmt
+                new, bytes, f"Didn't get bytes from {self.fmt} get_raw"
             )
             self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
             # Do the tests again with the BGZF compressed file
-            print("[BONUS %s.bgz]" % filename)
+            print(f"[BONUS {filename}.bgz]")
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
@@ -145,7 +145,7 @@ class CheckIndex(SearchTestBaseClass):
 
         if os.path.isfile(filename + ".bgz"):
             # Do the tests again with the BGZF compressed file
-            print("[BONUS %s.bgz]" % filename)
+            print(f"[BONUS {filename}.bgz]")
             self.check_index(filename + ".bgz", format, **kwargs)
 
 

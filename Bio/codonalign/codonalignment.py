@@ -65,7 +65,7 @@ class CodonAlignment(MultipleSeqAlignment):
         rows = len(self._records)
         lines = [
             "CodonAlignment with %i rows and %i columns (%i codons)"
-            % (rows, self.get_alignment_length(), self.get_aln_length(),)
+            % (rows, self.get_alignment_length(), self.get_aln_length())
         ]
 
         if rows <= 60:

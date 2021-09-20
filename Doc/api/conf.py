@@ -114,9 +114,7 @@ autodoc_default_options = {
 autodoc_preserve_defaults = True
 
 # To avoid import errors.
-autodoc_mock_imports = ["MySQLdb", "Bio.Restriction.Restriction"]
-if version > "1.77":
-    autodoc_mock_imports.append("Bio.Alphabet")
+autodoc_mock_imports = ["MySQLdb"]
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -305,7 +303,19 @@ def run_apidoc(_):
     # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
     tmp_path = tempfile.mkdtemp()
     apidoc_main(["-e", "-F", "-o", tmp_path, "../../BioSQL"])
-    apidoc_main(["-e", "-F", "-o", tmp_path, "../../Bio"])
+    apidoc_main(
+        [
+            "-e",
+            "-F",
+            "-o",
+            tmp_path,
+            # The input path:
+            "../../Bio",
+            # These are patterns to exclude:
+            "../../Bio/Alphabet/",
+            "../../Bio/Restriction/Restriction.py",
+        ]
+    )
     os.remove(os.path.join(tmp_path, "index.rst"))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):

@@ -274,7 +274,7 @@ def open(filename, mode="rb"):
     elif "w" in mode.lower() or "a" in mode.lower():
         return BgzfWriter(filename, mode)
     else:
-        raise ValueError("Bad mode %r" % mode)
+        raise ValueError(f"Bad mode {mode!r}")
 
 
 def make_virtual_offset(block_start_offset, within_block_offset):
@@ -481,7 +481,7 @@ def _load_bgzf_block(handle, text_mode=False):
     else:
         crc = struct.pack("<I", crc)
     if expected_crc != crc:
-        raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
+        raise RuntimeError(f"CRC is {crc}, not {expected_crc}")
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         # (i.e. ASCII), but critically is a single byte encoding
@@ -565,7 +565,7 @@ class BgzfReader:
         # treat the contents as either text or binary (unicode or
         # bytes under Python 3)
         if filename and fileobj:
-            raise AttributeError("Both filename and fileobj are defined")
+            raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
             if "b" not in fileobj.mode.lower():
                 raise ValueError("fileobj not open in binary mode")
@@ -606,7 +606,7 @@ class BgzfReader:
             return
         # Must hit the disk... first check cache limits,
         while len(self._buffers) >= self.max_cache:
-            # TODO - Implemente LRU cache removal?
+            # TODO - Implement LRU cache removal?
             self._buffers.popitem()
         # Now load the block
         handle = self._handle
@@ -773,14 +773,14 @@ class BgzfWriter:
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
         """Initilize the class."""
         if filename and fileobj:
-            raise AttributeError("Both filename and fileobj are defined")
+            raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
             if "b" not in fileobj.mode.lower():
                 raise ValueError("fileobj not open in binary mode")
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
-                raise ValueError("Must use write or append mode, not %r" % mode)
+                raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
                 raise NotImplementedError("Append mode is not implemented yet")
                 # handle = _open(filename, "ab")

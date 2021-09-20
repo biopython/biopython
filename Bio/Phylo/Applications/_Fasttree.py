@@ -514,7 +514,7 @@ class FastTreeCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-constraintWeight", "constraintWeight"],
-                """Weight strength of contraints in topology searching.
+                """Weight strength of constraints in topology searching.
 
                     Constrained topology search options:
                     -constraintWeight -- how strongly to weight the constraints. A value of 1

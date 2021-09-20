@@ -77,7 +77,7 @@ class TestUAN(unittest.TestCase):
                 region = int(fields[-1])
                 self.test_annotations[current_name]["region"] = region
             elif "XY" in line:
-                x, y = [int(v) for v in fields[-1].split("_")]
+                x, y = (int(v) for v in fields[-1].split("_"))
                 self.test_annotations[current_name]["coords"] = (x, y)
 
     def test_time(self):
@@ -116,7 +116,7 @@ class TestErrors(unittest.TestCase):
             records = list(SeqIO.parse(BytesIO(header), "sff"))
         err = str(cm.exception)
         if isinstance(msg, (tuple, list)):
-            self.assertIn(err, msg, "Unexpected error: %s" % err)
+            self.assertIn(err, msg, f"Unexpected error: {err}")
         else:
             self.assertEqual(err, msg)
 

@@ -57,7 +57,7 @@ class Yn00(Paml):
                     # to write it in the control file; it's normally just
                     # commented out.
                     continue
-                ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+                ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the yn00 instance."""

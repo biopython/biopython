@@ -84,7 +84,7 @@ class InterproscanXmlParser:
                     else:
                         hit_list.append(hit_new)
 
-                # create qresult and assing attributes
+                # create qresult and assign attributes
                 qresult = QueryResult(hit_list, query_id)
                 setattr(qresult, "description", query_desc)
                 for key, value in self._meta.items():

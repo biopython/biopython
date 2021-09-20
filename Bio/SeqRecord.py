@@ -11,6 +11,7 @@
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
 from io import StringIO
+import numbers
 
 from Bio import StreamModeError
 from Bio.Seq import UndefinedSequenceError
@@ -213,7 +214,7 @@ class SeqRecord:
         if annotations is None:
             annotations = {}
         elif not isinstance(annotations, dict):
-            raise TypeError("annotations argument should be a dict")
+            raise TypeError("annotations argument must be a dict or None")
         self.annotations = annotations
 
         if letter_annotations is None:
@@ -444,7 +445,7 @@ class SeqRecord:
         >>> rec.seq[5]
         'K'
         """
-        if isinstance(index, int):
+        if isinstance(index, numbers.Integral):
             # NOTE - The sequence level annotation like the id, name, etc
             # do not really apply to a single character.  However, should
             # we try and expose any per-letter-annotation here?  If so how?
@@ -619,7 +620,7 @@ class SeqRecord:
         Number of features: 0
         Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
-        In this example you don't actually need to call str explicity, as the
+        In this example you don't actually need to call str explicitly, as the
         print command does this automatically:
 
         >>> print(record)
@@ -1204,18 +1205,17 @@ class SeqRecord:
         if "protein" in self.annotations.get("molecule_type", ""):
             raise ValueError("Proteins do not have complements!")
         if "RNA" in self.annotations.get("molecule_type", ""):
-            if isinstance(self.seq, MutableSeq):
-                # Does not currently have reverse_complement_rna method:
-                answer = SeqRecord(Seq(self.seq).reverse_complement_rna())
-            else:
-                answer = SeqRecord(self.seq.reverse_complement_rna())
+            seq = self.seq.reverse_complement_rna(
+                inplace=False
+            )  # TODO: remove inplace=False
         else:
-            # Default to DNA
-            if isinstance(self.seq, MutableSeq):
-                # Currently the MutableSeq reverse complement is in situ
-                answer = SeqRecord(Seq(self.seq).reverse_complement())
-            else:
-                answer = SeqRecord(self.seq.reverse_complement())
+            # Default to DNA)
+            seq = self.seq.reverse_complement(
+                inplace=False
+            )  # TODO: remove inplace=False
+        if isinstance(self.seq, MutableSeq):
+            seq = Seq(seq)
+        answer = SeqRecord(seq)
         if isinstance(id, str):
             answer.id = id
         elif id:
@@ -1348,7 +1348,7 @@ class SeqRecord:
             answer.features = features
         elif features:
             # Does not make sense to copy old features as locations wrong
-            raise TypeError("Unexpected features argument %r" % features)
+            raise TypeError(f"Unexpected features argument {features!r}")
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
@@ -1361,7 +1361,7 @@ class SeqRecord:
         elif letter_annotations:
             # Does not make sense to copy these as length now wrong
             raise TypeError(
-                "Unexpected letter_annotations argument %r" % letter_annotations
+                f"Unexpected letter_annotations argument {letter_annotations!r}"
             )
         return answer
 

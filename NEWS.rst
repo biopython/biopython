@@ -11,19 +11,39 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
-Add tests for ``UniprotIO.Parser`` qualifiers "description", "evidence" and
-"status" information for sequence features as ``SeqFeature`` qualifiers.
+This release of Biopython supports Python 3.7, 3.8 and 3.9. It has also been
+tested on PyPy3.7 v7.3.5.
+
+Because dict retains the item order by default since Python3.6, all instances
+of ``collections.OrderedDict`` have been replaced by either standard ``dict``
+or where appropriate by ``collections.defaultsdict``.
+
+The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
+string array since the JASPAR 2018 release.
+
+The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
+base 4 log instead of 2 as stated in the original reference Konopka (2005),
+Sequence Complexity and Composition. https://doi.org/10.1038/npg.els.0005260
+
+The experimental warning was dropped from ``Bio.phenotype`` (which was new in
+Biopython 1.67).
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-Fixed typos of triple underscore.
-
+- Aziz Khan
 - Chenghao Zhu
+- Damien Goutte-Gattat
 - Fabian Egli
+- Sebastian Bassi
+- Michiel de Hoon
+- Peter Cock
 
 3 June 2021: Biopython 1.79
-================================
+===========================
 
 This is intended to be our final release supporting Python 3.6. It also
 supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.
@@ -74,7 +94,7 @@ an ASCII encoding. Alternatively, a ``bytes`` or ``bytearray`` object can be
 used, or an instance of any class inheriting from the new
 ``SequenceDataAbstractBaseClass`` abstract base class in ``Bio.Seq``. This
 requires that the class implements the ``__len__`` and ``__getitem`` methods
-that return the sequence length and sequence contents on demand. Initialzing a
+that return the sequence length and sequence contents on demand. Initializing a
 ``Seq`` instance using an instance of a class inheriting from
 ``SequenceDataAbstractBaseClass`` allows the ``Seq`` object to be lazy, meaning
 that its sequence is provided on demand only, without requiring to initialize
@@ -575,7 +595,7 @@ Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
 SeqIO.write (especially when used in a for loop).
 
 The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
-inclusive end co-ordinates to better handle searches at end points. This
+inclusive end coordinates to better handle searches at end points. This
 will require you to rebuild any existing MAF index files.
 
 In this release more of our code is now explicitly available under either our
@@ -1599,7 +1619,7 @@ The installation setup.py now supports 'install_requires' when setuptools
 is installed. This avoids the manual dialog when installing Biopython via
 easy_install or pip and numpy is not installed. It also allows user libraries
 that require Biopython to include it in their install_requires and get
-automatical installation of dependencies.
+automatic installation of dependencies.
 
 Bio.Graphics.BasicChromosome has been extended to allow simple sub-features to
 be drawn on chromosome segments, suitable to show the position of genes, SNPs
@@ -2668,7 +2688,7 @@ Oct 9, 2003: Biopython 1.22
 - Does not install Bio.Cluster without Numeric.
 - Distribute EUtils DTDs.
 - Yves Bastide patched NCBIStandalone.Iterator to be Python 2.0 iterator
-- Ashleigh's string coersion fixes in Clustalw.
+- Ashleigh's string coercion fixes in Clustalw.
 - Yair Benita added precision to the protein molecular weights.
 - Bartek updated AlignAce.Parser and added Motif.sim method
 - bug fixes in Michiel De Hoon's clustering library

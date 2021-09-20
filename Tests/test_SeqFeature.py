@@ -257,12 +257,12 @@ class TestExtract(unittest.TestCase):
         parent_record = SeqRecord.SeqRecord(seq=Seq.Seq("actg"))
         another_record = SeqRecord.SeqRecord(seq=Seq.Seq("gtcagctac"))
         location = FeatureLocation(5, 8, ref="ANOTHER.7")
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
         ):
             location.extract(parent_record)
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), not found in references",
         ):
@@ -289,12 +289,12 @@ class TestExtract(unittest.TestCase):
         parent_record = SeqRecord.SeqRecord(Seq.Seq("aaccaaccaaccaaccaa"))
         another_record = SeqRecord.SeqRecord(Seq.Seq("ttggttggttggttggtt"))
         location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
         ):
             location.extract(parent_record)
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), not found in references",
         ):

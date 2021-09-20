@@ -144,7 +144,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertEqual(get_base_url(parsed), URL_HEAD + "ecitmatch.cgi")
         query.pop("bdata")  # TODO
         self.assertDictEqual(
-            query, {"retmode": ["xml"], "db": [variables["db"]], **QUERY_DEFAULTS},
+            query, {"retmode": ["xml"], "db": [variables["db"]], **QUERY_DEFAULTS}
         )
 
     def test_construct_cgi_einfo(self):
@@ -170,7 +170,7 @@ class TestURLConstruction(unittest.TestCase):
 
         self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
         self.assertDictEqual(
-            query, {"db": [variables["db"]], "id": [variables["id"]], **QUERY_DEFAULTS},
+            query, {"db": [variables["db"]], "id": [variables["id"]], **QUERY_DEFAULTS}
         )
 
     def test_construct_cgi_epost2(self):
@@ -185,9 +185,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertEqual(result_url, URL_HEAD + "epost.fcgi")  # Params in POST data
         # Compare IDs up to reordering:
         self.assertCountEqual(query.pop("id"), variables["id"])
-        self.assertDictEqual(
-            query, {"db": [variables["db"]], **QUERY_DEFAULTS},
-        )
+        self.assertDictEqual(query, {"db": [variables["db"]], **QUERY_DEFAULTS})
 
     def test_construct_cgi_elink1(self):
         variables = {
@@ -320,10 +318,10 @@ class CustomDirectoryTest(unittest.TestCase):
 
         # Confirm that the two temp directories are named what we want.
         self.assertEqual(
-            handler.local_dtd_dir, os.path.join(tmpdir, "Bio", "Entrez", "DTDs"),
+            handler.local_dtd_dir, os.path.join(tmpdir, "Bio", "Entrez", "DTDs")
         )
         self.assertEqual(
-            handler.local_xsd_dir, os.path.join(tmpdir, "Bio", "Entrez", "XSDs"),
+            handler.local_xsd_dir, os.path.join(tmpdir, "Bio", "Entrez", "XSDs")
         )
 
         # And that they were created.

@@ -9,6 +9,11 @@ and confirms they are consistent using our different parsers.
 """
 import unittest
 
+try:
+    import numpy
+except ImportError:
+    numpy = None
+
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
@@ -217,6 +222,10 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual("BC", self.record[1:3].seq)
         with self.assertRaises(ValueError):
             c = self.record["a"].seq
+        if numpy is not None:
+            start, stop = numpy.array([1, 3])  # numpy integers
+            self.assertEqual("B", self.record[start])
+            self.assertEqual("BC", self.record[start:stop].seq)
 
     def test_slice_variants(self):
         """Simple slices using different start/end values."""

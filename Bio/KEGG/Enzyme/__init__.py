@@ -35,7 +35,7 @@ class Record:
     """Holds info from a KEGG Enzyme record.
 
     Attributes:
-     - entry       The EC number (withou the 'EC ').
+     - entry       The EC number (without the 'EC ').
      - name        A list of the enzyme names.
      - classname   A list of the classification terms.
      - sysname     The systematic name of the enzyme.

@@ -44,7 +44,7 @@ def AtomIterator(pdb_id, structure):
     module may be used by SeqIO modules wishing to parse sequences from lists
     of residues.
 
-    Calling funtions must pass a Bio.PDB.Structure.Structure object.
+    Calling functions must pass a Bio.PDB.Structure.Structure object.
 
 
     See Bio.SeqIO.PdbIO.PdbAtomIterator and Bio.SeqIO.PdbIO.CifAtomIterator for
@@ -92,7 +92,7 @@ def AtomIterator(pdb_id, structure):
         else:
             # No gaps
             res_out = [_res2aacode(x) for x in residues]
-        record_id = "%s:%s" % (pdb_id, chn_id)
+        record_id = f"{pdb_id}:{chn_id}"
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)
         # if len(structure) > 1 :
@@ -228,17 +228,13 @@ class PdbSeqresIterator(SequenceIterator):
             record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
-                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-                record.description = "%s:%s %s" % (
-                    m["database"],
-                    m["db_acc"],
-                    m["db_id_code"],
-                )
+                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
                 for melem in metadata[chn_id]:
                     record.dbxrefs.extend(
                         [
-                            "%s:%s" % (melem["database"], melem["db_acc"]),
-                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                            f"{melem['database']}:{melem['db_acc']}",
+                            f"{melem['database']}:{melem['db_id_code']}",
                         ]
                     )
             else:
@@ -432,17 +428,13 @@ def CifSeqresIterator(source):
         record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = "%s:%s %s" % (
-                m["database"],
-                m["db_acc"],
-                m["db_id_code"],
-            )
+            record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+            record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend(
                     [
-                        "%s:%s" % (melem["database"], melem["db_acc"]),
-                        "%s:%s" % (melem["database"], melem["db_id_code"]),
+                        f"{melem['database']}:{melem['db_acc']}",
+                        f"{melem['database']}:{melem['db_id_code']}",
                     ]
                 )
         else:

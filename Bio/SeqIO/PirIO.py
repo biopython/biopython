@@ -171,7 +171,7 @@ class PirIterator(SequenceIterator):
 
             # Return the record and then continue...
             record = SeqRecord(
-                Seq(seq[:-1]), id=identifier, name=identifier, description=description,
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description
             )
             record.annotations["PIR-type"] = pir_type
             if _pir_mol_type[pir_type]:
@@ -269,7 +269,7 @@ class PirWriter(SequenceWriter):
         assert "\n" not in title
         assert "\r" not in description
 
-        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+        self.handle.write(f">{code};{title}\n{description}\n")
 
         data = _get_seq_string(record)  # Catches sequence being None
 

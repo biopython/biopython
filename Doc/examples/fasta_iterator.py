@@ -18,7 +18,7 @@ def extract_organisms(file_to_parse, fmt):
 
         all_species.add(new_species)
 
-    # sorting the species wil convert the set to a list
+    # sorting the species will convert the set to a list
     all_species = sorted(all_species)
 
     return all_species

@@ -136,14 +136,14 @@ class SamtoolsTestCase(unittest.TestCase):
         stdout_bam, stderr_bam = cmdline()
         self.assertTrue(
             stderr_bam.startswith(""),
-            "SAM file viewing failed: \n%s\nStdout:%s" % (cmdline, stdout_bam),
+            f"SAM file viewing failed: \n{cmdline}\nStdout:{stdout_bam}",
         )
         cmdline.set_parameter("input_file", self.samfile1)
         cmdline.set_parameter("S", True)
         stdout_sam, stderr_sam = cmdline()
         self.assertTrue(
             stdout_sam.startswith("HWI-1KL120:88:D0LRBACXX:1:1101:1780:2146"),
-            "SAM file  viewing failed:\n%s\nStderr:%s" % (cmdline, stderr_sam),
+            f"SAM file  viewing failed:\n{cmdline}\nStderr:{stderr_sam}",
         )
 
     def create_fasta_index(self):
@@ -162,9 +162,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
-        self.assertFalse(
-            stderr, "Samtools faidx failed:\n%s\nStderr:%s" % (cmdline, stderr)
-        )
+        self.assertFalse(stderr, f"Samtools faidx failed:\n{cmdline}\nStderr:{stderr}")
         self.assertTrue(os.path.isfile(self.referenceindexfile))
 
     def test_calmd(self):
@@ -180,7 +178,7 @@ class SamtoolsTestCase(unittest.TestCase):
             # print("exists")
             stderr_calmd_expected = ""
         else:
-            # print("doesnt exist")
+            # print("doesn't exist")
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
         stdout, stderr = cmdline()
         self.assertEqual(stderr, stderr_calmd_expected)
@@ -217,17 +215,13 @@ class SamtoolsTestCase(unittest.TestCase):
                     raise
             else:
                 raise
-        self.assertFalse(
-            stderr, "Samtools sort failed:\n%s\nStderr:%s" % (cmdline, stderr)
-        )
+        self.assertFalse(stderr, f"Samtools sort failed:\n{cmdline}\nStderr:{stderr}")
 
     def test_index(self):
         cmdline = SamtoolsIndexCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
-        self.assertFalse(
-            stderr, "Samtools index failed:\n%s\nStderr:%s" % (cmdline, stderr)
-        )
+        self.assertFalse(stderr, f"Samtools index failed:\n{cmdline}\nStderr:{stderr}")
         self.assertTrue(os.path.exists(self.bamindexfile1))
 
     def test_idxstats(self):
@@ -236,7 +230,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input_bam", self.bamfile1)
         stdout, stderr = cmdline()
         self.assertFalse(
-            stderr, "Samtools idxstats failed:\n%s\nStderr:%s" % (cmdline, stderr)
+            stderr, f"Samtools idxstats failed:\n{cmdline}\nStderr:{stderr}"
         )
 
     def test_merge(self):
@@ -249,7 +243,7 @@ class SamtoolsTestCase(unittest.TestCase):
         # but as of v1.3 expect a warning: [W::bam_merge_core2] No @HD tag found.
         self.assertTrue(
             not stderr or stderr.strip() == "[W::bam_merge_core2] No @HD tag found.",
-            "Samtools merge failed:\n%s\nStderr:%s" % (cmdline, stderr),
+            f"Samtools merge failed:\n{cmdline}\nStderr:{stderr}",
         )
         self.assertTrue(os.path.exists(self.outbamfile))
 

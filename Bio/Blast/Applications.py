@@ -126,7 +126,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." % (a, b))
+                        raise ValueError(f"Options {a} and {b} are incompatible.")
 
 
 class _NcbiblastCommandline(_NcbibaseblastCommandline):
@@ -1573,7 +1573,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." % (a, b))
+                        raise ValueError(f"Options {a} and {b} are incompatible.")
 
         if self.mask_id and not self.mask_data:
             raise ValueError("Option mask_id requires mask_data to be set.")

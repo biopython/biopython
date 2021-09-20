@@ -27,7 +27,7 @@ particular prokaryotic genomes, either as linear diagrams (optionally broken up 
 fragments to fit better) or as circular wheel diagrams.  Have a look at Figure 2 in
 Toth \textit{et al.} (2006) \cite{toth2006}
 for a good example. It proved also well suited to drawing quite detailed figures for
-smaller genomes such as phage, plasmids or mitochrondia, for example see Figures 1
+smaller genomes such as phage, plasmids or mitochondria, for example see Figures 1
 and 2 in Van der Auwera \textit{et al.} (2009) \cite{vanderauwera2009}
 (shown with additional manual editing).
 
@@ -470,7 +470,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red", arrowhead_length
 \end{figure}
 \end{latexonly}
 
-Biopython 1.61 adds a new \verb|BIGARROW| sigil which always stradles
+Biopython 1.61 adds a new \verb|BIGARROW| sigil which always straddles
 the axis, pointing left for the reverse strand or right otherwise:
 
 \begin{minted}{python}
@@ -837,7 +837,7 @@ def get_feature(features, id, tags=["locus_tag", "gene"]):
 \end{minted}
 
 We can now turn those list of identifier pairs into SeqFeature pairs, and thus
-find their location co-ordinates. We can now add all that code and the following
+find their location coordinates. We can now add all that code and the following
 snippet to the previous example (just before the \verb|gd_diagram.draw(...)|
 line -- see the finished example script
 \href{https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py}{Proux\_et\_al\_2002\_Figure\_6.py}
@@ -872,12 +872,12 @@ for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [
 
 There are several important pieces to this code. First the \verb|GenomeDiagram| object
 has a \verb|cross_track_links| attribute which is just a list of \verb|CrossLink| objects.
-Each \verb|CrossLink| object takes two sets of track-specific co-ordinates (here given
+Each \verb|CrossLink| object takes two sets of track-specific coordinates (here given
 as tuples, you can alternatively use a \verb|GenomeDiagram.Feature| object instead).
-You can optionally supply a colour, border color, and say if this link should be drawn
+You can optionally supply a color, border color, and say if this link should be drawn
 flipped (useful for showing inversions).
 
-You can also see how we turn the BLAST percentage identity score into a colour,
+You can also see how we turn the BLAST percentage identity score into a color,
 interpolating between white ($0\%$) and a dark red ($100\%$). In this example
 we don't have any problems with overlapping cross-links. One way to tackle that
 is to use transparency in ReportLab, by using colors with their alpha channel set.

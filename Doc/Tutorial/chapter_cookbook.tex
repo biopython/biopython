@@ -70,7 +70,7 @@ id_file = "short_list.txt"
 output_file = "short_list.fastq"
 
 with open(id_file) as id_handle:
-    # Taking first word on each line as an identifer
+    # Taking first word on each line as an identifier
     wanted = set(line.rstrip("\n").split(None, 1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
 
@@ -87,12 +87,12 @@ if count < len(wanted):
     print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
 \end{minted}
 
-\subsection{Producing randomised genomes}
+\subsection{Producing randomized genomes}
 
 Let's suppose you are looking at genome sequence, hunting for some sequence
 feature -- maybe extreme local GC\% bias, or possible restriction digest sites.
 Once you've got your Python code working on the real genome it may be sensible
-to try running the same search on randomised versions of the same genome for
+to try running the same search on randomized versions of the same genome for
 statistical analysis (after all, any ``features'' you've found could just be
 there just by chance).
 
@@ -179,7 +179,9 @@ def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(
-        Seq("".join(nuc_list)), id=new_id, description="Based on %s" % original_rec.id,
+        Seq("".join(nuc_list)),
+        id=new_id,
+        description="Based on %s" % original_rec.id,
     )
 
 
@@ -711,7 +713,7 @@ SeqIO.convert("illumina.fastq", "fastq-illumina", "standard.fastq", "fastq")
 
 Note that using \verb|Bio.SeqIO.convert()| like this is \emph{much} faster
 than combining \verb|Bio.SeqIO.parse()| and \verb|Bio.SeqIO.write()|
-because optimised code is used for converting between FASTQ variants
+because optimized code is used for converting between FASTQ variants
 (and also for FASTQ to FASTA conversion).
 
 For good quality reads, PHRED and Solexa scores are approximately equal,
@@ -1017,7 +1019,7 @@ QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, 9264:9609
 If you comment out the sort statement, then the protein sequences will be
 shown in the same order as before, so you can check this is doing the same
 thing.  Here we have sorted them by location to make it easier to compare
-to the actual annotation in the GenBank file (as visualised in
+to the actual annotation in the GenBank file (as visualized in
 Section~\ref{sec:gd_nice_example}).
 
 If however all you want to find are the locations of the open reading frames,
@@ -1044,7 +1046,7 @@ parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
-There are lots of times when you might want to visualise the distribution of sequence
+There are lots of times when you might want to visualize the distribution of sequence
 lengths in a dataset -- for example the range of contig sizes in a genome assembly
 project.  In this example we'll reuse our orchid FASTA file
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta}
@@ -1180,7 +1182,7 @@ smoother plot than this.
 \subsection{Nucleotide dot plots}
 A dot plot is a way of visually comparing two nucleotide sequences for similarity to
 each other.  A sliding window is used to compare short sub-sequences to each other,
-often with a mis-match threshold.  Here for simplicity we'll only look for perfect
+often with a mismatch threshold.  Here for simplicity we'll only look for perfect
 matches (shown in black
 \begin{latexonly}
 in Figure~\ref{fig:nuc-dot-plot}).
@@ -1300,9 +1302,9 @@ for (seq, section_dict) in [
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}
-\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
+\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ coordinates:
 \begin{minted}{python}
-# Create lists of x and y co-ordinates for scatter plot
+# Create lists of x and y coordinates for scatter plot
 x = []
 y = []
 for section in matches:
@@ -1457,7 +1459,7 @@ You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 \subsection{Position Specific Score Matrices}
 \label{sec:pssm}
 
-Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consesus sequence, but can also be any sequence in the alignment. For instance for the alignment,
+Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consensus sequence, but can also be any sequence in the alignment. For instance for the alignment,
 
 \begin{minted}{text}
 GTATC
@@ -1534,7 +1536,7 @@ The structure of the PSSM class hopefully makes it easy both to access elements 
 
 A potentially useful measure of evolutionary conservation is the information content of a sequence.
 
-A useful introduction to information theory targeted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
+A useful introduction to information theory targeted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consensus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
 
 \begin{displaymath}
 IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
@@ -1545,12 +1547,12 @@ IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
 \begin{itemize}
   \item $IC_{j}$ -- The information content for the $j$-th column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
-  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occurred 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occurred 3 out of 6 times in an alignment column, this would be 0.5)
   \item $Q_{i}$ --  The expected frequency of a letter $i$. This is an
   optional argument, usage of which is left at the user's
   discretion. By default, it is automatically assigned to $0.05 = 1/20$ for a
   protein alphabet, and $0.25 = 1/4$ for a nucleic acid alphabet. This is for
-  geting the information content without any assumption of prior
+  getting the information content without any assumption of prior
   distributions. When assuming priors, or when using a non-standard
   alphabet, you should supply the values for $Q_{i}$.
 \end{itemize}
@@ -1695,7 +1697,7 @@ R 0.0342 0.0465 0.0166 0.0436 0.0288
 \end{minted}
 Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a single column with the values of \verb+residue_frequencies+, and \verb+residue_frequencies[None, :]+ a 2D array with these values as a single row. Taking their dot product (inner product) creates a matrix of expected frequencies where each entry consists of two \verb+residue_frequencies+ values multiplied with each other. For example, \verb+expected_frequencies['D', 'E']+ is equal to \verb+residue_frequencies['D'] * residue_frequencies['E']+.
 
-We can now calculate the log-odds matrix by dividing the observed frequencies by the expected freqencies and taking the logarithm:
+We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
 %cont-doctest
 \begin{minted}{pycon}
 >>> m = numpy.log2(observed_frequencies/expected_frequencies)

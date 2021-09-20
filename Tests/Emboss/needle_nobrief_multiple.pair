@@ -1,0 +1,119 @@
+########################################
+# Program: needle
+# Rundate: Fri 23 Jul 2021 22:45:41
+# Commandline: needle
+#    -asequence seqa.fa
+#    -bsequence seqb.fa
+#    -datafile EBLOSUM62
+#    -gapopen 10
+#    -gapextend 0.5
+#    -nobrief
+#    -outfile stdout
+# Align_format: srspair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: IXI_234
+# 2: IXI_235
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 131
+# Identity:     112/131 (85.5%)
+# Similarity:   112/131 (85.5%)
+# Gaps:          19/131 (14.5%)
+# Score: 591.5
+# Longest_Identity = 100.00%
+# Longest_Similarity = 100.00%
+# Shortest_Identity = 85.50%
+# Shortest_Similarity = 85.50%
+#
+#=======================================
+
+IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
+                     |||||||||||||||         ||||||||||||||||||||||||||
+IXI_235            1 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQAT     41
+
+IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
+                     ||||||||||||||||||||||||          ||||||||||||||||
+IXI_235           42 GGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAG     81
+
+IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
+                     |||||||||||||||||||||||||||||||
+IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: IXI_234
+# 2: IXI_236
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 131
+# Identity:     120/131 (91.6%)
+# Similarity:   120/131 (91.6%)
+# Gaps:           4/131 ( 3.1%)
+# Score: 618.0
+# Longest_Identity = 94.49%
+# Longest_Similarity = 94.49%
+# Shortest_Identity = 91.60%
+# Shortest_Similarity = 91.60%
+#
+#=======================================
+
+IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
+                     ||||||||||||||||||||||  |||||.||||.|||||||||.|||||
+IXI_236            1 TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQAT     48
+
+IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
+                     |||||||||||||||||||||||||||||||||||||||||||||||  |
+IXI_236           49 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--G     96
+
+IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
+                     |||.||||.|||||||||||||..|||||||
+IXI_236           97 SRPPRFAPPLMSSCITSTTGPPPPAGDRSHE    127
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: IXI_234
+# 2: IXI_237
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 131
+# Identity:     119/131 (90.8%)
+# Similarity:   124/131 (94.7%)
+# Gaps:           7/131 ( 5.3%)
+# Score: 609.0
+# Longest_Identity = 95.97%
+# Longest_Similarity = 100.00%
+# Shortest_Identity = 90.84%
+# Shortest_Similarity = 94.66%
+#
+#=======================================
+
+IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
+                     |||||:||||||||||||||||| |||||||||||    |||||||||||
+IXI_237            1 TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQAT     45
+
+IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
+                     ||:||||||||||||||||||||:|||||||||||||||||||||||  |
+IXI_237           46 GGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--G     93
+
+IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
+                     ||||||||||||||:||||||||:|||||||
+IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
+
+
+#---------------------------------------
+#---------------------------------------

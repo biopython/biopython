@@ -20,8 +20,8 @@ First supported in release 1.73.
 
 Python 3.6
 ----------
-Triggers a deprecation warning as of release 1.79.
-First supported in release 1.69.
+No longer supported as of Release 1.80, having triggered a deprecation
+warning as of release 1.79. First supported in release 1.69.
 
 Python 3.5
 ----------
@@ -63,11 +63,6 @@ Python 2.4
 ----------
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
-
-Python 2.3
-----------
-No longer supported as of Release 1.51, having triggered a warning with
-Release 1.50, with a mention in the release notes for Release 1.49.
 
 Jython
 ------
@@ -174,7 +169,7 @@ explicitly, for example record1.id == record2.id or record1.seq == record.seq
 Bio.Seq sequence equality
 -------------------------
 As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
-use string-like equality testing and hashing (ingoring any difference in
+use string-like equality testing and hashing (ignoring any difference in
 alphabet except to issue warnings).
 
 Prior releases used Python's object comparison. Warnings of this change
@@ -272,6 +267,13 @@ Bio.SeqFeature
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated. It was removed in Release 1.68.
 
+Note that in Release 1.80 the location_operator argument can no longer be
+used, instead do this via the CompoundLocation object.
+
+The strand, ref and ref_db arguments to the SeqFeature were deprecated in
+Release 1.80, and will later be removed. Set them via the location object
+instead.
+
 Bio.Motif
 ---------
 Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
@@ -342,9 +344,6 @@ Bio.InterPro
 This module was a parser for the EBI InterPro webpages, but no longer worked
 with their current website. Deprecated in Release 1.55, and removed in
 Release 1.58.
-
-Earlier the function ``pairlist_to_dict`` was deprecated in Release 1.45, and
-removed in Release 1.53.
 
 Bio.GenBank.LocationParser
 --------------------------
@@ -426,10 +425,6 @@ of "genbank" in EFetch.  Instead we should be using "gb" (GenBank) or "gp"
 automatically, but issues a deprecation warning. The code to check and correct
 for "genbank" was removed in Biopython 1.55 final.
 
-Bio.Entrez.query function
--------------------------
-Deprecated in Release 1.47, removed in Release 1.52.
-
 Bio.SwissProt.SProt
 -------------------
 Declared obsolete in Release 1.50, deprecated in Release 1.51, and removed in
@@ -469,11 +464,6 @@ Bio.AlignAce and Bio.MEME
 Declared obsolete in Release 1.50, deprecated in Release 1.52, and removed
 in Release 1.56. Please use Bio.Motif instead.
 
-Numeric support
----------------
-Following the Release of 1.48, Numeric support in Biopython is discontinued.
-Please move to NumPy for Biopython 1.49 or later.
-
 Bio.Seq, Bio.MutableSeq and the data property
 ---------------------------------------------
 Direct use of the Seq object (and MutableSeq object) .data property is
@@ -496,36 +486,6 @@ deprecated in Release 1.50, Bio.listfns was deprecated in Release 1.53.
 The three C implementations were all removed in Release 1.53. Bio.mathfns
 and Bio.stringfns were removed in Release 1.55. Bio.listfns was removed in
 Release 1.57.
-
-Bio.distance (and Bio.cdistance)
---------------------------------
-Bio.distance was deprecated in Release 1.49, at which point its C code
-implementation Bio.cdistance was removed (this was not intended as a public
-API). Removed in Release 1.53.
-
-Bio.Ndb
--------
-Deprecated in Release 1.49, as the website this parsed has been redesigned.
-Removed in Release 1.53.
-
-Martel
-------
-Declared obsolete in Release 1.48, deprecated in Release 1.49, and removed
-in Release 1.51.  The source code for Martel is still in our repository if
-anyone wanted to develop this outside of Biopython.
-
-Bio.Mindy and associated modules.
----------------------------------
-Declared obsolete in Release 1.48, deprecated in Release 1.49, removed in
-Release 1.51.  This includes the Bio.Writer, Bio.writers, Bio.builders,
-Bio.Std, Bio.StdHandler, Bio.Decode and Bio.DBXRef modules
-
-Bio.Fasta index_file and Dictionary
------------------------------------
-Deprecated in Release 1.44, removed in Biopython 1.46. For small to medium
-sized files, use Bio.SeqIO.to_dict() to make an in memory dictionary of
-SeqRecord objects. Biopython 1.52 onwards provides Bio.SeqIO.index()
-which is suitable even for very large files.
 
 Bio.Fasta (including Bio.Fasta.FastaAlign)
 ------------------------------------------
@@ -572,11 +532,6 @@ Declared obsolete in Release 1.48, deprecated in Release 1.51, and
 removed in Release 1.55 final. Instead, please use Bio.AlignIO or call the
 format built-in function on the Alignment object.
 
-Bio.Emboss.Primer
------------------
-Deprecated in Release 1.48, and removed in Release 1.51, this parser was
-replaced by Bio.Emboss.Primer3 and Bio.Emboss.PrimerSearch instead.
-
 Bio.Emboss.Applications
 -----------------------
 The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
@@ -587,64 +542,6 @@ EProtParsCommandline, EConsenseCommandline, and ESeqBootCommandline are
 replaced by FProtDistCommandline, FNeighborCommandline, FProtParsCommandline,
 FConsenseCommandline, and FSeqBootCommandline, respectively.
 
-Bio.MetaTool
-------------
-Deprecated in Release 1.48, and removed in Release 1.51, this was a parser
-for the output of MetaTool 3.5 which is now obsolete.
-
-Bio.GenBank
------------
-The online functionality (search_for, download_many, and NCBIDictionary) was
-declared obsolete in Release 1.48, deprecated in Release 1.50, and removed
-in Release 1.54. Please use Bio.Entrez instead.
-
-Bio.PubMed
-----------
-Declared obsolete in Release 1.48, deprecated in Release 1.49, and
-removed in Release 1.53. Please use Bio.Entrez instead.
-
-Bio.EUtils
-----------
-Deprecated in favor of Bio.Entrez in Release 1.48, removed in Release 1.52.
-
-Bio.Sequencing & Bio.Medline
-----------------------------
-A revised API was added and the old one deprecated in Release 1.48,
-and removed in Biopython 1.52:
-
-* Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
-* Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
-* Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
-* Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
-* Bio.Medline.RecordParser --> Bio.Medline.read(handle)
-* Bio.Medline.Iterator --> Bio.Medline.parse(handle)
-
-Bio.Blast.NCBIWWW
------------------
-The HTML BLAST parser was deprecated in Release 1.48, and removed in 1.52.
-The deprecated functions blast and blasturl were removed in Release 1.44.
-
-Bio.Saf
--------
-Deprecated as of Release 1.48, removed in Release 1.51.  If useful, a parser
-for this "simple alignment format" could be developed for Bio.AlignIO instead.
-
-Bio.NBRF
---------
-Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO,
-removed in Release 1.51.
-
-Bio.IntelliGenetics
--------------------
-Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO,
-removed in Release 1.51.
-
-Bio.SeqIO submodules PhylipIO, ClustalIO, NexusIO and StockholmIO
------------------------------------------------------------------
-You can still use the "phylip", "clustal", "nexus" and "stockholm" formats
-in Bio.SeqIO, however these are now supported via Bio.AlignIO, with the
-old code deprecated in Releases 1.46 or 1.47, and removed in Release 1.49.
-
 Bio.SeqIO.to_alignment()
 ------------------------
 This function was made obsolete with the introduction of Bio.AlignIO,
@@ -652,94 +549,8 @@ deprecated in Release 1.54, and removed in Release 1.58. Use either the
 Bio.AlignIO functions, or the Bio.Align.MultipleSeqAlignment class
 directly instead.
 
-Bio.ECell
----------
-Deprecated as of Release 1.47, as it appears to have no users, and the code
-does not seem relevant for ECell 3.  Removed in Release 1.49.
-
-Bio.Ais
--------
-Deprecated as of Release 1.45, removed in Release 1.49.
-
-Bio.LocusLink
--------------
-Deprecated as of Release 1.45, removed in Release 1.49.
-The NCBI's LocusLink was superseded by Entrez Gene.
-
-Bio.SGMLExtractor
------------------
-Deprecated as of Release 1.46, removed in Release 1.49.
-
-Bio.Rebase
-----------
-Deprecated as of Release 1.46, removed in Release 1.49.
-
-Bio.Gobase
-----------
-Deprecated as of Release 1.46, removed in Release 1.49.
-
-Bio.CDD
--------
-Deprecated as of Release 1.46, removed in Release 1.49.
-
-Bio.biblio
-----------
-Deprecated as of Release 1.45, removed in Release 1.48
-
-Bio.WWW
--------
-The modules under Bio.WWW were deprecated in Release 1.45, and removed in
-Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48,
-and removed in Release 1.53.
-
-The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro, Bio.WWW.ExPASy and
-Bio.WWW.NCBI is now available from Bio.SCOP, Bio.InterPro, Bio.ExPASy and
-Bio.Entrez instead.
-
-Bio.SeqIO
----------
-The old Bio.SeqIO.FASTA and Bio.SeqIO.generic were deprecated in favour of
-the new Bio.SeqIO module as of Release 1.44, removed in Release 1.47.
-
-Bio.Medline.NLMMedlineXML
--------------------------
-Deprecated in Release 1.44, removed in 1.46.
-
-Bio.MultiProc
--------------
-Deprecated in Release 1.44, removed in 1.46.
-
-Bio.MarkupEditor
-----------------
-Deprecated in Release 1.44, removed in 1.46.
-
-Bio.lcc
--------
-Deprecated in favor of Bio.SeqUtils.lcc in Release 1.44, removed in 1.46.
-
-Bio.crc
--------
-Deprecated in favor of Bio.SeqUtils.CheckSum in Release 1.44, removed in 1.46.
-
-Bio.FormatIO
-------------
-This was removed in Release 1.44 (a deprecation was not possible).
-
-Bio.expressions, Bio.config, Bio.dbdefs, Bio.formatdefs and Bio.dbdefs
-----------------------------------------------------------------------
-These were deprecated in Release 1.44, and removed in Release 1.49.
-
-Bio.Kabat
----------
-This was deprecated in Release 1.43 and removed in Release 1.44.
-
 Bio.SeqUtils
 ------------
-Functions 'complement' and 'antiparallel' in Bio.SeqUtils were deprecated
-in Release 1.31, and removed in Release 1.43.  Function 'translate' was
-deprecated in Release 1.49, and removed in Release 1.53. Use the functions
-and methods in Bio.Seq instead.
-
 Function makeTableX and classes ProteinX and MissingTable were deprecated
 in Release 1.54, and removed in Release 1.58. These were remnants of the
 removed translate function, and no longer served any useful purpose.
@@ -759,56 +570,13 @@ ideally convert your code to using an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 ------------------------------------------------------------------
-The functions ``forward_complement`` and ``antiparallel`` in ``Bio.GFF.easy``
-have been deprecated as of Release 1.31, and removed in Release 1.43.
-Use the functions ``complement`` and ``reverse_complement`` in ``Bio.Seq``
-instead.
-
 The whole of the old ``Bio.GFF`` module was deprecated in Release 1.53, and
 removed in Release 1.57 (with the intention of reusing this name space for a
 GFF parser).
 
-Bio.sequtils
-------------
-Deprecated as of Release 1.30, removed in Release 1.42. Use ``Bio.SeqUtils``
-instead.
-
-Bio.SVM
--------
-Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superseded by a
-more robust (and maintained) SVM library, which includes a python
-interface. We recommend using LIBSVM:
-
-http://www.csie.ntu.edu.tw/~cjlin/libsvm/
-
-Bio.RecordFile
---------------
-Deprecated as of Release 1.30, removed in Release 1.42.  RecordFile wasn't
-completely implemented and duplicates the work of most standard parsers.
-
-Bio.kMeans and Bio.xkMeans
---------------------------
-Deprecated as of Release 1.30, removed in Release 1.42.  Instead, please use
-the function kcluster in Bio.Cluster which performs k-means or k-medians
-clustering.
-
-Bio.SCOP
---------
-The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
-Release 1.53. The class Parser in Bio.SCOP.Dom was removed in Release 1.55
-final. The class Iterator in Bio.SCOP.Dom was removed in Release 1.56.
-
-Dictionary to_one_letter_code in module Bio.SCOP.three_to_one_dict was moved
-to protein_letters_3to1 in module Bio.Data.SCOPData in Release 1.62. The old
-alias was preserved with a deprecation warning, until it was removed in
-Release 1.66.
-
 Bio.utils
 ---------
-Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
-and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
-1.53. Function 'ungap' was deprecated in Release 1.53. Use Bio.Seq instead.
+Function 'ungap' was deprecated in Release 1.53. Use Bio.Seq instead.
 The whole of Bio.utils was declared obsolete in Release 1.55, deprecated in
 Release 1.56, and removed in Release 1.57.
 
@@ -859,8 +627,8 @@ The methods ``letter_sum`` and ``all_letters_sum`` were removed from the
 ``SeqMat`` class in Bio.SubsMat in Release 1.57.
 The methods ``print_full_mat`` and ``print_mat`` were removed from the
 `SeqMat`` class in Bio.SubsMat in Release 1.79.
-The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
-please consider using Bio.Align.substitution_matrices.
+The Bio.SubsMat module was deprecated in Release 1.78, and removed in Release
+1.80. As an alternative, please consider using Bio.Align.substitution_matrices.
 
 Bio.Align
 ---------
@@ -877,6 +645,9 @@ reversed in Release 1.79.
 
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
+
+The PairwiseAlignment class was deprecated in Release 1.80; please use the new
+Alignment class instead.
 
 Bio.Align.Generic
 -----------------

@@ -36,10 +36,10 @@ class ClustalWriter(SequentialAlignmentWriter):
             version = "1.81"
         if version.startswith("2."):
             # e.g. 2.0.x
-            output = "CLUSTAL %s multiple sequence alignment\n\n\n" % version
+            output = f"CLUSTAL {version} multiple sequence alignment\n\n\n"
         else:
             # e.g. 1.81 or 1.83
-            output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
+            output = f"CLUSTAL X ({version}) multiple sequence alignment\n\n\n"
 
         cur_char = 0
         max_length = len(alignment[0])
@@ -110,7 +110,14 @@ class ClustalIterator(AlignmentIterator):
             raise StopIteration
 
         # Whitelisted headers we know about
-        known_headers = ["CLUSTAL", "PROBCONS", "MUSCLE", "MSAPROBS", "Kalign"]
+        known_headers = [
+            "CLUSTAL",
+            "PROBCONS",
+            "MUSCLE",
+            "MSAPROBS",
+            "Kalign",
+            "Biopython",
+        ]
         if line.strip().split()[0] not in known_headers:
             raise ValueError(
                 "%s is not a known CLUSTAL header: %s"
@@ -148,7 +155,7 @@ class ClustalIterator(AlignmentIterator):
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % line)
+                    raise ValueError(f"Could not parse line:\n{line}")
 
                 ids.append(fields[0])
                 seqs.append(fields[1])
@@ -167,11 +174,11 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence number:\n%s" % line
+                            f"Could not parse line, bad sequence number:\n{line}"
                         ) from None
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
+                            f"Could not parse line, invalid sequence number:\n{line}"
                         )
             elif line[0] == " ":
                 # Sequence consensus line...
@@ -221,13 +228,13 @@ class ClustalIterator(AlignmentIterator):
 
             for i in range(len(ids)):
                 if line[0] == " ":
-                    raise ValueError("Unexpected line:\n%r" % line)
+                    raise ValueError(f"Unexpected line:\n{line!r}")
                 fields = line.rstrip().split()
 
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%r" % line)
+                    raise ValueError(f"Could not parse line:\n{line!r}")
 
                 if fields[0] != ids[i]:
                     raise ValueError(
@@ -253,11 +260,11 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence number:\n%s" % line
+                            f"Could not parse line, bad sequence number:\n{line}"
                         ) from None
                     if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
+                            f"Could not parse line, invalid sequence number:\n{line}"
                         )
 
                 # Read in the next line

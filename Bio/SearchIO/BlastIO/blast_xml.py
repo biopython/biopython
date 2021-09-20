@@ -346,7 +346,7 @@ class BlastXmlParser:
                             )
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
-                            hit.description = "%s %s" % (hit.id, hit.description)
+                            hit.description = f"{hit.id} {hit.description}"
                             hit.id = hit.blast_id
                             # and change the hit_id of the HSPs contained
                             for hsp in hit:
@@ -803,9 +803,7 @@ class BlastXmlWriter:
             except AttributeError:
                 # ensure attrs that is not present is optional
                 if elem not in _DTD_OPT:
-                    raise ValueError(
-                        "Element %r (attribute %r) not found" % (elem, attr)
-                    )
+                    raise ValueError(f"Element {elem!r} (attribute {attr!r}) not found")
             else:
                 # custom element-attribute mapping, for fallback values
                 if elem in opt_dict:
@@ -827,12 +825,10 @@ class BlastXmlWriter:
                 content = str(getattr(qresult, attr))
             except AttributeError:
                 if elem not in _DTD_OPT:
-                    raise ValueError(
-                        "Element %s (attribute %s) not found" % (elem, attr)
-                    )
+                    raise ValueError(f"Element {elem} (attribute {attr}) not found")
             else:
                 if elem == "BlastOutput_version":
-                    content = "%s %s" % (qresult.program.upper(), qresult.version)
+                    content = f"{qresult.program.upper()} {qresult.version}"
                 elif qresult.blast_id:
                     if elem == "BlastOutput_query-ID":
                         content = qresult.blast_id
@@ -931,9 +927,7 @@ class BlastXmlWriter:
                 # in the DTD
                 except AttributeError:
                     if elem not in _DTD_OPT:
-                        raise ValueError(
-                            "Element %s (attribute %s) not found" % (elem, attr)
-                        )
+                        raise ValueError(f"Element {elem} (attribute {attr}) not found")
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1

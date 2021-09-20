@@ -97,7 +97,7 @@ class Baseml(Paml):
                             % (option[1], self._options["model_options"])
                         )
                         continue
-                ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+                ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Baseml instance."""

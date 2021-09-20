@@ -9,6 +9,7 @@
 
 import unittest
 import re
+import tempfile
 import warnings
 
 try:
@@ -117,10 +118,10 @@ class Rebuild(unittest.TestCase):
                     ric.set_angle("psi", nv)
                     nvpsi[str(r)] = nv
         mdl.internal_to_atom_coordinates()
-        sf = StringIO()
-        write_PDB(self.pdb_1LCD, sf)
-        sf.seek(0)
-        new_1LCD = self.PDB_parser.get_structure("1LCD", sf)
+
+        filenumber, filename = tempfile.mkstemp()
+        write_PDB(self.pdb_1LCD, filename)
+        new_1LCD = self.PDB_parser.get_structure("1LCD", filename)
         for mdl in new_1LCD:
             if mdl.serial_num == 2:
                 break

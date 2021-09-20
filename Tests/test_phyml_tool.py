@@ -61,7 +61,7 @@ class AppTests(unittest.TestCase):
             tree = Phylo.read(outfname, "newick")
             self.assertEqual(tree.count_terminals(), 4)
         except Exception as exc:
-            self.fail("PhyML wrapper error: %s" % exc)
+            self.fail(f"PhyML wrapper error: {exc}")
         finally:
             # Clean up generated files
             for suffix in [

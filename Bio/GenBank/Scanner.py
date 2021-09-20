@@ -31,7 +31,7 @@ Feature Table Documentation:
 import warnings
 import re
 import sys
-from collections import OrderedDict
+from collections import defaultdict
 
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -186,7 +186,7 @@ class InsdcScanner:
                 continue
             if len(line) < self.FEATURE_QUALIFIER_INDENT:
                 warnings.warn(
-                    "line too short to contain a feature: %r" % line,
+                    f"line too short to contain a feature: {line!r}",
                     BiopythonParserWarning,
                 )
                 line = self.handle.readline()
@@ -211,7 +211,7 @@ class InsdcScanner:
                     feature_key, line = line[2:].strip().split(None, 1)
                     feature_lines = [line]
                     warnings.warn(
-                        "Over indented %s feature?" % feature_key,
+                        f"Over indented {feature_key} feature?",
                         BiopythonParserWarning,
                     )
                 else:
@@ -337,7 +337,7 @@ class InsdcScanner:
                     elif value == '"':
                         # One single quote
                         if self.debug:
-                            print("Single quote %s:%s" % (key, value))
+                            print(f"Single quote {key}:{value}")
                         # DO NOT remove the quote...
                         qualifiers.append((key, value))
                     elif value[0] == '"':
@@ -391,7 +391,7 @@ class InsdcScanner:
         return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
-        """Handle the LOCUS/ID line, passing data to the comsumer (PRIVATE).
+        """Handle the LOCUS/ID line, passing data to the consumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -400,7 +400,7 @@ class InsdcScanner:
         pass
 
     def _feed_header_lines(self, consumer, lines):
-        """Handle the header lines (list of strings), passing data to the comsumer (PRIVATE).
+        """Handle the header lines (list of strings), passing data to the consumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -410,7 +410,7 @@ class InsdcScanner:
 
     @staticmethod
     def _feed_feature_table(consumer, feature_tuples):
-        """Handle the feature table (list of tuples), passing data to the comsumer (PRIVATE).
+        """Handle the feature table (list of tuples), passing data to the consumer (PRIVATE).
 
         Used by the parse_records() and parse() methods.
         """
@@ -529,7 +529,7 @@ class InsdcScanner:
                 yield record
 
     def parse_cds_features(
-        self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product"),
+        self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product")
     ):
         """Parse CDS features, return SeqRecord object iterator.
 
@@ -537,7 +537,7 @@ class InsdcScanner:
 
         Arguments:
          - alphabet - Obsolete, should be left as None.
-         - tags2id  - Tupple of three strings, the feature keys to use
+         - tags2id  - Tuple of three strings, the feature keys to use
            for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
@@ -637,7 +637,7 @@ class EmblScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[: self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Footer format unexpected: '%s'" % self.line)
+            raise ValueError(f"Footer format unexpected: '{self.line}'")
 
         # Note that the SQ line can be split into several lines...
         misc_lines = []
@@ -652,7 +652,7 @@ class EmblScanner(InsdcScanner):
             self.line[: self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
             or self.line.strip() == "//"
         ):
-            raise ValueError("Unexpected content after SQ or CO line: %r" % self.line)
+            raise ValueError(f"Unexpected content after SQ or CO line: {self.line!r}")
 
         seq_lines = []
         line = self.line
@@ -835,7 +835,7 @@ class EmblScanner(InsdcScanner):
     @staticmethod
     def _feed_seq_length(consumer, text):
         length_parts = text.split()
-        assert len(length_parts) == 2, "Invalid sequence length string %r" % text
+        assert len(length_parts) == 2, f"Invalid sequence length string {text!r}"
         assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
         consumer.size(length_parts[0])
 
@@ -885,7 +885,7 @@ class EmblScanner(InsdcScanner):
                         for bases in data.split(",")
                         if bases.strip()
                     ]
-                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
+                    consumer.reference_bases(f"(bases {'; '.join(parts)})")
             elif line_type == "RT":
                 # Remove the enclosing quotes and trailing semi colon.
                 # Note the title can be split over multiple lines.
@@ -936,7 +936,7 @@ class EmblScanner(InsdcScanner):
                         "Malformed DR line in EMBL file.", BiopythonParserWarning
                     )
                 else:
-                    consumer.dblink("%s:%s" % (parts[0].strip(), parts[1].strip()))
+                    consumer.dblink(f"{parts[0].strip()}:{parts[1].strip()}")
             elif line_type == "RA":
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))
@@ -966,7 +966,7 @@ class EmblScanner(InsdcScanner):
                 getattr(consumer, consumer_dict[line_type])(data)
             else:
                 if self.debug:
-                    print("Ignoring EMBL header line:\n%s" % line)
+                    print(f"Ignoring EMBL header line:\n{line}")
 
     def _feed_misc_lines(self, consumer, lines):
         # TODO - Should we do something with the information on the SQ line(s)?
@@ -982,7 +982,7 @@ class EmblScanner(InsdcScanner):
                         if not line:
                             break
                         elif line.startswith("CO   "):
-                            # Don't need to preseve the whitespace here.
+                            # Don't need to preserve the whitespace here.
                             contig_location += line[5:].strip()
                         else:
                             raise ValueError(
@@ -1193,7 +1193,7 @@ class GenBankScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[: self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Footer format unexpected:  '%s'" % self.line)
+            raise ValueError(f"Footer format unexpected:  '{self.line}'")
 
         misc_lines = []
         while (
@@ -1207,7 +1207,7 @@ class GenBankScanner(InsdcScanner):
                 raise ValueError("Premature end of file")
 
         if self.line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
-            raise ValueError("Eh? '%s'" % self.line)
+            raise ValueError(f"Eh? '{self.line}'")
 
         # Now just consume the sequence lines until reach the // marker
         # or a CONTIG line
@@ -1237,7 +1237,7 @@ class GenBankScanner(InsdcScanner):
                 )
                 line = line[1:]
                 if len(line) > 9 and line[9:10] != " ":
-                    raise ValueError("Sequence line mal-formed, '%s'" % line)
+                    raise ValueError(f"Sequence line mal-formed, '{line}'")
             seq_lines.append(line[10:])  # remove spaces later
             line = self.handle.readline()
 
@@ -1389,7 +1389,7 @@ class GenBankScanner(InsdcScanner):
                 # See issue #1656 e.g.
                 # LOCUS       pEH010                  5743 bp    DNA     circular
                 warnings.warn(
-                    "Truncated LOCUS line found - is this correct?\n:%r" % line,
+                    f"Truncated LOCUS line found - is this correct?\n:{line!r}",
                     BiopythonParserWarning,
                 )
                 padding_len = 79 - len(line)
@@ -1495,7 +1495,7 @@ class GenBankScanner(InsdcScanner):
                 # Must just have just "LOCUS       ", is this even legitimate?
                 # We should be able to continue parsing... we need real world testcases!
                 warnings.warn(
-                    "Minimal LOCUS line found - is this correct?\n:%r" % line,
+                    f"Minimal LOCUS line found - is this correct?\n:{line!r}",
                     BiopythonParserWarning,
                 )
         elif (
@@ -1552,7 +1552,7 @@ class GenBankScanner(InsdcScanner):
             # Cope with EMBOSS seqret output where it seems the locus id can cause
             # the other fields to overflow.  We just IGNORE the other fields!
             warnings.warn(
-                "Malformed LOCUS line found - is this correct?\n:%r" % line,
+                f"Malformed LOCUS line found - is this correct?\n:{line!r}",
                 BiopythonParserWarning,
             )
             consumer.locus(line.split()[1])
@@ -1562,7 +1562,7 @@ class GenBankScanner(InsdcScanner):
             #   "LOCUS       RNA5 complete       1718 bp"
             # Treat everything between LOCUS and the size as the identifier.
             warnings.warn(
-                "Malformed LOCUS line found - is this correct?\n:%r" % line,
+                f"Malformed LOCUS line found - is this correct?\n:{line!r}",
                 BiopythonParserWarning,
             )
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())
@@ -1737,7 +1737,7 @@ class GenBankScanner(InsdcScanner):
                     if self.debug > 1:
                         print("Found comment")
                     comment_list = []
-                    structured_comment_dict = OrderedDict()
+                    structured_comment_dict = defaultdict(dict)
                     regex = fr"([^#]+){self.STRUCTURED_COMMENT_START}$"
                     structured_comment_key = re.search(regex, data)
                     if structured_comment_key is not None:
@@ -1757,8 +1757,8 @@ class GenBankScanner(InsdcScanner):
                                 )
                                 structured_comment_key = re.search(regex, data)
                                 if structured_comment_key is not None:
-                                    structured_comment_key = structured_comment_key.group(
-                                        1
+                                    structured_comment_key = (
+                                        structured_comment_key.group(1)
                                     )
                                 else:
                                     comment_list.append(data)
@@ -1771,9 +1771,6 @@ class GenBankScanner(InsdcScanner):
                                         self.STRUCTURED_COMMENT_DELIM
                                     ),
                                     data,
-                                )
-                                structured_comment_dict.setdefault(
-                                    structured_comment_key, OrderedDict()
                                 )
                                 structured_comment_dict[structured_comment_key][
                                     match.group(1)
@@ -1886,7 +1883,7 @@ class GenBankScanner(InsdcScanner):
                         if not line:
                             break
                         elif line[: self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            # Don't need to preseve the whitespace here.
+                            # Don't need to preserve the whitespace here.
                             contig_location += line[self.GENBANK_INDENT :].rstrip()
                         elif line.startswith("ORIGIN"):
                             # Strange, seen this in GenPept files via Entrez gbwithparts

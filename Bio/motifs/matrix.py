@@ -12,6 +12,7 @@ and position-specific scoring matrices.
 """
 
 import math
+import numbers
 
 try:
     import numpy as np
@@ -63,7 +64,7 @@ class GenericPositionMatrix(dict):
                     indices1 = range(start1, stop1, stride1)
                     letters1 = [self.alphabet[i] for i in indices1]
                     dim1 = 2
-                elif isinstance(key1, int):
+                elif isinstance(key1, numbers.Integral):
                     letter1 = self.alphabet[key1]
                     dim1 = 1
                 elif isinstance(key1, tuple):
@@ -81,7 +82,7 @@ class GenericPositionMatrix(dict):
                     start2, stop2, stride2 = key2.indices(self.length)
                     indices2 = range(start2, stop2, stride2)
                     dim2 = 2
-                elif isinstance(key2, int):
+                elif isinstance(key2, numbers.Integral):
                     index2 = key2
                     dim2 = 1
                 else:
@@ -114,7 +115,7 @@ class GenericPositionMatrix(dict):
             indices = range(start, stop, stride)
             letters = [self.alphabet[i] for i in indices]
             dim = 2
-        elif isinstance(key, int):
+        elif isinstance(key, numbers.Integral):
             letter = self.alphabet[key]
             dim = 1
         elif isinstance(key, tuple):

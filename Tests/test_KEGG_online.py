@@ -126,6 +126,11 @@ class KEGGTests(unittest.TestCase):
             handle.url, "http://rest.kegg.jp/find/compound/300-310/mol_weight"
         )
 
+    def test_get_br_ko00002(self):
+        with kegg_get("br:ko00002", "json") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "http://rest.kegg.jp/get/br:ko00002/json")
+
     def test_get_cpd_C01290_plus_gl_G00092(self):
         with kegg_get("cpd:C01290+gl:G00092") as handle:
             handle.read()

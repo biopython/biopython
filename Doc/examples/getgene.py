@@ -108,7 +108,7 @@ class DB_Index:
             values = self.db[id]
         except Exception:
             return None
-        start, stop = [int(x) for x in values.split()]
+        start, stop = (int(x) for x in values.split())
         self.fid.seek(start)
         txt = self.fid.read(stop - start)
         return txt
@@ -170,7 +170,7 @@ class DB_Index:
             return "U"
 
     def Get_Gene(self, id):
-        """Retreive the gene name (GN)."""
+        """Retrieve the gene name (GN)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -209,7 +209,7 @@ class DB_Index:
         return OS, OC, GN
 
     def Get_OS_OC_OG(self, id):
-        """Retreive organism species + classification and organelle."""
+        """Retrieve organism species + classification and organelle."""
         entry = self.Get(id)
         if not entry:
             return None, None, None

@@ -99,7 +99,7 @@ def FastaM10Iterator(handle, seq_count=None):
 
     def build_hsp():
         if not query_tags and not match_tags:
-            raise ValueError("No data for query %r, match %r" % (query_id, match_id))
+            raise ValueError(f"No data for query {query_id!r}, match {match_id!r}")
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
@@ -301,7 +301,7 @@ handle.name: {handle.name}
             # Next line(s) should be consensus seq...
         elif line.startswith("; "):
             if ": " in line:
-                key, value = [s.strip() for s in line[2:].split(": ", 1)]
+                key, value = (s.strip() for s in line[2:].split(": ", 1))
             else:
                 import warnings
                 from Bio import BiopythonParserWarning
@@ -309,12 +309,12 @@ handle.name: {handle.name}
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011
                 # Fixed in version 36.3.5b Oct, 2011(preload8)
                 warnings.warn(
-                    "Missing colon in line: %r" % line, BiopythonParserWarning
+                    f"Missing colon in line: {line!r}", BiopythonParserWarning
                 )
                 try:
-                    key, value = [s.strip() for s in line[2:].split(" ", 1)]
+                    key, value = (s.strip() for s in line[2:].split(" ", 1))
                 except ValueError:
-                    raise ValueError("Bad line: %r" % line) from None
+                    raise ValueError(f"Bad line: {line!r}") from None
             if state == state_QUERY_HEADER:
                 header_tags[key] = value
             elif state == state_ALIGN_HEADER:
@@ -324,7 +324,7 @@ handle.name: {handle.name}
             elif state == state_ALIGN_MATCH:
                 match_tags[key] = value
             else:
-                raise RuntimeError("Unexpected state %r, %r" % (state, line))
+                raise RuntimeError(f"Unexpected state {state!r}, {line!r}")
         elif state == state_ALIGN_QUERY:
             query_seq += line.strip()
         elif state == state_ALIGN_MATCH:

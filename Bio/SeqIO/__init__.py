@@ -497,7 +497,7 @@ def write(sequences, handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(handle, SeqRecord):
         raise TypeError("Check arguments, handle should NOT be a SeqRecord")
@@ -543,9 +543,9 @@ def write(sequences, handle, format):
         return count
 
     if format in _FormatToIterator or format in AlignIO._FormatToIterator:
-        raise ValueError("Reading format '%s' is supported, but not writing" % format)
+        raise ValueError(f"Reading format '{format}' is supported, but not writing")
 
-    raise ValueError("Unknown format '%s'" % format)
+    raise ValueError(f"Unknown format '{format}'")
 
 
 def parse(handle, format, alphabet=None):
@@ -596,7 +596,7 @@ def parse(handle, format, alphabet=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -606,7 +606,7 @@ def parse(handle, format, alphabet=None):
     if format in AlignIO._FormatToIterator:
         # Use Bio.AlignIO to read in the alignments
         return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
-    raise ValueError("Unknown format '%s'" % format)
+    raise ValueError(f"Unknown format '{format}'")
 
 
 def read(handle, format, alphabet=None):
@@ -717,10 +717,7 @@ def to_dict(sequences, key_function=None):
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
 
-    Since Python 3.6, the default dict class maintains key order, meaning
-    this dictionary will reflect the order of records given to it. As of
-    Biopython 1.72, on older versions of Python we explicitly use an
-    OrderedDict so that you can always assume the record order is preserved.
+    This dictionary will reflect the order of records given to it.
     """
     # This is to avoid a lambda function:
 
@@ -734,7 +731,7 @@ def to_dict(sequences, key_function=None):
     for record in sequences:
         key = key_function(record)
         if key in d:
-            raise ValueError("Duplicate key '%s'" % key)
+            raise ValueError(f"Duplicate key '{key}'")
         d[key] = record
     return d
 
@@ -854,7 +851,7 @@ def index(filename, format, alphabet=None, key_function=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -865,7 +862,7 @@ def index(filename, format, alphabet=None, key_function=None):
     try:
         proxy_class = _FormatToRandomAccess[format]
     except KeyError:
-        raise ValueError("Unsupported format %r" % format) from None
+        raise ValueError(f"Unsupported format {format!r}") from None
     repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" % (
         filename,
         format,
@@ -938,7 +935,7 @@ def index_db(
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -1059,7 +1056,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """
     if molecule_type:
         if not isinstance(molecule_type, str):
-            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+            raise TypeError(f"Molecule type should be a string, not {molecule_type!r}")
         elif (
             "DNA" in molecule_type
             or "RNA" in molecule_type
@@ -1067,7 +1064,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
         ):
             pass
         else:
-            raise ValueError("Unexpected molecule type, %r" % molecule_type)
+            raise ValueError(f"Unexpected molecule type, {molecule_type!r}")
     f = _converter.get((in_format, out_format))
     if f:
         count = f(in_file, out_file)

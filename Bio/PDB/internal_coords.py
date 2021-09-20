@@ -84,17 +84,7 @@ from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
 # for type checking only
-from typing import (
-    List,
-    Dict,
-    Set,
-    TextIO,
-    Union,
-    Tuple,
-    cast,
-    TYPE_CHECKING,
-    Optional,
-)
+from typing import List, Dict, Set, TextIO, Union, Tuple, cast, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue
@@ -606,7 +596,7 @@ class IC_Chain:
         a4shift[udFwd] = self.hedraIC[self.dH2ndx, 0][mdFwd]  # len12
 
         self.a4_pre_rotation[:, 2][self.dAtoms_needs_update] = numpy.add(
-            self.a4_pre_rotation[:, 2][self.dAtoms_needs_update], a4shift,
+            self.a4_pre_rotation[:, 2][self.dAtoms_needs_update], a4shift
         )  # so a2 at origin
 
         # build rz rotation matrix for dihedral angle
@@ -1243,7 +1233,8 @@ class IC_Residue:
     # chain)
     accept_resnames = ("CYG", "YCM", "UNK")
 
-    AllBonds: bool = False  # For OpenSCAD, generate explicit hedra covering all bonds if True.
+    # For OpenSCAD, generate explicit hedra covering all bonds if True.
+    AllBonds: bool = False
 
     def __init__(self, parent: "Residue", NO_ALTLOC: bool = False) -> None:
         """Initialize IC_Residue with parent Biopython Residue.
@@ -1648,7 +1639,7 @@ class IC_Residue:
             d.rcst = None
 
     def assemble(
-        self, resetLocation: bool = False, verbose: bool = False,
+        self, resetLocation: bool = False, verbose: bool = False
     ) -> Union[Dict["AtomKey", numpy.array], Dict[HKT, numpy.array], None]:
         """Compute atom coordinates for this residue from internal coordinates.
 
@@ -2235,7 +2226,7 @@ class IC_Residue:
             s += "\n"
         for d in sorted(self.dihedra.values()):
             try:
-                s += base + d.id + " " + "{:9.5f}".format(set_accuracy_95(d.angle))
+                s += f"{base}{d.id} {set_accuracy_95(d.angle):9.5f}"
             except KeyError:
                 pass
             s += "\n"
@@ -2612,7 +2603,7 @@ class Edron:
 
     """
 
-    # regular expresion to capture hedron and dihedron specifications, as in
+    # regular expression to capture hedron and dihedron specifications, as in
     #  .pic files
     edron_re = re.compile(
         # pdbid and chain id
@@ -2710,7 +2701,7 @@ class Edron:
             else:
                 acs.append(ac)
         if estr != "":
-            raise MissingAtomError("%s missing coordinates for %s" % (self, estr))
+            raise MissingAtomError(f"{self} missing coordinates for {estr}")
         return tuple(acs)
 
     def is_backbone(self) -> bool:
@@ -2805,7 +2796,7 @@ class Hedron(Edron):
         angle = angle (degrees) formed by 3 atoms
         len23 = distance between 2nd and 3rd atoms
 
-    atoms: 3x4 numpy arrray (view on chain array)
+    atoms: 3x4 numpy array (view on chain array)
         3 homogeneous atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
     atomsR: 3x4 numpy array (view on chain array)
         atoms reversed, 1st on +Z, 2nd at origin, 3rd on XZ plane
@@ -2817,7 +2808,7 @@ class Hedron(Edron):
     set_length()
         set bond length for specified atom pair
     angle(), len12(), len23()
-        gettters and setters for relevant attributes (angle in degrees)
+        getters and setters for relevant attributes (angle in degrees)
     """
 
     def __init__(self, *args: Union[List["AtomKey"], HKT], **kwargs: str) -> None:
@@ -2840,11 +2831,7 @@ class Hedron(Edron):
 
         if "len12" in kwargs:
             self.lal = numpy.array(
-                (
-                    float(kwargs["len12"]),
-                    float(kwargs["angle"]),
-                    float(kwargs["len23"]),
-                )
+                (float(kwargs["len12"]), float(kwargs["angle"]), float(kwargs["len23"]))
             )
         else:
             self.lal = numpy.zeros(3)
@@ -2929,7 +2916,7 @@ class Hedron(Edron):
         elif all(ak in self.aks[1:] for ak in ak_tpl):
             self.lal[2] = newLength  # len23
         else:
-            raise TypeError("%s not found in %s" % (str(ak_tpl), self))
+            raise TypeError(f"{str(ak_tpl)} not found in {self}")
 
         self.cic.hAtoms_needs_update[self.cic.hedraNdx[self.aks]] = True
 
@@ -3050,14 +3037,14 @@ class Dihedron(Edron):
 
         if not hedron1:
             raise HedronMatchError(
-                "can't find 1st hedron for key %s dihedron %s" % (h1key, self)
+                f"can't find 1st hedron for key {h1key} dihedron {self}"
             )
 
         hedron2 = Dihedron._get_hedron(res, h2key)
 
         if not hedron2:
             raise HedronMatchError(
-                "can't find 2nd hedron for key %s dihedron %s" % (h2key, self)
+                f"can't find 2nd hedron for key {h2key} dihedron {self}"
             )
 
         self.hedron1 = hedron1
@@ -3131,7 +3118,7 @@ class AtomKey:
     atom_re: compiled regex (Class Attribute)
         A compiled regular expression matching the string form of the key
     endnum_re: compiled regex (Class Attribute)
-        A compiled regular expresion capturing digits at end of a string
+        A compiled regular expression capturing digits at end of a string
     d2h: bool (Class Attribute)
         Convert D atoms to H on input; must also modify IC_Residue.accept_atoms
     missing: bool default False

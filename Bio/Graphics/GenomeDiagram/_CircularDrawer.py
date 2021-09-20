@@ -304,7 +304,7 @@ class CircularDrawer(AbstractDrawer):
          - locend        The end position of the feature
 
         """
-        # Establish the co-ordinates for the sigil
+        # Establish the coordinates for the sigil
         btm, ctr, top = self.track_radii[self.current_track_level]
 
         startangle, startcos, startsin = self.canvas_angle(locstart)
@@ -594,7 +594,7 @@ class CircularDrawer(AbstractDrawer):
                     strokeWidth=graph.linewidth,
                 )
             )
-            lastx, lasty, = x, y
+            lastx, lasty = x, y
         return line_elements
 
     def draw_bar_graph(self, graph):
@@ -904,7 +904,7 @@ class CircularDrawer(AbstractDrawer):
          - draw_label    Boolean, write the tick label?
 
         """
-        # Calculate tick co-ordinates
+        # Calculate tick coordinates
         tickangle, tickcos, ticksin = self.canvas_angle(tickpos)
         x0, y0 = self.xcenter + ctr * ticksin, self.ycenter + ctr * tickcos
         x1, y1 = (

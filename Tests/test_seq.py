@@ -9,6 +9,11 @@ import copy
 import unittest
 import warnings
 
+try:
+    import numpy
+except ImportError:
+    numpy = None
+
 from Bio import BiopythonWarning, BiopythonDeprecationWarning
 from Bio import Seq
 from Bio.Data.IUPACData import (
@@ -235,8 +240,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s + {}
 
     def test_radd_method_using_wrong_object(self):
-        with self.assertRaises(TypeError):
-            self.s.__radd__({})
+        self.assertEqual(self.s.__radd__({}), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
@@ -314,10 +318,7 @@ class TestSeqAddition(unittest.TestCase):
             Seq.Seq("U.CAG"),
             "UGCAU",
         ]
-        self.nuc = [
-            Seq.Seq("ATCG"),
-            "UUUTTTACG",
-        ]
+        self.nuc = [Seq.Seq("ATCG"), "UUUTTTACG"]
         self.protein = [
             Seq.Seq("ATCGPK"),
             Seq.Seq("atcGPK"),
@@ -424,6 +425,10 @@ class TestSeqMultiplication(unittest.TestCase):
         """Test mul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(seq * 3, seq + seq + seq)
+        if numpy is not None:
+            factor = numpy.intc(3)  # numpy integer
+            for seq in test_seqs + protein_seqs:
+                self.assertEqual(seq * factor, seq + seq + seq)
 
     def test_mul_method_exceptions(self):
         """Test mul method exceptions."""
@@ -437,6 +442,10 @@ class TestSeqMultiplication(unittest.TestCase):
         """Test rmul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(3 * seq, seq + seq + seq)
+        if numpy is not None:
+            factor = numpy.intc(3)  # numpy integer
+            for seq in test_seqs + protein_seqs:
+                self.assertEqual(factor * seq, seq + seq + seq)
 
     def test_rmul_method_exceptions(self):
         """Test rmul method exceptions."""
@@ -452,6 +461,12 @@ class TestSeqMultiplication(unittest.TestCase):
             original_seq = seq * 1  # make a copy
             seq *= 3
             self.assertEqual(seq, original_seq + original_seq + original_seq)
+        if numpy is not None:
+            factor = numpy.intc(3)  # numpy integer
+            for seq in test_seqs + protein_seqs:
+                original_seq = seq * 1  # make a copy
+                seq *= factor
+                self.assertEqual(seq, original_seq + original_seq + original_seq)
 
     def test_imul_method_exceptions(self):
         """Test imul method exceptions."""
@@ -576,8 +591,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s + 1234
 
     def test_radd_method_wrong_type(self):
-        with self.assertRaises(TypeError):
-            self.mutable_s.__radd__(1234)
+        self.assertEqual(self.mutable_s.__radd__(1234), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.mutable_s)
@@ -604,7 +618,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_setting_slices(self):
         self.assertEqual(
-            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
+            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq"
         )
 
         self.mutable_s[1:3] = "GAT"
@@ -620,10 +634,33 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s,
             "Set slice with MutableSeq",
         )
+        if numpy is not None:
+            one, three, five, seven = numpy.array([1, 3, 5, 7])  # numpy integers
+            self.assertEqual(
+                Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq"
+            )
+
+            self.mutable_s[one:three] = "GAT"
+            self.assertEqual(
+                Seq.MutableSeq("TGATTAAAGGATGCATCATG"),
+                self.mutable_s,
+                "Set slice with string and adding extra nucleotide",
+            )
+
+            self.mutable_s[one:three] = self.mutable_s[five:seven]
+            self.assertEqual(
+                Seq.MutableSeq("TAATTAAAGGATGCATCATG"),
+                self.mutable_s,
+                "Set slice with MutableSeq",
+            )
 
     def test_setting_item(self):
         self.mutable_s[3] = "G"
         self.assertEqual(Seq.MutableSeq("TCAGAAGGATGCATCATG"), self.mutable_s)
+        if numpy is not None:
+            i = numpy.intc(3)
+            self.mutable_s[i] = "X"
+            self.assertEqual(Seq.MutableSeq("TCAXAAGGATGCATCATG"), self.mutable_s)
 
     def test_deleting_slice(self):
         del self.mutable_s[4:5]
@@ -669,8 +706,15 @@ class TestMutableSeq(unittest.TestCase):
         """Test reverse using -1 stride."""
         self.assertEqual(Seq.MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s[::-1])
 
+    def test_complement_old(self):
+        # old approach
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.mutable_s.complement()
+        self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
+
     def test_complement(self):
-        self.mutable_s.complement()
+        # new approach
+        self.mutable_s.complement(inplace=True)
         self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
 
     def test_complement_rna(self):
@@ -712,22 +756,47 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(d, "TCAAAAGGATGCATCATG")
 
     def test_complement_mixed_aphabets(self):
+        # new approach
         seq = Seq.MutableSeq("AUGaaaCTG")
-        with self.assertRaises(ValueError):
-            seq.complement()
+        seq.complement_rna(inplace=True)
+        self.assertEqual("UACuuuGAC", seq)
+        # old approach
+        seq = Seq.MutableSeq("AUGaaaCTG")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            with self.assertRaises(ValueError):
+                seq.complement()
 
     def test_complement_rna_string(self):
+        # new approach
         seq = Seq.MutableSeq("AUGaaaCUG")
-        seq.complement()
+        seq.complement_rna(inplace=True)
+        self.assertEqual("UACuuuGAC", seq)
+        # old approach
+        seq = Seq.MutableSeq("AUGaaaCUG")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            seq.complement()
         self.assertEqual("UACuuuGAC", seq)
 
     def test_complement_dna_string(self):
+        # new approach
         seq = Seq.MutableSeq("ATGaaaCTG")
-        seq.complement()
+        seq.complement(inplace=True)
+        self.assertEqual("TACtttGAC", seq)
+        # old approach
+        seq = Seq.MutableSeq("ATGaaaCTG")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            seq.complement()
         self.assertEqual("TACtttGAC", seq)
 
     def test_reverse_complement(self):
-        self.mutable_s.reverse_complement()
+        # new approach
+        self.mutable_s.reverse_complement(inplace=True)
+        self.assertEqual("CATGATGCATCCTTTTGA", self.mutable_s)
+
+    def test_reverse_complement_old(self):
+        # old approach
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.mutable_s.reverse_complement()
         self.assertEqual("CATGATGCATCCTTTTGA", self.mutable_s)
 
     def test_extend_method(self):
@@ -752,6 +821,10 @@ class TestMutableSeq(unittest.TestCase):
         """Test setting wobble codon to N (set slice with stride 3)."""
         self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
         self.assertEqual(Seq.MutableSeq("TCNAANGGNTGNATNATN"), self.mutable_s)
+        if numpy is not None:
+            start, step = numpy.array([2, 3])  # numpy integers
+            self.mutable_s[start::step] = "X" * len(self.mutable_s[2::3])
+            self.assertEqual(Seq.MutableSeq("TCXAAXGGXTGXATXATX"), self.mutable_s)
 
 
 class TestUnknownSeq(unittest.TestCase):
@@ -848,12 +921,12 @@ class TestUnknownSeq(unittest.TestCase):
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("NNNNNN", seq.upper())
-        self.assertRaises(ValueError, self.u.upper)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.upper()))
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("nnnnnn", seq.lower())
-        self.assertRaises(ValueError, self.u.lower)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.lower()))
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())
@@ -886,14 +959,24 @@ class TestComplement(unittest.TestCase):
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             # Will default to DNA if neither T nor U found...
-            compl_values = Seq.Seq(values).complement().transcribe()
+            if "u" in values or "U" in values:
+                compl_values = Seq.Seq(values).complement_rna().transcribe()
+            else:
+                compl_values = Seq.Seq(values).complement().transcribe()
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertCountEqual(compl_values, ambig_values)
 
     def test_complement_incompatible_letters(self):
         seq = Seq.Seq("CAGGTU")
-        with self.assertRaises(ValueError):
-            seq.complement()
+        # new approach
+        dna = seq.complement(inplace=False)  # TODO: remove inplace=False
+        self.assertEqual("GTCCAA", dna)
+        rna = seq.complement_rna()
+        self.assertEqual("GUCCAA", rna)
+        # old approach
+        with self.assertWarns(BiopythonDeprecationWarning):
+            with self.assertRaises(ValueError):
+                seq.complement()
 
     def test_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
@@ -901,11 +984,34 @@ class TestComplement(unittest.TestCase):
 
     def test_complement_of_rna(self):
         seq = "AUGAAACUG"
-        self.assertEqual("UACUUUGAC", Seq.complement(seq))
+        # new approach
+        rna = Seq.complement_rna(seq)
+        self.assertEqual("UACUUUGAC", rna)
+        # old approach
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rna = Seq.complement(seq)
+        self.assertEqual("UACUUUGAC", rna)
 
     def test_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
+
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 
 class TestReverseComplement(unittest.TestCase):
@@ -914,7 +1020,25 @@ class TestReverseComplement(unittest.TestCase):
         test_seqs_copy.pop(13)
 
         for nucleotide_seq in test_seqs_copy:
-            if isinstance(nucleotide_seq, Seq.Seq):
+            if not isinstance(nucleotide_seq, Seq.Seq):
+                continue
+            if "u" in nucleotide_seq or "U" in nucleotide_seq:
+                expected = Seq.reverse_complement_rna(nucleotide_seq)
+                self.assertEqual(
+                    repr(expected), repr(nucleotide_seq.reverse_complement_rna())
+                )
+                self.assertEqual(
+                    repr(expected[::-1]), repr(nucleotide_seq.complement_rna())
+                )
+                self.assertEqual(
+                    nucleotide_seq.complement_rna(),
+                    Seq.reverse_complement_rna(nucleotide_seq)[::-1],
+                )
+                self.assertEqual(
+                    nucleotide_seq.reverse_complement_rna(),
+                    Seq.reverse_complement_rna(nucleotide_seq),
+                )
+            else:
                 expected = Seq.reverse_complement(nucleotide_seq)
                 self.assertEqual(
                     repr(expected), repr(nucleotide_seq.reverse_complement())
@@ -936,12 +1060,35 @@ class TestReverseComplement(unittest.TestCase):
         self.assertRaises(ValueError, Seq.reverse_complement, seq)
 
     def test_reverse_complement_of_rna(self):
+        # old approach
         seq = "AUGAAACUG"
-        self.assertEqual("CAGUUUCAU", Seq.reverse_complement(seq))
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rna = Seq.reverse_complement(seq)
+        self.assertEqual("CAGUUUCAU", rna)
+        # new approach
+        dna = Seq.reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        self.assertEqual("CAGTTTCAT", dna)
 
     def test_reverse_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
+
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 
 class TestDoubleReverseComplement(unittest.TestCase):
@@ -950,14 +1097,19 @@ class TestDoubleReverseComplement(unittest.TestCase):
         sorted_amb_rna = sorted(ambiguous_rna_values)
         sorted_amb_dna = sorted(ambiguous_dna_values)
         for sequence in [
-            Seq.Seq("".join(sorted_amb_rna)),
             Seq.Seq("".join(sorted_amb_dna)),
-            Seq.Seq("".join(sorted_amb_rna).replace("X", "")),
             Seq.Seq("".join(sorted_amb_dna).replace("X", "")),
-            Seq.Seq("AWGAARCKG"),
-        ]:  # Note no U or T
+            Seq.Seq("AWGAARCKG"),  # Note no U or T
+        ]:
             reversed_sequence = sequence.reverse_complement()
             self.assertEqual(sequence, reversed_sequence.reverse_complement())
+        for sequence in [
+            Seq.Seq("".join(sorted_amb_rna)),
+            Seq.Seq("".join(sorted_amb_rna).replace("X", "")),
+            Seq.Seq("AWGAARCKG"),  # Note no U or T
+        ]:
+            reversed_sequence = sequence.reverse_complement_rna()
+            self.assertEqual(sequence, reversed_sequence.reverse_complement_rna())
 
 
 class TestTranscription(unittest.TestCase):
@@ -1113,8 +1265,13 @@ class TestTranslating(unittest.TestCase):
 
     def test_translation_with_bad_table_argument(self):
         table = {}
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "Bad table argument")
+        table = b"0x"
+        with self.assertRaises(TypeError) as cm:
+            Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "table argument must be integer or string")
 
     def test_translation_with_codon_table_as_table_argument(self):
         table = standard_dna_table

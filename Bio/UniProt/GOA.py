@@ -12,6 +12,7 @@ Uniprot-GOA README + GAF format description:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
 
 Gene Association File, GAF formats:
+http://geneontology.org/docs/go-annotation-file-gaf-format-2.2/
 http://geneontology.org/docs/go-annotation-file-gaf-format-2.1/
 http://geneontology.org/docs/go-annotation-file-gaf-format-2.0/
 
@@ -385,20 +386,26 @@ def gafbyproteiniterator(handle):
         # Handle GAF 2.1 as GAF 2.0 for now TODO: fix
         # sys.stderr.write("gaf 2.1\n")
         return _gaf20byproteiniterator(handle)
+    elif inline.strip() == "!gaf-version: 2.2":
+        # Handle GAF 2.2 as GAF 2.0 for now. Change from
+        # 2.1 to 2.2 is that Qualifier field is no longer optional.
+        # As this type of checks has not been done before, we can
+        # continue to use the gaf2.0 parser
+        return _gaf20byproteiniterator(handle)
     else:
         raise ValueError(f"Unknown GAF version {inline}\n")
 
 
 def gafiterator(handle):
-    """Iterate over a GAF 1.0 or 2.0 file.
+    """Iterate over a GAF 1.0 or 2.x file.
 
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
-    returns a gaf 2.0 or a gaf 1.0 iterator as needed
+    returns a gaf 2.x or a gaf 1.0 iterator as needed
 
     Example: open, read, interat and filter results.
 
-    Original data file has been trimed to ~600 rows.
+    Original data file has been trimmed to ~600 rows.
 
     Original source ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/YEAST/goa_yeast.gaf.gz
 
@@ -433,6 +440,12 @@ def gafiterator(handle):
     elif inline.strip() == "!gaf-version: 2.1":
         # sys.stderr.write("gaf 2.1\n")
         # Handle GAF 2.1 as GAF 2.0 for now. TODO: fix
+        return _gaf20iterator(handle)
+    elif inline.strip() == "!gaf-version: 2.2":
+        # Handle GAF 2.2 as GAF 2.0 for now. Change from
+        # 2.1 to 2.2 is that Qualifier field is no longer optional.
+        # As this type of checks has not been done before, we can
+        # continue to use the gaf2.0 parser
         return _gaf20iterator(handle)
     elif inline.strip() == "!gaf-version: 1.0":
         # sys.stderr.write("gaf 1.0\n")

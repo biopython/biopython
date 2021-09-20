@@ -42,7 +42,7 @@ def find_test_dir(start_dir=None):
             break
         target = new
     raise ValueError(
-        "Not within Biopython source tree: %r" % os.path.abspath(start_dir)
+        f"Not within Biopython source tree: {os.path.abspath(start_dir)!r}"
     )
 
 

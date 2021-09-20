@@ -47,7 +47,7 @@ if sys.platform != "win32":
 
     for name in exes_wanted:
         # This will "just work" if installed on the path as normal on Unix
-        output = getoutput("%s -help" % name)
+        output = getoutput(f"{name} -help")
         if "not found" not in output and "not recognized" not in output:
             exes[name] = name
         del output
@@ -104,7 +104,7 @@ class DistanceTests(unittest.TestCase):
 
     def distances_from_alignment(self, filename, DNA=True):
         """Check we can make a distance matrix from a given alignment."""
-        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), f"Missing {filename}")
         if DNA:
             cline = FDNADistCommandline(
                 exes["fdnadist"],
@@ -127,7 +127,7 @@ class DistanceTests(unittest.TestCase):
 
     def tree_from_distances(self, filename):
         """Check we can estimate a tree from a distance matrix."""
-        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), f"Missing {filename}")
         cline = FNeighborCommandline(
             exes["fneighbor"],
             datafile=filename,
@@ -192,7 +192,7 @@ class ParsimonyTests(unittest.TestCase):
 
     def parsimony_tree(self, filename, format, DNA=True):
         """Estimate a parsimony tree from an alignment."""
-        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), f"Missing {filename}")
         if DNA:
             cline = FDNAParsCommandline(
                 exes["fdnapars"],
@@ -264,7 +264,7 @@ class BootstrapTests(unittest.TestCase):
         The align_type type argument is passed to the commandline object to
         set the output format to use (from [D]na,[p]rotein and [r]na )
         """
-        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), f"Missing {filename}")
         cline = FSeqBootCommandline(
             exes["fseqboot"],
             sequence=filename,

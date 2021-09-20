@@ -421,7 +421,7 @@ class PDBList:
             Has a meaning only for obsolete structures.
             If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
-            This option doesn't work for mmtf format as obsoleted structures are not availbe as mmtf.
+            This option doesn't work for mmtf format as obsoleted structures are not available as mmtf.
             (default: False)
 
         :type obsolete: bool

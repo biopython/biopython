@@ -15,7 +15,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.PairwiseAlignment.map."
+        "Install numpy if you want to use Bio.Align."
     ) from None
 
 from Bio import Align, SeqIO
@@ -2473,16 +2473,14 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: global
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
@@ -2559,16 +2557,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: global
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
@@ -2668,12 +2664,11 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
+  target_gap_function: {gap_score}
   query_internal_open_gap_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
@@ -2681,8 +2676,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-"""
-            % gap_score,
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -2727,16 +2721,14 @@ TTG--GAA
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {gap_score}
+  query_gap_function: {gap_score}
   mode: global
-"""
-            % (gap_score, gap_score),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -8.0)
@@ -2860,7 +2852,7 @@ TT-GGAA
             numpy.array_equal(
                 alignment.aligned,
                 numpy.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]),
-            ),
+            )
         )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -2906,16 +2898,14 @@ TTG--GAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: local
-"""
-            % (nogaps, specificgaps),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
@@ -3011,16 +3001,14 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         aligner.query_gap_score = specificgaps
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {nogaps}
+  query_gap_function: {specificgaps}
   mode: local
-"""
-            % (nogaps, specificgaps),
+""",
         )
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
@@ -3112,12 +3100,11 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
+  target_gap_function: {gap_score}
   query_internal_open_gap_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
@@ -3125,8 +3112,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: local
-"""
-            % gap_score,
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -3195,16 +3181,14 @@ TTGGAA
         aligner.query_gap_score = gap_score
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
+            f"""Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: %s
-  query_gap_function: %s
+  target_gap_function: {gap_score}
+  query_gap_function: {gap_score}
   mode: local
-"""
-            % (gap_score, gap_score),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -3785,8 +3769,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.query_internal_extend_gap_score,
         )
         self.assertAlmostEqual(
-            aligner.query_left_open_gap_score,
-            pickled_aligner.query_left_open_gap_score,
+            aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score
         )
         self.assertAlmostEqual(
             aligner.query_left_extend_gap_score,
@@ -3870,8 +3853,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.query_internal_extend_gap_score,
         )
         self.assertAlmostEqual(
-            aligner.query_left_open_gap_score,
-            pickled_aligner.query_left_open_gap_score,
+            aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score
         )
         self.assertAlmostEqual(
             aligner.query_left_extend_gap_score,
@@ -4355,442 +4337,6 @@ target	6	23	query	13.0	-	6	23	0	1	17,	0,
 query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
-
-
-class TestAlignmentMethods(unittest.TestCase):
-    def check_indexing_slicing(self, alignment, msg):
-        self.assertEqual(
-            str(alignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-        )
-        self.assertAlmostEqual(alignment.score, 6.0)
-        self.assertEqual(alignment[0], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[-2], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[-1], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, :], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, :], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[-2, :], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[-1, :], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[:, 0], "AA", msg=msg)
-        self.assertEqual(alignment[:, 1], "A-", msg=msg)
-        self.assertEqual(alignment[:, 2], "CC", msg=msg)
-        self.assertEqual(alignment[:, 3], "C-", msg=msg)
-        self.assertEqual(alignment[:, 4], "GG", msg=msg)
-        self.assertEqual(alignment[:, 5], "GG", msg=msg)
-        self.assertEqual(alignment[:, 6], "G-", msg=msg)
-        self.assertEqual(alignment[:, 7], "AA", msg=msg)
-        self.assertEqual(alignment[:, 8], "-A", msg=msg)
-        self.assertEqual(alignment[:, 9], "CC", msg=msg)
-        self.assertEqual(alignment[:, 10], "C-", msg=msg)
-        self.assertEqual(alignment[:, 11], "G-", msg=msg)
-        self.assertEqual(alignment[:, -12], "AA", msg=msg)
-        self.assertEqual(alignment[:, -11], "A-", msg=msg)
-        self.assertEqual(alignment[:, -10], "CC", msg=msg)
-        self.assertEqual(alignment[:, -9], "C-", msg=msg)
-        self.assertEqual(alignment[:, -8], "GG", msg=msg)
-        self.assertEqual(alignment[:, -7], "GG", msg=msg)
-        self.assertEqual(alignment[:, -6], "G-", msg=msg)
-        self.assertEqual(alignment[:, -5], "AA", msg=msg)
-        self.assertEqual(alignment[:, -4], "-A", msg=msg)
-        self.assertEqual(alignment[:, -3], "CC", msg=msg)
-        self.assertEqual(alignment[:, -2], "C-", msg=msg)
-        self.assertEqual(alignment[:, -1], "G-", msg=msg)
-        self.assertEqual(alignment[1, range(1, 12, 2)], "--GAC-", msg=msg)
-        self.assertEqual(alignment[0, (1, 4, 9)], "AGC", msg=msg)
-        self.assertEqual(alignment[1, (1, 4, 9)], "-GC", msg=msg)
-        self.assertEqual(alignment[0, range(0, 12, 2)], "ACGG-C", msg=msg)
-        self.assertAlmostEqual(alignment[:, :].score, 6.0, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertEqual(alignment[0, 0:12], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 0:12], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 0:], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 0:], "A-C-GG-AAC--", msg=msg)
-        self.assertAlmostEqual(alignment[:, 0:].score, 6.0, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 0:]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertEqual(alignment[0, :12], "AACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, :12], "A-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 1:], "ACCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 1:], "-C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 2:], "CCGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 2:], "C-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 3:], "CGGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 3:], "-GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 4:], "GGGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 4:], "GG-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 5:], "GGA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 5:], "G-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 6:], "GA-CCG", msg=msg)
-        self.assertEqual(alignment[1, 6:], "-AAC--", msg=msg)
-        self.assertEqual(alignment[0, 7:], "A-CCG", msg=msg)
-        self.assertEqual(alignment[1, 7:], "AAC--", msg=msg)
-        self.assertEqual(alignment[0, 8:], "-CCG", msg=msg)
-        self.assertEqual(alignment[1, 8:], "AC--", msg=msg)
-        self.assertEqual(alignment[0, 9:], "CCG", msg=msg)
-        self.assertEqual(alignment[1, 9:], "C--", msg=msg)
-        self.assertEqual(alignment[0, 10:], "CG", msg=msg)
-        self.assertEqual(alignment[1, 10:], "--", msg=msg)
-        self.assertEqual(alignment[0, 11:], "G", msg=msg)
-        self.assertEqual(alignment[1, 11:], "-", msg=msg)
-        self.assertEqual(alignment[0, 12:], "", msg=msg)
-        self.assertEqual(alignment[1, 12:], "", msg=msg)
-        self.assertEqual(alignment[0, :-1], "AACCGGGA-CC", msg=msg)
-        self.assertEqual(alignment[1, :-1], "A-C-GG-AAC-", msg=msg)
-        self.assertEqual(alignment[0, :-2], "AACCGGGA-C", msg=msg)
-        self.assertEqual(alignment[1, :-2], "A-C-GG-AAC", msg=msg)
-        self.assertEqual(alignment[0, :-3], "AACCGGGA-", msg=msg)
-        self.assertEqual(alignment[1, :-3], "A-C-GG-AA", msg=msg)
-        self.assertEqual(alignment[0, 1:-1], "ACCGGGA-CC", msg=msg)
-        self.assertEqual(alignment[1, 1:-1], "-C-GG-AAC-", msg=msg)
-        self.assertEqual(alignment[0, 1:-2], "ACCGGGA-C", msg=msg)
-        self.assertEqual(alignment[1, 1:-2], "-C-GG-AAC", msg=msg)
-        self.assertEqual(alignment[0, 2:-1], "CCGGGA-CC", msg=msg)
-        self.assertEqual(alignment[1, 2:-1], "C-GG-AAC-", msg=msg)
-        self.assertEqual(alignment[0, 2:-2], "CCGGGA-C", msg=msg)
-        self.assertEqual(alignment[1, 2:-2], "C-GG-AAC", msg=msg)
-        self.assertAlmostEqual(alignment[:, :12].score, 6.0, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :12]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertAlmostEqual(alignment[:, 0:12].score, 6.0, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 0:12]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 1:].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 1:]),
-            """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 2:].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 2:]),
-            """\
-AACCGGGA-CCG
-  |-||-|-|--
- AC-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 3:].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 3:]),
-            """\
-AACCGGGA-CCG
-   -||-|-|--
- AC-GG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 4:].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 4:]),
-            """\
-AACCGGGA-CCG
-    ||-|-|--
-  ACGG-AAC--
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, :-1].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :-1]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|-
-A-C-GG-AAC-
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, :-2].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :-2]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|
-A-C-GG-AAC
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, :-3].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :-3]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-
-A-C-GG-AAC
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 1:-1].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 1:-1]),
-            """\
-AACCGGGA-CCG
- -|-||-|-|-
-A-C-GG-AAC-
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 1:-2].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 1:-2]),
-            """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 2:-1].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 2:-1]),
-            """\
-AACCGGGA-CCG
-  |-||-|-|-
- AC-GG-AAC-
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, 2:-2].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, 2:-2]),
-            """\
-AACCGGGA-CCG
-  |-||-|-|
- AC-GG-AAC
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, ::2].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, ::2]),
-            """\
-ACGG-C
-|||---
-ACG-A-
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, range(0, 12, 2)].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, range(0, 12, 2)]),
-            """\
-ACGG-C
-|||---
-ACG-A-
-""",
-            msg=msg,
-        )
-        self.assertIsNone(alignment[:, (1, 8, 5)].score, msg=msg)
-        self.assertEqual(
-            str(alignment[:, (1, 8, 5)]),
-            """\
-A-G
---|
--AG
-""",
-            msg=msg,
-        )
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1]
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1, :]
-
-    def test_indexing_slicing(self):
-        target = "AACCGGGACCG"
-        query = "ACGGAAC"
-        aligner = Align.PairwiseAligner()
-        alignments = aligner.align(target, query)
-        self.assertEqual(len(alignments), 88)
-        alignment = alignments[0]
-        msg = "forward strand"
-        self.check_indexing_slicing(alignment, msg)
-        query = reverse_complement(query)
-        alignments = aligner.align(target, query, strand="-")
-        self.assertEqual(len(alignments), 88)
-        alignment = alignments[0]
-        msg = "reverse strand"
-        self.check_indexing_slicing(alignment, msg)
-
-    def test_sort(self):
-        aligner = Align.PairwiseAligner()
-        aligner.gap_score = -1
-        target = Seq("ACTT")
-        query = Seq("ACCT")
-        alignments = aligner.align(target, query)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
-        self.assertEqual(
-            str(alignment),
-            """\
-ACTT
-||.|
-ACCT
-""",
-        )
-        alignment.sort()
-        self.assertEqual(
-            str(alignment),
-            """\
-ACCT
-||.|
-ACTT
-""",
-        )
-        alignment.sort(reverse=True)
-        self.assertEqual(
-            str(alignment),
-            """\
-ACTT
-||.|
-ACCT
-""",
-        )
-        target.id = "seq1"
-        query.id = "seq2"
-        alignment.sort()
-        self.assertEqual(
-            str(alignment),
-            """\
-ACTT
-||.|
-ACCT
-""",
-        )
-        alignment.sort(reverse=True)
-        self.assertEqual(
-            str(alignment),
-            """\
-ACCT
-||.|
-ACTT
-""",
-        )
-        alignment.sort(key=GC)
-        self.assertEqual(
-            str(alignment),
-            """\
-ACTT
-||.|
-ACCT
-""",
-        )
-        alignment.sort(key=GC, reverse=True)
-        self.assertEqual(
-            str(alignment),
-            """\
-ACCT
-||.|
-ACTT
-""",
-        )
-
-    def test_substitutions(self):
-        aligner = Align.PairwiseAligner()
-        path = os.path.join("Align", "ecoli.fa")
-        record = SeqIO.read(path, "fasta")
-        target = record.seq
-        path = os.path.join("Align", "bsubtilis.fa")
-        record = SeqIO.read(path, "fasta")
-        query = record.seq
-        # blastn default parameters:
-        aligner.open_gap_score = -5
-        aligner.extend_gap_score = -2
-        aligner.match = +1
-        aligner.mismatch = -3
-        aligner.mode = "local"
-        alignments = aligner.align(target, query)
-        self.assertEqual(len(alignments), 9031680)
-        alignment = alignments[0]
-        m = alignment.substitutions
-        self.assertEqual(
-            str(m),
-            """\
-      A     C     G     T
-A 191.0   3.0  15.0  13.0
-C   5.0 186.0   9.0  14.0
-G  12.0  11.0 248.0   8.0
-T  11.0  19.0   6.0 145.0
-""",
-        )
-        self.assertAlmostEqual(m["T", "C"], 19.0)
-        self.assertAlmostEqual(m["C", "T"], 14.0)
-        m += m.transpose()
-        m /= 2.0
-        self.assertEqual(
-            str(m),
-            """\
-      A     C     G     T
-A 191.0   4.0  13.5  12.0
-C   4.0 186.0  10.0  16.5
-G  13.5  10.0 248.0   7.0
-T  12.0  16.5   7.0 145.0
-""",
-        )
-        self.assertAlmostEqual(m["C", "T"], 16.5)
-        self.assertAlmostEqual(m["T", "C"], 16.5)
-
-    def test_target_query_properties(self):
-        target = "ABCD"
-        query = "XYZ"
-        alignment = Align.PairwiseAlignment(target, query, None, None)
-        self.assertEqual(alignment.sequences[0], target)
-        self.assertEqual(alignment.sequences[1], query)
-        self.assertEqual(alignment.target, target)
-        self.assertEqual(alignment.query, query)
-        target = "EFGH"
-        query = "UVW"
-        alignment.target = target
-        alignment.query = query
-        self.assertEqual(alignment.sequences[0], target)
-        self.assertEqual(alignment.sequences[1], query)
-        self.assertEqual(alignment.target, target)
-        self.assertEqual(alignment.query, query)
-        target = "IJKL"
-        query = "RST"
-        sequences = [target, query]
-        alignment.sequences = sequences
-        self.assertEqual(alignment.sequences[0], target)
-        self.assertEqual(alignment.sequences[1], query)
-        self.assertEqual(alignment.target, target)
-        self.assertEqual(alignment.query, query)
 
 
 if __name__ == "__main__":

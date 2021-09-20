@@ -82,7 +82,7 @@ class Pathway:
                 "<!DOCTYPE pathway SYSTEM "
                 '"http://www.genome.jp/kegg/xml/'
                 'KGML_v0.7.2_.dtd">',
-                "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
+                f"<!-- Created by KGML_Pathway.py {time.asctime()} -->",
             ]
         )
         rough_xml = header + ET.tostring(self.element, "utf-8").decode()
@@ -94,7 +94,7 @@ class Pathway:
         # We insist that the node ID is an integer
         if not isinstance(entry.id, int):
             raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+                f"Node ID must be an integer, got {type(entry.id)} ({entry.id})"
             )
         entry._pathway = self  # Let the entry know about the pathway
         self.entries[entry.id] = entry
@@ -103,7 +103,7 @@ class Pathway:
         """Remove an Entry element from the pathway."""
         if not isinstance(entry.id, int):
             raise TypeError(
-                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+                f"Node ID must be an integer, got {type(entry.id)} ({entry.id})"
             )
         # We need to remove the entry from any other elements that may
         # contain it, which means removing those elements
@@ -115,8 +115,7 @@ class Pathway:
         # We insist that the node ID is an integer and corresponds to an entry
         if not isinstance(reaction.id, int):
             raise ValueError(
-                "Node ID must be an integer, got %s (%s)"
-                % (type(reaction.id), reaction.id)
+                f"Node ID must be an integer, got {type(reaction.id)} ({reaction.id})"
             )
         if reaction.id not in self.entries:
             raise ValueError("Reaction ID %d has no corresponding entry" % reaction.id)
@@ -127,8 +126,7 @@ class Pathway:
         """Remove a Reaction element from the pathway."""
         if not isinstance(reaction.id, int):
             raise TypeError(
-                "Node ID must be an integer, got %s (%s)"
-                % (type(reaction.id), reaction.id)
+                f"Node ID must be an integer, got {type(reaction.id)} ({reaction.id})"
             )
         # We need to remove the reaction from any other elements that may
         # contain it, which means removing those elements
@@ -147,10 +145,10 @@ class Pathway:
     def __str__(self):
         """Return a readable summary description string."""
         outstr = [
-            "Pathway: %s" % self.title,
-            "KEGG ID: %s" % self.name,
-            "Image file: %s" % self.image,
-            "Organism: %s" % self.org,
+            f"Pathway: {self.title}",
+            f"KEGG ID: {self.name}",
+            f"Image file: {self.image}",
+            f"Organism: {self.org}",
             "Entries: %d" % len(self.entries),
             "Entry types:",
         ]
@@ -166,7 +164,7 @@ class Pathway:
 
     def _setname(self, value):
         if not value.startswith("path:"):
-            raise ValueError("Pathway name should begin with 'path:', got %s" % value)
+            raise ValueError(f"Pathway name should begin with 'path:', got {value}")
         self._name = value
 
     def _delname(self):
@@ -298,10 +296,10 @@ class Entry:
         """Return readable descriptive string."""
         outstr = [
             "Entry node ID: %d" % self.id,
-            "Names: %s" % self.name,
-            "Type: %s" % self.type,
-            "Components: %s" % self.components,
-            "Reactions: %s" % self.reaction,
+            f"Names: {self.name}",
+            f"Type: {self.type}",
+            f"Components: {self.components}",
+            f"Reactions: {self.reaction}",
             "Graphics elements: %d %s" % (len(self.graphics), self.graphics),
         ]
         return "\n".join(outstr) + "\n"
@@ -315,7 +313,7 @@ class Entry:
         if self._pathway is not None:
             if element.id not in self._pathway.entries:
                 raise ValueError(
-                    "Component %s is not an entry in the pathway" % element.id
+                    f"Component {element.id} is not an entry in the pathway"
                 )
         self.components.add(element)
 
@@ -399,7 +397,7 @@ class Entry:
     def bounds(self):
         """Coordinate bounds for all Graphics elements in the Entry.
 
-        Return the [(xmin, ymin), (xmax, ymax)] co-ordinates for the Entry
+        Return the [(xmin, ymin), (xmax, ymax)] coordinates for the Entry
         Graphics elements.
         """
         xlist, ylist = [], []
@@ -466,7 +464,7 @@ class Graphics:
      - name         Label for the graphics object
      - x            X-axis position of the object (int)
      - y            Y-axis position of the object (int)
-     - coords       polyline co-ordinates, list of (int, int) tuples
+     - coords       polyline coordinates, list of (int, int) tuples
      - type         object shape
      - width        object width (int)
      - height       object height (int)
@@ -543,7 +541,7 @@ class Graphics:
         _getheight, _setheight, _delheight, "The height of the graphics element."
     )
 
-    # We make sure that the polyline co-ordinates are integers, too
+    # We make sure that the polyline coordinates are integers, too
     def _getcoords(self):
         return self._coords
 
@@ -628,7 +626,7 @@ class Graphics:
         """Coordinate bounds for the Graphics element.
 
         Return the bounds of the Graphics object as an [(xmin, ymin),
-        (xmax, ymax)] tuple.  Co-ordinates give the centre of the
+        (xmax, ymax)] tuple.  Coordinates give the centre of the
         circle, rectangle, roundrectangle elements, so we have to
         adjust for the relevant width/height.
         """
@@ -679,11 +677,11 @@ class Reaction:
     def __str__(self):
         """Return an informative human-readable string."""
         outstr = [
-            "Reaction node ID: %s" % self.id,
-            "Reaction KEGG IDs: %s" % self.name,
-            "Type: %s" % self.type,
-            "Substrates: %s" % ",".join([s.name for s in self.substrates]),
-            "Products: %s" % ",".join([s.name for s in self.products]),
+            f"Reaction node ID: {self.id}",
+            f"Reaction KEGG IDs: {self.name}",
+            f"Type: {self.type}",
+            f"Substrates: {','.join([s.name for s in self.substrates])}",
+            f"Products: {','.join([s.name for s in self.products])}",
         ]
         return "\n".join(outstr) + "\n"
 
@@ -812,7 +810,7 @@ class Relation:
             str(self.entry2),
         ]
         for s in self.subtypes:
-            outstr.extend(["Subtype: %s" % s[0], str(s[1])])
+            outstr.extend([f"Subtype: {s[0]}", str(s[1])])
         return "\n".join(outstr)
 
     # Properties entry1 and entry2

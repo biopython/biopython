@@ -164,12 +164,12 @@ class SortingTests(unittest.TestCase):
             self.assertEqual(
                 new[0:special_len],
                 special,
-                "Sorted residue did not place N, CA, C, O first: %s" % new,
+                f"Sorted residue did not place N, CA, C, O first: {new}",
             )
             self.assertEqual(
                 new[special_len:],
                 sorted(new[special_len:]),
-                "After N, CA, C, O should be alphabet: %s" % new,
+                f"After N, CA, C, O should be alphabet: {new}",
             )
 
     # Tests for sorting methods
@@ -200,13 +200,13 @@ class SortingTests(unittest.TestCase):
             self.assertEqual(
                 new[:len_special],
                 special,
-                "Sorted residue did not place N, CA, C, O first: %s" % new,
+                f"Sorted residue did not place N, CA, C, O first: {new}",
             )
             # Placed everyone else alphabetically?
             self.assertEqual(
                 new[len_special:],
                 sorted(new[len_special:]),
-                "After N, CA, C, O order Should be alphabetical: %s" % new,
+                f"After N, CA, C, O order Should be alphabetical: {new}",
             )
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
@@ -311,45 +311,45 @@ class ChangingIdTests(unittest.TestCase):
 
     def setUp(self):
         parser = PDBParser(PERMISSIVE=True, QUIET=True)
-        self.struc = parser.get_structure("X", "PDB/a_structure.pdb")
+        self.structure = parser.get_structure("X", "PDB/a_structure.pdb")
 
     def test_change_model_id(self):
         """Change the id of a model."""
-        for model in self.struc:
+        for model in self.structure:
             break  # Get first model in structure
         model.id = 2
         self.assertEqual(model.id, 2)
-        self.assertIn(2, self.struc)
-        self.assertNotIn(0, self.struc)
+        self.assertIn(2, self.structure)
+        self.assertNotIn(0, self.structure)
 
     def test_change_model_id_raises(self):
         """Cannot change id to a value already in use by another child."""
-        model = next(iter(self.struc))
+        model = next(iter(self.structure))
         with self.assertRaises(ValueError):
             model.id = 1
         # Make sure nothing was changed
         self.assertEqual(model.id, 0)
-        self.assertIn(0, self.struc)
-        self.assertIn(1, self.struc)
+        self.assertIn(0, self.structure)
+        self.assertIn(1, self.structure)
 
     def test_change_chain_id(self):
         """Change the id of a model."""
-        chain = next(iter(self.struc.get_chains()))
+        chain = next(iter(self.structure.get_chains()))
         chain.id = "R"
         self.assertEqual(chain.id, "R")
-        model = next(iter(self.struc))
+        model = next(iter(self.structure))
         self.assertIn("R", model)
 
     def test_change_id_to_self(self):
         """Changing the id to itself does nothing (does not raise)."""
-        chain = next(iter(self.struc.get_chains()))
+        chain = next(iter(self.structure.get_chains()))
         chain_id = chain.id
         chain.id = chain_id
         self.assertEqual(chain.id, chain_id)
 
     def test_change_residue_id(self):
         """Change the id of a residue."""
-        chain = next(iter(self.struc.get_chains()))
+        chain = next(iter(self.structure.get_chains()))
         res = chain[("H_PCA", 1, " ")]
         res.id = (" ", 1, " ")
 
@@ -360,12 +360,12 @@ class ChangingIdTests(unittest.TestCase):
 
     def test_full_id_is_updated_residue(self):
         """Invalidate cached full_ids if an id is changed."""
-        atom = next(iter(self.struc.get_atoms()))
+        atom = next(iter(self.structure.get_atoms()))
 
         # Generate the original full id.
         original_id = atom.get_full_id()
         self.assertEqual(original_id, ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
-        residue = next(iter(self.struc.get_residues()))
+        residue = next(iter(self.structure.get_residues()))
 
         # Make sure the full id was in fact cached,
         # so we need to invalidate it later.
@@ -379,17 +379,17 @@ class ChangingIdTests(unittest.TestCase):
 
     def test_full_id_is_updated_chain(self):
         """Invalidate cached full_ids if an id is changed."""
-        atom = next(iter(self.struc.get_atoms()))
+        atom = next(iter(self.structure.get_atoms()))
 
         # Generate the original full id.
         original_id = atom.get_full_id()
         self.assertEqual(original_id, ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
-        residue = next(iter(self.struc.get_residues()))
+        residue = next(iter(self.structure.get_residues()))
 
         # Make sure the full id was in fact cached,
         # so we need to invalidate it later.
         self.assertEqual(residue.full_id, ("X", 0, "A", ("H_PCA", 1, " ")))
-        chain = next(iter(self.struc.get_chains()))
+        chain = next(iter(self.structure.get_chains()))
 
         # Changing the chain's id should lead to an updated full id.
         chain.id = "Q"

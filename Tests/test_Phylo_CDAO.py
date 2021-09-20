@@ -43,7 +43,7 @@ def _test_parse_factory(source):
     def test_parse(self):
         trees = list(bp._io.parse(filename, "cdao"))
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % source
+    test_parse.__doc__ = f"Parse the phylogenies in {source}."
     return test_parse
 
 
@@ -72,15 +72,11 @@ def _test_write_factory(source):
                 pass
             else:
                 # Can't sort lists with None on Python 3 ...
-                self.assertNotIn(
-                    None, p1, "Bad input values for %s: %r" % (prop_name, p1)
-                )
-                self.assertNotIn(
-                    None, p2, "Bad output values for %s: %r" % (prop_name, p2)
-                )
+                self.assertNotIn(None, p1, f"Bad input values for {prop_name}: {p1!r}")
+                self.assertNotIn(None, p2, f"Bad output values for {prop_name}: {p2!r}")
                 self.assertEqual(sorted(p1), sorted(p2))
 
-    test_write.__doc__ = "Write and re-parse the phylogenies in %s." % source
+    test_write.__doc__ = f"Write and re-parse the phylogenies in {source}."
     return test_write
 
 
@@ -90,7 +86,7 @@ class ParseTests(unittest.TestCase):
 
 for n, ex in enumerate(cdao_files):
     parse_test = _test_parse_factory(ex)
-    parse_test.__name__ = "test_parse_%s" % n
+    parse_test.__name__ = f"test_parse_{n}"
     setattr(ParseTests, parse_test.__name__, parse_test)
 
 
@@ -100,7 +96,7 @@ class WriterTests(unittest.TestCase):
 
 for n, ex in enumerate(cdao_files):
     write_test = _test_write_factory(ex)
-    write_test.__name__ = "test_write_%s" % n
+    write_test.__name__ = f"test_write_{n}"
     setattr(WriterTests, write_test.__name__, write_test)
 
 

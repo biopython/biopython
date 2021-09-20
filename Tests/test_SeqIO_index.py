@@ -222,7 +222,7 @@ if sqlite3:
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-            # Note we expect relative paths recorded with Unix slashs!
+            # Note we expect relative paths recorded with Unix slashes!
             expt_sff_files = [
                 "Roche/E3MFGYR02_no_manifest.sff",
                 "Roche/greek.sff",
@@ -413,7 +413,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(id, rec_dict[key].id, msg=msg)
             self.assertEqual(id, rec_dict.get(key).id, msg=msg)
-        # Check non-existant keys,
+        # Check non-existent keys,
         assert chr(0) not in keys, "Bad example in test"
         with self.assertRaises(KeyError, msg=msg):
             rec = rec_dict[chr(0)]
@@ -432,7 +432,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def simple_check(self, filename, fmt, comp):
         """Check indexing (without a key function)."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -505,7 +505,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def key_check(self, filename, fmt, comp):
         """Check indexing with a key function."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -572,7 +572,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def get_raw_check(self, filename, fmt, comp):
         # Also checking the key_function here
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
@@ -590,13 +590,13 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
                 if sqlite3:
                     rec_dict_db = SeqIO.index_db(
-                        ":memory:", filename, fmt, key_function=str.lower,
+                        ":memory:", filename, fmt, key_function=str.lower
                     )
         else:
             rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
             if sqlite3:
                 rec_dict_db = SeqIO.index_db(
-                    ":memory:", filename, fmt, key_function=str.lower,
+                    ":memory:", filename, fmt, key_function=str.lower
                 )
 
         self.assertCountEqual(id_list, rec_dict.keys(), msg=msg)
@@ -626,7 +626,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             elif mode == "t":
                 handle = StringIO(raw.decode())
             else:
-                raise RuntimeError("Unexpected mode %s" % mode)
+                raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
