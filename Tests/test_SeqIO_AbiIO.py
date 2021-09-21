@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO AbiIO module."""
+import array
 import unittest
 
 from os.path import basename
@@ -250,7 +251,8 @@ class TestAbi(unittest.TestCase):
                 )
                 self.assertEqual(test_data[trace]["seq"], record.seq)
                 self.assertEqual(
-                    test_data[trace]["qual"], record.letter_annotations["phred_quality"]
+                    array.array("B", test_data[trace]["qual"]),
+                    record.letter_annotations["phred_quality"],
                 )
             self.assertEqual(test_data[trace]["sample"], record.id)
             self.assertEqual(

@@ -14,6 +14,7 @@ For more details on the format specification, visit:
 http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pdf
 
 """
+import array
 import datetime
 import struct
 import sys
@@ -392,7 +393,9 @@ class AbiIterator(SequenceIterator):
                 seq = tag_data.decode()
             # PCON2 is quality values of base-called sequence
             elif key == "PCON2":
-                qual = [ord(val) for val in tag_data.decode()]
+                qual = qualities = array.array(
+                    "B", [ord(val) for val in tag_data.decode()]
+                )
             # SMPL1 is sample id entered before sequencing run, it must be
             # a string.
             elif key == "SMPL1":
