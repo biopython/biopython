@@ -219,7 +219,7 @@ Number of features: 0
 Per letter annotation for: phred_quality
 Undefined sequence of length 25
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+array('B', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
 Just to keep things tidy, if you are following this example yourself, you can
 delete this temporary file now:
@@ -1372,13 +1372,13 @@ class QualPhredIterator(SequenceIterator):
         each record's per-letter-annotation:
 
         >>> print(record.letter_annotations["phred_quality"])
-        [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+        array('B', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
         You can still slice one of these SeqRecord objects:
 
         >>> sub_record = record[5:10]
-        >>> print("%s %s" % (sub_record.id, sub_record.letter_annotations["phred_quality"]))
-        EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
+        >>> print(f"{sub_record.id} {sub_record.letter_annotations['phred_quality']}")
+        EAS54_6_R1_2_1_443_348 array('B', [26, 26, 26, 26, 26])
 
         As of Biopython 1.59, this parser will accept files with negatives quality
         scores but will replace them with the lowest possible PHRED score of zero.
@@ -1431,6 +1431,9 @@ class QualPhredIterator(SequenceIterator):
                     BiopythonParserWarning,
                 )
                 qualities = [max(0, q) for q in qualities]
+
+            if qualities and max(qualities) < 256:
+                qualities = array.array("B", qualities)
 
             # Return the record and then continue...
             sequence = Seq(None, length=len(qualities))
@@ -1933,7 +1936,7 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
     of integers:
 
     >>> print(record.letter_annotations["phred_quality"])
-    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+    array('B', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
     If you have access to data as a FASTQ format file, using that directly
     would be simpler and more straight forward.  Note that you can easily use
