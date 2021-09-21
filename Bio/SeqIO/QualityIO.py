@@ -126,7 +126,7 @@ Number of features: 0
 Per letter annotation for: phred_quality
 Seq('GTTGCTTCTGGCGTGGGTGGGGGGG')
 >>> print(record.letter_annotations["phred_quality"])
-array('b', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
+array('B', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
 You can use the SeqRecord format method to show this in the QUAL format:
 
@@ -183,7 +183,7 @@ Number of features: 0
 Per letter annotation for: phred_quality
 Seq('TTCTGGCGTG')
 >>> print(sub_rec.letter_annotations["phred_quality"])
-array('b', [26, 26, 26, 26, 26, 26, 24, 26, 22, 26])
+array('B', [26, 26, 26, 26, 26, 26, 24, 26, 22, 26])
 >>> print(sub_rec.format("fastq"))
 @EAS54_6_R1_2_1_443_348
 TTCTGGCGTG
@@ -1056,7 +1056,7 @@ class FastqPhredIterator(SequenceIterator):
         per-letter-annotation dictionary as a Python array of integers:
 
         >>> print(record.letter_annotations["phred_quality"])
-        array('b', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
+        array('B', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
         """
         if alphabet is not None:
@@ -1093,7 +1093,7 @@ class FastqPhredIterator(SequenceIterator):
             record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
             try:
                 qualities = array.array(
-                    "b", [q_mapping[letter] for letter in quality_string]
+                    "B", [q_mapping[letter] for letter in quality_string]
                 )
             except KeyError:
                 raise ValueError("Invalid character in quality string") from None
@@ -1257,6 +1257,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
             name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
+            # Signed byte array since Solexa scores can be negative:
             qualities = array.array(
                 "b", (q_mapping[letter] for letter in quality_string)
             )
@@ -1316,7 +1317,7 @@ def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
             qualities = array.array(
-                "b", (q_mapping[letter] for letter in quality_string)
+                "B", (q_mapping[letter] for letter in quality_string)
             )
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
