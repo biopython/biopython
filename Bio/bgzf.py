@@ -556,7 +556,32 @@ class BgzfReader:
     """
 
     def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
-        """Initialize the class."""
+        r"""Initialize the class for reading a BGZF file.
+
+        You would typically use the top level ``bgzf.open(...)`` function
+        which will call this class internally. Direct use is discouraged.
+
+        Either the ``filename`` (string) or ``fileobj`` (input file object in
+        binary mode) arguments must be supplied, but not both.
+
+        Argument ``mode`` controls if the data will be returned as strings in
+        text mode ("rt", "tr", or default "r"), or bytes binary mode ("rb"
+        or "br"). The argument name matches the built-in ``open(...)`` and
+        standard library ``gzip.open(...)`` function.
+
+        If text mode is requested, in order to avoid multi-byte characters,
+        this is hard coded to use the "latin1" encoding, and "\r" and "\n"
+        are passed as is (without implementing universal new line mode). There
+        is no ``encoding`` argument.
+
+        If your data is in UTF-8 or any other incompatible encoding, you must
+        use binary mode, and decode the appropriate fragments yourself.
+
+        Argument ``max_cache`` controls the maximum number of BGZF blocks to
+        cache in memory. Each can be up to 64kb thus the default of 100 blocks
+        could take up to 6MB of RAM. This is important for efficient random
+        access, a small value is fine for reading the file in one pass.
+        """
         # TODO - Assuming we can seek, check for 28 bytes EOF empty block
         # and if missing warn about possible truncation (as in samtools)?
         if max_cache < 1:
@@ -566,15 +591,16 @@ class BgzfReader:
         # bytes under Python 3)
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
+        # Want to reject output modes like w, a, x, +
+        if mode.lower() not in ("r", "tr", "rt", "rb", "br"):
+            raise ValueError(
+                "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
+            )
         if fileobj:
             if "b" not in fileobj.mode.lower():
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
-            if "w" in mode.lower() or "a" in mode.lower():
-                raise ValueError(
-                    "Must use read mode (default), not write or append mode"
-                )
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         if self._text:
