@@ -463,7 +463,8 @@ def _load_bgzf_block(handle, text_mode=False):
             if block_size is not None:
                 raise ValueError("Two BC subfields?")
             block_size = struct.unpack("<H", subfield_data)[0] + 1  # uint16_t
-    assert x_len == extra_len, (x_len, extra_len)
+    if x_len != extra_len:
+        raise ValueError(f"x_len and extra_len differ {x_len}, {extra_len}")
     if block_size is None:
         raise ValueError("Missing BC, this isn't a BGZF file!")
     # Now comes the compressed data, CRC, and length of uncompressed data.
