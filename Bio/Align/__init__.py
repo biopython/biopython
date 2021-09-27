@@ -980,7 +980,10 @@ class Alignment:
             current_state = [None] * n
             for i in range(m):
                 next_state = [line[i] != "-" for line in lines]
-                if next_state == current_state:
+                if not any(next_state):
+                    # skip columns in which all rows have a gap
+                    continue
+                elif next_state == current_state:
                     step += 1  # noqa: F821
                 else:
                     indices = [
