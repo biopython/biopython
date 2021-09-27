@@ -69,8 +69,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise ValueError("Non-empty sequences are required")
         datatype = self._classify_mol_type_for_nexus(alignment)
         minimal_record = (
-            "begin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
-            % datatype
+            "begin data; dimensions ntax=0 nchar=0; format datatype=%s; end;" % datatype
         )
         n = Nexus.Nexus(minimal_record)
         for record, aligned_sequence in zip(alignment.sequences, alignment):
@@ -94,7 +93,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         Raises an exception if this is not possible.
         """
-        values = {sequence.annotations.get("molecule_type", None) for sequence in alignment.sequences}
+        values = {
+            sequence.annotations.get("molecule_type", None)
+            for sequence in alignment.sequences
+        }
         if all(_ and "DNA" in _ for _ in values):
             return "dna"  # could have been a mix of "DNA" and "gDNA"
         elif all(_ and "RNA" in _ for _ in values):
