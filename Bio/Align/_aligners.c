@@ -138,18 +138,17 @@ PathGenerator_create_path(PathGenerator* self, int i, int j) {
                 }
                 break;
             case '-': {
-                l = n - 1;
+                const int nB = self->nB;
                 while (1) {
                     path = M[i][j].path;
                     if (path != direction) {
                         value = PyLong_FromLong(i);
                         if (!value) break;
                         PyTuple_SET_ITEM(target_row, k, value);
-                        value = PyLong_FromLong(j);
+                        value = PyLong_FromLong(nB-j);
                         if (!value) break;
-                        PyTuple_SET_ITEM(query_row, l, value);
+                        PyTuple_SET_ITEM(query_row, k, value);
                         k++;
-                        l--;
                         direction = path;
                     }
                     switch (path) {
