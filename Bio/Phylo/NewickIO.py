@@ -13,6 +13,7 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
 
 import re
+from collections import deque
 from io import StringIO
 
 from Bio.Phylo import Newick
@@ -287,18 +288,73 @@ class Writer:
         )
 
         def newickize(clade):
-            """Convert a node tree to a Newick tree string, recursively."""
-            label = clade.name or ""
-            if label:
-                unquoted_label = re.match(token_dict["unquoted node label"], label)
-                if (not unquoted_label) or (unquoted_label.end() < len(label)):
-                    label = "'%s'" % label.replace("\\", "\\\\").replace("'", "\\'")
+            """Convert a node tree to a Newick tree string, iteratively.
 
-            if clade.is_terminal():  # terminal
-                return label + make_info_string(clade, terminal=True)
-            else:
-                subtrees = (newickize(sub) for sub in clade)
-                return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+            This is done with a stack with a few special markers.  Each time a
+            non-terminal node is encountered, an end marker is pushed onto the stack,
+            which contains the information necessary to print out the node information.
+            Subsequently, its children are pushed (in reverse order) onto the stack,
+            along with comma markers to denote where commas should be introduced in the
+            output.  This allows us to output the tree without busting the Python
+            stack.
+            """
+
+            class TerminalMarker:
+                """Marker for non-terminal nodes.
+
+                When we encounter this marker in the stack, we should write the
+                information for a non-terminal node to the output buffer.
+                """
+
+                def __init__(self, clade):
+                    self.clade = clade
+
+            class CommaMarker:
+                """Marker for commas.
+
+                When we encounter this marker in the stack, we should write a comma to
+                the output buffer.
+                """
+
+                ...
+
+            to_process = deque((clade,))
+            result = StringIO()
+            while len(to_process) != 0:
+                dequeued_item = to_process.popleft()
+                if isinstance(dequeued_item, CommaMarker):
+                    result.write(",")
+                    continue
+                elif isinstance(dequeued_item, TerminalMarker):
+                    item = dequeued_item.clade
+                else:
+                    item = dequeued_item
+
+                label = item.name or ""
+                if label:
+                    unquoted_label = re.match(token_dict["unquoted node label"], label)
+                    if (not unquoted_label) or (unquoted_label.end() < len(label)):
+                        label = "'%s'" % label.replace("\\", "\\\\").replace("'", "\\'")
+
+                if isinstance(dequeued_item, TerminalMarker):
+                    result.write("){}{}".format(label, make_info_string(item)))
+                elif item.is_terminal():  # terminal
+                    result.write(
+                        "{}{}".format(label, make_info_string(item, terminal=True))
+                    )
+                else:
+                    # insert the terminal marker first
+                    to_process.appendleft(TerminalMarker(item))
+                    for sub in reversed(item):
+                        to_process.appendleft(sub)
+                        to_process.appendleft(CommaMarker())
+
+                    # remove the last comma marker that we inserted.
+                    if isinstance(to_process[0], CommaMarker):
+                        to_process.popleft()
+
+                    result.write("(")
+            return result.getvalue()
 
         # Convert each tree to a string
         for tree in self.trees:
