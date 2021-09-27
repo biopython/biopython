@@ -39,6 +39,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         super().__init__(source, mode="w")
 
     def write_file(self, alignments):
+        """Write a file with the alignments, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        """
         count = super().write_file(alignments, mincount=1, maxcount=1)
         return count
 
@@ -128,7 +132,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             raise ValueError("File does not start with NEXUS header.")
 
     def parse(self, stream):
-        """Parse the next alignment from the stream
+        """Parse the next alignment from the stream.
 
         This uses the Bio.Nexus module to do the hard work.
 
