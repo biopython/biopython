@@ -1065,9 +1065,9 @@ class LinearDrawer(AbstractDrawer):
             top += self.fragment_lines[fragment][0]
         except Exception:  # Only called if the method screws up big time
             print("We've got a screw-up")
-            print("%s %s" % (self.start, self.end))
+            print(f"{self.start} {self.end}")
             print(self.fragment_bases)
-            print("%r %r" % (x0, x1))
+            print(f"{x0!r} {x1!r}")
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
@@ -1104,7 +1104,7 @@ class LinearDrawer(AbstractDrawer):
             strand=feature.strand,
             color=feature.color,
             border=feature.border,
-            **kwargs
+            **kwargs,
         )
 
         if feature.label_strand:
@@ -1552,7 +1552,7 @@ class LinearDrawer(AbstractDrawer):
             strokeWidth=1,
             strokeLineJoin=1,  # 1=round
             fillColor=color,
-            **kwargs
+            **kwargs,
         )
 
     def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):

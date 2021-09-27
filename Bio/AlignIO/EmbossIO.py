@@ -181,7 +181,7 @@ class EmbossIterator(AlignmentIterator):
                 # Just a spacer?
                 pass
             else:
-                raise ValueError("Unrecognised EMBOSS pairwise line: %r\n" % line)
+                raise ValueError(f"Unrecognised EMBOSS pairwise line: {line!r}\n")
 
             line = handle.readline()
             if (

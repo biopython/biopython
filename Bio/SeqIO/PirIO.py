@@ -269,7 +269,7 @@ class PirWriter(SequenceWriter):
         assert "\n" not in title
         assert "\r" not in description
 
-        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+        self.handle.write(f">{code};{title}\n{description}\n")
 
         data = _get_seq_string(record)  # Catches sequence being None
 

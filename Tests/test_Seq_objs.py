@@ -129,7 +129,7 @@ class StringMethodTests(unittest.TestCase):
                     j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
-                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, str2))
+                self.assertEqual(i, j, f"{example1!r}.{method_name}({str2!r})")
                 try:
                     i = getattr(example1, method_name)(example2)
                 except ValueError:
@@ -138,7 +138,7 @@ class StringMethodTests(unittest.TestCase):
                     j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
-                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, example2))
+                self.assertEqual(i, j, f"{example1!r}.{method_name}({example2!r})")
 
                 if start_end:
                     for start in self._start_end_values:
@@ -151,7 +151,7 @@ class StringMethodTests(unittest.TestCase):
                         except ValueError:
                             j = ValueError
                         self.assertEqual(
-                            i, j, "%r.%s(%r, %s)" % (example1, method_name, str2, start)
+                            i, j, f"{example1!r}.{method_name}({str2!r}, {start})"
                         )
 
                         for end in self._start_end_values:
@@ -166,8 +166,7 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(
                                 i,
                                 j,
-                                "%r.%s(%r, %s, %s)"
-                                % (example1, method_name, str2, start, end),
+                                f"{example1!r}.{method_name}({str2!r}, {start}, {end})",
                             )
 
     def test_str_count(self):
@@ -665,32 +664,32 @@ class StringMethodTests(unittest.TestCase):
                     self.assertEqual(
                         str(example1) == str(example2),
                         example1 == example2,
-                        "Checking %r == %r" % (example1, example2),
+                        f"Checking {example1!r} == {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) != str(example2),
                         example1 != example2,
-                        "Checking %r != %r" % (example1, example2),
+                        f"Checking {example1!r} != {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) < str(example2),
                         example1 < example2,
-                        "Checking %r < %r" % (example1, example2),
+                        f"Checking {example1!r} < {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) <= str(example2),
                         example1 <= example2,
-                        "Checking %r <= %r" % (example1, example2),
+                        f"Checking {example1!r} <= {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) > str(example2),
                         example1 > example2,
-                        "Checking %r > %r" % (example1, example2),
+                        f"Checking {example1!r} > {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) >= str(example2),
                         example1 >= example2,
-                        "Checking %r >= %r" % (example1, example2),
+                        f"Checking {example1!r} >= {example2!r}",
                     )
 
     def test_str_getitem(self):
@@ -973,7 +972,7 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
-            msg = "Translating %s should fail" % codon
+            msg = f"Translating {codon} should fail"
             nuc = Seq(codon)
             with self.assertRaises(TranslationError, msg=msg):
                 nuc.translate()
@@ -1266,7 +1265,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertEqual(seq1[2:4], seq2[3:5], msg=msg)
                 self.assertEqual(seq1[2:4], "AT", msg=msg)
                 self.assertEqual(seq2[3:5], "AT", msg=msg)
@@ -1307,7 +1306,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertNotEqual(seq1, seq2, msg=msg)
                 self.assertNotEqual(seq1, "AT", msg=msg)
                 self.assertNotEqual(seq2, "AT", msg=msg)
@@ -1364,7 +1363,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertLess(seq1, seq2, msg=msg)
                 self.assertLess("AA", seq1, msg=msg)
                 self.assertLess(seq1, "TT", msg=msg)
@@ -1413,7 +1412,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertLessEqual(seq1, seq2, msg=msg)
                 self.assertLessEqual(seq1, "TT", msg=msg)
                 self.assertLessEqual("TT", seq2, msg=msg)
@@ -1471,7 +1470,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertGreater(seq2, seq1, msg=msg)
                 self.assertGreater("TT", seq1, msg=msg)
                 self.assertGreater(seq2, "TT", msg=msg)
@@ -1528,7 +1527,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertGreaterEqual(seq2, seq1, msg=msg)
                 self.assertGreaterEqual("TT", seq1, msg=msg)
                 self.assertGreaterEqual(seq2, "TT", msg=msg)

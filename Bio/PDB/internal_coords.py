@@ -2226,7 +2226,7 @@ class IC_Residue:
             s += "\n"
         for d in sorted(self.dihedra.values()):
             try:
-                s += base + d.id + " " + "{:9.5f}".format(set_accuracy_95(d.angle))
+                s += f"{base}{d.id} {set_accuracy_95(d.angle):9.5f}"
             except KeyError:
                 pass
             s += "\n"
@@ -2701,7 +2701,7 @@ class Edron:
             else:
                 acs.append(ac)
         if estr != "":
-            raise MissingAtomError("%s missing coordinates for %s" % (self, estr))
+            raise MissingAtomError(f"{self} missing coordinates for {estr}")
         return tuple(acs)
 
     def is_backbone(self) -> bool:
@@ -2916,7 +2916,7 @@ class Hedron(Edron):
         elif all(ak in self.aks[1:] for ak in ak_tpl):
             self.lal[2] = newLength  # len23
         else:
-            raise TypeError("%s not found in %s" % (str(ak_tpl), self))
+            raise TypeError(f"{str(ak_tpl)} not found in {self}")
 
         self.cic.hAtoms_needs_update[self.cic.hedraNdx[self.aks]] = True
 
@@ -3037,14 +3037,14 @@ class Dihedron(Edron):
 
         if not hedron1:
             raise HedronMatchError(
-                "can't find 1st hedron for key %s dihedron %s" % (h1key, self)
+                f"can't find 1st hedron for key {h1key} dihedron {self}"
             )
 
         hedron2 = Dihedron._get_hedron(res, h2key)
 
         if not hedron2:
             raise HedronMatchError(
-                "can't find 2nd hedron for key %s dihedron %s" % (h2key, self)
+                f"can't find 2nd hedron for key {h2key} dihedron {self}"
             )
 
         self.hedron1 = hedron1

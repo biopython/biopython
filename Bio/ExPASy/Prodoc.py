@@ -85,7 +85,7 @@ class Reference:
 def __read_prosite_reference_line(record, line):
     line = line.rstrip()
     if line[-1] != "}":
-        raise ValueError("I don't understand the Prosite reference on line\n%s" % line)
+        raise ValueError(f"I don't understand the Prosite reference on line\n{line}")
     acc, name = line[1:-1].split("; ")
     record.prosite_refs.append((acc, name))
 
@@ -118,7 +118,7 @@ def __read_reference_line(record, line):
         else:
             reference.citation += line[5:]
         return True
-    raise Exception("I don't understand the reference line\n%s" % line)
+    raise Exception(f"I don't understand the reference line\n{line}")
 
 
 def __read_copyright_line(record, line):
@@ -141,7 +141,7 @@ def __read(handle):
     if not line.startswith("{PDOC"):
         raise ValueError("Line does not start with '{PDOC':\n%s" % line)
     if line[-1] != "}":
-        raise ValueError("I don't understand accession line\n%s" % line)
+        raise ValueError(f"I don't understand accession line\n{line}")
     record.accession = line[1:-1]
     # Read the Prosite references
     for line in handle:

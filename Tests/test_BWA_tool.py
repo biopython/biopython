@@ -107,13 +107,12 @@ class BwaTestCase(unittest.TestCase):
         for extension in self.reference_extensions:
             index_file = self.reference_file + "." + extension
             self.assertTrue(
-                os.path.exists(index_file), "Index File %s not found" % (index_file)
+                os.path.exists(index_file), f"Index File {index_file} not found"
             )
         self.assertIn(
             "Finished constructing BWT",
             str(stdout) + str(stderr),
-            "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
-            % (cmdline, stdout, stderr),
+            f"FASTA indexing failed:\n{cmdline}\nStdout:{stdout}\nStderr:{stderr}\n",
         )
 
     def do_aln(self, in_file, out_file):
@@ -158,8 +157,7 @@ class BwaTestCase(unittest.TestCase):
                 headline = handle.readline()
             self.assertTrue(
                 headline.startswith("@SQ"),
-                "Error generating sam files:\n%s\nOutput starts:%s"
-                % (cmdline, headline),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
         def test_sampe(self):
@@ -182,8 +180,7 @@ class BwaTestCase(unittest.TestCase):
                 headline = handle.readline()
             self.assertTrue(
                 headline.startswith("@SQ"),
-                "Error generating sam files:\n%s\nOutput starts:%s"
-                % (cmdline, headline),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
         def test_mem(self):
@@ -200,8 +197,7 @@ class BwaTestCase(unittest.TestCase):
                 headline = handle.readline()
             self.assertTrue(
                 headline.startswith("@SQ"),
-                "Error generating sam files:\n%s\nOutput starts:%s"
-                % (cmdline, headline),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
 

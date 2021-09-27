@@ -109,7 +109,7 @@ class BgzfTests(unittest.TestCase):
 
                 self.assertEqual(len(old), len(new))
                 self.assertEqual(
-                    old[:10], new[:10], "%r vs %r, mode %r" % (old[:10], new[:10], mode)
+                    old[:10], new[:10], f"{old[:10]!r} vs {new[:10]!r}, mode {mode!r}"
                 )
                 self.assertEqual(old, new)
 
@@ -146,7 +146,7 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(len(old), len(new))
                 # If bytes vs unicode mismatch, give a short error message:
                 self.assertEqual(
-                    old[:10], new[:10], "%r vs %r, mode %r" % (old[:10], new[:10], mode)
+                    old[:10], new[:10], f"{old[:10]!r} vs {new[:10]!r}, mode {mode!r}"
                 )
                 self.assertEqual(old, new)
 

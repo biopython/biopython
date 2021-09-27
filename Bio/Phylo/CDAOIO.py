@@ -277,7 +277,7 @@ class Writer:
         tree_uri="",
         record_complete_ancestry=False,
         rooted=False,
-        **kwargs
+        **kwargs,
     ):
         """Write this instance's trees to a file handle."""
         self.rooted = rooted
@@ -291,7 +291,7 @@ class Writer:
         if tree_uri:
             handle.write("@base <%s>\n" % tree_uri)
         for k, v in self.prefixes.items():
-            handle.write("@prefix %s: <%s> .\n" % (k, v))
+            handle.write(f"@prefix {k}: <{v}> .\n")
 
         handle.write("<%s> a owl:Ontology .\n" % self.prefixes["cdao"])
 

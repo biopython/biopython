@@ -371,7 +371,7 @@ def _read(handle):
             _read_ft(record, line)
         elif key == "SQ":
             cols = value.split()
-            assert len(cols) == 7, "I don't understand SQ line %s" % line
+            assert len(cols) == 7, f"I don't understand SQ line {line}"
             # Do more checking here?
             record.seqinfo = int(cols[1]), int(cols[3]), cols[5]
         elif key == "  ":
@@ -408,7 +408,7 @@ def _read(handle):
             # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         else:
-            raise SwissProtParserError("Unknown keyword '%s' found" % key, line=line)
+            raise SwissProtParserError(f"Unknown keyword '{key}' found", line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -435,13 +435,13 @@ def _read_id(record, line):
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        message = "Unrecognized data class '%s'" % record.data_class
+        message = f"Unrecognized data class '{record.data_class}'"
         raise SwissProtParserError(message, line=line)
 
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        message = "Unrecognized molecule type '%s'" % record.molecule_type
+        message = f"Unrecognized molecule type '{record.molecule_type}'"
         raise SwissProtParserError(message, line=line)
 
 
@@ -474,7 +474,7 @@ def _read_dt(record, line):
         for index in range(len(uprcols)):
             if "REL." in uprcols[index]:
                 rel_index = index
-        assert rel_index >= 0, "Could not find Rel. in DT line: %s" % line
+        assert rel_index >= 0, f"Could not find Rel. in DT line: {line}"
         version_index = rel_index + 1
         # get the version information
         str_version = cols[version_index].rstrip(",")
@@ -565,13 +565,13 @@ def _read_ox(record, line):
         ids = line[5:].rstrip().rstrip(";")
     else:
         descr, ids = line[5:].rstrip().rstrip(";").split("=")
-        assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
+        assert descr == "NCBI_TaxID", f"Unexpected taxonomy type {descr}"
     record.taxonomy_id.extend(ids.split(", "))
 
 
 def _read_oh(record, line):
     # Line type OH (Organism Host) for viral hosts
-    assert line[5:].startswith("NCBI_TaxID="), "Unexpected %s" % line
+    assert line[5:].startswith("NCBI_TaxID="), f"Unexpected {line}"
     line = line[16:].rstrip()
     assert line[-1] == "." and line.count(";") == 1, line
     taxid, name = line[:-1].split(";")
@@ -586,15 +586,13 @@ def _read_rn(reference, rn):
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
     words = rn.split(None, 1)
     number = words[0]
-    assert number.startswith("[") and number.endswith("]"), (
-        "Missing brackets %s" % number
-    )
+    assert number.startswith("[") and number.endswith("]"), f"Missing brackets {number}"
     reference.number = int(number[1:-1])
     if len(words) > 1:
         evidence = words[1]
-        assert evidence.startswith("{") and evidence.endswith("}"), (
-            "Missing braces %s" % evidence
-        )
+        assert evidence.startswith("{") and evidence.endswith(
+            "}"
+        ), f"Missing braces {evidence}"
         reference.evidence = evidence[1:-1].split("|")
 
 
@@ -615,7 +613,7 @@ def _read_rc(reference, value):
             reference.comments.append(comment)
         else:
             comment = reference.comments[-1]
-            comment = "%s %s" % (comment, col)
+            comment = f"{comment} {col}"
             reference.comments[-1] = comment
     return unread
 
@@ -648,7 +646,7 @@ def _read_rx(reference, value):
             if len(x) != 2 or x == ("DOI", "DOI"):
                 warn = True
                 break
-            assert len(x) == 2, "I don't understand RX line %s" % value
+            assert len(x) == 2, f"I don't understand RX line {value}"
             reference.references.append((x[0], x[1].rstrip(";")))
     # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
     else:
@@ -662,7 +660,7 @@ def _read_rx(reference, value):
         import warnings
         from Bio import BiopythonParserWarning
 
-        warnings.warn("Possibly corrupt RX line %r" % value, BiopythonParserWarning)
+        warnings.warn(f"Possibly corrupt RX line {value!r}", BiopythonParserWarning)
 
 
 def _read_cc(record, line):
@@ -768,9 +766,9 @@ def _read_ft(record, line):
         # this line is a continuation of the description of the previous feature
         old_description = feature.qualifiers["description"]
         if old_description.endswith("-"):
-            description = "%s%s" % (old_description, description)
+            description = f"{old_description}{description}"
         else:
-            description = "%s %s" % (old_description, description)
+            description = f"{old_description} {description}"
 
         if feature.type in ("VARSPLIC", "VAR_SEQ"):  # special case
             # Remove unwanted spaces in sequences.
@@ -831,9 +829,9 @@ def _read_ft(record, line):
         description = value.rstrip('"')
         old_description = feature.qualifiers[key]
         if key == "evidence" or old_description.endswith("-"):
-            description = "%s%s" % (old_description, description)
+            description = f"{old_description}{description}"
         else:
-            description = "%s %s" % (old_description, description)
+            description = f"{old_description} {description}"
         if feature.type == "VAR_SEQ":  # see VARSPLIC above
             try:
                 first_seq, second_seq = description.split(" -> ")

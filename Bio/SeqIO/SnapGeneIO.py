@@ -110,7 +110,7 @@ def _parse_cookie_packet(length, data, record):
 
 
 def _parse_location(rangespec, strand, record):
-    start, end = [int(x) for x in rangespec.split("-")]
+    start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
     if start > end:
@@ -144,12 +144,33 @@ def _parse_features_packet(length, data, record):
             strand = -1
 
         location = None
+        subparts = []
+        n_parts = 0
         for segment in feature.getElementsByTagName("Segment"):
+            if _get_attribute_value(segment, "type", "standard") == "gap":
+                continue
             rng = _get_attribute_value(segment, "range")
+            n_parts += 1
+            next_location = _parse_location(rng, strand, record)
             if not location:
-                location = _parse_location(rng, strand, record)
+                location = next_location
+            elif strand == -1:
+                # Reverse segments order for reverse-strand features
+                location = next_location + location
             else:
-                location = location + _parse_location(rng, strand, record)
+                location = location + next_location
+
+            name = _get_attribute_value(segment, "name")
+            if name:
+                subparts.append([n_parts, name])
+
+        if len(subparts) > 0:
+            # Add a "parts" qualifiers to represent "named subfeatures"
+            if strand == -1:
+                # Reverse segment indexes and order for reverse-strand features
+                subparts = reversed([[n_parts - i + 1, name] for i, name in subparts])
+            quals["parts"] = [";".join(f"{i}:{name}" for i, name in subparts)]
+
         if not location:
             raise ValueError("Missing feature location")
 
@@ -220,7 +241,6 @@ _packet_handlers = {
     0x06: _parse_notes_packet,
     0x0A: _parse_features_packet,
 }
-
 
 # Helper functions to process the XML data in
 # some of the segments

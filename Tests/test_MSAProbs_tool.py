@@ -77,7 +77,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
                 str(err),
             )
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -96,7 +96,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
                 expected = 139  # TODO: Check return codes on various other platforms
             self.assertEqual(expected, err.returncode)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
@@ -108,7 +108,7 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             self.assertEqual(err.returncode, 1)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
 
 #################################################################

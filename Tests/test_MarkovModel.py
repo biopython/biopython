@@ -478,7 +478,7 @@ class TestMarkovModel(unittest.TestCase):
         self.assertEqual(viterbi_output[0][0][0], output1[0])
         self.assertEqual(viterbi_output[0][0][1], output1[1])
         self.assertEqual(viterbi_output[0][0][2], output1[2])
-        self.assertEqual(float("%.3f" % viterbi_output[0][1]), float("%.3f" % output2))
+        self.assertEqual(float(f"{viterbi_output[0][1]:.3f}"), float(f"{output2:.3f}"))
 
     def test_normalize_and_copy_and_check(self):
         matrix_in1 = array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
@@ -562,19 +562,19 @@ class TestMarkovModel(unittest.TestCase):
         output = 10.304721798
         output1 = 3.40760596444
         self.assertEqual(
-            float("%.3f" % MarkovModel._logsum(matrix)), float("%.3f" % output)
+            float(f"{MarkovModel._logsum(matrix):.3f}"), float(f"{output:.3f}")
         )
         self.assertEqual(
-            float("%.3f" % MarkovModel._logsum(matrix1)), float("%.3f" % output1)
+            float(f"{MarkovModel._logsum(matrix1):.3f}"), float(f"{output1:.3f}")
         )
 
         output2 = 29873.342245
         output3 = 30.1928748506
         self.assertEqual(
-            float("%.3f" % MarkovModel._exp_logsum(matrix)), float("%.3f" % output2)
+            float(f"{MarkovModel._exp_logsum(matrix):.3f}"), float(f"{output2:.3f}")
         )
         self.assertEqual(
-            float("%.3f" % MarkovModel._exp_logsum(matrix1)), float("%.3f" % output3)
+            float(f"{MarkovModel._exp_logsum(matrix1):.3f}"), float(f"{output3:.3f}")
         )
 
     def test_logvecadd(self):

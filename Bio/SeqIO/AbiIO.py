@@ -361,7 +361,7 @@ class AbiIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         if marker != b"ABIF":
-            raise OSError("File should start ABIF, not %r" % marker)
+            raise OSError(f"File should start ABIF, not {marker!r}")
         records = self.iterate(handle)
         return records
 
@@ -404,8 +404,8 @@ class AbiIterator(SequenceIterator):
                     annot[_EXTRACT[key]] = tag_data
 
         # set time annotations
-        annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
-        annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
+        annot["run_start"] = f"{times['RUND1']} {times['RUNT1']}"
+        annot["run_finish"] = f"{times['RUND2']} {times['RUNT2']}"
 
         # raw data (for advanced end users benefit)
         annot["abif_raw"] = raw

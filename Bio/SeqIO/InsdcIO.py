@@ -249,7 +249,7 @@ def _insdc_feature_position_string(pos, offset=0):
 
 def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length):
     if location.ref:
-        ref = "%s:" % location.ref
+        ref = f"{location.ref}:"
     else:
         ref = ""
     assert not location.ref_db
@@ -345,7 +345,7 @@ def _insdc_location_string(location, rec_length):
             location, rec_length
         )
         if location.strand == -1:
-            return "complement(%s)" % loc
+            return f"complement({loc})"
         else:
             return loc
 
@@ -376,7 +376,7 @@ class _InsdcWriter(SequenceWriter):
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if value is None:
             # Value-less entry like /pseudo
-            self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
+            self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
         if type(value) == str:
@@ -393,9 +393,9 @@ class _InsdcWriter(SequenceWriter):
             else:
                 quote = True
         if quote:
-            line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f'{self.QUALIFIER_INDENT_STR}/{key}="{value}"'
         else:
-            line = "%s/%s=%s" % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f"{self.QUALIFIER_INDENT_STR}/{key}={value}"
         if len(line) <= self.MAX_WIDTH:
             self.handle.write(line + "\n")
             return
@@ -425,7 +425,7 @@ class _InsdcWriter(SequenceWriter):
         index = location[:length].rfind(",")
         if index == -1:
             # No good place to split (!)
-            warnings.warn("Couldn't split location:\n%s" % location, BiopythonWarning)
+            warnings.warn(f"Couldn't split location:\n{location}", BiopythonWarning)
             return location
         return (
             location[: index + 1]
@@ -546,11 +546,11 @@ class GenBankWriter(_InsdcWriter):
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
                 warnings.warn(
-                    "Annotation %r too long for %r line" % (text, tag), BiopythonWarning
+                    f"Annotation {text!r} too long for {tag!r} line", BiopythonWarning
                 )
             else:
                 # Can't give such a precise warning
-                warnings.warn("Annotation %r too long" % text, BiopythonWarning)
+                warnings.warn(f"Annotation {text!r} too long", BiopythonWarning)
         self.handle.write(
             "%s%s\n" % (tag.ljust(self.HEADER_WIDTH), text.replace("\n", " "))
         )
@@ -731,7 +731,7 @@ class GenBankWriter(_InsdcWriter):
                 )
 
         if len(locus.split()) > 1:
-            raise ValueError("Invalid whitespace in %r for LOCUS line" % locus)
+            raise ValueError(f"Invalid whitespace in {locus!r} for LOCUS line")
         if len(record) > 99999999999:
             # As of the GenBank release notes 229.0, the locus line can be
             # any length. However, long locus lines may not be compatible
@@ -751,7 +751,7 @@ class GenBankWriter(_InsdcWriter):
             # Deal with common cases from EMBL to GenBank
             mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")
             if len(mol_type) > 7:
-                warnings.warn("Molecule type %r too long" % mol_type, BiopythonWarning)
+                warnings.warn(f"Molecule type {mol_type!r} too long", BiopythonWarning)
                 mol_type = "DNA"
         if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
@@ -985,7 +985,7 @@ class GenBankWriter(_InsdcWriter):
             for words in range(
                 line_number, min(line_number + self.LETTERS_PER_LINE, seq_len), 10
             ):
-                self.handle.write(" %s" % data[words : words + 10])
+                self.handle.write(f" {data[words:words + 10]}")
             self.handle.write("\n")
 
     def write_record(self, record):
@@ -1025,9 +1025,9 @@ class GenBankWriter(_InsdcWriter):
 
         self._write_single_line("ACCESSION", accession)
         if gi != ".":
-            self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version, gi))
+            self._write_single_line("VERSION", f"{acc_with_version}  GI:{gi}")
         else:
-            self._write_single_line("VERSION", "%s" % acc_with_version)
+            self._write_single_line("VERSION", acc_with_version)
 
         # The NCBI initially expected two types of link,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
@@ -1189,7 +1189,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write(" %s" % data[index : index + self.LETTERS_PER_BLOCK])
+                handle.write(f" {data[index:index + self.LETTERS_PER_BLOCK]}")
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING
@@ -1204,9 +1204,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write(
-                    (" %s" % data[index : index + self.LETTERS_PER_BLOCK]).ljust(11)
-                )
+                handle.write(f" {data[index:index + self.LETTERS_PER_BLOCK]}".ljust(11))
             handle.write(str(seq_len).rjust(self.POSITION_PADDING))
             handle.write("\n")
 
@@ -1214,7 +1212,7 @@ class EmblWriter(_InsdcWriter):
         assert len(tag) == 2
         line = tag + "   " + text
         if len(text) > self.MAX_WIDTH:
-            warnings.warn("Line %r too long" % line, BiopythonWarning)
+            warnings.warn(f"Line {line!r} too long", BiopythonWarning)
         self.handle.write(line + "\n")
 
     def _write_multi_line(self, tag, text):
@@ -1237,12 +1235,10 @@ class EmblWriter(_InsdcWriter):
             )
 
         if ";" in accession:
-            raise ValueError(
-                "Cannot have semi-colon in EMBL accession, '%s'" % accession
-            )
+            raise ValueError(f"Cannot have semi-colon in EMBL accession, '{accession}'")
         if " " in accession:
             # This is out of practicality... might it be allowed?
-            raise ValueError("Cannot have spaces in EMBL accession, '%s'" % accession)
+            raise ValueError(f"Cannot have spaces in EMBL accession, '{accession}'")
 
         topology = self._get_annotation_str(record, "topology", default="")
 
@@ -1253,7 +1249,7 @@ class EmblWriter(_InsdcWriter):
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
         if mol_type not in ("DNA", "RNA", "protein"):
-            warnings.warn("Non-standard molecule type: %s" % mol_type, BiopythonWarning)
+            warnings.warn(f"Non-standard molecule type: {mol_type}", BiopythonWarning)
         mol_type_upper = mol_type.upper()
         if "DNA" in mol_type_upper:
             units = "BP"
@@ -1263,7 +1259,7 @@ class EmblWriter(_InsdcWriter):
             mol_type = "PROTEIN"
             units = "AA"
         else:
-            raise ValueError("failed to understand molecule_type '%s'" % mol_type)
+            raise ValueError(f"failed to understand molecule_type '{mol_type}'")
 
         # Get the taxonomy division
         division = self._get_data_division(record)
@@ -1373,15 +1369,15 @@ class EmblWriter(_InsdcWriter):
                 )
             # TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:
-                self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
+                self._write_single_line("RX", f"PUBMED; {ref.pubmed_id}.")
             if ref.consrtm:
-                self._write_single_line("RG", "%s" % ref.consrtm)
+                self._write_single_line("RG", f"{ref.consrtm}")
             if ref.authors:
                 # We store the AUTHORS data as a single string
                 self._write_multi_line("RA", ref.authors + ";")
             if ref.title:
                 # We store the title as a single string
-                self._write_multi_line("RT", '"%s";' % ref.title)
+                self._write_multi_line("RT", f'"{ref.title}";')
             if ref.journal:
                 # We store this as a single string - holds the journal name,
                 # volume, year, and page numbers of the citation

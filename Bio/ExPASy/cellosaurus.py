@@ -122,11 +122,11 @@ class Record(dict):
         """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["AC"]:
-                return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["AC"])
+                return f"{self.__class__.__name__} ({self['ID']}, {self['AC']})"
             else:
-                return "%s (%s)" % (self.__class__.__name__, self["ID"])
+                return f"{self.__class__.__name__} ({self['ID']})"
         else:
-            return "%s ( )" % (self.__class__.__name__)
+            return f"{self.__class__.__name__} ( )"
 
     def __str__(self):
         """Return a readable string representation of the Record object."""

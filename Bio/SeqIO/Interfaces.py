@@ -48,15 +48,15 @@ class SequenceIterator(ABC):
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        "%s files must be opened in text mode." % fmt
+                        f"{fmt} files must be opened in text mode."
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        "%s files must be opened in binary mode." % fmt
+                        f"{fmt} files must be opened in binary mode."
                     ) from None
             else:
-                raise ValueError("Unknown mode '%s'" % mode) from None
+                raise ValueError(f"Unknown mode '{mode}'") from None
             self.stream = source
             self.should_close_stream = False
         try:
@@ -102,9 +102,9 @@ def _get_seq_string(record):
     if not isinstance(record, SeqRecord):
         raise TypeError("Expected a SeqRecord object")
     if record.seq is None:
-        raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
+        raise TypeError(f"SeqRecord (id={record.id}) has None for its sequence.")
     elif not isinstance(record.seq, (Seq, MutableSeq)):
-        raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
+        raise TypeError(f"SeqRecord (id={record.id}) has an invalid sequence.")
     return str(record.seq)
 
 
@@ -157,7 +157,7 @@ class SequenceWriter:
             else:
                 handle = target
         else:
-            raise RuntimeError("Unknown mode '%s'" % mode)
+            raise RuntimeError(f"Unknown mode '{mode}'")
 
         self._target = target
         self.handle = handle

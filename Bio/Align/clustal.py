@@ -32,7 +32,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 version = alignments.version
             except AttributeError:
                 version = ""
-        line = "%s %s multiple sequence alignment\n" % (program, version)
+        line = f"{program} {version} multiple sequence alignment\n"
         stream.write(line)
         stream.write("\n")
         stream.write("\n")
@@ -78,7 +78,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stop = length
 
             for name, gapped_sequence in zip(names, gapped_sequences):
-                line = "%s%s\n" % (name, gapped_sequence[start:stop])
+                line = f"{name}{gapped_sequence[start:stop]}\n"
                 stream.write(line)
 
             # now we need to print out the star info, if we've got it
@@ -94,7 +94,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
     def __init__(self, source):
-        """Create an Iterator object.
+        """Create an AlignmentIterator object.
 
         Arguments:
          - source   - input data or file name

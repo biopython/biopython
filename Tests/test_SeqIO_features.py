@@ -110,9 +110,9 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             if key in ["db_xref", "protein_id", "product", "note"]:
                 # EMBL and GenBank files are use different references/notes/etc
                 continue
-            err_msg = "qualifier mismatch for %s" % key
+            err_msg = f"qualifier mismatch for {key}"
             if msg:
-                err_msg = "%s; %s" % (msg, err_msg)
+                err_msg = f"{msg}; {err_msg}"
             self.assertEqual(old.qualifiers[key], new.qualifiers[key], msg=err_msg)
 
     def compare_record(self, old, new, msg=None, expect_minor_diffs=False):
@@ -125,7 +125,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                 new.name,
             )
             if msg:
-                err_msg = "%s; %s" % (msg, err_msg)
+                err_msg = f"{msg}; {err_msg}"
             self.assertTrue(
                 old.id == new.id
                 or old.name == new.name
@@ -153,9 +153,9 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             bytes(new_seq)
         except UndefinedSequenceError:
             new_seq = None
-        err_msg = "'%s' vs '%s'" % (old_seq, new_seq)
+        err_msg = f"'{old_seq}' vs '{new_seq}'"
         if msg:
-            err_msg = "%s; %s" % (msg, err_msg)
+            err_msg = f"{msg}; {err_msg}"
         if old_seq is None and new_seq is None:
             self.assertEqual(repr(old_seq_upper), repr(new_seq_upper), msg=err_msg)
         else:
@@ -1069,7 +1069,7 @@ class NC_000932(SeqIOFeatureTestBaseClass):
         "gi|7525057|ref|NP_051038.1|",  # dual-strand
         "gi|90110725|ref|NP_051109.2|",  # Invalid annotation? No start codon
     ]
-    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
+    __doc__ = f"Tests using {basename} GenBank and FASTA files from the NCBI"
     # TODO - neat way to change the docstrings...
 
     def setUp(self):
@@ -1098,7 +1098,7 @@ class NC_000932(SeqIOFeatureTestBaseClass):
             try:
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
-                msg = "%s\n%r, %r, %r\n%s" % (e, r.id, nuc, self.table, f)
+                msg = f"{e}\n{r.id!r}, {nuc!r}, {self.table!r}\n{f}"
                 self.fail(msg)
             if pro[-1] == "*":
                 self.assertEqual(pro[:-1], r.seq)
@@ -1111,7 +1111,7 @@ class NC_005816(NC_000932):
     emblname = "AE017046"
     table = 11
     skip_trans_test = []
-    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
+    __doc__ = f"Tests using {basename} GenBank and FASTA files from the NCBI"
 
     def test_GenBank_vs_EMBL(self):
         if not self.emblname:
@@ -1139,7 +1139,7 @@ class NC_005816(NC_000932):
             if faa.id in self.skip_trans_test:
                 continue
             t = SeqRecord(
-                translation, id="Translation", description="Table %s" % self.table
+                translation, id="Translation", description=f"Table {self.table}"
             )
             msg = "FAA vs FNA translation problem:\n%s\n%s\n%s\n" % (
                 fna.format("fasta"),
@@ -1185,7 +1185,7 @@ class TestWriteRead(SeqIOFeatureTestBaseClass):
 
     def write_read(self, filename, in_format="gb", out_formats=("gb", "embl", "imgt")):
         for out_format in out_formats:
-            msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
+            msg = f"Convert {filename} from {in_format} to {out_format}"
             gb_records = list(SeqIO.parse(filename, in_format))
             # Write it out...
             handle = StringIO()

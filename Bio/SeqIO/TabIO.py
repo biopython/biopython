@@ -130,7 +130,7 @@ def as_tab(record):
     assert "\t" not in seq
     assert "\n" not in seq
     assert "\r" not in seq
-    return "%s\t%s\n" % (title, seq)
+    return f"{title}\t{seq}\n"
 
 
 if __name__ == "__main__":

@@ -108,7 +108,7 @@ class DB_Index:
             values = self.db[id]
         except Exception:
             return None
-        start, stop = [int(x) for x in values.split()]
+        start, stop = (int(x) for x in values.split())
         self.fid.seek(start)
         txt = self.fid.read(stop - start)
         return txt

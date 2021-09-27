@@ -119,7 +119,7 @@ def _check_bases(seq_string):
         seq_string = seq_string.replace(c, "")
     # Check only allowed IUPAC letters
     if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")):
-        raise TypeError("Invalid character found in %r" % seq_string)
+        raise TypeError(f"Invalid character found in {seq_string!r}")
     return " " + seq_string
 
 
@@ -177,7 +177,7 @@ class FormattedSeq:
             self.linear = seq.linear
             self.klass = seq.klass
         else:
-            raise TypeError("expected Seq or MutableSeq, got %s" % type(seq))
+            raise TypeError(f"expected Seq or MutableSeq, got {type(seq)}")
 
     def __len__(self):
         """Return length of ``FormattedSeq``.
@@ -188,7 +188,7 @@ class FormattedSeq:
 
     def __repr__(self):
         """Represent ``FormattedSeq`` class as a string."""
-        return "FormattedSeq(%r, linear=%r)" % (self[1:], self.linear)
+        return f"FormattedSeq({self[1:]!r}, linear={self.linear!r})"
 
     def __eq__(self, other):
         """Implement equality operator for ``FormattedSeq`` object."""
@@ -270,7 +270,7 @@ class RestrictionType(type):
         See below.
         """
         if "-" in name:
-            raise ValueError("Problem with hyphen in %r as enzyme name" % name)
+            raise ValueError(f"Problem with hyphen in {name!r} as enzyme name")
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
         # super().__init__(cls, name, bases, dct)
@@ -283,7 +283,7 @@ class RestrictionType(type):
             pass
         except Exception:
             raise ValueError(
-                "Problem with regular expression, re.compiled(%r)" % cls.compsite
+                f"Problem with regular expression, re.compiled({cls.compsite!r})"
             ) from None
 
     def __add__(cls, other):
@@ -352,7 +352,7 @@ class RestrictionType(type):
 
         Used with eval or exec will instantiate the enzyme.
         """
-        return "%s" % cls.__name__
+        return f"{cls.__name__}"
 
     def __len__(cls):
         """Return length of recognition site of enzyme as int."""
@@ -431,7 +431,7 @@ class RestrictionType(type):
         True
         """
         if not isinstance(other, RestrictionType):
-            raise TypeError("expected RestrictionType, got %s instead" % type(other))
+            raise TypeError(f"expected RestrictionType, got {type(other)} instead")
         return cls._mod1(other)
 
     def __ge__(cls, other):
@@ -1027,7 +1027,7 @@ class Unknown(AbstractCut):
         If linear is False, the sequence is considered to be circular and the
         output will be modified accordingly.
         """
-        raise NotImplementedError("%s restriction is unknown." % cls.__name__)
+        raise NotImplementedError(f"{cls.__name__} restriction is unknown.")
 
     catalyze = catalyse
 
@@ -1958,7 +1958,7 @@ class NotDefined(AbstractCut):
         >>>
 
         """
-        return "? %s ?" % cls.site
+        return f"? {cls.site} ?"
 
 
 class Commercially_available(AbstractCut):
@@ -2062,7 +2062,7 @@ class RestrictionBatch(set):
 
     def __repr__(self):
         """Represent ``RestrictionBatch`` class as a string for debugging."""
-        return "RestrictionBatch(%s)" % self.elements()
+        return f"RestrictionBatch({self.elements()})"
 
     def __contains__(self, other):
         """Implement ``in`` for ``RestrictionBatch``."""
@@ -2109,7 +2109,7 @@ class RestrictionBatch(set):
             self.add(e)
             return e
         else:
-            raise ValueError("enzyme %s is not in RestrictionBatch" % e.__name__)
+            raise ValueError(f"enzyme {e.__name__} is not in RestrictionBatch")
 
     def lambdasplit(self, func):
         """Filter enzymes in batch with supplied function.
@@ -2198,7 +2198,7 @@ class RestrictionBatch(set):
                 return eval(y)
         except (NameError, SyntaxError):
             pass
-        raise ValueError("%s is not a RestrictionType" % y.__class__)
+        raise ValueError(f"{y.__class__} is not a RestrictionType")
 
     def is_restriction(self, y):
         """Return if enzyme (name) is a known enzyme.
@@ -2293,9 +2293,7 @@ class RestrictionBatch(set):
                 self.already_mapped = str(dna), dna.linear
                 self.mapping = {x: x.search(dna) for x in self}
                 return self.mapping
-        raise TypeError(
-            "Expected Seq or MutableSeq instance, got %s instead" % type(dna)
-        )
+        raise TypeError(f"Expected Seq or MutableSeq instance, got {type(dna)} instead")
 
 
 ###############################################################################
@@ -2331,7 +2329,7 @@ class Analysis(RestrictionBatch, PrintFormat):
 
     def __repr__(self):
         """Represent ``Analysis`` class as a string."""
-        return "Analysis(%r,%r,%s)" % (self.rb, self.sequence, self.linear)
+        return f"Analysis({self.rb!r},{self.sequence!r},{self.linear})"
 
     def _sub_set(self, wanted):
         """Filter result for keys which are in wanted (PRIVATE).
@@ -2351,9 +2349,9 @@ class Analysis(RestrictionBatch, PrintFormat):
         search to only part of the sequence given to analyse.
         """
         if not isinstance(start, int):
-            raise TypeError("expected int, got %s instead" % type(start))
+            raise TypeError(f"expected int, got {type(start)} instead")
         if not isinstance(end, int):
-            raise TypeError("expected int, got %s instead" % type(end))
+            raise TypeError(f"expected int, got {type(end)} instead")
         if start < 1:  # Looks like this tries to do python list like indexing
             start += len(self.sequence)
         if end < 1:
@@ -2427,10 +2425,10 @@ class Analysis(RestrictionBatch, PrintFormat):
                 setattr(self, k, v)
             elif k in ("Cmodulo", "PrefWidth"):
                 raise AttributeError(
-                    "To change %s, change NameWidth and/or ConsoleWidth" % k
+                    f"To change {k}, change NameWidth and/or ConsoleWidth"
                 )
             else:
-                raise AttributeError("Analysis has no attribute %s" % k)
+                raise AttributeError(f"Analysis has no attribute {k}")
 
     def full(self, linear=True):
         """Perform analysis with all enzymes of batch and return all results.
@@ -2491,7 +2489,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         """Return only results from enzymes which names are listed."""
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
+                warnings.warn(f"no data for the enzyme: {enzyme}", BiopythonWarning)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence, self.linear)

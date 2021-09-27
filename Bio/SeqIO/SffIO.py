@@ -314,7 +314,7 @@ def _sff_file_header(handle):
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
     if magic_number != _sff:  # 779314790
-        raise ValueError("SFF file did not start '.sff', but %r" % magic_number)
+        raise ValueError(f"SFF file did not start '.sff', but {magic_number!r}")
     if (ver0, ver1, ver2, ver3) != (0, 0, 0, 1):
         raise ValueError(
             "Unsupported SFF version in header, %i.%i.%i.%i" % (ver0, ver1, ver2, ver3)
@@ -541,7 +541,7 @@ def _sff_find_roche_index(handle):
         )
     else:
         raise ValueError(
-            "Unknown magic number %r in SFF index header:\n%r" % (magic_number, data)
+            f"Unknown magic number {magic_number!r} in SFF index header:\n{data!r}"
         )
 
 
@@ -1229,7 +1229,7 @@ class SffWriter(SequenceWriter):
         else:
             from Bio import __version__
 
-            xml = "<!-- This file was output with Biopython %s -->\n" % __version__
+            xml = f"<!-- This file was output with Biopython {__version__} -->\n"
             xml += (
                 "<!-- This XML and index block attempts to mimic Roche SFF files -->\n"
             )
@@ -1368,7 +1368,7 @@ class SffWriter(SequenceWriter):
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
             raise ValueError(
-                "Missing PHRED qualities information for %s" % record.id
+                f"Missing PHRED qualities information for {record.id}"
             ) from None
         # Flow
         try:
@@ -1380,38 +1380,34 @@ class SffWriter(SequenceWriter):
             ):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
-            raise ValueError(
-                "Missing SFF flow information for %s" % record.id
-            ) from None
+            raise ValueError(f"Missing SFF flow information for {record.id}") from None
         except AttributeError:
             raise ValueError("Header not written yet?") from None
         # Clipping
         try:
             clip_qual_left = record.annotations["clip_qual_left"]
             if clip_qual_left < 0:
-                raise ValueError("Negative SFF clip_qual_left value for %s" % record.id)
+                raise ValueError(f"Negative SFF clip_qual_left value for {record.id}")
             if clip_qual_left:
                 clip_qual_left += 1
             clip_qual_right = record.annotations["clip_qual_right"]
             if clip_qual_right < 0:
-                raise ValueError(
-                    "Negative SFF clip_qual_right value for %s" % record.id
-                )
+                raise ValueError(f"Negative SFF clip_qual_right value for {record.id}")
             clip_adapter_left = record.annotations["clip_adapter_left"]
             if clip_adapter_left < 0:
                 raise ValueError(
-                    "Negative SFF clip_adapter_left value for %s" % record.id
+                    f"Negative SFF clip_adapter_left value for {record.id}"
                 )
             if clip_adapter_left:
                 clip_adapter_left += 1
             clip_adapter_right = record.annotations["clip_adapter_right"]
             if clip_adapter_right < 0:
                 raise ValueError(
-                    "Negative SFF clip_adapter_right value for %s" % record.id
+                    f"Negative SFF clip_adapter_right value for {record.id}"
                 )
         except KeyError:
             raise ValueError(
-                "Missing SFF clipping information for %s" % record.id
+                f"Missing SFF clipping information for {record.id}"
             ) from None
 
         # Capture information for index

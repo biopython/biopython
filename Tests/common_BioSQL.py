@@ -92,7 +92,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
             elif DBDRIVER in ["psycopg2", "pgdb"]:
                 import org.postgresql.Driver
         except ImportError:
-            message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
+            message = f"Install the JDBC driver for {DBTYPE} to use BioSQL "
             raise MissingExternalDependencyError(message) from None
     else:
         try:
@@ -104,10 +104,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
                     % (DBTYPE)
                 )
             else:
-                message = "Install %s if you want to use %s with BioSQL " % (
-                    DBDRIVER,
-                    DBTYPE,
-                )
+                message = f"Install {DBDRIVER} if you want to use {DBTYPE} with BioSQL "
             raise MissingExternalDependencyError(message) from None
 
     try:
@@ -120,14 +117,14 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         server.close()
         del server
     except Exception as e:
-        message = "Connection failed, check settings if you plan to use BioSQL: %s" % e
+        message = f"Connection failed, check settings if you plan to use BioSQL: {e}"
         raise MissingExternalDependencyError(message) from None
 
     DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
     SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
 
     if not os.path.isfile(SQL_FILE):
-        message = "Missing SQL schema file: %s" % SQL_FILE
+        message = f"Missing SQL schema file: {SQL_FILE}"
         raise MissingExternalDependencyError(message)
 
 
@@ -180,7 +177,7 @@ def _do_db_cleanup():
             server.module.IntegrityError,
             server.module.ProgrammingError,
         ) as e:  # ditto--perhaps
-            if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+            if str(e).find(f'database "{TESTDB}" does not exist') == -1:
                 server.close()
                 raise
         # create a new database
@@ -206,7 +203,7 @@ def create_database():
                 except Exception:
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
-                    print("Could not remove %r" % TESTDB)
+                    print(f"Could not remove {TESTDB!r}")
                     pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
@@ -470,7 +467,7 @@ class SeqInterfaceTest(unittest.TestCase):
         test_seq = self.item.seq
         string_rep = str(test_seq)
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
-        self.assertEqual(type(string_rep), type(""))
+        self.assertEqual(type(string_rep), str)
         self.assertEqual(len(test_seq), 880)
         self.assertEqual(test_seq[879], "A")
         self.assertEqual(test_seq[-1], "A")
@@ -552,7 +549,7 @@ class SeqInterfaceTest(unittest.TestCase):
             str(cds_feature.location), "join{[103:160](+), [319:390](+), [503:579](+)}"
         )
 
-        msg = "Missing expected entries, have %r" % cds_feature.qualifiers
+        msg = f"Missing expected entries, have {cds_feature.qualifiers!r}"
         self.assertIn("gene", cds_feature.qualifiers)
         self.assertIn("protein_id", cds_feature.qualifiers)
         self.assertIn("codon_start", cds_feature.qualifiers)
@@ -1128,7 +1125,7 @@ class ClosedLoopTest(SeqRecordTestBaseClass):
         server = BioSeqDatabase.open_database(
             driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
         )
-        db_name = "test_loop_%s" % filename  # new namespace!
+        db_name = f"test_loop_{filename}"  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
         self.assertEqual(count, len(original_records))
@@ -1213,7 +1210,7 @@ class TransferTest(SeqRecordTestBaseClass):
         server = BioSeqDatabase.open_database(
             driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
         )
-        db_name = "test_trans1_%s" % filename  # new namespace!
+        db_name = f"test_trans1_{filename}"  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
         self.assertEqual(count, len(original_records))
@@ -1223,7 +1220,7 @@ class TransferTest(SeqRecordTestBaseClass):
         # And check they agree
         self.compare_records(original_records, biosql_records)
         # Now write to a second name space...
-        db_name = "test_trans2_%s" % filename  # new namespace!
+        db_name = f"test_trans2_{filename}"  # new namespace!
         db = server.new_database(db_name)
         count = db.load(biosql_records)
         self.assertEqual(count, len(original_records))
@@ -1399,7 +1396,7 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
                 elif "protein" in molecule_type:
                     record.annotations["molecule_type"] = "protein"
                 else:
-                    raise Exception("Unknown molecule type '%s'" % molecule_type)
+                    raise Exception(f"Unknown molecule type '{molecule_type}'")
             records.append(record)
         count = db.load(records)
         assert count == t_count
@@ -1422,7 +1419,7 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
             if "accessions" in record.annotations:
                 # Only expect FIRST accession to work!
                 key = record.annotations["accessions"][0]
-                assert key, "Blank accession in annotation %r" % record.annotations
+                assert key, f"Blank accession in annotation {record.annotations!r}"
                 if key != record.id:
                     # print(" - Retrieving by accession '%s'," % key)
                     db_rec = db.lookup(accession=key)
@@ -1524,7 +1521,7 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
     def test_ambiguous_location(self):
         """Loaded uniprot-xml with ambiguous location in BioSQL."""
         id = "P97881"
-        seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
+        seqiter = SeqIO.parse(f"SwissProt/{id}.xml", "uniprot-xml")
         self.assertEqual(self.db.load(seqiter), 1)
 
         dbrecord = self.db.lookup(primary_id=id)
@@ -1556,9 +1553,7 @@ class TestBaseClassMethods(unittest.TestCase):
             if accession in record.annotations["accessions"]:
                 break
         else:
-            raise RuntimeError(
-                "Failed to find accession %s in GenBank file" % accession
-            )
+            raise RuntimeError(f"Failed to find accession {accession} in GenBank file")
         self.seq2 = record.seq
 
     def tearDown(self):

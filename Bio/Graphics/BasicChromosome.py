@@ -534,7 +534,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     if count <= 1:
         return desired  # Easy!
     if minimum >= maximum:
-        raise ValueError("Bad min/max %f and %f" % (minimum, maximum))
+        raise ValueError(f"Bad min/max {minimum:f} and {maximum:f}")
     if min(desired) < minimum or max(desired) > maximum:
         raise ValueError(
             "Data %f to %f out of bounds (%f to %f)"

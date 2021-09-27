@@ -2264,7 +2264,7 @@ class MotifTestPWM(unittest.TestCase):
         integers = {"python": python_integers, "numpy": numpy_integers}
         for int_type in ("python", "numpy"):
             i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12 = integers[int_type]
-            msg = "using %s integers as indices" % int_type
+            msg = f"using {int_type} integers as indices"
             # slice, slice
             d = counts[i1::i2, i2:i12:i3]
             self.assertIsInstance(d, dict, msg=msg)
@@ -2373,7 +2373,7 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
-        self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
+        self.assertTrue(math.isnan(result[6]), f"Expected nan, not {result[6]!r}")
 
     def test_calculate_pseudocounts(self):
         pseudocounts = motifs.jaspar.calculate_pseudocounts(self.m)

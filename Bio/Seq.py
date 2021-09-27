@@ -326,7 +326,7 @@ class _SeqAbstractBaseClass(ABC):
                 if len(seq) > 60:
                     start = seq[:54].decode("ASCII")
                     end = seq[-3:].decode("ASCII")
-                    seq = "%s...%s" % (start, end)
+                    seq = f"{start}...{end}"
                 else:
                     seq = seq.decode("ASCII")
                 d[position] = seq
@@ -2263,7 +2263,7 @@ class UnknownSeq(Seq):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
-                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
             )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
@@ -2314,7 +2314,7 @@ class UnknownSeq(Seq):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
-                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
             )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
@@ -2691,7 +2691,7 @@ class MutableSeq(_SeqAbstractBaseClass):
             elif isinstance(value, str):
                 self._data[index] = value.encode("ASCII")
             else:
-                raise TypeError("received unexpected type '%s'" % type(value).__name__)
+                raise TypeError(f"received unexpected type '{type(value).__name__}'")
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.

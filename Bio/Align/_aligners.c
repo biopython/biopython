@@ -79,99 +79,88 @@ typedef struct {
 static PyObject*
 PathGenerator_create_path(PathGenerator* self, int i, int j) {
     PyObject* tuple;
-    PyObject* row;
+    PyObject* target_row;
+    PyObject* query_row;
     PyObject* value;
     int path;
-    const int ii = i;
-    const int jj = j;
+    int k, l;
     int n = 1;
     int direction = 0;
     Trace** M = self->M;
     const unsigned char strand = self->strand;
 
+    k = i;
+    l = j;
     while (1) {
-        path = M[i][j].path;
+        path = M[k][l].path;
         if (!path) break;
         if (path != direction) {
             n++;
             direction = path;
         }
         switch (path) {
-            case HORIZONTAL: j++; break;
-            case VERTICAL: i++; break;
-            case DIAGONAL: i++; j++; break;
+            case HORIZONTAL: l++; break;
+            case VERTICAL: k++; break;
+            case DIAGONAL: k++; l++; break;
         }
     }
 
-    i = ii;
-    j = jj;
     direction = 0;
-    tuple = PyTuple_New(n);
+    tuple = PyTuple_New(2);
     if (!tuple) return NULL;
+    target_row = PyTuple_New(n);
+    query_row = PyTuple_New(n);
+    PyTuple_SET_ITEM(tuple, 0, target_row);
+    PyTuple_SET_ITEM(tuple, 1, query_row);
 
-    n = 0;
-    switch (strand) {
-        case '+':
-            while (1) {
-                path = M[i][j].path;
-                if (path != direction) {
-                    row = PyTuple_New(2);
-                    if (!row) break;
-                    value = PyLong_FromLong(i);
-                    if (!value) {
-                        Py_DECREF(row); /* all references were stolen */
-                        break;
+    if (target_row && query_row) {
+        k = 0;
+        switch (strand) {
+            case '+':
+                while (1) {
+                    path = M[i][j].path;
+                    if (path != direction) {
+                        value = PyLong_FromLong(i);
+                        if (!value) break;
+                        PyTuple_SET_ITEM(target_row, k, value);
+                        value = PyLong_FromLong(j);
+                        if (!value) break;
+                        PyTuple_SET_ITEM(query_row, k, value);
+                        k++;
+                        direction = path;
                     }
-                    PyTuple_SET_ITEM(row, 0, value);
-                    value = PyLong_FromLong(j);
-                    if (!value) {
-                        Py_DECREF(row); /* all references were stolen */
-                        break;
+                    switch (path) {
+                        case HORIZONTAL: j++; break;
+                        case VERTICAL: i++; break;
+                        case DIAGONAL: i++; j++; break;
+                        default: return tuple;
                     }
-                    PyTuple_SET_ITEM(row, 1, value);
-                    PyTuple_SET_ITEM(tuple, n, row);
-                    n++;
-                    direction = path;
                 }
-                switch (path) {
-                    case HORIZONTAL: j++; break;
-                    case VERTICAL: i++; break;
-                    case DIAGONAL: i++; j++; break;
-                    default: return tuple;
+                break;
+            case '-': {
+                l = n - 1;
+                while (1) {
+                    path = M[i][j].path;
+                    if (path != direction) {
+                        value = PyLong_FromLong(i);
+                        if (!value) break;
+                        PyTuple_SET_ITEM(target_row, k, value);
+                        value = PyLong_FromLong(j);
+                        if (!value) break;
+                        PyTuple_SET_ITEM(query_row, l, value);
+                        k++;
+                        l--;
+                        direction = path;
+                    }
+                    switch (path) {
+                        case HORIZONTAL: j++; break;
+                        case VERTICAL: i++; break;
+                        case DIAGONAL: i++; j++; break;
+                        default: return tuple;
+                    }
                 }
+                break;
             }
-            break;
-        case '-': {
-            const int nB = self->nB;
-            while (1) {
-                path = M[i][j].path;
-                if (path != direction) {
-                    row = PyTuple_New(2);
-                    if (!row) break;
-                    value = PyLong_FromLong(i);
-                    if (!value) {
-                        Py_DECREF(row); /* all references were stolen */
-                        break;
-                    }
-                    PyTuple_SET_ITEM(row, 0, value);
-                    value = PyLong_FromLong(nB-j);
-                    if (!value) {
-                        Py_DECREF(row); /* all references were stolen */
-                        break;
-                    }
-                    PyTuple_SET_ITEM(row, 1, value);
-                    PyTuple_SET_ITEM(tuple, n, row);
-                    n++;
-                    direction = path;
-                }
-                switch (path) {
-                    case HORIZONTAL: j++; break;
-                    case VERTICAL: i++; break;
-                    case DIAGONAL: i++; j++; break;
-                    default: return tuple;
-                }
-            }
-            break;
         }
     }
     Py_DECREF(tuple); /* all references were stolen */

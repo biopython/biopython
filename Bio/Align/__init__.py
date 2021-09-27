@@ -219,7 +219,7 @@ class MultipleSeqAlignment:
         """
         if record.seq.__class__.__name__ == "CodonSeq":
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" % (
                     record.seq[: length - 3],
@@ -228,7 +228,7 @@ class MultipleSeqAlignment:
                 )
         else:
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" % (
                     record.seq[: length - 6],
@@ -895,7 +895,7 @@ class MultipleSeqAlignment:
             ('A', 'C') : 0.8 * 1.0 = 0.8
 
         """
-        letters = set.union(*[set(record.seq) for record in self])
+        letters = set.union(*(set(record.seq) for record in self))
         try:
             letters.remove("-")
         except KeyError:
@@ -1348,12 +1348,8 @@ class Alignment:
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                n = len(sequences[i])
-                coordinates[i, :] = n - coordinates[i, :]
-                try:  # reverse_complement function does not work on SeqRecord
-                    sequences[i] = sequences[i].reverse_complement()
-                except AttributeError:  # for str
-                    sequences[i] = reverse_complement(sequences[i])
+                coordinates[i, :] = coordinates[i, ::-1]
+                sequences[i] = reverse_complement(sequences[i], inplace=False)
         if isinstance(key, int):
             n, m = self.shape
             row = key
@@ -1530,7 +1526,7 @@ class Alignment:
                             if self.coordinates[i, 0] > self.coordinates[i, -1]:
                                 # mapped to reverse strand
                                 n = len(sequence)
-                                coordinates[i, :] = n - coordinates[i, :]
+                                coordinates[i, :] = coordinates[i, ::-1]
                         sequences = self.sequences
                         alignment = Alignment(sequences, coordinates)
                         if numpy.array_equal(coordinates, self.coordinates):
@@ -1678,8 +1674,8 @@ class Alignment:
         coordinates = self.coordinates
         if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
             coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
-            seq2 = reverse_complement(seq2)
+            coordinates[1, :] = coordinates[1, ::-1]
+            seq2 = reverse_complement(seq2, inplace=False)
         coordinates = coordinates.transpose()
         end1, end2 = coordinates[0, :]
         if end1 > 0 or end2 > 0:
@@ -1714,7 +1710,7 @@ class Alignment:
             start2 = end2
         aligned_seq1 += seq1[end1:]
         aligned_seq2 += seq2[end2:]
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_generalized(self):
         """Return generalized string representation (PRIVATE).
@@ -1787,7 +1783,7 @@ class Alignment:
         aligned_seq1 = " ".join(aligned_seq1)
         aligned_seq2 = " ".join(aligned_seq2)
         pattern = " ".join(pattern)
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_bed(self):
         """Return BED file format string representation (PRIVATE).
@@ -1809,9 +1805,8 @@ class Alignment:
             strand = "+"
         else:  # mapped to reverse strand
             strand = "-"
-            n = len(query)
             coordinates = coordinates.copy()
-            coordinates[1, :] = n - coordinates[1, :]
+            coordinates[1, :] = coordinates[1, ::-1]
         score = self.score
         blockSizes = []
         tStarts = []
@@ -1893,9 +1888,9 @@ class Alignment:
             seq2 = query
         else:  # mapped to reverse strand
             strand = "-"
-            seq2 = reverse_complement(query)
+            seq2 = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
+            coordinates[1, :] = coordinates[1, ::-1]
         try:
             seq2 = bytes(seq2)
         except TypeError:  # string
@@ -2045,9 +2040,9 @@ class Alignment:
             seq = query
         else:  # mapped to reverse strand
             flag = 16
-            seq = reverse_complement(query)
+            seq = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
+            coordinates[1, :] = coordinates[1, ::-1]
         try:
             seq = bytes(seq)
         except TypeError:  # string
@@ -2204,8 +2199,7 @@ class Alignment:
         n = len(coordinates)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                k = len(self.sequences[i])
-                coordinates[i, :] = k - coordinates[i, :]
+                coordinates[i, :] = coordinates[i, ::-1]
         steps = numpy.diff(coordinates, 1).max(0)
         m = sum(steps)
         return (n, m)
@@ -2297,8 +2291,7 @@ class Alignment:
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(self.sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                n = len(sequence)
-                coordinates[i, :] = n - coordinates[i, :]
+                coordinates[i, :] = coordinates[i, ::-1]
         coordinates = coordinates.transpose()
         steps = numpy.diff(coordinates, axis=0).min(1)
         indices = numpy.flatnonzero(steps)
@@ -2455,16 +2448,16 @@ class Alignment:
         if strand1 == "+":
             if strand2 == "-":  # mapped to reverse strand
                 coordinates2 = coordinates2.copy()
-                coordinates2[1, :] = n2 - coordinates2[1, :]
+                coordinates2[1, :] = coordinates2[1, ::-1]
         else:  # mapped to reverse strand
             coordinates1 = coordinates1.copy()
-            coordinates1[1, :] = n1 - coordinates1[1, :]
+            coordinates1[1, :] = coordinates1[1, ::-1]
             coordinates2 = coordinates2.copy()
             coordinates2[0, :] = n1 - coordinates2[0, ::-1]
             if strand2 == "+":
                 coordinates2[1, :] = n2 - coordinates2[1, ::-1]
             else:  # mapped to reverse strand
-                coordinates2[1, :] = coordinates2[1, ::-1]
+                coordinates2[1, :] = n2 - coordinates2[1, :]
         path = []
         tEnd, qEnd = sys.maxsize, sys.maxsize
         coordinates1 = iter(coordinates1.transpose())
@@ -2513,7 +2506,7 @@ class Alignment:
             tStart2, qStart2 = tEnd2, qEnd2
         coordinates = numpy.array(path).transpose()
         if strand1 != strand2:
-            coordinates[1, :] = n2 - coordinates[1, :]
+            coordinates[1, :] = coordinates[1, ::-1]
         sequences = [target, query]
         alignment = Alignment(sequences, coordinates)
         return alignment
@@ -2587,7 +2580,7 @@ class Alignment:
         is 3.5 + 3.5 = 7.
         """
         sequences = self.sequences
-        letters = set.union(*[set(sequence) for sequence in sequences])
+        letters = set.union(*(set(sequence) for sequence in sequences))
         letters = "".join(sorted(letters))
         m = substitution_matrices.Array(letters, dims=2)
         n = len(sequences)
@@ -2666,7 +2659,7 @@ class PairwiseAlignments:
 
         path = next(self.paths)
         self.index += 1
-        coordinates = numpy.array(path).transpose()
+        coordinates = numpy.array(path)
         alignment = Alignment(self.sequences, coordinates)
         alignment.score = self.score
         self.alignment = alignment
@@ -2844,7 +2837,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
-            sB = reverse_complement(seqB)
+            sB = reverse_complement(seqB, inplace=False)
         if isinstance(sB, (Seq, MutableSeq)):
             sB = bytes(sB)
         score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
@@ -2856,7 +2849,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         if isinstance(seqA, (Seq, MutableSeq)):
             seqA = bytes(seqA)
         if strand == "-":
-            seqB = reverse_complement(seqB)
+            seqB = reverse_complement(seqB, inplace=False)
         if isinstance(seqB, (Seq, MutableSeq)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)

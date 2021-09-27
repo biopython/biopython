@@ -106,7 +106,7 @@ class DatabaseLoader:
         id_results = self.adaptor.execute_and_fetchall(sql, fields)
         # something is wrong
         if len(id_results) > 1:
-            raise ValueError("Multiple term ids for %s: %r" % (name, id_results))
+            raise ValueError(f"Multiple term ids for {name}: {id_results!r}")
         elif len(id_results) == 1:
             return id_results[0][0]
         else:
@@ -1097,7 +1097,7 @@ class DatabaseLoader:
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except Exception:
-                raise ValueError("Parsing of db_xref failed: '%s'" % value) from None
+                raise ValueError(f"Parsing of db_xref failed: '{value}'") from None
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
             for accession in accessions:
@@ -1179,9 +1179,7 @@ class DatabaseLoader:
                 db = db.strip()
                 accession = accession.strip()
             except Exception:
-                raise ValueError(
-                    "Parsing of dbxrefs list failed: '%s'" % value
-                ) from None
+                raise ValueError(f"Parsing of dbxrefs list failed: '{value}'") from None
             # Get the dbxref_id value for the dbxref data
             dbxref_id = self._get_dbxref_id(db, accession)
             # Insert the bioentry_dbxref  data

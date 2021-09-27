@@ -263,9 +263,9 @@ class Tree(Nodes.Chain):
         """
         id = self.search_taxon(taxon)
         if id is None:
-            raise TreeError("Taxon not found: %s" % taxon)
+            raise TreeError(f"Taxon not found: {taxon}")
         elif id not in self.get_terminals():
-            raise TreeError("Not a terminal taxon: %s" % taxon)
+            raise TreeError(f"Not a terminal taxon: {taxon}")
         else:
             prev = self.unlink(id)
             self.kill(id)
@@ -391,7 +391,7 @@ class Tree(Nodes.Chain):
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
-                    print("%s %s" % (n, self.set_subtree(n)))
+                    print(f"{n} {self.set_subtree(n)}")
                 print([self.set_subtree(n) for n in self.node(node).succ])
                 raise
 
@@ -604,17 +604,17 @@ class Tree(Nodes.Chain):
                 tx = n.data.taxon
                 if not tx:
                     tx = "-"
-                blength = "%0.2f" % n.data.branchlength
+                blength = f"{n.data.branchlength:0.2f}"
                 if blength is None:
                     blength = "-"
                     sum_blength = "-"
                 else:
-                    sum_blength = "%0.2f" % self.sum_branchlength(node=i)
+                    sum_blength = f"{self.sum_branchlength(node=i):0.2f}"
                 support = n.data.support
                 if support is None:
                     support = "-"
                 else:
-                    support = "%0.2f" % support
+                    support = f"{support:0.2f}"
                 comment = n.data.comment
                 if comment is None:
                     comment = "-"
@@ -631,7 +631,7 @@ class Tree(Nodes.Chain):
                     )
                 )
         print("\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % l for l in table))
-        print("\nRoot:  %s" % self.root)
+        print(f"\nRoot:  {self.root}")
 
     def to_string(
         self,
@@ -660,25 +660,25 @@ class Tree(Nodes.Chain):
                 self.support_as_branchlengths
             ):  # support as branchlengths (eg. PAUP), ignore actual branchlengths
                 if terminal:  # terminal branches have 100% support
-                    info_string = ":%1.2f" % self.max_support
+                    info_string = f":{self.max_support:1.2f}"
                 elif data.support:
-                    info_string = ":%1.2f" % (data.support)
+                    info_string = f":{data.support:1.2f}"
                 else:
                     info_string = ":0.00"
             elif self.branchlengths_only:  # write only branchlengths, ignore support
-                info_string = ":%1.5f" % (data.branchlength)
+                info_string = f":{data.branchlength:1.5f}"
             else:  # write support and branchlengths (e.g. .con tree of mrbayes)
                 if terminal:
-                    info_string = ":%1.5f" % (data.branchlength)
+                    info_string = f":{data.branchlength:1.5f}"
                 else:
                     if (
                         data.branchlength is not None and data.support is not None
                     ):  # we have blen and support
-                        info_string = "%1.2f:%1.5f" % (data.support, data.branchlength)
+                        info_string = f"{data.support:1.2f}:{data.branchlength:1.5f}"
                     elif data.branchlength is not None:  # we have only blen
-                        info_string = "0.00000:%1.5f" % (data.branchlength)
+                        info_string = f"0.00000:{data.branchlength:1.5f}"
                     elif data.support is not None:  # we have only support
-                        info_string = "%1.2f:0.00000" % (data.support)
+                        info_string = f"{data.support:1.2f}:0.00000"
                     else:
                         info_string = "0.00:0.00000"
             if not ignore_comments:
@@ -713,10 +713,7 @@ class Tree(Nodes.Chain):
             else:
                 succnodes = ladderize_nodes(self.node(node).succ, ladderize=ladderize)
                 subtrees = [newickize(sn, ladderize=ladderize) for sn in succnodes]
-                return "(%s)%s" % (
-                    ",".join(subtrees),
-                    make_info_string(self.node(node).data),
-                )
+                return f"({','.join(subtrees)}){make_info_string(self.node(node).data)}"
 
         treeline = ["tree"]
         if self.name:
@@ -725,12 +722,12 @@ class Tree(Nodes.Chain):
             treeline.append("a_tree")
         treeline.append("=")
         if self.weight != 1:
-            treeline.append("[&W%s]" % str(round(float(self.weight), 3)))
+            treeline.append(f"[&W{str(round(float(self.weight), 3))}]")
         if self.rooted:
             treeline.append("[&R]")
         succnodes = ladderize_nodes(self.node(self.root).succ)
         subtrees = [newickize(sn, ladderize=ladderize) for sn in succnodes]
-        treeline.append("(%s)" % ",".join(subtrees))
+        treeline.append(f"({','.join(subtrees)})")
         if plain_newick:
             return treeline[-1]
         else:
@@ -854,9 +851,7 @@ class Tree(Nodes.Chain):
             i for i in self.all_ids() if self.node(i).prev is None and i != self.root
         ]
         if len(oldroot) > 1:
-            raise TreeError(
-                "Isolated nodes in tree description: %s" % ",".join(oldroot)
-            )
+            raise TreeError(f"Isolated nodes in tree description: {','.join(oldroot)}")
         elif len(oldroot) == 1:
             self.kill(oldroot[0])
         return self.root
@@ -934,7 +929,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
     for c in delclades:
         del clades[c]
     # create a tree with a root node
-    consensus = Tree(name="consensus_%2.1f" % float(threshold), data=dataclass)
+    consensus = Tree(name=f"consensus_{float(threshold):2.1f}", data=dataclass)
     # each clade needs a node in the new tree, add them as isolated nodes
     for c, s in clades.items():
         node = Nodes.Node(data=dataclass())
