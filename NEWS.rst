@@ -25,6 +25,9 @@ The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
 base 4 log instead of 2 as stated in the original reference Konopka (2005),
 Sequence Complexity and Composition. https://doi.org/10.1038/npg.els.0005260
 
+Append mode is now supported in ``Bio.bgzf`` (and a bug parsing blocked GZIP
+files with an internal empty block fixed).
+
 The experimental warning was dropped from ``Bio.phenotype`` (which was new in
 Biopython 1.67).
 
@@ -39,6 +42,7 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - Fabian Egli
 - Sebastian Bassi
+- Tim Burke
 - Michiel de Hoon
 - Peter Cock
 
