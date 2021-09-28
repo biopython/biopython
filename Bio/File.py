@@ -225,7 +225,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
     def __getitem__(self, key):
         """Return record for the specified key.
 
-        As an optimitation when repeatedly asked to look up the same record,
+        As an optimization when repeatedly asked to look up the same record,
         the key and record are cached so that if the *same* record is
         requested next time, it can be returned without going to disk.
         """
