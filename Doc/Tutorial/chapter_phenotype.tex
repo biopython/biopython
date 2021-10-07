@@ -59,9 +59,11 @@ There are several ways to access WellRecord objects from a PlateRecord objects:
 \begin{description}
   \item[Well identifier]
     If you know the well identifier (row + column identifiers) you can access the desired well directly.
+%cont-doctest
 \begin{minted}{pycon}
-    >>> record["A02"]
-    \end{minted}
+>>> record["A02"]
+WellRecord('(0.0, 12.0), (0.25, 18.0), (0.5, 27.0), (0.75, 35.0), (1.0, 37.0), ..., (71.75, 143.0)')
+\end{minted}
 
   \item[Well plate coordinates]
     The same well can be retrieved by using the row and columns numbers (0-based index).
@@ -151,7 +153,7 @@ indexing; the default time interval is therefore one hour.
 
 %cont-doctest
 \begin{minted}{pycon}
->>> well[:10]  
+>>> well[:10]
 [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
 \end{minted}
 
