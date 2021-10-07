@@ -17,7 +17,7 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \item Open a Swiss-Prot file locally:
 \begin{minted}{pycon}
 >>> handle = open("myswissprotfile.dat")
-\end{minted} 
+\end{minted}
 
 \item Open a gzipped Swiss-Prot file:
 \begin{minted}{pycon}
@@ -451,8 +451,10 @@ CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
 you can use the following code:
 
 \begin{minted}{pycon}
->>> sequence = "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
-CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
+>>> sequence = (
+...     "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT"
+...     "CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
+... )
 >>> from Bio.ExPASy import ScanProsite
 >>> handle = ScanProsite.scan(seq=sequence)
 \end{minted}
