@@ -1165,7 +1165,7 @@ First, we use EGQuery to find out the number of results we will get before actua
 4457
 \end{minted}
 
-So, we expect to find 4457 Entrez Nucleotide records (this increased from 814 records in 2008; it is likely to continue to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step. 
+So, we expect to find 4457 Entrez Nucleotide records (this increased from 814 records in 2008; it is likely to continue to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step.
 Let's use the \verb+retmax+ argument to restrict the maximum number of records retrieved to the number available in 2008:
 
 %doctest . internet
@@ -1187,7 +1187,7 @@ First, let's check how many results were found:
 >>> print(record["Count"])
 '4457'
 \end{minted}
-You might have expected this to be 814, the maximum number of records we asked to retrieve. 
+You might have expected this to be 814, the maximum number of records we asked to retrieve.
 However, \verb+Count+ represents the total number of records available for that search, not how many were retrieved.
 The retrieved records are stored in \verb+record['IdList']+, which should contain the total number we asked for:
 \begin{minted}{pycon}
@@ -1309,8 +1309,8 @@ In this case, we are just getting the raw records. To get the records in a more 
 \noindent We can now step through the records and look at the information we are interested in:
 \begin{minted}{pycon}
 >>> for record in records:
->>> ...    print("%s, length %i, with %i features"
->>> ...           % (record.name, len(record), len(record.features)))
+...    print(f"{record.name}, length {len(record)}, with {len(record.features)} features")
+...
 AY851612, length 892, with 3 features
 AY851611, length 881, with 3 features
 AF191661, length 895, with 3 features
