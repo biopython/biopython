@@ -189,11 +189,15 @@ The number of columns in each row is equal to the row number. Hence, the first r
 \begin{minted}{pycon}
 >>> from numpy import array
 >>> from Bio.Cluster import distancematrix
->>> data = array([[0, 1,  2,  3],
-...               [4, 5,  6,  7],
-...               [8, 9, 10, 11],
-...               [1, 2,  3,  4]])
->>> distances = distancematrix(data, dist='e')
+>>> data = array(
+...     [
+...         [0, 1, 2, 3],
+...         [4, 5, 6, 7],
+...         [8, 9, 10, 11],
+...         [1, 2, 3, 4],
+...     ]
+... )
+>>> distances = distancematrix(data, dist="e")
 \end{minted}
 yields a distance matrix
 \begin{minted}{pycon}
@@ -700,14 +704,15 @@ This two-step process gives you some flexibility in the source of the data.
 For example, you can use
 
 \begin{minted}{pycon}
->>> import gzip # Python standard library
+>>> import gzip  # Python standard library
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{minted}
 to open a gzipped file, or
 \begin{minted}{pycon}
 >>> from urllib.request import urlopen
 >>> from io import TextIOWrapper
->>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
+>>> url = "https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"
+>>> handle = TextIOWrapper(urlopen(url))
 \end{minted}
 to open a file stored on the Internet before calling \verb|read|.
 
@@ -951,7 +956,7 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%all cyano_result* files created here during the run of test_Tutorial.py are 
+%all cyano_result* files created here during the run of test_Tutorial.py are
 %after automatically deleted at the end of the test run.
 
 %doctest ../Tests/Cluster lib:numpy
