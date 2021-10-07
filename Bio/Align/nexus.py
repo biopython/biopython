@@ -1,4 +1,5 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
+# Revisions copyright 2021 by Michiel de Hoon.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
