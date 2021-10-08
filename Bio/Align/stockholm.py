@@ -357,29 +357,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
          - source   - input data or file name
 
         """
-        super().__init__(source, mode="t", fmt="Clustal")
-        stream = self.stream
-        try:
-            line = next(stream)
-        except StopIteration:
-            raise ValueError("Empty file.") from None
-        if line.strip() != "# STOCKHOLM 1.0":
-            raise ValueError("Did not find STOCKHOLM header")
+        super().__init__(source, mode="t", fmt="Stockholm")
 
-    def _create_alignment(self, aligned_sequences, records, strands, gc, gf, gr):
+    def _annotate_alignment(self, alignment, gc, gf, gr):
         gf = dict(gf)
         for key, value in gf.items():
             if len(value) > 1:
-                raise Exception(key)
+                if key != "AU":
+                    raise Exception(key)
         for k, v in gc.items():
             if len(v) != length:
                 raise ValueError(f"{k} length is {len(v)}, expected {length}")
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for i, (record, strand) in enumerate(zip(records, strands)):
-            if strand == "-":
-                n = len(record.seq)
-                coordinates[i, :] = n - coordinates[i, :]
-        alignment = Alignment(records, coordinates)
 
         for k, v in sorted(gc.items()):
             if k in self.pfam_gc_mapping:
@@ -404,31 +392,41 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # We do not check for this - perhaps we should, and verify that
         # if present it agrees with our parsing.
 
-        records = []
-        aligned_sequences = []
-        strands = []
-        length = None
-        gs = {}
-        gr = {}
-        gf = defaultdict(list)
-        gc = {}
-        passed_end_alignment = False
+        alignment = None
         for line in stream:
-            line = line.strip()  # remove trailing \n
+            line = line.strip()
             if not line:
                 continue
             elif line == "# STOCKHOLM 1.0":
-                yield self._create_alignment(aligned_sequences, records, strands, gc, gf, gr)
+                if alignment is not None:
+                    self._annotate_alignment(alignment, gc, gf, gr)
+                    yield alignment
                 # Starting a new alignment
-                passed_end_alignment = False
+                records = []
+                aligned_sequences = []
+                strands = []
+                gs = {}
+                gr = {}
+                gf = defaultdict(list)
+                gc = {}
+                length = None
             elif line == "//":
                 # The "//" line indicates the end of the alignment.
                 # There may still be more meta-data
-                passed_end_alignment = True
+                coordinates = Alignment.infer_coordinates(aligned_sequences)
+                for i, (record, strand) in enumerate(zip(records, strands)):
+                    if strand == "-":
+                        n = len(record.seq)
+                        coordinates[i, :] = n - coordinates[i, :]
+                for aligned_sequence in aligned_sequences:
+                    if "U" in aligned_sequence or "u" in aligned_sequence:
+                        for record in records:
+                            record.seq = record.seq.transcribe()
+                        break
+                alignment = Alignment(records, coordinates)
             elif not line.startswith("#"):
                 # Sequence
                 # Format: "<seqname> <sequence>"
-                assert not passed_end_alignment
                 try:
                     seqname, aligned_sequence = line.split(None, 1)
                 except ValueError:
@@ -452,7 +450,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     else:
                         start, end = end, start
                         strands.append("-")
-                        sequence = reverse_complement(sequence)
+                        sequence = reverse_complement(sequence, inplace=False)  # TODO: remove inplace=False
                     start -= 1  # 0-based index
                     if start + len(sequence) != end:
                         raise ValueError(f"Start and end of sequence {name} are not consistent with sequence length")
@@ -495,7 +493,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 gr[seqname].setdefault(feature, "")
                 gr[seqname][feature] += text.strip()  # append to any previous entry
                 # Might be interleaved blocks, so can't check length yet
-        yield _create_alignment(aligned_sequences, records, strands, gc, gf, gr)
+        if alignment is not None:
+            self._annotate_alignment(alignment, gc, gf, gr)
+            yield alignment
 
     def _identifier_split(self, identifier):
         """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
