@@ -573,24 +573,29 @@ def parse(handle, validate=True, escape=False):
 
 
 def _open(req_or_cgi, params=None, post=None, ecitmatch=False):
-    """Build the URL and open a handle to it (PRIVATE).
+    """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 
-    Open a handle to Entrez. Does some simple error checking, and will raise an IOError if it
-    encounters one. This function also enforces the "up to three queries per second rule" to avoid
-    abusing the NCBI servers.
+    Does some simple error checking and will try again after certain types of errors, up to
+    ``max_retries`` times. This function also enforces the "up to three queries per second
+    rule" to avoid abusing the NCBI servers (this limit is increased to 10 if using an API key).
+
+    This function previously also built the request from the CGI URL and parameter dictionary, that
+    functionality has since been moved to the ``_build_request()`` function. The old behavior has
+    been retained for backward compatibility but is now deprecated.
 
     :param req_or_cgi: A Request object returned by ``_build_request``, or a URL to be passed
-        as the first argument to ``_build_request``.
+        as the first argument to ``_build_request`` (deprecated).
     :type req_or_cgi: urllib.request.Request or str
-    :param dict params: A dictionary of options to be passed to ``_build_request`` if the first
-        argument is a string, ignored otherwise.
-    :param bool post: Whether to use the HTTP POST method instead of HTTP get. Passed to
-        ``_build_request`` if the first argument is a string, ignored otherwise.
-    :param bool ecitmatch: Passed to ``_build_request`` if the first argument is a string, ignored
-        otherwise.
+    :param dict params: (Deprecated) a dictionary of options to be passed to ``_build_request`` if
+        the first argument is a string, ignored otherwise.
+    :param bool post: (Deprecated) whether to use the HTTP POST method instead of HTTP get. Passed
+        to ``_build_request`` if the first argument is a string, ignored otherwise.
+    :param bool ecitmatch: (Deprecated) passed to ``_build_request`` if the first argument is a
+        string, ignored otherwise.
     :returns: Handle to HTTP response as returned by ``urllib.request.urlopen``. Will be wrapped in
         an ``io.TextIOWrapper`` if its content type is plain text.
     :rtype: http.client.HTTPResponse or io.TextIOWrapper
+    :raises urllib.error.URLError: Errors raises by ``urlopen`` past the maximum number of retries.
     """
     if isinstance(req_or_cgi, Request):
         request = req_or_cgi
@@ -684,6 +689,13 @@ def _build_request(cgi, params=None, post=None, ecitmatch=False):
 
 
 def _construct_params(params):
+    """Construct/format parameter dict for an Entrez request.
+
+    :param params: User-supplied parameters.
+    :type params: dict or None
+    :returns: Parameters with defaults added and keys with None values removed.
+    :rtype: dict
+    """
     if params is None:
         params = {}
 
