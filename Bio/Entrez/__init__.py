@@ -142,9 +142,8 @@ def epost(db, **keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost
 
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
+    :returns: Handle to the results.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
     variables = {"db": db}
@@ -162,10 +161,6 @@ def efetch(db, **keywords):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch
 
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -180,6 +175,9 @@ def efetch(db, **keywords):
 
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
+
+    :returns: Handle to the results.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
     variables = {"db": db}
@@ -219,10 +217,6 @@ def esearch(db, term, **keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
 
-    Return a handle to the results which are always in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -237,6 +231,8 @@ def esearch(db, term, **keywds):
     >>> "EF590892.1" in record["IdList"]
     True
 
+    :returns: Handle to the results, which are always in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
     variables = {"db": db, "term": term}
@@ -257,10 +253,6 @@ def elink(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     This example finds articles related to the Biopython application
     note's entry in the PubMed database:
 
@@ -277,6 +269,9 @@ def elink(**keywds):
     True
 
     This is explained in much more detail in the Biopython Tutorial.
+
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
@@ -294,10 +289,6 @@ def einfo(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -306,6 +297,8 @@ def einfo(**keywds):
     >>> 'pubmed' in record['DbList']
     True
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
     variables = {}
@@ -323,10 +316,6 @@ def esummary(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     This example discovers more about entry 19923 in the structure
     database:
 
@@ -340,6 +329,9 @@ def esummary(**keywds):
     >>> print(record[0]["PdbDescr"])
     Crystal Structure Of E. Coli Aconitase B
 
+
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     variables = {}
@@ -357,10 +349,6 @@ def egquery(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
 
-    Return a handle to the results in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     This quick example based on a longer version from the Biopython
     Tutorial just checks there are over 60 matches for 'Biopython'
     in PubMedCentral:
@@ -375,6 +363,8 @@ def egquery(**keywds):
     ...         print(int(row["Count"]) > 60)
     True
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
@@ -391,10 +381,6 @@ def espell(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -405,6 +391,8 @@ def espell(**keywds):
     >>> print(record["CorrectedQuery"])
     biopython
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi"
     variables = {}
@@ -450,10 +438,6 @@ def ecitmatch(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
 
-    Return a handle to the results, by default in plain text
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -466,6 +450,8 @@ def ecitmatch(**keywds):
     ['proc natl acad sci u s a', '1991', '88', '3248', 'mann bj', 'citation_1', '2014248']
     >>> handle.close()
 
+    :returns: Handle to the results, by default in plain text.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
     variables = _update_ecitmatch_variables(keywds)
