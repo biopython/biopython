@@ -685,35 +685,36 @@ def _construct_params(params):
     if params is None:
         params = {}
 
+    # Tell Entrez that we are using Biopython (or whatever the user has
+    # specified explicitly in the parameters or by changing the default)
+    params.setdefault("tool", tool)
+
+    # Tell Entrez who we are
+    params.setdefault("email", email)
+    params.setdefault("api_key", api_key)
+
     # Remove None values from the parameters
     for key, value in list(params.items()):
         if value is None:
             del params[key]
-    # Tell Entrez that we are using Biopython (or whatever the user has
-    # specified explicitly in the parameters or by changing the default)
-    if "tool" not in params:
-        params["tool"] = tool
-    # Tell Entrez who we are
-    if "email" not in params:
-        if email is not None:
-            params["email"] = email
-        else:
-            warnings.warn(
-                """
-Email address is not specified.
 
-To make use of NCBI's E-utilities, NCBI requires you to specify your
-email address with each request.  As an example, if your email address
-is A.N.Other@example.com, you can specify it as follows:
-   from Bio import Entrez
-   Entrez.email = 'A.N.Other@example.com'
-In case of excessive usage of the E-utilities, NCBI will attempt to contact
-a user at the email address provided before blocking access to the
-E-utilities.""",
-                UserWarning,
-            )
-    if api_key and "api_key" not in params:
-        params["api_key"] = api_key
+    # Warn if email not set
+    if "email" not in params:
+        warnings.warn(
+            """
+            Email address is not specified.
+
+            To make use of NCBI's E-utilities, NCBI requires you to specify your
+            email address with each request.  As an example, if your email address
+            is A.N.Other@example.com, you can specify it as follows:
+               from Bio import Entrez
+               Entrez.email = 'A.N.Other@example.com'
+            In case of excessive usage of the E-utilities, NCBI will attempt to contact
+            a user at the email address provided before blocking access to the
+            E-utilities.""",
+            UserWarning,
+        )
+
     return params
 
 
