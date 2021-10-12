@@ -409,10 +409,10 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 \begin{minted}{pycon}
 >>> from Bio.motifs.jaspar.db import JASPAR5
 >>>
->>> JASPAR_DB_HOST = ""  # <hostname>
->>> JASPAR_DB_NAME = ""  # <db_name>
->>> JASPAR_DB_USER = ""  # <user>
->>> JASPAR_DB_PASS = ""  # <password>
+>>> JASPAR_DB_HOST = "yourhostname"  # fill in these values
+>>> JASPAR_DB_NAME = "yourdatabase"
+>>> JASPAR_DB_USER = "yourusername"
+>>> JASPAR_DB_PASS = "yourpassword"
 >>>
 >>> jdb = JASPAR5(
 ...     host=JASPAR_DB_HOST,
