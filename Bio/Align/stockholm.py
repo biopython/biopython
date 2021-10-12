@@ -173,7 +173,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         "intron": "IN",
     }
     # These GC mappings are in addition to *_cons in GR mapping:
-    pfam_gc_mapping = {"reference_annotation": "RF", "model_mask": "MM"}
+    pfam_gc_mapping = {"reference_coordinate_annotation": "RF", "model_mask": "MM"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"organism": "OS", "organism_classification": "OC", "look": "LO"}
 
@@ -346,7 +346,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     }
 
     # These GC mappings are in addition to *_cons in GR mapping:
-    pfam_gc_mapping = {"RF": "reference_annotation", "MM": "model_mask"}
+    pfam_gc_mapping = {"RF": "reference_coordinate_annotation", "MM": "model_mask"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"OS": "organism", "OC": "organism_classification", "LO": "look"}
 
@@ -359,26 +359,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="Stockholm")
 
-    def _annotate_alignment(self, alignment, gc, gf, gr):
+    def _annotate_alignment(self, alignment, gc, gf):
+        rows, columns = alignment.shape
         gf = dict(gf)
-        for key, value in gf.items():
-            if len(value) > 1:
-                if key != "AU":
-                    raise Exception(key)
-        for k, v in gc.items():
-            if len(v) != length:
-                raise ValueError(f"{k} length is {len(v)}, expected {length}")
-
+        if gc:
+            alignment.column_annotations = {}
         for k, v in sorted(gc.items()):
+            if len(v) != columns:
+                raise ValueError(f"{k} length is {len(v)}, expected {columns}")
             if k in self.pfam_gc_mapping:
                 alignment.column_annotations[self.pfam_gc_mapping[k]] = v
             elif k.endswith("_cons") and k[:-5] in self.pfam_gr_mapping:
-                alignment.column_annotations[self.pfam_gr_mapping[k[:-5]]] = v
+                alignment.column_annotations["consensus_"+self.pfam_gr_mapping[k[:-5]]] = v
             else:
                 # Ignore it?
                 alignment.column_annotations["GC:" + k] = v
-
-        alignment.annotations = gr
 
         return alignment
 
@@ -399,31 +394,47 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 continue
             elif line == "# STOCKHOLM 1.0":
                 if alignment is not None:
-                    self._annotate_alignment(alignment, gc, gf, gr)
+                    self._annotate_alignment(alignment, gc, gf)
                     yield alignment
                 # Starting a new alignment
                 records = []
                 aligned_sequences = []
+                starts = []
                 strands = []
+                references = []
+                reference_comments = None
+                cross_references = []
+                nested_domains = []
                 gs = {}
                 gr = {}
                 gf = defaultdict(list)
+                gf['searchmethod'] = None
+                gf['wikipedia'] = []
                 gc = {}
                 length = None
             elif line == "//":
                 # The "//" line indicates the end of the alignment.
                 # There may still be more meta-data
                 coordinates = Alignment.infer_coordinates(aligned_sequences)
-                for i, (record, strand) in enumerate(zip(records, strands)):
-                    if strand == "-":
+                for i, (record, start, strand) in enumerate(zip(records, starts, strands)):
+                    if strand == "+":
+                        coordinates[i, :] += start
+                    else:  # strand == "-"
                         n = len(record.seq)
                         coordinates[i, :] = n - coordinates[i, :]
-                for aligned_sequence in aligned_sequences:
-                    if "U" in aligned_sequence or "u" in aligned_sequence:
+                for aligned_sequence, strand in zip(aligned_sequences, strands):
+                    if strand == "-" and ("U" in aligned_sequence or "u" in aligned_sequence):
                         for record in records:
                             record.seq = record.seq.transcribe()
                         break
                 alignment = Alignment(records, coordinates)
+                alignment.annotations = {}
+                if references:
+                    alignment.annotations["references"] = references
+                if cross_references:
+                    alignment.annotations["cross_references"] = cross_references
+                if nested_domains:
+                    alignment.annotations["nested_domains"] = nested_domains
             elif not line.startswith("#"):
                 # Sequence
                 # Format: "<seqname> <sequence>"
@@ -444,26 +455,87 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 name, start, end = self._identifier_split(seqname)
                 if start is None:
                     seq = Seq(sequence)
+                    start = 0
+                    strand = "+"
                 else:
                     if start < end:
-                        strands.append("+")
+                        strand = "+"
                     else:
                         start, end = end, start
-                        strands.append("-")
+                        strand = "-"
                         sequence = reverse_complement(sequence, inplace=False)  # TODO: remove inplace=False
                     start -= 1  # 0-based index
                     if start + len(sequence) != end:
                         raise ValueError(f"Start and end of sequence {name} are not consistent with sequence length")
+
                     seq = Seq({start: sequence}, end)
+                strands.append(strand)
                 record = SeqRecord(seq, id=name)
                 records.append(record)
+                starts.append(start)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text
                 # Format: #=GF <feature> <free text>
                 feature, text = line[5:].strip().split(None, 1)
-                # Each feature key could be used more than once,
-                # so store the entries as a list of strings.
-                gf[feature].append(text)
+                if feature == "RN":
+                    assert text.startswith("[")
+                    assert text.endswith("]")
+                    number = int(text[1:-1])
+                    reference = Reference(number)
+                    if reference_comments is not None:
+                        reference.comments = reference_comments
+                        reference_comments = None
+                    references.append(reference)
+                elif feature == "RM":
+                    reference.medline = text
+                elif feature == "RT":
+                    if reference.title is None:
+                        reference.title = text
+                    else:
+                        reference.title += " " + text
+                elif feature == "RA":
+                    if reference.authors is None:
+                        reference.authors = text
+                    else:
+                        reference.authors += " " + text
+                elif feature == "RL":
+                    if reference.location is None:
+                        reference.location = text
+                    else:
+                        reference.location += " " + text
+                elif feature == "RC":
+                    if reference_comments is None:
+                        reference_comments = text
+                    else:
+                        reference_comments += " " + text
+                elif feature == "DR":
+                    words = [word.strip() for word in text.split(";")]
+                    cross_reference = CrossReference(words)
+                    cross_references.append(cross_reference)
+                elif feature == "DC":
+                    assert cross_reference.comment is None
+                    cross_reference.comment = text
+                elif feature == "NE":
+                    assert text.count(";") == 1
+                    nested_domain = NestedDomain(text[:-1])
+                    nested_domains.append(nested_domain)
+                elif feature == "NL":
+                    assert nested_domain.location is None
+                    nested_domain.location  = text
+                elif feature == "SM":
+                    if gf['searchmethod'] is None:
+                        gf['searchmethod'] = text
+                    else:
+                        gf['searchmethod'] += " " + text
+                elif feature == "WK":
+                    if gf['wikipedia'] and gf['wikipedia'][-1].endswith("/"):
+                        gf['wikipedia'][-1] = gf['wikipedia'][-1][:-1] + text
+                    else:
+                        gf['wikipedia'].append(text)
+                else:
+                    # Each feature key could be used more than once,
+                    # so store the entries as a list of strings.
+                    gf[feature].append(text)
             elif line.startswith("#=GC "):
                 # Generic per-Column annotation, exactly 1 char per column
                 # Format: "#=GC <feature> <exactly 1 char per column>"
@@ -488,97 +560,85 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif line[:5] == "#=GR ":
                 # Generic per-Sequence AND per-Column markup
                 # Format: "#=GR <seqname> <feature> <exactly 1 char per column>"
-                seqname, feature, text = line[5:].strip().split(None, 2)
-                gr.setdefault(seqname, {})
-                gr[seqname].setdefault(feature, "")
-                gr[seqname][feature] += text.strip()  # append to any previous entry
-                # Might be interleaved blocks, so can't check length yet
+                terms = line[5:].split(None, 2)
+                assert terms[0] == seqname
+                keyword = terms[1]
+                feature = self.pfam_gr_mapping[keyword]
+                letter_annotation = terms[2].strip().replace(".", "")
+                if strand == "-":
+                    letter_annotation = letter_annotation[::-1]
+                letter_annotation = "?" * start + letter_annotation
+                record.letter_annotations[feature] = letter_annotation
         if alignment is not None:
-            self._annotate_alignment(alignment, gc, gf, gr)
+            self._annotate_alignment(alignment, gc, gf)
             yield alignment
 
     def _identifier_split(self, identifier):
         """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
-        if "/" in identifier:
+        try:
             name, start_end = identifier.rsplit("/", 1)
-            if start_end.count("-") == 1:
-                try:
-                    start, end = start_end.split("-")
-                    return name, int(start), int(end)
-                except ValueError:
-                    # Non-integers after final '/' - fall through
-                    pass
-        return identifier, None, None
+            start, end = start_end.split("-")
+            return name, int(start), int(end)
+        except ValueError:
+            # Non-integers after final '/' - fall through
+            return identifier, None, None
 
-    def _get_meta_data(self, identifier, meta_dict):
-        """Take an itentifier and returns dict of all meta-data matching it (PRIVATE).
 
-        For example, given "Q9PN73_CAMJE/149-220" will return all matches to
-        this or "Q9PN73_CAMJE" which the identifier without its /start-end
-        suffix.
+class Reference:
+    """Holds information from one reference in a PFAM/RFAM record.
 
-        In the example below, the suffix is required to match the AC, but must
-        be removed to match the OS and OC meta-data::
+    Attributes:
+     - number        RN  Number of reference in a record.
+     - medline       RM  Eight digit medline UI number.
+     - title         RT  Reference title.
+     - authors       RA  Reference author.
+     - location      RL  Journal location.
+     - comments      RC  Comment about literature reference.
+     # - evidence    Evidence code.  List of strings.
+     # - positions   Describes extent of work.  List of strings.
+     # - references  References.  List of (dbname, identifier).
 
-            # STOCKHOLM 1.0
-            #=GS Q9PN73_CAMJE/149-220  AC Q9PN73
-            ...
-            Q9PN73_CAMJE/149-220               NKA...
-            ...
-            #=GS Q9PN73_CAMJE OS Campylobacter jejuni
-            #=GS Q9PN73_CAMJE OC Bacteria
+    """
 
-        This function will return an empty dictionary if no data is found.
-        """
-        name, start, end = self._identifier_split(identifier)
-        if name == identifier:
-            identifier_keys = [identifier]
-        else:
-            identifier_keys = [identifier, name]
-        answer = {}
-        for identifier_key in identifier_keys:
-            try:
-                for feature_key in meta_dict[identifier_key]:
-                    answer[feature_key] = meta_dict[identifier_key][feature_key]
-            except KeyError:
-                pass
-        return answer
+    def __init__(self, number):
+        """Initialize the class."""
+        self.number = number
+        self.medline = None
+        self.title = None
+        self.authors = None
+        self.location = None
+        self.comments = None
 
-    def _populate_meta_data(self, identifier, record):
-        """Add meta-date to a SecRecord's annotations dictionary (PRIVATE).
 
-        This function applies the PFAM conventions.
-        """
-        seq_data = self._get_meta_data(identifier, self.seq_annotation)
-        for feature in seq_data:
-            # Note this dictionary contains lists!
-            if feature == "AC":  # ACcession number
-                assert len(seq_data[feature]) == 1
-                record.annotations["accession"] = seq_data[feature][0]
-            elif feature == "DE":  # DEscription
-                record.description = "\n".join(seq_data[feature])
-            elif feature == "DR":  # Database Reference
-                # Should we try and parse the strings?
-                record.dbxrefs = seq_data[feature]
-            elif feature in self.pfam_gs_mapping:
-                record.annotations[self.pfam_gs_mapping[feature]] = ", ".join(
-                    seq_data[feature]
-                )
-            else:
-                # Ignore it?
-                record.annotations["GS:" + feature] = ", ".join(seq_data[feature])
+class CrossReference:
+    """Holds information from one database cross-reference in a PFAM/RFAM record.
 
-        # Now record the per-letter-annotations
-        seq_col_data = self._get_meta_data(identifier, self.seq_col_annotation)
-        for feature in seq_col_data:
-            # Note this dictionary contains strings!
-            if feature in self.pfam_gr_mapping:
-                record.letter_annotations[self.pfam_gr_mapping[feature]] = seq_col_data[
-                    feature
-                ]
-            else:
-                # Ignore it?
-                record.letter_annotations["GR:" + feature] = seq_col_data[feature]
+    Attributes:
+     - reference     DR  Reference to external database.
+     - comment       DC  Comment about database reference.
+
+    """
+
+    def __init__(self, reference):
+        """Initialize the class."""
+        self.reference = reference
+        self.comment = None
+
+
+class NestedDomain:
+    """Holds information of a nested domain in a PFAM/RFAM record.
+
+    Attributes:
+     - accession     NE  Pfam accession of a nested domain.
+     - location      NL  Location of nested domains - sequence ID, start and
+                         end of insert.
+
+    """
+
+    def __init__(self, accession):
+        """Initialize the class."""
+        self.accession = accession
+        self.location = None
 
 
 if __name__ == "__main__":
