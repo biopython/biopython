@@ -335,7 +335,7 @@ def _get_strand_from_desc(desc, is_protein, modify_desc=True):
         return "+", desc
 
     if modify_desc:
-        return "-", desc[:-len(suffix)]
+        return "-", desc[: -len(suffix)]
 
     return "-", desc
 
