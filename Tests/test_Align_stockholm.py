@@ -8,6 +8,16 @@ import unittest
 from Bio.Align import stockholm
 
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install numpy if you want to use Bio.Align.stockholm."
+    ) from None
+
+
 class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_globins45(self):
@@ -20,6 +30,59 @@ class TestAlignIO_reading(unittest.TestCase):
             alignments = stockholm.AlignmentIterator(path)
             alignment = next(alignments)
             self.assertRaises(StopIteration, next, alignments)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+[[0, 0, 0, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 51, 55, 78, 78, 79, 80, 146, 147, 148, 153],
+ [0, 1, 1, 1, 1, 13, 15, 42, 43, 46, 46, 50, 73, 73, 74, 75, 141, 142, 143, 148],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 0, 0, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 1, 1, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 1, 1, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 1, 1, 1, 5, 17, 19, 46, 46, 49, 49, 49, 72, 73, 74, 74, 140, 141, 141, 141],
+ [0, 1, 1, 1, 5, 17, 19, 46, 47, 50, 50, 50, 73, 74, 75, 75, 141, 142, 142, 142],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 145, 146, 146],
+ [0, 1, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 146, 146, 146],
+ [0, 0, 1, 2, 6, 18, 18, 45, 46, 49, 50, 54, 77, 78, 79, 79, 145, 145, 145, 145],
+]
+                ),
+            )
+        )
         self.assertEqual(alignment.sequences[0].id, "MYG_ESCGI")
         self.assertEqual(alignment.sequences[0].seq, "VLSDAEWQLVLNIWAKVEADVAGHGQDILIRLFKGHPETLEKFDKFKHLKTEAEMKASEDLKKHGNTVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSRHPGDFGADAQAAMNKALELFRKDIAAKYKelgfqg")
         self.assertEqual(alignment.sequences[0].letter_annotations['posterior_probability'], "69****************************************************************************99******************************************************************7******")
@@ -157,6 +220,57 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignment.sequences[44].letter_annotations['posterior_probability'], "69*******************************************************************************************************************************************9988")
         self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], ".xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx......")
         self.assertEqual(alignment.column_annotations["consensus_posterior_probability"], ".679*****************************************************************************99******************************************************************7......")
+
+    def test_reading_alignments_pfam1(self):
+        """Test parsing Pfam record 120_Rick_ant."""
+        path = "Stockholm/pfam1.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["identification"], "120_Rick_ant")
+        self.assertEqual(alignment.annotations["accession number"], "PF12574.10")
+        self.assertEqual(alignment.annotations["definition"], "120 KDa Rickettsia surface antigen")
+        self.assertEqual(alignment.annotations["author"], ["Gavin OL;"])
+        self.assertEqual(alignment.annotations["source of seed"], "Prosite")
+        self.assertEqual(alignment.annotations["gathering method"], "25.00 25.00;")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "42.00 39.60;")
+        self.assertEqual(alignment.annotations["noise cutoff"], "23.60 21.20;")
+        self.assertEqual(alignment.annotations["build method"], "hmmbuild HMM.ann SEED.ann")
+        self.assertEqual(alignment.annotations["search method"], "hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq")
+        self.assertEqual(alignment.annotations["type"], "Family")
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "8112862")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "Cloning, sequencing, and expression of the gene coding for an antigenic 120-kilodalton protein of Rickettsia conorii.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Schuenke KW, Walker DH;")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Infect Immun. 1994;62:904-909.")
+        self.assertEqual(len(alignment.annotations["database_references"]), 2)
+        self.assertEqual(len(alignment.annotations["database_references"]["INTERPRO"]), 1)
+        self.assertEqual(len(alignment.annotations["database_references"]["SO"]), 1)
+        self.assertEqual(alignment.annotations["database_references"]["INTERPRO"][0]["accession"], "IPR020954")
+        self.assertEqual(alignment.annotations["database_references"]["SO"][0]["accession"], "0100021")
+        self.assertEqual(alignment.annotations["database_references"]["SO"][0]["name"], "polypeptide_conserved_region")
+        self.assertEqual(alignment.annotations["comment"], "This domain family is found in bacteria, and is approximately 40 amino acids in length. This family is a Rickettsia surface antigen of 120 KDa which may be used as an antigen for immune response against the bacterial species.")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                     [102, 110, 110, 331, 333, 337],
+                     [112, 120, 125, 346, 346, 350],
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(alignment.sequences[0].id, "SCA4_RICPR")
+        self.assertEqual(alignment.sequences[0].seq[102:337], "LAEQIAKEEDDRKFRAFLSNQDNYALINKAFEDTKTKKNLEKAEIVGYKNVLSTYSVANGYQGGFQPVQWENQVSASDLRSTVVKNDEGEELCTLNETTVKTKDLIVAKQDGTQVQINSYREINFPIKLDKANGSMHLSMVALKADGTKPAKDKAVYFTAHYEEGPNGKPQLKEISSPQPLKFVGTGDDAVAYIEHGGEIYTLAVTRGKYKEMMKEVALNHGQSVALSQTIAEDL")
+        self.assertEqual(alignment.sequences[0].annotations['accession'], "Q9ZD49.2")
+        self.assertEqual(alignment.sequences[1].id, "H8K5G2_RICAG")
+        self.assertEqual(alignment.sequences[1].seq[112:350], "LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESIEIAGYKNVHNTFSAASGYPGGFKPVQWENQVSANDLRATVVKNDAGDELCTLNETTVKTKPFTVAKQDGTQVQISSYREIDFPIKLDKADGSMHLSMVALKADGTKPSKDKAVYFTAHYEEGPNGKPQLKEISSPKPLKFAGTGDDAIAYIEHGGEIYTLAVTRGKYKEMMKEVELNQGQSVDLSQAEDI")
+        self.assertEqual(alignment.sequences[1].annotations['accession'], "H8K5G2.1")
+        self.assertEqual(alignment[0], "LAEQIAKE-----EDDRKFRAFLSNQDNYALINKAFEDTKTKKNLEKAEIVGYKNVLSTYSVANGYQGGFQPVQWENQVSASDLRSTVVKNDEGEELCTLNETTVKTKDLIVAKQDGTQVQINSYREINFPIKLDKANGSMHLSMVALKADGTKPAKDKAVYFTAHYEEGPNGKPQLKEISSPQPLKFVGTGDDAVAYIEHGGEIYTLAVTRGKYKEMMKEVALNHGQSVALSQTIAEDL")
+        self.assertEqual(alignment[1], "LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESIEIAGYKNVHNTFSAASGYPGGFKPVQWENQVSANDLRATVVKNDAGDELCTLNETTVKTKPFTVAKQDGTQVQISSYREIDFPIKLDKADGSMHLSMVALKADGTKPSKDKAVYFTAHYEEGPNGKPQLKEISSPKPLKFAGTGDDAIAYIEHGGEIYTLAVTRGKYKEMMKEVELNQGQSVDLSQ--AEDI")
+        self.assertEqual(alignment.column_annotations['sequence_consensus'], "LAEQhtKE.....EcD+phpsFhuN.sNhthIsKAhEsschKKpLEphEIsGYKNVhsTaSsAsGY.GGFpPVQWENQVSAsDLRuTVVKNDtG-ELCTLNETTVKTKshhVAKQDGTQVQIsSYREIsFPIKLDKAsGSMHLSMVALKADGTKPuKDKAVYFTAHYEEGPNGKPQLKEISSPpPLKFsGTGDDAlAYIEHGGEIYTLAVTRGKYKEMMKEVtLNpGQSVsLSQ..AEDl")
 
 
 if __name__ == "__main__":
