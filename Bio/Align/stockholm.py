@@ -221,11 +221,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "IN": "intron",
     }
 
-    # These GC mappings are in addition to *_cons in GR mapping:
     gc_mapping = {"RF": "reference_coordinate_annotation",
                   "MM": "model_mask",
                   "seq_cons": "sequence_consensus",
+                  "scorecons": "score_consensus",  # used in CATH
+                  "scorecons_70": "score_consensus_70",  # used in CATH
+                  "scorecons_80": "score_consensus_80",  # used in CATH
+                  "scorecons_90": "score_consensus_90",  # used in CATH
                  }
+    # Add *_cons from GR mapping:
+    for key, value in gr_mapping.items():
+        gc_mapping[key + "_cons"] = "consensus_" + value
+
     # These GC keywords are used in Rfam:
     for keyword in ("RNA_elements",
                     "RNA_structural_element",
@@ -250,7 +257,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         gc_mapping[keyword] = keyword
     gs_mapping = {"AC": "accession",
                   # "DE": description,  # handled separately
-                  "DR": "dateabase_references",
+                  "DR": "database_references",
                   "OS": "organism",
                   "OC": "organism_classification",
                   "LO": "look",
@@ -296,24 +303,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             alignment.column_annotations = {}
             for key, value in gc.items():
                 if len(value) != columns:
-                    raise ValueError(f"{k} length is {len(v)}, expected {columns}")
-                if key in self.gc_mapping:
-                    alignment.column_annotations[self.gc_mapping[key]] = value
-                elif key.endswith("_cons") and key[:-5] in self.gr_mapping:
-                    alignment.column_annotations["consensus_"+self.gr_mapping[key[:-5]]] = value
-                else:
-                    raise ValueError("Unknown Generic per-Column annotation keyword '%s'" % key)
+                    raise ValueError(f"{key} length is {len(value)}, expected {columns}")
+                try:
+                    key = self.gc_mapping.get(key)
+                except KeyError:
+                    raise ValueError("Unknown Generic per-Column annotation keyword '%s'" % key) from None
+                alignment.column_annotations[key] = value
         if gs:
-            seqnames = []
-            for row, record in zip(alignment.coordinates, alignment.sequences):
-                start = row[0]
-                end = row[-1]
-                seqname = f"{record.id}/{start+1}-{end}"
-                seqnames.append(seqname)
-            for key, value in gs.items():
-                index = seqnames.index(key)
-                record = alignment.sequences[index]
-                for key, value in value.items():
+            for seqname, annotations in gs.items():
+                for record in alignment.sequences:
+                    if record.annotations['seqname'] == seqname:
+                        break
+                else:
+                    raise ValueError(f"Failed to find seqname {seqname}")
+                for key, value in annotations.items():
                     if key == "DE":
                         record.description = value
                     else:
@@ -347,11 +350,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 strands = []
                 references = []
                 reference_comments = []
-                database_references = defaultdict(list)
+                database_references = []
                 nested_domains = []
                 gf = defaultdict(list)
                 gc = {}
-                gs = defaultdict(lambda: {"DR": {}})
+                gs = defaultdict(lambda: {"DR": []})
                 gr = {}
                 length = None
             elif line == "//":
@@ -418,7 +421,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
                     seq = Seq({start: sequence}, end)
                 strands.append(strand)
-                record = SeqRecord(seq, id=name)
+                annotations = {"seqname": seqname}
+                record = SeqRecord(seq, id=name, annotations=annotations)
                 records.append(record)
                 starts.append(start)
             elif line.startswith("#=GF "):
@@ -447,38 +451,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif feature == "RC":
                     reference_comments.append(text)
                 elif feature == "DR":
-                    words = [word.strip() for word in text.split(";")]
-                    database, accession = words[:2]
-                    database_reference = {"accession": accession}
-                    assert words[-1] == ""
-                    if len(words) == 3:
-                        pass
-                    elif len(words) == 4:
-                        if database == "SCOP":
-                            tag = words[2]
-                            assert tag in ("fa", "pr", "sf")
-                            database_reference["tag"] = tag
-                        elif database == "SO":  # Sequence Ontology
-                            name = words[2]
-                            database_reference["name"] = name
-                        elif database == "GO":  # Gene Ontology
-                            name = words[2]
-                            database_reference["name"] = name
-                        else:
-                            raise ValueError("Unexpected database in DR line '%s'" % line)
-                    else:
-                        raise ValueError("Unexpected format of DR line '%s'" % line)
-                    database_references[database].append(database_reference)
+                    database_reference = {"reference": text}
+                    database_references.append(database_reference)
                 elif feature == "DC":
-                    assert database_reference.get("comment") is None
+                    assert "comment" not in database_reference
                     database_reference["comment"] = text
                 elif feature == "NE":
-                    assert text.count(";") == 1
-                    nested_domain = NestedDomain(text[:-1])
+                    nested_domain = {"accession": text}
                     nested_domains.append(nested_domain)
                 elif feature == "NL":
-                    assert nested_domain.location is None
-                    nested_domain.location  = text
+                    assert "location" not in nested_domain
+                    nested_domain["location"]  = text
                 else:
                     # Each feature key could be used more than once,
                     # so store the entries as a list of strings.
@@ -502,11 +485,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     seqname, feature = line[5:].strip().split(None, 1)
                     text = ""
                 if feature == "DR":
-                    database, accession = text.split(";", 1)
-                    database_reference = {"accession": accession}
-                    if database not in gs[seqname][feature]:
-                        gs[seqname][feature][database] = []
-                    gs[seqname][feature][database].append(database_reference)
+                    database_reference = {"reference": text}
+                    gs[seqname][feature].append(database_reference)
                 else:
                     assert feature not in gs[seqname]
                     gs[seqname][feature] = text

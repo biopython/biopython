@@ -245,11 +245,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignment.annotations["references"][0]["author"], "Schuenke KW, Walker DH;")
         self.assertEqual(alignment.annotations["references"][0]["location"], "Infect Immun. 1994;62:904-909.")
         self.assertEqual(len(alignment.annotations["database_references"]), 2)
-        self.assertEqual(len(alignment.annotations["database_references"]["INTERPRO"]), 1)
-        self.assertEqual(len(alignment.annotations["database_references"]["SO"]), 1)
-        self.assertEqual(alignment.annotations["database_references"]["INTERPRO"][0]["accession"], "IPR020954")
-        self.assertEqual(alignment.annotations["database_references"]["SO"][0]["accession"], "0100021")
-        self.assertEqual(alignment.annotations["database_references"]["SO"][0]["name"], "polypeptide_conserved_region")
+        self.assertEqual(alignment.annotations["database_references"][0], {'reference': 'INTERPRO; IPR020954;'})
+        self.assertEqual(alignment.annotations["database_references"][1], {'reference': 'SO; 0100021; polypeptide_conserved_region;'})
         self.assertEqual(alignment.annotations["comment"], "This domain family is found in bacteria, and is approximately 40 amino acids in length. This family is a Rickettsia surface antigen of 120 KDa which may be used as an antigen for immune response against the bacterial species.")
         self.assertTrue(
             numpy.array_equal(
