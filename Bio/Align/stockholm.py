@@ -190,7 +190,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """
 
     gf_mapping = {
-        "AC": "accession number",
+        "AC": "accession",
         "ID": "identification",
         "DE": "definition",
         "AU": "author",
@@ -223,11 +223,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     gc_mapping = {"RF": "reference_coordinate_annotation",
                   "MM": "model_mask",
-                  "seq_cons": "sequence_consensus",
-                  "scorecons": "score_consensus",  # used in CATH
-                  "scorecons_70": "score_consensus_70",  # used in CATH
-                  "scorecons_80": "score_consensus_80",  # used in CATH
-                  "scorecons_90": "score_consensus_90",  # used in CATH
+                  "seq_cons": "consensus_sequence",
+                  "scorecons": "consensus_score",  # used in CATH
+                  "scorecons_70": "consensus_score_70",  # used in CATH
+                  "scorecons_80": "consensus_score_80",  # used in CATH
+                  "scorecons_90": "consensus_score_90",  # used in CATH
                  }
     # Add *_cons from GR mapping:
     for key, value in gr_mapping.items():
