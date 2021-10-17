@@ -403,23 +403,41 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 aligned_sequence = aligned_sequence.replace(".", "-")
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
-                name, start, end = self._identifier_split(seqname)
-                if start is None:
+                try:
+                    name, segments = seqname.rsplit("/", 1)
+                except ValueError:
+                    name = seqname
                     seq = Seq(sequence)
                     start = 0
                     strand = "+"
                 else:
-                    if start < end:
-                        strand = "+"
-                    else:
-                        start, end = end, start
-                        strand = "-"
-                        sequence = reverse_complement(sequence, inplace=False)  # TODO: remove inplace=False
-                    start -= 1  # 0-based index
-                    if start + len(sequence) != end:
-                        raise ValueError(f"Start and end of sequence {name} are not consistent with sequence length")
-
-                    seq = Seq({start: sequence}, end)
+                    # CATH uses multiple segments, separated by an underscore
+                    seqdata = {}
+                    strand = None
+                    segment_end = 0
+                    for segment in segments.split("_"):
+                        start, end = segment.split("-")
+                        start = int(start)
+                        end = int(end)
+                        if strand is None:
+                            if start < end:
+                                strand = "+"
+                            else:
+                                start, end = end, start
+                                strand = "-"
+                                sequence = reverse_complement(sequence, inplace=False)  # TODO: remove inplace=False
+                        elif strand == "+":
+                            assert start < end
+                        elif strand == "-":
+                            assert end < start
+                            start, end = end, start
+                        start -= 1  # 0-based index
+                        segment_start = segment_end
+                        segment_end = segment_start + end - start
+                        seqdata[start] = sequence[segment_start: segment_end]
+                    if len(sequence) != segment_end:
+                        raise ValueError(f"Start and end of sequence {name} are not consistent with sequence length {len(sequence)}")
+                    seq = Seq(seqdata, end)
                 strands.append(strand)
                 annotations = {"seqname": seqname}
                 record = SeqRecord(seq, id=name, annotations=annotations)
