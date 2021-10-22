@@ -102,7 +102,9 @@ def real_test():
         else:
             raise
     except RenderPMError as err:
-        if str(err).startswith("Can't setFont("):
+        if str(err).startswith("Can't setFont(") or str(err).startswith(
+            "Error in setFont("
+        ):
             # TODO - can we raise the error BEFORE the unit test function
             # is run? That way it can be skipped in run_tests.py
             raise MissingExternalDependencyError(
