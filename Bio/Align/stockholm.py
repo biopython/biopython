@@ -312,7 +312,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if gs:
             for seqname, annotations in gs.items():
                 for record in alignment.sequences:
-                    if record.annotations['seqname'] == seqname:
+                    if record.id == seqname:
                         break
                 else:
                     raise ValueError(f"Failed to find seqname {seqname}")
@@ -346,8 +346,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # Starting a new alignment
                 records = []
                 aligned_sequences = []
-                starts = []
-                strands = []
                 references = []
                 reference_comments = []
                 database_references = []
@@ -361,17 +359,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # The "//" line indicates the end of the alignment.
                 # There may still be more meta-data
                 coordinates = Alignment.infer_coordinates(aligned_sequences)
-                for i, (record, start, strand) in enumerate(zip(records, starts, strands)):
-                    if strand == "+":
-                        coordinates[i, :] += start
-                    else:  # strand == "-"
-                        n = len(record.seq)
-                        coordinates[i, :] = n - coordinates[i, :]
-                for aligned_sequence, strand in zip(aligned_sequences, strands):
-                    if strand == "-" and ("U" in aligned_sequence or "u" in aligned_sequence):
-                        for record in records:
-                            record.seq = record.seq.transcribe()
-                        break
                 alignment = Alignment(records, coordinates)
                 alignment.annotations = {}
                 if references:
@@ -403,46 +390,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 aligned_sequence = aligned_sequence.replace(".", "-")
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
-                try:
-                    name, segments = seqname.rsplit("/", 1)
-                except ValueError:
-                    name = seqname
-                    seq = Seq(sequence)
-                    start = 0
-                    strand = "+"
-                else:
-                    # CATH uses multiple segments, separated by an underscore
-                    seqdata = {}
-                    strand = None
-                    segment_end = 0
-                    for segment in segments.split("_"):
-                        start, end = segment.split("-")
-                        start = int(start)
-                        end = int(end)
-                        if strand is None:
-                            if start < end:
-                                strand = "+"
-                            else:
-                                start, end = end, start
-                                strand = "-"
-                                sequence = reverse_complement(sequence, inplace=False)  # TODO: remove inplace=False
-                        elif strand == "+":
-                            assert start < end
-                        elif strand == "-":
-                            assert end < start
-                            start, end = end, start
-                        start -= 1  # 0-based index
-                        segment_start = segment_end
-                        segment_end = segment_start + end - start
-                        seqdata[start] = sequence[segment_start: segment_end]
-                    if len(sequence) != segment_end:
-                        raise ValueError(f"Start and end of sequence {name} are not consistent with sequence length {len(sequence)}")
-                    seq = Seq(seqdata, end)
-                strands.append(strand)
-                annotations = {"seqname": seqname}
-                record = SeqRecord(seq, id=name, annotations=annotations)
+                seq = Seq(sequence)
+                record = SeqRecord(seq, id=seqname)
                 records.append(record)
-                starts.append(start)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text
                 # Format: #=GF <feature> <free text>
@@ -516,23 +466,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 keyword = terms[1]
                 feature = self.gr_mapping[keyword]
                 letter_annotation = terms[2].strip().replace(".", "")
-                if strand == "-":
-                    letter_annotation = letter_annotation[::-1]
-                letter_annotation = "?" * start + letter_annotation
                 record.letter_annotations[feature] = letter_annotation
         if alignment is not None:
             self._annotate_alignment(alignment, gf, gc, gs)
             yield alignment
-
-    def _identifier_split(self, identifier):
-        """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
-        try:
-            name, start_end = identifier.rsplit("/", 1)
-            start, end = start_end.split("-")
-            return name, int(start), int(end)
-        except ValueError:
-            # Non-integers after final '/' - fall through
-            return identifier, None, None
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
