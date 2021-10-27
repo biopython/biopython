@@ -640,6 +640,106 @@ class TestAlignIO_reading(unittest.TestCase):
         192, 195, 197, 206, 206, 210, 210, 227, 227, 235, 236, 236, 242,
         242, 242, 242, 261, 261, 280, 281, 323, 324]])))
 
+    def test_reading_alignments_pfam6(self):
+        """Test parsing Pfam record COX2_TM."""
+        path = "Stockholm/pfam6.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["identification"], "COX2_TM")
+        self.assertEqual(alignment.annotations["accession"], "PF02790.17")
+        self.assertEqual(alignment.annotations["definition"], "Cytochrome C oxidase subunit II, transmembrane domain")
+        self.assertEqual(len(alignment.annotations["author"]), 2)
+        self.assertEqual(alignment.annotations["author"][0], "Sonnhammer ELL;0000-0002-9015-5588")
+        self.assertEqual(alignment.annotations["author"][1], "Griffiths-Jones SR;0000-0001-6043-807X")
+        self.assertEqual(alignment.annotations["source of seed"], "Prosite")
+        self.assertEqual(alignment.annotations["gathering method"], "22.80 18.00;")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "22.80 21.40;")
+        self.assertEqual(alignment.annotations["noise cutoff"], "22.70 17.90;")
+        self.assertEqual(alignment.annotations["build method"], "hmmbuild HMM.ann SEED.ann")
+        self.assertEqual(alignment.annotations["search method"], "hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq")
+        self.assertEqual(alignment.annotations["type"], "Family")
+        self.assertEqual(alignment.annotations["wikipedia"], ["Cytochrome_c_oxidase_subunit_II"])
+        self.assertEqual(len(alignment.annotations["references"]), 1)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "8638158")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "The whole structure of the 13-subunit oxidized cytochrome c oxidase at 2.8 A.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Tsukihara T, Aoyama H, Yamashita E, Tomizaki T, Yamaguchi H, Shinzawa-Itoh K, Nakashima R, Yaono R, Yoshikawa S;")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Science 1996;272:1136-1144.")
+        self.assertEqual(len(alignment.annotations["database_references"]), 5)
+        self.assertEqual(alignment.annotations["database_references"][0]["reference"], "INTERPRO; IPR011759;")
+        self.assertEqual(alignment.annotations["database_references"][1]["reference"], "PROSITE; PDOC00075;")
+        self.assertEqual(alignment.annotations["database_references"][2]["reference"], "SCOP; 1occ; fa;")
+        self.assertEqual(alignment.annotations["database_references"][2]["comment"], "This family corresponds to chains b and o.")
+        self.assertEqual(alignment.annotations["database_references"][3]["reference"], "TC; 3.D.4;")
+        self.assertEqual(alignment.annotations["database_references"][4]["reference"], "SO; 0100021; polypeptide_conserved_region;")
+        self.assertEqual(alignment.annotations["comment"], "The N-terminal domain of cytochrome C oxidase contains two transmembrane alpha-helices.")
+        self.assertEqual(len(alignment.sequences), 11)
+        self.assertEqual(alignment.sequences[0].id, "COX2_SCHPO/11-99")
+        self.assertEqual(alignment.sequences[1].id, "COX2_CANGA/17-103")
+        self.assertEqual(alignment.sequences[2].id, "COX2_NEUCR/14-102")
+        self.assertEqual(alignment.sequences[3].id, "H9D0Q0_EMENI/15-102")
+        self.assertEqual(alignment.sequences[4].id, "COX2_ARATH/17-103")
+        self.assertEqual(alignment.sequences[5].id, "COX2_ANOGA/1-83")
+        self.assertEqual(alignment.sequences[6].id, "COX2_CHICK/1-82")
+        self.assertEqual(alignment.sequences[7].id, "COX2_SHEEP/1-83")
+        self.assertEqual(alignment.sequences[8].id, "COX2_STRPU/1-83")
+        self.assertEqual(alignment.sequences[9].id, "COX2_SYNY3/19-111")
+        self.assertEqual(alignment.sequences[10].id, "A1BA41_PARDP/42-128")
+        self.assertEqual(alignment.sequences[0].annotations["accession"], "P21534.4")
+        self.assertEqual(alignment.sequences[1].annotations["accession"], "P43373.2")
+        self.assertEqual(alignment.sequences[2].annotations["accession"], "P00411.2")
+        self.assertEqual(alignment.sequences[3].annotations["accession"], "H9D0Q0.1")
+        self.assertEqual(alignment.sequences[4].annotations["accession"], "P93285.2")
+        self.assertEqual(alignment.sequences[5].annotations["accession"], "P34840.1")
+        self.assertEqual(alignment.sequences[6].annotations["accession"], "P18944.1")
+        self.assertEqual(alignment.sequences[7].annotations["accession"], "O78750.1")
+        self.assertEqual(alignment.sequences[8].annotations["accession"], "P15545.1")
+        self.assertEqual(alignment.sequences[9].annotations["accession"], "Q06474.2")
+        self.assertEqual(alignment.sequences[10].annotations["accession"], "A1BA41.1")
+        self.assertEqual(alignment.sequences[0].seq, "APSSWALYFQDGASPSYLGVTHLNDYLMFYLTFIFIGVIYAICKAVIEYNYNSHPIAAKYTTHGSIVEFIWTLIPALILILVALPSFKL")
+        self.assertEqual(alignment.sequences[1].seq, "VPTPYGIYFQDSATPNQEGILELHDNIMFYLFIILGLVSWMLFTIVKTYSKNPMAYKYIKHGQTIEIIWTMFPAVILLIIAFPSFIL")
+        self.assertEqual(alignment.sequences[2].seq, "APSPWGIYFQDSATPQMEGLVELHDNIMYYLVVILFGVGWILLSIIRNYISTKSPISHKYLNHGTLIELIWTITPAVILILIAFPSFKL")
+        self.assertEqual(alignment.sequences[3].seq, "PTPWGIFFQDSASPQMEGIEELHNNIMFYLAIILFTVTWMMITIIRNFVAKKSPIAHKYMNHGTLIELIWTITPAFILILIAFPSFKL")
+        self.assertEqual(alignment.sequences[4].seq, "AEPWQLGFQDAATPIMQGIIDLHHDIFFFLILILVFVLWILVRALWHFHYKKNAIPQRIVHGTTIEILWTIFPSIILMFIAIPSFAL")
+        self.assertEqual(alignment.sequences[5].seq, "MATWANLGLQDSSSPLMEQLNFFHDHTLLILTMITILVGYIMGMLSFNKFTNRFLLHGQTIEIIWTVLPAIILMFIAFPSLRL")
+        self.assertEqual(alignment.sequences[6].seq, "MANHSQLGFQDASSPIMEELVEFHDHALMVALAICSLVLYLLTLMLMEKLSSNTVDAQEVELIWTILPAIVLVLLALPSLQI")
+        self.assertEqual(alignment.sequences[7].seq, "MAYPMQLGFQDATSPIMEELLHFHDHTLMIVFLISSLVLYIISLMLTTKLTHTSTMDAQEVETIWTILPAIILIMIALPSLRI")
+        self.assertEqual(alignment.sequences[8].seq, "MGTWAQFGLQDASSPLMEELTYFHDYALIVLTLITILVFYGLVSLLVSSNTNRFFFEGQELETIWTVIPALILILIALPSLQL")
+        self.assertEqual(alignment.sequences[9].seq, "VSLWYGQNHGLMPVAASADAEKVDGIFNYMMTIATGLFLLVEGVLVYCLIRFRRRKDDQTDGPPIEGNVPLEILWTAIPTVIVFTLAVYSFEV")
+        self.assertEqual(alignment.sequences[10].seq, "PVNGGMNFQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLICIVRFNRRANPVPARFTHNTPIEVIWTLVPVLILVAIGAFSLPI")
+        self.assertEqual(alignment[0], "APSSWALY---FQDGASPSYLGVTHLNDYLMFYLTFIFIGVIYAICKAVIEYNYNSHPIAAKYTTHGSI-VEFIWTLIPALILILVALPSFKL")
+        self.assertEqual(alignment[1], "VPTPYGIY---FQDSATPNQEGILELHDNIMFYLFIILGLVSWMLFTIVKTY--SKNPMAYKYIKHGQT-IEIIWTMFPAVILLIIAFPSFIL")
+        self.assertEqual(alignment[2], "APSPWGIY---FQDSATPQMEGLVELHDNIMYYLVVILFGVGWILLSIIRNYISTKSPISHKYLNHGTL-IELIWTITPAVILILIAFPSFKL")
+        self.assertEqual(alignment[3], "-PTPWGIF---FQDSASPQMEGIEELHNNIMFYLAIILFTVTWMMITIIRNFVAKKSPIAHKYMNHGTL-IELIWTITPAFILILIAFPSFKL")
+        self.assertEqual(alignment[4], "-AEPWQLG---FQDAATPIMQGIIDLHHDIFFFLILILVFVLWILVRALWHFHYKKNAIPQR-IVHGTT-IEILWTIFPSIILMFIAIPSFAL")
+        self.assertEqual(alignment[5], "MATWANLG---LQDSSSPLMEQLNFFHDHTLLILTMITILVGYIMGMLSFN------KFTNRFLLHGQT-IEIIWTVLPAIILMFIAFPSLRL")
+        self.assertEqual(alignment[6], "MANHSQLG---FQDASSPIMEELVEFHDHALMVALAICSLVLYLLTLMLME------KLS-SNTVDAQE-VELIWTILPAIVLVLLALPSLQI")
+        self.assertEqual(alignment[7], "MAYPMQLG---FQDATSPIMEELLHFHDHTLMIVFLISSLVLYIISLMLTT------KLTHTSTMDAQE-VETIWTILPAIILIMIALPSLRI")
+        self.assertEqual(alignment[8], "MGTWAQFG---LQDASSPLMEELTYFHDYALIVLTLITILVFYGLVSLLVS------SNTNRFFFEGQE-LETIWTVIPALILILIALPSLQL")
+        self.assertEqual(alignment[9], "VSLWYGQNHGLMPVAASADAEKVDGIFNYMMTIATGLFLLVEGVLVYCLIRFRRRKDDQTDGPPIEGNVPLEILWTAIPTVIVFTLAVYSFEV")
+        self.assertEqual(alignment[10], "-PVNGGMN---FQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLICIVRFNRRANPVPAR-FTHNTP-IEVIWTLVPVLILVAIGAFSLPI")
+        self.assertEqual(alignment.column_annotations['consensus_sequence'], "hssshsls...FQDuuSP.MEtlhclHDahhhhLshIhhhVhalLshhlhpa..ptpslsp+.hhHGph.lElIWTllPAlILlhIAhPShpL")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([
+                    [0, 1, 8,  8, 48, 49, 51, 54, 57, 58, 59, 60, 66, 66, 89],
+                    [0, 1, 8,  8, 48, 49, 49, 52, 55, 56, 57, 58, 64, 64, 87],
+                    [0, 1, 8,  8, 48, 49, 51, 54, 57, 58, 59, 60, 66, 66, 89],
+                    [0, 0, 7,  7, 47, 48, 50, 53, 56, 57, 58, 59, 65, 65, 88],
+                    [0, 0, 7,  7, 47, 48, 50, 53, 56, 57, 58, 58, 64, 64, 87],
+                    [0, 1, 8,  8, 48, 48, 48, 48, 51, 52, 53, 54, 60, 60, 83],
+                    [0, 1, 8,  8, 48, 48, 48, 48, 51, 51, 52, 53, 59, 59, 82],
+                    [0, 1, 8,  8, 48, 48, 48, 48, 51, 52, 53, 54, 60, 60, 83],
+                    [0, 1, 8,  8, 48, 48, 48, 48, 51, 52, 53, 54, 60, 60, 83],
+                    [0, 1, 8, 11, 51, 52, 54, 57, 60, 61, 62, 63, 69, 70, 93],
+                    [0, 0, 7,  7, 47, 48, 50, 53, 56, 57, 58, 58, 64, 64, 87]],
+                )
+            )
+        )
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
