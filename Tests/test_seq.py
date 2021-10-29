@@ -130,6 +130,9 @@ class TestSeq(unittest.TestCase):
     def test_replace(self):
         self.assertEqual("ATCCCA", Seq.Seq("ATC-CCA").replace("-", ""))
 
+    def test_cast_to_list(self):
+        self.assertEqual(list("ATC"), list(Seq.Seq("ATC")))
+
 
 class TestSeqStringMethods(unittest.TestCase):
     def setUp(self):
