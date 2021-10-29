@@ -60,7 +60,7 @@ class Structure(Entity):
         :param verbose bool: default False
             describe runtime problems
 
-        :raises Exception: if any chain does not have .pic attribute
+        :raises Exception: if any chain does not have .internal_coord attribute
         """
         for chn in self.get_chains():
             chn.internal_to_atom_coordinates(verbose)

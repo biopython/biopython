@@ -1,4 +1,4 @@
-# Copyright 2019 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-21 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -38,6 +38,8 @@ from Bio.PDB.internal_coords import IC_Residue, IC_Chain
 # from Bio.PDB.Residue import Residue
 from Bio.PDB.vectors import homog_scale_mtx
 
+import numpy as np  # type: ignore
+
 
 def _scale_residue(res, scale, scaleMtx):
     if res.internal_coord:
@@ -54,6 +56,8 @@ def write_SCAD(
     backboneOnly=False,
     includeCode=True,
     maxPeptideBond=None,
+    start=None,
+    fin=None,
     handle="protein",
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
@@ -92,6 +96,8 @@ def write_SCAD(
         Override the cut-off in IC_Chain class (default 1.4) for detecting
         chain breaks.  If your target has chain breaks, pass a large number here
         to create a very long 'bond' spanning the break.
+    :param start, fin: int default None
+        Parameters for internal_to_atom_coords() to limit chain segment.
     :param handle: str, default 'protein'
         name for top level of generated OpenSCAD matrix structure
     """
@@ -108,44 +114,36 @@ def write_SCAD(
                 chn.internal_coord = IC_Chain(chn)
                 added_IC_Atoms = True
     elif "C" == entity.level:
-        if not entity.internal_coord:
+        if not entity.internal_coord:  # entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             added_IC_Atoms = True
     else:
         raise PDBException("level not S, M or C: " + str(entity.level))
 
-    if not added_IC_Atoms and scale is not None:
+    if added_IC_Atoms:
+        # if loaded pdb, need to scale, and asm, gen atomArray
+        entity.atom_to_internal_coordinates()
+    else:
         # if loaded pic file and need to scale, generate atom coords
-        entity.internal_to_atom_coordinates()
-
-    # need to reset rnext and rprev in case MaxPeptideBond changed
-    if not added_IC_Atoms:
-        if "C" == entity.level:
-            if entity.internal_coord is not None:
-                entity.internal_coord.clear_ic()
-            chnp = entity.internal_coord = IC_Chain(entity)
-            chnp.atom_to_internal_coordinates()
-            # chnp.link_residues()
-            # chnp.init_edra()  # render_dihedra()
-            # chnp.init_atom_coords()
-        else:
-            for chn in entity.get_chains():
-                if chn.internal_coord is not None:
-                    chn.internal_coord.clear_ic()
-                chnp = chn.internal_coord = IC_Chain(chn)
-                chnp.atom_to_internal_coordinates()
-                # chnp.link_residues()
-                # chnp.init_edra()  # render_dihedra()
-                # chnp.init_atom_coords()
+        entity.internal_to_atom_coordinates(None)
 
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
-        for res in entity.get_residues():
-            if 2 == res.is_disordered():
-                for r in res.child_dict.values():
-                    _scale_residue(r, scale, scaleMtx)
-            else:
-                _scale_residue(res, scale, scaleMtx)
+
+        if "C" == entity.level:
+            entity.internal_coord.atomArray = np.dot(
+                entity.internal_coord.atomArray[:], scaleMtx
+            )
+            entity.internal_coord.hAtoms_needs_update[:] = True
+            entity.internal_coord.scale = scale
+        else:
+            for chn in entity.get_chains():
+                if hasattr(chn.internal_coord, "atomArray"):
+                    chn.internal_coord.atomArray = np.dot(
+                        chn.internal_coord.atomArray[:], scaleMtx
+                    )
+                    chn.internal_coord.hAtoms_needs_update[:] = True
+                    chn.internal_coord.scale = scale
 
     # generate internal coords for scaled entity
     # (hedron bond lengths have changed if scaled)
@@ -156,18 +154,21 @@ def write_SCAD(
 
     allBondsStash = IC_Residue.AllBonds
     IC_Residue.AllBonds = True
+    # trigger rebuild of hedra for AllBonds
+    if "C" == entity.level:
+        entity.internal_coord.ordered_aa_ic_list[0].hedra = {}
+        delattr(entity.internal_coord, "hAtoms_needs_update")
+        delattr(entity.internal_coord, "hedraLen")
+    else:
+        for chn in entity.get_chains():
+            chn.internal_coord.ordered_aa_ic_list[0].hedra = {}
+            delattr(chn.internal_coord, "hAtoms_needs_update")
+            delattr(chn.internal_coord, "hedraLen")
     entity.atom_to_internal_coordinates()
     IC_Residue.AllBonds = allBondsStash
 
-    # clear initNCaC - want at origin, not match PDB file
-    if "C" == entity.level:
-        entity.internal_coord.initNCaC = {}
-    else:
-        for chn in entity.get_chains():
-            chn.internal_coord.initNCaC = {}
-
-    # rebuild atom coordinates now starting at origin: in OpenSCAD code, each
-    # residue model is transformed to N-Ca-C start position instead of updating
+    # rebuild atom coordinates now with chain starting at origin: in OpenSCAD code,
+    # each residue model is transformed to N-Ca-C start position instead of updating
     # transform matrix along chain
     entity.internal_to_atom_coordinates()
 
@@ -186,11 +187,15 @@ def write_SCAD(
         if "S" == entity.level or "M" == entity.level:
             for chn in entity.get_chains():
                 fp.write(" [\n")
-                chn.internal_coord.write_SCAD(fp, backboneOnly)
+                chn.internal_coord.write_SCAD(
+                    fp, backboneOnly=backboneOnly, start=start, fin=fin
+                )
                 fp.write(" ]\n")
         elif "C" == entity.level:
             fp.write(" [\n")
-            entity.internal_coord.write_SCAD(fp, backboneOnly)
+            entity.internal_coord.write_SCAD(
+                fp, backboneOnly=backboneOnly, start=start, fin=fin
+            )
             fp.write(" ]\n")
         elif "R" == entity.level:
             raise NotImplementedError("writescad single residue not yet implemented.")

@@ -21,6 +21,7 @@ except ImportError:
 from Bio.PDB.vectors import Vector
 from Bio.PDB import rotmat, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
 from Bio.PDB.vectors import get_spherical_coordinates, coord_space, homog_trans_mtx
+from Bio.PDB.vectors import multi_coord_space
 
 
 class VectorTests(unittest.TestCase):
@@ -235,6 +236,43 @@ class VectorTests(unittest.TestCase):
                     for i in range(3):
                         rslt[i] = mtxs[1].dot(rslt[i])
                     self.assertTrue(numpy.array_equal(rslt, ps2))
+
+    def test_multi_coord_space(self):
+        # start with 3 points already aligned to axes
+        point_set = numpy.array(
+            [[[2.0, 0.0, 2.0, 1.0], [0.0, 0.0, 0.0, 1.0], [0.0, 0.0, 2.0, 1.0]]]
+        )
+        # confirm get id matrix to transform to/from coord space
+        homog_id = numpy.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+        mtxs = multi_coord_space(point_set, 1, True)
+        for i in range(2):
+            self.assertTrue(numpy.array_equal(mtxs[i][0], homog_id))
+        # test in every quadrant
+        test_set = numpy.empty([8, 3, 4], dtype=numpy.float64)
+        m = 0
+        for i in range(2):
+            for j in range(2):
+                for k in range(2):
+                    # translate point_set arbitrary amount in each axis
+                    tm = homog_trans_mtx(
+                        (3 if i else -3), (3 if j else -3), (3 if k else -3)
+                    )
+                    for i in range(3):
+                        test_set[m, i] = tm.dot(point_set[0][i])
+                    m += 1
+
+        # confirm coord_space puts points back to axis alignment
+        mtxs = multi_coord_space(test_set, 8, True)
+        for m in range(0, 8):
+            rslt = [1, 2, 3]
+            for i in range(3):
+                rslt[i] = mtxs[0][m].dot(test_set[m][i])
+            self.assertTrue(numpy.array_equal(rslt, point_set[0]))
+
+            # confirm reverse transform returns translated points
+            for i in range(3):
+                rslt[i] = mtxs[1][m].dot(rslt[i])
+            self.assertTrue(numpy.array_equal(rslt, test_set[m]))
 
 
 if __name__ == "__main__":

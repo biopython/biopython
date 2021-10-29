@@ -661,3 +661,75 @@ def multi_rot_Y(angle_rads: numpy.ndarray) -> numpy.ndarray:
     ry[:, 2, 0] = -ry[:, 0, 2]
 
     return ry
+
+
+def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.ndarray:
+    """Generate [dLen] transform matrices to coord space defined by 3 points.
+
+    New coordinate space will have:
+        acs[0] on XZ plane
+        acs[1] origin
+        acs[2] on +Z axis
+
+    :param numpy array [entries]x3x3 [entries] XYZ coords for 3 atoms
+    :param bool rev: if True, also return reverse transformation matrix
+    (to return from coord_space)
+    :returns: [entries] 4x4 numpy arrays, x2 if rev=True
+
+    """
+    # build tm translation matrix: atom1 to origin
+
+    tm = numpy.empty((dLen, 4, 4))
+    tm[...] = numpy.identity(4)
+    tm[:, 0:3, 3] = -a3[:, 1, 0:3]
+
+    # directly translate a2 into new space using a1
+    p = a3[:, 2] - a3[:, 1]
+
+    # get spherical coords of translated a2 (p)
+    r = numpy.linalg.norm(p, axis=1)
+    azimuth = numpy.arctan2(p[:, 1], p[:, 0])
+    polar_angle = numpy.arccos(numpy.divide(p[:, 2], r, where=r != 0))
+
+    # build rz rotation matrix: translated a2 -azimuth around Z
+    # (enables next step rotating around Y to align with Z)
+    rz = multi_rot_Z(-azimuth)
+
+    # build ry rotation matrix: translated a2 -polar_angle around Y
+    ry = multi_rot_Y(-polar_angle)
+
+    # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
+    mt = numpy.matmul(ry, numpy.matmul(rz, tm))
+
+    # transform a0 to mt space
+    p = numpy.matmul(mt, a3[:, 0].reshape(-1, 4, 1)).reshape(-1, 4)
+    # print("mt[0]:\n", mt[0], "\na3[0][0] (a0):\n", a3[0][0], "\np[0]:\n", p[0])
+
+    # get azimuth of translated a0
+    azimuth2 = numpy.arctan2(p[:, 1], p[:, 0])
+
+    # build rotation matrix rz2 to rotate a0 -azimuth about Z to align with X
+    rz2 = multi_rot_Z(-azimuth2)
+
+    # update mt to be complete transform into hedron coordinate space
+    if not rev:
+        return numpy.matmul(rz2, mt[:])
+
+    # rev=True, so generate the reverse transformation
+    mt = numpy.matmul(rz2, mt[:])
+
+    # rotate a0 theta about Z, reversing alignment with X
+    mrz2 = multi_rot_Z(azimuth2)
+
+    # rotate a2 phi about Y
+    mry = multi_rot_Y(polar_angle)
+
+    # rotate a2 theta about Z
+    mrz = multi_rot_Z(azimuth)
+
+    # translation matrix origin to a1
+    tm[:, 0:3, 3] = a3[:, 1, 0:3]
+
+    mr = tm @ mrz @ mry @ mrz2  # tm.dot(mrz.dot(mry.dot(mrz2)))
+
+    return numpy.array([mt, mr])
