@@ -204,6 +204,9 @@ residue_max_acc = {
     },
 }
 
+def version(version_string):
+    return tuple(map(int, (version_string.split("."))))
+
 
 def ss_to_index(ss):
     """Secondary structure symbol to index.
@@ -221,7 +224,7 @@ def ss_to_index(ss):
     assert 0
 
 
-def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
+def dssp_dict_from_pdb_file(in_file, DSSP="dssp", dssp_version="3.9.9"):
     """Create a DSSP dictionary from a PDB file.
 
     Parameters
@@ -231,6 +234,9 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     DSSP : string
         DSSP executable (argument to subprocess)
+    
+    dssp_version : string
+        Version of DSSP excutable
 
     Returns
     -------
@@ -255,8 +261,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     # and calling 'dssp' will hence not work in some operating systems
     # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
     try:
+        if version(dssp_version) < version("4.0.0"):
+            DSSP_cmd = [DSSP, in_file]
+        else:
+            DSSP_cmd = [DSSP, "--output-format=dssp", in_file]
         p = subprocess.Popen(
-            [DSSP, in_file],
+            DSSP_cmd,
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -264,8 +274,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     except FileNotFoundError:
         if DSSP == "mkdssp":
             raise
+        if version(dssp_version) < version("4.0.0"):
+            DSSP_cmd = ["mkdssp", in_file]
+        else:
+            DSSP_cmd = ["mkdssp", "--output-format=dssp", in_file]
         p = subprocess.Popen(
-            ["mkdssp", in_file],
+            DSSP_cmd,
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -421,7 +435,7 @@ class DSSP(AbstractResiduePropertyMap):
 
     """
 
-    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""):
+    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type="", dssp_version="3.9.9"):
         """Create a DSSP object.
 
         Parameters
@@ -439,6 +453,9 @@ class DSSP(AbstractResiduePropertyMap):
         file_type: string
             File type switch: either PDB, MMCIF or DSSP. Inferred from the
             file extension by default.
+        dssp_version: string
+            Version of DSSP used to generate in_file if in_file is of DSSP
+            format. Else version will be automatically detected.
 
         """
         self.residue_max_acc = residue_max_acc[acc_array]
@@ -460,7 +477,9 @@ class DSSP(AbstractResiduePropertyMap):
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
-                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+                version_string= subprocess.check_output([dssp, "--version"], universal_newlines=True)
+                dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp, dssp_version)
             except FileNotFoundError:
                 if dssp == "dssp":
                     dssp = "mkdssp"
@@ -468,7 +487,9 @@ class DSSP(AbstractResiduePropertyMap):
                     dssp = "dssp"
                 else:
                     raise
-            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+                version_string= subprocess.check_output([dssp, "--version"], universal_newlines=True)
+                dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp, dssp_version)
         # If the input file is a DSSP file just parse it directly:
         elif file_type == "DSSP":
             dssp_dict, dssp_keys = make_dssp_dict(in_file)
@@ -484,7 +505,7 @@ class DSSP(AbstractResiduePropertyMap):
         # But MMCIFParser reads in the auth_asym_id
         # Here we create a dictionary to map label_asym_id to auth_asym_id
         # using the mmCIF file
-        if file_type == "MMCIF":
+        if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
             mmcif_dict = MMCIF2Dict(in_file)
             mmcif_chain_dict = {}
             for i, c in enumerate(mmcif_dict["_atom_site.label_asym_id"]):
@@ -497,7 +518,7 @@ class DSSP(AbstractResiduePropertyMap):
         # (residue, (secondary structure, accessibility)) tuples
         for key in dssp_keys:
             chain_id, res_id = key
-            if file_type == "MMCIF":
+            if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
                 chain_id = mmcif_chain_dict[chain_id]
                 dssp_mapped_keys.append((chain_id, res_id))
             chain = model[chain_id]
@@ -637,6 +658,6 @@ class DSSP(AbstractResiduePropertyMap):
             dssp_map[(chain_id, res_id)] = dssp_vals
             dssp_list.append(dssp_vals)
 
-        if file_type == "MMCIF":
+        if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
             dssp_keys = dssp_mapped_keys
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
