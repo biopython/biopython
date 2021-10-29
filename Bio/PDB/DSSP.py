@@ -435,7 +435,7 @@ class DSSP(AbstractResiduePropertyMap):
 
     """
 
-    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type="", dssp_version="3.9.9"):
+    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""):
         """Create a DSSP object.
 
         Parameters
@@ -453,9 +453,6 @@ class DSSP(AbstractResiduePropertyMap):
         file_type: string
             File type switch: either PDB, MMCIF or DSSP. Inferred from the
             file extension by default.
-        dssp_version: string
-            Version of DSSP used to generate in_file if in_file is of DSSP
-            format. Else version will be automatically detected.
 
         """
         self.residue_max_acc = residue_max_acc[acc_array]
