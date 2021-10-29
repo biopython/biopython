@@ -206,7 +206,7 @@ residue_max_acc = {
 
 
 def version(version_string):
-    """Parse semantic version scheme."""
+    """Parse semantic version scheme for easy comparison."""
     return tuple(map(int, (version_string.split("."))))
 
 
