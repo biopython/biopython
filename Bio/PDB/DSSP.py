@@ -204,7 +204,9 @@ residue_max_acc = {
     },
 }
 
+
 def version(version_string):
+    """Parse semantic version scheme."""
     return tuple(map(int, (version_string.split("."))))
 
 
@@ -234,7 +236,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp", dssp_version="3.9.9"):
 
     DSSP : string
         DSSP executable (argument to subprocess)
-    
+
     dssp_version : string
         Version of DSSP excutable
 
@@ -474,9 +476,13 @@ class DSSP(AbstractResiduePropertyMap):
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
-                version_string= subprocess.check_output([dssp, "--version"], universal_newlines=True)
+                version_string = subprocess.check_output(
+                    [dssp, "--version"], universal_newlines=True
+                )
                 dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
-                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp, dssp_version)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
+                    in_file, dssp, dssp_version
+                )
             except FileNotFoundError:
                 if dssp == "dssp":
                     dssp = "mkdssp"
@@ -484,9 +490,13 @@ class DSSP(AbstractResiduePropertyMap):
                     dssp = "dssp"
                 else:
                     raise
-                version_string= subprocess.check_output([dssp, "--version"], universal_newlines=True)
+                version_string = subprocess.check_output(
+                    [dssp, "--version"], universal_newlines=True
+                )
                 dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
-                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp, dssp_version)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
+                    in_file, dssp, dssp_version
+                )
         # If the input file is a DSSP file just parse it directly:
         elif file_type == "DSSP":
             dssp_dict, dssp_keys = make_dssp_dict(in_file)
