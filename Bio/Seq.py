@@ -428,6 +428,10 @@ class _SeqAbstractBaseClass(ABC):
         """Return the length of the sequence."""
         return len(self._data)
 
+    def __iter__(self):
+        """Return an iterable of the sequence."""
+        return self._data.decode("ASCII").__iter__()
+
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.
 
