@@ -1365,6 +1365,54 @@ class TestAlignIO_reading(unittest.TestCase):
 [0, 1, 2, 4, 11, 11, 11, 12, 13, 14, 15, 16, 17, 19, 20, 20, 20, 22, 23, 24, 25, 25, 27, 28, 28, 29, 31, 32, 33, 37, 37, 46, 47, 64, 65, 66, 67, 68, 73, 73, 73, 73, 73, 89, 89, 89, 89, 92, 93, 93, 94, 95, 96, 103, 104, 104, 104, 104, 104, 104, 104, 104, 106, 106, 108, 109, 126, 127, 129],
 ])))
 
+    def test_reading_alignments_rfam1(self):
+        """Test parsing Rfam record BTnc005."""
+        path = "Stockholm/rfam1.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["accession"], "RF04178")
+        self.assertEqual(alignment.annotations["identification"], "BTnc005")
+        self.assertEqual(alignment.annotations["definition"], "Bacteroides sRNA BTnc005")
+        self.assertEqual(alignment.annotations["author"], ["Prezza, G", "Ryan, D", "Mädler, G", "Barquist, L; 0000-0003-4732-2667", "Westermann, A"])
+        self.assertEqual(alignment.annotations["source of seed"], "Published; PMID:32678091;")
+        self.assertEqual(alignment.annotations["source of structure"], "Published; PMID:32678091;")
+        self.assertEqual(alignment.annotations["gathering method"], "174.80")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "179.30")
+        self.assertEqual(alignment.annotations["noise cutoff"], "174.30")
+        self.assertEqual(alignment.annotations["type"], "Gene; sRNA;")
+        self.assertEqual(alignment.annotations["build method"], "cmbuild -F CM SEED")
+        self.assertEqual(alignment.annotations["calibration method"], "cmcalibrate --mpi CM")
+        self.assertEqual(alignment.annotations["search method"], "cmsearch --cpu 4 --verbose --nohmmonly -T 30.00 -Z 742849.287494 CM SEQDB")
+        self.assertEqual(len(alignment.annotations["database_references"]), 1)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "SO; 0000655; ncRNA;"})
+        self.assertEqual(len(alignment.annotations["references"]), 1)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "32678091")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "A high-resolution transcriptome map identifies small RNA regulation of metabolism in the gut microbe Bacteroides thetaiotaomicron.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Ryan D, Jenniches L, Reichardt S, Barquist L, Westermann AJ")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Nat Commun. 2020;11:3557.")
+        self.assertEqual(alignment.annotations["comment"], "An uncharacterized small RNA discovered in Bacteroides thetaiotaomicron [1]")
+        self.assertEqual(alignment.annotations["wikipedia"], ["Bacteroides_thetaiotaomicron_sRNA"])
+        self.assertEqual(len(alignment.sequences), 3)
+        self.assertEqual(alignment.sequences[0].id, "AE015928.1/72774-72978")
+        self.assertEqual(alignment.sequences[1].id, "CP000139.1/2819055-2819247")
+        self.assertEqual(alignment.sequences[2].id, "FP929033.1/4930704-4930908")
+        self.assertEqual(alignment.sequences[0].seq, "GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCAGAACCUACUGGACAAAACAGGACAGUAAGUGGACAAAAACCUACAAAUCAGCGAUUUGUAGGUUUUUU")
+        self.assertEqual(alignment.sequences[1].seq, "AAAAGUAAGAGUGUAACAGGAAGAAAGUUGCAGCAUAUACGCGGUGAAUUAUUCGGUGUCAUAGGAGUAGAGUCUUUUGGUAAGAUGCUGAUAAUGAGUAGGGGAGAUGAAAGUUAAUCGUUCCCUGUCUCUCCGCUGGAAAGAAUUGCAAAACAAAGAAAAUCCCUGUAAAUUAAUACUUUACGGGGAUUUU")
+        self.assertEqual(alignment.sequences[2].seq, "GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCUGAACUAUCCGGACAAAACCGGGCAAUGAACAGUCAAAUCCCACAAAUUCAAUGAUUUGUGGGACUUUU")
+        self.assertEqual(alignment[0], "GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCAGAACCUACUGGACAAAACAGGACAGUAAGUGGACAAAAACCUACAAAUCAGC-GAUUUGUAGGUUUUUU")
+        self.assertEqual(alignment[1], "AAAAGUAAGAGUGUAACAGGAAGAAAGUUGCAGCAUAUACGCGGUGAAUUAUUCGGUGUCAUAGGAGUAGAGUCUUUUGGUAAGAUGCUGAUAAUGAGUAGGGGAGAUGAAAGUUAAUCGUUCCCUGUCUCUCCGCUGG---------AAAGAAUUGCAAAACAA--AGA-AAAUCCCUGUAAAUUAAU-ACUUUACGGGGAUUUU")
+        self.assertEqual(alignment[2], "GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCUGAACUAUCCGGACAAAACCGGGCAAUGAACAGUCAAA-UCCCACAAAUUCAAUGAUUUGUGGGACUUUU")
+        self.assertEqual(alignment.column_annotations["consensus_secondary_structure"], ":::::::::::<<<<<<_________>>>>>>,,,,,,,,((((,,,<<<<<-<<<<<<<----<<<_______>>>------>>>>>>>>>>>><<<<<-<<<<_______________>>>>->>->>>,))))---------------------------------------<<<<<<<<<<<____>>>>>>>>>>>:::::")
+        self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], "guAAGUAAaAGuGuaaCAGGAAGAAAGuugCaGCAUAUAuGCGGUGAauuaugCgGuguCAUAGgaaUuGAGgauuuauGUAAGaugCuGauaauGaGuaaGGaaccUuAAAGUUAAUCGuuCCCugUCuCUCCGCuGaACuaaCuGGAcAaAAcuGgacAauaAauaGaCAAAacCCcgcaaaucaau.gauuugcgGGguUUUU")
+        self.assertTrue(numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[0, 139, 148, 165, 167, 170, 171, 174, 175, 189, 189, 205],
+       [0, 139, 139, 156, 156, 159, 159, 162, 163, 177, 177, 193],
+       [0, 139, 148, 165, 167, 170, 171, 174, 174, 188, 189, 205]])))
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
