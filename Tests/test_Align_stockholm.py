@@ -1580,6 +1580,68 @@ numpy.array([[  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
        [ 0, 33, 34, 96],
        [ 0, 33, 33, 95]])))
 
+    def test_reading_alignments_rfam4(self):
+        """Test parsing Rfam record IRES_KSHV."""
+        path = "Stockholm/rfam4.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["accession"], "RF00511")
+        self.assertEqual(alignment.annotations["identification"], "IRES_KSHV")
+        self.assertEqual(alignment.annotations["definition"], "Kaposi's sarcoma-associated herpesvirus internal ribosome entry site")
+        self.assertEqual(alignment.annotations["author"], ["Moxon SJ; 0000-0003-4644-1816"])
+        self.assertEqual(alignment.annotations["source of seed"], "Published; 11160685, INFERNAL")
+        self.assertEqual(alignment.annotations["source of structure"], "Published; PMID:11160685")
+        self.assertEqual(alignment.annotations["gathering method"], "100.00")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "317.10")
+        self.assertEqual(alignment.annotations["noise cutoff"], "30.10")
+        self.assertEqual(alignment.annotations["type"], "Cis-reg; IRES;")
+        self.assertEqual(alignment.annotations["build method"], "cmbuild -F CM SEED")
+        self.assertEqual(alignment.annotations["calibration method"], "cmcalibrate --mpi CM")
+        self.assertEqual(alignment.annotations["search method"], "cmsearch --cpu 4 --verbose --nohmmonly -E 1000 -Z 549862.597050 CM SEQDB")
+        self.assertEqual(len(alignment.annotations["database_references"]), 2)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "SO; 0000243; internal_ribosome_entry_site;"})
+        self.assertEqual(alignment.annotations["database_references"][1], {"reference": "GO; 0043022; ribosome binding;"})
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "11160685")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "Kaposi's sarcoma-associated herpesvirus vCyclin open reading frame contains an internal ribosome entry site.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Bieleski L, Talbot SJ")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "J Virol 2001;75:1864-1869.")
+        self.assertEqual(alignment.annotations["references"][1]["number"], 2)
+        self.assertEqual(alignment.annotations["references"][1]["medline"], "14993645")
+        self.assertEqual(alignment.annotations["references"][1]["title"], "A polypyrimidine tract facilitates the expression of Kaposi's sarcoma-associated herpesvirus vFLIP through an internal ribosome entry site.")
+        self.assertEqual(alignment.annotations["references"][1]["author"], "Bieleski L, Hindley C, Talbot SJ")
+        self.assertEqual(alignment.annotations["references"][1]["location"], "J Gen Virol 2004;85:615-620.")
+        self.assertEqual(alignment.annotations["comment"], "This family represents the Kaposi's sarcoma-associated herpesvirus (KSHV) internal ribosome entry site (IRES) present in the vCyclin gene. The vCyclin and vFLIP coding sequences are present on a bicistronic transcript and it is thought the IRES may initiate translation of vFLIP from this bicistronic transcript [1,2].")
+        self.assertEqual(alignment.annotations["wikipedia"], ["Kaposi's_sarcoma-associated_herpesvirus_internal_ribosome_entry_site_(IRES)"])
+        self.assertEqual(len(alignment.sequences), 5)
+        self.assertEqual(alignment.sequences[0].id, "AF148805.2/123462-123215")
+        self.assertEqual(alignment.sequences[1].id, "U40667.1/2005-2252")
+        self.assertEqual(alignment.sequences[2].id, "U79416.1/354-601")
+        self.assertEqual(alignment.sequences[3].id, "U93872.2/123729-123482")
+        self.assertEqual(alignment.sequences[4].id, "U75698.1/123214-122967")
+        self.assertEqual(alignment.sequences[0].seq, "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment.sequences[1].seq, "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGGUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGGUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment.sequences[2].seq, "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUAACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCGACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment.sequences[3].seq, "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUAACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment.sequences[4].seq, "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment[0], "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment[1], "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGGUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGGUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment[2], "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUAACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCGACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment[3], "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUAACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment[4], "UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAGACCAGGAGAAAGAACUCCUUGAGAAGUUGGCGUGGCGAACAGAGGCAGUCUUAGCGACGGACGUCACUUCCUUCUUGUUACUUAAAUUGCUGGGGGGCUCCCAACACCUGGACUUUUGGCACCACGAGGUCAACACCCUGAUUACAAAAGCCUUAGUUGACCCAAAGACUGGCUCAUUGCCCGCCUCUAUUAUCAGCGCUGCAG")
+        self.assertEqual(alignment.column_annotations["consensus_secondary_structure"], ":::::::::<<<---<<<<<<<<<<---<<<<<--<<<<<-------<<<<<______>>>>>---->>>>>---->>>>>--->>>>>->>>>>-->>>,,<<<_______>>>-----------------((((((((((,,,<<<<----<<-<<<<<<------<<-<<<____>>>->>---->>>>>>>>--->>>>,,,,,,,,,,,<<<_____>>>,))))))-----)))):::::::")
+        self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], "UUGCUAUGCCGCGGCaGaCuCCucuUCCCGCCaAGaaCuuAUAGACCaGGaGAAAGAACuCCuUGAGaaGuuGGCGuGGCGAACagaGGCaGuCuUAGCGACGGaCGUaACUuCCUUCUUGUUACUUAAAUUGcuGgGgGGCUCCCaaCACCUGGACuuuuGGCACCACgAGGuCaACaCCCcGAUUACaaaaGCCUUAGuuGACCCAAAGACUGGcUCAUUgCCCGCCcCcAUUAUCagCGCUGCAG")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[  0, 248],
+       [  0, 248],
+       [  0, 248],
+       [  0, 248],
+       [  0, 248]])))
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
