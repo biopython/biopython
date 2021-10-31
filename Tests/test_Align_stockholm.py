@@ -1507,6 +1507,79 @@ numpy.array([[  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
        [  0,  29,  29,  88,  92, 103, 103, 104, 105, 132, 132, 150],
        [  0,  29,  29,  88,  88,  99,  99, 100, 101, 128, 128, 146]])))
 
+    def test_reading_alignments_rfam3(self):
+        """Test parsing Rfam record McaS."""
+        path = "Stockholm/rfam3.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["accession"], "RF00115")
+        self.assertEqual(alignment.annotations["identification"], "McaS")
+        self.assertEqual(alignment.annotations["previous identifier"], "IS061;")
+        self.assertEqual(alignment.annotations["definition"], "McaS/IsrA RNA")
+        self.assertEqual(alignment.annotations["author"], ["Argasinska J; 0000-0003-2678-2824"])
+        self.assertEqual(alignment.annotations["source of seed"], "Argasinska J")
+        self.assertEqual(alignment.annotations["source of structure"], "Predicted; 22289118")
+        self.assertEqual(alignment.annotations["gathering method"], "42.00")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "42.10")
+        self.assertEqual(alignment.annotations["noise cutoff"], "38.70")
+        self.assertEqual(alignment.annotations["type"], "Gene; sRNA;")
+        self.assertEqual(alignment.annotations["build method"], "cmbuild -n -F CM SEED")
+        self.assertEqual(alignment.annotations["calibration method"], "cmcalibrate --mpi CM")
+        self.assertEqual(alignment.annotations["search method"], "cmsearch --cpu 4 --verbose --nohmmonly -T 30.00 -Z 604040.189692 --mxsize 128 CM SEQDB")
+        self.assertEqual(alignment.annotations["clan"], "CL00106")
+        self.assertEqual(len(alignment.annotations["database_references"]), 3)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "SO; 0001263; ncRNA_gene;"})
+        self.assertEqual(alignment.annotations["database_references"][1], {"reference": "GO; 0005515; protein binding;"})
+        self.assertEqual(alignment.annotations["database_references"][2], {"reference": "GO; 0006417; regulation of translation;"})
+        self.assertEqual(len(alignment.annotations["references"]), 4)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "12069726")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "A bioinformatics based approach to discover small RNA genes in the Escherichia coli genome.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Chen S, Lesnik EA, Hall TA, Sampath R, Griffey RH, Ecker DJ, Blyn LB")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Biosystems 2002;65:157-177.")
+        self.assertEqual(alignment.annotations["references"][1]["number"], 2)
+        self.assertEqual(alignment.annotations["references"][1]["medline"], "23666921")
+        self.assertEqual(alignment.annotations["references"][1]["title"], "Dual function of the McaS small RNA in controlling biofilm formation.")
+        self.assertEqual(alignment.annotations["references"][1]["author"], "Jorgensen MG, Thomason MK, Havelund J, Valentin-Hansen P, Storz G")
+        self.assertEqual(alignment.annotations["references"][1]["location"], "Genes Dev. 2013;27:1132-1145.")
+        self.assertEqual(alignment.annotations["references"][2]["number"], 3)
+        self.assertEqual(alignment.annotations["references"][2]["medline"], "22289118")
+        self.assertEqual(alignment.annotations["references"][2]["title"], "A small RNA that regulates motility and biofilm formation in response to changes  in nutrient availability in Escherichia coli.")
+        self.assertEqual(alignment.annotations["references"][2]["author"], "Thomason MK, Fontaine F, De Lay N, Storz G")
+        self.assertEqual(alignment.annotations["references"][2]["location"], "Mol Microbiol. 2012;84:17-35.")
+        self.assertEqual(alignment.annotations["references"][3]["number"], 4)
+        self.assertEqual(alignment.annotations["references"][3]["medline"], "26609136")
+        self.assertEqual(alignment.annotations["references"][3]["title"], "Ribonucleoprotein particles of bacterial small non-coding RNA IsrA (IS61 or McaS) and its interaction with RNA polymerase core may link transcription to mRNA fate.")
+        self.assertEqual(alignment.annotations["references"][3]["author"], "van Nues RW, Castro-Roa D, Yuzenkova Y, Zenkin N")
+        self.assertEqual(alignment.annotations["references"][3]["location"], "Nucleic Acids Res. 2016;44:2577-2592.")
+        self.assertEqual(alignment.annotations["comment"], "This family consists of several bacterial RNA genes which are found between the abgR and ydaL genes in Escherichia coli and Shigella flexneri.[1] It was discovered using a computational screen of the E. coli genome.[1] Subsequent characterisation of ISO61 region has revealed that the reverse strand is actually a CsrA binding ncRNA called McaS and that it has a role in biofilm formation control.[2] Furthermore, it has been shown that McaS(IsrA) exists as a ribonucleoprotein particles (sRNPs), which involve a defined set of proteins including Hfq, S1, CsrA, ProQ and PNPase.[4]")
+        self.assertEqual(alignment.annotations["wikipedia"], ["IS061_RNA"])
+        self.assertEqual(len(alignment.sequences), 4)
+        self.assertEqual(alignment.sequences[0].id, "CP000036.1/1703842-1703937")
+        self.assertEqual(alignment.sequences[1].id, "U00096.3/1405751-1405656")
+        self.assertEqual(alignment.sequences[2].id, "CP000034.1/1309299-1309204")
+        self.assertEqual(alignment.sequences[3].id, "CP011132.1/1732716-1732810")
+        self.assertEqual(alignment.sequences[0].seq, "ACCGGCGCAGAGGAGACAAUGCCGGACUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU")
+        self.assertEqual(alignment.sequences[1].seq, "ACCGGCGCAGAGGAGACAAUGCCGGAUUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU")
+        self.assertEqual(alignment.sequences[2].seq, "ACCGGUCACCAGGACCCCAGGCCGGAUUUAAGACGAGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU")
+        self.assertEqual(alignment.sequences[3].seq, "ACCCGCCACACGGAAUAAUAACGGGAACACAUGAAGGAUAAACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU")
+        self.assertEqual(alignment[0], "ACCGGCGCAGAGGAGACAAUGCCGGACUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU")
+        self.assertEqual(alignment[1], "ACCGGCGCAGAGGAGACAAUGCCGGAUUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU")
+        self.assertEqual(alignment[2], "ACCGGUCACCAGGACCCCAGGCCGGAUUUAAGACGAGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU")
+        self.assertEqual(alignment[3], "ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAAACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU")
+        self.assertEqual(alignment.column_annotations["consensus_secondary_structure"], ":<<<<<<____________>>>>>>,,,,,,,<<<<<<________>>>>>>-----<<<<<<<<<<-<<_____>>->>>>>>>>>>::::::::")
+        self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], "ACCgGccaaaaGGAaacaaggCcGGAuuuaAgaCgcgGAUgcACUGCugcGuGUACUguaGaGuCuGGCGGAUGUCGACaGaCuCuauUUUUUUAU")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+[[ 0, 33, 34, 96],
+       [ 0, 33, 34, 96],
+       [ 0, 33, 34, 96],
+       [ 0, 33, 33, 95]])))
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
