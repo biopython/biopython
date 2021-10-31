@@ -1413,6 +1413,100 @@ class TestAlignIO_reading(unittest.TestCase):
        [0, 139, 139, 156, 156, 159, 159, 162, 163, 177, 177, 193],
        [0, 139, 148, 165, 167, 170, 171, 174, 174, 188, 189, 205]])))
 
+    def test_reading_alignments_rfam2(self):
+        """Test parsing Rfam record SraC_RyeA."""
+        path = "Stockholm/rfam2.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["accession"], "RF00101")
+        self.assertEqual(alignment.annotations["identification"], "SraC_RyeA")
+        self.assertEqual(alignment.annotations["definition"], "SraC/RyeA RNA")
+        self.assertEqual(alignment.annotations["author"], ["Bateman A; 0000-0002-6982-4660"])
+        self.assertEqual(alignment.annotations["source of seed"], "Bateman A")
+        self.assertEqual(alignment.annotations["source of structure"], "Predicted; PFOLD")
+        self.assertEqual(alignment.annotations["gathering method"], "37.00")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "37.20")
+        self.assertEqual(alignment.annotations["noise cutoff"], "36.80")
+        self.assertEqual(alignment.annotations["type"], "Gene; sRNA;")
+        self.assertEqual(alignment.annotations["build method"], "cmbuild -F CM SEED")
+        self.assertEqual(alignment.annotations["calibration method"], "cmcalibrate --mpi CM")
+        self.assertEqual(alignment.annotations["search method"], "cmsearch --cpu 4 --verbose --nohmmonly -E 1000 -Z 549862.597050 CM SEQDB")
+        self.assertEqual(alignment.annotations["clan"], "CL00105")
+        self.assertEqual(len(alignment.annotations["database_references"]), 1)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "SO; 0000655; ncRNA;"})
+        self.assertEqual(len(alignment.annotations["references"]), 2)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "11448770")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "Novel small RNA-encoding genes in the intergenic regions of Escherichia coli.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Argaman L, Hershberg R, Vogel J, Bejerano G, Wagner EG, Margalit H, Altuvia S")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Curr Biol 2001;11:941-950.")
+        self.assertEqual(alignment.annotations["references"][1]["number"], 2)
+        self.assertEqual(alignment.annotations["references"][1]["medline"], "11445539")
+        self.assertEqual(alignment.annotations["references"][1]["title"], "Identification of novel small RNAs using comparative genomics and microarrays.")
+        self.assertEqual(alignment.annotations["references"][1]["author"], "Wassarman KM, Repoila F, Rosenow C, Storz G, Gottesman S")
+        self.assertEqual(alignment.annotations["references"][1]["location"], "Genes Dev 2001;15:1637-1651.")
+        self.assertEqual(alignment.annotations["comment"], "This RNA was discovered in E. coli during a large scale screens [1-2]. The function of this RNA is unknown. This RNA overlaps RFAM:RF00111 on the opposite strand suggesting that the two may act in a concerted manner.")
+        self.assertEqual(alignment.annotations["wikipedia"], ["SraC/RyeA_RNA"])
+        self.assertEqual(len(alignment.sequences), 13)
+        self.assertEqual(alignment.sequences[0].id, "AL627272.1/127686-127830")
+        self.assertEqual(alignment.sequences[1].id, "CP000653.1/2601613-2601758")
+        self.assertEqual(alignment.sequences[2].id, "AE017042.1/1756200-1756347")
+        self.assertEqual(alignment.sequences[3].id, "CP000034.1/1046100-1046244")
+        self.assertEqual(alignment.sequences[4].id, "CP000647.1/2580976-2581120")
+        self.assertEqual(alignment.sequences[5].id, "AM286415.1/1991675-1991530")
+        self.assertEqual(alignment.sequences[6].id, "CU928145.2/2074283-2074427")
+        self.assertEqual(alignment.sequences[7].id, "CP000970.1/1336993-1336849")
+        self.assertEqual(alignment.sequences[8].id, "AM933172.1/1226335-1226191")
+        self.assertEqual(alignment.sequences[9].id, "AALD02000029.1/37435-37580")
+        self.assertEqual(alignment.sequences[10].id, "AALC02000009.1/70496-70641")
+        self.assertEqual(alignment.sequences[11].id, "AALF02000003.1/121616-121765")
+        self.assertEqual(alignment.sequences[12].id, "AALE02000013.1/38-183")
+        self.assertEqual(alignment.sequences[0].seq, "AAUUAAAAAAAGACCGAAUACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUAAAUCGCCUUGCUCUUUAAGAAUAGAUGACGACGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment.sequences[1].seq, "AGAUAAAAAGAGACCGAAUACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAUAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUAACUACGCCUGACACUCUAAGAAUAGAUGACGACGCCAGGUUUUCCAGUCC")
+        self.assertEqual(alignment.sequences[2].seq, "AAUUAAAAAAAGACCGAAUACGAUUCCUGAUAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGUAUUAAUGUAGGCUUAUUCAGCCGCACUUCUUAAGCGUAGCCGAGUACCGACAUUUCGCCAACCUU")
+        self.assertEqual(alignment.sequences[3].seq, "AAUGAAAAAAAGACCGAAUACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUUAGUUGCCUUGCCCUUUAAGAAUAGAUGACGACGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment.sequences[4].seq, "AGAUAAAAAGAGACCGAAUACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUAAGUCGCCUUGCACUAUAAGAAUAGUUUAACGCGUCAGCUUUUCCAGUCC")
+        self.assertEqual(alignment.sequences[5].seq, "AAUUAAAAAGAGACCGAAUACGAUUCCUAUAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAACGUAGGCUUGUUCAGCCAUACUCUUUAAGAGUAGUCGAGGUCAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment.sequences[6].seq, "AGAUAAAAAGAGACCGAACACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUUAGUUGCCUUGCCCUUUAAGAAUAGAUGACGACGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment.sequences[7].seq, "AGAUAAAAAGAGACCGAACACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUUAGUUGCCUUGCUCUUUAAGAAUAGAUGACGACGCCAGAUUUUCCAGUUU")
+        self.assertEqual(alignment.sequences[8].seq, "AAAUAAAAAGAGACCGAAUACGAUUCCUGUAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAUGCAGGCUAAAUCGCCUUGCCCUUUAAGAAUAGAUGACGACGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment.sequences[9].seq, "ACUUAAAAAGAGACCGAAUACGAUUCCUAUAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAACGUAGGCUUGUUCAGCCGUACUACUUAAGCGUAGUCGAGUACAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment.sequences[10].seq, "AGAUAAAAAAAGACCGAAUACGAUUCCUAUAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAACGUAGGCUUAUUCAGCCGUACUCCUUAAGCGUAGUCGAGUACAUGUAUUUAGCCAACUU")
+        self.assertEqual(alignment.sequences[11].seq, "AAUUAAAAAAAGACCGAAUACGAUUCCUAUAUUCGGUCUAGGGAAAUGGCUCUUGGGACAGAGCCGUGCGCUAAAAGUUGGCAUUAAUUAACGUAGGCUUAUUCAGCCGUACUCCUUAAGCGUAGUCGAGUACAUGUGUUUAGCCAACUU")
+        self.assertEqual(alignment.sequences[12].seq, "AGUUAAAAAAAGACCGAAUACGAUUCCUAUAUUCGGUCUAGGGAAAGGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAACGUAGGCUUAUUCAGCCGUACUCCUUAAGCGUAGUCGAGUACAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment[0], "AAUUAAAAAAAGACCGAAUACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUAAAU-C-GCCUUGCUCUUUAAGAAUAGAUGACGA-CGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment[1], "AGAUAAAAAGAGACCGAAUACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAUAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUAACUAC-GCCUGACACUCUAAGAAUAGAUGACGA-CGCCAGGUUUUCCAGUCC")
+        self.assertEqual(alignment[2], "AAUUAAAAAAAGACCGAAUACGAUUCCUGAUAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGUAUUAAU----GUAGGCUUAUU-CAGCCGCACUUCUUAAGCGUAGCCGAGUACCGACAUUUCGCCAACCUU")
+        self.assertEqual(alignment[3], "AAUGAAAAAAAGACCGAAUACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUUAGU-U-GCCUUGCCCUUUAAGAAUAGAUGACGA-CGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment[4], "AGAUAAAAAGAGACCGAAUACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUAAGU-C-GCCUUGCACUAUAAGAAUAGUUUAACG-CGUCAGCUUUUCCAGUCC")
+        self.assertEqual(alignment[5], "AAUUAAAAAGAGACCGAAUACGAUUCCUA-UAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAC----GUAGGCUUGUU-CAGCCAUACUCUUUAAGAGUAGUCGAGGU-CAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment[6], "AGAUAAAAAGAGACCGAACACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUUAGU-U-GCCUUGCCCUUUAAGAAUAGAUGACGA-CGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment[7], "AGAUAAAAAGAGACCGAACACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUUAGU-U-GCCUUGCUCUUUAAGAAUAGAUGACGA-CGCCAGAUUUUCCAGUUU")
+        self.assertEqual(alignment[8], "AAAUAAAAAGAGACCGAAUACGAUUCCUG-UAUUCGGUCCAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAU----GCAGGCUAAAU-C-GCCUUGCCCUUUAAGAAUAGAUGACGA-CGCCAGGUUUUCCAGUUU")
+        self.assertEqual(alignment[9], "ACUUAAAAAGAGACCGAAUACGAUUCCUA-UAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAC----GUAGGCUUGUU-CAGCCGUACUACUUAAGCGUAGUCGAGUA-CAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment[10], "AGAUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCUAGGGAAAUGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAC----GUAGGCUUAUU-CAGCCGUACUCCUUAAGCGUAGUCGAGUA-CAUGUAUUUAGCCAACUU")
+        self.assertEqual(alignment[11], "AAUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCUAGGGAAAUGGCUCUUGGGACAGAGCCGUGCGCUAAAAGUUGGCAUUAAUUAACGUAGGCUUAUU-CAGCCGUACUCCUUAAGCGUAGUCGAGUA-CAUGUGUUUAGCCAACUU")
+        self.assertEqual(alignment[12], "AGUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCUAGGGAAAGGGCUCUUGGGAGAGAGCCGUGCGCUAAAAGUUGGCAUUAAC----GUAGGCUUAUU-CAGCCGUACUCCUUAAGCGUAGUCGAGUA-CAUGUGUUUCGCCAACUU")
+        self.assertEqual(alignment.column_annotations["consensus_secondary_structure"], ":::::::::::<<<<<<<<<<_______>.>>>>>>>>>,,,,,,,<<<<<<<<______>>>>>>>>,,<<_________>>,,,,,,....,,,<<<_____._.>>>::::::::::::::::::::::::.::::::::::::::::::")
+        self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], "AauUAAAAAaAGaCCGaauacGAUUCCUg.uauuCGGuCuAGGGAAauGGCuCuUGGGAgaGaGCCguGCGCUAAAAGUUGGCAUUAAu....GuAGGCUuAuU.c.GCCuuaCucuUUAAGaaUAGuuGAguA.CgucaguUUuuCcAauUU")
+        self.assertTrue(numpy.array_equal(
+                alignment.coordinates,
+numpy.array([[  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99, 100, 101, 101, 128, 128, 146],
+       [  0,  29,  30,  89,  89, 100, 100, 101, 102, 129, 130, 148],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 101, 128, 128, 146],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 101, 128, 128, 146],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 101, 128, 128, 146],
+       [  0,  29,  29,  88,  92, 103, 103, 104, 105, 132, 132, 150],
+       [  0,  29,  29,  88,  88,  99,  99, 100, 101, 128, 128, 146]])))
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
