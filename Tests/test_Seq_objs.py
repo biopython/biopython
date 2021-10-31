@@ -608,6 +608,28 @@ class StringMethodTests(unittest.TestCase):
             Seq("ABCD").lower(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
 
+    def test_str_isupper(self):
+        """Check matches the python string isupper method."""
+        for example1 in self._examples:
+            str1 = str(example1)
+            if isinstance(example1, _UndefinedSequenceData):
+                with self.assertRaises(UndefinedSequenceError):
+                    example1.isupper()
+            else:
+                example1 = example1.isupper()
+            self.assertEqual(example1, str1.isupper())
+
+    def test_str_islower(self):
+        """Check matches the python string islower method."""
+        for example1 in self._examples:
+            str1 = str(example1)
+            if isinstance(example1, _UndefinedSequenceData):
+                with self.assertRaises(UndefinedSequenceError):
+                    example1.islower()
+            else:
+                example1 = example1.islower()
+            self.assertEqual(example1, str1.islower())
+
     def test_str_replace(self):
         """Check matches the python string replace method."""
         s = Seq("AAGTACGT")

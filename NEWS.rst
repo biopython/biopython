@@ -45,6 +45,7 @@ possible, especially the following contributors:
 - Tim Burke
 - Michiel de Hoon
 - Peter Cock
+- Erik  Whiting
 
 3 June 2021: Biopython 1.79
 ===========================

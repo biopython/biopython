@@ -281,6 +281,20 @@ class SequenceDataAbstractBaseClass(ABC):
         """Return a copy of data with all ASCII characters converted to lowercase."""
         return bytes(self).lower()
 
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, method returns False.
+        """
+        return bytes(self).isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, method returns False.
+        """
+        return bytes(self).islower()
+
     def replace(self, old, new):
         """Return a copy with all occurrences of substring old replaced by new."""
         return bytes(self).replace(old, new)
@@ -1300,6 +1314,20 @@ class _SeqAbstractBaseClass(ABC):
             return self
         else:
             return self.__class__(data)
+
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, method returns False.
+        """
+        return self._data.isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, method returns False.
+        """
+        return self._data.islower()
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -2887,6 +2915,22 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         # sequence of the same length
         return _UndefinedSequenceData(self._length)
 
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is undefined")
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is undefined")
+
     def replace(self, old, new):
         """Return a copy with all occurrences of substring old replaced by new."""
         # Replacing substring old by new in an undefined sequence will result
@@ -3079,6 +3123,22 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         """Return a lower case copy of the sequence."""
         data = {start: seq.lower() for start, seq in self._data.items()}
         return _PartiallyDefinedSequenceData(self._length, data)
+
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is only partially defined")
 
     def translate(self, table, delete=b""):
         """Return a copy with each character mapped by the given translation table.
