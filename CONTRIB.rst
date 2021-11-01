@@ -89,6 +89,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Damien Goutte-Gattat <https://github.com/gouttegd>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - Darcy Mason <https://github.com/darcymason>
+- David Born <https://github.com/hypostulate>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
