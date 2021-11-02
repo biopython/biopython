@@ -219,6 +219,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "LI": "ligand_binding",
         "AS": "active_site",
         "IN": "intron",
+        "CSA": "Catalytic Site Atlas",
     }
 
     gc_mapping = {"RF": "reference_coordinate_annotation",
@@ -272,8 +273,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="Stockholm")
 
-    def _annotate_alignment(self, alignment, gf, gc, gs):
-        rows, columns = alignment.shape
+    def _add_per_file_annotations(self, alignment, gf, rows):
         for key, value in gf.items():
             if key == "WK":
                 lines = iter(value)
@@ -299,9 +299,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert len(value) == 1, (key, value)
                 value = value.pop()
             alignment.annotations[self.gf_mapping[key]] = value
+
+    def _add_per_column_annotations(self, alignment, gc, columns, skipped_columns):
         if gc:
             alignment.column_annotations = {}
             for key, value in gc.items():
+                if skipped_columns:
+                    value = "".join(letter for index, letter in enumerate(value) if index not in skipped_columns)
                 if len(value) != columns:
                     raise ValueError(f"{key} length is {len(value)}, expected {columns}")
                 try:
@@ -309,40 +313,46 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 except KeyError:
                     raise ValueError("Unknown Generic per-Column annotation keyword '%s'" % key) from None
                 alignment.column_annotations[key] = value
-        if gs:
-            for seqname, annotations in gs.items():
-                for record in alignment.sequences:
-                    if record.id == seqname:
-                        break
+
+    def _add_per_sequence_annotations(self, alignment, gs):
+        for seqname, annotations in gs.items():
+            for record in alignment.sequences:
+                if record.id == seqname:
+                    break
+            else:
+                raise ValueError(f"Failed to find seqname {seqname}")
+            for key, value in annotations.items():
+                if key == "DE":
+                    record.description = value
                 else:
-                    raise ValueError(f"Failed to find seqname {seqname}")
-                for key, value in annotations.items():
-                    if key == "DE":
-                        record.description = value
-                    else:
-                        key = self.gs_mapping[key]
-                        record.annotations[key] = value
-        return alignment
+                    key = self.gs_mapping[key]
+                    record.annotations[key] = value
+
+    def _add_per_sequence_and_per_column_annotations(self, alignment, gr):
+        for seqname, letter_annotations in gr.items():
+            for record in alignment.sequences:
+                if record.id == seqname:
+                    break
+            else:
+                raise ValueError(f"Failed to find seqname {seqname}")
+            for keyword, letter_annotation in letter_annotations.items():
+                feature = self.gr_mapping[keyword]
+                if keyword == "CSA":
+                    letter_annotation = letter_annotation.replace("-", "")
+                else:
+                    letter_annotation = letter_annotation.replace(".", "")
+                record.letter_annotations[feature] = letter_annotation
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
         if stream is None:
             raise StopIteration
 
-        # Note: If this file follows the PFAM conventions, there should be
-        # a line containing the number of sequences, e.g. "#=GF SQ 67"
-        # We do not check for this - perhaps we should, and verify that
-        # if present it agrees with our parsing.
-
-        alignment = None
         for line in stream:
             line = line.strip()
             if not line:
                 continue
             elif line == "# STOCKHOLM 1.0":
-                if alignment is not None:
-                    self._annotate_alignment(alignment, gf, gc, gs)
-                    yield alignment
                 # Starting a new alignment
                 records = []
                 aligned_sequences = []
@@ -353,12 +363,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 gf = defaultdict(list)
                 gc = {}
                 gs = defaultdict(lambda: {"DR": []})
-                gr = {}
+                gr = defaultdict(dict)
                 length = None
             elif line == "//":
                 # The "//" line indicates the end of the alignment.
                 # There may still be more meta-data
-                coordinates = Alignment.infer_coordinates(aligned_sequences)
+                skipped_columns = []
+                coordinates = Alignment.infer_coordinates(aligned_sequences, skipped_columns)
+                skipped_columns = set(skipped_columns)
                 alignment = Alignment(records, coordinates)
                 alignment.annotations = {}
                 if references:
@@ -373,6 +385,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     alignment.annotations["database_references"] = database_references
                 if nested_domains:
                     alignment.annotations["nested_domains"] = nested_domains
+                rows, columns = alignment.shape
+                self._add_per_file_annotations(alignment, gf, rows)
+                self._add_per_column_annotations(alignment, gc, columns, skipped_columns)
+                self._add_per_sequence_annotations(alignment, gs)
+                self._add_per_sequence_and_per_column_annotations(alignment, gr)
+                yield alignment
             elif not line.startswith("#"):
                 # Sequence
                 # Format: "<seqname> <sequence>"
@@ -386,7 +404,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if length is None:
                     length = len(aligned_sequence)
                 elif length != len(aligned_sequence):
-                    raise ValueError(f"Sequence {seqname} length is inconsistent")
+                    raise ValueError(f"Aligned sequence {seqname} consists of {len(aligned_sequence)} letters, expected {length} letters)")
                 aligned_sequence = aligned_sequence.replace(".", "-")
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
@@ -463,13 +481,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # Format: "#=GR <seqname> <feature> <exactly 1 char per column>"
                 terms = line[5:].split(None, 2)
                 assert terms[0] == seqname
-                keyword = terms[1]
-                feature = self.gr_mapping[keyword]
-                letter_annotation = terms[2].strip().replace(".", "")
-                record.letter_annotations[feature] = letter_annotation
-        if alignment is not None:
-            self._annotate_alignment(alignment, gf, gc, gs)
-            yield alignment
+                feature = terms[1]
+                gr[seqname][feature] = terms[2].strip()
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):

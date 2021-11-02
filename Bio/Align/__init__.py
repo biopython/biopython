@@ -938,7 +938,7 @@ class Alignment:
     """
 
     @classmethod
-    def infer_coordinates(cls, lines):
+    def infer_coordinates(cls, lines, skipped_columns=None):
         """Infer the coordinates from a printed alignment.
 
         This method is primarily employed in Biopython's alignment parsers,
@@ -949,6 +949,10 @@ class Alignment:
         this method will calculate the sequence coordinates that define the
         alignment. The coordinates are returned as a numpy array of integers,
         and can be used to create an Alignment object.
+
+        The argument skipped columns should be None (the default) or an empty
+        list. If skipped_columns is a list, then the indices of any columns in
+        the alignment with a gap in all lines are appended to skipped_columns.
 
         This is an example for the alignment of three sequences TAGGCATACGTG,
         AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
@@ -982,7 +986,8 @@ class Alignment:
                 next_state = [line[i] != "-" for line in lines]
                 if not any(next_state):
                     # skip columns in which all rows have a gap
-                    continue
+                    if skipped_columns is not None:
+                        skipped_columns.append(i)
                 elif next_state == current_state:
                     step += 1  # noqa: F821
                 else:

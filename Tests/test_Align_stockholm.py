@@ -1642,6 +1642,35 @@ numpy.array([[  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
        [  0, 248],
        [  0, 248]])))
 
+    def test_reading_alignments_rfam4(self):
+        """Test parsing CATH record 3.30.160.60/FF/004774."""
+        path = "Stockholm/cath1.sth"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["identification"], "3.30.160.60/FF/004774")
+        self.assertEqual(alignment.annotations["definition"], "Uncharacterized protein")
+        self.assertEqual(alignment.annotations["accession"], "3.30.160.60/FF/004774")
+        self.assertEqual(alignment.annotations["type"], "FunFam")
+        self.assertEqual(len(alignment.annotations["database_references"]), 2)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "CATH: v4.3"})
+        self.assertEqual(alignment.annotations["database_references"][1], {"reference": "DOPS: 0.000"})
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].annotations["accession"], "L7MZX4")
+        self.assertEqual(alignment.sequences[0].annotations["organism"], "Anolis carolinensis")
+        self.assertEqual(alignment.sequences[0].description, "Uncharacterized protein")
+        self.assertEqual(len(alignment.sequences[0].annotations["database_references"]), 1)
+        self.assertEqual(alignment.sequences[0].annotations["database_references"][0], {"reference": "ORG; Eukaryota; Metazoa; Chordata; Craniata; Sarcopterygii; Lepidosauria; Squamata; Iguania; Dactyloidae; Anolis; Anolis carolinensis;"})
+        self.assertEqual(alignment.sequences[0].id, "L7MZX4/382-398")
+        self.assertEqual(alignment.sequences[0].seq, "GEKPYECLECGKRFTAR")
+        self.assertEqual(alignment[0], "GEKPYECLECGKRFTAR")
+        self.assertEqual(alignment.column_annotations["consensus_score"], "00000000000000000")
+        self.assertEqual(alignment.column_annotations["consensus_score_70"], "_________________")
+        self.assertEqual(alignment.column_annotations["consensus_score_80"], "_________________")
+        self.assertEqual(alignment.column_annotations["consensus_score_90"], "_________________")
+        self.assertTrue(numpy.array_equal(alignment.coordinates, numpy.array([[ 0, 17]])))
+
     def test_reading_alignments_cath(self):
         """Test parsing CATH record 3.40.50.300/FF/634591."""
         path = "Stockholm/cath.sth"
