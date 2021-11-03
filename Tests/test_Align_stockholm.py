@@ -1365,6 +1365,43 @@ class TestAlignIO_reading(unittest.TestCase):
 [0, 1, 2, 4, 11, 11, 11, 12, 13, 14, 15, 16, 17, 19, 20, 20, 20, 22, 23, 24, 25, 25, 27, 28, 28, 29, 31, 32, 33, 37, 37, 46, 47, 64, 65, 66, 67, 68, 73, 73, 73, 73, 73, 89, 89, 89, 89, 92, 93, 93, 94, 95, 96, 103, 104, 104, 104, 104, 104, 104, 104, 104, 106, 106, 108, 109, 126, 127, 129],
 ])))
 
+    def test_reading_alignments_pfam9(self):
+        """Test parsing Pfam record SH3_11."""
+        path = "Stockholm/pfam9.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["identification"], "SH3_11")
+        self.assertEqual(alignment.annotations["accession"], "PF18103.3")
+        self.assertEqual(alignment.annotations["definition"], "Retroviral integrase C-terminal SH3 domain")
+        self.assertEqual(alignment.annotations["author"], ["El-Gebali S;0000-0003-1378-5495"])
+        self.assertEqual(alignment.annotations["source of seed"], "ECOD:EUF00899")
+        self.assertEqual(alignment.annotations["gathering method"], "25.00 25.00;")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "25.20 78.10;")
+        self.assertEqual(alignment.annotations["noise cutoff"], "24.90 24.20;")
+        self.assertEqual(alignment.annotations["build method"], "hmmbuild HMM.ann SEED.ann")
+        self.assertEqual(alignment.annotations["search method"], "hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq")
+        self.assertEqual(alignment.annotations["type"], "Domain")
+        self.assertEqual(alignment.annotations["wikipedia"], ["Integrase", "SH3_domain"])
+        self.assertEqual(alignment.annotations["clan"], "CL0010")
+        self.assertEqual(len(alignment.annotations["references"]), 1)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "20118915")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "Retroviral intasome assembly and inhibition of DNA strand transfer.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Hare S, Gupta SS, Valkov E, Engelman A, Cherepanov P;")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "Nature. 2010;464:232-236.")
+        self.assertEqual(len(alignment.annotations["database_references"]), 2)
+        self.assertEqual(alignment.annotations["database_references"][0]["reference"], "INTERPRO; IPR040903;")
+        self.assertEqual(alignment.annotations["database_references"][1]["reference"], "SO; 0000417; polypeptide_domain;")
+        self.assertEqual(alignment.annotations["comment"], "This is the carboxy-terminal domain (CTD) found in retroviral integrase, an essential retroviral enzyme that binds both termini of linear viral DNA and inserts them into a host cell chromosome. The CTD adopts an SH3-like fold. Each CTD makes contact with the phosphodiester backbone of both viral DNA molecules, essentially crosslinking the structure [1].")
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "POL_SFVCP/1064-1126")
+        self.assertEqual(alignment.sequences[0].annotations["accession"], "Q87040.1")
+        self.assertEqual(alignment.sequences[0].seq, "RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGNNRTVSIDNLKPTSHQ")
+        self.assertEqual(alignment.column_annotations["consensus_sequence"], "RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGNNRTVSIDNLKPTSHQ")
+        self.assertTrue(numpy.array_equal(alignment.coordinates,numpy.array([[0, 63]])))
+
     def test_reading_alignments_rfam1(self):
         """Test parsing Rfam record BTnc005."""
         path = "Stockholm/rfam1.seed.txt"
