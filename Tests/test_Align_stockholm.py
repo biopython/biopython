@@ -1642,6 +1642,51 @@ numpy.array([[  0,  29,  29,  88,  88,  99,  99, 100, 100, 127, 127, 145],
        [  0, 248],
        [  0, 248]])))
 
+    def test_reading_alignments_rfam5(self):
+        """Test parsing Rfam record BMV3_UPD-PK3."""
+        path = "Stockholm/rfam5.seed.txt"
+        with open(path) as stream:
+            alignments = stockholm.AlignmentIterator(path)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+        self.assertEqual(alignment.annotations["accession"], "RF01113")
+        self.assertEqual(alignment.annotations["identification"], "BMV3_UPD-PK3")
+        self.assertEqual(alignment.annotations["definition"], "Pseudoknot of upstream pseudoknot domain (UPD) of the 3'UTR")
+        self.assertEqual(alignment.annotations["author"], ["Wilkinson A; 0000-0001-7406-0151"])
+        self.assertEqual(alignment.annotations["source of seed"], "Pseudobase")
+        self.assertEqual(alignment.annotations["source of structure"], "Pseudobase")
+        self.assertEqual(alignment.annotations["gathering method"], "36.00")
+        self.assertEqual(alignment.annotations["trusted cutoff"], "37.00")
+        self.assertEqual(alignment.annotations["noise cutoff"], "33.30")
+        self.assertEqual(alignment.annotations["type"], "Cis-reg;")
+        self.assertEqual(alignment.annotations["build method"], "cmbuild -F CM SEED")
+        self.assertEqual(alignment.annotations["calibration method"], "cmcalibrate --mpi CM")
+        self.assertEqual(alignment.annotations["search method"], "cmsearch --cpu 4 --verbose --nohmmonly -T 28.00 -Z 549862.597050 CM SEQDB")
+        self.assertEqual(len(alignment.annotations["database_references"]), 4)
+        self.assertEqual(alignment.annotations["database_references"][0], {"reference": "PKBASE; PKB00156;"})
+        self.assertEqual(alignment.annotations["database_references"][1], {"reference": "SO; 0005836; regulatory_region;"})
+        self.assertEqual(alignment.annotations["database_references"][2], {"reference": "GO; 1904973; positive regulation of viral translation;"})
+        self.assertEqual(alignment.annotations["database_references"][3], {"reference": "GO; 0046782; regulation of viral transcription;"})
+        self.assertEqual(len(alignment.annotations["references"]), 1)
+        self.assertEqual(alignment.annotations["references"][0]["number"], 1)
+        self.assertEqual(alignment.annotations["references"][0]["medline"], "7684465")
+        self.assertEqual(alignment.annotations["references"][0]["title"], "Contributions of the brome mosaic virus RNA-3 3'-nontranslated region to replication and translation.")
+        self.assertEqual(alignment.annotations["references"][0]["author"], "Lahser FC, Marsh LE, Hall TC")
+        self.assertEqual(alignment.annotations["references"][0]["location"], "J Virol. 1993;67:3295-3303.")
+        self.assertEqual(alignment.annotations["wikipedia"], ["UPSK_RNA"])
+        self.assertEqual(alignment.annotations["**"], "seedtax: Viruses; unclassified sequences")
+        self.assertEqual(len(alignment.sequences), 2)
+        self.assertEqual(alignment.sequences[0].id, "X01678.1/2648-2670")
+        self.assertEqual(alignment.sequences[1].id, "X58459.1/659-681")
+        self.assertEqual(alignment.sequences[0].seq, "ACUUUGGCUAAGUUUAAAAGCUU")
+        self.assertEqual(alignment.sequences[1].seq, "ACUUUGGCUAAGGUUAAAAGCUU")
+        self.assertEqual(alignment[0], "ACUUUGGCUAAGUUUAAAAGCUU")
+        self.assertEqual(alignment[1], "ACUUUGGCUAAGGUUAAAAGCUU")
+        self.assertEqual(alignment.column_annotations["consensus_secondary_structure"], ":<<<_AAAA>>>::::::aaaa:")
+        self.assertEqual(alignment.column_annotations["reference_coordinate_annotation"], "ACUUUGGCUAAGuUUAAAAGCUU")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 23], [0, 23]])))
+
     def test_reading_alignments_cath1(self):
         """Test parsing CATH record 3.30.160.60/FF/004774."""
         path = "Stockholm/cath1.sth"

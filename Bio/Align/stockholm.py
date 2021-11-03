@@ -201,7 +201,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "CL": "clan",
         "WK": "wikipedia",
         "CB": "calibration method",
-        "**": "**",  # Found in Rfam  # FIXME: NOT TESTED
+        "**": "**",  # Found in Rfam
     }
 
     gr_mapping = {
