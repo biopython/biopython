@@ -154,7 +154,7 @@ from collections import defaultdict
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -167,9 +167,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     This parser will detect if the Stockholm file follows the PFAM
     conventions for sequence specific meta-data (lines starting #=GS
     and #=GR) and populates the SeqRecord fields accordingly.
-
-    Any annotation which does not follow the PFAM conventions is currently
-    ignored.
 
     If an accession is provided for an entry in the meta data, IT WILL NOT
     be used as the record.id (it will be recorded in the record's
@@ -184,9 +181,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     http://sonnhammer.sbc.su.se/Stockholm.html
     https://en.wikipedia.org/wiki/Stockholm_format
     http://bioperl.org/formats/alignment_formats/Stockholm_multiple_alignment_format.html
-
-    For consistency with BioPerl and EMBOSS we call this the "stockholm"
-    format.
     """
 
     gf_mapping = {
@@ -199,7 +193,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "GA": "gathering method",
         "BM": "build method",
         "SM": "search method",
-        "GA": "gathering method",
         "TC": "trusted cutoff",
         "TP": "type",
         "NC": "noise cutoff",
@@ -208,58 +201,69 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "CL": "clan",
         "WK": "wikipedia",
         "CB": "calibration method",
-        "**": "**",  # Found in Rfam
+        "**": "**",  # Found in Rfam  # FIXME: NOT TESTED
     }
 
     gr_mapping = {
         "SS": "secondary_structure",
+        "PP": "posterior_probability",
+        "CSA": "Catalytic Site Atlas",  # used in CATH  # FIXME: NOT TESTED
+        # These features are included in the Stockholm file format
+        # documentation, but currently not used in the PFAM, RFAM, or CATH
+        # databases:
         "SA": "surface_accessibility",
         "TM": "transmembrane",
-        "PP": "posterior_probability",
         "LI": "ligand_binding",
         "AS": "active_site",
+        "pAS": "active site - Pfam predicted",
+        "sAS": "active site - from SwissProt",
         "IN": "intron",
-        "CSA": "Catalytic Site Atlas",
     }
 
     gc_mapping = {"RF": "reference_coordinate_annotation",
-                  "MM": "model_mask",
                   "seq_cons": "consensus_sequence",
                   "scorecons": "consensus_score",  # used in CATH
                   "scorecons_70": "consensus_score_70",  # used in CATH
                   "scorecons_80": "consensus_score_80",  # used in CATH
                   "scorecons_90": "consensus_score_90",  # used in CATH
+                  # This feature is included in the Stockholm file format
+                  # documentation, but currently not used in the PFAM, RFAM, or
+                  # CATH databases:
+                  "MM": "model_mask",
                  }
     # Add *_cons from GR mapping:
     for key, value in gr_mapping.items():
         gc_mapping[key + "_cons"] = "consensus_" + value
 
     # These GC keywords are used in Rfam:
-    for keyword in ("RNA_elements",
-                    "RNA_structural_element",
-                    "RNA_structural_elements",
-                    "RNA_ligand_AdoCbl",
-                    "RNA_ligand_AqCbl",
-                    "RNA_ligand_FMN",
-                    "RNA_ligand_Guanidinium",
-                    "RNA_ligand_SAM",
-                    "RNA_ligand_THF_1",
-                    "RNA_ligand_THF_2",
-                    "RNA_ligand_TPP",
-                    "RNA_ligand_preQ1",
-                    "RNA_motif_k_turn",
-                    "Repeat_unit",
-                    "2L3J_B_SS",
-                    "CORE",
-                    "PK",
-                    "PK_SS",
-                    "cons",
+    for keyword in ("RNA_elements",  # FIXME: NOT TESTED
+                    "RNA_structural_element",  # FIXME: NOT TESTED
+                    "RNA_structural_elements",  # FIXME: NOT TESTED
+                    "RNA_ligand_AdoCbl",  # FIXME: NOT TESTED
+                    "RNA_ligand_AqCbl",  # FIXME: NOT TESTED
+                    "RNA_ligand_FMN",  # FIXME: NOT TESTED
+                    "RNA_ligand_Guanidinium",  # FIXME: NOT TESTED
+                    "RNA_ligand_SAM",  # FIXME: NOT TESTED
+                    "RNA_ligand_THF_1",  # FIXME: NOT TESTED
+                    "RNA_ligand_THF_2",  # FIXME: NOT TESTED
+                    "RNA_ligand_TPP",  # FIXME: NOT TESTED
+                    "RNA_ligand_preQ1",  # FIXME: NOT TESTED
+                    "RNA_motif_k_turn",  # FIXME: NOT TESTED
+                    "Repeat_unit",  # FIXME: NOT TESTED
+                    "2L3J_B_SS",  # FIXME: NOT TESTED
+                    "CORE",  # FIXME: NOT TESTED
+                    "PK",  # FIXME: NOT TESTED
+                    "PK_SS",  # FIXME: NOT TESTED
+                    "cons",  # FIXME: NOT TESTED
                    ):
         gc_mapping[keyword] = keyword
     gs_mapping = {"AC": "accession",
                   # "DE": description,  # handled separately
                   "DR": "database_references",
                   "OS": "organism",
+                  # These two features are included in the Stockholm file
+                  # format documentation, but currently not used in the PFAM,
+                  # RFAM, or CATH databases:
                   "OC": "organism_classification",
                   "LO": "look",
                  }
@@ -308,11 +312,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     value = "".join(letter for index, letter in enumerate(value) if index not in skipped_columns)
                 if len(value) != columns:
                     raise ValueError(f"{key} length is {len(value)}, expected {columns}")
-                try:
-                    key = self.gc_mapping.get(key)
-                except KeyError:
-                    raise ValueError("Unknown Generic per-Column annotation keyword '%s'" % key) from None
-                alignment.column_annotations[key] = value
+                alignment.column_annotations[self.gc_mapping[key]] = value
 
     def _add_per_sequence_annotations(self, alignment, gs):
         for seqname, annotations in gs.items():
@@ -614,22 +614,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 # It doesn't follow the PFAM standards, but should we record
                 # this data anyway?
                 pass
-
-
-class NestedDomain:
-    """Holds information of a nested domain in a PFAM/RFAM record.
-
-    Attributes:
-     - accession     NE  Pfam accession of a nested domain.
-     - location      NL  Location of nested domains - sequence ID, start and
-                         end of insert.
-
-    """
-
-    def __init__(self, accession):
-        """Initialize the class."""
-        self.accession = accession
-        self.location = None
 
 
 if __name__ == "__main__":
