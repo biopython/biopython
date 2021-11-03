@@ -207,9 +207,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     gr_mapping = {
         "SS": "secondary_structure",
         "PP": "posterior_probability",
-        "CSA": "Catalytic Site Atlas",  # used in CATH  # FIXME: NOT TESTED
+        "CSA": "Catalytic Site Atlas",  # used in CATH
         # These features are included in the Stockholm file format
-        # documentation, but currently not used in the PFAM, RFAM, or CATH
+        # documentation, but currently not used in the PFAM, RFAM, and CATH
         # databases:
         "SA": "surface_accessibility",
         "TM": "transmembrane",
@@ -227,8 +227,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                   "scorecons_80": "consensus_score_80",  # used in CATH
                   "scorecons_90": "consensus_score_90",  # used in CATH
                   # This feature is included in the Stockholm file format
-                  # documentation, but currently not used in the PFAM, RFAM, or
-                  # CATH databases:
+                  # documentation, but currently not used in the PFAM, RFAM,
+                  # and CATH databases:
                   "MM": "model_mask",
                  }
     # Add *_cons from GR mapping:
@@ -236,25 +236,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         gc_mapping[key + "_cons"] = "consensus_" + value
 
     # These GC keywords are used in Rfam:
-    for keyword in ("RNA_elements",  # FIXME: NOT TESTED
-                    "RNA_structural_element",  # FIXME: NOT TESTED
-                    "RNA_structural_elements",  # FIXME: NOT TESTED
-                    "RNA_ligand_AdoCbl",  # FIXME: NOT TESTED
-                    "RNA_ligand_AqCbl",  # FIXME: NOT TESTED
-                    "RNA_ligand_FMN",  # FIXME: NOT TESTED
-                    "RNA_ligand_Guanidinium",  # FIXME: NOT TESTED
-                    "RNA_ligand_SAM",  # FIXME: NOT TESTED
-                    "RNA_ligand_THF_1",  # FIXME: NOT TESTED
-                    "RNA_ligand_THF_2",  # FIXME: NOT TESTED
-                    "RNA_ligand_TPP",  # FIXME: NOT TESTED
-                    "RNA_ligand_preQ1",  # FIXME: NOT TESTED
-                    "RNA_motif_k_turn",  # FIXME: NOT TESTED
-                    "Repeat_unit",  # FIXME: NOT TESTED
-                    "2L3J_B_SS",  # FIXME: NOT TESTED
-                    "CORE",  # FIXME: NOT TESTED
-                    "PK",  # FIXME: NOT TESTED
-                    "PK_SS",  # FIXME: NOT TESTED
-                    "cons",  # FIXME: NOT TESTED
+    for keyword in ("RNA_elements",
+                    "RNA_structural_element",
+                    "RNA_structural_elements",
+                    "RNA_ligand_AdoCbl",
+                    "RNA_ligand_AqCbl",
+                    "RNA_ligand_FMN",
+                    "RNA_ligand_Guanidinium",
+                    "RNA_ligand_SAM",
+                    "RNA_ligand_THF_1",
+                    "RNA_ligand_THF_2",
+                    "RNA_ligand_TPP",
+                    "RNA_ligand_preQ1",
+                    "RNA_motif_k_turn",
+                    "Repeat_unit",
+                    "2L3J_B_SS",
+                    "CORE",
+                    "PK",
+                    "PK_SS",
+                    "cons",
                    ):
         gc_mapping[keyword] = keyword
     gs_mapping = {"AC": "accession",
@@ -263,7 +263,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                   "OS": "organism",
                   # These two features are included in the Stockholm file
                   # format documentation, but currently not used in the PFAM,
-                  # RFAM, or CATH databases:
+                  # RFAM, and CATH databases:
                   "OC": "organism_classification",
                   "LO": "look",
                  }
@@ -492,10 +492,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     gc_mapping = {value: key for key, value in AlignmentIterator.gc_mapping.items()}
     gs_mapping = {value: key for key, value in AlignmentIterator.gs_mapping.items()}
 
-    def write_header(self, alignments):
-        """Use this to write the file header."""
-        stream = self.stream
-
     def write_alignment(self, alignment):
         """Use this to write the alignment to an open file.
 
@@ -506,7 +502,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream = self.stream
         count = len(alignment)
 
-        n, self._length_of_sequences = alignment.shape()
+        n, self._length_of_sequences = alignment.shape
         self._ids_written = []
 
         if count == 0:
@@ -514,22 +510,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if self._length_of_sequences == 0:
             raise ValueError("Non-empty sequences are required")
 
-        self.handle.write("# STOCKHOLM 1.0\n")
-        self.handle.write("#=GF SQ %i\n" % count)
+        stream.write("# STOCKHOLM 1.0\n")
+        stream.write("#=GF SQ %i\n" % count)
         for record in alignment:
             self._write_record(record)
         # This shouldn't be None... but just in case,
         if alignment.column_annotations:
             for k, v in sorted(alignment.column_annotations.items()):
                 if k in self.gc_mapping:
-                    self.handle.write(f"#=GC {self.gc_mapping[k]} {v}\n")
+                    stream.write(f"#=GC {self.gc_mapping[k]} {v}\n")
                 elif k in self.gr_mapping:
-                    self.handle.write(f"#=GC {self.gr_mapping[k]}_cons {v}\n")
+                    stream.write(f"#=GC {self.gr_mapping[k]}_cons {v}\n")
                 else:
                     # It doesn't follow the PFAM standards, but should we record
                     # this data anyway?
                     pass
-        self.handle.write("//\n")
+        stream.write("//\n")
 
     def _write_record(self, record):
         """Write a single SeqRecord to the file (PRIVATE)."""
@@ -558,7 +554,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if seq_name in self._ids_written:
             raise ValueError(f"Duplicate record identifier: {seq_name}")
         self._ids_written.append(seq_name)
-        self.handle.write(f"{seq_name} {record.seq}\n")
+        stream.write(f"{seq_name} {record.seq}\n")
 
         # The recommended placement for GS lines (per sequence annotation)
         # is above the alignment (as a header block) or just below the
@@ -573,26 +569,26 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         # AC = Accession
         if "accession" in record.annotations:
-            self.handle.write(
+            stream.write(
                 f"#=GS {seq_name} AC {self.clean(record.annotations['accession'])}\n"
             )
         elif record.id:
-            self.handle.write(f"#=GS {seq_name} AC {self.clean(record.id)}\n")
+            stream.write(f"#=GS {seq_name} AC {self.clean(record.id)}\n")
 
         # DE = description
         if record.description:
-            self.handle.write(f"#=GS {seq_name} DE {self.clean(record.description)}\n")
+            stream.write(f"#=GS {seq_name} DE {self.clean(record.description)}\n")
 
         # DE = database links
         for xref in record.dbxrefs:
-            self.handle.write(f"#=GS {seq_name} DR {self.clean(xref)}\n")
+            stream.write(f"#=GS {seq_name} DR {self.clean(xref)}\n")
 
         # GS = other per sequence annotation
         for key, value in record.annotations.items():
             if key in self.pfam_gs_mapping:
                 data = self.clean(str(value))
                 if data:
-                    self.handle.write(
+                    stream.write(
                         "#=GS %s %s %s\n"
                         % (seq_name, self.clean(self.pfam_gs_mapping[key]), data)
                     )
@@ -606,7 +602,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if key in self.gr_mapping and len(str(value)) == len(record.seq):
                 data = self.clean(str(value))
                 if data:
-                    self.handle.write(
+                    stream.write(
                         "#=GR %s %s %s\n"
                         % (seq_name, self.clean(self.gr_mapping[key]), data)
                     )
