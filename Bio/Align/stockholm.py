@@ -259,7 +259,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         gc_mapping[keyword] = keyword
     gs_mapping = {"AC": "accession",
                   # "DE": description,  # handled separately
-                  "DR": "database_references",
+                  # "DR": "database_references",  # handled separately
                   "OS": "organism",
                   # These two features are included in the Stockholm file
                   # format documentation, but currently not used in the PFAM,
@@ -324,6 +324,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             for key, value in annotations.items():
                 if key == "DE":
                     record.description = value
+                elif key == "DR":
+                    record.dbxrefs = value
                 else:
                     key = self.gs_mapping[key]
                     record.annotations[key] = value
@@ -471,8 +473,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     seqname, feature = line[5:].strip().split(None, 1)
                     text = ""
                 if feature == "DR":
-                    database_reference = {"reference": text}
-                    gs[seqname][feature].append(database_reference)
+                    gs[seqname][feature].append(text)
                 else:
                     assert feature not in gs[seqname]
                     gs[seqname][feature] = text
