@@ -41,7 +41,7 @@ _ENTITY_HIERARCHY = {
 # References:
 # A. Bondi (1964). "van der Waals Volumes and Radii".
 # M. Mantina, A.C. et al., J. Phys. Chem. 2009, 113, 5806.
-ATOMIC_RADII = collections.defaultdict(lambda x: 2.0)
+ATOMIC_RADII = collections.defaultdict(lambda: 2.0)
 ATOMIC_RADII.update(
     {
         "H": 1.200,
