@@ -1461,6 +1461,33 @@ class TestAttributes(unittest.TestCase):
         self.assertNotIn("dog", dir(s))
 
 
+class TestSeqDefined(unittest.TestCase):
+    def test_zero_length(self):
+        zero_length_seqs = [
+            Seq.Seq(""),
+            Seq.Seq(None, length=0),
+            Seq.Seq({}, length=0),
+            Seq.UnknownSeq(length=0),
+        ]
+
+        for seq in zero_length_seqs:
+            self.assertTrue(seq.defined)
+
+    def test_undefined(self):
+        undefined_seqs = [
+            Seq.Seq(None, length=1),
+            Seq.Seq({3: "ACGT"}, length=10),
+            Seq.UnknownSeq(length=1),
+        ]
+
+        for seq in undefined_seqs:
+            self.assertFalse(seq.defined)
+
+    def test_defined(self):
+        seq = Seq.Seq("T")
+        self.assertTrue(seq.defined)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

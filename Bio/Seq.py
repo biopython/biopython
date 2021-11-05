@@ -1922,7 +1922,7 @@ class Seq(_SeqAbstractBaseClass):
 
         Arguments:
          - data - Sequence, required (string)
-         - length - Sequence length, used only if data is None (integer)
+         - length - Sequence length, used only if data is None or a dictionary (integer)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -1977,7 +1977,7 @@ class Seq(_SeqAbstractBaseClass):
         elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
             self._data = data
         elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-            self._data = data = bytes(data)
+            self._data = bytes(data)
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
         elif isinstance(data, dict):
@@ -2051,6 +2051,22 @@ class Seq(_SeqAbstractBaseClass):
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
         return self.replace(gap, b"")
+
+    @property
+    def defined(self):
+        """Return true if the sequence is defined, false if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if len(self) == 0:
+            return True
+        elif isinstance(self, UnknownSeq):
+            return False
+        elif isinstance(self._data, _UndefinedSequenceData):
+            return False
+        elif isinstance(self._data, _PartiallyDefinedSequenceData):
+            return False
+        return True
 
 
 class UnknownSeq(Seq):
