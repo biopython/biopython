@@ -150,6 +150,7 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
+import textwrap
 from collections import defaultdict
 
 from Bio.Align import Alignment
@@ -184,18 +185,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """
 
     gf_mapping = {
-        "AC": "accession",
         "ID": "identification",
+        "AC": "accession",
         "DE": "definition",
         "AU": "author",
         "SE": "source of seed",
         "SS": "source of structure",
         "GA": "gathering method",
+        "TC": "trusted cutoff",
+        "NC": "noise cutoff",
         "BM": "build method",
         "SM": "search method",
-        "TC": "trusted cutoff",
         "TP": "type",
-        "NC": "noise cutoff",
         "PI": "previous identifier",
         "CC": "comment",
         "CL": "clan",
@@ -327,8 +328,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif key == "DR":
                     record.dbxrefs = value
                 else:
-                    key = self.gs_mapping[key]
-                    record.annotations[key] = value
+                    record.annotations[self.gs_mapping[key]] = value
 
     def _add_per_sequence_and_per_column_annotations(self, alignment, gr):
         for seqname, letter_annotations in gr.items():
@@ -489,128 +489,134 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Stockholm file format."""
 
+    gf_mapping = {value: key for key, value in AlignmentIterator.gf_mapping.items()}
+    gs_mapping = {value: key for key, value in AlignmentIterator.gs_mapping.items()}
     gr_mapping = {value: key for key, value in AlignmentIterator.gr_mapping.items()}
     gc_mapping = {value: key for key, value in AlignmentIterator.gc_mapping.items()}
-    gs_mapping = {value: key for key, value in AlignmentIterator.gs_mapping.items()}
+
+    #=GF Above the alignment; alignment.annotations
+    #=GS Above the alignment or just below the corresponding sequence; record.annotations
+    #=GR Just below the corresponding sequence; record.letter_annotations
+    #=GC Below the alignment; alignment.column_annotations
 
     def write_alignment(self, alignment):
         """Use this to write the alignment to an open file.
 
-        Note that sequences and their annotation are recorded
-        together (rather than having a block of annotation followed
-        by a block of aligned sequences).
+        Sequence annotations (GS and GR lines) are recorded just below
+        the corresponding sequence.
         """
         stream = self.stream
-        count = len(alignment)
 
-        n, self._length_of_sequences = alignment.shape
-        self._ids_written = []
+        rows, columns = alignment.shape
 
-        if count == 0:
+        if rows == 0:
             raise ValueError("Must have at least one sequence")
-        if self._length_of_sequences == 0:
+        if columns == 0:
             raise ValueError("Non-empty sequences are required")
 
         stream.write("# STOCKHOLM 1.0\n")
-        stream.write("#=GF SQ %i\n" % count)
-        for record in alignment:
-            self._write_record(record)
-        # This shouldn't be None... but just in case,
-        if alignment.column_annotations:
-            for k, v in sorted(alignment.column_annotations.items()):
-                if k in self.gc_mapping:
-                    stream.write(f"#=GC {self.gc_mapping[k]} {v}\n")
-                elif k in self.gr_mapping:
-                    stream.write(f"#=GC {self.gr_mapping[k]}_cons {v}\n")
+        #=GF Above the alignment; alignment.annotations
+        for key, feature in self.gf_mapping.items():
+            if key == "comment":
+                # write this last
+                continue
+            value = alignment.annotations.get(key)
+            if value is not None:
+                feature = self.gf_mapping[key]
+                if key in ("author", "wikipedia"):
+                    for item in value:
+                        stream.write(f"#=GF {feature}   {item}\n")
                 else:
-                    # It doesn't follow the PFAM standards, but should we record
-                    # this data anyway?
-                    pass
+                    stream.write(f"#=GF {feature}   {value}\n")
+        nested_domains = alignment.annotations.get("nested_domains")
+        if nested_domains is not None:
+            for nested_domain in nested_domains:
+                accession = nested_domain.get("accession")
+                if accession is not None:
+                    stream.write(f"#=GF NE   {accession}\n")
+                location = nested_domain.get("location")
+                if location is not None:
+                    stream.write(f"#=GF NL   {location}\n")
+        references = alignment.annotations.get("references")
+        if references is not None:
+            for reference in references:
+                comment = reference.get("comment")
+                AlignmentWriter._write_long_line(stream, "#=GF RC   ", comment)
+                stream.write(f"#=GF RN   [{reference['number']}]\n")
+                stream.write(f"#=GF RM   {reference['medline']}\n")
+                title = reference["title"]
+                AlignmentWriter._write_long_line(stream, "#=GF RT   ", title)
+                stream.write(f"#=GF RA   {reference['author']}\n")
+                stream.write(f"#=GF RL   {reference['location']}\n")
+        database_references = alignment.annotations.get("database_references")
+        if database_references is not None:
+            for database_reference in database_references:
+                stream.write(f"#=GF DR   {database_reference['reference']}\n")
+                comment = database_reference.get("comment")
+                if comment is not None:
+                    stream.write(f"#=GF DC   {comment}\n")
+        key = "comment"
+        value = alignment.annotations.get(key)
+        if value is not None:
+             prefix = "#=GF %s   " % self.gf_mapping[key]
+             AlignmentWriter._write_long_line(stream, prefix, value)
+        for key in alignment.annotations:
+            if key in self.gf_mapping:
+                continue
+            if key == "nested_domains":
+                continue
+            if key == "references":
+                continue
+            if key == "database_references":
+                continue
+            raise ValueError("Unknown annotation %s found in alignment.annotations" % key)
+        stream.write("#=GF SQ   %i\n" % rows)
+        #=GS Above the alignment or just below the corresponding sequence;
+        #    record.annotations
+        #=GR Just below the corresponding sequence;
+        #    record.letter_annotations
+        width = max(len(record.id) for record in alignment.sequences)
+        start = max(width, 20) + 12
+        for record in alignment.sequences:
+            name = record.id.ljust(width)
+            for key, value in record.annotations.items():
+                feature = self.gs_mapping[key]
+                stream.write(f"#=GS {name}  {feature} {value}\n")
+            if record.description != "<unknown description>":
+                stream.write(f"#=GS {name}  DE {record.description}\n")
+            for value in record.dbxrefs:
+                stream.write(f"#=GS {name}  DR {value}\n")
+        for aligned_sequence, record in zip(alignment, alignment.sequences):
+            self._write_record(stream, width, start, aligned_sequence, record)
+        #=GC Below the alignment;
+        #    alignment.column_annotations
+        if alignment.column_annotations:
+            for key, value in alignment.column_annotations.items():
+                feature = self.gc_mapping[key]
+                line = f"#=GC {feature}".ljust(start) + value + "\n"
+                stream.write(line)
         stream.write("//\n")
 
-    def _write_record(self, record):
+    @staticmethod
+    def _write_long_line(stream, prefix, text):
+        if text is None:
+            return
+        lines = textwrap.wrap(text, width=79, break_long_words=False,
+                              initial_indent=prefix, subsequent_indent=prefix)
+        for line in lines:
+            stream.write(line + "\n")
+
+    def _write_record(self, stream, width, start, aligned_sequence, record):
         """Write a single SeqRecord to the file (PRIVATE)."""
-        if self._length_of_sequences != len(record.seq):
-            raise ValueError("Sequences must all be the same length")
 
-        # For the case for stockholm to stockholm, try and use record.name
-        seq_name = record.id
-        if record.name is not None:
-            if "accession" in record.annotations:
-                if record.id == record.annotations["accession"]:
-                    seq_name = record.name
-
-        # In the Stockholm file format, spaces are not allowed in the id
-        seq_name = seq_name.replace(" ", "_")
-
-        if "start" in record.annotations and "end" in record.annotations:
-            suffix = f"/{record.annotations['start']}-{record.annotations['end']}"
-            if seq_name[-len(suffix) :] != suffix:
-                seq_name = "%s/%s-%s" % (
-                    seq_name,
-                    record.annotations["start"],
-                    record.annotations["end"],
-                )
-
-        if seq_name in self._ids_written:
-            raise ValueError(f"Duplicate record identifier: {seq_name}")
-        self._ids_written.append(seq_name)
-        stream.write(f"{seq_name} {record.seq}\n")
-
-        # The recommended placement for GS lines (per sequence annotation)
-        # is above the alignment (as a header block) or just below the
-        # corresponding sequence.
-        #
-        # The recommended placement for GR lines (per sequence per column
-        # annotation such as secondary structure) is just below the
-        # corresponding sequence.
-        #
-        # We put both just below the corresponding sequence as this allows
-        # us to write the file using a single pass through the records.
-
-        # AC = Accession
-        if "accession" in record.annotations:
-            stream.write(
-                f"#=GS {seq_name} AC {self.clean(record.annotations['accession'])}\n"
-            )
-        elif record.id:
-            stream.write(f"#=GS {seq_name} AC {self.clean(record.id)}\n")
-
-        # DE = description
-        if record.description:
-            stream.write(f"#=GS {seq_name} DE {self.clean(record.description)}\n")
-
-        # DE = database links
-        for xref in record.dbxrefs:
-            stream.write(f"#=GS {seq_name} DR {self.clean(xref)}\n")
-
-        # GS = other per sequence annotation
-        for key, value in record.annotations.items():
-            if key in self.pfam_gs_mapping:
-                data = self.clean(str(value))
-                if data:
-                    stream.write(
-                        "#=GS %s %s %s\n"
-                        % (seq_name, self.clean(self.pfam_gs_mapping[key]), data)
-                    )
-            else:
-                # It doesn't follow the PFAM standards, but should we record
-                # this data anyway?
-                pass
-
-        # GR = per row per column sequence annotation
+        name = record.id.ljust(start)
+        line = name + aligned_sequence + "\n"
+        stream.write(line)
+        name = record.id.ljust(width)
         for key, value in record.letter_annotations.items():
-            if key in self.gr_mapping and len(str(value)) == len(record.seq):
-                data = self.clean(str(value))
-                if data:
-                    stream.write(
-                        "#=GR %s %s %s\n"
-                        % (seq_name, self.clean(self.gr_mapping[key]), data)
-                    )
-            else:
-                # It doesn't follow the PFAM standards, but should we record
-                # this data anyway?
-                pass
+            feature = self.gr_mapping[key]
+            line = f"#=GR {name}  {feature}".ljust(start) + value + "\n"
+            stream.write(line)
 
 
 if __name__ == "__main__":
