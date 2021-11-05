@@ -2062,9 +2062,9 @@ class Seq(_SeqAbstractBaseClass):
             return True
         elif isinstance(self, UnknownSeq):
             return False
-        elif isinstance(self._data, _UndefinedSequenceData):
-            return False
-        elif isinstance(self._data, _PartiallyDefinedSequenceData):
+        elif isinstance(
+            self._data, (_UndefinedSequenceData, _PartiallyDefinedSequenceData)
+        ):
             return False
         return True
 
