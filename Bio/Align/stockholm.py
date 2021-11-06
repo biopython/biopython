@@ -1,4 +1,5 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
+# Copyright 2021 by Michiel de Hoon.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -8,147 +9,82 @@
 
 You are expected to use this module via the Bio.Align functions.
 
-For example, consider a Stockholm alignment file containing the following::
+For example, consider this alignment from PFAM for the HAT helix motif::
 
     # STOCKHOLM 1.0
-    #=GC SS_cons       .................<<<<<<<<...<<<<<<<........>>>>>>>..
-    AP001509.1         UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGU
-    #=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..--
-    AE007476.1         AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGU
-    #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----
-
-    #=GC SS_cons       ......<<<<<<<.......>>>>>>>..>>>>>>>>...............
-    AP001509.1         CUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-    #=GR AP001509.1 SS -------<<<<<--------->>>>>--->>>>>>>>---------------
-    AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-    #=GR AE007476.1 SS ------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    #=GF ID   HAT
+    #=GF AC   PF02184.18
+    #=GF DE   HAT (Half-A-TPR) repeat
+    #=GF AU   SMART;
+    #=GF SE   Alignment kindly provided by SMART
+    #=GF GA   21.00 21.00;
+    #=GF TC   21.00 21.00;
+    #=GF NC   20.90 20.90;
+    #=GF BM   hmmbuild HMM.ann SEED.ann
+    #=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+    #=GF TP   Repeat
+    #=GF CL   CL0020
+    #=GF RN   [1]
+    #=GF RM   9478129
+    #=GF RT   The HAT helix, a repetitive motif implicated in RNA processing. 
+    #=GF RA   Preker PJ, Keller W; 
+    #=GF RL   Trends Biochem Sci 1998;23:15-16.
+    #=GF DR   INTERPRO; IPR003107;
+    #=GF DR   SMART; HAT;
+    #=GF DR   SO; 0001068; polypeptide_repeat;
+    #=GF CC   The HAT (Half A TPR) repeat is found in several RNA processing
+    #=GF CC   proteins [1].
+    #=GF SQ   3
+    #=GS CRN_DROME/191-222     AC P17886.2
+    #=GS CLF1_SCHPO/185-216    AC P87312.1
+    #=GS CLF1_SCHPO/185-216    DR PDB; 3JB9 R; 185-216;
+    #=GS O16376_CAEEL/201-233  AC O16376.2
+    CRN_DROME/191-222                KEIDRAREIYERFVYVH.PDVKNWIKFARFEES
+    CLF1_SCHPO/185-216               HENERARGIYERFVVVH.PEVTNWLRWARFEEE
+    #=GR CLF1_SCHPO/185-216    SS    --HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH
+    O16376_CAEEL/201-233             KEIDRARSVYQRFLHVHGINVQNWIKYAKFEER
+    #=GC SS_cons                     --HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH
+    #=GC seq_cons                    KEIDRARuIYERFVaVH.P-VpNWIKaARFEEc
     //
 
-This is a single multiple sequence alignment, so you would probably load this
-using the Bio.Align.read() function:
+Parsing this file using Bio.Align stores the alignment, its annotations, and
+the sequences and their annotations::
 
-    >>> from Bio import Align
-    >>> alignment = Align.read("Stockholm/simple.sth", "stockholm")
-    # >>> print(align)
-    # Alignment with 2 rows and 104 columns
-    # UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
-    # AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
-    >>> for record in alignment.sequences:
-    ...     print("%s %i" % (record.id, len(record)))
-    AP001509.1 104
-    AE007476.1 104
+    >>> from Bio,Align import stockholm
+    >>> alignment = stockholm.AlignmentIterator("Stockholm/example.sth")
+    >>> alignment.shape
+    (3, 33)
+    >>> alignment[0]
+    'KEIDRAREIYERFVYVH-PDVKNWIKFARFEES'
 
-In addition to the sequences themselves, this example alignment also includes
-some GR lines for the secondary structure of the sequences.  These are
-strings, with one character for each letter in the associated sequence:
+Alignment meta-data are stored in alignment.annotations::
 
-    >>> for record in alignment:
-    ...     print(record.id)
-    ...     print(record.seq)
-    ...     print(record.letter_annotations['secondary_structure'])
-    AP001509.1
-    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-    AE007476.1
-    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    >>> alignmetn.annotations["accession"]
+    'PF02184.18'
+    >>> alignment.annottions["references"][0]["title"]
+    'The HAT helix, a repetitive motif implicated in RNA processing.'
 
-Any general annotation for each row is recorded in the SeqRecord's annotations
-dictionary.  Any per-column annotation for the entire alignment in in the
-alignment's column annotations dictionary, such as the secondary structure
-consensus in this example:
+Annotations of alignment columns are stored in alignment.column_annotations::
 
-    >>> sorted(align.column_annotations.keys())
-    ['secondary_structure']
-    >>> align.column_annotations["secondary_structure"]
-    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
+    >>> alignment.column_annotations["consensus secondary structure"]
+    '--HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH'
 
-You can output this alignment in many different file formats
-using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
+Sequences and their annotations are stored in alignment.sequences::
 
-    >>> print(format(align, "fasta"))
-    >AP001509.1
-    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
-    GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-    >AE007476.1
-    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAA
-    GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-    <BLANKLINE>
+   >>> alignment.sequences[0].id
+   'CRN_DROME/191-222'
+   >>> alignment.sequences[0].seq
+   'KEIDRAREIYERFVYVHPDVKNWIKFARFEES'
+   >>> alignment.sequences[1].letter_annotations["secondary structure"]
+   '--HHHHHHHHHHHHHHS--HHHHHHHHHHHHH'
 
-Most output formats won't be able to hold the annotation possible in a
-Stockholm file:
+Slicing specific columns of an alignment will slice any per-column-annotations:
 
-    >>> print(format(align, "stockholm"))
-    # STOCKHOLM 1.0
-    #=GF SQ 2
-    AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-    #=GS AP001509.1 AC AP001509.1
-    #=GS AP001509.1 DE AP001509.1
-    #=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-    AE007476.1 AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-    #=GS AE007476.1 AC AE007476.1
-    #=GS AE007476.1 DE AE007476.1
-    #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
-    #=GC SS_cons .................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............
-    //
-    <BLANKLINE>
-
-Note that when writing Stockholm files, AlignIO does not break long sequences
-up and interleave them (as in the input file shown above).  The standard
-allows this simpler layout, and it is more likely to be understood by other
-tools.
-
-Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
-iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects.
-
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
-    ...     print(record.id)
-    ...     print(record.seq)
-    ...     print(record.letter_annotations['secondary_structure'])
-    AP001509.1
-    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
-    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
-    AE007476.1
-    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
-    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
-
-Remember that if you slice a SeqRecord, the per-letter-annotations like the
-secondary structure string here, are also sliced:
-
-    >>> sub_record = record[10:20]
-    >>> print(sub_record.seq)
-    AUCGUUUUAC
-    >>> print(sub_record.letter_annotations['secondary_structure'])
-    -------<<<
-
-Likewise with the alignment object, as long as you are not dropping any rows,
-slicing specific columns of an alignment will slice any per-column-annotations:
-
-    >>> align.column_annotations["secondary_structure"]
-    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
-    >>> part_align = align[:,10:20]
-    >>> part_align.column_annotations["secondary_structure"]
-    '.......<<<'
-
-You can also see this in the Stockholm output of this partial-alignment:
-
-    >>> print(format(part_align, "stockholm"))
-    # STOCKHOLM 1.0
-    #=GF SQ 2
-    AP001509.1 UCAACACUCU
-    #=GS AP001509.1 AC AP001509.1
-    #=GS AP001509.1 DE AP001509.1
-    #=GR AP001509.1 SS -------<<<
-    AE007476.1 AUCGUUUUAC
-    #=GS AE007476.1 AC AE007476.1
-    #=GS AE007476.1 DE AE007476.1
-    #=GR AE007476.1 SS -------<<<
-    #=GC SS_cons .......<<<
-    //
-    <BLANKLINE>
-
+    >>> alignment.column_annotations["secondary structure"]
+    '--HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH'
+    >>> part_alignment = alignment[:,10:20]
+    >>> part_alignment.column_annotations["secondary structure"]
+    'HHHHHHS.--'
 """
 import textwrap
 from collections import defaultdict
@@ -160,32 +96,29 @@ from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
-    """Alignment iterator for PFAM alignment files in the Stockholm format.
+    """Alignment iterator for alignment files in the Stockholm format.
 
     The file may contain multiple concatenated alignments, which are loaded
     and returned incrementally.
 
-    This parser will detect if the Stockholm file follows the PFAM
-    conventions for sequence specific meta-data (lines starting #=GS
-    and #=GR) and populates the SeqRecord fields accordingly.
+    Alignment meta-data (lines starting with #=GF) are stored in the dictionary
+    alignment.annotations. Column annotations (lines starting with #=GC) are
+    stored in the dictionary alignment.column_annotations. Sequence names are
+    stored in record.id. Sequence record meta-data (lines starting with #=GS)
+    are stored in the dictionary record.annotations. Sequence letter
+    annotations (lines starting with #=GR) are stored in the dictionary
+    record.letter_annotations.
 
-    If an accession is provided for an entry in the meta data, IT WILL NOT
-    be used as the record.id (it will be recorded in the record's
-    annotations).  This is because some files have (sub) sequences from
-    different parts of the same accession (differentiated by different
-    start-end positions).
-
-    Wrap-around alignments are not supported - each sequences must be on
-    a single line.  However, interlaced sequences should work.
+    Wrap-around alignments are not supported - each sequence must be on
+    a single line.
 
     For more information on the file format, please see:
     http://sonnhammer.sbc.su.se/Stockholm.html
     https://en.wikipedia.org/wiki/Stockholm_format
-    http://bioperl.org/formats/alignment_formats/Stockholm_multiple_alignment_format.html
     """
 
     gf_mapping = {
-        "ID": "identification",
+        "ID": "identifier",
         "AC": "accession",
         "DE": "definition",
         "AU": "author",
@@ -206,35 +139,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     }
 
     gr_mapping = {
-        "SS": "secondary_structure",
-        "PP": "posterior_probability",
+        "SS": "secondary structure",
+        "PP": "posterior probability",
         "CSA": "Catalytic Site Atlas",  # used in CATH
         # These features are included in the Stockholm file format
         # documentation, but currently not used in the PFAM, RFAM, and CATH
         # databases:
-        "SA": "surface_accessibility",
+        "SA": "surface accessibility",
         "TM": "transmembrane",
-        "LI": "ligand_binding",
-        "AS": "active_site",
+        "LI": "ligand binding",
+        "AS": "active site",
         "pAS": "active site - Pfam predicted",
         "sAS": "active site - from SwissProt",
         "IN": "intron",
     }
 
-    gc_mapping = {"RF": "reference_coordinate_annotation",
-                  "seq_cons": "consensus_sequence",
-                  "scorecons": "consensus_score",  # used in CATH
-                  "scorecons_70": "consensus_score_70",  # used in CATH
-                  "scorecons_80": "consensus_score_80",  # used in CATH
-                  "scorecons_90": "consensus_score_90",  # used in CATH
+    gc_mapping = {"RF": "reference coordinate annotation",
+                  "seq_cons": "consensus sequence",
+                  "scorecons": "consensus score",  # used in CATH
+                  "scorecons_70": "consensus score 70",  # used in CATH
+                  "scorecons_80": "consensus score 80",  # used in CATH
+                  "scorecons_90": "consensus score 90",  # used in CATH
                   # This feature is included in the Stockholm file format
                   # documentation, but currently not used in the PFAM, RFAM,
                   # and CATH databases:
-                  "MM": "model_mask",
+                  "MM": "model mask",
                  }
     # Add *_cons from GR mapping:
     for key, value in gr_mapping.items():
-        gc_mapping[key + "_cons"] = "consensus_" + value
+        gc_mapping[key + "_cons"] = "consensus " + value
 
     # These GC keywords are used in Rfam:
     for keyword in ("RNA_elements",
@@ -257,7 +190,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "PK_SS",
                     "cons",
                    ):
-        gc_mapping[keyword] = keyword
+        gc_mapping[keyword] = keyword.replace("_", " ")
     gs_mapping = {"AC": "accession",
                   # "DE": description,  # handled separately
                   # "DR": "database_references",  # handled separately
@@ -265,7 +198,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                   # These two features are included in the Stockholm file
                   # format documentation, but currently not used in the PFAM,
                   # RFAM, and CATH databases:
-                  "OC": "organism_classification",
+                  "OC": "organism classification",
                   "LO": "look",
                  }
 
@@ -368,8 +301,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 gr = defaultdict(dict)
                 length = None
             elif line == "//":
-                # The "//" line indicates the end of the alignment.
-                # There may still be more meta-data
+                # Reached the end of the alignment.
                 skipped_columns = []
                 coordinates = Alignment.infer_coordinates(aligned_sequences, skipped_columns)
                 skipped_columns = set(skipped_columns)
@@ -384,9 +316,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         reference["location"] = " ".join(reference["location"])
                         alignment.annotations["references"].append(reference)
                 if database_references:
-                    alignment.annotations["database_references"] = database_references
+                    alignment.annotations["database references"] = database_references
                 if nested_domains:
-                    alignment.annotations["nested_domains"] = nested_domains
+                    alignment.annotations["nested domains"] = nested_domains
                 rows, columns = alignment.shape
                 self._add_per_file_annotations(alignment, gf, rows)
                 self._add_per_column_annotations(alignment, gc, columns, skipped_columns)
@@ -528,7 +460,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         stream.write(f"#=GF {feature}   {item}\n")
                 else:
                     stream.write(f"#=GF {feature}   {value}\n")
-        nested_domains = alignment.annotations.get("nested_domains")
+        nested_domains = alignment.annotations.get("nested domains")
         if nested_domains is not None:
             for nested_domain in nested_domains:
                 accession = nested_domain.get("accession")
@@ -548,7 +480,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 AlignmentWriter._write_long_line(stream, "#=GF RT   ", title)
                 stream.write(f"#=GF RA   {reference['author']}\n")
                 stream.write(f"#=GF RL   {reference['location']}\n")
-        database_references = alignment.annotations.get("database_references")
+        database_references = alignment.annotations.get("database references")
         if database_references is not None:
             for database_reference in database_references:
                 stream.write(f"#=GF DR   {database_reference['reference']}\n")
@@ -563,11 +495,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for key in alignment.annotations:
             if key in self.gf_mapping:
                 continue
-            if key == "nested_domains":
+            if key == "nested domains":
                 continue
             if key == "references":
                 continue
-            if key == "database_references":
+            if key == "database references":
                 continue
             raise ValueError("Unknown annotation %s found in alignment.annotations" % key)
         stream.write("#=GF SQ   %i\n" % rows)
