@@ -697,7 +697,7 @@ class Tree(Nodes.Chain):
                 if ladderize == "right" or ladderize == "RIGHT":
                     succnode_terminals.reverse()
                 if succnode_terminals:
-                    succnodes = zip(*succnode_terminals)[1]
+                    succnodes = list(zip(*succnode_terminals))[1]
                 else:
                     succnodes = []
             else:

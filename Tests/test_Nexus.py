@@ -1035,6 +1035,16 @@ Root:  16
             ],
         )
 
+    def test_to_string(self):
+        t = Trees.Tree(
+            "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"
+            "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"
+            "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"
+            "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        )
+        self.assertEqual(t.to_string(ladderize="LEFT"),
+                         "tree a_tree = ((A 6,(B 9,(C 8,C 4))),t2,((E 0,E 7),(F 1,(G 5,G 3))));")
+
     def test_large_newick(self):
         with open(
             os.path.join(self.testfile_dir, "int_node_labels.nwk")
