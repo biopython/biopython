@@ -26,8 +26,8 @@ For example, consider this alignment from PFAM for the HAT helix motif::
     #=GF CL   CL0020
     #=GF RN   [1]
     #=GF RM   9478129
-    #=GF RT   The HAT helix, a repetitive motif implicated in RNA processing. 
-    #=GF RA   Preker PJ, Keller W; 
+    #=GF RT   The HAT helix, a repetitive motif implicated in RNA processing.
+    #=GF RA   Preker PJ, Keller W;
     #=GF RL   Trends Biochem Sci 1998;23:15-16.
     #=GF DR   INTERPRO; IPR003107;
     #=GF DR   SMART; HAT;
@@ -550,7 +550,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     @staticmethod
     def _write_long_line(stream, prefix, text):
         """Write the text as wrapped lines to the file (PRIVATE)."""
-
         if text is None:
             return
         lines = textwrap.wrap(
@@ -566,7 +565,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     @staticmethod
     def _write_record(stream, width, start, aligned_sequence, record):
         """Write a single SeqRecord to the file (PRIVATE)."""
-
         name = record.id.ljust(start)
         line = name + aligned_sequence + "\n"
         stream.write(line)
