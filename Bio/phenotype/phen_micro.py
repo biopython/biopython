@@ -957,10 +957,11 @@ def JsonIterator(handle):
                 )
             elif int(pID) < 0:
                 warnings.warn(
-                    "Non-standard plate ID found (%s), using %s"
-                    % (plateID, _platesPrefix + abs(int(pID)))
+                    "Non-standard plate ID found ({}), using {}{}".format(
+                        plateID, _platesPrefix, abs(int(pID))
+                    )
                 )
-                plateID = _platesPrefix + abs(int(pID))
+                plateID = _platesPrefix + str(abs(int(pID)))
             else:
                 if plateID.startswith(_platesPrefixMammalian):
                     plateID = _platesPrefixMammalian + "%02d" % int(pID)
@@ -1060,10 +1061,11 @@ def CsvIterator(handle):
                     )
                 elif int(pID) < 0:
                     warnings.warn(
-                        "Non-standard plate ID found (%s), using %s"
-                        % (plateID, _platesPrefix + abs(int(pID)))
+                        "Non-standard plate ID found ({}), using {}{}".format(
+                            plateID, _platesPrefix, abs(int(pID))
+                        )
                     )
-                    plateID = _platesPrefix + abs(int(pID))
+                    plateID = _platesPrefix + str(abs(int(pID)))
                 else:
                     if plateID.startswith(_platesPrefixMammalian):
                         plateID = _platesPrefixMammalian + "%02d" % int(pID)
