@@ -189,14 +189,11 @@ The number of columns in each row is equal to the row number. Hence, the first r
 \begin{minted}{pycon}
 >>> from numpy import array
 >>> from Bio.Cluster import distancematrix
->>> data = array(
-...     [
-...         [0, 1, 2, 3],
-...         [4, 5, 6, 7],
-...         [8, 9, 10, 11],
-...         [1, 2, 3, 4],
-...     ]
-... )
+>>> data = array([[0, 1,  2 , 3],
+...               [4, 5,  6,  7],
+...               [8, 9, 10, 11],
+...               [1, 2,  3,  4]])  # fmt: skip
+...
 >>> distances = distancematrix(data, dist="e")
 \end{minted}
 yields a distance matrix
