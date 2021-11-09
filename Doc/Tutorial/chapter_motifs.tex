@@ -366,8 +366,9 @@ T  [ 7 58  0 55 49 52 21 56  0  2 ]
 The motifs are read as follows:
 \begin{minted}{pycon}
 >>> fh = open("jaspar_motifs.txt")
->>> for m in motifs.parse(fh, "jaspar"))
+>>> for m in motifs.parse(fh, "jaspar"):
 ...     print(m)
+...
 TF name	 Arnt
 Matrix ID	MA0004.1
 Matrix:
@@ -408,10 +409,10 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 \begin{minted}{pycon}
 >>> from Bio.motifs.jaspar.db import JASPAR5
 >>>
->>> JASPAR_DB_HOST = <hostname>
->>> JASPAR_DB_NAME = <db_name>
->>> JASPAR_DB_USER = <user>
->>> JASPAR_DB_PASS = <password>
+>>> JASPAR_DB_HOST = "yourhostname"  # fill in these values
+>>> JASPAR_DB_NAME = "yourdatabase"
+>>> JASPAR_DB_USER = "yourusername"
+>>> JASPAR_DB_PASS = "yourpassword"
 >>>
 >>> jdb = JASPAR5(
 ...     host=JASPAR_DB_HOST,
@@ -522,11 +523,9 @@ For example, using the Arnt motif before, let's search a sequence with a relativ
 >>> max_score = pssm.max
 >>> min_score = pssm.min
 >>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
->>> for position, score in pssm.search(test_seq,
-                                       threshold=abs_score_threshold):
+>>> for pos, score in pssm.search(test_seq, threshold=abs_score_threshold):
 ...     rel_score = (score - min_score) / (max_score - min_score)
-...     print("Position %d: score = %5.3f, rel. score = %5.3f" % (
-            position, score, rel_score))
+...     print(f"Position {pos}: score = {score:5.3f}, rel. score = {rel_score:5.3f}")
 ...
 Position 2: score = 5.362, rel. score = 0.801
 Position 8: score = 6.112, rel. score = 0.831

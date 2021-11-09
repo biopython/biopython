@@ -131,7 +131,8 @@ The function \verb+train+ has two optional arguments: \verb+update_fn+ and \verb
 
 \begin{minted}{pycon}
 >>> def show_progress(iteration, loglikelihood):
-        print("Iteration:", iteration, "Log-likelihood function:", loglikelihood)
+...     print(f"Iteration: {iteration} Log-likelihood function: {loglikelihood}")
+...
 >>>
 >>> model = LogisticRegression.train(xs, ys, update_fn=show_progress)
 Iteration: 0 Log-likelihood function: -11.7835020695
@@ -225,7 +226,8 @@ class OP: probability = 0.000321211251817 class NOP: probability = 0.99967878874
 To get some idea of the prediction accuracy of the logistic regression model, we can apply it to the training data:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+...     print(f"True: {ys[i]} Predicted: {LogisticRegression.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -247,8 +249,9 @@ True: 0 Predicted: 0
 showing that the prediction is correct for all but one of the gene pairs. A more reliable estimate of the prediction accuracy can be found from a leave-one-out analysis, in which the model is recalculated from the training data after removing the gene to be predicted:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+...     model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+...     print(f"True: {ys[i]} Predicted: {LogisticRegression.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -360,7 +363,8 @@ which means that two neighbors are operon pairs and one neighbor is a non-operon
 To get some idea of the prediction accuracy of the $k$-nearest neighbors approach, we can apply it to the training data:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+...     print(f"True: {ys[i]} Predicted: {kNN.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -383,8 +387,9 @@ showing that the prediction is correct for all but two of the gene pairs. A more
 \begin{minted}{pycon}
 >>> k = 3
 >>> for i in range(len(ys)):
-        model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
-        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+...     model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
+...     print(f"True: {ys[i]} Predicted: {kNN.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
