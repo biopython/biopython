@@ -123,7 +123,7 @@ in the example below only the first ten time points are shown.
 %rest of code snippet output is truncated
 \begin{minted}{pycon}
 >>> for time, signal in well:
-...    print(time, signal)
+...     print(time, signal)
 ...
 (0.0, 12.0)
 (0.25, 18.0)
@@ -248,8 +248,7 @@ the logistic and then the richards function. The user can also specify one of th
 >>> well.fit()
 >>> print("Function fitted: %s" % well.model)
 Function fitted: gompertz
->>> for param in ["area", "average_height", "lag", "max", "min",
-...               "plateau", "slope"]:
+>>> for param in ["area", "average_height", "lag", "max", "min", "plateau", "slope"]:
 ...     print("%s\t%.2f" % (param, getattr(well, param)))
 ...
 area    4414.38

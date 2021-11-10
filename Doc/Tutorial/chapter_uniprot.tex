@@ -172,6 +172,7 @@ The entries in this file can be parsed by the \verb+parse+ function in the \verb
 >>> for record in records:
 ...     print(record["ID"])
 ...     print(record["DE"])
+...
 \end{minted}
 
 This prints
@@ -228,7 +229,8 @@ and so on. If you're interested in how many Prosite records there are, you could
 >>> handle = open("prosite.dat")
 >>> records = Prosite.parse(handle)
 >>> n = 0
->>> for record in records: n+=1
+>>> for record in records:
+...     n += 1
 ...
 >>> n
 2073
@@ -357,6 +359,7 @@ First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|B
 ...     handle = ExPASy.get_sprot_raw(accession)
 ...     record = SwissProt.read(handle)
 ...     records.append(record)
+...
 \end{minted}
 
 If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exist, then \verb|SwissProt.read(handle)| will raise a \verb|ValueError|. You can catch \verb|ValueException| exceptions to detect invalid accession numbers:
@@ -369,6 +372,7 @@ If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exi
 ...     except ValueException:
 ...         print("WARNING: Accession %s not found" % accession)
 ...     records.append(record)
+...
 \end{minted}
 
 \subsection{Searching Swiss-Prot}
