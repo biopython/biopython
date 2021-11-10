@@ -61,7 +61,6 @@ SubName: Full=Plasma membrane intrinsic protein {ECO:0000313|EMBL:BAN04711.1}; S
 >>> for ref in record.references:
 ...     print("authors:", ref.authors)
 ...     print("title:", ref.title)
-...	print(record.organism_classification)
 ...
 authors: Matsumoto T., Tanaka T., Sakai H., Amano N., Kanamori H., Kurita K., Kikuta A., Kamiya K., Yamamoto M., Ikawa H., Fujii N., Hori K., Itoh T., Sato K.
 title: Comprehensive sequence analysis of 24,783 barley full-length cDNAs derived from 12 clone libraries.
@@ -71,6 +70,7 @@ title: Functional characterization of a novel plasma membrane intrinsic protein2
 ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
 authors: Shibasaka M., Katsuhara M., Sasano S.
 title: 
+>>> print(record.organism_classification)
 ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
 \end{minted}
 
