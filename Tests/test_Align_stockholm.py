@@ -930,11 +930,6 @@ class TestAlignIO_reading(unittest.TestCase):
         )
         self.assertEqual(alignment.annotations["type"], "Family")
         self.assertEqual(len(alignment.annotations["wikipedia"]), 1)
-        self.assertEqual(b"\xce\xb2".decode("UTF-8"), "β")
-        self.assertEqual(
-            alignment.annotations["wikipedia"][0][1].encode("UTF-8"), b"\xce\xb2"
-        )
-        self.assertEqual(alignment.annotations["wikipedia"][0][1], "β")
         self.assertEqual(
             alignment.annotations["wikipedia"][0], "3β-Hydroxysteroid_dehydrogenase"
         )
@@ -3877,9 +3872,11 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam4(self):
         """Test parsing Pfam record 3Beta_HSD."""
         path = "Stockholm/pfam4.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with open(path, encoding="UTF-8") as stream:
+            # encoding depends on locale by default
+            alignments = stockholm.AlignmentIterator(stream)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam4(alignment)
         stream = StringIO()
         writer = stockholm.AlignmentWriter(stream)
