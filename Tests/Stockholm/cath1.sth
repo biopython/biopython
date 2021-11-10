@@ -1,0 +1,18 @@
+# STOCKHOLM 1.0
+#=GF ID 3.30.160.60/FF/004774
+#=GF DE Uncharacterized protein
+#=GF AC 3.30.160.60/FF/004774
+#=GF TP FunFam
+#=GF DR CATH: v4.3
+#=GF DR DOPS: 0.000
+#=GS L7MZX4/382-398  AC L7MZX4
+#=GS L7MZX4/382-398  OS Anolis carolinensis
+#=GS L7MZX4/382-398  DE Uncharacterized protein
+#=GS L7MZX4/382-398  DR ORG; Eukaryota; Metazoa; Chordata; Craniata; Sarcopterygii; Lepidosauria; Squamata; Iguania; Dactyloidae; Anolis; Anolis carolinensis; 
+#=GF SQ 1
+L7MZX4/382-398          GEKPYECLECGKRFTA-R
+#=GC scorecons          000000000000000000
+#=GC scorecons_70       __________________
+#=GC scorecons_80       __________________
+#=GC scorecons_90       __________________
+//
