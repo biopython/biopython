@@ -448,7 +448,8 @@ Let's see an example where we're using \verb|hit_map| to rename the hit IDs:
 %cont-doctest
 \begin{minted}{pycon}
 >>> def map_func(hit):
-...     hit.id = hit.id.split("|")[3]   # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     hit.id = hit.id.split("|")[3]
 ...     return hit
 ...
 >>> mapped_qresult = blast_qresult.hit_map(map_func)
