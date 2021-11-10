@@ -202,8 +202,8 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="biopython[title]", retmax="40" )
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+>>> handle = Entrez.esearch(db="pubmed", term="biopython[title]", retmax="40")
 >>> record = Entrez.read(handle)
 >>> "19304878" in record["IdList"]
 True
@@ -222,7 +222,9 @@ find out which fields you can search in each Entrez database):
 
 % Search results too changeable for use in doctest
 \begin{minted}{pycon}
->>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
+>>> handle = Entrez.esearch(
+...     db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc"
+... )
 >>> record = Entrez.read(handle)
 >>> record["Count"]
 '348'
@@ -271,7 +273,7 @@ refer to this long list of IDs, and download the associated data with EFetch.
 Let's look at a simple example to see how EPost works -- uploading some PubMed identifiers:
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 >>> print(Entrez.epost("pubmed", id=",".join(id_list)).read())
 <?xml version="1.0"?>
@@ -288,7 +290,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 >>> search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
 >>> webenv = search_results["WebEnv"]
@@ -549,6 +551,7 @@ We can use a loop to print out all PubMed IDs:
 \begin{minted}{pycon}
 >>> for link in record[0]["LinkSetDb"][0]["Link"]:
 ...     print(link["Id"])
+...
 19304878
 14630660
 18689808
@@ -622,7 +625,7 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 >>> records = Entrez.parse(handle)
 >>> for record in records:
 ...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
-...     if status.attributes["value"]=="discontinued":
+...     if status.attributes["value"] == "discontinued":
 ...         continue
 ...     geneid = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_geneid"]
 ...     genename = record["Entrezgene_gene"]["Gene-ref"]["Gene-ref_locus"]
@@ -678,7 +681,7 @@ The first case occurs if, for example, you try to parse a Fasta file as if it we
 %doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("NC_005816.fna", "rb") # a Fasta file
+>>> handle = open("NC_005816.fna", "rb")  # a Fasta file
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
   ...
@@ -804,7 +807,7 @@ We first open the file and then parse it:
 \begin{minted}{pycon}
 >>> from Bio import Medline
 >>> with open("pubmed_result1.txt") as handle:
-...    record = Medline.read(handle)
+...     record = Medline.read(handle)
 ...
 \end{minted}
 The \verb+record+ now contains the Medline record as a Python dictionary:
@@ -866,6 +869,7 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 >>> records = Medline.parse(handle)
 >>> for record in records:
 ...     print(record["AU"])
+...
 ['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
 ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
 ['Casbon JA', 'Crooks GE', 'Saqi MA']
@@ -881,6 +885,7 @@ For comparison, here we show an example using the XML format:
 >>> records = Entrez.read(handle)
 >>> for record in records["PubmedArticle"]:
 ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
+...
 Biopython: freely available Python tools for computational molecular biology and
  bioinformatics.
 Enzymes/non-enzymes classification model complexity based on composition, sequence,
@@ -913,6 +918,7 @@ The following code fragment shows how to parse the example GEO file
 >>> records = Geo.parse(handle)
 >>> for record in records:
 ...     print(record)
+...
 \end{minted}
 
 You can search the ``gds'' database (GEO datasets) with ESearch:
@@ -1030,6 +1036,7 @@ To parse a file containing more than one UniGene record, use the \verb+parse+ fu
 >>> records = UniGene.parse(input)
 >>> for record in records:
 ...     print(record.ID)
+...
 \end{minted}
 
 \section{Using a proxy}
@@ -1070,8 +1077,9 @@ In this example, we will query PubMed for all articles having to do with orchids
 >>> handle = Entrez.egquery(term="orchid")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
-...     if row["DbName"]=="pubmed":
+...     if row["DbName"] == "pubmed":
 ...         print(row["Count"])
+...
 463
 \end{minted}
 
@@ -1100,8 +1108,7 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Medline
->>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
-...                        retmode="text")
+>>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
 >>> records = Medline.parse(handle)
 \end{minted}
 
@@ -1160,8 +1167,9 @@ First, we use EGQuery to find out the number of results we will get before actua
 >>> handle = Entrez.egquery(term="Cypripedioideae")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
-...     if row["DbName"]=="nuccore":
+...     if row["DbName"] == "nuccore":
 ...         print(row["Count"])
+...
 4457
 \end{minted}
 
@@ -1172,7 +1180,9 @@ Let's use the \verb+retmax+ argument to restrict the maximum number of records r
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
+>>> handle = Entrez.esearch(
+...     db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc"
+... )
 >>> record = Entrez.read(handle)
 >>> handle.close()
 \end{minted}
@@ -1256,7 +1266,7 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 >>> handle = Entrez.egquery(term="Opuntia AND rpl16")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
-...     if row["DbName"]=="nuccore":
+...     if row["DbName"] == "nuccore":
 ...         print(row["Count"])
 ...
 9
@@ -1309,7 +1319,7 @@ In this case, we are just getting the raw records. To get the records in a more 
 \noindent We can now step through the records and look at the information we are interested in:
 \begin{minted}{pycon}
 >>> for record in records:
-...    print(f"{record.name}, length {len(record)}, with {len(record.features)} features")
+...     print(f"{record.name}, length {len(record)}, with {len(record.features)} features")
 ...
 AY851612, length 892, with 3 features
 AY851611, length 881, with 3 features
@@ -1398,8 +1408,9 @@ additional argument of \verb|usehistory="y"|,
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
->>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
-...                                usehistory="y", idtype="acc")
+>>> search_handle = Entrez.esearch(
+...     db="nucleotide", term="Opuntia[orgn] and rpl16", usehistory="y", idtype="acc"
+... )
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
 \end{minted}
@@ -1507,8 +1518,9 @@ Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> pmid = "14630660"
->>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-...                                    LinkName="pubmed_pmc_refs", id=pmid))
+>>> results = Entrez.read(
+...     Entrez.elink(dbfrom="pubmed", db="pmc", LinkName="pubmed_pmc_refs", id=pmid)
+... )
 >>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
 >>> pmc_ids
 ['2744707', '2705363', '2682512', ..., '1190160']
@@ -1528,8 +1540,9 @@ But first, taking the more straightforward approach of making a second
 (separate) call to ELink:
 
 \begin{minted}{pycon}
->>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-...                                     id=",".join(pmc_ids)))
+>>> results2 = Entrez.read(
+...     Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed", id=",".join(pmc_ids))
+... )
 >>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
 >>> pubmed_ids
 ['19698094', '19450287', '19304878', ..., '15985178']

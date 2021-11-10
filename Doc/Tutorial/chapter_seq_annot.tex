@@ -12,7 +12,6 @@ While this chapter should cover most things to do with the \verb|SeqRecord| and 
 \begin{minted}{pycon}
 >>> from Bio.SeqRecord import SeqRecord
 >>> help(SeqRecord)
-...
 \end{minted}
 
 \section{The SeqRecord object}
@@ -537,7 +536,7 @@ If you are using Biopython 1.59 or later, the feature location's start and end a
 
 %cont-doctest
 \begin{minted}{pycon}
->>> feature_seq = seq[feature.location.start:feature.location.end].reverse_complement()
+>>> feature_seq = seq[feature.location.start : feature.location.end].reverse_complement()
 >>> print(feature_seq)
 AGCCTTTGCCGTC
 \end{minted}
@@ -586,7 +585,6 @@ What happens when you try to compare these ``identical'' records?
 %this is not a doctest:
 \begin{minted}{pycon}
 >>> record1 == record2
-...
 \end{minted}
 
 Perhaps surprisingly older versions of Biopython would use Python's default object
@@ -798,7 +796,7 @@ longer circular DNA - it is now linear:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> sub_record.annotations['topology'] = 'linear'
+>>> sub_record.annotations["topology"] = "linear"
 \end{minted}
 
 The same point could be made about the record \texttt{id}, \texttt{name}
