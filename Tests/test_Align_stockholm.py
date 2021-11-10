@@ -5,7 +5,6 @@
 """Tests for Align.stockholm module."""
 import unittest
 from io import StringIO
-import locale
 
 
 from Bio.Align import stockholm
@@ -27,7 +26,6 @@ class TestAlignIO_reading(unittest.TestCase):
         path = "Stockholm/example.sth"
         alignments = stockholm.AlignmentIterator(path)
         alignment = next(alignments)
-        self.assertEqual(locale.getpreferredencoding(), "UTF-8")
         self.assertEqual(alignment.annotations["identifier"], "HAT")
         self.assertEqual(alignment.annotations["accession"], "PF02184.18")
         self.assertEqual(alignment.annotations["definition"], "HAT (Half-A-TPR) repeat")
@@ -933,6 +931,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignment.annotations["type"], "Family")
         self.assertEqual(len(alignment.annotations["wikipedia"]), 1)
         self.assertEqual(b"\xce\xb2".decode("UTF-8"), "β")
+        self.assertEqual(alignment.annotations["wikipedia"][0][1], "β")
         self.assertEqual(
             alignment.annotations["wikipedia"][0], "3β-Hydroxysteroid_dehydrogenase"
         )
