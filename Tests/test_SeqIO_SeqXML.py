@@ -49,6 +49,7 @@ class TestDetailedRead(unittest.TestCase):
 
     def test_unicode_characters_desc(self):
         """Test special unicode characters in the description."""
+        self.assertEqual(b"\xce\xb2".decode("UTF-8"), "β")
         self.assertEqual(self.records["rna"][2].description, "åÅüöÖßøä¢£$€香肠")
 
     def test_full_characters_set_read(self):
