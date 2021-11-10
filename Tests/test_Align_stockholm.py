@@ -3982,9 +3982,10 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_writing_alignments_rfam1(self):
         """Test parsing Rfam record BTnc005."""
         path = "Stockholm/rfam1.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with open(path, encoding="UTF-8") as stream:
+            alignments = stockholm.AlignmentIterator(stream)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam1(alignment)
         stream = StringIO()
         writer = stockholm.AlignmentWriter(stream)
