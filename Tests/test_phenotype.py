@@ -18,7 +18,6 @@ except ImportError:
         "Install NumPy if you want to use Bio.phenotype."
     ) from None
 
-import io
 import json
 import unittest
 
@@ -314,22 +313,18 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_JsonIterator(self):
         """Test basic functionalities of JsonIterator file parser."""
-        # Parse file content big enouth to trigger issue #3783
-        JSON = '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
-        f = io.StringIO(JSON)
-
-        gen = phenotype.phen_micro.JsonIterator(f)
-        for w in gen:
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO(
+            '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
+        )
+        for w in phenotype.phen_micro.JsonIterator(handle):
             self.assertEqual(w.id, "PM999")
 
     def test_CsvIterator(self):
         """Test basic functionalities of CsvIterator file parser."""
-        # Parse file content big enouth to trigger issue #3783
-        CSV = '"Data File",3\n"Plate Type",PM-33\n'
-        f = io.StringIO(CSV)
-        gen = phenotype.phen_micro.CsvIterator(f)
-        # for w in gen.next()
-        for w in gen:
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO('"Data File",3\n"Plate Type",PM-33\n')
+        for w in phenotype.phen_micro.CsvIterator(handle):
             self.assertEqual(w.id, "PM33")
 
 
