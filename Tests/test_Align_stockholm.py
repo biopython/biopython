@@ -5,6 +5,8 @@
 """Tests for Align.stockholm module."""
 import unittest
 from io import StringIO
+import locale
+
 
 from Bio.Align import stockholm
 
@@ -25,6 +27,7 @@ class TestAlignIO_reading(unittest.TestCase):
         path = "Stockholm/example.sth"
         alignments = stockholm.AlignmentIterator(path)
         alignment = next(alignments)
+        self.assertEqual(locale.getpreferredencoding(), "UTF-8")
         self.assertEqual(alignment.annotations["identifier"], "HAT")
         self.assertEqual(alignment.annotations["accession"], "PF02184.18")
         self.assertEqual(alignment.annotations["definition"], "HAT (Half-A-TPR) repeat")
