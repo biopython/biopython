@@ -31,6 +31,9 @@ files with an internal empty block fixed).
 The experimental warning was dropped from ``Bio.phenotype`` (which was new in
 Biopython 1.67).
 
+The ``KEGG.Compound.Record`` class now has a ``raw`` attribute which makes all
+fields available which have not already been explicitly handled by the parser.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 

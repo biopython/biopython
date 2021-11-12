@@ -37,6 +37,8 @@ class Record:
      - enzyme      A list of the EC numbers.
      - structures  A list of 2-tuples: (database, list of struct ids)
      - dblinks     A list of 2-tuples: (database, list of link ids)
+     - raw         A dictionary of lists with all attributes which are
+                   not explicitly handled by this class
 
     """
 
@@ -50,6 +52,7 @@ class Record:
         self.enzyme = []
         self.structures = []
         self.dblinks = []
+        self.raw = {}
 
     def __str__(self):
         """Return a string representation of this Record."""
@@ -62,6 +65,7 @@ class Record:
             + self._enzyme()
             + self._structures()
             + self._dblinks()
+            + self._raw()
             + "///"
         )
 
@@ -103,6 +107,9 @@ class Record:
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
         return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
+
+    def _raw(self):
+        return "".join(_write_kegg(key, value) for (key, value) in self.raw.items())
 
 
 def parse(handle):
@@ -167,6 +174,8 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
+        else:
+            record.raw.setdefault(keyword.rstrip(), []).append(data)
 
 
 if __name__ == "__main__":

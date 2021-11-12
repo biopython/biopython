@@ -144,6 +144,18 @@ class CompoundTests(unittest.TestCase):
         self.assertEqual(records[1].enzyme[0], ("2.3.2.6"))
         self.assertEqual(records[1].structures, [])
         self.assertEqual(records[1].dblinks[0], ("PubChem", ["3319"]))
+        # check the "raw" dictionary
+        self.assertEqual(records[0].raw["EXACT_MASS"], ["55.9349"])
+        self.assertEqual(
+            records[0].raw["ATOM"],
+            [
+                "1",
+                "1   Z   Fe   22.1200  -16.1700",
+            ],
+        )
+        # keys with dedicated fields are not available from "raw"
+        with self.assertRaises(KeyError):
+            records[0].raw["FORMULA"]
         self.assertEqual(
             str(records[-1]).replace(" ", "").split("\n")[:10],
             [
