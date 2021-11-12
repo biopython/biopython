@@ -1484,8 +1484,14 @@ class TestSeqDefined(unittest.TestCase):
             self.assertFalse(seq.defined)
 
     def test_defined(self):
-        seq = Seq.Seq("T")
-        self.assertTrue(seq.defined)
+        seqs = [
+            Seq.Seq("T"),
+            Seq.Seq({0: "A"}, length=1),
+            Seq.Seq({0: "A", 1: "C"}, length=2),
+        ]
+
+        for seq in seqs:
+            self.assertTrue(seq.defined)
 
 
 if __name__ == "__main__":
