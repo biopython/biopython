@@ -14,56 +14,70 @@ fi
 #
 # $ make -C Doc/api/ html
 #
-# In order to have write permissions, we put a private key into the
-# TravisCI settings as a secure environment variable, and put the
-# matching public key into the GitHub documentation repository's
-# settings as a deploy key with write permissions.
+# First, we need to enable SSH. First, generate a key locally (You must use an empty passphrase):
 #
-# Key creation,
+#     ssh-keygen -t rsa -b 4096 -C "biopython documentation deploy key" -f biopython_doc_key -N ""
 #
-# $ ssh-keygen -t rsa -b 4096 -C "biopython documentation deploy key" -f biopython_doc_key -N ""
-# Generating public/private rsa key pair.
-# Your identification has been saved in biopython_doc_key.
-# Your public key has been saved in biopython_doc_key.pub.
-# The key fingerprint is:
-# SHA256:nFfhbwryDLDz8eDEHa4sjdH0gOgwyXGGDUBGfDi5luQ biopython documentation deploy key
-# The key's randomart image is:
-# +---[RSA 4096]----+
-# |===+o       .    |
-# |.B.*.. .   . .   |
-# |o X . o o . o    |
-# | E +   B * o .   |
-# |.   . + S *   o  |
-# |       X @ . o   |
-# |      o * + .    |
-# |       .         |
-# |                 |
-# +----[SHA256]-----+
+# Output from the previous command should look something like this:
 #
-# Next, we add the public key to https://github.com/biopython/docs as
-# a deployment key with write permission,
+#     Generating public/private rsa key pair.
+#     Your identification has been saved in biopython_doc_key
+#     Your public key has been saved in biopython_doc_key.pub
+#     The key fingerprint is:
+#     SHA256:abunchofnumbersandletters biopython documentation deploy key
+#     The key's randomart image is:
+#     +---[RSA 4096]----+
+#     |    xxx x        |
+#     |    xxxx x       |
+#     | . . .x.x x x    |
+#     |  x . xO O o     |
+#     |   x  x x o .    |
+#     |  .  . + . o .   |
+#     | x      E o . .  |
+#     |xx.. o xxxx  x   |
+#     |x.  . ..+xxx     |
+#     +----[SHA256]-----+
 #
-# $ cat biopython_doc_key.pub
-# ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDpQ3I6ZpL9cqUpqkHMPALTQg9ya3sL1MVXYjbTnuWnDoRml5UYXVgD8hgOJxwaxDo1BV+fKn68LXPEwlZ5FC6eRSCJz20SvWPkMDhAwChJJ+nE7f/vvK18R3Ge9ksWra8LFSR3EL7joQTN+c1VyaJH22qj1OED3G68Ix+bgvnUpZgeurV8vDV06FVx7H1Q5a5MoTWFdMa9wzJn5o6m7khditOTDKqznFULoOONpw7CsTiJD6drQPk1pwftDxEBMEAG7cKwux/dRWJtzsRQ7IO0d/AhzsqnLJJIgkHzQwmvpGpffWfoomNwF4bWJuWzu6tRcGcX16fLMyGK8kFJaL1zY6gQFkAbfsIdA2G28S79mIC4jT1JtiNYBOV9wIjxyZUyvzSeQGVC7yBafHE5eEb267dgGnDl654XzyIImLSKv/nx8No16UK/e5F+ds3hp0DPTknzeVOGBUEt1k8pEp47J9JVKoeceph0cJbfzFNv9pgOgyaHb1mhs9pI4kIQ3R+ibeAZbPWT709n26Y99Q2MSSZyPuZvX8VBA1NfoENmuTrEn/qqGlvZez3Blh4MIvYg24DFv/rHN92Edk5S7xY0eB7E6D6X/N80ThuBSqxlJpxSQlA+LICcq/EPd37/WT7exiheXysN5oIOvwNgUNNFftDWv2gPBu2bf/foHfAQKQ== biopython documentation deploy key
+# Now we're going to add the public key to the docs project. To get the key, run the
+# following command:
 #
-# Finally, we add the private key to TravisCI by going to
-# https://travis-ci.org/biopython/biopython/settings or any authorised
-# fork like https://travis-ci.org/peterjc/biopython/settings and
-# setting DOC_KEY to the following (secret) value:
+#     cat biopython_doc_key.pub
 #
-# $ python -c "print(open('biopython_doc_key').read().strip().replace(' ', r'\ ').replace('\n', r'\\\n'))"
-# ...
+# and copy the output. Go to https://github.com/$USER/docs and
+# substitute $USER for the organization your doing this for (biopython for
+# the main repository, your GitHub username for your own fork).
+# Click on Settings -> Deploy Keys -> Add deploy key
+# In the title, pick a name that's descriptive and easy for you to remember.
+# I'm going to use "biopython_doc_key". Paste the contents of the public
+# key (the one you copied from the cat command a few moments ago) into the
+# "Key" text box. Check "Allow write access" and click "Add key".
 #
-# TravisCI requires we escape spaces as '\ ' and newlines as '\\n', and
-# we explicitly strip the trailing new line so that we don't get an extra
-# one when rebuilding the key later.
+# Now, we have to add the private key to CircleCI. Go to
+# https://app.circleci.com/settings/project/github/$USER/biopython
+# once again replace $USER with either your github user name or
+# biopython. Click "SSH Keys" in the menu on the left and click
+# the button "Add SSH Key" at the bottom of the page. Leave the
+# host name blank. In your terminal, run the following command:
+#     cat biopython_doc_key
+# and copy the contents. Back in the CircleCI UI, paste the contents
+# you just copied into the "Private Key" text box. Click "Add SSH Key".
 #
-# Make sure "DISPLAY VALUE IN BUILD LOG" is off (the default).
+# We now have to set an environment variable called DOC_KEY
+# in the Biopython project settings. To get this value in a format
+# we can paste, run the following command and copy the output:
 #
-# For testing locally, set local environment $DOC_KEY to this value.
-# Thereafter, when ever this script gets run on TravisCI it should
-# be able to deplop the HTML documentation to our documentation
-# repository (which will dispaly on biopython.org via GitHub pages).
+#     python -c "print(open('biopython_doc_key').read().strip().replace(' ', r'\ ').replace('\n', r'\\\n'))"
+#
+# In the CircleCI UI, click on "Project Settings" in the top right, 
+# and go to "Environment Variables" on the left. Click "Add Environment
+# Variable". In the "Name" input, put "DOC_KEY" and paste the value 
+# you copied earlier into the "Value" input.
+# 
+# Finally, we need to add a User Key to the CircleCI biopython project.
+# To do this, go to Biopython project in the CircleCI UI, click
+# "project settings" in the top right, click "SSH Keys", and click
+# "Add User Key." This allows CircleCI to act as a Git user and
+# push the project to the docs repository.
 
 set -e
 
@@ -76,24 +90,23 @@ fi
 set -euo pipefail
 
 DEST_SLUG=biopython/docs
-# Could look at $TRAVIS_TAG, e.g. DEST_DIR=${TRAVIS_TAG:-dev}
-# However, tags lack the dots in the version number. Since
-# Biopython was installed to run Sphinx and build the docs,
-# can use this:
 DEST_DIR=`python -c "import Bio; v=Bio.__version__; print('dev' if 'dev' in v else v)"`
-SOURCE_DIR=${TRAVIS_BUILD_DIR:-$PWD}/Doc/api/_build/html
+SOURCE_DIR=${BUILD_DIR:-$PWD}/Doc/api/_build/html
 WORKING_DIR=/tmp/deploy_biopython_docs
+COMMIT_HASH=$(git rev-parse HEAD) # For later when we commit the docs repository
 
 if [ -z "$DEST_DIR" ]; then
    echo "ERROR: Failed to get Biopython version, is it not installed?"
    python -c "import Bio; print(Bio.__version__)"
    false
 fi
+
 DEST_DIR=$DEST_DIR/api
 echo "Aiming to deploy $SOURCE_DIR to $DEST_SLUG branch gh-pages as $DEST_DIR"
 
-# On TravisCI, must create the variable using '\ ' and '\n', so
-# here we must unescape the whitespace to recover the SSH deploy key:
+# We have to create the SSH key with spaces and new lines, so
+# we un-escape whitespace and newline characters to recover
+# the SSH deploy key:
 python -c "import os; print(os.environ['DOC_KEY'].strip().replace(r'\ ', ' ').replace(r'\n', '\n'))" > $HOME/.biopython_doc_deploy.key
 # Check we have a sane looking line structure:
 if [ `grep -c "^\-\-\-\-\-" $HOME/.biopython_doc_deploy.key` -ne 2 ]; then
@@ -102,10 +115,9 @@ if [ `grep -c "^\-\-\-\-\-" $HOME/.biopython_doc_deploy.key` -ne 2 ]; then
     md5sum $HOME/.biopython_doc_deploy.key
     false
 fi
+
 chmod 600 $HOME/.biopython_doc_deploy.key
 mv $HOME/.biopython_doc_deploy.key $HOME/.ssh/id_rsa
-
-echo "Setting up clone of $DEST_SLUG locally at $WORKING_DIR"
 
 # Clone the destination under /tmp (public URL, no key needed)
 rm -rf $WORKING_DIR
@@ -134,13 +146,15 @@ cp -R $SOURCE_DIR/* $DEST_DIR/
 echo "Staging files in git"
 git add $DEST_DIR/
 
+echo "Preparing to deploy documentation"
+
 if [[ -z $(git status --porcelain) ]]; then
     echo "Nothing has changed, nothing needs pushing."
 else
     echo "Making commit of new files"
     git config user.email "sphinx@example.org"
     git config user.name "Sphinx"
-    git commit -m "Automated update ${TRAVIS_COMMIT:-}"
+    git commit -m "Automated update ${COMMIT_HASH}"
     echo "Finally, pushing to $DEST_SLUG gh-pages branch"
     git push origin gh-pages
     echo "Documentation deployed!"
