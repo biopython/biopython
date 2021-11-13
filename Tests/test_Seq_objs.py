@@ -1611,7 +1611,7 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(seq), "Seq({5: 'ACGT'}, length=20)")
         with self.assertRaises(ValueError) as cm:
             Seq({5: "ACGT"}, length=-10)
-        self.assertEqual(str(cm.exception), "Length must not be negative.")
+        self.assertEqual(str(cm.exception), "length must not be negative.")
         with self.assertRaises(ValueError) as cm:
             Seq({5: 1.5}, length=10)
         self.assertEqual(str(cm.exception), "Expected bytes-like objects or strings")

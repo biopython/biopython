@@ -1973,7 +1973,12 @@ class Seq(_SeqAbstractBaseClass):
         if data is None:
             if length is None:
                 raise ValueError("length must not be None if data is None")
-            self._data = _UndefinedSequenceData(length)
+            elif length == 0:
+                self._data = b""
+            elif length < 0:
+                raise ValueError("length must not be negative.")
+            else:
+                self._data = _UndefinedSequenceData(length)
         elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
             self._data = data
         elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
@@ -1981,7 +1986,38 @@ class Seq(_SeqAbstractBaseClass):
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
         elif isinstance(data, dict):
-            self._data = _PartiallyDefinedSequenceData(length, data)
+            if length is None:
+                raise ValueError("length must not be None if data is a dictionary")
+            elif length < 0:
+                raise ValueError("length must not be negative.")
+            else:
+                end = -1
+                starts = sorted(data.keys())
+                _data = {}
+                for start in starts:
+                    seq = data[start]
+                    if isinstance(seq, str):
+                        seq = bytes(seq, encoding="ASCII")
+                    else:
+                        try:
+                            seq = bytes(seq)
+                        except Exception:
+                            raise ValueError("Expected bytes-like objects or strings")
+                    if start < end:
+                        raise ValueError("Sequence data are overlapping.")
+                    elif start == end:
+                        _data[current] += seq
+                    else:
+                        _data[start] = seq
+                        current = start
+                    end = start + len(seq)
+                if end > length:
+                    raise ValueError("Provided sequence data extend beyond sequence length.")
+                elif end == length and current == 0:
+                    # sequence is fully defined
+                    self._data = _data[current]
+                else:
+                    self._data = _PartiallyDefinedSequenceData(length, _data)
         else:
             raise TypeError(
                 "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
@@ -2865,8 +2901,6 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
 
     def __init__(self, length):
         """Initialize the object with the sequence length."""
-        if length < 0:
-            raise ValueError("Length must not be negative.")
         self._length = length
         super().__init__()
 
@@ -2960,28 +2994,8 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
     def __init__(self, length, data):
         """Initialize with the sequence length and defined sequence segments."""
-        if length < 0:
-            raise ValueError("Length must not be negative.")
-        position = 0
-        starts = sorted(data.keys())
-        _data = {}
-        for start in starts:
-            seq = data[start]
-            if isinstance(seq, str):
-                seq = bytes(seq, encoding="ASCII")
-            else:
-                try:
-                    seq = bytes(seq)
-                except Exception:
-                    raise ValueError("Expected bytes-like objects or strings")
-            if start < position:
-                raise ValueError("Sequence data are overlapping.")
-            _data[start] = seq
-            position = start + len(seq)
-        if position > length:
-            raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
-        self._data = _data
+        self._data = data
         super().__init__()
 
     def __getitem__(self, key):
