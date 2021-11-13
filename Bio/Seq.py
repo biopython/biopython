@@ -3024,7 +3024,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     raised.
     """
 
-    __slots__ = ("_length", "_data", "_data_length")
+    __slots__ = ("_length", "_data")
 
     def __init__(self, length, data):
         """Initialize with the sequence length and defined sequence segments."""
