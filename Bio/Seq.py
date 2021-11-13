@@ -2012,7 +2012,9 @@ class Seq(_SeqAbstractBaseClass):
                         current = start
                     end = start + len(seq)
                 if end > length:
-                    raise ValueError("Provided sequence data extend beyond sequence length.")
+                    raise ValueError(
+                        "Provided sequence data extend beyond sequence length."
+                    )
                 elif end == length and current == 0:
                     # sequence is fully defined
                     self._data = _data[current]
