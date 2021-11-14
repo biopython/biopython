@@ -2006,7 +2006,7 @@ class Seq(_SeqAbstractBaseClass):
                     if start < end:
                         raise ValueError("Sequence data are overlapping.")
                     elif start == end:
-                        _data[current] += seq  # noqa
+                        _data[current] += seq  # noqa: F821
                     else:
                         _data[start] = seq
                         current = start
