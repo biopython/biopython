@@ -282,6 +282,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Rob Miller
+- Witold Wydmański (first contribution)
 - Sergio Valqui
 - Steve Bond
 - Sujan Dulal (first contribution)

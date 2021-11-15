@@ -223,25 +223,22 @@ def _read_v4(f):
     raiseBadHeader("OffsetY", 0)
 
     # This is unfortunately undocumented, but it turns out that real data has
-    # the record.AlgorithmParameters repeated in the data section, until an
-    # EOF, i.e. b"\x04".
-    char = b"\x00"
+    # the record.AlgorithmParameters repeated in the data section, until
+    # 15 bytes of zero padding
+    padding_chars = 0
     safetyValve = 10 ** 4
     for i in range(safetyValve):
         char = f.read(1)
-        # For debugging
-        # print([i for i in char], end="")
-        if char == b"\x04":
+        if char == b"\x00":
+            padding_chars += 1
+        else:
+            padding_chars = 0
+        if padding_chars == 15:
             break
         if i == safetyValve:
             raise ParserError(
-                "Parse Error. The parser expects a short, "
-                "undocumented binary blob terminating with "
-                "ASCII EOF, x04"
+                "Parse Error. The parser expects a 15 bytes", "zero padding"
             )
-
-    # After that there are precisely 15 bytes padded. Again, undocumented.
-    padding = f.read(15)
 
     # That's how we pull out the values (triplets of the form float, float,
     # signed short).
@@ -258,6 +255,13 @@ def _read_v4(f):
     b = f.read(structSize * record.NumberCells)
     for i in range(record.NumberCells):
         binaryFragment = b[i * structSize : (i + 1) * structSize]
+
+        assert (
+            len(binaryFragment) == structSize
+        ), "Last cell is incomplete. Expected {0} bytes, but found {1}".format(
+            structSize, len(binaryFragment)
+        )
+
         intensity, stdevs, npix = structa.unpack(binaryFragment)
         record.intensities[i] = intensity
         record.stdevs[i] = stdevs

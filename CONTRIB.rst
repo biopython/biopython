@@ -296,6 +296,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
+- Witold Wydmański <https://github.com/wwydmanski>
 - Wolfgang Schueler <wolfgang at domain proceryon.at>
 - Xiaoyu Zhuo <https://github.com/xzhuo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
