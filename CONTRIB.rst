@@ -101,6 +101,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Diego Brouard <diego at domain conysis.com>
 - Edward Liaw <https://github.com/edliaw>
 - Emmanuel Noutahi <https://github.com/maclandrol>
+- Eric Alcaide <https://github.com/EricAlcaide>
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>

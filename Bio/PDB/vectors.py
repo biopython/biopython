@@ -232,21 +232,21 @@ def calc_dihedral(v1, v2, v3, v4):
     :param v1, v2, v3, v4: the four points that define the dihedral angle
     :type v1, v2, v3, v4: L{Vector}
     """
-    ab = v1 - v2
-    cb = v3 - v2
-    db = v4 - v3
-    u = ab ** cb
-    v = db ** cb
-    w = u ** v
-    angle = u.angle(v)
-    # Determine sign of angle
-    try:
-        if cb.angle(w) > 0.001:
-            angle = -angle
-    except ZeroDivisionError:
-        # dihedral=pi
-        pass
-    return angle
+    a1 = v2 - v1
+    a2 = v3 - v2
+    a3 = v4 - v3
+
+    u1 = numpy.cross(a1, a2)
+    u1 = u1 / (u1 * u1).sum(-1) ** 0.5
+    u2 = numpy.cross(a2, a3)
+    u2 = u2 / (u2 * u2).sum(-1) ** 0.5
+    porm = numpy.sign((u1 * a3).sum(-1))
+    med = (u1 * u2).sum(-1) / ((u1 ** 2).sum(-1) * (u2 ** 2).sum(-1)) ** 0.5
+    rad = numpy.arccos(med)
+    if not porm == 0:
+        rad = rad * porm
+
+    return rad
 
 
 class Vector:
