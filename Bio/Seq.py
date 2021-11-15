@@ -1996,6 +1996,8 @@ class Seq(_SeqAbstractBaseClass):
         elif isinstance(data, dict):
             if length is None:
                 raise ValueError("length must not be None if data is a dictionary")
+            elif length == 0:
+                self._data = b""
             elif length < 0:
                 raise ValueError("length must not be negative.")
             else:
@@ -2104,13 +2106,10 @@ class Seq(_SeqAbstractBaseClass):
 
         Zero-length sequences are always considered to be defined.
         """
-        if len(self) == 0:
+        if isinstance(self._data, (bytes, bytearray)):
             return True
-        elif isinstance(self, UnknownSeq):
-            return False
-        elif isinstance(self._data, SequenceDataAbstractBaseClass):
+        else:
             return self._data.defined
-        return True
 
 
 class UnknownSeq(Seq):
