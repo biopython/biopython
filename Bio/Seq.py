@@ -2681,6 +2681,16 @@ class UnknownSeq(Seq):
             return self.__class__(len(temp_data), character=self._character)
         return Seq(temp_data)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if self._length == 0:
+            return True
+        return False
+
 
 class MutableSeq(_SeqAbstractBaseClass):
     """An editable sequence object.
@@ -3008,8 +3018,6 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
 
         Zero-length sequences are always considered to be defined.
         """
-        if len(self) == 0:
-            return True
         return False
 
 
@@ -3226,8 +3234,6 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
         Zero-length sequences are always considered to be defined.
         """
-        if self._length == self._data_length:
-            return True
         return False
 
 
