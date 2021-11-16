@@ -51,4 +51,4 @@ jobs:
             echo "Tests run"
             coverage xml
       - codecov/upload:
-        file: biopython-*/Tests/coverage.xml
+          file: biopython-*/Tests/coverage.xml
