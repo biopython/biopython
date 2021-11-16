@@ -36,17 +36,12 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-  - conda install coverage setuptools numpy
+  - conda install setuptools numpy
   - python setup.py build
 
 test_script:
   - python -c "import sys; print(sys.version)"
   - cd Tests
   - cp biosql.ini.appveyor biosql.ini
-  - coverage run run_tests.py --offline
-  - coverage xml
+  - python run_tests.py --offline
   - cd ..
-
-after_test:
-  - conda install -c conda-forge codecov
-  - codecov --file Tests/coverage.xml -X pycov -X gcov

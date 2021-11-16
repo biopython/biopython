@@ -202,9 +202,7 @@ jobs:
     - name: Run test suite and get coverage
       run: |
         cd Tests
-        rm -rf coverage.xml
-        coverage run run_tests.py --offline
-        coverage xml
+        python run_tests.py --offline
       shell: bash
 
   test_macos:
