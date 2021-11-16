@@ -8,7 +8,7 @@
 
 version: 2.1
 orbs:
-  codecov: codecov/codecov@3.1.1
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
