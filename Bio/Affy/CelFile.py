@@ -332,8 +332,7 @@ def _read_v3(handle):
                     # not sure if all parameters here are interpreted correctly
                     record.DatHeader = {}
                     index = line.find(":")
-                    line = line.replace("\x14", "")
-                    _, filename = line[:index].split()
+                    _, filename = line.replace("\x14", "")[:index].split()
                     record.DatHeader["filename"] = filename
                     if index > 0:
                         index += 1
