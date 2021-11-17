@@ -40,6 +40,7 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alessio Quercia
 - Aziz Khan
 - Chenghao Zhu
 - Damien Goutte-Gattat
