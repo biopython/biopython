@@ -332,64 +332,66 @@ def _read_v3(handle):
                     # not sure if all parameters here are interpreted correctly
                     record.DatHeader = {}
                     index = line.find(":")
+                    line = line.replace("\x14", "")
                     _, filename = line[:index].split()
                     record.DatHeader["filename"] = filename
-                    index += 1
-                    field = line[index : index + 9]
-                    assert field[:4] == "CLS="
-                    assert field[8] == " "
-                    record.DatHeader["CLS"] = int(field[4:8])
-                    index += 9
-                    field = line[index : index + 9]
-                    assert field[:4] == "RWS="
-                    assert field[8] == " "
-                    record.DatHeader["RWS"] = int(field[4:8])
-                    index += 9
-                    field = line[index : index + 7]
-                    assert field[:4] == "XIN="
-                    assert field[6] == " "
-                    record.DatHeader["XIN"] = int(field[4:6])
-                    index += 7
-                    field = line[index : index + 7]
-                    assert field[:4] == "YIN="
-                    assert field[6] == " "
-                    record.DatHeader["YIN"] = int(field[4:6])
-                    index += 7
-                    field = line[index : index + 6]
-                    assert field[:3] == "VE="
-                    assert field[5] == " "
-                    record.DatHeader["VE"] = int(field[3:5])
-                    index += 6
-                    field = line[index : index + 7]
-                    assert field[6] == " "
-                    temperature = field[:6].strip()
-                    if temperature:
-                        record.DatHeader["temperature"] = int(temperature)
-                    else:
-                        record.DatHeader["temperature"] = None
-                    index += 7
-                    field = line[index : index + 4]
-                    assert field.endswith(" ")
-                    record.DatHeader["laser-power"] = float(field)
-                    index += 4
-                    field = line[index : index + 18]
-                    assert field[8] == " "
-                    record.DatHeader["scan-date"] = field[:8]
-                    assert field[17] == " "
-                    record.DatHeader["scan-time"] = field[9:17]
-                    index += 18
-                    field = line[index:]
-                    subfields = field.split(" \x14 ")
-                    assert len(subfields) == 12
-                    subfield = subfields[0]
-                    try:
-                        scanner_id, scanner_type = subfield.split()
-                    except ValueError:
-                        scanner_id = subfield.strip()
-                    record.DatHeader["scanner-id"] = scanner_id
-                    record.DatHeader["scanner-type"] = scanner_type
-                    record.DatHeader["array-type"] = subfields[2]
-                    record.DatHeader["image-orientation"] = int(subfields[11])
+                    if index > 0:
+                        index += 1
+                        field = line[index : index + 9]
+                        assert field[:4] == "CLS="
+                        assert field[8] == " "
+                        record.DatHeader["CLS"] = int(field[4:8])
+                        index += 9
+                        field = line[index : index + 9]
+                        assert field[:4] == "RWS="
+                        assert field[8] == " "
+                        record.DatHeader["RWS"] = int(field[4:8])
+                        index += 9
+                        field = line[index : index + 7]
+                        assert field[:4] == "XIN="
+                        assert field[6] == " "
+                        record.DatHeader["XIN"] = int(field[4:6])
+                        index += 7
+                        field = line[index : index + 7]
+                        assert field[:4] == "YIN="
+                        assert field[6] == " "
+                        record.DatHeader["YIN"] = int(field[4:6])
+                        index += 7
+                        field = line[index : index + 6]
+                        assert field[:3] == "VE="
+                        assert field[5] == " "
+                        record.DatHeader["VE"] = int(field[3:5])
+                        index += 6
+                        field = line[index : index + 7]
+                        assert field[6] == " "
+                        temperature = field[:6].strip()
+                        if temperature:
+                            record.DatHeader["temperature"] = int(temperature)
+                        else:
+                            record.DatHeader["temperature"] = None
+                        index += 7
+                        field = line[index : index + 4]
+                        assert field.endswith(" ")
+                        record.DatHeader["laser-power"] = float(field)
+                        index += 4
+                        field = line[index : index + 18]
+                        assert field[8] == " "
+                        record.DatHeader["scan-date"] = field[:8]
+                        assert field[17] == " "
+                        record.DatHeader["scan-time"] = field[9:17]
+                        index += 18
+                        field = line[index:]
+                        subfields = field.split(" \x14 ")
+                        assert len(subfields) == 12
+                        subfield = subfields[0]
+                        try:
+                            scanner_id, scanner_type = subfield.split()
+                        except ValueError:
+                            scanner_id = subfield.strip()
+                        record.DatHeader["scanner-id"] = scanner_id
+                        record.DatHeader["scanner-type"] = scanner_type
+                        record.DatHeader["array-type"] = subfields[2]
+                        record.DatHeader["image-orientation"] = int(subfields[11])
                 elif key == "Algorithm":
                     record.Algorithm = value
                 elif key == "AlgorithmParameters":
@@ -404,9 +406,28 @@ def _read_v3(handle):
                             "FullFeatureHeight",
                             "PoolWidthExtenstion",
                             "PoolHeightExtension",
+                            "NumPixelsToUse",
+                            "ExtendPoolWidth",
+                            "ExtendPoolHeight",
+                            "OutlierRatioLowPercentile",
+                            "OutlierRatioHighPercentile",
+                            "HalfCellRowsDivisor",
+                            "HalfCellRowsRemainder",
+                            "HighCutoff",
+                            "LowCutoff",
+                            "featureRows",
+                            "featureColumns",
                         ):
                             values[key] = int(value)
-                        elif key in ("OutlierHigh", "OutlierLow", "StdMult"):
+                        elif key in (
+                            "OutlierHigh",
+                            "OutlierLow",
+                            "StdMult",
+                            "PercentileSpread",
+                            "PairCutoff",
+                            "featureWidth",
+                            "featureHeight",
+                        ):
                             values[key] = float(value)
                         elif key in (
                             "FixedCellSize",
@@ -414,6 +435,8 @@ def _read_v3(handle):
                             "FeatureExtraction",
                             "UseSubgrids",
                             "RandomizePixels",
+                            "ImageCalibration",
+                            "IgnoreShiftRowOutliers",
                         ):
                             if value == "TRUE":
                                 value = True
@@ -422,7 +445,11 @@ def _read_v3(handle):
                             else:
                                 raise ValueError("Unexpected boolean value")
                             values[key] = value
-                        elif key in ("AlgVersion", "ErrorBasis"):
+                        elif key in (
+                            "AlgVersion",
+                            "ErrorBasis",
+                            "CellIntensityCalculationType",
+                        ):
                             values[key] = value
                         else:
                             raise ValueError("Unexpected tag in AlgorithmParameters")
