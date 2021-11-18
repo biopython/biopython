@@ -311,6 +311,22 @@ class TestPhenoMicro(unittest.TestCase):
 
         w[1] = 1
 
+    def test_JsonIterator(self):
+        """Test basic functionalities of JsonIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO(
+            '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
+        )
+        for w in phenotype.phen_micro.JsonIterator(handle):
+            self.assertEqual(w.id, "PM999")
+
+    def test_CsvIterator(self):
+        """Test basic functionalities of CsvIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO('"Data File",3\n"Plate Type",PM-33\n')
+        for w in phenotype.phen_micro.CsvIterator(handle):
+            self.assertEqual(w.id, "PM33")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

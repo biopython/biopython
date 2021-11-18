@@ -272,6 +272,7 @@ through each of the trees in the given file:
 >>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
 ...     print(tree)
+...
 \end{minted}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
@@ -734,16 +735,18 @@ Here is an example of typical usage of codeml:
 >>> cml.tree = "Tests/PAML/species.tree"
 >>> cml.out_file = "results.out"
 >>> cml.working_dir = "./scratch"
->>> cml.set_options(seqtype=1,
-...         verbose=0,
-...         noisy=0,
-...         RateAncestor=0,
-...         model=0,
-...         NSsites=[0, 1, 2],
-...         CodonFreq=2,
-...         cleandata=1,
-...         fix_alpha=1,
-...         kappa=4.54006)
+>>> cml.set_options(
+...     seqtype=1,
+...     verbose=0,
+...     noisy=0,
+...     RateAncestor=0,
+...     model=0,
+...     NSsites=[0, 1, 2],
+...     CodonFreq=2,
+...     cleandata=1,
+...     fix_alpha=1,
+...     kappa=4.54006,
+... )
 >>> results = cml.run()
 >>> ns_sites = results.get("NSsites")
 >>> m0 = ns_sites.get(0)

@@ -30,15 +30,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     You are expected to call this class via Bio.Align.write().
     """
 
-    def __init__(self, source):
-        """Create an AlignmentWriter object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="w")
-
     def write_file(self, alignments):
         """Write a file with the alignments, and return the number of alignments.
 

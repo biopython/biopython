@@ -310,6 +310,14 @@ class SequenceDataAbstractBaseClass(ABC):
         """
         return bytes(self).translate(table, delete)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        return True
+
 
 class _SeqAbstractBaseClass(ABC):
     """Abstract base class for the Seq and MutableSeq classes (PRIVATE).
@@ -1922,7 +1930,7 @@ class Seq(_SeqAbstractBaseClass):
 
         Arguments:
          - data - Sequence, required (string)
-         - length - Sequence length, used only if data is None (integer)
+         - length - Sequence length, used only if data is None or a dictionary (integer)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -1977,7 +1985,7 @@ class Seq(_SeqAbstractBaseClass):
         elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
             self._data = data
         elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-            self._data = data = bytes(data)
+            self._data = bytes(data)
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
         elif isinstance(data, dict):
@@ -2051,6 +2059,20 @@ class Seq(_SeqAbstractBaseClass):
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
         return self.replace(gap, b"")
+
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if len(self) == 0:
+            return True
+        elif isinstance(self, UnknownSeq):
+            return False
+        elif isinstance(self._data, SequenceDataAbstractBaseClass):
+            return self._data.defined
+        return True
 
 
 class UnknownSeq(Seq):
@@ -2944,6 +2966,16 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
             raise UndefinedSequenceError("Sequence content is undefined")
         return _UndefinedSequenceData(self._length)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if len(self) == 0:
+            return True
+        return False
+
 
 class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
@@ -2956,7 +2988,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     raised.
     """
 
-    __slots__ = ("_length", "_data")
+    __slots__ = ("_length", "_data", "_data_length")
 
     def __init__(self, length, data):
         """Initialize with the sequence length and defined sequence segments."""
@@ -2965,6 +2997,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         position = 0
         starts = sorted(data.keys())
         _data = {}
+        _data_length = 0
         for start in starts:
             seq = data[start]
             if isinstance(seq, str):
@@ -2977,11 +3010,13 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             if start < position:
                 raise ValueError("Sequence data are overlapping.")
             _data[start] = seq
+            _data_length += len(seq)
             position = start + len(seq)
         if position > length:
             raise ValueError("Provided sequence data extend beyond sequence length.")
         self._length = length
         self._data = _data
+        self._data_length = _data_length
         super().__init__()
 
     def __getitem__(self, key):
@@ -3171,6 +3206,16 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         items = self._data.items()
         data = {start: seq.replace(old, new) for start, seq in items}
         return _PartiallyDefinedSequenceData(self._length, data)
+
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if self._length == self._data_length:
+            return True
+        return False
 
 
 # The transcribe, backward_transcribe, and translate functions are

@@ -65,7 +65,6 @@ documentation, or that built into Biopython:
 \begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
-...
 \end{minted}
 
 Note that the default settings on the NCBI BLAST website are not quite
@@ -412,6 +411,7 @@ threshold. The following code does this:
 ...             print(hsp.query[0:75] + "...")
 ...             print(hsp.match[0:75] + "...")
 ...             print(hsp.sbjct[0:75] + "...")
+...
 \end{minted}
 
 This will print out summary reports like the following:

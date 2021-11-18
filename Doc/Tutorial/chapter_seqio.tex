@@ -7,7 +7,6 @@ See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}),
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> help(SeqIO)
-...
 \end{minted}
 
 The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapter~\ref{chapter:seq_annot}), which contain a \verb|Seq| object (see Chapter~\ref{chapter:seq_objects}) plus annotation like an identifier and description.
@@ -264,7 +263,7 @@ You can check by hand, but for every record the species name is in the descripti
 >>> for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
 ...     all_species.append(seq_record.description.split()[1])
 ...
->>> print(all_species) # doctest:+ELLIPSIS
+>>> print(all_species)  # doctest:+ELLIPSIS
 ['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 \end{minted}
 
@@ -277,8 +276,7 @@ The concise alternative using list comprehensions would be:
 ...     seq_record.description.split()[1]
 ...     for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta")
 ... ]
-...
->>> print(all_species) # doctest:+ELLIPSIS
+>>> print(all_species)  # doctest:+ELLIPSIS
 ['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 \end{minted}
 
@@ -352,6 +350,7 @@ to close the handle automatically:
 >>> from Bio import SeqIO
 >>> with open("ls_orchid.gbk") as handle:
 ...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+...
 67518
 \end{minted}
 
@@ -547,12 +546,12 @@ Looping over the iterator returned by \verb|SeqIO.parse| once will exhaust the f
 >>> records = SeqIO.parse(handle, "twobit")
 >>> records.keys()
 dict_keys(['seq11111', 'seq222', 'seq3333', 'seq4', 'seq555', 'seq6'])
->>> records['seq222']
+>>> records["seq222"]
 SeqRecord(seq=Seq('TTGATCGGTGACAAATTTTTTACAAAGAACTGTAGGACTTGCTACTTCTCCCTC...ACA'), id='seq222', name='<unknown name>', description='<unknown description>', dbxrefs=[])
->>> records['seq222'].seq
+>>> records["seq222"].seq
 Seq('TTGATCGGTGACAAATTTTTTACAAAGAACTGTAGGACTTGCTACTTCTCCCTC...ACA')
 >>> handle.close()
->>> records['seq222'].seq
+>>> records["seq222"].seq
 Traceback (most recent call last):
 ...
 ValueError: cannot retrieve sequence: file is closed
@@ -622,8 +621,7 @@ are iterators rather than lists.
 
 If you really want to, you can even look at all the records at once:
 \begin{minted}{pycon}
->>> list(orchid_dict.values()) #lots of output!
-...
+>>> list(orchid_dict.values())  # lots of output!
 \end{minted}
 
 We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
@@ -724,8 +722,9 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> from Bio.SeqUtils.CheckSum import seguid
->>> seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
-...                             lambda rec : seguid(rec.seq))
+>>> seguid_dict = SeqIO.to_dict(
+...     SeqIO.parse("ls_orchid.gbk", "genbank"), lambda rec: seguid(rec.seq)
+... )
 >>> record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
 >>> print(record.id)
 Z78532.1
@@ -1223,7 +1222,6 @@ To find out more, see the built in help:
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> help(SeqIO.convert)
-...
 \end{minted}
 
 In principle, just by changing the filenames and the format names, this code
@@ -1253,6 +1251,7 @@ the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Sectio
 >>> for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
 ...     print(record.id)
 ...     print(record.seq.reverse_complement())
+...
 \end{minted}
 
 Now, if we want to save these reverse complements to a file, we'll need to make \verb|SeqRecord| objects.
@@ -1263,8 +1262,10 @@ This is an excellent place to demonstrate the power of list comprehensions which
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
->>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
-...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
+>>> records = [
+...     rec.reverse_complement(id="rc_" + rec.id, description="reverse complement")
+...     for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+... ]
 >>> len(records)
 94
 \end{minted}
@@ -1273,8 +1274,11 @@ This is an excellent place to demonstrate the power of list comprehensions which
 
 %cont-doctest examples
 \begin{minted}{pycon}
->>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
-...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700]
+>>> records = [
+...     rec.reverse_complement(id="rc_" + rec.id, description="reverse complement")
+...     for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+...     if len(rec) < 700
+... ]
 >>> len(records)
 18
 \end{minted}
@@ -1283,8 +1287,11 @@ That would create an in memory list of reverse complement records where the sequ
 
 %cont-doctest examples
 \begin{minted}{pycon}
->>> records = (rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
-...           for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
+>>> records = (
+...     rec.reverse_complement(id="rc_" + rec.id, description="reverse complement")
+...     for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+...     if len(rec) < 700
+... )
 \end{minted}
 
 As a complete example:
@@ -1292,8 +1299,11 @@ As a complete example:
 %not a doctest as would have to remove the output file
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
->>> records = (rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
-...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
+>>> records = (
+...     rec.reverse_complement(id="rc_" + rec.id, description="reverse complement")
+...     for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+...     if len(rec) < 700
+... )
 >>> SeqIO.write(records, "rev_comp.fasta", "fasta")
 18
 \end{minted}

@@ -151,7 +151,7 @@ def main(argv):
     source_path = os.path.abspath(f"{test_path}/..")
     sys.path.insert(1, source_path)
     build_path = os.path.abspath(
-        f"{test_path}/../build/lib.{distutils.util.get_platform()}-{sys.version[:3]}"
+        f"{test_path}/../build/lib.{distutils.util.get_platform()}-{sys.version_info.major}.{sys.version_info.minor}"
     )
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
