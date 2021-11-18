@@ -4207,7 +4207,7 @@ class AtomKey:
                     akl.append(fld)
 
         # tweak local akl to generate id string
-        if isinstance(akl[0], int):
+        if isinstance(akl[0], (int, np.integer)):
             akl[0] = str(akl[0])  # numeric residue position to string
 
         if self.d2h:
