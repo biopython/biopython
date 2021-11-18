@@ -2951,8 +2951,6 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         return self._length
 
     def __bytes__(self):
-        if self._length == 0:
-            return b""
         raise UndefinedSequenceError("Sequence content is undefined")
 
     def __add__(self, other):
@@ -3106,8 +3104,6 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         return self._length
 
     def __bytes__(self):
-        if self._length == 0:
-            return b""
         raise UndefinedSequenceError("Sequence content is only partially defined")
 
     def __add__(self, other):
