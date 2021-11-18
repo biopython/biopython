@@ -182,7 +182,7 @@ def _split_fragment(frag):
     qstep = 1 if frag.query_strand >= 0 else -1
     hstep = 1 if frag.hit_strand >= 0 else -1
     qpos = min(frag.query_range) if qstep >= 0 else max(frag.query_range)
-    hpos = min(frag.hit_range) if qstep >= 0 else max(frag.hit_range)
+    hpos = min(frag.hit_range) if hstep >= 0 else max(frag.hit_range)
     abs_pos = 0
     # split according to hit, then query
     while simil:
