@@ -284,14 +284,14 @@ class SequenceDataAbstractBaseClass(ABC):
     def isupper(self):
         """Return True if all ASCII characters in data are uppercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         return bytes(self).isupper()
 
     def islower(self):
         """Return True if all ASCII characters in data are lowercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         return bytes(self).islower()
 
@@ -1330,14 +1330,14 @@ class _SeqAbstractBaseClass(ABC):
     def isupper(self):
         """Return True if all ASCII characters in data are uppercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         return self._data.isupper()
 
     def islower(self):
         """Return True if all ASCII characters in data are lowercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         return self._data.islower()
 
@@ -2933,7 +2933,11 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     __slots__ = ("_length",)
 
     def __init__(self, length):
-        """Initialize the object with the sequence length."""
+        """Initialize the object with the sequence length.
+
+        The calling function is responsible for ensuring that the length is
+        greater than zero.
+        """
         self._length = length
         super().__init__()
 
@@ -2987,7 +2991,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     def isupper(self):
         """Return True if all ASCII characters in data are uppercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         # Character case is irrelevant for an undefined sequence
         raise UndefinedSequenceError("Sequence content is undefined")
@@ -2995,7 +2999,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
     def islower(self):
         """Return True if all ASCII characters in data are lowercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         # Character case is irrelevant for an undefined sequence
         raise UndefinedSequenceError("Sequence content is undefined")
@@ -3011,10 +3015,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
 
     @property
     def defined(self):
-        """Return True if the sequence is defined, False if undefined or partially defined.
-
-        Zero-length sequences are always considered to be defined.
-        """
+        """Return False, as the sequence is not defined and has a non-zero length."""
         return False
 
 
@@ -3032,7 +3033,11 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     __slots__ = ("_length", "_data")
 
     def __init__(self, length, data):
-        """Initialize with the sequence length and defined sequence segments."""
+        """Initialize with the sequence length and defined sequence segments.
+
+        The calling function is responsible for ensuring that the length is
+        greater than zero.
+        """
         self._length = length
         self._data = data
         super().__init__()
@@ -3182,7 +3187,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     def isupper(self):
         """Return True if all ASCII characters in data are uppercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         # Character case is irrelevant for an undefined sequence
         raise UndefinedSequenceError("Sequence content is only partially defined")
@@ -3190,7 +3195,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     def islower(self):
         """Return True if all ASCII characters in data are lowercase.
 
-        If there are no cased characters, method returns False.
+        If there are no cased characters, the method returns False.
         """
         # Character case is irrelevant for an undefined sequence
         raise UndefinedSequenceError("Sequence content is only partially defined")
@@ -3225,10 +3230,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
     @property
     def defined(self):
-        """Return True if the sequence is defined, False if undefined or partially defined.
-
-        Zero-length sequences are always considered to be defined.
-        """
+        """Return False, as the sequence is not fully defined and has a non-zero length."""
         return False
 
 
