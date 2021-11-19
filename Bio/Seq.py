@@ -318,6 +318,18 @@ class SequenceDataAbstractBaseClass(ABC):
         """
         return True
 
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        length = len(self)
+        if length > 0:
+            return ((0, length), )
+        else:
+            return ()
+
 
 class _SeqAbstractBaseClass(ABC):
     """Abstract base class for the Seq and MutableSeq classes (PRIVATE).
@@ -1909,6 +1921,32 @@ class _SeqAbstractBaseClass(ABC):
             return self
         return self.__class__(data)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if isinstance(self._data, (bytes, bytearray)):
+            return True
+        else:
+            return self._data.defined
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        if isinstance(self._data, (bytes, bytearray)):
+            length = len(self)
+            if length > 0:
+                return ((0, length), )
+            else:
+                return ()
+        else:
+            return self._data.defined_ranges
+
 
 class Seq(_SeqAbstractBaseClass):
     """Read-only sequence object (essentially a string with biological methods).
@@ -2099,17 +2137,6 @@ class Seq(_SeqAbstractBaseClass):
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
         return self.replace(gap, b"")
-
-    @property
-    def defined(self):
-        """Return True if the sequence is defined, False if undefined or partially defined.
-
-        Zero-length sequences are always considered to be defined.
-        """
-        if isinstance(self._data, (bytes, bytearray)):
-            return True
-        else:
-            return self._data.defined
 
 
 class UnknownSeq(Seq):
@@ -2690,6 +2717,15 @@ class UnknownSeq(Seq):
             return True
         return False
 
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        As the sequence contents of an UnknownSeq object is fully undefined,
+        the return value is always an empty tuple.
+        """
+        return ()
+
 
 class MutableSeq(_SeqAbstractBaseClass):
     """An editable sequence object.
@@ -3018,6 +3054,15 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         """Return False, as the sequence is not defined and has a non-zero length."""
         return False
 
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        As the sequence contents of an _UndefinedSequenceData object is fully
+        undefined, the return value is always an empty tuple.
+        """
+        return ()
+
 
 class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
@@ -3233,6 +3278,13 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         """Return False, as the sequence is not fully defined and has a non-zero length."""
         return False
 
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        return tuple((start, start + len(seq)) for start, seq in self._data.items())
 
 # The transcribe, backward_transcribe, and translate functions are
 # user-friendly versions of the corresponding Seq/MutableSeq methods.
