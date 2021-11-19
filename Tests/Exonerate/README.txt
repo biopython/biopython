@@ -5,6 +5,9 @@ This directory contains various data files for testing the
 Exonerate-related code in Biopython. All files are grouped by
 Exonerate release version, from the most recent first.
 
+Exonerate 2.4
+-------------
+exn_24_m_protein2genome_revcomp_fshifts.exn
 
 Exonerate 2.2
 -------------
