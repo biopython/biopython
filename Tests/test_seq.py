@@ -1481,7 +1481,7 @@ class TestSeqDefined(unittest.TestCase):
         self.assertEqual(seq.defined_ranges, ())
         seq = Seq.Seq({3: "ACGT"}, length=10)
         self.assertFalse(seq.defined)
-        self.assertEqual(seq.defined_ranges, ((3, 7), ))
+        self.assertEqual(seq.defined_ranges, ((3, 7),))
         seq = Seq.UnknownSeq(length=1)
         self.assertFalse(seq.defined)
         self.assertEqual(seq.defined_ranges, ())
@@ -1495,7 +1495,7 @@ class TestSeqDefined(unittest.TestCase):
 
         for seq in seqs:
             self.assertTrue(seq.defined)
-            self.assertEqual(seq.defined_ranges, ((0, len(seq)), ), msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, ((0, len(seq)),), msg=repr(seq))
 
 
 if __name__ == "__main__":

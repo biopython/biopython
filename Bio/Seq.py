@@ -326,7 +326,7 @@ class SequenceDataAbstractBaseClass(ABC):
         """
         length = len(self)
         if length > 0:
-            return ((0, length), )
+            return ((0, length),)
         else:
             return ()
 
@@ -1941,7 +1941,7 @@ class _SeqAbstractBaseClass(ABC):
         if isinstance(self._data, (bytes, bytearray)):
             length = len(self)
             if length > 0:
-                return ((0, length), )
+                return ((0, length),)
             else:
                 return ()
         else:
@@ -3285,6 +3285,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         The return value has the format ((start1, end1), (start2, end2), ...).
         """
         return tuple((start, start + len(seq)) for start, seq in self._data.items())
+
 
 # The transcribe, backward_transcribe, and translate functions are
 # user-friendly versions of the corresponding Seq/MutableSeq methods.
