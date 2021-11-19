@@ -73,6 +73,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chenghao Zhu <zhuchcn@gmail.com>
 - Chris Daley <https://github.com/chebizarro>
+- Chris Jackson <https://github.com/chrisjackson-pellicle>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris MacRaild <https://github.com/macraild>
 - Chris Mitchell <https://github.com/chrismit>
