@@ -1494,7 +1494,7 @@ class TestSeqDefined(unittest.TestCase):
         ]
 
         for seq in seqs:
-            self.assertTrue(seq.defined)
+            self.assertTrue(seq.defined, msg=repr(seq))
             self.assertEqual(seq.defined_ranges, ((0, len(seq)),), msg=repr(seq))
 
 
