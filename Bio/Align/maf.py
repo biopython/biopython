@@ -200,14 +200,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             lines = stream
         records = None
         for line in lines:
-            if line.startswith("a "):
+            if line.startswith("a"):
                 starts = []
                 annotations = {}
                 column_annotations = {}
                 records = []
                 aligned_sequences = []
                 score = None
-                words = line[2:].split()
+                words = line[1:].split()
                 for word in words:
                     key, value = word.split("=")
                     if key == "score":
@@ -231,6 +231,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 strand = words[4]
                 srcSize = int(words[5])
                 text = words[6]
+                for gap_char in ".=_":
+                    text = text.replace(gap_char, "-")
                 aligned_sequences.append(text)
                 sequence = text.replace("-", "")
                 if len(sequence) != size:
@@ -254,7 +256,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
             elif line.startswith("e"):
-                words = line.strip().split()
+                words = line[1:].split()
                 assert len(words) == 6
                 src = words[0]
                 start = int(words[1])

@@ -52,6 +52,13 @@ class TestAlignIO_reading(unittest.TestCase):
                 )
             )
 
+    def test_missing_signature(self):
+        """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
+        path = "MAF/ucsc_mm9_chr10_big.maf"
+        with self.assertRaises(ValueError) as cm:
+            alignments = maf.AlignmentIterator(path)
+        self.assertEqual(str(cm.exception), "header line does not start with ##maf")
+
     def test_reading_length_coords_mismatch(self):
         """Test parsing inconsistent MAF file length_coords_mismatch.maf."""
         path = "MAF/length_coords_mismatch.maf"
