@@ -52,6 +52,32 @@ class TestAlignIO_reading(unittest.TestCase):
                 )
             )
 
+    def test_reading_length_coords_mismatch(self):
+        """Test parsing inconsistent MAF file length_coords_mismatch.maf."""
+        path = "MAF/length_coords_mismatch.maf"
+        alignments = maf.AlignmentIterator(path)
+        self.assertEqual(alignments.metadata["version"], "1")
+        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 6441)
+        self.assertEqual(len(alignment.sequences), 2)
+        self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
+        self.assertEqual(len(alignment.sequences[0]), 129993255)
+        self.assertEqual(alignment.sequences[0].seq[3009319:3009319+162], "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACCCCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT")
+        self.assertEqual(alignment[0], "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT")
+        self.assertEqual(alignment.sequences[1].id, "oryCun1.scaffold_133159")
+        self.assertEqual(len(alignment.sequences[1]), 13221)
+        self.assertEqual(alignment.sequences[1].seq[11087:11087+164], "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT")
+        self.assertEqual(alignment[1], "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT")
+        self.assertEqual(alignment.column_annotations["oryCun1.scaffold_133159"], "99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999")
+        self.assertEqual(alignment.sequences[1].annotations["leftStatus"], "N")
+        self.assertEqual(alignment.sequences[1].annotations["leftCount"], 0)
+        self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
+        self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "sequence size is incorrect (found 219, expected 319)")
+
     def test_reading_bug2453(self):
         """Test parsing bug2453.maf."""
         path = "MAF/bug2453.maf"
@@ -182,6 +208,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 )
             )
         self.assertRaises(StopIteration, next, alignments)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

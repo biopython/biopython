@@ -137,9 +137,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if key in ("name", "description", "frames"):
                     pass
                 elif key == "mafDot":
-                    assert value in ("on", "off")
+                    if value not in ("on", "off"):
+                        raise ValueError("Variable mafDot in track line has Unexpected value '%s'" % value)
                 elif key == "visibility":
-                    assert value in ("dense", "pack", "full")
+                    if value not in ("dense", "pack", "full"):
+                        raise ValueError("Variable visibility in track line has Unexpected value '%s'" % value)
                 elif key == "speciesOrder":
                     value = value.split()
                 else:
@@ -147,10 +149,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 metadata[key] = value
             line = next(stream)
         words = line.split()
-        assert words[0] == "##maf"
+        if words[0] != "##maf":
+            raise ValueError("header line does not start with ##maf")
         for word in words[1:]:
             key, value = word.split("=")
-            assert key in ("version", "scoring", "program")
+            if key not in ("version", "scoring", "program"):
+                raise ValueError("Unexpected variable '%s' in header line" % key)
             metadata[key] = value
         if metadata.get("version") != "1":
             raise ValueError("MAF version must be 1")
@@ -210,7 +214,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         score = float(value)
                     elif key == "pass":
                         value = int(value)
-                        assert value > 0
+                        if value <= 0:
+                            raise ValueError("pass value must be positive (found %d)" % value)
                         annotations["pass"] = value
                     else:
                         raise ValueError("Unknown annotation variable '%s'" % key)
@@ -228,7 +233,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 text = words[6]
                 aligned_sequences.append(text)
                 sequence = text.replace("-", "")
-                assert len(sequence) == size
+                if len(sequence) != size:
+                    raise ValueError("sequence size is incorrect (found %d, expected %d)" % (len(sequence), size))
                 seq = Seq({start: sequence}, length=srcSize)
                 record = SeqRecord(seq, id=src)
                 records.append(record)
