@@ -137,16 +137,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             metadata[key] = value
         if metadata.get("version") != "1":
             raise ValueError("MAF version must be 1")
-        try:
-            line = next(stream)
-        except StopIteration:
-            self.stream = None
+        comments = []
+        for line in stream:
+            if line.strip():
+                if not line.startswith("#"):
+                    self.line = line
+                    break
+                comment = line[1:].strip()
+                comments.append(comment)
         else:
-            if line.startswith("#"):
-                metadata["comment"] = line[1:].strip()
-                self.line = None
-            else:
-                self.line = line
+            self.stream = None
+            self.line = None
+        if comments:
+            metadata["comments"] = comments
         self.metadata = metadata
 
     @staticmethod
