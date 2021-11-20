@@ -29,6 +29,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 import os
+import shlex
 
 from itertools import chain
 
@@ -127,10 +128,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="MAF")
         stream = self.stream
+        metadata = {}
         line = next(stream)
+        if line.startswith("track "):
+            words = shlex.split(line)
+            for word in words[1:]:
+                key, value = word.split("=")
+                if key in ("name", "description", "frames"):
+                    pass
+                elif key == "mafDot":
+                    assert value in ("on", "off")
+                elif key == "visibility":
+                    assert value in ("dense", "pack", "full")
+                elif key == "speciesOrder":
+                    value = value.split()
+                else:
+                    raise ValueError("Unexpected variable '%s' in track line" % key)
+                metadata[key] = value
+            line = next(stream)
         words = line.split()
         assert words[0] == "##maf"
-        metadata = {}
         for word in words[1:]:
             key, value = word.split("=")
             assert key in ("version", "scoring", "program")

@@ -56,6 +56,23 @@ class TestAlignIO_reading(unittest.TestCase):
         """Test parsing bug2453.maf."""
         path = "MAF/bug2453.maf"
         alignments = maf.AlignmentIterator(path)
+        self.assertEqual(len(alignments.metadata), 3)
+        self.check_ucsc_test(alignments)
+
+    def test_reading_ucsc_test(self):
+        """Test parsing ucsc_test.maf."""
+        path = "MAF/ucsc_test.maf"
+        alignments = maf.AlignmentIterator(path)
+        self.assertEqual(len(alignments.metadata), 9)
+        self.assertEqual(alignments.metadata["name"], "euArc")
+        self.assertEqual(alignments.metadata["visibility"], "pack")
+        self.assertEqual(alignments.metadata["mafDot"], "off")
+        self.assertEqual(alignments.metadata["frames"], "multiz28wayFrames")
+        self.assertEqual(alignments.metadata["speciesOrder"], ["hg16", "panTro1", "baboon", "mm4", "rn3"])
+        self.assertEqual(alignments.metadata["description"], "A sample alignment")
+        self.check_ucsc_test(alignments)
+
+    def check_ucsc_test(self, alignments):
         self.assertEqual(alignments.metadata["version"], "1")
         self.assertEqual(alignments.metadata["scoring"], "tba.v8")
         self.assertEqual(alignments.metadata["comments"], [
