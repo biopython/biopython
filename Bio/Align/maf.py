@@ -116,6 +116,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
 
     status_characters = ("C", "I", "N", "n", "M", "T")
+    empty_status_characters = ("C", "I", "M", "n")
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -131,7 +132,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         assert words[0] == "##maf"
         metadata = {}
         for word in words[1:]:
-            key, value = words[1].split("=")
+            key, value = word.split("=")
             assert key in ("version", "scoring", "program")
             metadata[key] = value
         if metadata.get("version") != "1":
@@ -149,11 +150,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.metadata = metadata
 
     @staticmethod
-    def create_alignment(records, aligned_sequences, annotations, score):
+    def create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score):
         coordinates = Alignment.infer_coordinates(aligned_sequences)
+        for start, row in zip(starts, coordinates):
+            row += start
         alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
+        if column_annotations is not None:
+            alignment.column_annotations = column_annotations
         if score is not None:
             alignment.score = score
         return alignment
@@ -172,7 +177,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         records = None
         for line in lines:
             if line.startswith("a "):
+                starts = []
                 annotations = {}
+                column_annotations = {}
                 records = []
                 aligned_sequences = []
                 score = None
@@ -205,6 +212,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seq = Seq({start: sequence}, length=srcSize)
                 record = SeqRecord(seq, id=src)
                 records.append(record)
+                starts.append(start)
             elif line.startswith("i "):
                 words = line.strip().split()
                 assert len(words) == 6
@@ -215,30 +223,44 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 rightCount = int(words[5])
                 assert leftStatus in AlignmentIterator.status_characters
                 assert rightStatus in AlignmentIterator.status_characters
-                annotations["leftStatus"] = leftStatus
-                annotations["leftCount"] = leftCount
-                annotations["rightStatus"] = rightStatus
-                annotations["rightCount"] = rightCount
+                record.annotations["leftStatus"] = leftStatus
+                record.annotations["leftCount"] = leftCount
+                record.annotations["rightStatus"] = rightStatus
+                record.annotations["rightCount"] = rightCount
             elif line.startswith("e"):
-                # TODO: information about the size of the gap between the alignments
-                # that span the current block
-                pass
-            elif line.startswith("q"):
-                # TODO: quality of each aligned base for the species.
-                # Need to find documentation on this, looks like ASCII 0-9 or gap?
-                # Can then store in each SeqRecord's .letter_annotations dictionary,
-                # perhaps as the raw string or turned into integers / None for gap?
-                pass
-            elif line.startswith("#"):
-                # ignore comments
-                # (not sure whether comments
-                # are in the maf specification, though)
-                pass
+                words = line.strip().split()
+                assert len(words) == 6
+                src = words[0]
+                start = int(words[1])
+                size = int(words[2])
+                strand = words[3]
+                srcSize = int(words[4])
+                status = words[5]
+                assert status in AlignmentIterator.empty_status_characters
+                sequence = Seq(None, length=srcSize)
+                record = SeqRecord(sequence, id=src)
+                end = start + size
+                if strand == "+":
+                    segment = (start, end)
+                else:
+                    segment = (srcSize - start, srcSize - end)
+                empty = (record, segment, status)
+                annotation = annotations.get("empty")
+                if annotation is None:
+                    annotation = []
+                    annotations["empty"] = annotation
+                annotation.append(empty)
+            elif line.startswith("q "):
+                words = line.strip().split()
+                assert len(words) == 3
+                assert words[1] == src  # from the previous "s" line
+                value = words[2]
+                column_annotations[src] = value
             elif not line.strip():
                 # reached the end of this alignment
-                yield AlignmentIterator.create_alignment(records, aligned_sequences, annotations, score)
+                yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score)
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         if records is None:
             return
-        yield AlignmentIterator.create_alignment(records, aligned_sequences, annotations, score)
+        yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score)
