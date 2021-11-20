@@ -262,6 +262,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif not line.strip():
                 # reached the end of this alignment
                 yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score)
+                records = None
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         if records is None:
