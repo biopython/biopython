@@ -36,7 +36,7 @@ from itertools import chain
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 
 
@@ -174,9 +174,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.metadata = metadata
 
     @staticmethod
-    def create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score):
+    def create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score):
         coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for start, row in zip(starts, coordinates):
+        for start, strand, row in zip(starts, strands, coordinates):
+            if strand == "-":
+                row[:] = row[-1] - row[0] - row
             row += start
         alignment = Alignment(records, coordinates)
         if annotations is not None:
@@ -202,6 +204,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in lines:
             if line.startswith("a"):
                 starts = []
+                strands = []
                 annotations = {}
                 column_annotations = {}
                 records = []
@@ -237,10 +240,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 sequence = text.replace("-", "")
                 if len(sequence) != size:
                     raise ValueError("sequence size is incorrect (found %d, expected %d)" % (len(sequence), size))
+                if strand == "-":
+                    sequence = reverse_complement(sequence)
+                    start = srcSize - start - size
                 seq = Seq({start: sequence}, length=srcSize)
                 record = SeqRecord(seq, id=src)
                 records.append(record)
                 starts.append(start)
+                strands.append(strand)
             elif line.startswith("i "):
                 words = line.strip().split()
                 assert len(words) == 6
@@ -286,10 +293,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 column_annotations[src] = value
             elif not line.strip():
                 # reached the end of this alignment
-                yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score)
+                yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score)
                 records = None
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         if records is None:
             return
-        yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, annotations, column_annotations, score)
+        yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score)
