@@ -289,8 +289,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 words = line.strip().split()
                 assert len(words) == 3
                 assert words[1] == src  # from the previous "s" line
-                value = words[2]
-                column_annotations[src] = value
+                value = words[2].replace("-", "")
+                record.annotations["quality"] = value
             elif not line.strip():
                 # reached the end of this alignment
                 yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score)
