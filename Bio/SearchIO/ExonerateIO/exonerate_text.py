@@ -27,7 +27,7 @@ _RE_ALN_ROW = re.compile(r"\s*\d+\s+: (.*) :\s+\d+")
 # for splitting the line based on intron annotations
 # e.g. '  >>>> Target Intron 1 >>>>  ' or 'gt.........................ag'
 _RE_EXON = re.compile(
-    r"[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?"
+    r"[atgc ]{2}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2}?"
 )
 # captures the intron length
 # from e.g. '61 bp // 154295 bp' (joint intron lengths) or '177446 bp'

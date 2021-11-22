@@ -2323,6 +2323,71 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual("CLAACLEVEKVVMMGFLVYSASLDQTFKVWRVKVLPDEE", hsp[-1].query.seq)
         self.assertEqual("CLAAC*QVEKMVMMGFLIYSVSLDQTLKVWRVKILPDQE", hsp[-1].hit.seq)
 
+    def test_exn_24_protein2genome_met_intron(self):
+        """Test parsing exonerate output (exn_24_m_protein2genome_met_intron.exn)."""
+        exn_file = get_file("exn_24_m_protein2genome_met_intron.exn")
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual("Morus-gene001", qresult.id)
+        self.assertEqual("", qresult.description)
+        self.assertEqual("exonerate", qresult.program)
+        self.assertEqual("protein2genome:local", qresult.model)
+        self.assertEqual(1, len(qresult))
+        # first hit
+        hit = qresult[0]
+        self.assertEqual("NODE_1_length_2817_cov_100.387732", hit.id)
+        self.assertEqual("SPAdes contig NODE_1", hit.description)
+        self.assertEqual(1, len(hit))
+        # first hit, first hsp
+        self.assertEqual(1958, hsp.score)
+        self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_strand_all)
+        self.assertEqual([-1, -1, -1, -1, -1, -1], hsp.hit_strand_all)
+        self.assertEqual(48, hsp.query_start)
+        self.assertEqual(388, hsp.hit_start)
+        self.assertEqual(482, hsp.query_end)
+        self.assertEqual(2392, hsp.hit_end)
+        self.assertEqual(
+            [(48, 85), (85, 118), (118, 155), (155, 256), (257, 303), (303, 482)],
+            hsp.query_range_all,
+        )
+        self.assertEqual(
+            [
+                (2281, 2392),
+                (2030, 2129),
+                (1810, 1921),
+                (1420, 1724),
+                (1058, 1198),
+                (388, 925),
+            ],
+            hsp.hit_range_all,
+        )
+        self.assertEqual(
+            [(2129, 2281), (1921, 2030), (1724, 1810), (1198, 1420), (925, 1058)],
+            hsp.hit_inter_ranges,
+        )
+        self.assertEqual(
+            [(85, 85), (118, 118), (155, 155), (256, 257), (303, 303)],
+            hsp.query_inter_ranges,
+        )
+        self.assertEqual("MVQTPLHVSAGNNRADIVKF", hsp[0].query.seq[:20])
+        self.assertEqual("VKFLLEFPGPEKVELEAKNM", hsp[0].query.seq[-20:])
+        self.assertEqual("|||", hsp[0].aln_annotation["similarity"][0])
+        self.assertEqual("|||", hsp[0].aln_annotation["similarity"][-1])
+        self.assertEqual("ATG", hsp[0].aln_annotation["hit_annotation"][0])
+        self.assertEqual("ATG", hsp[0].aln_annotation["hit_annotation"][-1])
+        self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_frame_all)
+        self.assertEqual([-2, -3, -2, -2, -3, -2], hsp.hit_frame_all)
+        self.assertEqual(6, len(hsp.query_all))
+        self.assertEqual(6, len(hsp.hit_all))
+        self.assertEqual(6, len(hsp.aln_annotation_all))
+
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
         exn_file = get_file("exn_22_q_none.exn")
