@@ -475,6 +475,12 @@ class TestBaseClassMethods(unittest.TestCase):
         # seq.complement uses seq._data.translate
         self.assertEqual(self.seq1_twobit.complement(), self.seq1_fasta.complement())
 
+    def test_defined(self):
+        self.assertTrue(self.seq1_twobit.defined)
+        self.assertTrue(self.seq2_twobit.defined)
+        self.assertEqual(self.seq1_twobit.defined_ranges, ((0, len(self.seq1_twobit)),))
+        self.assertEqual(self.seq2_twobit.defined_ranges, ((0, len(self.seq2_twobit)),))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

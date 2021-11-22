@@ -1468,20 +1468,23 @@ class TestSeqDefined(unittest.TestCase):
             Seq.Seq(None, length=0),
             Seq.Seq({}, length=0),
             Seq.UnknownSeq(length=0),
+            Seq.MutableSeq(""),
         ]
 
         for seq in zero_length_seqs:
-            self.assertTrue(seq.defined)
+            self.assertTrue(seq.defined, msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, (), msg=repr(seq))
 
     def test_undefined(self):
-        undefined_seqs = [
-            Seq.Seq(None, length=1),
-            Seq.Seq({3: "ACGT"}, length=10),
-            Seq.UnknownSeq(length=1),
-        ]
-
-        for seq in undefined_seqs:
-            self.assertFalse(seq.defined)
+        seq = Seq.Seq(None, length=1)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ())
+        seq = Seq.Seq({3: "ACGT"}, length=10)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ((3, 7),))
+        seq = Seq.UnknownSeq(length=1)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ())
 
     def test_defined(self):
         seqs = [
@@ -1491,7 +1494,8 @@ class TestSeqDefined(unittest.TestCase):
         ]
 
         for seq in seqs:
-            self.assertTrue(seq.defined)
+            self.assertTrue(seq.defined, msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, ((0, len(seq)),), msg=repr(seq))
 
 
 if __name__ == "__main__":
