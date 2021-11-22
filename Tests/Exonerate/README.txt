@@ -8,6 +8,8 @@ Exonerate release version, from the most recent first.
 Exonerate 2.4
 -------------
 exn_24_m_protein2genome_revcomp_fshifts.exn
+exn_24_m_protein2genome_met_intron.exn
+
 
 Exonerate 2.2
 -------------
