@@ -51,10 +51,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 pass
             elif key == "mafDot":
                 if value not in ("on", "off"):
-                    raise ValueError("mafDot value must be 'on' or 'off' (received '%s')" % value)
+                    raise ValueError(
+                        "mafDot value must be 'on' or 'off' (received '%s')" % value
+                    )
             elif key == "visibility":
                 if value not in ("dense", "pack", "full"):
-                    raise ValueError("visibility value must be 'dense', 'pack', or 'full' (received '%s')" % value)
+                    raise ValueError(
+                        "visibility value must be 'dense', 'pack', or 'full' (received '%s')"
+                        % value
+                    )
             elif key == "speciesOrder":
                 value = " ".join(value)
             else:
@@ -68,8 +73,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """Write the MAF header."""
         stream = self.stream
         metadata = alignments.metadata
-        track_keys = ("name", "description", "frames", "mafDot", "visibility",
-                      "speciesOrder")
+        track_keys = (
+            "name",
+            "description",
+            "frames",
+            "mafDot",
+            "visibility",
+            "speciesOrder",
+        )
         for key in track_keys:
             if key in metadata:
                 self._write_trackline(metadata)
@@ -222,6 +233,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             stream.write(line)
         stream.write("\n")
 
+
 class AlignmentIterator(interfaces.AlignmentIterator):
 
     status_characters = ("C", "I", "N", "n", "M", "T")
@@ -246,10 +258,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     pass
                 elif key == "mafDot":
                     if value not in ("on", "off"):
-                        raise ValueError("Variable mafDot in track line has unexpected value '%s'" % value)
+                        raise ValueError(
+                            "Variable mafDot in track line has unexpected value '%s'"
+                            % value
+                        )
                 elif key == "visibility":
                     if value not in ("dense", "pack", "full"):
-                        raise ValueError("Variable visibility in track line has unexpected value '%s'" % value)
+                        raise ValueError(
+                            "Variable visibility in track line has unexpected value '%s'"
+                            % value
+                        )
                 elif key == "speciesOrder":
                     value = value.split()
                 else:
@@ -282,7 +300,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.metadata = metadata
 
     @staticmethod
-    def create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score):
+    def create_alignment(
+        records,
+        aligned_sequences,
+        starts,
+        strands,
+        annotations,
+        column_annotations,
+        score,
+    ):
         coordinates = Alignment.infer_coordinates(aligned_sequences)
         for start, strand, row in zip(starts, strands, coordinates):
             if strand == "-":
@@ -326,7 +352,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     elif key == "pass":
                         value = int(value)
                         if value <= 0:
-                            raise ValueError("pass value must be positive (found %d)" % value)
+                            raise ValueError(
+                                "pass value must be positive (found %d)" % value
+                            )
                         annotations["pass"] = value
                     else:
                         raise ValueError("Unknown annotation variable '%s'" % key)
@@ -347,7 +375,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 aligned_sequences.append(text)
                 sequence = text.replace("-", "")
                 if len(sequence) != size:
-                    raise ValueError("sequence size is incorrect (found %d, expected %d)" % (len(sequence), size))
+                    raise ValueError(
+                        "sequence size is incorrect (found %d, expected %d)"
+                        % (len(sequence), size)
+                    )
                 if strand == "-":
                     sequence = reverse_complement(sequence)
                     start = srcSize - start - size
@@ -401,10 +432,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 record.annotations["quality"] = value
             elif not line.strip():
                 # reached the end of this alignment
-                yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score)
+                yield AlignmentIterator.create_alignment(
+                    records,
+                    aligned_sequences,
+                    starts,
+                    strands,
+                    annotations,
+                    column_annotations,
+                    score,
+                )
                 records = None
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         if records is None:
             return
-        yield AlignmentIterator.create_alignment(records, aligned_sequences, starts, strands, annotations, column_annotations, score)
+        yield AlignmentIterator.create_alignment(
+            records,
+            aligned_sequences,
+            starts,
+            strands,
+            annotations,
+            column_annotations,
+            score,
+        )
