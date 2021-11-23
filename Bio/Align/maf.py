@@ -234,6 +234,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
+    """Alignment iterator for Multiple Alignment Format files.
+
+    The file may contain multiple concatenated alignments, which are loaded
+    and returned incrementally.
+
+    File meta-data are stored in the ``.metadata`` attribute of the returned
+    iterator.  Alignment annotations are stored in the ``.annotations``
+    attribute of the ``Alignment`` object, except for the alignment score,
+    which is stored as an attribute.  Sequence information of empty parts in
+    the alignment block (sequences that connect the previous alignment block to
+    the next alignment block, but do not align to the current alignment block)
+    is stored in the alignment annotations under the ``"empty"`` key.
+    Annotations specific to each line in the alignment are stored in the
+    ``.annotations`` attribute of the corresponding sequence record.
+    """
 
     status_characters = ("C", "I", "N", "n", "M", "T")
     empty_status_characters = ("C", "I", "M", "n")
@@ -308,6 +323,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         column_annotations,
         score,
     ):
+        """Create the Alignment object from the collected alignment data."""
         coordinates = Alignment.infer_coordinates(aligned_sequences)
         for start, strand, row in zip(starts, strands, coordinates):
             if strand == "-":
