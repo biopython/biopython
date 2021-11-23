@@ -317,7 +317,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def create_alignment(
         records,
         aligned_sequences,
-        starts,
         strands,
         annotations,
         column_annotations,
@@ -325,9 +324,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     ):
         """Create the Alignment object from the collected alignment data."""
         coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for start, strand, row in zip(starts, strands, coordinates):
+        for record, strand, row in zip(records, strands, coordinates):
             if strand == "-":
                 row[:] = row[-1] - row[0] - row
+            start = record.seq.defined_ranges[0][0]
             row += start
         alignment = Alignment(records, coordinates)
         if annotations is not None:
@@ -352,7 +352,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         records = None
         for line in lines:
             if line.startswith("a"):
-                starts = []
                 strands = []
                 annotations = {}
                 column_annotations = {}
@@ -400,7 +399,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seq = Seq({start: sequence}, length=srcSize)
                 record = SeqRecord(seq, id=src)
                 records.append(record)
-                starts.append(start)
                 strands.append(strand)
             elif line.startswith("i "):
                 words = line.strip().split()
@@ -450,7 +448,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 yield AlignmentIterator.create_alignment(
                     records,
                     aligned_sequences,
-                    starts,
                     strands,
                     annotations,
                     column_annotations,
@@ -464,7 +461,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         yield AlignmentIterator.create_alignment(
             records,
             aligned_sequences,
-            starts,
             strands,
             annotations,
             column_annotations,
