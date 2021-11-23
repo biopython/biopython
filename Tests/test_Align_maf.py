@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for Align.maf module."""
 import unittest
+from io import StringIO
 
 
 from Bio.Align import maf
@@ -5082,6 +5083,95 @@ class TestAlignIO_reading(unittest.TestCase):
                 )
             )
         self.assertRaises(StopIteration, next, alignments)
+
+
+class TestAlignIO_writing(unittest.TestCase):
+    def test_writing_ucsc_test(self):
+        """Test reading and writing ucsc_test.maf."""
+        path = "MAF/ucsc_test.maf"
+        alignments = maf.AlignmentIterator(path)
+        output = StringIO()
+        writer = maf.AlignmentWriter(output)
+        writer.write_file(alignments)
+        output.seek(0)
+        with open(path) as stream:
+            line1 = next(output)
+            line2 = next(stream)
+            self.assertEqual(line1, 'track name=euArc visibility=pack mafDot=off frames=multiz28wayFrames speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"\n')
+            self.assertEqual(line2, 'track name=euArc visibility=pack mafDot=off frames="multiz28wayFrames" speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"\n')
+            for line1, line2 in zip(output, stream):
+                if line1.startswith("a score="):
+                    prefix1, score1 = line1.split("=")
+                    prefix2, score2 = line2.split("=")
+                    self.assertEqual(prefix1, prefix2)
+                    self.assertAlmostEqual(float(score1), float(score2))
+                else:
+                    self.assertEqual(line1.strip(), line2.strip())
+
+    def test_writing_bug2453(self):
+        """Test reading and writing bug2453.maf."""
+        path = "MAF/bug2453.maf"
+        alignments = maf.AlignmentIterator(path)
+        output = StringIO()
+        writer = maf.AlignmentWriter(output)
+        writer.write_file(alignments)
+        output.seek(0)
+        with open(path) as stream:
+            for line1, line2 in zip(output, stream):
+                if line1.startswith("a score="):
+                    prefix1, score1 = line1.split("=")
+                    prefix2, score2 = line2.split("=")
+                    self.assertEqual(prefix1, prefix2)
+                    self.assertAlmostEqual(float(score1), float(score2))
+                else:
+                    self.assertEqual(line1.strip(), line2.strip())
+
+    def test_writing_bundle_without_target(self):
+        """Test reading and writing bundle_without_target.maf."""
+        path = "MAF/bundle_without_target.maf"
+        alignments = maf.AlignmentIterator(path)
+        output = StringIO()
+        writer = maf.AlignmentWriter(output)
+        writer.write_file(alignments)
+        output.seek(0)
+        with open(path) as stream:
+            for line1, line2 in zip(output, stream):
+                self.assertEqual(line1, line2)
+
+    def test_writing_ucsc_mm9_chr10(self):
+        """Test reading and writing ucsc_mm9_chr10.maf."""
+        path = "MAF/ucsc_mm9_chr10.maf"
+        alignments = maf.AlignmentIterator(path)
+        output = StringIO()
+        writer = maf.AlignmentWriter(output)
+        writer.write_file(alignments)
+        output.seek(0)
+        with open(path) as stream:
+            for line1, line2 in zip(output, stream):
+                words1 = line1.split()
+                words2 = line2.split()
+                if line1.startswith("e "):
+                    prefix1, name1, start1, size1, strand1, length1, status1 = line1.split()
+                    prefix2, name2, start2, size2, strand2, length2, status2 = line2.split()
+                    size1 = int(size1)
+                    size2 = int(size2)
+                    if size1 == 0 and strand1 != strand2:
+                        start1 = int(start1)
+                        start2 = int(start2)
+                        size1 = int(size1)
+                        size2 = int(size2)
+                        length1 = int(length1)
+                        length2 = int(length2)
+                        self.assertEqual(prefix1, "e")
+                        self.assertEqual(prefix2, "e")
+                        self.assertEqual(name1, name2)
+                        self.assertEqual(status1, status2)
+                        self.assertEqual(size1, size2)
+                        self.assertEqual(length1, length2)
+                        self.assertEqual(start1, length2 - start2 - size2)
+                        self.assertEqual(start2, length1 - start1 - size1)
+                        continue
+                self.assertEqual(words1, words2)
 
 
 if __name__ == "__main__":
