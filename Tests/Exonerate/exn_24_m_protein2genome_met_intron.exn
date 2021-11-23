@@ -17,7 +17,7 @@ C4 Alignment:
 
    70 : uLeuGluPheProGlyProGluLysValGluLeuGluAlaLysAsnMet  >>>> Target :   86
         |||||||||||||||||||||||||||||||||||||||||||||||||            1
-        uLeuGluPheProGlyProGluLysValGluLeuGluAlaLysAsnMet++
+        uLeuGluPheProGlyProGluLysValGluLeuGluAlaLysAsnMet++           
  2331 : TCTTGAGTTTCCAGGGCCAGAGAAGGTTGAGTTGGAAGCCAAGAACATGgt........... : 2279
 
    87 :  Intron 1 >>>>  TyrGlyGluThrProLeuHisMetAlaAlaLysAsnGlyCysAsnA :  101
@@ -26,8 +26,8 @@ C4 Alignment:
  2278 : ..............agTATGGGGAAACTCCTTTGCACATGGCAGCAAAGAATGGATGCAATG : 2084
 
   102 : spAlaAlaArgLeuLeuLeuAlaHisGlyAlaPheIleGluAlaLysAlaAsn  >>>> Ta :  119
-        |||||||||||:!!|||||||||||||||||||||||||||||||||||||||
-        spAlaAlaArgValLeuLeuAlaHisGlyAlaPheIleGluAlaLysAlaAsn++
+        |||||||||||:!!|||||||||||||||||||||||||||||||||||||||         
+        spAlaAlaArgValLeuLeuAlaHisGlyAlaPheIleGluAlaLysAlaAsn++       
  2083 : ATGCTGCTCGGGTGCTTCTTGCTCATGGTGCTTTTATTGAAGCCAAAGCAAATgt....... : 2028
 
   120 : rget Intron 2 >>>>  AsnGlyMetThrProLeuHisLeuAlaValTrpTyrSerLeu :  132
