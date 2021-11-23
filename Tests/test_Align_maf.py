@@ -63,6 +63,7 @@ class TestAlignIO_reading(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
+# flake8: noqa
                 numpy.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
@@ -6927,7 +6928,7 @@ class TestAlignIO_reading(unittest.TestCase):
         """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
         path = "MAF/ucsc_mm9_chr10_big.maf"
         with self.assertRaises(ValueError) as cm:
-            alignments = maf.AlignmentIterator(path)
+            maf.AlignmentIterator(path)
         self.assertEqual(str(cm.exception), "header line does not start with ##maf")
 
     def test_reading_ucsc_mm9_chr10_bad(self):
@@ -6936,14 +6937,14 @@ class TestAlignIO_reading(unittest.TestCase):
         alignments = maf.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "1")
         self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
-        alignment = next(alignments)
-        alignment = next(alignments)
-        alignment = next(alignments)
-        alignment = next(alignments)
-        alignment = next(alignments)
-        alignment = next(alignments)
+        next(alignments)
+        next(alignments)
+        next(alignments)
+        next(alignments)
+        next(alignments)
+        next(alignments)
         with self.assertRaises(ValueError) as cm:
-            alignment = next(alignments)
+            next(alignments)
         self.assertEqual(
             str(cm.exception), "sequence size is incorrect (found 219, expected 319)"
         )
