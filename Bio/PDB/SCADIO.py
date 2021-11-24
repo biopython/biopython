@@ -16,6 +16,13 @@ a printable model from the script this software produces.  MeshMixer
 technology available to you provide options for addressing the problems around
 physically rendering the model.
 
+The model generated here consists of OpenSCAD primitives, e.g. spheres and
+cylinders, representing individual atoms and bonds in an explicit model of a
+protein structure.  The benefit is that individual atoms/bonds may be selected
+for specific print customizations relevant to 3D printing (such as rotatable
+bond mechanisms or hydrogen bond magnets).  Alternatively, use e.g. Chimera to
+render a structure as ribbons or similar for printing as a single object.
+
 I suggest generating your initial model using the OpenSCAD script provided
 here, then modifying that script according to your needs.  Changing the
 atomScale and bondRadius values can simplify the model by removing gaps and
@@ -23,7 +30,7 @@ the corresponding need for supports, or you may wish to modify the hedronDispatc
 routine to select residues or chain sections for printing separately and
 subsequently joining with rotatable bonds.  During this development phase you
 will likely have your version `include` only the data matrices generated here,
-by using the `includeCode-False` option to write_SCAD().  An example project
+by using the `includeCode=False` option to write_SCAD().  An example project
 with modifications of the script generated here is
 <https://www.thingiverse.com/thing:3957471>.
 """
@@ -62,8 +69,8 @@ def write_SCAD(
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
 
-    This routine calls both internal_to_atom_coordinates() and
-    atom_to_internal_coordinates() due to requirements for scaling, explicit
+    This routine calls both :meth:`.internal_to_atom_coordinates` and
+    :meth:`.atom_to_internal_coordinates` due to requirements for scaling, explicit
     bonds around rings, and setting the coordinate space of the output model.
 
     Output data format is primarily:
@@ -78,28 +85,34 @@ def write_SCAD(
     OpenSCAD software is included in this Python file to process these
     matrices into a model suitable for a 3D printing project.
 
-    :param entity: Biopython PDB structure entity
+    :param entity: Biopython PDB :class:`.Structure` entity
         structure data to export
-    :param file: Bipoython as_handle filename or open file pointer
+    :param file: Bipoython :func:`.as_handle` filename or open file pointer
         file to write data to
-    :param scale: float
+    :param float scale:
         units (usually mm) per angstrom for STL output, written in output
-    :param pdbid: str
+    :param str pdbid:
         PDB idcode, written in output. Defaults to '0PDB' if not supplied
         and no 'idcode' set in entity
-    :param backboneOnly: bool default False
+    :param bool backboneOnly: default False.
         Do not output side chain data past Cbeta if True
-    :param includeCode: bool default True
+    :param bool includeCode: default True.
         Include OpenSCAD software (inline below) so output file can be loaded
         into OpenSCAD; if False, output data matrices only
-    :param maxPeptideBond: Optional[float] default None
+    :param float maxPeptideBond: Optional default None.
         Override the cut-off in IC_Chain class (default 1.4) for detecting
         chain breaks.  If your target has chain breaks, pass a large number here
         to create a very long 'bond' spanning the break.
-    :param start, fin: int default None
+    :param int start,fin: default None
         Parameters for internal_to_atom_coords() to limit chain segment.
-    :param handle: str, default 'protein'
+    :param str handle: default 'protein'
         name for top level of generated OpenSCAD matrix structure
+
+    See :meth:`.IC_Residue.set_flexible` to set flags for specific residues to
+    have rotatable bonds, and :meth:`.IC_Residue.set_hbond` to include cavities
+    for small magnets to work as hydrogen bonds.  See <https://www.thingiverse.com/thing:3957471>
+    for implementation example.
+
     """
     if maxPeptideBond is not None:
         mpbStash = IC_Chain.MaxPeptideBond
@@ -584,14 +597,17 @@ module hedronDispatch(h,rev=0,scal) {
 
     /*
     // Some examples for special handling for specific hedra below:
+    // note use of h_seqpos, h_residue, h_class for selecting hedra
 
-    // caTop needs to be a global variable so hedron() above can see it.
+    // bool flag caTop (for rotatable bond part) needs to be a global variable
+    // so hedron() above can see it.
 
 caBase1 = false;   // only make bottom of N_C-alpha_C hedron
 caBase2 = false;   // same as caBase1 but for case of reversed hedron (for testing, should be identical to caBase1 result)
 amideOnly = false; // make only the first amide
 
     if (caTop) {
+        // these examples select a specific sequence position (h[h_seqpos] == n)
         if (h[h_seqpos] == 1) {
             if (h[h_class] == "NCAC") {
                 hedron(h, rev, scal, 1);

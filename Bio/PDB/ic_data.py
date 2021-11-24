@@ -545,11 +545,10 @@ electronegativity = {"C": 2.55, "O": 3.44, "N": 3.04, "H": 2.20, "S": 2.58}
 # hedra and dihedra default values reference database:
 #
 # generated from Pisces cullpdb cullpdb_pc20_res2.2_R1.0_d190812_chains8767.gz
-# (Aug 2019) https://dunbrack.fccc.edu/Guoli/pisces_download.php
+# (Aug 2019) https://dunbrack.fccc.edu/pisces
 # G. Wang and R. L. Dunbrack, Jr. PISCES: a protein sequence culling server.
 # Bioinformatics, 19:1589-1591, 2003.
 #
-
 # hedra defaults based on residue-atom classes from reference database
 #
 # values in comments after each entry are std dev for each value, followed by

@@ -39,15 +39,15 @@ from Bio.PDB.Chain import Chain
 def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> Dict:
     """Test rebuild PDB structure from internal coordinates.
 
-    :param entity: Biopython Structure, Model or Chain
+    :param Entity entity: Biopython Structure, Model or Chain.
         Structure to test
-    :param verbose: bool default False
+    :param bool verbose: default False.
         print extra messages
-    :param quick: bool default False
+    :param bool quick: default False.
         only check atomArrays are identical
         in internal_to_atom_coords computation
     :returns: dict
-        comparison dict from compare_residues()
+        comparison dict from :func:`.compare_residues`
     """
     sp = StringIO()
     entity.atom_to_internal_coordinates(verbose)
@@ -165,10 +165,10 @@ def report_IC(
 def IC_duplicate(entity) -> Structure:
     """Duplicate structure entity with IC data, no atom coordinates.
 
-    Employs write_PIC(), read_PIC() with StringIO buffer.
-    Calls atom_to_internal_coordinates() if needed.
+    Employs :func:`.write_PIC`, :func:`.read_PIC` with StringIO buffer.
+    Calls :meth:`.Chain.atom_to_internal_coordinates` if needed.
 
-    :param entity: Biopython PDB Entity (will fail for Atom)
+    :param Entity entity: Biopython PDB Entity (will fail for Atom)
     :returns: Biopython PDBStructure, no Atom objects
     """
     sp = StringIO()
@@ -338,17 +338,17 @@ def compare_residues(
 
     Skip DNA and HETATMs.
 
-    :param e0, e1: Biopython PDB Entity objects (S, M or C)
+    :param Entity e0,e1: Biopython PDB Entity objects (S, M or C).
         Structures, Models or Chains to be compared
-    :param verbose: Bool
+    :param bool verbose:
         whether to print mismatch info, default False
-    :param quick: bool default False
+    :param bool quick: default False.
         only check atomArrays are identical, aCoordMatchCount=0 if different
-    :param rtol, atol: float default 1e-03, 1e-05 or round to 3 places
+    :param float rtol,atol: default 1e-03, 1e-05 or round to 3 places.
         numpy allclose parameters; default is to round atom coordinates to 3
         places and test equal.  For 'quick' will use defaults above for comparing
         ataomArrays
-    :returns: Dictionary
+    :returns dict:
         Result counts for Residues, Full ID match Residues, Atoms,
         Full ID match atoms, and Coordinate match atoms; report string;
         error status (bool)

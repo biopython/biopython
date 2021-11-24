@@ -83,10 +83,10 @@ def read_PIC(
     in some PDB file residues, which means the sidechain cannot be
     placed.  The alternate CB path (i-1)C-N-CA-CB is provided to
     circumvent this, but if this is needed then it must be adjusted in
-    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see IC_Residue.bond_set
-    and bond_rotate to handle this automatically).
+    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see :meth:`.bond_set`
+    and :meth:`.bond_rotate` to handle this automatically).
 
-    :param Bio.File file: file name or handle
+    :param Bio.File file: :func:`.as_handle` file name or handle
     :param bool verbose: complain when lines not as expected
     :param bool quick: don't check residues for all dihedra (no default values)
     :param bool defaults: create di/hedra as needed from reference database.
@@ -503,7 +503,15 @@ def read_PIC(
                 # need more here?
 
     def ak_add(ek: set, ric: IC_Residue) -> None:
-        """Allocate edron key AtomKeys to current residue as appropriate."""
+        """Allocate edron key AtomKeys to current residue as appropriate.
+
+        A hedron or dihedron may span a backbone amide bond, this routine
+        allocates atoms in the (h/di)edron to the ric residue or saves them
+        for a residue yet to be processed.
+
+        :param set ek: AtomKeys in edron
+        :param IC_Residue ric: current residue to assign AtomKeys to
+        """
         res = ric.residue
         reskl = (str(res.id[1]), (None if res.id[2] == " " else res.id[2]), ric.lc)
         for ak in ek:
@@ -742,7 +750,7 @@ def read_PIC_seq(
     title: str = None,
     chain: str = None,
 ) -> Structure:
-    """Read SeqIO.SeqRecord into Structure with default internal coordinates."""
+    """Read :class:`.SeqRecord` into Structure with default internal coordinates."""
     read_pdbid, read_title, read_chain = None, None, None
 
     if seqRec.id is not None:
@@ -872,43 +880,44 @@ def write_PIC(
 ):
     """Write Protein Internal Coordinates (PIC) to file.
 
-    See read_PIC() for file format.  Recurses to lower entity levels (M, C, R).
+    See :func:`read_PIC` for file format.  Recurses to lower entity levels (M, C, R).
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
-    :param Bio.File file: file name or handle
+    :param Bio.File file: :func:`.as_handle` file name or handle
     :param str pdbid: PDB idcode, read from entity if not supplied
     :param char chainid: PDB Chain ID, set from C level entity.id if needed
-    :param int: boolean flags controlling output, defined in IC_Residue.pic_flags:
+    :param flags: uint boolean flags controlling output, defined in IC_Residue.pic_flags:
 
-        "psi",
-        "omg",
-        "phi",
-        "tau",  # tau hedron (N-Ca-C)
-        "chi1",
-        "chi2",
-        "chi3",
-        "chi4",
-        "chi5",
-        "pomg",  # proline omega
-        "chi",   # chi1 through chi5
-        "classic_b",  # psi | phi | tau | pomg
-        "classic",    # classic_b | chi
-        "hedra",      # all hedra including bond lengths
-        "primary",    # all primary dihedra
-        "secondary",  # all secondary dihedra
-        "all",        # hedra | primary | secondary
-        "initAtoms",  # XYZ coordinates of initial Tau (N-Ca-C)
-        "bFactors",
+        * "psi",
+        * "omg",
+        * "phi",
+        * "tau",  # tau hedron (N-Ca-C)
+        * "chi1",
+        * "chi2",
+        * "chi3",
+        * "chi4",
+        * "chi5",
+        * "pomg",  # proline omega
+        * "chi",   # chi1 through chi5
+        * "classic_b",  # psi | phi | tau | pomg
+        * "classic",    # classic_b | chi
+        * "hedra",      # all hedra including bond lengths
+        * "primary",    # all primary dihedra
+        * "secondary",  # all secondary dihedra
+        * "all",        # hedra | primary | secondary
+        * "initAtoms",  # XYZ coordinates of initial Tau (N-Ca-C)
+        * "bFactors"
 
         default is everything:
-        picFlagsDefault = pic_flags.all | pic_flags.initAtoms | pic_flags.bFactors
+            picFlagsDefault = pic_flags.all | pic_flags.initAtoms | pic_flags.bFactors
 
         read_PIC(defaults=True) will supply default values for anything left out
 
-    :param float hCut: only write hedra with ref db angle std dev greater than
-        this value; default None
-    :param float pCut: only write primary dihedra with ref db angle
-        std dev greater than this value; default None
+    :param float hCut: default None
+        only write hedra with ref db angle std dev greater than this value
+    :param float pCut: default None
+        only write primary dihedra with ref db angle std dev greater than this
+        value
 
     'primary' and 'secondary' dihedra are defined in ic_data.py.  Specifically,
     secondary dihedra can be determined as a fixed rotation from another known
