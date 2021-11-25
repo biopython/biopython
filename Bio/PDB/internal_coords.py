@@ -481,7 +481,7 @@ class IC_Chain:
         for n in Nlist:
             for c in pClist:
                 if self._atm_dist_chk(
-                    Natom, pCatom, IC_Chain.MaxPeptideBond, self.sqMaxPeptideBond
+                    n, c, IC_Chain.MaxPeptideBond, self.sqMaxPeptideBond
                 ):
                     return None
         return f"MaxPeptideBond ({IC_Chain.MaxPeptideBond} angstroms) exceeded"
@@ -1381,7 +1381,7 @@ class IC_Chain:
             if verbose and not np.all(self.atomArrayValid):
                 dSetValid = self.atomArrayValid[self.a2da_map].reshape(-1, 4)
                 for ric in self.ordered_aa_ic_list:
-                    for k, d in ric.dihedra.items():
+                    for d in ric.dihedra.values():
                         if not dSetValid[d.ndx].all():
                             print(
                                 f"missing coordinates for chain {ric.cic.chain.id} {ric.pretty_str()} dihedral: {d.id}"
@@ -1489,7 +1489,7 @@ class IC_Chain:
         if hasattr(self, "scale"):  # used for openscad output
             Ca_Cb_Len *= self.scale  # type: ignore
 
-        for gcb, gcbd in self.gcb.items():
+        for gcbd in self.gcb.values():
             cbak = gcbd[3]
             self.atomArrayValid[self.atomArrayIndex[cbak]] = False
             ric = cbak.ric
@@ -1820,12 +1820,10 @@ class IC_Chain:
             for NCaCKey in sorted(ric.NCaCKey):  # type: ignore
                 mtr = None
                 if 0 < len(ric.rprev):
-                    for rpr in ric.rprev:
-                        acl = [
-                            self.atomArray[self.atomArrayIndex[ak]] for ak in NCaCKey
-                        ]
-                        # acl = [rpr.atom_coords[ak] for ak in NCaCKey]
-                        mt, mtr = coord_space(acl[0], acl[1], acl[2], True)
+                    # for rpr in ric.rprev:
+                    acl = [self.atomArray[self.atomArrayIndex[ak]] for ak in NCaCKey]
+                    # acl = [rpr.atom_coords[ak] for ak in NCaCKey]
+                    mt, mtr = coord_space(acl[0], acl[1], acl[2], True)
                 else:
                     mtr = np.identity(4, dtype=np.float64)
                 if chnStarted:

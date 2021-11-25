@@ -9,7 +9,6 @@
 import re
 from datetime import date
 from io import StringIO
-from collections import namedtuple
 
 try:
     import numpy
@@ -265,7 +264,7 @@ def read_PIC(
     def process_dihedron(
         a1: str, a2: str, a3: str, a4: str, dangle: str, ric: IC_Residue
     ) -> Set:
-        """Create Diedron on current Chain.internal_coord."""
+        """Create Dihedron on current Chain.internal_coord."""
         ek = (
             akcache(a1),
             akcache(a2),
@@ -705,7 +704,7 @@ def read_PIC(
                 m = Edron.edron_re.match(line)
                 if m and sb_res is not None:
                     if m["a4"] is None:
-                        ek = process_hedron(
+                        process_hedron(
                             m["a1"],
                             m["a2"],
                             m["a3"],
@@ -715,7 +714,7 @@ def read_PIC(
                             sb_res.internal_coord,
                         )
                     else:
-                        ek = process_dihedron(
+                        process_dihedron(
                             m["a1"],
                             m["a2"],
                             m["a3"],

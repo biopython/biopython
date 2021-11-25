@@ -9,7 +9,6 @@
 
 import unittest
 import re
-import tempfile
 import warnings
 import copy
 
@@ -72,7 +71,7 @@ class Rebuild(unittest.TestCase):
         """Convert disordered protein to internal coordinates and back."""
         # 3jqh has both disordered residues
         # and disordered atoms in ordered residues
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             warnings.simplefilter("always", PDBConstructionWarning)
             r = structure_rebuild_test(self.cif_3JQH, False)
         # print(r)
@@ -340,18 +339,18 @@ class Rebuild(unittest.TestCase):
     def test_distplot_rebuild(self):
         """Build identical structure from distplot and chirality data."""
         # load input chain
-        for chn1 in self.cif_4ZHL.get_chains():
+        for _chn1 in self.cif_4ZHL.get_chains():
             break
         # create atomArray and compute distplot and dihedral signs array
-        chn1.atom_to_internal_coordinates()
-        dplot1 = chn1.internal_coord.distance_plot()
-        dsigns = chn1.internal_coord.dihedral_signs()
+        _chn1.atom_to_internal_coordinates()
+        dplot1 = _chn1.internal_coord.distance_plot()
+        dsigns = _chn1.internal_coord.dihedral_signs()
 
         # load second copy (same again) input chain
-        for chn2 in self.cif_4ZHL2.get_chains():
+        for _chn2 in self.cif_4ZHL2.get_chains():
             break
         # create internal coord structures but do not compute di/hedra
-        cic2 = chn2.internal_coord = IC_Chain(chn2)
+        cic2 = _chn2.internal_coord = IC_Chain(_chn2)
         cic2.init_edra()
         # load relevant interatomic distances from chn1 distance plot
         cic2.distplot_to_dh_arrays(dplot1)
@@ -365,7 +364,7 @@ class Rebuild(unittest.TestCase):
         cic2.atomArray[:, 3] = 1.0
 
         # 4zhl has chain breaks so copy initial coords of each segment
-        cic2.copy_initNCaCs(chn1.internal_coord)
+        cic2.copy_initNCaCs(_chn1.internal_coord)
         # compute chn2 atom coords from di/hedra data
         cic2.internal_to_atom_coordinates()
 
@@ -379,13 +378,13 @@ class Rebuild(unittest.TestCase):
     def test_seq_as_PIC(self):
         """Read protein sequence, generate default PIC data."""
         seqIter = SeqIO.parse("Fasta/f001", "fasta")
-        for record in seqIter:
+        for _record in seqIter:
             break
-        pdb_structure = read_PIC_seq(record)
+        pdb_structure = read_PIC_seq(_record)
         pdb_structure.internal_to_atom_coordinates()
-        for chn in pdb_structure.get_chains():
+        for _chn in pdb_structure.get_chains():
             break
-        assert len(chn.internal_coord.atomArrayValid) == 575
+        assert len(_chn.internal_coord.atomArrayValid) == 575
 
     def test_angle_fns(self):
         """Test angle_dif and angle_avg across +/-180 boundaries."""

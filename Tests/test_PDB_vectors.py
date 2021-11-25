@@ -95,6 +95,7 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1, 0, 0])))
 
     def test_refmat(self):
+        """Test refmat can mirror one matrix to another."""
         v1 = Vector(0, 0, 1)
         v2 = Vector(0, 1, 0)
         ref = refmat(v1, v2)
@@ -182,7 +183,7 @@ class VectorTests(unittest.TestCase):
         """Test spherical coordinates."""
         srt22 = numpy.sqrt(2.0) / 2
         r45 = numpy.radians(45)
-        r90 = numpy.radians(90)
+        # r90 = numpy.radians(90)
         r135 = numpy.radians(135)
         for i in range(2):
             for j in range(2):

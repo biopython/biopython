@@ -8,7 +8,6 @@
 """The structure class, representing a macromolecular structure."""
 
 from Bio.PDB.Entity import Entity
-from Bio.PDB.internal_coords import IC_Chain
 
 
 class Structure(Entity):
