@@ -55,7 +55,7 @@ class Rebuild(unittest.TestCase):
     cif_4ZHL2 = CIF_parser.get_structure("4ZHL", "PDB/4ZHL.cif")
 
     def test_rebuild_multichain_missing(self):
-        """Convert multichain missing atom protein to internal coordinates and back."""
+        """Convert multichain missing atom struct to, from internal coords."""
         # 2XHE has regions of missing chain, last residue has only N
         r = structure_rebuild_test(self.pdb_2XHE, False)
         self.assertEqual(r["residues"], 787)
@@ -85,13 +85,23 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(r["pass"])
 
     def test_no_crosstalk(self):
-        """Deep copy, change few internal coords and prove nothing else changes."""
+        """Deep copy, change few internal coords, test nothing else changes."""
         # IC_Chain.ParallelAssembleResidues = False
         self.cif_4CUP.atom_to_internal_coordinates()
         cpy4cup = copy.deepcopy(self.cif_4CUP)
         cic0 = self.cif_4CUP.child_list[0].child_list[0].internal_coord
         cic1 = cpy4cup.child_list[0].child_list[0].internal_coord
-        alist = ["omg", "phi", "psi", "chi1", "chi2", "chi3", "chi4", "chi5", "tau"]
+        alist = [
+            "omg",
+            "phi",
+            "psi",
+            "chi1",
+            "chi2",
+            "chi3",
+            "chi4",
+            "chi5",
+            "tau",
+        ]
         delta = 33  # degrees to change
         tdelta = delta / 10.0  # more realistic for bond angle
         targPos = 1
@@ -120,7 +130,8 @@ class Rebuild(unittest.TestCase):
                 pass  # skip if residue does not have e.g. chi5
         cic0.internal_to_atom_coordinates()  # move atoms
         cic0.atom_to_internal_coordinates()  # get new internal coords
-        # generate hdelta and ddelta difference arrays so can look for what changed
+        # generate hdelta and ddelta difference arrays so can look for what
+        # changed
         hdelta = cic0.hedraAngle - cic1.hedraAngle
         hdelta[np.abs(hdelta) < 0.00001] = 0.0
         ddelta = cic0.dihedraAngle - cic1.dihedraAngle
@@ -247,7 +258,12 @@ class Rebuild(unittest.TestCase):
         """
         sf = StringIO()
         write_SCAD(
-            self.cif_4CUP2, sf, 10.0, pdbid="4cup", backboneOnly=True, includeCode=False
+            self.cif_4CUP2,
+            sf,
+            10.0,
+            pdbid="4cup",
+            backboneOnly=True,
+            includeCode=False,
         )
         sf.seek(0)
         next_one = False
@@ -265,8 +281,8 @@ class Rebuild(unittest.TestCase):
                 elif next_one:
                     next_one = False
                     # test last residue transform looks roughly correct
-                    # some differences due to sorting issues on different python
-                    # versions
+                    # some differences due to sorting issues on different
+                    # python versions
                     target = [-12.413, -3.303, 35.771, 1.0]
                     ms = re.findall(  # last column of each row
                         r"\s+(-?\d+\.\d+)\s+\]", aline
@@ -320,7 +336,8 @@ class Rebuild(unittest.TestCase):
         cpy.internal_to_atom_coordinates(start=31, fin=45)
         cdict = compare_residues(chn, cpy, quick=True)
         self.assertFalse(cdict["pass"])
-        # transform source coordinates to put res 31 tau at origin like fragment
+        # transform source coordinates to put res 31 tau at origin like
+        # fragment
         res = chn[31]
         psi = res.internal_coord.pick_angle("psi")
         cst = np.transpose(psi.cst)

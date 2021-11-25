@@ -12,40 +12,40 @@ bond lengths defining a protein chain.  These routines can compute internal
 coordinates from atom XYZ coordinates, and compute atom XYZ coordinates from
 internal coordinates.
 
-Secondary benefits include the ability to align and compare residue environments
-in 3D structures, support for 2D atom distance plots, converting a distance plot plus
-chirality information to a structure, generating an OpenSCAD description of a
-structure for 3D printing, and reading/writing structures as internal coordinate
-data files.
+Secondary benefits include the ability to align and compare residue
+environments in 3D structures, support for 2D atom distance plots, converting a
+distance plot plus chirality information to a structure, generating an OpenSCAD
+description of a structure for 3D printing, and reading/writing structures as
+internal coordinate data files.
 
 **Terms and key data structures:**
 Internal coordinates are defined on sequences of atoms which span
 residues or follow accepted nomenclature along sidechains.  To manage these
-sequences and support Biopython's disorder mechanisms, :class:`AtomKey` specifiers
-are implemented to capture residue, atom and variant identification in a single
-object.  A :class:`Hedron` object is specified as three sequential AtomKeys,
-comprising two bond lengths and the bond angle between them.  A :class:`Dihedron`
-consists of four sequential AtomKeys, linking two Hedra with a dihedral angle
-between them.
+sequences and support Biopython's disorder mechanisms, (class)`AtomKey`
+specifiers are implemented to capture residue, atom and variant identification
+in a single object.  A (class)`Hedron` object is specified as three sequential
+AtomKeys, comprising two bond lengths and the bond angle between them.  A
+(class)`Dihedron` consists of four sequential AtomKeys, linking two Hedra with
+a dihedral angle between them.
 
 **Algorithmic overview:**
 The Internal Coordinates module combines a specification of connected atoms as
-hedra and dihedra in the :mod:`.ic_data` file with routines here to transform
+hedra and dihedra in the (mod)`.ic_data` file with routines here to transform
 XYZ coordinates of these atom sets between a local coordinate system and the
-world coordinates supplied in e.g. a PDB or mmCif data file.  The local coordinate
-system places the center atom of a hedron at the origin (0,0,0), one leg on the
-+Z axis, and the other leg on the XZ plane (see :class:`Hedron`).  Measurement
-and creation or manipulation of hedra and dihedra in the local coordinate space
-is straightforward, and the calculated transformation matrices enable assembling
-these subunits into a protein chain starting from supplied (PDB) coordinates for
-the initial N-Ca-C atoms.
+world coordinates supplied in e.g. a PDB or mmCif data file.  The local
+coordinate system places the center atom of a hedron at the origin (0,0,0), one
+leg on the +Z axis, and the other leg on the XZ plane (see (class)`Hedron`).
+Measurement and creation or manipulation of hedra and dihedra in the local
+coordinate space is straightforward, and the calculated transformation matrices
+enable assembling these subunits into a protein chain starting from supplied
+(PDB) coordinates for the initial N-Ca-C atoms.
 
-Psi and Phi angles are defined on atoms from adjacent residues in a protein chain,
-see e.g. :meth:`.pick_angle` and :mod:`.ic_data` for the relevant mapping between
-residues and backbone dihedral angles.
+Psi and Phi angles are defined on atoms from adjacent residues in a protein
+chain, see e.g. (meth)`.pick_angle` and (mod)`.ic_data` for the relevant
+mapping between residues and backbone dihedral angles.
 
 Transforms to and from the dihedron local coordinate space described above are
-accessible via :data:`.IC_Chain.dCoordSpace` and :data:`.Dihedron.cst`, and may
+accessible via (data)`.IC_Chain.dCoordSpace` and (data)`.Dihedron.cst`, and may
 be applied in the alignment and comparison of residues and their environments
 with code along the lines of::
 
@@ -53,63 +53,64 @@ with code along the lines of::
     cst = np.transpose(chi1.cst) # transform TO chi1 space
     newAtomCoords = oldAtomCoords.dot(cst)
 
-The core algorithms were developed independently during 1993-4 for `''Development
-and Application of a Three-dimensional Description of Amino Acid Environments in
-Protein,'' Miller, Douthart, and Dunker, Advances in Molecular Bioinformatics,
-IOS Press, 1994, ISBN 90 5199 172 x, pp. 9-30.
+The core algorithms were developed independently during 1993-4 for
+`''Development and Application of a Three-dimensional Description of Amino Acid
+Environments in Protein,'' Miller, Douthart, and Dunker, Advances in Molecular
+Bioinformatics, IOS Press, 1994, ISBN 90 5199 172 x, pp. 9-30.
 <https://www.google.com/books/edition/Advances_in_Molecular_Bioinformatics/VmFSNNm7k6cC?gbpv=1>`_
 
 A Protein Internal Coordinate (.pic) file format is defined to capture
 sufficient detail to reproduce a PDB file from chain starting coordinates
 (first residue N, Ca, C XYZ coordinates) and remaining internal coordinates.
 These files are used internally to verify that a given structure can be
-regenerated from its internal coordinates.  See :mod:`.PICIO` for reading/writing
-and :func:`.structure_rebuild_test` to determine if a specific PDB or mmCif datafile
-has sufficient information to interconvert between cartesian and internal
-coordinates.
+regenerated from its internal coordinates.  See (mod)`.PICIO` for reading and
+writing .pic files and (func)`.structure_rebuild_test` to determine if a
+specific PDB or mmCif datafile has sufficient information to interconvert
+between cartesian and internal coordinates.
 
 Internal coordinates may also be exported as `OpenSCAD <https://www.openscad.org>`
 data arrays for generating 3D printed protein models.  OpenSCAD software is
 provided as a starting point and proof-of-concept for generating such models.
-See :mod:`.SCADIO` and this `Thingiverse project <https://www.thingiverse.com/thing:3957471>`
+See (mod)`.SCADIO` and this `Thingiverse project <https://www.thingiverse.com/thing:3957471>`
 for a more advanced example.
 
-Refer to :meth:`.distance_plot` and :meth:`.distance_to_internal_coordinates` for
-converting structure data to/from 2D distance plots.
+Refer to (meth)`.distance_plot` and (meth)`.distance_to_internal_coordinates`
+for converting structure data to/from 2D distance plots.
 
 The following classes comprise the core functionality for processing internal
 coordinates and are sufficiently related and coupled to place them together in
 this module:
 
-:class:`IC_Chain`: Extends Biopython Chain on .internal_coord attribute.
+(class)`IC_Chain`: Extends Biopython Chain on .internal_coord attribute.
     Manages connected sequence of residues and chain breaks; holds numpy arrays
     for all atom coordinates and bond geometries. For 'parallel' processing
     IC_Chain methods operate on these arrays with single numpy commands.
 
-:class:`IC_Residue`: Extends Biopython Residue on .internal_coord attribute.
+(class)`IC_Residue`: Extends Biopython Residue on .internal_coord attribute.
     Access for per residue views on internal coordinates and methods for serial
     (residue by residue) assembly.
 
-:class:`Dihedron`: four joined atoms forming a dihedral angle.
+(class)`Dihedron`: four joined atoms forming a dihedral angle.
     Dihedral angle, homogeneous atom coordinates in local coordinate space,
     references to relevant Hedra and IC_Residue.  Getter methods for
     residue dihedral angles, bond angles and bond lengths.
 
-:class:`Hedron`: three joined atoms forming a plane.
+(class)`Hedron`: three joined atoms forming a plane.
     Contains homogeneous atom coordinates in local coordinate space as well as
     bond lengths and angle between them.
 
-:class:`Edron`: base class for Hedron and Dihedron classes.
+(class)`Edron`: base class for Hedron and Dihedron classes.
     Tuple of AtomKeys comprising child, string ID, mainchain membership boolean
     and other routines common for both Hedra and Dihedra.  Implements rich
     comparison.
 
-:class:`AtomKey`: keys (dictionary and string) for referencing atom sequences.
+(class)`AtomKey`: keys (dictionary and string) for referencing atom sequences.
     Capture residue and disorder/occupancy information, provides a
     no-whitespace key for .pic files, and implements rich comparison.
 
-Custom exception classes: :class:`HedronMatchError` and :class:`MissingAtomError`
-"""
+Custom exception classes: (class)`HedronMatchError` and
+(class)`MissingAtomError`
+"""  # noqa
 
 import re
 from collections import deque, namedtuple
@@ -133,8 +134,8 @@ from Bio.PDB.Polypeptide import three_to_one
 from Bio.PDB.vectors import multi_coord_space, multi_rot_Z
 from Bio.PDB.vectors import coord_space
 
-# , calc_dihedral, Vector
-from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains, primary_angles
+from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
+from Bio.PDB.ic_data import primary_angles
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 from Bio.PDB.ic_data import dihedra_primary_defaults, hedra_defaults
 
@@ -171,12 +172,12 @@ class IC_Chain:
     Attributes
     ----------
     chain: object reference
-        The Biopython :class:`.Chain` object this extends
+        The Biopython (class)`.Chain` object this extends
 
     initNCaC: List of N, Ca, C AtomKey tuples.
         NCaCKeys start chain segments (first residue or after chain break).
-        These 3 atoms define the coordinate space for a contiguous chain segment,
-        as initially specified by PDB or mmCIF file.
+        These 3 atoms define the coordinate space for a contiguous chain
+        segment, as initially specified by PDB or mmCIF file.
 
     MaxPeptideBond: float
         **Class** attribute to detect chain breaks.
@@ -200,7 +201,8 @@ class IC_Chain:
         length of hedra dict
 
     hedraNdx: dict
-        maps hedra AtomKeys to numeric index into hedra data arrays e.g. hedraL12
+        maps hedra AtomKeys to numeric index into hedra data arrays e.g.
+        hedraL12
 
     dihedra: dict
         indexed by 4-tuples of AtomKeys; Dihedra forming residues in this chain
@@ -227,8 +229,8 @@ class IC_Chain:
         bond length between hedron 2nd and 3rd atom
 
     id3_dh_index: dict
-        maps hedron key to list of dihedra starting with hedron, used by assemble
-        and bond_rotate to find dihedra with h1 key
+        maps hedron key to list of dihedra starting with hedron, used by
+        assemble and bond_rotate to find dihedra with h1 key
 
     id32_dh_index: dict
         like id3_dh_index, find dihedra from h2 key
@@ -274,13 +276,13 @@ class IC_Chain:
     link_residues:
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
     set_residues:
-        Add .internal_coord attribute for all :class:`.Residue`s in parent
-        :class:`.Chain`, populate ordered_aa_ic_list, set IC_Residue rprev, rnext
-        or initNCaC coordinates
+        Add .internal_coord attribute for all (class)`.Residue`s in parent
+        (class)`.Chain`, populate ordered_aa_ic_list, set IC_Residue rprev,
+        rnext or initNCaC coordinates
     write_SCAD:
         Write OpenSCAD matrices for internal coordinate data comprising chain;
-        this is a support routine, see :func:`.SCADIO.write_SCAD` to generate OpenSCAD
-        description of a protein chain.
+        this is a support routine, see (func)`.SCADIO.write_SCAD` to generate
+        OpenSCAD description of a protein chain.
     distance_plot:
         Generate 2D plot of interatomic distances with optional filter
     distance_to_internal_coordinates:
@@ -291,7 +293,8 @@ class IC_Chain:
 
     # Class globals
     MaxPeptideBond = 1.4  # larger C-N distance than this is chain break
-    ParallelAssembleResidues = True  # parallel internal_to_atom, slow for short chains
+    # enable parallel internal_to_atom algorithm, is slower for short chains
+    ParallelAssembleResidues = True
 
     # for assemble_residues
     dihedraSelect = np.array([True, True, True, False])
@@ -311,7 +314,7 @@ class IC_Chain:
         # self.initNCaC: Dict[Tuple[str], Dict["AtomKey", np.array]] = {}
         self.initNCaCs = []
 
-        self.sqMaxPeptideBond = IC_Chain.MaxPeptideBond * IC_Chain.MaxPeptideBond
+        self.sqMaxPeptideBond = np.square(IC_Chain.MaxPeptideBond)
         # need init here for _gen_edra():
         self.hedra = {}
         # self.hedraNdx = {}
@@ -493,14 +496,18 @@ class IC_Chain:
             res.internal_coord = None
 
     def _add_residue(
-        self, res: "Residue", last_res: List, last_ord_res: List, verbose: bool = False
+        self,
+        res: "Residue",
+        last_res: List,
+        last_ord_res: List,
+        verbose: bool = False,
     ) -> bool:
         """Set rprev, rnext, manage chain break.
 
-        Returns True for no chain break or residue has sufficient data to restart
-        at this position after a chain break (sets initNCaC AtomKeys in this
-        case).  False return means insufficient data to extend chain with this
-        residue.
+        Returns True for no chain break or residue has sufficient data to
+        restart at this position after a chain break (sets initNCaC AtomKeys
+        in this case).  False return means insufficient data to extend chain
+        with this residue.
         """
         if not res.internal_coord:
             res.internal_coord = IC_Residue(res)
@@ -520,7 +527,7 @@ class IC_Chain:
             # chain break, save coords for restart
             if verbose and len(last_res) != 0:  # not first residue
                 if last_ord_res != last_res:
-                    reason = f"disordered residues after {last_ord_res.pretty_str()}"
+                    reason = "disordered residues after {last_ord_res.pretty_str()}"
                 else:
                     reason = cast(
                         str, self._peptide_check(last_ord_res[0].residue, res)
@@ -539,14 +546,14 @@ class IC_Chain:
     def set_residues(self, verbose: bool = False) -> None:
         """Initialize .internal_coord for loaded Biopython Residue objects.
 
-        Add IC_Residue as .internal_coord attribute for each :class:`.Residue` in
-        parent :class:`.Chain`; populate ordered_aa_ic_list with :class:`IC_Residue`
-        references for residues which can be built (amino acids and some hetatms);
-        set rprev and rnext on each sequential IC_Residue, populate initNCaC at
-        start and after chain breaks.
+        Add IC_Residue as .internal_coord attribute for each (class)`.Residue`
+        in parent (class)`.Chain`; populate ordered_aa_ic_list with
+        (class)`IC_Residue` references for residues which can be built (amino
+        acids and some hetatms); set rprev and rnext on each sequential
+        IC_Residue, populate initNCaC at start and after chain breaks.
 
         Generates:
-            self.akset : set of :class:`.AtomKey` s in this chain
+            self.akset : set of (class)`.AtomKey` s in this chain
         """
         # ndx = 0
         last_res: List["IC_Residue"] = []
@@ -579,11 +586,11 @@ class IC_Chain:
         self.initNCaCs = sorted(self.initNCaCs)
 
     def build_atomArray(self) -> None:
-        """Create :class:`IC_Chain` numpy coordinate array from biopython atoms.
+        """Build (class)`IC_Chain` numpy coordinate array from biopython atoms.
 
         Inputs:
             self.akset : set
-                :class:`AtomKey` s in this chain
+                (class)`AtomKey` s in this chain
 
         Generates:
             self.AAsiz : int
@@ -595,8 +602,8 @@ class IC_Chain:
             self.atomArrayValid : AAsiz x bool
                 atomArray coordinates current if True
             self.atomArray : AAsiz x np.float64[4]
-                homogeneous atom coordinates; Biopython :class:`.Atom` coordinates
-                are view into this array after execution
+                homogeneous atom coordinates; Biopython (class)`.Atom`
+                coordinates are view into this array after execution
             rak_cache : dict
                 lookup cache for AtomKeys for each residue
 
@@ -639,7 +646,8 @@ class IC_Chain:
     def build_edraArrays(self) -> None:
         """Build chain level hedra and dihedra arrays.
 
-        Used by :meth:`.hedraDict2chain` and :meth:`.atom_to_internal_coordinates`
+        Used by (meth)`.hedraDict2chain` and
+        (meth)`.atom_to_internal_coordinates`
 
         Inputs:
             self.dihedraLen : int
@@ -700,8 +708,9 @@ class IC_Chain:
                 AtomNdx's for each dihedron (reshaped a2da_map)
             self.dFwd : bool
                 dihedron is not Reversed if True
-            self.a2d_map : AAsiz x [[dihedraNdx], [atom ndx 0-3 of atom in dihedron]]
-                maps atom indexes to dihedra and atoms in them
+            self.a2d_map : AAsiz x [[dihedraNdx]
+                [atom ndx 0-3 of atom in dihedron]], maps atom indexes to
+                dihedra and atoms in them
             self.dAtoms_needs_update : dihedraLen x bool
                 atoms in h1, h2 are current if False
 
@@ -808,11 +817,11 @@ class IC_Chain:
         da: Dict[str, float],
         bfacs: Dict[str, float],
     ) -> None:
-        """Generate chain numpy arrays from :func:`.read_PIC` dicts.
+        """Generate chain numpy arrays from (func)`.read_PIC` dicts.
 
         On entry:
             * chain internal_coord has ordered_aa_ic_list built, akset;
-            * residues have rnext, rprev, ak_set and di/hedra dicts initialised.
+            * residues have rnext, rprev, ak_set and di/hedra dicts initialised
             * Chain, residues do NOT have NCaC info, id3_dh_index
             * Di/hedra have cic, aks set
             * Dihedra do NOT have valid reverse flag, h1/2 info
@@ -897,7 +906,7 @@ class IC_Chain:
             else:
                 if 2 == bpAtm.is_disordered() and bpAtm.disordered_has_id(altloc):
                     bpAtm.disordered_select(altloc)
-                # bpAtm.set_coord(self.atomArray[ndx][0:3])  # done in build_atomArray
+
                 bpAtm.set_bfactor(bfac)
                 bpAtm.set_occupancy(occ)
                 sn = bpAtm.get_serial_number()
@@ -921,15 +930,17 @@ class IC_Chain:
 
     # @profile
     def ar2(self, verbose: bool = False) -> None:
-        """Generate atom coords from internal coords (vectorised :meth:`assemble_residues`).
+        """Generate atom coords from internal coords (vectorised).
+
+        This is the 'Numpy parallel' version of (meth)`assemble_residues`).
 
         Starting with dihedra already formed by init_atom_coords(), transform
         each from dihedron build coordinate space into protein chain coordinate
         space.  Iterate until all dependencies satisfied.
 
         Does not update dCoordSpace as assemble_residues() does - call
-        :meth:`update_dCoordSpace` if needed.  Faster to do in single operation once
-        all atom coordinates finished.
+        (meth)`update_dCoordSpace` if needed.  Faster to do in single
+        operation once all atom coordinates finished.
 
         :param bool verbose: default False.
             Report number of iterations to compute changed dihedra
@@ -1018,7 +1029,8 @@ class IC_Chain:
         if verbose:
             cid = self.chain.full_id
             print(
-                f"{cid[0]} {cid[2]} coordinates for {dihedraWrk} dihedra updated in {loopCount} iterations"
+                f"{cid[0]} {cid[2]} coordinates for {dihedraWrk} dihedra"
+                " updated in {loopCount} iterations"
             )
 
     def assemble_residues(
@@ -1030,7 +1042,7 @@ class IC_Chain:
         """Generate IC_Residue atom coords from internal coordinates (serial).
 
         Filter positions between start and fin if set, find appropriate start
-        coordinates for each residue and pass to :meth:`.assemble`
+        coordinates for each residue and pass to (meth)`.assemble`
 
         :param bool verbose: default False.
             Describe runtime problems
@@ -1058,13 +1070,13 @@ class IC_Chain:
                 ric.ak_set = set(ric.atom_coords.keys())
 
     def init_edra(self, verbose: bool = False) -> None:
-        """Create chain and residue di/hedra structures, arrays, atomArray as needed.
+        """Create chain and residue di/hedra structures, arrays, atomArray.
 
         Inputs:
             self.ordered_aa_ic_list : list of IC_Residue
         Generates:
-            * edra objects, self.di/hedra (execute :meth:`.create_edra`)
-            * atomArray and support (executes :meth:`build_atomArray`)
+            * edra objects, self.di/hedra (execute (meth)`.create_edra`)
+            * atomArray and support (executes (meth)`build_atomArray`)
             * self.hedraLen : number of hedra in structure
             * hedraL12 : np arrays for lengths, angles (empty)
             * hedraAngle ..
@@ -1110,8 +1122,8 @@ class IC_Chain:
         """Set chain level di/hedra initial coords from angles and distances.
 
         Initializes atom coordinates in local coordinate space for hedra and
-        dihedra, will be transformed appropriately later by dCoordSpace matrices
-        for assembly.
+        dihedra, will be transformed appropriately later by dCoordSpace
+        matrices for assembly.
         """
         # dbg = True
         if not np.all(self.dAtoms_needs_update):
@@ -1138,7 +1150,7 @@ class IC_Chain:
         if np.any(self.hAtoms_needs_update):
             # hedra inital coords
 
-            # sar = supplementary angle radian: angles which add to 180 are supplementary
+            # sar = supplementary angle radian: angles which add to 180
             sar = np.deg2rad(180.0 - self.hedraAngle[self.hAtoms_needs_update])  # angle
             sinSar = np.sin(sar)
             cosSarN = np.cos(sar) * -1
@@ -1195,8 +1207,8 @@ class IC_Chain:
             self.a4_pre_rotation[mdRev] = self.hAtoms[self.dH2ndx, 0][mdRev]
             self.a4_pre_rotation[mdFwd] = self.hAtomsR[self.dH2ndx, 2][mdFwd]
 
-            # numpy multiply, add operations below intermediate array but out= not
-            # working with masking:
+            # numpy multiply, add operations below intermediate array but out=
+            # not working with masking:
             self.a4_pre_rotation[:, 2][self.dAtoms_needs_update] = np.multiply(
                 self.a4_pre_rotation[:, 2][self.dAtoms_needs_update], -1
             )  # a4 to +Z
@@ -1238,7 +1250,8 @@ class IC_Chain:
         rz = multi_rot_Z(self.dihedraAngleRads[self.dAtoms_needs_update])
 
         a4rot = np.matmul(
-            rz, self.a4_pre_rotation[self.dAtoms_needs_update][:].reshape(-1, 4, 1)
+            rz,
+            self.a4_pre_rotation[self.dAtoms_needs_update][:].reshape(-1, 4, 1),
         ).reshape(-1, 4)
 
         self.dAtoms[:, 3][mdFwd] = a4rot[udFwd]  # [self.dFwd]
@@ -1278,9 +1291,9 @@ class IC_Chain:
             """
 
     def update_dCoordSpace(self, workSelector: Optional[np.ndarray] = None) -> None:
-        """Compute/update multiple coordinate space transforms for chain dihedra.
+        """Compute/update coordinate space transforms for chain dihedra.
 
-        Requires all atoms updated so calls :meth:`.ar2`.
+        Requires all atoms updated so calls (meth)`.ar2`.
 
         :param [bool] workSelector:
             Optional mask to select dihedra for update
@@ -1328,15 +1341,15 @@ class IC_Chain:
                         # and done with this invalid_atom_ndxs segment
                         break
                     elif pos not in done and atm != "H":
-                        # H is terminal so ignore, no effect on subsequent atoms
+                        # H is terminal so ignore, not effect subsequent atoms
                         # O is terminal but used to locate CB
-                        # atomArray is sorted so sidechain atoms follow backbone
+                        # atomArray is sorted, sidechain atoms follow backbone
                         for i in range(andx, csNext):
                             if self.aktuple[i].akl[posNdx] == pos:
                                 self.atomArrayValid[i] = False
                             else:
-                                # done with residue sidechain when find next seq pos
-                                # so need not go to fin
+                                # done with residue sidechain when find next
+                                # seq pos so need not go to fin
                                 break
                         done.add(pos)
             csNdx += 1
@@ -1356,13 +1369,13 @@ class IC_Chain:
             Optional sequence positions for begin, end of subregion
             to process.
 
-        .. note::
-            Setting start or fin activates serial :meth:`assemble_residues`
-            instead of (Numpy parallel) :meth:`ar2`; start C-alpha will be at
+        -- note::
+            Setting start or fin activates serial (meth)`assemble_residues`
+            instead of (Numpy parallel) (meth)`ar2`; start C-alpha will be at
             origin.
 
-        .. seealso::
-            :data:`ParallelAssembleResidues`
+        -- seealso::
+            (data)`ParallelAssembleResidues`
 
         """
         if not hasattr(self, "dAtoms_needs_update"):
@@ -1371,7 +1384,10 @@ class IC_Chain:
         # if verbose:
         #    for ric in self.ordered_aa_ic_list:
         #        if not hasattr(ric, "NCaCKey"):
-        #            print(f"no assembly for {ric} due to missing N, Ca and/or C atoms")
+        #            print(
+        #                f"no assembly for {ric} due to missing N, Ca"
+        #                " and/or C atoms"
+        #            )
 
         if IC_Chain.ParallelAssembleResidues and not (start or fin):
 
@@ -1385,7 +1401,9 @@ class IC_Chain:
                     for d in ric.dihedra.values():
                         if not dSetValid[d.ndx].all():
                             print(
-                                f"missing coordinates for chain {ric.cic.chain.id} {ric.pretty_str()} dihedral: {d.id}"
+                                "missing coordinates for chain "
+                                f"{ric.cic.chain.id} {ric.pretty_str()} "
+                                f"dihedral: {d.id}"
                             )
         else:
             if start:  # set initNCaC tag to build from
@@ -1393,7 +1411,11 @@ class IC_Chain:
                     if start != ric.residue.id[1]:
                         continue
                     iNCaC = ric.split_akl(
-                        (AtomKey(ric, "N"), AtomKey(ric, "CA"), AtomKey(ric, "C"))
+                        (
+                            AtomKey(ric, "N"),
+                            AtomKey(ric, "CA"),
+                            AtomKey(ric, "C"),
+                        )
                     )
                     self.initNCaCs.extend(iNCaC)
 
@@ -1409,7 +1431,7 @@ class IC_Chain:
         Generates atomArray (through init_edra), value arrays for hedra and
         dihedra, and coordinate space transforms for dihedra.
 
-        Generates Gly C-beta if specified, see :data:`IC_Residue.gly_Cbeta`
+        Generates Gly C-beta if specified, see (data)`IC_Residue.gly_Cbeta`
 
         :param bool verbose: default False.
             describe runtime problems
@@ -1422,7 +1444,7 @@ class IC_Chain:
         if self.dihedra == {}:
             return  # escape if no hedra loaded for this chain
 
-        # compute all hedra parameters with law of cosines on 3 atom coordinates
+        # compute all hedra parameters with law of cosines on 3 atom coords
         ha = self.atomArray[self.a2ha_map].reshape(-1, 3, 4)
         self.hedraL12 = np.linalg.norm(ha[:, 0] - ha[:, 1], axis=1)
         self.hedraL23 = np.linalg.norm(ha[:, 1] - ha[:, 2], axis=1)
@@ -1443,7 +1465,7 @@ class IC_Chain:
         dha = self.atomArray[self.a2da_map].reshape(-1, 4, 4)
 
         # develop coord_space matrix for 1st 3 atoms of dihedra:
-        # note use of [...] to modify in place, so dihedra cst, rcst remain valid
+        # note use of [...] to modify in place, dihedra cst, rcst remain valid
         self.dCoordSpace[...] = multi_coord_space(dha, self.dihedraLen, True)
         self.dcsValid[:] = True
 
@@ -1465,8 +1487,8 @@ class IC_Chain:
 
         `PISCES: A Protein Sequence Culling Server <https://dunbrack.fccc.edu/pisces/>`_
 
-        'G. Wang and R. L. Dunbrack, Jr. PISCES: a protein sequence culling server.
-        Bioinformatics, 19:1589-1591, 2003.'
+        'G. Wang and R. L. Dunbrack, Jr. PISCES: a protein sequence culling
+        server. Bioinformatics, 19:1589-1591, 2003.'
 
         Ala avg rotation of OCCACB from NCACO query::
 
@@ -1485,7 +1507,7 @@ class IC_Chain:
             | avg_rslt          | sd_rslt          | count   |
             | -122.682194862932 | 5.04403040513919 | 14098   |
 
-        """
+        """  # noqa
         Ca_Cb_Len = 1.53363
         if hasattr(self, "scale"):  # used for openscad output
             Ca_Cb_Len *= self.scale  # type: ignore
@@ -1494,7 +1516,12 @@ class IC_Chain:
             cbak = gcbd[3]
             self.atomArrayValid[self.atomArrayIndex[cbak]] = False
             ric = cbak.ric
-            rN, rCA, rC, rO = ric.rak("N"), ric.rak("CA"), ric.rak("C"), ric.rak("O")
+            rN, rCA, rC, rO = (
+                ric.rak("N"),
+                ric.rak("CA"),
+                ric.rak("C"),
+                ric.rak("O"),
+            )
             gCBd = self.dihedra[gcbd]
             dndx = gCBd.ndx
             # generated dihedron is O-Ca-C-Cb
@@ -1541,15 +1568,22 @@ class IC_Chain:
     ) -> None:
         fp.write(
             "[ {:9.5f}, {}, {}, {}, ".format(
-                d.angle, hedraNdx[d.h1key], hedraNdx[d.h2key], (1 if d.reverse else 0)
+                d.angle,
+                hedraNdx[d.h1key],
+                hedraNdx[d.h2key],
+                (1 if d.reverse else 0),
             )
         )
         fp.write(
-            f"{0 if d.h1key in hedraSet else 1}, {0 if d.h2key in hedraSet else 1}, "
+            f"{0 if d.h1key in hedraSet else 1}, "
+            f"{0 if d.h2key in hedraSet else 1}, "
         )
         fp.write(
             "    // {} [ {} -- {} ] {}\n".format(
-                d.id, d.hedron1.id, d.hedron2.id, ("reversed" if d.reverse else "")
+                d.id,
+                d.hedron1.id,
+                d.hedron2.id,
+                ("reversed" if d.reverse else ""),
             )
         )
         fp.write("        ")
@@ -1557,9 +1591,10 @@ class IC_Chain:
         fp.write(" ]")  # close residue array of dihedra entry
 
     def write_SCAD(self, fp: TextIO, backboneOnly: bool, start=None, fin=None) -> None:
-        """Write self to file fp as `OpenSCAD <https://www.openscad.org>`_ data matrices.
+        """Write self to file fp as OpenSCAD data matrices.
 
-        Works with :func:`.write_SCAD` and embedded OpenSCAD routines therein.
+        See `OpenSCAD <https://www.openscad.org>`_.
+        Works with (func)`.write_SCAD` and embedded OpenSCAD routines therein.
         The OpenSCAD code explicitly creates spheres and cylinders to
         represent atoms and bonds in a 3D model.  Options are available
         to support rotatable bonds and magnetic hydrogen bonds.
@@ -1576,17 +1611,18 @@ class IC_Chain:
         * bonds and atoms are tracked so that each is only created once
 
         * bond options for rotation and magnet holders for hydrogen bonds
-          may be specified (see :meth:`IC_Residue.set_flexible` and :meth:`IC_Residue.set_hbond` )
+          may be specified (see (meth)`IC_Residue.set_flexible` and
+          (meth)`IC_Residue.set_hbond` )
 
-        Note the application of :data:`IC_Chain.MaxPeptideBond` : missing
+        Note the application of (data)`IC_Chain.MaxPeptideBond` : missing
         residues may be linked (joining chain segments with arbitrarily long
         bonds) by setting this to a large value.
 
         Note this uses the serial assembly per residue, placing each residue at
         the origin and supplying the coordinate space transform to OpenaSCAD
 
-        All ALTLOC (disordered) residues and atoms are written to the output model.
-        (see :data:`IC_Residue.no_altloc`)
+        All ALTLOC (disordered) residues and atoms are written to the output
+        model.  (see (data)`IC_Residue.no_altloc`)
         """
         fp.write(f'   "{self.chain.id}", // chain id\n')
 
@@ -1630,7 +1666,8 @@ class IC_Chain:
             if "O" not in ric.akc:
                 if ric.lc != "G" and ric.lc != "A":
                     print(
-                        f"Unable to generate complete sidechain for {ric} {ric.lc} missing O atom"
+                        "Unable to generate complete sidechain for "
+                        f"{ric} {ric.lc} missing O atom"
                     )
             resNdx[ric] = ndx
             if chnStarted:
@@ -1663,7 +1700,8 @@ class IC_Chain:
                 if i == 1:
                     cma = "," if started else ""
                     fp.write(
-                        f"{cma}\n       // {str(ric.residue.id)} {ric.lc} sidechain\n"
+                        f"{cma}\n       // {str(ric.residue.id)} {ric.lc}"
+                        " sidechain\n"
                     )
                 started = False
                 for dk, d in sorted(ric.dihedra.items()):
@@ -1683,7 +1721,8 @@ class IC_Chain:
                             ndx2 += 1
                         else:
                             print(
-                                f"Atom missing for {d.id3}-{d.id32}, OpenSCAD chain may be discontiguous"
+                                f"Atom missing for {d.id3}-{d.id32}, OpenSCAD"
+                                f" chain may be discontiguous"
                             )
         fp.write("   ],")  # end of residue entry dihedra table
         fp.write("\n  ],\n")  # end of all dihedra table
@@ -1843,23 +1882,27 @@ class IC_Chain:
         """Generate 2D distance plot from atomArray.
 
         Default is to calculate distances for all atoms.  To generate the
-        classic C-alpha distance plot, pass a boolean mask array like:
+        classic C-alpha distance plot, pass a boolean mask array like::
 
             CaSelect = [
-            atomArrayNdx.get(k) for k in atomArrayNdx.keys() if k.akl[atmNameNdx] == "CA"
+                atomArrayNdx.get(k)
+                for k in atomArrayNdx.keys()
+                if k.akl[atmNameNdx] == "CA"
             ]
 
-        Alternatively, this will select all backbone atoms:
+        Alternatively, this will select all backbone atoms::
 
             backboneSelect = [
-            atomArrayNdx.get(k) for k in atomArrayNdx.keys() if k.is_backbone()
+                atomArrayNdx.get(k)
+                for k in atomArrayNdx.keys()
+                if k.is_backbone()
             ]
 
         :param [bool] filter: restrict atoms for calculation
 
-        .. seealso::
-            :meth:`.distance_to_internal_coordinates`, which requires the default
-            all atom distance plot.
+        -- seealso::
+            (meth)`.distance_to_internal_coordinates`, which requires the
+            default all atom distance plot.
 
         """
         if filter is None:
@@ -1872,21 +1915,23 @@ class IC_Chain:
         return np.linalg.norm(atomSet[:, None, :] - atomSet[None, :, :], axis=-1)
 
     def dihedral_signs(self) -> np.ndarray:
-        """Get sign array (+1/-1) for each element of :data:`.IC_Chain.dihedraAngle` .
+        """Get sign array (+1/-1) for each element of chain dihedraAngle array.
 
-        Required for :meth:`.distance_to_internal_coordinates`
+        Required for (meth)`.distance_to_internal_coordinates`
         """
         return np.sign(self.dihedraAngle)
 
     def distplot_to_dh_arrays(self, distplot: np.ndarray) -> None:
         """Load di/hedra distance arays from distplot.
 
-        Fill :class:`IC_Chain` arrays hedraL12, L23, L13 and dihedraL14 distance value arrays
-        from input distplot.  Distplot and di/hedra distance arrays must index
-        according to AtomKey mappings as developed in :meth:`IC_Chain.build_edraArrays`
+        Fill (class)`IC_Chain` arrays hedraL12, L23, L13 and dihedraL14
+        distance value arrays from input distplot.  Distplot and di/hedra
+        distance arrays must index according to AtomKey mappings as developed
+        in (meth)`IC_Chain.build_edraArrays`
 
-        Explcitly removed from :meth:`.distance_to_internal_coordinates` so user may
-        populate these chain di/hedra distance arrays by other methods.
+        Explcitly removed from (meth)`.distance_to_internal_coordinates` so
+        user may populate these chain di/hedra distance arrays by other
+        methods.
         """
         ha = self.a2ha_map.reshape(-1, 3)
         self.hedraL12 = distplot[ha[:, 0], ha[:, 1]]
@@ -1898,21 +1943,22 @@ class IC_Chain:
     def distance_to_internal_coordinates(self, dihedra_signs: np.ndarray) -> None:
         """Compute chain di/hedra from from distance and chirality data.
 
-        Distance properties on hedra L12, L23, L13 and dihedra L14 configured by
-        :meth:`.distplot_to_dh_arrays` or alternative loader.
+        Distance properties on hedra L12, L23, L13 and dihedra L14 configured
+        by (meth)`.distplot_to_dh_arrays` or alternative loader.
 
-        dihedraAngles result multiplied by dihedra_signs at final step to recover
-        chirality information lost in distance plot (mirror image of structure
-        has same distances but opposite sign dihedral angles).
+        dihedraAngles result multiplied by dihedra_signs at final step to
+        recover chirality information lost in distance plot (mirror image of
+        structure has same distances but opposite sign dihedral angles).
 
         Note that chain breaks will cause errors in rebuilt structure, use
-        :meth:`.copy_initNCaCs` to avoid this
+        (meth)`.copy_initNCaCs` to avoid this
 
         Based on answer Blue's answer to `The dihedral angles of a tetrahedron
         in terms of its edge lengths <https://math.stackexchange.com/a/49340/972353>`_
         on math.stackexchange.
 
-        Other values from that analysis included here as comments for completeness:
+        Other values from that analysis included here as comments for
+        completeness:
 
         * oa = hedron1 L12 if reverse else hedron1 L23
         * ob = hedron1 L23 if reverse else hedron1 L12
@@ -1922,7 +1968,7 @@ class IC_Chain:
         * bc = dihedron L14
 
         target is OA, the dihedral angle along edge oa
-        """
+        """  # noqa
         oa = self.hedraL12[self.dH1ndx]
         oa[self.dFwd] = self.hedraL23[self.dH1ndx][self.dFwd]
         ob = self.hedraL23[self.dH1ndx]
@@ -1998,8 +2044,8 @@ class IC_Chain:
     def copy_initNCaCs(self, other: "IC_Chain") -> None:
         """Copy atom coordinates for initNCaC atoms from other IC_Chain.
 
-        Needed for :meth:`.distance_to_internal_coordinates` if target has chain breaks
-        (otherwise each fragment will start at origin)
+        Needed for (meth)`.distance_to_internal_coordinates` if target has
+        chain breaks (otherwise each fragment will start at origin)
         """
         ndx = [self.atomArrayIndex[ak] for iNCaC in other.initNCaCs for ak in iNCaC]
         self.atomArray[ndx] = other.atomArray[ndx]
@@ -2016,34 +2062,38 @@ class IC_Residue:
     Attributes
     ----------
     no_altloc: bool default False
-        **Class** variable, disable processing of ALTLOC atoms if True, use only selected atoms.
+        **Class** variable, disable processing of ALTLOC atoms if True, use
+        only selected atoms.
 
     accept_atoms: tuple
-        **Class** variable, list of PDB atom names to use when generating internal coordinates.
-        Default is:
+        **Class** variable, list of PDB atom names to use when generating
+        internal coordinates.
+        Default is::
 
             accept_atoms = accept_mainchain + accept_hydrogens
 
         to exclude hydrogens in internal coordinates and generated PDB files,
-        override as:
+        override as::
 
             IC_Residue.accept_atoms = IC_Residue.accept_mainchain
 
-        to get only mainchain atoms plus amide proton, use:
+        to get only mainchain atoms plus amide proton, use::
 
             IC_Residue.accept_atoms = IC_Residue.accept_mainchain + ('H',)
 
-        to convert D atoms to H, set :data:`AtomKey.d2h` = True and use:
+        to convert D atoms to H, set (data)`AtomKey.d2h` = True and use::
 
-            IC_Residue.accept_atoms = accept_mainchain + accept_hydrogens + accept_deuteriums
+            IC_Residue.accept_atoms = (
+                accept_mainchain + accept_hydrogens + accept_deuteriums
+            )
 
-        Note that `accept_mainchain = accept_backbone + accept_sidechain`.  Thus
-        to generate sequence-agnostic conformational data for e.g. structure
-        alignment in dihedral angle space, use:
+        Note that `accept_mainchain = accept_backbone + accept_sidechain`.
+        Thus to generate sequence-agnostic conformational data for e.g.
+        structure alignment in dihedral angle space, use::
 
             IC_Residue.accept_atoms = accept_backbone
 
-        or set gly_Cbeta = True and use:
+        or set gly_Cbeta = True and use::
 
             IC_Residue.accept_atoms = accept_backbone + ('CB',)
 
@@ -2051,26 +2101,28 @@ class IC_Residue:
         instead of H
 
     accept_resnames: tuple
-        **Class** variable, list of 3-letter residue names for HETATMs to accept when generating
-        internal coordinates from atoms.  HETATM sidechain will be ignored, but normal
-        backbone atoms (N, CA, C, O, CB) will be included.  Currently only
-        CYG, YCM and UNK; override at your own risk.  To generate
-        sidechain, add appropriate entries to `ic_data_sidechains` in :mod:`.ic_data` and
-        support in :meth:`.atom_to_internal_coordinates`
+        **Class** variable, list of 3-letter residue names for HETATMs to
+        accept when generating internal coordinates from atoms.  HETATM
+        sidechain will be ignored, but normal backbone atoms (N, CA, C, O, CB)
+        will be included.  Currently only CYG, YCM and UNK; override at your
+        own risk.  To generate sidechain, add appropriate entries to
+        `ic_data_sidechains` in (mod)`.ic_data` and support in
+        (meth)`.atom_to_internal_coordinates`
 
     gly_Cbeta: bool default False
-        **Class** variable, override to True to generate internal coordinates for
-        glycine CB atoms in :meth:`.atom_to_internal_coordinates` :
+        **Class** variable, override to True to generate internal coordinates
+        for glycine CB atoms in (meth)`.atom_to_internal_coordinates` ::
 
             IC_Residue.gly_Cbeta = True
 
     allBonds: bool default False
-        **Class** variable, whereas a PDB file just specifies atoms, OpenSCAD output for 3D printing
-        needs all bonds specified explicitly - otherwise, e.g. PHE rings will not
-        be closed.  This variable is managed by the :func:`.SCADIO.write_SCAD` code.
+        **Class** variable, whereas a PDB file just specifies atoms, OpenSCAD
+        output for 3D printing needs all bonds specified explicitly - otherwise
+        e.g. PHE rings will not be closed.  This variable is managed by the
+        (func)`.SCADIO.write_SCAD` code.
 
     residue: Biopython Residue object reference
-        The :class:`.Residue` object this extends
+        The (class)`.Residue` object this extends
     hedra: dict indexed by 3-tuples of AtomKeys
         Hedra forming this residue
     dihedra: dict indexed by 4-tuples of AtomKeys
@@ -2142,7 +2194,7 @@ class IC_Residue:
     # chain)
     accept_resnames = ("CYG", "YCM", "UNK")
 
-    # AllBonds - For OpenSCAD, generate explicit hedra covering all bonds if True.
+    # AllBonds - For OpenSCAD, generate explicit hedra covering all bonds.
     AllBonds: bool = False
 
     no_altloc: bool = False
@@ -2311,8 +2363,9 @@ class IC_Residue:
         self.dihedra: Dict[DKT, Dihedron] = {}
         # cache of AtomKey results for rak()
         self.akc: Dict[Union[str, Atom], AtomKey] = {}
-        # set of AtomKeys involved in dihedra, used by split_akl, build_rak_cache
-        # built by __init__ for XYZ (PDB coord) input, link_dihedra for PIC input
+        # set of AtomKeys involved in dihedra, used by split_akl,
+        # build_rak_cache.  Built by __init__ for XYZ (PDB coord) input,
+        # link_dihedra for PIC input
         self.ak_set: Set[AtomKey] = set()
         # reference to adjacent residues in chain
         self.rprev: List[IC_Residue] = []
@@ -2345,9 +2398,10 @@ class IC_Residue:
                             self._add_atom(atm)
                 else:
                     self._add_atom(atom)
-            if self.ak_set:  # only for coordinate (pdb) input, _add_atom loads
-                self.build_rak_cache()  # init cache ready for atom_to_internal_coords
-                # self.NCaCKey = [(self.rak("N"), self.rak("CA"), self.rak("C"))]
+            if self.ak_set:
+                # only for coordinate (pdb) input, _add_atom loads
+                # init cache ready for atom_to_internal_coords
+                self.build_rak_cache()
 
     def __deepcopy__(self, memo):
         existing = memo.get(id(self), False)
@@ -2451,7 +2505,7 @@ class IC_Residue:
     def set_flexible(self) -> None:
         """For OpenSCAD, mark N-CA and CA-C bonds to be flexible joints.
 
-        See :func:`.SCADIO.write_SCAD`
+        See (func)`.SCADIO.write_SCAD`
         """
         for h in self.hedra.values():
             if h.dh_class == "NCAC":
@@ -2467,7 +2521,7 @@ class IC_Residue:
     def set_hbond(self) -> None:
         """For OpenSCAD, mark H-N and C-O bonds to be hbonds (magnets).
 
-        See :func:`.SCADIO.write_SCAD`
+        See (func)`.SCADIO.write_SCAD`
         """
         for h in self.hedra.values():
             if h.dh_class == "HNCA":
@@ -2542,9 +2596,10 @@ class IC_Residue:
         protein coordinates to dihedron space coordinates for first three
         atoms (see coord_space())
 
-        This is the serial version, see :meth:`.ar2` for numpy vectorized version.
+        This is the serial version, see (meth)`.ar2` for numpy vectorized
+        version.
 
-        Call :meth:`.init_atom_coords` to update any modified di/hedra before
+        Call (meth)`.init_atom_coords` to update any modified di/hedra before
         coming here, this only assembles dihedra into protein coordinate space.
 
         **Algorithm**
@@ -2581,8 +2636,8 @@ class IC_Residue:
             at origin.
 
         :returns:
-            Dict of AtomKey -> homogeneous atom coords for residue in protein space
-            relative to previous residue
+            Dict of AtomKey -> homogeneous atom coords for residue in protein
+            space relative to previous residue
 
         """
         # debug statements below still useful, commented for performance
@@ -2734,7 +2789,7 @@ class IC_Residue:
         lst: Union[Tuple["AtomKey", ...], List["AtomKey"]],
         missingOK: bool = False,
     ) -> List[Tuple["AtomKey", ...]]:
-        """Get AtomKeys for this residue (ak_set) given generic list of AtomKeys.
+        """Get AtomKeys for this residue (ak_set) for generic list of AtomKeys.
 
         Changes and/or expands a list of 'generic' AtomKeys (e.g. 'N, C, C') to
         be specific to this Residue's altlocs etc., e.g.
@@ -2851,7 +2906,7 @@ class IC_Residue:
         if 4 > lenLst:
             cdct, dct, obj = self.cic.hedra, self.hedra, Hedron
         else:
-            cdct, dct, obj = self.cic.dihedra, self.dihedra, Dihedron  # type: ignore
+            cdct, dct, obj = self.cic.dihedra, self.dihedra, Dihedron  # type: ignore # noqa
 
         if isinstance(lst, List):
             tlst = tuple(lst)
@@ -2874,7 +2929,7 @@ class IC_Residue:
 
     # @profile
     def create_edra(self, verbose: bool = False) -> None:
-        """Create IC_Chain and IC_Residue hedra and dihedra for atom coordinates.
+        """Create IC_Chain and IC_Residue di/hedra for atom coordinates.
 
         AllBonds handled here.
 
@@ -2902,13 +2957,11 @@ class IC_Residue:
 
                 for tpl in nextNCaC:
                     for ak in tpl:
-                        if ak in rn.ak_set:  # rn.atom_coords:
-                            # self.atom_coords[ak] = rn.atom_coords[ak]
+                        if ak in rn.ak_set:
                             self.ak_set.add(ak)
                         else:
-                            for rn_ak in rn.ak_set:  # rn.atom_coords.keys():
+                            for rn_ak in rn.ak_set:
                                 if rn_ak.altloc_match(ak):
-                                    # self.atom_coords[rn_ak] = rn.atom_coords[rn_ak]
                                     self.ak_set.add(rn_ak)
 
                 self._gen_edra((sN, sCA, sC, nN))  # psi
@@ -2930,11 +2983,13 @@ class IC_Residue:
                         self._gen_edra((nN, nCA, nCB))
                         self._gen_edra((sC, nN, nCA, nCB))
 
-        # if start of chain then need to init NCaC hedron as not in previous residue
+        # if start of chain then need to init NCaC hedron as not in previous
+        # residue
         if 0 == len(self.rprev):
             self._gen_edra((sN, sCA, sC))
 
-        # now init di/hedra for standard backbone atoms independent of neighbours
+        # now init di/hedra for standard backbone atoms independent of
+        # neighbours
         backbone = ic_data_backbone
         for edra in backbone:
             # only need to build if this residue has all the atoms in the edra
@@ -2954,7 +3009,8 @@ class IC_Residue:
             if IC_Residue.AllBonds:  # openscad output needs all bond cylinders explicit
                 sidechain = ic_data_sidechain_extras.get(self.lc, [])
                 for edra in sidechain:
-                    # test less useful here but avoids populating rak cache if possible
+                    # test less useful here but avoids populating rak cache if
+                    # possible
                     if all(atm in self.akc for atm in edra):
                         r_edra = [self.rak(atom) for atom in edra]
                         self._gen_edra(r_edra)
@@ -3052,14 +3108,14 @@ class IC_Residue:
         """Generate PDB ATOM records for this residue as string.
 
         Convenience method for functionality not exposed in PDBIO.py.
-        Increments :data:`IC_Residue.atom_sernum` if not None
+        Increments (data)`IC_Residue.atom_sernum` if not None
 
         :param IC_Residue.atom_sernum: Class variable default None.
             Override and increment atom serial number if not None
         :param IC_Residue.atom_chain: Class variable.
             Override atom chain id if not None
 
-        .. todo::
+        -- todo::
             move to PDBIO
         """
         str = ""
@@ -3115,7 +3171,7 @@ class IC_Residue:
             "bFactors",  # _b[14]
         ],
     )
-    pfDef.__doc__ = """terms to select angles in :func:`.PICIO.write_PIC`"""
+    pfDef.__doc__ = """terms to select angles in (func)`.PICIO.write_PIC`"""
 
     _b = [1 << i for i in range(16)]
     _bChi = _b[4] | _b[5] | _b[6] | _b[7] | _b[8]
@@ -3165,11 +3221,14 @@ class IC_Residue:
         hCut: Optional[Union[float, None]] = None,
         pCut: Optional[Union[float, None]] = None,
     ) -> str:
-        """Write PIC format lines for this residue.  See :func:`.PICIO.write_PIC`.
+        """Write PIC format lines for this residue.
+
+        See (func)`.PICIO.write_PIC`.
 
         :param str pdbid: PDB idcode string; default 0PDB
         :param str chainid: PDB Chain ID character; default A
-        :param int picFlags: control details written to PIC file; see :meth:`.PICIO.write_PIC`
+        :param int picFlags: control details written to PIC file; see
+            (meth)`.PICIO.write_PIC`
         :param float hCut: only write hedra with ref db angle std dev > this
             value; default None
         :param float pCut: only write primary dihedra with ref db angle
@@ -3332,7 +3391,7 @@ class IC_Residue:
               previous residue, 0 is this residue, 1 is next residue
             - psi, phi, omg, omega, chi1, chi2, chi3, chi4, chi5
             - tau (N-CA-C angle) see Richardson1981
-            - except for tuples of AtomKeys, no option to access alternate disordered atoms
+            - tuples of AtomKeys is only access for alternate disordered atoms
 
         Observe that a residue's phi and omega dihedrals, as well as the hedra
         comprising them (including the N:Ca:C `tau` hedron), are stored in the
@@ -3434,7 +3493,7 @@ class IC_Residue:
     def get_angle(self, angle_key: Union[EKT, str]) -> Optional[float]:
         """Get dihedron or hedron angle for specified key.
 
-        See :meth:`.pick_angle` for key specifications.
+        See (meth)`.pick_angle` for key specifications.
         """
         edron = self.pick_angle(angle_key)
         if edron:
@@ -3444,7 +3503,7 @@ class IC_Residue:
     def set_angle(self, angle_key: Union[EKT, str], v: float):
         """Set dihedron or hedron angle for specified key.
 
-        See :meth:`.pick_angle` for key specifications.
+        See (meth)`.pick_angle` for key specifications.
         """
         edron = self.pick_angle(angle_key)
         if edron is not None:
@@ -3470,7 +3529,7 @@ class IC_Residue:
     def bond_rotate(self, angle_key: Union[EKT, str], delta: float):
         """Rotate set of overlapping dihedrals by delta degrees.
 
-        See :meth:`.pick_angle` for key specifications.
+        See (meth)`.pick_angle` for key specifications.
         """
         base = self.pick_angle(angle_key)
         self._do_bond_rotate(base, delta)
@@ -3478,7 +3537,7 @@ class IC_Residue:
     def bond_set(self, angle_key: Union[EKT, str], val: float):
         """Set dihedron to val, update overlapping dihedra by same amount.
 
-        See :meth:`.pick_angle` for key specifications.
+        See (meth)`.pick_angle` for key specifications.
         """
         base = self.pick_angle(angle_key)
         delta = Dihedron.angle_dif(base.angle, val)
@@ -3509,7 +3568,8 @@ class IC_Residue:
                 else ric.get_length((ric.rak("C"), ric.rnext[0].rak("N"))),
             )
 
-        :return: list of hedra containing specified atom pair, tuple of atom keys
+        :return: list of hedra containing specified atom pair as tuples of
+                AtomKeys
         """
         rlst: List[Hedron] = []
         # if ":" in ak_spec:
@@ -3525,7 +3585,7 @@ class IC_Residue:
     def get_length(self, ak_spec: Union[str, BKT]) -> Optional[float]:
         """Get bond length for specified atom pair.
 
-        See :meth:`.pick_length` for ak_spec.
+        See (meth)`.pick_length` for ak_spec.
         """
         hed_lst, ak_spec2 = self.pick_length(ak_spec)
         if hed_lst is None or ak_spec2 is None:
@@ -3540,7 +3600,7 @@ class IC_Residue:
     def set_length(self, ak_spec: Union[str, BKT], val: float) -> None:
         """Set bond length for specified atom pair.
 
-        See :meth:`.pick_length` for ak_spec.
+        See (meth)`.pick_length` for ak_spec.
         """
         hed_lst, ak_spec2 = self.pick_length(ak_spec)
         if hed_lst is not None and ak_spec2 is not None:
@@ -3555,7 +3615,8 @@ class IC_Residue:
         rp = str(self.rbase[0])
         aselect = [aai.get(k) for k in aai.keys() if k.akl[rpndx] == rp]
         aas = aa[aselect]
-        # numpy will broadcast the transform matrix over all points if dot() in this order
+        # numpy will broadcast the transform matrix over all points if dot()
+        # in this order
         aa[aselect] = aas.dot(mtx.transpose())
         """
         # slower way, one at a time
@@ -3573,7 +3634,7 @@ class Edron:
     Attributes
     ----------
     aks: tuple
-        3 (hedron) or 4 (dihedron) :class:`.AtomKey` s defining this di/hedron
+        3 (hedron) or 4 (dihedron) (class)`.AtomKey` s defining this di/hedron
     id: str
         ':'-joined string of AtomKeys for this di/hedron
     needs_update: bool
@@ -3591,10 +3652,10 @@ class Edron:
         and Dihedron objects
     cic: IC_Chain reference
         Chain internal coords object containing this hedron; set in
-        :meth:`IC_Residue.link_dihedra`
+        (meth)`IC_Residue.link_dihedra`
     ndx: int
         index into IC_Chain level numpy data arrays for di/hedra.
-        Set in :meth:`IC_Chain.init_edra`
+        Set in (meth)`IC_Chain.init_edra`
     rc: int
         number of residues involved in this edron
 
@@ -3660,7 +3721,11 @@ class Edron:
                 if arg is not None:
                     aks.append(arg)
         if [] == aks and all(k in kwargs for k in ("a1", "a2", "a3")):
-            aks = [AtomKey(kwargs["a1"]), AtomKey(kwargs["a2"]), AtomKey(kwargs["a3"])]
+            aks = [
+                AtomKey(kwargs["a1"]),
+                AtomKey(kwargs["a2"]),
+                AtomKey(kwargs["a3"]),
+            ]
             if "a4" in kwargs and kwargs["a4"] is not None:
                 aks.append(AtomKey(kwargs["a4"]))
 
@@ -3857,7 +3922,10 @@ class Hedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Hedron object."""
-        return f"3-{self.id} {self.rdh_class} {str(self.L12)} {str(self.Angle)} {str(self.L23)}"
+        return (
+            f"3-{self.id} {self.rdh_class} {str(self.L12)} "
+            f"{str(self.Angle)} {str(self.L23)}"
+        )
 
     @property
     def angle(self) -> float:
@@ -3949,7 +4017,7 @@ class Dihedron(Edron):
     ----------
     angle: float
         Measurement or specification of dihedral angle in degrees; prefer
-        :meth:`IC_Residue.bond_set` to set
+        (meth)`IC_Residue.bond_set` to set
     hedron1, hedron2: Hedron object references
         The two hedra which form the dihedral angle
     h1key, h2key: tuples of AtomKeys
@@ -3957,10 +4025,10 @@ class Dihedron(Edron):
     id3,id32: tuples of AtomKeys
         First 3 and second 3 atoms comprising dihedron; hxkey orders may differ
     ric: IC_Residue object reference
-        :class:`.IC_Residue` object containing this dihedral
+        (class)`.IC_Residue` object containing this dihedral
     reverse: bool
         Indicates order of atoms in dihedron is reversed from order of atoms
-        in hedra (configured by :meth:`.set_hedra`)
+        in hedra (configured by (meth)`.set_hedra`)
     primary: bool
         True if this is psi, phi, omega or a sidechain chi angle
     pclass: string (primary angle class)
@@ -3969,20 +4037,21 @@ class Dihedron(Edron):
     cst, rcst: numpy [4][4] arrays
         transformations to (cst) and from (rcst) Dihedron coordinate space
         defined with atom 2 (Hedron 1 center atom) at the origin.  Set by
-        :meth:`.IC_Chain.build_edraArrays` and :meth:`.IC_Residue.assemble`.
+        (meth)`.IC_Chain.build_edraArrays` and (meth)`.IC_Residue.assemble`.
 
     Methods
     -------
     set_hedra()
         work out hedra keys and orientation for this dihedron
     angle()
-        getter/setter for dihdral angle in degrees; prefer :meth:`IC_Residue.bond_set`
+        getter/setter for dihdral angle in degrees; prefer
+        (meth)`IC_Residue.bond_set`
     bits()
         return pic_flags bitmask for dihedron psi, omega, etc
     """
 
     def __init__(self, *args: Union[List["AtomKey"], DKT], **kwargs: str) -> None:
-        """Initialize Dihedron with sequence of AtomKeys and optional dihedral angle.
+        """Init Dihedron with sequence of AtomKeys and optional dihedral angle.
 
         Acceptable input:
             As for Edron, plus optional 'dihedral' keyworded angle value.
@@ -4109,7 +4178,7 @@ class Dihedron(Edron):
         Faster to modify IC_Chain level arrays directly.
 
         This is probably not the routine you are looking for.  See
-        :meth:`IC_Residue.bond_set` to change a dihedral angle along with its
+        (meth)`IC_Residue.bond_set` to change a dihedral angle along with its
         neighbours, i.e. without clashing atoms.
 
         N.B. dihedron (i-1)C-N-CA-CB is ignored if O exists.
@@ -4172,7 +4241,7 @@ class Dihedron(Edron):
         return Dihedron.angle_dif(self.angle, other.angle)
 
     def bits(self) -> int:
-        """Return pic_flags bitmasks for self is psi, omg, phi, pomg, chiX; else 0."""
+        """Get pic_flags bitmasks for self is psi, omg, phi, pomg, chiX."""
         icr = IC_Residue
         if self.dh_class == "NCACN":  # i psi
             return icr.pic_flags.psi
@@ -4207,26 +4276,36 @@ class AtomKey:
     Supports rich comparison and multiple ways to instantiate.
 
     AtomKeys contain:
-     residue position (respos), insertion code (icode), 1 or 3 char residue name
-     (resname), atom name (atm), altloc (altloc), and occupancy (occ)
+     residue position (respos), insertion code (icode), 1 or 3 char residue
+     name (resname), atom name (atm), altloc (altloc), and occupancy (occ)
 
-    Use :data:`AtomKey.fields` to get the index to the component of interest by name:
+    Use (data)`AtomKey.fields` to get the index to the component of interest by
+    name:
 
-    Get C-alpha atoms from IC_Chain atomArray and atomArrayIndex with AtomKeys::
+    Get C-alpha atoms from IC_Chain atomArray and atomArrayIndex with
+    AtomKeys::
 
         atmNameNdx = internal_coords.AtomKey.fields.atm
-        CaSelection = [atomArrayNdx.get(k) for k in atomArrayIndex.keys() if k.akl[atmNameNdx] == 'CA']
+        CaSelection = [
+            atomArrayNdx.get(k)
+            for k in atomArrayIndex.keys()
+            if k.akl[atmNameNdx] == "CA"
+        ]
         AtomArrayCa = atomArray[CaSelection]
 
     Get all phenylalanine atoms in a chain::
 
         resNameNdx = internal_coords.AtomKey.fields.resname
-        PheSelection = [atomArrayNdx.get(k) for k in atomArrayIndex.keys() if k.akl[resNameNdx] == 'F']
+        PheSelection = [
+            atomArrayNdx.get(k)
+            for k in atomArrayIndex.keys()
+            if k.akl[resNameNdx] == "F"
+        ]
         AtomArrayPhe = atomArray[PheSelection]
 
     'resname' will be the uppercase 1-letter amino acid code if one of the 20
     standard residues, otherwise the supplied 3-letter code.  Supplied as input
-    or read from :data:`IC_Residue.rbase`.
+    or read from (data)`IC_Residue.rbase`.
 
     Attributes
     ----------
@@ -4458,7 +4537,7 @@ class AtomKey:
                 elif o is None and s is not None:
                     return 1, 0
                 # now we know s, o not None
-                # s, o = cast(str, s), cast(str, o)  # performance critical code
+                # s, o = cast(str, s), cast(str, o) # performance critical code
 
                 if AtomKey.fields.atm != i:
                     # only sorting complications at atom level, occ.
@@ -4482,10 +4561,8 @@ class AtomKey:
                                 return 1, 0
                         elif oac is not None:  # oac has val and sac is None
                             return 0, 1
-                        # else:
-                        #    return ord(s), ord(o)  # sac, oac = None
                     # else:  # altloc
-                    # fall through for altloc and resname with both altloc = None
+                    # fall through for altloc, resname with both altloc = None
                     return ord(s), ord(o)
 
                 # atom names from here
@@ -4532,7 +4609,10 @@ class AtomKey:
                     elif o1d:
                         return 1, 0
                     else:
-                        return (self._greek_sort_keys[s1], self._greek_sort_keys[o1])
+                        return (
+                            self._greek_sort_keys[s1],
+                            self._greek_sort_keys[o1],
+                        )
                 return int(s), int(o)  # raise exception?
         return 1, 1
 
@@ -4586,7 +4666,9 @@ class AtomKey:
 def set_accuracy_95(num: float) -> float:
     """Reduce floating point accuracy to 9.5 (xxxx.xxxxx).
 
-    Used by :class:`Hedron` and :class:`Dihedron` classes writing PIC and SCAD files.
+    Used by (class)`Hedron` and (class)`Dihedron` classes writing PIC and SCAD
+    files.
+
     :param float num: input number
     :returns: float with specified accuracy
     """

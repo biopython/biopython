@@ -52,7 +52,10 @@ from Bio import SeqIO
 
 # @profile
 def read_PIC(
-    file: TextIO, verbose: bool = False, quick: bool = False, defaults: bool = False
+    file: TextIO,
+    verbose: bool = False,
+    quick: bool = False,
+    defaults: bool = False,
 ) -> Structure:
     """Load Protein Internal Coordinate (.pic) data from file.
 
@@ -72,9 +75,9 @@ def read_PIC(
     An improvement would define relative positions for HOH (water) entries.
 
     Defaults will be supplied for any value if defaults=True.  Default values
-    are supplied in ic_data.py, but structures degrade quickly with any deviation
-    from true coordinates.  Experiment with picFlags options to write_PIC() to
-    verify this.
+    are supplied in ic_data.py, but structures degrade quickly with any
+    deviation from true coordinates.  Experiment with picFlags options to
+    write_PIC() to verify this.
 
     N.B. dihedron (i-1)C-N-CA-CB is ignored in assembly if O exists.
 
@@ -82,17 +85,17 @@ def read_PIC(
     in some PDB file residues, which means the sidechain cannot be
     placed.  The alternate CB path (i-1)C-N-CA-CB is provided to
     circumvent this, but if this is needed then it must be adjusted in
-    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see :meth:`.bond_set`
-    and :meth:`.bond_rotate` to handle this automatically).
+    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see (meth)`.bond_set`
+    and (meth)`.bond_rotate` to handle this automatically).
 
-    :param Bio.File file: :func:`.as_handle` file name or handle
+    :param Bio.File file: (func)`.as_handle` file name or handle
     :param bool verbose: complain when lines not as expected
     :param bool quick: don't check residues for all dihedra (no default values)
     :param bool defaults: create di/hedra as needed from reference database.
         Amide proton created if 'H' is in IC_Residue.accept_atoms
-    :returns: Biopython Structure object, Residues with .internal_coord attributes
-        but no coordinates except for chain start N, CA, C atoms if supplied,
-        **OR** None on parse fail (silent unless verbose=True)
+    :returns: Biopython Structure object, Residues with .internal_coord
+        attributes but no coordinates except for chain start N, CA, C atoms if
+        supplied, **OR** None on parse fail (silent unless verbose=True)
 
     """
     proton = "H" in IC_Residue.accept_atoms
@@ -164,7 +167,7 @@ def read_PIC(
 
     def akcache(akstr: str) -> AtomKey:
         """Maintain dictionary of AtomKeys seen while reading this PIC file."""
-        # akstr: full AtomKey string read from .pic file - includes residue info
+        # akstr: full AtomKey string read from .pic file, includes residue info
         try:
             return akc[akstr]
         except (KeyError):
@@ -185,7 +188,13 @@ def read_PIC(
                         pric.rprev.append(ppric)
 
     def process_hedron(
-        a1: str, a2: str, a3: str, l12: str, ang: str, l23: str, ric: IC_Residue
+        a1: str,
+        a2: str,
+        a3: str,
+        l12: str,
+        ang: str,
+        l23: str,
+        ric: IC_Residue,
     ) -> Tuple:
         """Create Hedron on current (sbcic) Chain.internal_coord."""
         ek = (akcache(a1), akcache(a2), akcache(a3))
@@ -242,14 +251,20 @@ def read_PIC(
             dflts = hedra_defaults["".join(rhcl)][0]
 
         process_hedron(
-            str(hkey[0]), str(hkey[1]), str(hkey[2]), dflts[0], dflts[1], dflts[2], ric
+            str(hkey[0]),
+            str(hkey[1]),
+            str(hkey[2]),
+            dflts[0],
+            dflts[1],
+            dflts[2],
+            ric,
         )
 
         if verbose:
             print(f" default for {ek}")
 
     def hedra_check(dk: str, ric: IC_Residue) -> None:
-        """Confirm both hedra present for supplied dihedron key, use default if set."""
+        """Confirm both hedra present for dihedron key, use default if set."""
         if dk[0:3] not in sbcic.hedra and dk[2::-1] not in sbcic.hedra:
             if defaults:
                 default_hedron(dk[0:3], ric)
@@ -330,7 +345,14 @@ def read_PIC(
                 rnext = ek[0].ric.rnext
                 paKey.append(
                     AtomKey(
-                        (rnext[0].rbase[0], None, rnext[0].rbase[2], "N", None, None)
+                        (
+                            rnext[0].rbase[0],
+                            None,
+                            rnext[0].rbase[2],
+                            "N",
+                            None,
+                            None,
+                        )
                     )
                 )
                 paKey = tuple(paKey)
@@ -404,15 +426,17 @@ def read_PIC(
 
                 else:
                     print(
-                        f"missing primary angle {paKey} {primAngle} to generate {rnum}{rname} {rdclass}"
+                        f"missing primary angle {paKey} {primAngle} to "
+                        f"generate {rnum}{rname} {rdclass}"
                     )
         else:
             print(
-                f"missing {ek} -> {rdclass} ({dclass}) not found in primary or secondary defaults"
+                f"missing {ek} -> {rdclass} ({dclass}) not found in primary or"
+                " secondary defaults"
             )
 
     def dihedra_check(ric: IC_Residue) -> None:
-        """Look for required dihedra in residue, generate defaults if configured."""
+        """Look for required dihedra in residue, generate defaults if set."""
         # rnext should be set
         def ake_recurse(akList: List) -> List:
             """Bulid combinatorics of AtomKey lists."""
@@ -457,7 +481,11 @@ def read_PIC(
         sO, sCB, sH = AtomKey(ric, "O"), AtomKey(ric, "CB"), AtomKey(ric, "H")
         if ric.rnext != []:
             for rn in ric.rnext:
-                nN, nCA, nC = AtomKey(rn, "N"), AtomKey(rn, "CA"), AtomKey(rn, "C")
+                nN, nCA, nC = (
+                    AtomKey(rn, "N"),
+                    AtomKey(rn, "CA"),
+                    AtomKey(rn, "C"),
+                )
                 # intermediate residue, need psi, phi, omg
                 chkLst.append((sN, sCA, sC, nN))  # psi
                 chkLst.append((sCA, sC, nN, nCA))  # omg i+1
@@ -481,7 +509,7 @@ def read_PIC(
         except KeyError:
             pass
 
-        # now compare generated list to ric.dihedra, get defaults if configured.
+        # now compare generated list to ric.dihedra, get defaults if set.
         chkLst = ak_expand(chkLst)
         altloc_ndx = AtomKey.fields.altloc
 
@@ -512,7 +540,11 @@ def read_PIC(
         :param IC_Residue ric: current residue to assign AtomKeys to
         """
         res = ric.residue
-        reskl = (str(res.id[1]), (None if res.id[2] == " " else res.id[2]), ric.lc)
+        reskl = (
+            str(res.id[1]),
+            (None if res.id[2] == " " else res.id[2]),
+            ric.lc,
+        )
         for ak in ek:
             if ak.ric is None:
                 sbcic.akset.add(ak)
@@ -565,7 +597,12 @@ def read_PIC(
                     segid = m.group(9)
                     if segid is None:
                         segid = "    "
-                    this_SMCS = [m.group(1), int(m.group(2)), m.group(3), segid]
+                    this_SMCS = [
+                        m.group(1),
+                        int(m.group(2)),
+                        m.group(3),
+                        segid,
+                    ]
                     if curr_SMCS != this_SMCS:
                         if curr_SMCS[:3] != this_SMCS[:3] and ha != {}:
                             # chain change so process current chain data
@@ -616,7 +653,8 @@ def read_PIC(
 
                         if not quick:
                             for r in pr:
-                                # create di/hedra if default for res i-1 just linked
+                                # create di/hedra if default for residue i-1
+                                # just linked
                                 dihedra_check(r.internal_coord)
 
                         pr = tr
@@ -644,7 +682,12 @@ def read_PIC(
 
                 else:
                     if verbose:
-                        print("Reading pic file", file, "residue ID parse fail: ", line)
+                        print(
+                            "Reading pic file",
+                            file,
+                            "residue ID parse fail: ",
+                            line,
+                        )
                     return None
             elif line.startswith("ATOM "):
                 m = pdb_atm_re.match(line)
@@ -674,7 +717,11 @@ def read_PIC(
                             )
                         return None
                     coord = numpy.array(
-                        (float(m.group("x")), float(m.group("y")), float(m.group("z"))),
+                        (
+                            float(m.group("x")),
+                            float(m.group("y")),
+                            float(m.group("z")),
+                        ),
                         "f",
                     )
                     struct_builder.init_atom(
@@ -688,7 +735,8 @@ def read_PIC(
                         m.group("elm").strip(),
                     )
 
-                    # reset because prev does not link to this residue (chainBreak)
+                    # reset because prev does not link to this residue
+                    # (chainBreak)
                     pr = []
 
             elif line.startswith("BFAC: "):
@@ -699,7 +747,7 @@ def read_PIC(
                             m2 = bfac2_re.match(bfac_pair)
                             bfacs[m2.group(1)] = float(m2.group(2))
                 # else:
-                #    print('Reading pic file', file, 'B-factor line fail: ', line)
+                #    print f"Reading pic file {file} B-factor fail: {line}"
             else:
                 m = Edron.edron_re.match(line)
                 if m and sb_res is not None:
@@ -727,13 +775,19 @@ def read_PIC(
                     print(
                         "PIC file: ",
                         file,
-                        " error: no residue info before reading (di/h)edron data: ",
+                        " error: no residue info before reading (di/h)edron: ",
                         line,
                     )
                     return None
                 elif line.strip():
                     if verbose:
-                        print("Reading PIC file", file, "parse fail on: .", line, ".")
+                        print(
+                            "Reading PIC file",
+                            file,
+                            "parse fail on: .",
+                            line,
+                            ".",
+                        )
                     return None
 
     # reached end of input
@@ -749,7 +803,7 @@ def read_PIC_seq(
     title: str = None,
     chain: str = None,
 ) -> Structure:
-    """Read :class:`.SeqRecord` into Structure with default internal coordinates."""
+    """Read (class)`.SeqRecord` into Structure with default internal coords."""
     read_pdbid, read_title, read_chain = None, None, None
 
     if seqRec.id is not None:
@@ -879,13 +933,15 @@ def write_PIC(
 ):
     """Write Protein Internal Coordinates (PIC) to file.
 
-    See :func:`read_PIC` for file format.  Recurses to lower entity levels (M, C, R).
+    See (func)`read_PIC` for file format.
+    Recurses to lower entity levels (M, C, R).
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
-    :param Bio.File file: :func:`.as_handle` file name or handle
+    :param Bio.File file: (func)`.as_handle` file name or handle
     :param str pdbid: PDB idcode, read from entity if not supplied
     :param char chainid: PDB Chain ID, set from C level entity.id if needed
-    :param flags: uint boolean flags controlling output, defined in IC_Residue.pic_flags:
+    :param flags: uint boolean flags controlling output, defined in
+        IC_Residue.pic_flags:
 
         * "psi",
         * "omg",
@@ -907,10 +963,24 @@ def write_PIC(
         * "initAtoms",  # XYZ coordinates of initial Tau (N-Ca-C)
         * "bFactors"
 
-        default is everything:
-            picFlagsDefault = pic_flags.all | pic_flags.initAtoms | pic_flags.bFactors
+        default is everything::
 
-        read_PIC(defaults=True) will supply default values for anything left out
+            picFlagsDefault = (
+                pic_flags.all | pic_flags.initAtoms | pic_flags.bFactors
+            )
+
+        Usage in your code::
+
+            # just primary dihedra and all hedra
+            picFlags = (
+                IC_Residue.pic_flags.primary | IC_Residue.pic_flags.hedra
+            )
+
+            # no B-factors:
+            picFlags = IC_Residue.picFlagsDefault
+            picFlags &= ~IC_Residue.pic_flags.bFactors
+
+        read_PIC(defaults=True) will use default values for anything left out
 
     :param float hCut: default None
         only write hedra with ref db angle std dev greater than this value
@@ -958,12 +1028,24 @@ def write_PIC(
                     chainid = entity.id
                 for res in entity:
                     write_PIC(
-                        res, fp, pdbid, chainid, picFlags=picFlags, hCut=hCut, pCut=pCut
+                        res,
+                        fp,
+                        pdbid,
+                        chainid,
+                        picFlags=picFlags,
+                        hCut=hCut,
+                        pCut=pCut,
                     )
             elif "M" == entity.level:
                 for chn in entity:
                     write_PIC(
-                        chn, fp, pdbid, chainid, picFlags=picFlags, hCut=hCut, pCut=pCut
+                        chn,
+                        fp,
+                        pdbid,
+                        chainid,
+                        picFlags=picFlags,
+                        hCut=hCut,
+                        pCut=pCut,
                     )
             elif "S" == entity.level:
                 if not pdbid:
@@ -981,7 +1063,13 @@ def write_PIC(
                     fp.write("TITLE     " + nam.upper() + "\n")
                 for mdl in entity:
                     write_PIC(
-                        mdl, fp, pdbid, chainid, picFlags=picFlags, hCut=hCut, pCut=pCut
+                        mdl,
+                        fp,
+                        pdbid,
+                        chainid,
+                        picFlags=picFlags,
+                        hCut=hCut,
+                        pCut=pCut,
                     )
             else:
                 raise PDBException("Cannot identify level: " + str(entity.level))

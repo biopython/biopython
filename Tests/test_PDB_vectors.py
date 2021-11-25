@@ -19,8 +19,19 @@ except ImportError:
     ) from None
 
 from Bio.PDB.vectors import Vector
-from Bio.PDB import rotmat, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
-from Bio.PDB.vectors import get_spherical_coordinates, coord_space, homog_trans_mtx
+from Bio.PDB import (
+    rotmat,
+    refmat,
+    calc_angle,
+    calc_dihedral,
+    rotaxis,
+    m2rotaxis,
+)
+from Bio.PDB.vectors import (
+    get_spherical_coordinates,
+    coord_space,
+    homog_trans_mtx,
+)
 from Bio.PDB.vectors import multi_coord_space
 
 
@@ -119,7 +130,8 @@ class VectorTests(unittest.TestCase):
         )
         self.assertTrue(
             numpy.allclose(
-                v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]
+                v1.right_multiply(numpy.transpose(rot)).get_array(),
+                [0.0, 1.0, 0.0],
             )
         )
 
@@ -158,7 +170,7 @@ class VectorTests(unittest.TestCase):
         self.assertLess(abs(angle - numpy.pi), 1e-5)
 
     def test_m2rotaxis_0(self):
-        """Test 0 deg rotation. Axis must be [1, 0, 0] as per Vector documentation."""
+        """Test 0 deg rotation. Axis must be [1, 0, 0] as per Vector docs."""
         v1 = Vector([1.0, 0.8, 0])
         v2 = Vector([1.0, 0.8, 0])
         rot = rotmat(v1, v2)
@@ -176,7 +188,8 @@ class VectorTests(unittest.TestCase):
         self.assertAlmostEqual(angle, cangle, places=3)
         self.assertTrue(
             numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
-            f"Want {axis.get_array()!r} and {caxis.get_array()!r} to be almost equal",
+            f"Want {axis.get_array()!r} and {caxis.get_array()!r}"
+            " to be almost equal",
         )
 
     def test_get_spherical_coordinates(self):
@@ -243,7 +256,13 @@ class VectorTests(unittest.TestCase):
         """Confirm multi_coord_space computes forward, reverse transforms."""
         # start with 3 points already aligned to axes
         point_set = numpy.array(
-            [[[2.0, 0.0, 2.0, 1.0], [0.0, 0.0, 0.0, 1.0], [0.0, 0.0, 2.0, 1.0]]]
+            [
+                [
+                    [2.0, 0.0, 2.0, 1.0],
+                    [0.0, 0.0, 0.0, 1.0],
+                    [0.0, 0.0, 2.0, 1.0],
+                ]
+            ]
         )
         # confirm get id matrix to transform to/from coord space
         homog_id = numpy.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])

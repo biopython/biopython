@@ -21,7 +21,8 @@ def m2rotaxis(m):
     """
     eps = 1e-5
 
-    # Check for singularities a la http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/
+    # Check for singularities a la
+    # http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/  # noqa
     if (
         abs(m[0, 1] - m[1, 0]) < eps
         and abs(m[0, 2] - m[2, 0]) < eps
@@ -464,7 +465,8 @@ def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     :param x, y, z: translation in each axis
     """
     return numpy.array(
-        ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)), dtype=numpy.float64
+        ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)),
+        dtype=numpy.float64,
     )
 
 
@@ -567,9 +569,9 @@ def coord_space(
     #    print("p", p.transpose())
     #    print("sc", sc)
 
-    # mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a2 -azimuth about Z
+    # rotate translated a2 -azimuth about Z
     set_Z_homog_rot_mtx(-sc[1], mrz)
-    # mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
+    # rotate translated a2 -polar_angle about Y
     set_Y_homog_rot_mtx(-sc[2], mry)
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
@@ -703,7 +705,7 @@ def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.
 
     # transform a0 to mt space
     p = numpy.matmul(mt, a3[:, 0].reshape(-1, 4, 1)).reshape(-1, 4)
-    # print("mt[0]:\n", mt[0], "\na3[0][0] (a0):\n", a3[0][0], "\np[0]:\n", p[0])
+    # print(f"mt[0]:\n{mt[0]}\na3[0][0] (a0):\n{a3[0][0]}\np[0]:\n{p[0]}")
 
     # get azimuth of translated a0
     azimuth2 = numpy.arctan2(p[:, 1], p[:, 0])

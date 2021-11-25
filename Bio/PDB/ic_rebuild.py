@@ -47,7 +47,7 @@ def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -
         only check atomArrays are identical
         in internal_to_atom_coords computation
     :returns: dict
-        comparison dict from :func:`.compare_residues`
+        comparison dict from (func)`.compare_residues`
     """
     sp = StringIO()
     entity.atom_to_internal_coordinates(verbose)
@@ -165,8 +165,8 @@ def report_IC(
 def IC_duplicate(entity) -> Structure:
     """Duplicate structure entity with IC data, no atom coordinates.
 
-    Employs :func:`.write_PIC`, :func:`.read_PIC` with StringIO buffer.
-    Calls :meth:`.Chain.atom_to_internal_coordinates` if needed.
+    Employs (func)`.write_PIC`, (func)`.read_PIC` with StringIO buffer.
+    Calls (meth)`.Chain.atom_to_internal_coordinates` if needed.
 
     :param Entity entity: Biopython PDB Entity (will fail for Atom)
     :returns: Biopython PDBStructure, no Atom objects
@@ -214,10 +214,20 @@ def _cmp_atm(
     cmpdict["aCount"] += 1
     if a0 is None:
         if verbose:
-            print(r1.get_full_id(), "None !=", a1.get_full_id(), a1.parent.resname)
+            print(
+                r1.get_full_id(),
+                "None !=",
+                a1.get_full_id(),
+                a1.parent.resname,
+            )
     elif a1 is None:
         if verbose:
-            print(r0.get_full_id(), a0.get_full_id(), a0.parent.resname, "!= None")
+            print(
+                r0.get_full_id(),
+                a0.get_full_id(),
+                a0.parent.resname,
+                "!= None",
+            )
     else:
         if a0.get_full_id() == a1.get_full_id() or _atmfid_d2h(a0) == a1.get_full_id():
             cmpdict["aFullIdMatchCount"] += 1
@@ -346,8 +356,8 @@ def compare_residues(
         only check atomArrays are identical, aCoordMatchCount=0 if different
     :param float rtol,atol: default 1e-03, 1e-05 or round to 3 places.
         numpy allclose parameters; default is to round atom coordinates to 3
-        places and test equal.  For 'quick' will use defaults above for comparing
-        ataomArrays
+        places and test equal.  For 'quick' will use defaults above for
+        comparing ataomArrays
     :returns dict:
         Result counts for Residues, Full ID match Residues, Atoms,
         Full ID match atoms, and Coordinate match atoms; report string;

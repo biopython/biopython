@@ -26,13 +26,13 @@ render a structure as ribbons or similar for printing as a single object.
 I suggest generating your initial model using the OpenSCAD script provided
 here, then modifying that script according to your needs.  Changing the
 atomScale and bondRadius values can simplify the model by removing gaps and
-the corresponding need for supports, or you may wish to modify the hedronDispatch()
-routine to select residues or chain sections for printing separately and
-subsequently joining with rotatable bonds.  During this development phase you
-will likely have your version `include` only the data matrices generated here,
-by using the `includeCode=False` option to write_SCAD().  An example project
-with modifications of the script generated here is
-<https://www.thingiverse.com/thing:3957471>.
+the corresponding need for supports, or you may wish to modify the
+hedronDispatch() routine to select residues or chain sections for printing
+separately and subsequently joining with rotatable bonds.  During this
+development phase you will likely have your version `include` only the data
+matrices generated here, by using the `includeCode=False` option to
+write_SCAD().  An example project using rotatable backbone and magnetic
+hydrogen bonds is at <https://www.thingiverse.com/thing:3957471>.
 """
 # import re
 
@@ -69,9 +69,10 @@ def write_SCAD(
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
 
-    This routine calls both :meth:`.internal_to_atom_coordinates` and
-    :meth:`.atom_to_internal_coordinates` due to requirements for scaling, explicit
-    bonds around rings, and setting the coordinate space of the output model.
+    This routine calls both (meth)`.internal_to_atom_coordinates` and
+    (meth)`.atom_to_internal_coordinates` due to requirements for scaling,
+    explicit bonds around rings, and setting the coordinate space of the output
+    model.
 
     Output data format is primarily:
 
@@ -85,9 +86,9 @@ def write_SCAD(
     OpenSCAD software is included in this Python file to process these
     matrices into a model suitable for a 3D printing project.
 
-    :param entity: Biopython PDB :class:`.Structure` entity
+    :param entity: Biopython PDB (class)`.Structure` entity
         structure data to export
-    :param file: Bipoython :func:`.as_handle` filename or open file pointer
+    :param file: Bipoython (func)`.as_handle` filename or open file pointer
         file to write data to
     :param float scale:
         units (usually mm) per angstrom for STL output, written in output
@@ -101,17 +102,17 @@ def write_SCAD(
         into OpenSCAD; if False, output data matrices only
     :param float maxPeptideBond: Optional default None.
         Override the cut-off in IC_Chain class (default 1.4) for detecting
-        chain breaks.  If your target has chain breaks, pass a large number here
-        to create a very long 'bond' spanning the break.
+        chain breaks.  If your target has chain breaks, pass a large number
+        here to create a very long 'bond' spanning the break.
     :param int start,fin: default None
         Parameters for internal_to_atom_coords() to limit chain segment.
     :param str handle: default 'protein'
         name for top level of generated OpenSCAD matrix structure
 
-    See :meth:`.IC_Residue.set_flexible` to set flags for specific residues to
-    have rotatable bonds, and :meth:`.IC_Residue.set_hbond` to include cavities
-    for small magnets to work as hydrogen bonds.  See <https://www.thingiverse.com/thing:3957471>
-    for implementation example.
+    See (meth)`.IC_Residue.set_flexible` to set flags for specific residues to
+    have rotatable bonds, and (meth)`.IC_Residue.set_hbond` to include cavities
+    for small magnets to work as hydrogen bonds.
+    See <https://www.thingiverse.com/thing:3957471> for implementation example.
 
     """
     if maxPeptideBond is not None:
@@ -180,9 +181,9 @@ def write_SCAD(
     entity.atom_to_internal_coordinates()
     IC_Residue.AllBonds = allBondsStash
 
-    # rebuild atom coordinates now with chain starting at origin: in OpenSCAD code,
-    # each residue model is transformed to N-Ca-C start position instead of updating
-    # transform matrix along chain
+    # rebuild atom coordinates now with chain starting at origin: in OpenSCAD
+    # code, each residue model is transformed to N-Ca-C start position instead
+    # of updating transform matrix along chain
     entity.internal_to_atom_coordinates()
 
     with as_handle(file, "w") as fp:
@@ -236,39 +237,46 @@ peptide_scad = """
 // data matrices should be appended below to form a program ready to load into
 // the OpenSCAD application.
 //
-//  The protein_scale value used throughout is the second element of the protein[]
-//    array appended below.
-//    This is the value supplied when generating the data for build units per PDB angstrom.
-//    You may wish to modify it here to adjust the appearance of the model in terms of atom sphere
-//    or bond cylinder diameter, however the bond lengths are fixed with the supplied value when
-//    the data matrices are generated.  Atom sphere and bond cylinder radii may be individually
-//    adjusted below as well.
+//  The protein_scale value used throughout is the second element of the
+//    protein[] array appended below.
+//    This is the value supplied when generating the data for build units per
+//    PDB angstrom.
+//    You may wish to modify it here to adjust the appearance of the model in
+//    terms of atom sphere or bond cylinder diameter, however the bond lengths
+//    are fixed with the supplied value when the data matrices are generated.
+//    Atom sphere and bond cylinder radii may be individually adjusted below as
+//    well.
 //
-//  $fn (fragment number) is an OpenSCAD parameter controlling the smoothness of the model surface.
-//    Smaller values will render faster, but yield more 'blocky' models.
+//  $fn (fragment number) is an OpenSCAD parameter controlling the smoothness
+//    of the model surface.  Smaller values will render faster, but yield more
+//    'blocky' models.
 //
-//  This is intended to be a working example, you are encouraged to modify the OpenSCAD subroutines
-//    below to generate a model to your liking.  For more information, start with
-//    http://www.openscad.org/cheatsheet/index.html
+//  This is intended to be a working example, you are encouraged to modify the
+//    OpenSCAD subroutines below to generate a model to your liking.  For more
+//    information, start with http://www.openscad.org/cheatsheet/index.html
 //
-//  Note especially the hedronDispatch() subroutine below: here you may select hedra based on
-//    residue, sequence position, and class (hedron atoms) for special handling.  Also see the
-//    per hedron render options in the hedra[] array.
+//  Note especially the hedronDispatch() subroutine below: here you may select
+//    hedra based on residue, sequence position, and class (hedron atoms) for
+//    special handling.  Also see the per hedron render options in the hedra[]
+//    array.
 //
-//  If you modify this file, you may find it useful to generate the data matrices without this
-//    OpenSCAD code by calling write_SCAD() with the includeCode=False option, then use the OpenSCAD
-//    'include <>' facility at the end of your modified OpenSCAD program.
+//  If you modify this file, you may find it useful to generate the data
+//    matrices without this OpenSCAD code by calling write_SCAD() with the
+//    includeCode=False option, then use the OpenSCAD 'include <>' facility at
+//    the end of your modified OpenSCAD program.
 */
 
 rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinates)
     chain(protein);   // this is the main subroutine call to  build the structure
 
-// top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8 inside, regardless of this setting.
+// top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8
+// inside, regardless of this setting.
 $fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support
 
 tubes=false;     // style: render atoms and bonds as constant diameter cylinders, preferred for rotatable bonds / h-bonds
 support=false;   // enable print-in-place internal support for rotatable bonds
-// N.B. rotatable bonds must be parallel to build plate for internal support structures to be generated correctly by slicer
+// N.B. rotatable bonds must be parallel to build plate for internal support
+// structures to be generated correctly by slicer
 
 // output parameters
 atomScale=1.0;  // 0.8 better for rotatable bonds
@@ -308,8 +316,9 @@ caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedro
 /*
 //
 // Generate a sphere to represent an atom.
-// Colour and size determined for the atom covalent radius specified by the parameter 'a' by lookup
-//   in the atomData table below, then scaled by the supplied parameter 'scal'.
+// Colour and size determined for the atom covalent radius specified by the
+//   parameter 'a' by lookup in the atomData table below, then scaled by the
+//   supplied parameter 'scal'.
 //
 // scal : protein_scale
 // clr : additional radius if used to create clearance for rotatable bonds
@@ -325,7 +334,8 @@ module atom(a,scal,clr=0)
 
 /*
 //
-// a hedron (below) may be 'reversed' in terms of the order of its two bonds; this function fixes the ordering
+// a hedron (below) may be 'reversed' in terms of the order of its two bonds;
+// this function fixes the ordering
 //
 */
 function hFlip(h,rev) =
@@ -359,7 +369,8 @@ module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
 //
 // create a rotatable bond
 //
-// supportSel : 0 for no support, 1 or 2 for support on top or bottom (needed for reversed hedra)
+// supportSel : 0 for no support, 1 or 2 for support on top or bottom (needed
+// for reversed hedra)
 //
 */
 module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differentiate joiner part lengths to guide assembly, but not used
@@ -423,7 +434,8 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
 
 /*
 //
-// create bond with different options (regular, skinny, h-bond atom, rotatable male or female
+// create bond with different options (regular, skinny, h-bond atom, rotatable
+// male or female
 //
 //  parameters:
 //  bl : bond length
@@ -471,10 +483,12 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 
 /*
 //
-// Generate a 'hedron', one plane of 3 points, consisting of 3 atoms joined by two bonds.
+// Generate a 'hedron', one plane of 3 points, consisting of 3 atoms joined by
+//   two bonds.
 //   Defined as bond length - bond angle - bond length
 //
-// In some cases the sequence of atoms in the h[] array is reversed (rev flag), as detailed in the comments.
+// In some cases the sequence of atoms in the h[] array is reversed (rev flag),
+// as detailed in the comments.
 //
 // other parameters:
 //
@@ -483,12 +497,14 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 //    0    1     2     3     4     5     6      7     :     0     1     2     3    4     5      6      7
 //  len1  len3  atom1 atom3  a1    a2   a1-a2  a2-a3      len1  len3  atom1 atom3   a1    a3  a1-a2  a2-a3
 //
-// split: chop half of the hedron - to selectively print parts of a rotating bond to be glued together.
-//   top or bottom half selected by global caTop (C-alpha top) variable, undef by default so bottom half.
+// split: chop half of the hedron - to selectively print parts of a rotating
+//   bond to be glued together.  top or bottom half selected by global caTop
+//   (C-alpha top) variable, undef by default so bottom half.
 //
-// supporSel: enable support structure inside rotatable bond to print in place.  Please note the bond needs to be exactly parallel
-//  to the buildplate and the layerHeight global variable above needs to be set correctly for the structure to be correctly created
-//  by your slicer software.
+// supporSel: enable support structure inside rotatable bond to print in place.
+//  Please note the bond needs to be exactly parallel to the buildplate and the
+//  layerHeight global variable above needs to be set correctly for the
+//  structure to be correctly created by your slicer software.
 //
  */
 
@@ -721,8 +737,8 @@ module dihedron(d,hedra,scal)
 
 /*
 //
-// Generate a residue consisting of the set of dihedra in the parameter 'r', referring to hedra the
-//   table specified in the parameter 'hedra'.
+// Generate a residue consisting of the set of dihedra in the parameter 'r',
+//   referring to hedra the table specified in the parameter 'hedra'.
 //
 */
 module residue(r,hedra, scal)
@@ -736,7 +752,8 @@ module residue(r,hedra, scal)
 
 /*
 //
-// Generate a chain of residues, each positioned by a supplied rotation/translation matrix.
+// Generate a chain of residues, each positioned by a supplied
+// rotation/translation matrix.
 //
 */
 module chain(protein)
@@ -800,7 +817,8 @@ r_resID = 1;
 r_resTransform = 2;
 
 
-// use single default atom radius for all atoms if tubes = true, else use covalent radii from literature
+// use single default atom radius for all atoms if tubes = true, else use
+// covalent radii from literature
 atomData = ( tubes ?
             [   ["Csb","green" , defaultAtomRadius], ["Cres","green" , defaultAtomRadius], ["Cdb","green" , defaultAtomRadius],
                 ["Osb","red" , defaultAtomRadius], ["Ores","red" , defaultAtomRadius], ["Odb","red" , defaultAtomRadius],
@@ -809,8 +827,9 @@ atomData = ( tubes ?
                 ["Ssb","yellow" , defaultAtomRadius] ]
             :
 
-// covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic Covalent Radii'
-// https://arxiv.org/pdf/0804.2488.pdf
+// covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty
+// Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic
+// Covalent Radii'  https://arxiv.org/pdf/0804.2488.pdf
 
             [   ["Csb","green" , 0.77], ["Cres","green" , 0.72], ["Cdb","green" , 0.67],
                 ["Osb","red" , 0.67], ["Ores","red" , 0.635], ["Odb","red" , 0.60],
@@ -824,4 +843,4 @@ atomData = ( tubes ?
 // include <1rtm.scad>;
 // or paste below
 
-"""
+"""  # noqa
