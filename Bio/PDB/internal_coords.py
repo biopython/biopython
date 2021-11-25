@@ -305,7 +305,7 @@ class IC_Chain:
     def __init__(self, parent: "Chain", verbose: bool = False) -> None:
         """Initialize IC_Chain object, with or without residue/Atom data.
 
-        :param Chain parent: Biopython Chain object
+        :param Bio.PDB.Chain parent: Biopython Chain object
             Chain object this extends
         """
         # type hinting parent as Chain leads to import cycle
