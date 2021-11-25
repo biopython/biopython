@@ -172,7 +172,7 @@ class IC_Chain:
     Attributes
     ----------
     chain: object reference
-        The Biopython (class)`.Chain` object this extends
+        The Biopython (class)`Bio.PDB.Chain` object this extends
 
     initNCaC: List of N, Ca, C AtomKey tuples.
         NCaCKeys start chain segments (first residue or after chain break).
@@ -277,7 +277,7 @@ class IC_Chain:
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
     set_residues:
         Add .internal_coord attribute for all (class)`.Residue`s in parent
-        (class)`.Chain`, populate ordered_aa_ic_list, set IC_Residue rprev,
+        (class)`Bio.PDB.Chain`, populate ordered_aa_ic_list, set IC_Residue rprev,
         rnext or initNCaC coordinates
     write_SCAD:
         Write OpenSCAD matrices for internal coordinate data comprising chain;
@@ -547,7 +547,7 @@ class IC_Chain:
         """Initialize .internal_coord for loaded Biopython Residue objects.
 
         Add IC_Residue as .internal_coord attribute for each (class)`.Residue`
-        in parent (class)`.Chain`; populate ordered_aa_ic_list with
+        in parent (class)`Bio.PDB.Chain`; populate ordered_aa_ic_list with
         (class)`IC_Residue` references for residues which can be built (amino
         acids and some hetatms); set rprev and rnext on each sequential
         IC_Residue, populate initNCaC at start and after chain breaks.
