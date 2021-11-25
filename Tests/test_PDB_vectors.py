@@ -203,6 +203,7 @@ class VectorTests(unittest.TestCase):
                     self.assertEqual((r45 if k else r135), sc[2])  # polar angle
 
     def test_coord_space(self):
+        """Confirm can generate coordinate space transform for 3 points."""
         # start with 3 points already aligned to axes
         point_set = (
             numpy.array([[2.0], [0.0], [2.0], [1.0]]),
@@ -239,6 +240,7 @@ class VectorTests(unittest.TestCase):
                     self.assertTrue(numpy.array_equal(rslt, ps2))
 
     def test_multi_coord_space(self):
+        """Confirm multi_coord_space computes forward, reverse transforms."""
         # start with 3 points already aligned to axes
         point_set = numpy.array(
             [[[2.0, 0.0, 2.0, 1.0], [0.0, 0.0, 0.0, 1.0], [0.0, 0.0, 2.0, 1.0]]]

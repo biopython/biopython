@@ -329,6 +329,7 @@ class IC_Chain:
         self.set_residues(verbose)  # no effect if no residues loaded
 
     def __deepcopy__(self, memo) -> "IC_Chain":
+        """Implement deepcopy for IC_Chain."""
         existing = memo.get(id(self), False)
         if existing:
             return existing
