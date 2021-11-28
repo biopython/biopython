@@ -301,6 +301,46 @@ class TestURLConstruction(unittest.TestCase):
             },
         )
 
+    def test_default_params(self):
+        """Test overriding default values for the "email", "api_key", and "tool" parameters."""
+        vars_base = {
+            "db": "protein",
+            "id": "15718680",
+        }
+        alt_values = {
+            "tool": "mytool",
+            "email": "example@example.com",
+            "api_key": "test",
+        }
+
+        for param in alt_values.keys():
+            # Try both an alternate value and None
+            for alt_value in [alt_values[param], None]:
+                # Try both altering global variable and also passing parameter directly
+                for set_global in [False, True]:
+
+                    variables = dict(vars_base)
+
+                    with patch_urlopen() as patched:
+                        if set_global:
+                            with mock.patch("Bio.Entrez." + param, alt_value):
+                                Entrez.efetch(**variables)
+                        else:
+                            variables[param] = alt_value
+                            Entrez.efetch(**variables)
+
+                    request = get_patched_request(patched, self)
+                    base_url, query = deconstruct_request(request, self)
+
+                    expected = {k: [v] for k, v in vars_base.items()}
+                    expected.update(QUERY_DEFAULTS)
+                    if alt_value is None:
+                        del expected[param]
+                    else:
+                        expected[param] = [alt_value]
+
+                    self.assertDictEqual(query, expected)
+
 
 class CustomDirectoryTest(unittest.TestCase):
     """Offline unit test for custom directory feature.
