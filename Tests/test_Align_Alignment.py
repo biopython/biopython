@@ -488,34 +488,39 @@ ACTT
             ]
         )
         sequences = (target, query)
-        alignment = Align.Alignment(sequences, coordinates)
-        m = alignment.substitutions
-        self.assertEqual(
-            str(m),
-            """\
+        forward_alignment = Align.Alignment(sequences, coordinates)
+        sequences = (target, query.reverse_complement())
+        coordinates = coordinates.copy()
+        coordinates[1, :] = len(query) - coordinates[1, :]
+        reverse_alignment = Align.Alignment(sequences, coordinates)
+        for alignment in (forward_alignment, reverse_alignment):
+            m = alignment.substitutions
+            self.assertEqual(
+                str(m),
+                """\
       A     C     G     T
 A 191.0   3.0  15.0  13.0
 C   5.0 186.0   9.0  14.0
 G  12.0  11.0 248.0   8.0
 T  11.0  19.0   6.0 145.0
 """,
-        )
-        self.assertAlmostEqual(m["T", "C"], 19.0)
-        self.assertAlmostEqual(m["C", "T"], 14.0)
-        m += m.transpose()
-        m /= 2.0
-        self.assertEqual(
-            str(m),
-            """\
+            )
+            self.assertAlmostEqual(m["T", "C"], 19.0)
+            self.assertAlmostEqual(m["C", "T"], 14.0)
+            m += m.transpose()
+            m /= 2.0
+            self.assertEqual(
+                str(m),
+                """\
       A     C     G     T
 A 191.0   4.0  13.5  12.0
 C   4.0 186.0  10.0  16.5
 G  13.5  10.0 248.0   7.0
 T  12.0  16.5   7.0 145.0
 """,
-        )
-        self.assertAlmostEqual(m["C", "T"], 16.5)
-        self.assertAlmostEqual(m["T", "C"], 16.5)
+            )
+            self.assertAlmostEqual(m["C", "T"], 16.5)
+            self.assertAlmostEqual(m["T", "C"], 16.5)
 
     def test_target_query_properties(self):
         target = "ABCD"
