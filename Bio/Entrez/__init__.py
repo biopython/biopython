@@ -598,7 +598,7 @@ def _open(req_or_cgi, params=None, post=None, ecitmatch=False):
     # Equivalently, at least a third of second between queries
     # Using just 0.333333334 seconds sometimes hit the NCBI rate limit,
     # the slightly longer pause of 0.37 seconds has been more reliable.
-    delay = 0.1 if api_key else 0.37
+    delay = 0.1 if _has_api_key(request) else 0.37
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:
@@ -716,6 +716,16 @@ def _construct_params(params):
         )
 
     return params
+
+
+def _has_api_key(request):
+    """Check if a Request has the api_key parameter set, to set the rate limit.
+
+    Works with GET or POST requests.
+    """
+    if request.method == "POST":
+        return b"api_key=" in request.data
+    return "api_key=" in request.full_url
 
 
 if __name__ == "__main__":

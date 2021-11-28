@@ -341,6 +341,31 @@ class TestURLConstruction(unittest.TestCase):
 
                     self.assertDictEqual(query, expected)
 
+    def test_has_api_key(self):
+        """Test checking whether a Request object specifies an API key.
+
+        The _has_api_key() private function is used to set the delay in _open().
+        """
+        variables = {
+            "db": "protein",
+            "id": "15718680",
+        }
+
+        for etool in [Entrez.efetch, Entrez.epost]:  # Make both GET and POST requests
+
+            with patch_urlopen() as patched:
+                etool(**variables)
+            assert Entrez._has_api_key(get_patched_request(patched, self))
+
+            with patch_urlopen() as patched:
+                etool(**variables, api_key=None)
+            assert not Entrez._has_api_key(get_patched_request(patched, self))
+
+            with patch_urlopen() as patched:
+                with mock.patch("Bio.Entrez.api_key", None):
+                    etool(**variables)
+            assert not Entrez._has_api_key(get_patched_request(patched, self))
+
 
 class CustomDirectoryTest(unittest.TestCase):
     """Offline unit test for custom directory feature.
