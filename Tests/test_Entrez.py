@@ -117,6 +117,21 @@ def deconstruct_request(request, testcase=None):
     return get_base_url(parsed), params
 
 
+def check_request_ids(testcase, params, expected):
+    """Check that the constructed request parameters contain the correct IDs.
+
+    :param testcase: Test case currently being run, which is used to make asserts.
+    :type testcase: unittest.TestCase
+    :param params: Parsed parameter dictionary returned by `deconstruct_request`.
+    :type params: dict
+    :param expected: Expected set of IDs, as colleciton of strings.
+    """
+    testcase.assertEquals(len(params["id"]), 1)
+    ids_str = params["id"][0]
+    # Compare up to ordering
+    testcase.assertCountEqual(ids_str.split(","), expected)
+
+
 class TestURLConstruction(unittest.TestCase):
     def test_email_warning(self):
         """Test issuing warning when user does not specify email address."""
@@ -190,9 +205,15 @@ class TestURLConstruction(unittest.TestCase):
         base_url, query = deconstruct_request(request, self)
 
         self.assertEqual(base_url, URL_HEAD + "epost.fcgi")  # Params in POST data
-        # Compare IDs up to reordering:
-        self.assertCountEqual(query.pop("id"), variables["id"])
-        self.assertDictEqual(query, {"db": [variables["db"]], **QUERY_DEFAULTS})
+        check_request_ids(self, query, variables["id"])
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "id": query["id"],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_elink1(self):
         variables = {
@@ -218,7 +239,7 @@ class TestURLConstruction(unittest.TestCase):
                 "cmd": [variables["cmd"]],
                 "db": [variables["db"]],
                 "dbfrom": [variables["dbfrom"]],
-                "id": [variables["id"]],
+                "id": [variables["id"]],  # UIDs joined in single string
                 **QUERY_DEFAULTS,
             },
         )
@@ -244,7 +265,7 @@ class TestURLConstruction(unittest.TestCase):
             {
                 "db": [variables["db"]],
                 "dbfrom": [variables["dbfrom"]],
-                "id": [variables["id"]],
+                "id": [variables["id"]],  # UIDs joined in single string
                 **QUERY_DEFAULTS,
             },
         )
@@ -265,13 +286,12 @@ class TestURLConstruction(unittest.TestCase):
         base_url, query = deconstruct_request(request, self)
 
         self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
-        # Compare IDs up to reordering:
-        self.assertCountEqual(query.pop("id"), variables["id"])
         self.assertDictEqual(
             query,
             {
                 "db": [variables["db"]],
                 "dbfrom": [variables["dbfrom"]],
+                "id": query["id"],  # UIDs in multiple separate "id" parameters
                 **QUERY_DEFAULTS,
             },
         )
@@ -365,6 +385,32 @@ class TestURLConstruction(unittest.TestCase):
                 with mock.patch("Bio.Entrez.api_key", None):
                     etool(**variables)
             assert not Entrez._has_api_key(get_patched_request(patched, self))
+
+    def test_format_ids(self):
+        ids = [
+            15718680,
+            157427902,
+            119703751,
+            "NP_001098858.1",  # Sequence databases accept accession #s as IDs
+        ]
+        ids_str = list(map(str, ids))
+        ids_formatted = "15718680,157427902,119703751,NP_001098858.1"
+
+        # Single integers or strings should just be converted to string
+        for id_ in ids:
+            self.assertEqual(Entrez._format_ids(id_), str(id_))
+
+        # List:
+        self.assertEqual(Entrez._format_ids(ids), ids_formatted)
+        self.assertEqual(Entrez._format_ids(ids_str), ids_formatted)
+        # Multiple IDs already joined by commas:
+        self.assertEqual(Entrez._format_ids(ids_formatted), ids_formatted)
+        # Other iterable types:
+        self.assertEqual(Entrez._format_ids(tuple(ids)), ids_formatted)
+        self.assertEqual(Entrez._format_ids(tuple(ids_str)), ids_formatted)
+        # As set, compare up to reordering
+        self.assertCountEqual(Entrez._format_ids(set(ids)).split(","), ids_str)
+        self.assertCountEqual(Entrez._format_ids(set(ids_str)).split(","), ids_str)
 
 
 class CustomDirectoryTest(unittest.TestCase):
