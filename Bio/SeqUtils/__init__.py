@@ -25,22 +25,22 @@ from Bio import BiopythonDeprecationWarning
 # {{{
 
 _ambiguous_gc_values = {
-    "A": 0.0,
+    "A": 0,
     "C": 1.0,
-    "T": 0.0,
+    "T": 0,
     "G": 1.0,
     "S": 1.0,
-    "V": 0.6667,
-    "B": 0.6667,
+    "V": 2 / 3,
+    "B": 2 / 3,
     "M": 0.5,
     "R": 0.5,
     "Y": 0.5,
     "K": 0.5,
     "X": 0.5,
     "N": 0.5,
-    "H": 0.3333,
-    "D": 0.3333,
-    "W": 0.0,
+    "H": 1 / 3,
+    "D": 1 / 3,
+    "W": 0,
 }
 
 
@@ -58,7 +58,7 @@ def gc_content(seq: str, ambiguous: str = "ignore"):
     and X will be counted as 0.5, D will be counted as 0.33 etc. See
     Bio.SeqUtils._ambiguous_gc_values for a full list.
 
-    If ambiguous equals "remove", will only only count GCS towards the
+    If ambiguous equals "remove", will only count GCS towards the
     percentage, but will also not count ambiguous characters towards the length
     of the sequence. Equivalent to gc_content(seq.replace('N','')) but replacing
     all ambiguous nucleotides.
@@ -108,7 +108,7 @@ def gc_content(seq: str, ambiguous: str = "ignore"):
     Note that this will return zero for an empty sequence.
     """
     if ambiguous not in ("count", "remove", "ignore"):
-        raise ValueError(f"ambiguous value {ambiguous} not recognized")
+        raise ValueError(f"ambiguous value '{ambiguous}' not recognized")
 
     count = Counter(seq)
 
@@ -137,7 +137,8 @@ def GC(seq):
     Use Bio.SeqUtils.gc_content instead.
     """
     warnings.warn(
-        "GC is deprecated; please use gc_content instead.", BiopythonDeprecationWarning,
+        "GC is deprecated; please use gc_content instead.",
+        BiopythonDeprecationWarning,
     )
 
     gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
