@@ -129,6 +129,7 @@ class Rebuild(unittest.TestCase):
             except AttributeError:
                 pass  # skip if residue does not have e.g. chi5
         cic0.internal_to_atom_coordinates()  # move atoms
+        cic0.update_dCoordSpace()  # unnecessary, just for test coverage
         cic0.atom_to_internal_coordinates()  # get new internal coords
         # generate hdelta and ddelta difference arrays so can look for what
         # changed
@@ -178,9 +179,11 @@ class Rebuild(unittest.TestCase):
         nvt = {}
         nvc1 = {}
         nvpsi = {}
+        nvlen = {}
         tcount = 0
         c1count = 0
         psicount = 0
+        lcount = 0
         for r in mdl.get_residues():
             ric = r.internal_coord
             if ric:
@@ -198,7 +201,8 @@ class Rebuild(unittest.TestCase):
                     nv = chi1 + 90
                     if nv > 180.0:
                         nv -= 360.0
-                    ric.set_angle("chi1", nv)
+                    # ric.set_angle("chi1", nv)
+                    ric.bond_set("chi1", nv)
                     nvc1[str(r)] = nv
                 # backbone dihedron change
                 psi = ric.get_angle("psi")
@@ -209,6 +213,13 @@ class Rebuild(unittest.TestCase):
                         nv += 360.0
                     ric.set_angle("psi", nv)
                     nvpsi[str(r)] = nv
+                leng = ric.get_length("CA:CB")
+                if leng is not None:
+                    lcount += 1
+                    nv = leng + 0.05
+                    ric.set_length("CA:CB", nv)
+                    nvlen[str(r)] = nv
+
         mdl.internal_to_atom_coordinates()
 
         # prove not using stored results
@@ -226,6 +237,7 @@ class Rebuild(unittest.TestCase):
         ttcount = 0
         c1tcount = 0
         psitcount = 0
+        ltcount = 0
         for r in mdl.get_residues():
             ric = r.internal_coord
             if ric:
@@ -244,12 +256,19 @@ class Rebuild(unittest.TestCase):
                     psitcount += 1
                     # print(str(r), "psi", psi, nvpsi[str(r)])
                     self.assertAlmostEqual(psi, nvpsi[str(r)], places=3)
+                leng = ric.get_length("CA:CB")
+                if leng is not None:
+                    ltcount += 1
+                    self.assertAlmostEqual(leng, nvlen[str(r)], places=3)
+
         self.assertEqual(tcount, ttcount)
         self.assertEqual(c1count, c1tcount)
         self.assertEqual(psicount, psitcount)
+        self.assertEqual(lcount, ltcount)
         self.assertGreater(ttcount, 0)
         self.assertGreater(c1count, 0)
         self.assertGreater(psicount, 0)
+        self.assertGreater(lcount, 0)
 
     def test_write_SCAD(self):
         """Check SCAD output plus MaxPeptideBond and Gly CB.
