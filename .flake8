@@ -16,6 +16,15 @@
 
 [flake8]
 doctests = True
+rst-roles =
+    class,
+    func,
+    meth,
+    mod,
+    data,
+rst-directives =
+    seealso,
+    todo,
 # Exclude some file types and folders that shouldn't be checked:
 exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build
 ignore =
