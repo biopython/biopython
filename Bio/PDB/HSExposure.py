@@ -25,7 +25,14 @@ class _AbstractHSExposure(AbstractPropertyMap):
     """
 
     def __init__(
-        self, model, radius, offset, hse_up_key, hse_down_key, skip_residues=False, angle_key=None
+        self,
+        model,
+        radius,
+        offset,
+        hse_up_key,
+        hse_down_key,
+        skip_residues=False,
+        angle_key=None,
     ):
         """Initialize class.
 
@@ -132,7 +139,9 @@ class _AbstractHSExposure(AbstractPropertyMap):
             c_v = residue["C"].get_vector()
             ca_v = residue["CA"].get_vector()
         except KeyError:
-            warnings.warn(f"pCB vector not calculated for {residue} (no CA, N, or C atoms)")
+            warnings.warn(
+                f"pCB vector not calculated for {residue} (no CA, N, or C atoms)"
+            )
             return None
         # center at origin
         n_v = n_v - ca_v
@@ -194,14 +203,18 @@ class HSExposureCA(_AbstractHSExposure):
         :type r1, r2, r3: L{Residue}
         """
         if r1 is None or r3 is None:
-            warnings.warn(f"Approx. CA-CB vector not calculated for {r2} (missing neighbors).")
+            warnings.warn(
+                f"Approx. CA-CB vector not calculated for {r2} (missing neighbors)."
+            )
             return None
         try:
             ca1 = r1["CA"].get_vector()
             ca2 = r2["CA"].get_vector()
             ca3 = r3["CA"].get_vector()
         except KeyError:
-            warnings.warn(f"Approx. CA-CB vector not calculated for {r2} (missing CA atoms).")
+            warnings.warn(
+                f"Approx. CA-CB vector not calculated for {r2} (missing CA atoms)."
+            )
             return None
         # center
         d1 = ca2 - ca1
@@ -298,7 +311,9 @@ class HSExposureCB(_AbstractHSExposure):
                 vca = r2["CA"].get_vector()
                 return (vcb - vca), 0.0
             else:
-                warnings.warn(f"CA-CB vector not calculated for {r2} (missing CA or CB atoms).")
+                warnings.warn(
+                    f"CA-CB vector not calculated for {r2} (missing CA or CB atoms)."
+                )
                 return None
 
 
