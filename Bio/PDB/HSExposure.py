@@ -131,7 +131,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
             n_v = residue["N"].get_vector()
             c_v = residue["C"].get_vector()
             ca_v = residue["CA"].get_vector()
-        except Exception:
+        except KeyError:
             return None
         # center at origin
         n_v = n_v - ca_v
@@ -198,7 +198,7 @@ class HSExposureCA(_AbstractHSExposure):
             ca1 = r1["CA"].get_vector()
             ca2 = r2["CA"].get_vector()
             ca3 = r3["CA"].get_vector()
-        except Exception:
+        except KeyError:
             return None
         # center
         d1 = ca2 - ca1
