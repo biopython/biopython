@@ -100,6 +100,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Devang Thakkar <https://github.com/devangthakkar>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
+- Dominique Sydow <https://github.com/dominiquesydow>
 - Edward Liaw <https://github.com/edliaw>
 - Emmanuel Noutahi <https://github.com/maclandrol>
 - Eric Rasche <https://github.com/erasche>
