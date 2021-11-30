@@ -365,7 +365,7 @@ TTT	0.886
 
         seq = "GDVV"
         self.assertEqual(gc_content(seq), 0.25)
-        self.assertEqual(gc_content(seq, "count"), 0.666675)
+        self.assertAlmostEqual(gc_content(seq, "count"), 0.6667, places=3)
         self.assertEqual(gc_content(seq, "remove"), 1.00)
 
         with self.assertRaises(ValueError):
