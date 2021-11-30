@@ -58,10 +58,10 @@ def gc_content(seq: str, ambiguous: str = "ignore"):
     and X will be counted as 0.5, D will be counted as 0.33 etc. See
     Bio.SeqUtils._ambiguous_gc_values for a full list.
 
-    If ambiguous equals "remove", will only count GCS towards the
-    percentage, but will also not count ambiguous characters towards the length
-    of the sequence. Equivalent to gc_content(seq.replace('N','')) but replacing
-    all ambiguous nucleotides.
+    If ambiguous equals "remove", will only count GCS towards the percentage,
+    but will also only count ACTGSW towards the length of the sequence.
+    Equivalent to gc_content(seq.replace('N','')) but replacing all nucleotides
+    that are ambiguous between GC or AT (VBMRYKXNHD).
 
     Will raise a ValueError for any other value of the ambiguous parameter.
 
