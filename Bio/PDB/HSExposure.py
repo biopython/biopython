@@ -262,7 +262,11 @@ class HSExposureCB(_AbstractHSExposure):
         :type r1, r2, r3: L{Residue}
         """
         if r2.get_resname() == "GLY":
-            return self._get_gly_cb_vector(r2), 0.0
+            vcb_gly = self._get_gly_cb_vector(r2)
+            if vcb_gly is None:
+                return None
+            else:
+                return vcb_gly, 0.0
         else:
             if r2.has_id("CB") and r2.has_id("CA"):
                 vcb = r2["CB"].get_vector()
