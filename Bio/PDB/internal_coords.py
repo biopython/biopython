@@ -1884,17 +1884,18 @@ class IC_Chain:
         Default is to calculate distances for all atoms.  To generate the
         classic C-alpha distance plot, pass a boolean mask array like::
 
+            atmNameNdx = internal_coords.AtomKey.fields.atm
             CaSelect = [
-                atomArrayNdx.get(k)
-                for k in atomArrayNdx.keys()
+                atomArrayIndex.get(k)
+                for k in atomArrayIndex.keys()
                 if k.akl[atmNameNdx] == "CA"
             ]
 
         Alternatively, this will select all backbone atoms::
 
             backboneSelect = [
-                atomArrayNdx.get(k)
-                for k in atomArrayNdx.keys()
+                atomArrayIndex.get(k)
+                for k in atomArrayIndex.keys()
                 if k.is_backbone()
             ]
 
@@ -2156,9 +2157,6 @@ class IC_Residue:
     -------
     assemble(atomCoordsIn, resetLocation, verbose)
         Compute atom coordinates for this residue from internal coordinates
-    atm241(coord)
-        Convert 1x3 cartesian coords to 1x4 homogeneous coords
-        Naming: 4x1 array is correct, but numpy handles automatically
     create_edra(verbose)
         Create hedra and dihedra for atom coordinates
     get_angle()
@@ -2404,6 +2402,7 @@ class IC_Residue:
                 self.build_rak_cache()
 
     def __deepcopy__(self, memo):
+        """Deep copy implementation for IC_Residue."""
         existing = memo.get(id(self), False)
         if existing:
             return existing
@@ -2436,15 +2435,6 @@ class IC_Residue:
             atmName = ak.akl[3]
             if self.akc.get(atmName) is None:
                 self.akc[atmName] = ak
-
-    @staticmethod
-    def atm241(coord: np.array) -> np.array:
-        """Convert 1x3 cartesian coordinates to 1x4 homogeneous coordinates."""
-        print("ATM241")
-        arr41 = np.empty(4)
-        arr41[0:3] = coord
-        arr41[3] = 1.0
-        return arr41
 
     def _add_atom(self, atm: Atom) -> None:
         """Filter Biopython Atom with accept_atoms; set atom_coords, ak_set.
@@ -3202,6 +3192,7 @@ class IC_Residue:
     )
 
     picFlagsDefault = pic_flags.all | pic_flags.initAtoms | pic_flags.bFactors
+    picFlagsDict = pic_flags._asdict()
 
     def _write_pic_bfac(self, atm: Atom, s: str, col: int) -> Tuple[str, int]:
         ak = self.rak(atm)
@@ -3663,8 +3654,6 @@ class Edron:
     -------
     gen_key([AtomKey, ...] or AtomKey, ...) (Static Method)
         generate a ':'-joined string of AtomKey Ids
-    gen_acs(atom_coords)
-        generate tuple of atom coords for keys in self.aks
     is_backbone()
         Return True if all aks atoms are N, Ca, C or O
 
@@ -3687,19 +3676,15 @@ class Edron:
     )
 
     @staticmethod
-    def gen_key(lst: Union[List[str], List["AtomKey"]]) -> str:
+    def gen_key(lst: List["AtomKey"]) -> str:
         """Generate string of ':'-joined AtomKey strings from input.
 
-        :param list lst: list of AtomKey objects or id strings
+        :param list lst: list of AtomKey objects
         """
-        if isinstance(lst[0], str):
-            lst = cast(List[str], lst)
-            return ":".join(lst)
+        if 4 == len(lst):
+            return f"{lst[0].id}:{lst[1].id}:{lst[2].id}:{lst[3].id}"
         else:
-            if 4 == len(lst):
-                return f"{lst[0].id}:{lst[1].id}:{lst[2].id}:{lst[3].id}"
-            else:
-                return f"{lst[0].id}:{lst[1].id}:{lst[2].id}"
+            return f"{lst[0].id}:{lst[1].id}:{lst[2].id}"
 
     # @profile
     def __init__(self, *args: Union[List["AtomKey"], EKT], **kwargs: str) -> None:
@@ -3772,6 +3757,7 @@ class Edron:
         self.rc = len(rset)
 
     def __deepcopy__(self, memo):
+        """Deep copy implementation for Edron."""
         existing = memo.get(id(self), False)
         if existing:
             return existing
@@ -3781,25 +3767,6 @@ class Edron:
         dup.cic = memo[id(self.cic)]
         dup.aks = copy.deepcopy(self.aks, memo)
         return dup
-
-    def gen_acs(self, atom_coords: Dict["AtomKey", np.array]) -> Tuple[np.array, ...]:
-        """Generate tuple of atom coord arrays for keys in self.aks.
-
-        :param dict atom_coords: AtomKey dict of atom coords for residue
-        :raises: MissingAtomError any atoms in self.aks missing coordinates
-        """
-        aks = self.aks
-        acs: List[np.array] = []
-        estr = ""
-        for ak in aks:
-            ac = atom_coords[ak]
-            if ac is None:
-                estr += str(ak) + " "
-            else:
-                acs.append(ac)
-        if estr != "":
-            raise MissingAtomError(f"{self} missing coordinates for {estr}")
-        return tuple(acs)
 
     def is_backbone(self) -> bool:
         """Report True for contains only N, C, CA, O, H atoms."""
@@ -3814,7 +3781,10 @@ class Edron:
         return self._hash
 
     def _cmp(self, other: "Edron") -> Union[Tuple["AtomKey", "AtomKey"], bool]:
-        """Comparison function ranking self vs. other; False on equal."""
+        """Comparison function ranking self vs. other; False on equal.
+
+        Priority is lowest value for sort: psi < chi1.
+        """
         for ak_s, ak_o in zip(self.aks, other.aks):
             if ak_s != ak_o:
                 return ak_s, ak_o
@@ -3923,8 +3893,8 @@ class Hedron(Edron):
     def __repr__(self) -> str:
         """Print string for Hedron object."""
         return (
-            f"3-{self.id} {self.rdh_class} {str(self.L12)} "
-            f"{str(self.Angle)} {str(self.L23)}"
+            f"3-{self.id} {self.rdh_class} {str(self.len12)} "
+            f"{str(self.angle)} {str(self.len23)}"
         )
 
     @property
@@ -3936,7 +3906,6 @@ class Hedron(Edron):
             return 0.0
 
     def _invalidate_atoms(self):
-        print("INVALIDATE_ATOMS")
         self.cic.hAtoms_needs_update[self.ndx] = True
         for ak in self.aks:
             self.cic.atomArrayValid[self.cic.atomArrayIndex[ak]] = False
@@ -4287,7 +4256,7 @@ class AtomKey:
 
         atmNameNdx = internal_coords.AtomKey.fields.atm
         CaSelection = [
-            atomArrayNdx.get(k)
+            atomArrayIndex.get(k)
             for k in atomArrayIndex.keys()
             if k.akl[atmNameNdx] == "CA"
         ]
@@ -4297,7 +4266,7 @@ class AtomKey:
 
         resNameNdx = internal_coords.AtomKey.fields.resname
         PheSelection = [
-            atomArrayNdx.get(k)
+            atomArrayIndex.get(k)
             for k in atomArrayIndex.keys()
             if k.akl[resNameNdx] == "F"
         ]
@@ -4448,6 +4417,7 @@ class AtomKey:
         self.missing = False
 
     def __deepcopy__(self, memo):
+        """Deep copy implementation for AtomKey."""
         # will fail if .ric not in memo
         existing = memo.get(id(self), False)
         if existing:
@@ -4526,7 +4496,10 @@ class AtomKey:
 
     # @profile
     def _cmp(self, other: "AtomKey") -> Tuple[int, int]:
-        """Comparison function ranking self vs. other."""
+        """Comparison function ranking self vs. other.
+
+        Priority is lower value, i.e. (CA, CB) gives (0, 1) for sorting.
+        """
         for i in range(6):
             s, o = self.akl[i], other.akl[i]
             if s != o:
