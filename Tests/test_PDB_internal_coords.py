@@ -32,7 +32,7 @@ from Bio.PDB.PICIO import read_PIC_seq
 
 from Bio.File import as_handle
 
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Dihedron
+from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Dihedron, AtomKey
 
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio import SeqIO
@@ -111,7 +111,8 @@ class Rebuild(unittest.TestCase):
             # print(targPos + 1, ricTarg.lc, ang)
             targPos += 2
             try:
-                andx = ricTarg.pick_angle(ang).ndx
+                edr = ricTarg.pick_angle(ang)
+                andx = edr.ndx
                 if ang == "tau":
                     cic0.hedraAngle[andx] += tdelta
                     cic0.hAtoms_needs_update[andx] = True
@@ -126,10 +127,16 @@ class Rebuild(unittest.TestCase):
                     cic0.dihedraAngleRads[andx] = np.deg2rad(cic0.dihedraAngle[andx])
                     cic0.dAtoms_needs_update[andx] = True
                     cic0.atomArrayValid[cic0.d2aa[andx]] = False
+                    # test Dihedron.bits()
+                    pfd = IC_Residue.picFlagsDict
+                    if ricTarg.rbase[2] == "P" and ang == "omg":
+                        self.assertEqual(edr.bits(), (pfd["omg"] | pfd["pomg"]))
+                    else:
+                        self.assertEqual(edr.bits(), pfd[ang])
+
             except AttributeError:
                 pass  # skip if residue does not have e.g. chi5
         cic0.internal_to_atom_coordinates()  # move atoms
-        cic0.update_dCoordSpace()  # unnecessary, just for test coverage
         cic0.atom_to_internal_coordinates()  # get new internal coords
         # generate hdelta and ddelta difference arrays so can look for what
         # changed
@@ -314,18 +321,32 @@ class Rebuild(unittest.TestCase):
 
         sf.seek(0)
         IC_Residue.gly_Cbeta = True
+        IC_Chain.MaxPeptideBond = 100.0
+        chn = self.pdb_2XHE2[0]["A"]
+        chn.atom_to_internal_coordinates()
+        rt0 = chn.internal_coord.ordered_aa_ic_list[12]
+        rt1 = chn.internal_coord.ordered_aa_ic_list[16]
+        rt0.set_flexible()
+        rt1.set_hbond()
+
         write_SCAD(
             self.pdb_2XHE2[0]["A"],
             sf,
             10.0,
             pdbid="2xhe",
-            maxPeptideBond=100.0,
+            # maxPeptideBond=100.0,
             includeCode=False,
+            start=10,
+            fin=570,
         )
         sf.seek(0)
         allBondsPass = False
         maxPeptideBondPass = False
         glyCbetaFound = False
+        startPass = True
+        finPass = True
+        flexPass = False
+        hbPass = False
         with as_handle(sf, mode="r") as handle:
             for aline in handle.readlines():
                 # test extra bond created in TRP (allBonds is True)
@@ -343,10 +364,22 @@ class Rebuild(unittest.TestCase):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("Cbeta internal coords not found")
+                if "8_K_CA" in aline:
+                    startPass = False
+                if "572_N_CA" in aline:
+                    finPass = False
+                if 'FemaleJoinBond, FemaleJoinBond, "N", 13, "NCAC"' in aline:
+                    flexPass = True
+                if 'HBond, "R", 16, "CACO"' in aline:
+                    hbPass = True
 
-        self.assertTrue(allBondsPass)
-        self.assertTrue(glyCbetaFound)
-        self.assertTrue(maxPeptideBondPass)
+        self.assertTrue(allBondsPass, msg="missing extra ring close bonds")
+        self.assertTrue(glyCbetaFound, msg="gly CB not created")
+        self.assertTrue(maxPeptideBondPass, msg="ignored maxPeptideBond setting")
+        self.assertTrue(startPass, msg="writeSCAD wrote residue before start")
+        self.assertTrue(finPass, msg="writeSCAD wrote residue past fin")
+        self.assertTrue(flexPass, msg="writeSCAD residue 12 not flexible")
+        self.assertTrue(hbPass, msg="writeSCAD residue 16 no hbond")
 
     def test_i2a_start_fin(self):
         """Test assemble start/fin, default NCaC coordinates, IC_duplicate."""
@@ -379,6 +412,20 @@ class Rebuild(unittest.TestCase):
             break
         # create atomArray and compute distplot and dihedral signs array
         _chn1.atom_to_internal_coordinates()
+        _c1ic = _chn1.internal_coord
+        atmNameNdx = AtomKey.fields.atm
+        CaSelect = [
+            _c1ic.atomArrayIndex.get(k)
+            for k in _c1ic.atomArrayIndex.keys()
+            if k.akl[atmNameNdx] == "CA"
+        ]
+        dplot0 = _chn1.internal_coord.distance_plot(filter=CaSelect)
+        self.assertAlmostEqual(
+            dplot0[3, 9],
+            16.296,
+            places=3,
+            msg="fail generate distance plot with filter",
+        )
         dplot1 = _chn1.internal_coord.distance_plot()
         dsigns = _chn1.internal_coord.dihedral_signs()
 
@@ -412,7 +459,7 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(np.amax(dpdiff) < 0.000001)
 
     def test_seq_as_PIC(self):
-        """Read protein sequence, generate default PIC data."""
+        """Read protein sequence, generate default PIC data, test various."""
         seqIter = SeqIO.parse("Fasta/f001", "fasta")
         for _record in seqIter:
             break
@@ -420,7 +467,46 @@ class Rebuild(unittest.TestCase):
         pdb_structure.internal_to_atom_coordinates()
         for _chn in pdb_structure.get_chains():
             break
-        assert len(_chn.internal_coord.atomArrayValid) == 575
+        cic = _chn.internal_coord
+        self.assertEqual(
+            len(cic.atomArrayValid), 575, msg="wrong number atoms from Fasta/f001"
+        )
+        cic.update_dCoordSpace()
+        rt = cic.ordered_aa_ic_list[10]  # pick a residue
+        chi1 = rt.pick_angle("chi1")  # chi1 coord space puts CA at origin
+        rt.applyMtx(chi1.cst)
+        coord = rt.residue.child_dict["CA"].coord  # Biopython API Atom coords
+        self.assertTrue(
+            np.allclose(coord, [0.0, 0.0, 0.0]), msg="dCoordSpace transform error"
+        )
+
+        psi = rt.pick_angle("psi")
+
+        self.assertEqual(
+            psi.__repr__(),
+            "4-11_M_N:11_M_CA:11_M_C:12_A_N MNMCAMCAN 179.0 ('gi|3318709|pdb|1A91|', 0, 'A', (' ', 11, ' '))",
+            msg="dihedron __repr__ error for M11 psi",
+        )
+        m = "Edron rich comparison failed"
+        self.assertTrue(chi1 != psi, msg=m)
+        self.assertFalse(chi1 == psi, msg=m)
+        self.assertTrue(psi < chi1, msg=m)
+        self.assertTrue(psi <= chi1, msg=m)
+        self.assertTrue(chi1 > psi, msg=m)
+        self.assertTrue(chi1 >= psi, msg=m)
+
+        tau = rt.pick_angle("tau")
+        self.assertEqual(
+            tau.__repr__(),
+            "3-11_M_N:11_M_CA:11_M_C MNMCAMC 1.46091 110.97184 1.52499",
+            msg="hedron __repr__ error for M11 tau",
+        )
+        # some specific AtomKey compsrisons missed in other tests
+        a0, a1 = tau.aks[0], tau.aks[1]
+        m = "AtomKey rich comparison failed"
+        self.assertTrue(a1 > a0, msg=m)
+        self.assertTrue(a1 >= a0, msg=m)
+        self.assertTrue(a0 <= a1, msg=m)
 
     def test_angle_fns(self):
         """Test angle_dif and angle_avg across +/-180 boundaries."""
