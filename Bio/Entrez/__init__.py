@@ -558,42 +558,20 @@ def parse(handle, validate=True, escape=False):
     return records
 
 
-def _open(req_or_cgi, params=None, post=None, ecitmatch=False):
+def _open(request):
     """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 
     Does some simple error checking and will try again after certain types of errors, up to
     ``max_retries`` times. This function also enforces the "up to three queries per second
     rule" to avoid abusing the NCBI servers (this limit is increased to 10 if using an API key).
 
-    This function previously also built the request from the CGI URL and parameter dictionary, that
-    functionality has since been moved to the ``_build_request()`` function. The old behavior has
-    been retained for backward compatibility but is now deprecated.
-
-    :param req_or_cgi: A Request object returned by ``_build_request``, or a URL to be passed
-        as the first argument to ``_build_request`` (deprecated).
-    :type req_or_cgi: urllib.request.Request or str
-    :param dict params: (Deprecated) a dictionary of options to be passed to ``_build_request`` if
-        the first argument is a string, ignored otherwise.
-    :param bool post: (Deprecated) whether to use the HTTP POST method instead of HTTP get. Passed
-        to ``_build_request`` if the first argument is a string, ignored otherwise.
-    :param bool ecitmatch: (Deprecated) passed to ``_build_request`` if the first argument is a
-        string, ignored otherwise.
+    :param req_or_cgi: A Request object returned by ``_build_request``.
+    :type req_or_cgi: urllib.request.Request
     :returns: Handle to HTTP response as returned by ``urllib.request.urlopen``. Will be wrapped in
         an ``io.TextIOWrapper`` if its content type is plain text.
     :rtype: http.client.HTTPResponse or io.TextIOWrapper
-    :raises urllib.error.URLError: Errors raises by ``urlopen`` past the maximum number of retries.
+    :raises urllib.error.URLError: Errors raised by ``urlopen`` past the maximum number of retries.
     """
-    if isinstance(req_or_cgi, Request):
-        request = req_or_cgi
-    else:
-        warnings.warn(
-            "Passing anything other than a Request object is deprecated, use _build_request() first.",
-            DeprecationWarning,
-        )
-        request = _build_request(
-            req_or_cgi, params=params, post=post, ecitmatch=ecitmatch
-        )
-
     # NCBI requirement: At most three queries per second if no API key is provided.
     # Equivalently, at least a third of second between queries
     # Using just 0.333333334 seconds sometimes hit the NCBI rate limit,
