@@ -22,13 +22,14 @@ except ImportError:
 from Bio.PDB.ic_rebuild import structure_rebuild_test, write_PDB
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFParser
 from io import StringIO
 from Bio.PDB.SCADIO import write_SCAD
 from Bio.PDB.PICIO import write_PIC
 from Bio.File import as_handle
 from Bio.PDB.Model import Model
 from Bio.PDB.Residue import Residue
-from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.internal_coords import IC_Residue, IC_Chain
 
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
@@ -38,10 +39,21 @@ class Rebuild(unittest.TestCase):
 
     PDB_parser = PDBParser(PERMISSIVE=True, QUIET=True)
     CIF_parser = MMCIFParser(QUIET=True)
+    MMTF_parser = MMTFParser()
+
     pdb_1LCD = PDB_parser.get_structure("1LCD", "PDB/1LCD.pdb")
     pdb_2XHE = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
     cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always", PDBConstructionWarning)
+        mmtf_1A8O = MMTF_parser.get_structure("PDB/1A8O.mmtf")
+
+    def test_mmtf(self):
+        chain = next(self.mmtf_1A8O.get_chains())
+        ic_chain = IC_Chain(chain)
+        self.assertEqual(len(ic_chain.ordered_aa_ic_list), 70)
 
     def test_rebuild_multichain_missing(self):
         """Convert multichain missing atom protein to internal coordinates and back."""

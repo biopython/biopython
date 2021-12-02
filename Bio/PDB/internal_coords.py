@@ -65,6 +65,8 @@ Custom exception classes: HedronMatchError and MissingAtomError
 import re
 from collections import deque, namedtuple
 
+from numbers import Integral
+
 try:
     import numpy  # type: ignore
 except ImportError:
@@ -3225,7 +3227,7 @@ class AtomKey:
                     akl.append(fld)
 
         # tweak local akl to generate id string
-        if isinstance(akl[0], int):
+        if isinstance(akl[0], Integral):
             akl[0] = str(akl[0])  # numeric residue position to string
 
         # occNdx = AtomKey.fields.occ
