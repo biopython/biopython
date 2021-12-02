@@ -44,7 +44,10 @@ class PepdigestIterator(SequenceIterator):
         return records
 
     def parse_digestion_header(self, handle):
-        """TODO."""
+        """Parse the header of a digestion.
+
+        Return usefull information for parsing the results.
+        """
         # Read sequence name and positions
         line = handle.readline()
         while not line.startswith("# Sequence"):
@@ -72,7 +75,7 @@ class PepdigestIterator(SequenceIterator):
         return orig_seq_name, seq_to, seq_from, hitcount, enzyme
 
     def parse_digestion_results(self, handle, header):
-        """TODO."""
+        """Parse the digested peptides."""
         orig_seq_name, seq_to, seq_from, hitcount, enzyme = header
         # skip one line
         handle.readline()
@@ -104,7 +107,8 @@ class PepdigestIterator(SequenceIterator):
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects.
 
-        Reads
+        Reads the file by reading each block of results, with each peptide
+        produced by the in silico digestion being returned as a SeqRecord.
         """
         while True:
             line = handle.readline()

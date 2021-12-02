@@ -1,0 +1,1498 @@
+########################################
+# Program: pepdigest
+# Rundate: Sun 13 Jun 2021 13:18:29
+# Commandline: pepdigest
+#    [-seqall] selected_proteins.fasta
+# Report_format: seqtable
+# Report_file: 1.pepdigest
+########################################
+
+#=======================================
+#
+# Sequence: GFAH01000435.1.p1     from: 1   to: 243
+# HitCount: 24
+#
+# Complete digestion with Trypsin yields 24 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      35   3851.532 .      S      MGLIIVLVISVLSADAVLSMDNELYLNLEPHPSQR
+    215     243   2858.040 R      .      STSDECSNAVAEYTGETGPGAKLLNSAGK
+    116     140   2819.090 K      E      WCGAGNEAANYSELGYFYNVDLCCR
+    195     209   1834.033 R      C      YTYFELYGNGCYNVK
+     61      75   1690.950 R      E      MQGCQILESLNDIAR
+    177     188   1341.544 K      A      CLSDIPGYFAQK
+    141     152   1335.414 R      T      EHDHCDNIPAGK
+    159     169   1261.448 K      C      NEGAYTMMNCK
+     91      99   1159.236 K      C      DEMEFFEGR
+    100     109   1063.150 R      T      CLNVGGESER
+     83      90    952.168 R      D      HAIKRISK
+    170     176    840.903 K      C      CEEAFDK
+     36      42    801.900 R      A      SSWPVAR
+     46      51    763.895 R      S      VQFSKR
+    110     115    722.857 R      W      TMWGTK
+    189     194    661.818 K      Y      AVSMVR
+    210     214    577.613 K      S      CENGR
+     57      60    546.584 R      M      ESRR
+     52      56    504.500 R      E      SEGGR
+     76      79    487.556 R      T      EALR
+    155     158    479.577 K      N      YGLK
+     80      82    372.425 R      H      TPR
+     43      45    344.414 R      V      AVR
+    153     154    247.294 K      Y      TK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000035.1.p2     from: 1   to: 65
+# HitCount: 7
+#
+# Complete digestion with Trypsin yields 7 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      28   3152.832 .      C      MNTKFVLMMLMITAVILVSEAEADDPIR
+     49      65   1997.481 K      .      CKRISSRKLICVCEQCK
+     33      40    919.038 K      N      EQCTAHCK
+     29      32    435.539 R      E      CVSK
+     43      45    336.406 K      S      SCK
+     46      48    290.319 K      C      SGK
+     41      42    260.293 K      S      NK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000730.1.p1     from: 1   to: 141
+# HitCount: 10
+#
+# Complete digestion with Trypsin yields 10 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     89     135   5252.864 K      H      DNANRPHLIGNYKPQCEADGTYRLTQCWGSVGSCWCVDAEGRKLPNK
+      1      28   3255.057 .      E      MKLFILVCFMLVLVTLSLAEQTPCQEKR
+     29      51   2636.910 R      D      EKILSQNLDVEVIPECEENGSYK
+     67      80   1518.643 R      A      TDGTPINDFSPNLK
+     58      66   1080.201 K      T      NGVDCQCWR
+    136     141    716.810 K      .      HFPVDC
+     81      86    651.797 K      S      ACSCIR
+     54      57    505.633 K      N      QCKK
+     52      53    261.278 K      Q      DK
+     87      88    233.268 R      D      SK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000700.1.p1     from: 1   to: 106
+# HitCount: 11
+#
+# Complete digestion with Trypsin yields 11 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      21   2331.928 .      D      MFFILLAIVLLLIPSQGSLSR
+     66      83   2002.450 R      T      AVYMLFCPCESGLQCIPK
+     44      58   1717.901 K      N      SCEMLTEEGEFCSPR
+     22      33   1295.318 R      E      DGCESGEDCPQR
+     89      98   1120.271 R      C      NGTTIYPNLK
+     59      65    818.798 R      A      NENGTER
+     34      39    778.943 R      H      ECCLRR
+    102     106    640.604 R      .      QYSED
+     84      88    618.645 K      N      TVEDR
+     40      43    531.612 R      S      HFTK
+     99     101    378.447 K      Q      CTR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000720.1.p1     from: 1   to: 135
+# HitCount: 18
+#
+# Complete digestion with Trypsin yields 18 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     18      32   1677.119 K      E      YVILLIAVITVTQCK
+     43      56   1665.810 R      C      VDECCVQFSEYSTR
+     84      96   1597.941 K      G      CPCLEDMECKLWK
+     70      81   1534.617 K      G      TEYMNEENSVYR
+    118     130   1488.493 R      E      TTTHTNTTNNNNR
+    107     117   1278.443 R      T      CEKIETTTPTR
+      1       9   1206.425 .      Q      MYLAYLNYR
+     97     104    914.974 K      G      GQNESPRK
+     63      69    809.982 K      T      AGRICYK
+     57      62    787.935 R      A      CERRPK
+     37      42    721.743 K      V      NSNECR
+     10      14    677.801 R      T      QQKFK
+    131     135    613.579 R      .      EDTSY
+     15      17    378.487 K      Y      TMK
+     33      34    303.318 K      C      ER
+     35      36    249.328 R      N      CK
+    105     106    231.255 K      C      GR
+     82      83    203.241 R      C      GK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000180.1.p2     from: 1   to: 58
+# HitCount: 8
+#
+# Complete digestion with Trypsin yields 8 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      3      31   3150.698 K      C      TAFIFLLVVFALCITDNTVDAVCPFSSSR
+     38      45    780.792 R      C      DNGFSGGK
+     32      37    729.913 R      D      CVLHCR
+     46      51    651.781 K      Y      CGGFLR
+     56      58    363.432 K      .      CNK
+     52      53    309.365 R      C      YK
+      1       2    277.382 .      T      MK
+     54      55    249.328 K      C      CK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000399.1.p1     from: 1   to: 697
+# HitCount: 51
+#
+# Complete digestion with Trypsin yields 51 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      5      73   7863.193 K      N      GIMGAIYFRLGVCFLLMAVINHHKIECQNITSLSDYIWINDLCENCTSETEFDSTTLTVPLPTKKPKKR
+    565     619   6070.789 R      E      NKIIHMNDDTNEVMAGWGSVPSSSFFDNNFASAFSIFPEITTMPIVDDTACSRIK
+    467     512   4949.566 R      E      MGICSGSLICSQWVLTSASCFYGEDETIQTSKINAFVTLGEDDLSK
+    132     175   4850.557 K      E      CIPPLYSCNPPEPISNGIIIGNERLDGSRILYICDQGYELLGSR
+    527     564   4473.193 K      N      MHPKFRPWSGNDYDIALVKLTQPAPLDFTYRPVCLPER
+    260     301   4435.008 K      T      VLIDEFGVDNSIDAESTGTRIAVITFGDTAKLVIKPNDASIK
+    304     339   3801.424 K      A      HDAYGRLDALQPGGGGTAMHQAFATLITIIPLLRPK
+    665     684   2563.867 K      N      YCQSYYNVFSEILQYTSWIR
+    399     418   2304.668 R      G      NHLFLLDSFSDLESILSLIK
+     76      94   2148.424 R      M      DSLECPSLPVHRLQNGNIR
+    352     370   2084.375 R      T      NNVGNINISDMLKPEGQLK
+    438     455   2040.392 K      H      NSPEAIPGWPWLAVIYVK
+    103     118   1899.241 R      C      YICNEGFRLIGPTFIR
+    207     223   1880.951 K      S      HHVIDEVGSYSSNSHGR
+    620     635   1833.015 K      T      ETNHTNAFCAGSRLRR
+    649     664   1759.035 K      Y      DVSNIHYLVGVLSSKK
+    371     386   1693.932 K      D      TGMEIFAVGIGQDIDK
+    181     194   1647.733 K      Y      YGYWSPDTPSCEDK
+    387     398   1359.499 K      N      DELTKIASEPTR
+    636     648   1246.444 R      D      TCSGNLGSPLVAK
+    243     253   1222.361 R      G      SSSIDPVDFKK
+    233     242   1154.415 K      S      GLELLLLIDR
+     95     102   1072.334 R      Y      MLSYKKFR
+    124     131   1013.205 R      C      WDNIIKPK
+    343     351    991.155 K      N      AVFLITDGR
+    690     697    883.975 R      .      CQDVHSVP
+    200     206    840.008 K      H      SMATRFK
+    224     230    718.805 R      E      SIGSDIK
+    254     259    676.814 K      V      GINFVK
+    195     199    648.757 K      S      YEPLK
+    432     437    619.777 K      N      CGVITK
+    685     689    604.621 R      C      NTTNR
+    424     429    581.713 K      E      APPLGK
+    522     526    573.734 R      M      VSKIK
+    513     516    533.536 K      E      EEEK
+    419     423    532.656 K      A      GMPTK
+    460     463    517.539 K      T      ENQK
+    456     459    510.597 K      E      HARK
+      1       4    475.542 .      G      LDTK
+    519     521    435.483 K      V      NFR
+    119     121    391.445 R      G      CNR
+    464     466    362.386 K      M      TSR
+    178     180    350.433 R      Y      TCK
+    340     342    345.442 K      A      AKK
+    176     177    303.318 R      T      ER
+     74      75    288.307 R      D      NR
+    517     518    275.305 K      N      EK
+    430     431    275.305 K      C      EK
+    231     232    275.305 K      G      EK
+    302     303    247.294 K      H      TK
+    122     123    231.255 R      W      GR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000205.1.p1     from: 1   to: 405
+# HitCount: 30
+#
+# Complete digestion with Trypsin yields 30 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     41      73   3477.875 K      T      DLLRLSNSEGNIFFSPSSLTSALSAIYFGANGK
+    345     375   3282.608 K      N      AVVEVNEEGSEAAAVTGAIFFPTSLEIPYDR
+      1      29   3198.702 .      V      MIHTLAFLAAAVITVYAYQANVCTNEDVR
+    171     197   3065.603 K      G      THGKISKLVDNLDEATKFLLLSAIYFK
+     83     106   2848.325 R      T      YLSMQYQNVSSINPVLTYCLELLR
+    224     245   2692.125 K      A      SVLTMKLNTKFPYLYDPVNEYR
+    310     334   2617.870 K      G      DDLISAGLGSMFSTNADFSRITGNK
+    198     219   2616.786 K      N      GTWQTKFDPENTESRPFYNNGK
+    267     287   2401.696 R      V      DGIEKLQQSITSETLIDILER
+    290     309   2332.786 R      D      ETQVTVFLPKFNIIHSMSLK
+    120     136   1911.142 R      D      ANAALVQEGYTILQEYK
+    380     392   1604.828 K      S      ADHPFLFFIIDNR
+    253     266   1575.886 K      D      GNSISMIIVLPFER
+    159     170   1445.592 K      T      AVEEINQWVTEK
+    137     148   1401.585 K      N      DRLHESFGTIVK
+    149     158   1265.299 K      A      NIDFEEQNEK
+    335     344   1144.336 K      A      GLYVSDIIHK
+    393     401    950.062 R      V      SGSNLFIGR
+    246     252    832.010 R      G      ALQLPYK
+     34      40    805.932 R      D      VNNKFGK
+    114     119    795.847 R      A      DYTLER
+     77      82    715.848 R      Y      DLTVLR
+    376     379    520.629 R      A      NIFK
+     30      33    491.591 R      V      VFAR
+    402     405    459.586 R      .      VTKL
+    110     113    449.464 K      D      STSR
+    220     223    444.488 K      S      NSPK
+    107     109    360.454 R      S      TLK
+     74      76    346.387 K      D      TAR
+    288     289    273.335 R      E      VR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000026.1.p2     from: 1   to: 62
+# HitCount: 7
+#
+# Complete digestion with Trypsin yields 7 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      31   3431.183 .      W      MNSKLIFPMIVMITAVILTFEIETTSAANCK
+     53      62   1191.446 R      .      GICFCRFCDK
+     32      37    812.895 K      E      WDFDCK
+     44      49    722.817 K      C      NCSFPR
+     38      41    525.620 K      N      EFCK
+     50      52    405.516 R      G      CKR
+     42      43    260.293 K      N      NK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000233.1.p1     from: 1   to: 867
+# HitCount: 86
+#
+# Complete digestion with Trypsin yields 86 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    720     760   4189.093 K      Y      EGVGDGSIGSASSLPMAAMVAIIVILLIIVLVTIDITCYLR
+    198     231   3889.572 R      E      AMVIQTGRFQNKLITVEVHVPPVITQLESHVEFK
+    521     548   3059.342 K      E      TATTATFALHNPDDDGGLPIHTFVVEYR
+    423     448   3032.466 K      G      TWNNNPINLTCIAEAIPNATLTWWFK
+     70      95   2997.395 K      N      ETIELRPSSPVEVLQQEDNQLALIFK
+    232     256   2794.986 K      H      EGEEATLTCHATGSPQPEYTWFDPK
+    114     137   2758.138 K      Q      TDKLNISVALTFYQDITWVDCPSK
+    598     622   2647.013 K      Y      MDVTMPAESSPESPKFLIPGGNVSR
+      6      29   2509.045 R      V      TISRFLGLLTTGLGICIAFAAELK
+    165     185   2395.654 K      T      DNKPLPEDHYVIVENGVTVTR
+    294     314   2331.692 K      Q      NDAGETSKFLELTVIVKPEIK
+    631     647   2135.453 R      Y      WTLPLDNGRKIDYFQLR
+     44      63   2131.443 K      W      GFVLTCLGEAPDTSLFSDMK
+    326     345   2101.403 K      D      TATLECQATGEPLPSLSVRK
+     96     113   1992.142 K      T      NPTTEESGVYECTALYSK
+    561     576   1935.123 K      V      EWNEGSSYILENLKPR
+    695     710   1804.980 R      T      AHNEIGFSQDATIVFR
+    461     476   1771.090 K      E      QYGTSSHSLLLVKPIK
+    257     270   1614.781 K      D      HQDLSNIHGYFVGK
+    402     415   1544.829 R      T      VGHLTVEFSPIMSK
+    383     395   1464.523 R      G      SDDGLYYCSAENK
+    371     382   1393.723 K      S      SILTMTIQSIMR
+    761     770   1392.623 R      S      YQWGLLYFFR
+     30      43   1367.525 K      G      VKPGGAEQSQPAAK
+    152     164   1347.491 K      D      VSANPSATVTWSK
+    138     149   1299.493 K      C      QALVINTTGNIR
+    577     586   1258.445 R      N      VQYTFRFAAR
+    807     817   1218.344 K      G      VEPNSTTPMDK
+    828     838   1206.274 R      D      TEVDNPAFDAK
+    315     325   1206.321 K      T      QFDNISVAQGK
+    587     597   1204.261 R      M      NDAGIGEWSQK
+    188     197   1155.204 R      A      EEDAGNYAMR
+    654     663   1118.211 K      A      DGNDWTIIGK
+    505     514   1098.268 K      V      EARKPSPVSK
+    682     690   1085.181 K      V      SLNPNSYYK
+    623     630   1067.210 R      W      YPDKFEIR
+    797     806   1028.087 K      V      DVPANNGDVK
+    842     850   1010.084 K      N      TDTNSMDVK
+    346     354    976.998 K      E      DGHDTAFSK
+    481     487    899.959 R      C      DVYGQYR
+    271     278    875.977 K      S      DTGTLTIR
+    675     681    860.024 R      S      APRFELK
+    498     504    858.002 K      E      EINIELK
+    454     460    794.816 K      Q      EGDPSYK
+    785     792    789.797 K      G      EAAAEDGK
+    648     653    784.910 R      D      YFQVTK
+    416     422    756.941 K      T      TPVTLVK
+     64      69    727.861 K      E      WIAPNK
+    552     557    717.731 K      V      EPEESK
+    515     520    712.974 K      T      VILLKK
+    666     670    676.786 K      N      MEEIR
+    488     493    664.731 R      H      CEATNK
+    288     293    641.740 R      N      YGCTAK
+    355     359    634.601 K      V      ETDDR
+      1       5    621.774 .      T      MCGRR
+    771     776    607.723 R      S      STLCGK
+    671     674    588.624 R      A      NWNR
+    777     782    577.592 K      A      SATGDK
+    366     370    576.561 K      S      EEDGK
+    449     453    573.647 K      E      GQEIK
+    851     855    557.647 K      G      NISPK
+    283     287    546.538 K      Y      EDAGR
+    859     863    504.584 K      D      SSIAK
+    818     822    503.512 K      E      GANDK
+    691     694    501.583 K      A      VEVR
+    711     715    474.517 R      D      TAAGR
+    477     480    473.530 K      D      ELGR
+    494     497    468.556 K      E      HGKK
+    279     282    460.574 R      E      SVKK
+    360     363    445.560 R      T      VSLK
+    864     867    432.474 K      .      DSLV
+    716     719    431.489 R      E      DLGK
+    823     825    404.420 K      S      EEK
+    399     401    402.451 K      V      VER
+    549     551    376.410 R      E      ETK
+    558     560    374.437 K      E      VEK
+    793     796    363.432 K      D      GGCK
+    839     841    362.383 K      T      DTK
+    396     398    318.330 K      V      GDK
+    856     858    290.319 K      S      GSK
+    186     187    275.308 R      E      TR
+    826     827    261.281 K      T      SR
+    150     151    249.328 R      V      CK
+    364     365    247.294 K      E      TK
+    783     784    217.268 K      E      AK
+    664     665    217.268 K      M      AK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000029.1.p1     from: 1   to: 63
+# HitCount: 9
+#
+# Complete digestion with Trypsin yields 9 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      25   2915.662 .      G      MNTKLFLMMLMITAVILVFEAETVR
+     56      63    924.177 K      .      CHCMLCSK
+     36      42    705.845 K      A      QCAGPCK
+     26      32    680.734 R      T      GTGTSCR
+     51      55    551.676 K      C      CMNGK
+     33      35    344.411 R      Q      TPK
+     48      50    340.382 K      C      HGK
+     45      47    306.380 K      H      GCK
+     43      44    217.268 K      G      AK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000047.1.p1     from: 1   to: 60
+# HitCount: 4
+#
+# Complete digestion with Trypsin yields 4 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     27      57   3190.415 R      G      SSDCDPVTCFDGCVADNCDSGSCVNGECQCR
+      3      26   2690.175 K      S      TAFILTILLITVFTTIHADTVTER
+     58      60    315.347 R      .      GCH
+      1       2    277.382 .      T      MK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000317.1.p1     from: 1   to: 90
+# HitCount: 13
+#
+# Complete digestion with Trypsin yields 13 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      3      28   3064.595 K      V      MIIFYSLFFILVLTSINVAEADHHNR
+     58      74   1835.024 K      H      AFIYGGCQGNSNNFSKK
+     29      36    883.117 R      T      VNCLLPPK
+     75      80    808.913 K      C      HHCEKR
+     47      51    762.820 R      E      YYFDR
+     86      90    600.672 R      .      YFGSK
+     42      46    536.588 K      Y      GSFAR
+     37      41    504.602 K      G      TGPCK
+     52      54    404.423 R      S      ETR
+     83      85    392.458 R      Y      AFR
+     55      57    336.406 R      A      SCK
+     81      82    277.342 R      A      CR
+      1       2    203.241 .      M      GK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000169.1.p1     from: 1   to: 136
+# HitCount: 9
+#
+# Complete digestion with Trypsin yields 9 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     83     123   4788.297 K      C      NNTSFEEAQNCSLQTSGYFLTCVANVWERLWLLSTEVTEFR
+      1      25   2766.365 .      D      MAKITLLLSLIVSISATGEWEQMCK
+     40      61   2498.908 K      Q      HISFASNSIFHSKLIEILDAKK
+     62      82   2338.750 K      N      QVVAGFNYELIINIGTTVCRK
+     29      39   1267.488 K      H      ETKKLAVYSTK
+    124     131    922.110 R      M      CSPIAYLR
+    132     135    581.687 R      D      MFER
+     26      28    364.417 K      E      DCK
+    136     136    133.104 R      .      D
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000427.1.p1     from: 1   to: 599
+# HitCount: 40
+#
+# Complete digestion with Trypsin yields 40 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    268     311   5174.915 K      T      DLATVTAEQNMTISQIIEICEKFYESIGFQNLGEEFWQHLKKIK
+    545     584   4858.469 R      N      TEPWQEAMKLMTNEENTGLDVQPLLDYYKPLYEWLVEQNK
+      1      36   4097.923 .      E      MTSVFVLISLICLGFQLVDVILACESWENNVCRKPR
+    338     366   3617.043 K      C      EGNGNYFFYYLIQNLISVHFQIWNSQHRK
+    397     423   3011.359 R      M      NFSTSIGITNANSYAPENIFNINHLMK
+    107     130   2761.012 K      E      SYISNIYHNAAVCLYEEDSVNVEK
+    312     337   2698.939 K      E      TNGSDCQNSVFAGCDGFHASVTICHK
+    210     229   2524.094 K      Y      ELLPLYQQLHAYIRRKLIKK
+    237     257   2416.718 R      D      ENGPIPEHLLDILGDNWWGLK
+    178     197   2364.599 K      D      SIAKIYSGNEYWALNYNTTR
+    476     496   2270.524 R      E      TELDFDPGALSEIANNLPVVR
+    367     386   2124.355 K      G      CGWADVLNGYPNPGFESGIK
+    424     440   2097.459 K      W      MALWSFVSLQYYYNIAK
+    441     458   2063.371 K      W      WMLDLSTGAIQPQEMNTK
+    510     528   2045.414 K      S      GLCKIMGTDASLQSCNIYK
+     43      57   1962.330 K      E      YLMEQNWILYQACMR
+     58      72   1889.144 R      N      EEPPHFKPIPLQDWR
+    497     509   1712.971 R      G      EFLGRIYQFQFHK
+    585     599   1636.707 K      .      NESIGWESDDATICP
+    136     146   1442.631 K      D      WISEIYDIFEK
+     89      97   1189.345 K      E      YIEYDDLMK
+    258     267   1174.316 K      D      DSILPFPEEK
+    529     538   1144.256 K      M      SNEAGNRIRK
+    154     161   1134.219 R      N      EHYWASWR
+    198     206   1125.218 R      A      DNMFQDIDK
+    170     177   1112.210 K      S      ERFQQNYK
+     73      81   1077.246 R      A      NISIPDYKK
+    387     396   1032.162 K      N      GVVDISVSTR
+     98     106   1031.128 K      S      ELPEEISSK
+    459     465   1011.145 K      Y      WWEYSLK
+    147     153    960.060 K      E      DNNWKKR
+    230     236    866.926 K      E      YEEGTIR
+    162     169    859.037 R      E      NATGKKIK
+    468     475    845.028 R      T      GVCPSVKR
+     82      88    772.940 K      Y      ALELISK
+     37      42    758.913 R      Y      EKLLEK
+    539     544    677.878 K      T      MMALGR
+    131     135    634.792 K      W      ECKKK
+    207     209    403.481 K      E      AWK
+    466     467    337.379 K      G      YR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000578.1.p1     from: 1   to: 199
+# HitCount: 18
+#
+# Complete digestion with Trypsin yields 18 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    144     171   3351.748 K      Y      VCLDPHLMDFVEEEYLNEQVESIDKLSR
+     43      68   2953.269 R      Q      QIDEEMHASLTYMSMAAHFGNNDIAR
+    111     129   2215.404 K      V      DTWQNGLEALEDALNLEKR
+    178     196   2098.414 R      V      AMDSGMGEYLIDQELLGKK
+      1      17   1858.287 .      V      MLTATFLAFLSTLAMAR
+    130     143   1693.923 R      V      VNNKLYHLHDLAEK
+     84      96   1628.848 K      G      EHAEKIIDYINKR
+     30      42   1542.819 R      Q      YVLHNQCLVGLQR
+     69      80   1405.530 R      E      QGFSKFFSENSK
+    100     106    794.903 K      M      VSSFDIK
+    172     177    781.968 R      A      YISMLR
+     18      23    716.789 R      Q      VDNELK
+     24      27    508.578 K      D      QPHK
+    107     110    475.604 K      D      MPTK
+     81      83    404.420 K      E      EEK
+    197     199    359.423 K      .      VEL
+     28      29    289.291 K      Y      DR
+     97      99    260.293 R      V      GGK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000037.1.p1     from: 1   to: 62
+# HitCount: 6
+#
+# Complete digestion with Trypsin yields 6 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      31   3583.369 .      W      MNSKLIFLMMMMITAVILTFEIETTSAENCR
+     32      41   1328.480 R      N      WDLQCEEFCR
+     55      62   1023.205 K      .      CFCYQCEK
+     42      49    981.137 R      C      NRLCNFSK
+     52      54    317.345 R      C      NGK
+     50      51    277.342 K      N      CR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000211.1.p1     from: 1   to: 206
+# HitCount: 19
+#
+# Complete digestion with Trypsin yields 19 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      31   3579.435 .      C      MDLYMLIVALLACLVCNVNCLMFHLQPNARR
+    121     150   3533.036 K      D      NYENIAEVGKLKPLEVELQRLEDLSEYIVK
+    173     200   3419.210 R      A      VLYFSIFSMCCLLGLATWQVLYLRRFFK
+     78      97   2346.636 K      M      GKFAFTTDDYDVFEICFISK
+     40      56   1734.924 K      T      GVLVTGEYTLSDAPGQK
+    164     172   1022.981 R      V      DTNESTNSR
+     57      65   1005.133 K      G      TDLIVTDTK
+    108     114    790.973 R      H      EATLVMK
+    151     156    787.888 K      Q      DFGYMR
+     66      72    768.871 K      D      GHTLVSR
+    201     206    700.877 K      .      AKKLIE
+    159     163    692.742 R      D      EEEMR
+     98     103    658.773 K      G      MPAGQR
+     35      39    654.721 K      G      EEIHK
+    115     120    611.655 K      N      HGAEAK
+     73      77    603.630 R      G      DNIDK
+    104     107    461.580 R      E      GMVR
+     32      34    362.488 R      E      CLK
+    157     158    302.333 R      E      QR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000716.1.p1     from: 1   to: 76
+# HitCount: 9
+#
+# Complete digestion with Trypsin yields 9 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      23   2527.211 .      C      MRLNAILVVFLICIIAADLVVAR
+     66      76   1434.754 K      .      NIRRKLHTLKR
+     36      46   1387.666 K      M      YPSRKIVTMHR
+     47      53    856.138 R      A      MVRIIPK
+     57      63    855.135 R      V      VVKIIKR
+     24      30    844.940 R      Y      CYPGSYR
+     31      35    639.706 R      Y      YQTTK
+     54      56    358.441 K      V      AIR
+     64      65    245.322 R      N      VK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000110.1.p1     from: 1   to: 1379
+# HitCount: 98
+#
+# Complete digestion with Trypsin yields 98 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    835     909   8381.450 K      C      EEEQEWSTEGLWVNQTDNLTLCFSTHLTAFSILLDPDPEPIAESHQQALSLISYIGSGLSLLGLLLTIITYSLFR
+    945    1012   7645.209 K      Y      ELCTGSAILIHYFVLTTLSWMCIEAINIYQLLIHVFASAETRFMLKRFFAAWGIPLIIVGVTAGIDLK
+    631     682   5593.274 K      N      DIAIAQSMFSVISNMLAVNQSVLDAADHDGITTGKLLTVIDDFVSNVELDER
+    287     333   5412.070 K      S      CTILENVSPWTDYQFRLYAWNTNETGLGSDIVHFGTRPNYCLGNICK
+   1016    1055   4470.315 K      V      NPNEYCMLSPANPYVYYISLLGPSCAILLINCTVFVMVSR
+    588     626   4314.814 K      Y      GYQEAENITGELQLLTEDPNSLNAEKLANATKKIQEIVK
+    798     834   4202.835 R      E      YVIQASINNLQLSNLSEPVEYSLPSPSHIPVLCVYWK
+    228     263   4196.812 K      Y      TISEPLMVQVNHTTETSVEICWRRPHYGHVTGYLIK
+    342     377   4144.590 K      N      QHPGYICHCHQGYYGSTCENFDPCFSKPCENYGVCR
+    382     415   3671.247 R      C      NMYECSCLNGFSGLTCNIFNPCAIRPSPCMNGGR
+    914     944   3605.334 R      E      DHSGKILLNLCISMFLMNFAFLSNSIPFFRK
+   1308    1340   3522.799 R      D      DTPTSSLLAESPHTEQSSMGESPIPPDQIEGRK
+    436     462   3081.605 K      C      MCQYFNPCFSSPCLNGVCHNISEVIFK
+    465     493   3030.249 R      D      CNPGYSGDLCETDVDECSAYPCQNGGTCK
+    536     561   2957.220 R      A      WNETPHGETDYVSCPYGVVTYSPINK
+   1103    1127   2926.599 K      C      QLKLVFQYVFCIANSLQGLLIFIVR
+    174     196   2765.118 R      D      TEDSSYFILNEQTGNIFVRKKFK
+     42      65   2576.846 K      Y      APVGTYVTTVHTYDALEGALQDVR
+     96     118   2523.872 K      V      ANESYQIIVAALHQGDSKLQPIK
+    153     173   2517.663 R      T      VEAHDSDPLDYNAEIYYSMER
+   1177    1199   2511.606 R      H      VHSGNSDNAGTSVFNTNFWNSQK
+   1241    1261   2463.680 R      T      ELPPPLNDPTIVYIDEEDHEK
+    266     286   2302.523 R      C      ESDQLDRIPSLVNLTTNASTK
+    119     137   2251.481 K      A      VDVTVYNTFTPKFDQASYR
+    566     585   2239.549 K      E      CLLLNNGTVAWGETIDFNCR
+   1082    1102   2193.719 R      Q      GAFTVMVLLGITWVFGALAVK
+   1274    1289   1996.207 K      N      SLLDRPDYFSQELEKR
+     73      90   1961.156 K      A      DSAYFLLESTSGNISTKK
+    420     435   1843.105 R      M      TSHTYHCICPLGYYGK
+    707     721   1826.086 R      E      QVTFTPSYQTTIRRK
+   1152    1168   1735.830 R      Q      GVPPGGSWYANSNSSQK
+    741     757   1682.981 K      Q      AAGSITLPTEAIIAARK
+     10      24   1681.069 R      G      NVIFGLVVTFIISCR
+    758     771   1673.932 K      N      QTSGDLRFKFIAYK
+   1222    1237   1631.719 R      N      SSSNAAGVYGTTTYPR
+    138     152   1580.804 R      V      AEIHANVTIGTSVLR
+    683     695   1430.578 R      A      NNVSLETENIAVK
+   1211    1221   1429.518 K      S      NSNQQNERKRR
+    786     797   1428.539 R      Y      EHCGQSELLQER
+   1262    1273   1332.433 K      S      TVEASHPSDVYK
+   1341    1351   1293.572 K      E      DKKKKLSFATK
+   1062    1072   1243.530 R      G      MNTKPGIVQKK
+    728     740   1190.145 R      A      APSGGADDNDSGK
+    206     216   1162.268 R      A      VFAEDGGSPKR
+    217     227   1146.263 R      T      ASDAQVEVTVK
+   1140    1149   1142.407 K      H      QLLLTGTLKR
+      1       9   1116.318 .      N      MSFSSLCWR
+   1295    1303    995.144 R      E      TVTTFLTGR
+    501     508    973.176 R      G      CFCKPGYR
+   1128    1135    948.148 R      C      CLLFPEAR
+   1073    1081    946.071 K      G      GTVTTAQIR
+    520     527    895.876 R      G      SEETTSDK
+    199     205    856.038 K      V      HGKLVFR
+   1370    1376    852.871 R      T      MDSTEDR
+   1169    1176    849.856 K      V      QNGSTSTR
+     66      72    846.037 R      D      YNLLPVK
+    334     341    839.873 K      Q      SGDCETTK
+     31      37    832.877 R      V      AQHHNAR
+    772     777    825.922 K      Q      NDKFFR
+    494     500    807.861 K      C      DGINSFR
+   1204    1210    788.942 R      N      TLPFPSK
+     25      30    762.867 R      A      GDIRFR
+   1056    1061    731.893 R      M      VLFTPR
+   1358    1363    718.762 K      Q      TNDELK
+    512     517    718.869 K      C      CQITVR
+   1352    1357    701.775 K      T      EESPIK
+   1290    1294    630.702 R      T      NTLQR
+     91      95    601.704 K      A      AIDRK
+    702     706    587.633 K      Q      NTPTR
+    627     630    559.620 K      D      YSYK
+    781     785    549.602 R      E      NCASR
+     38      41    537.613 R      A      VYEK
+   1200    1203    527.538 K      T      HESR
+   1136    1139    506.620 R      Q      CAWK
+    910     913    504.605 R      D      CLNR
+   1366    1369    498.583 K      M      VQPR
+    416     419    493.535 R      T      CESR
+   1304    1307    488.501 R      D      EGQR
+    378     381    488.544 R      N      NISR
+    532     535    477.564 K      W      GVFR
+    562     565    474.561 K      C      ATRK
+   1013    1015    472.541 K      N      YYK
+    699     701    460.577 K      N      WKK
+    778     780    458.521 R      N      QRR
+    725     727    459.506 R      A      ERR
+    722     724    416.478 K      E      EIR
+    528     531    405.408 K      G      GSDK
+   1238    1240    375.385 R      E      NSR
+   1377    1379    361.395 R      .      TEL
+    264     265    337.379 K      E      YR
+    696     698    330.428 K      W      AIK
+    509     511    331.415 R      C      GKK
+   1150    1151    311.344 R      G      HR
+    518     519    277.342 R      S      CR
+    463     464    277.342 K      C      CR
+   1364    1365    274.320 K      V      QK
+    586     587    275.305 R      G      EK
+    197     198    261.278 K      H      DK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000335.1.p1     from: 1   to: 995
+# HitCount: 64
+#
+# Complete digestion with Trypsin yields 64 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    114     199   9829.043 K      D      EKIMTGQLEFIGGGWSMNDEAATHYNAMIDQMTWGFRRLYDNFGVCGVPHIGWQIDPFGHSAEQASLFAQMKFDGFFVGRIDYQDK
+    839     891   6148.082 K      N      HRKLGEELFMAPLMSFVSIESEHEWATSYHTQISGLNRPLPASLHMLTLEPWK
+    661     705   5258.962 K      E      GPLVQEIHQIFNSWTTQVIRLYQGEEYIEYEWLVGPIPIQDGIGK
+    221     264   4995.538 K      A      SGEIFTSVLPNTYSPPSGFCFDLLCNDQPIMDDPRLEDYNVDIR
+    729     763   4300.007 R      D      EMRKRIINYRPTWKLNVTEPVSGNYYPVNSRIYIK
+    778     817   4232.614 R      G      SQGGSSLHNGSLELMIHRRLLHDDAFGVGEALNESGVDGR
+    462     492   3587.080 K      N      QQFCNYLNISACDITENNDLVVVTIYNPIIR
+    346     371   3042.270 K      G      SDDFFPYASDPHAYWTGYFTSRPSVK
+    634     660   2982.363 R      G      ASGAYIFRPNGTDPYPLGDNVTMHIFK
+    436     461   2891.455 K      Q      GIDSCQNVMSSAYQKLMQIKKPPPVK
+    926     950   2694.941 K      W      AFQVTSFQEATLGANQNIGDVSQLR
+    281     302   2638.909 R      N      TNNIIMTMGNDFNYQNADTWFK
+    613     633   2625.860 K      A      VNQSFYWYHGMNGNNSEFKFR
+     31      52   2567.948 K      T      VEPDKLNVHIICHTHNDVGWLK
+      1      22   2466.081 .      C      MYLRLVIGLLNFVLCLSSSVPK
+    497     515   2166.467 K      S      YIRFPVHPSGYQVFSPSGK
+     84      99   2134.384 K      W      NNDRRFIYVETAFFWR
+    569     587   2116.367 K      H      QQHSAVHISFGNTVVLHNK
+    317     333   1959.245 K      S      NESKINVIYSTPSCYLK
+    968     984   1871.139 K      T      SGQSPLTNITLNPMEIR
+    906     921   1802.955 K      S      DDDPNDLSLPVTINFK
+    100     113   1795.898 R      E      WWEEQSDDIQNSMK
+    406     422   1776.924 R      Q      EALGVAQHHDAITGTEK
+     53      67   1765.854 K      A      TVDQYYYGADSSIQR
+    892     905   1760.041 K      D      NNTVLLRLEHMYEK
+     68      83   1734.967 R      N      AGVQYILDSVLDSLNK
+    546     560   1670.969 K      T      VDLPALGYASYFVKK
+    207     220   1665.884 K      S      QMEFLWQGSQNIGK
+    706     719   1634.853 K      E      EVISRFASELNNKK
+    825     838   1585.820 K      H      HYLIISEINDAAVK
+    600     612   1482.793 K      V      VSAIRRINGQKIK
+    303     313   1352.612 K      Q      NLDKLMTYINK
+    334     345   1339.470 K      S      SVNALNYTWGSK
+    985     995   1326.512 R      .      TFILTVVDQYQ
+    386     396   1249.476 K      S      QLYTLARLGSK
+    516     526   1154.433 K      S      SVACQLVPIPK
+    536     545   1145.280 K      V      SNATHELVFK
+    376     385   1116.301 R      Q      QANNVLQVCK
+    768     777   1101.268 K      S      GIQVTVLTDR
+    423     431   1100.237 K      Q      QAVTYDYIK
+    720     728   1088.098 K      E      EFYTDSNGR
+    397     405   1059.184 K      E      SEDDLIVLR
+    265     273   1047.263 R      T      AQEFIKIAK
+    527     535    998.150 K      S      SVQNIPGRK
+    588     595    952.165 K      Q      HLTLLVTR
+     23      30    843.968 K      V      CGYSSCPK
+    274     280    838.916 K      T      TEATVYR
+    563     568    746.966 K      Q      SIRLMK
+    951     956    734.807 R      N      WSSVEK
+    957     961    607.664 K      Y      NSYPK
+    818     822    542.679 R      G      GLVVR
+    372     375    541.607 K      Q      GYFR
+    203     206    518.524 R      Q      EENK
+    922     925    493.604 K      A      SLFK
+    764     767    461.516 K      G      DVTK
+    493     496    460.531 R      Y      NISK
+    596     599    445.476 R      V      QNGK
+    432     435    444.531 K      G      QVAK
+    962     964    440.558 K      W      YMK
+    965     967    419.481 K      S      WSK
+    200     202    417.422 K      E      DQR
+    314     316    387.479 K      N      QLK
+    561     562    247.294 K      S      TK
+    823     824    203.241 R      H      GK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000319.1.p1     from: 1   to: 100
+# HitCount: 10
+#
+# Complete digestion with Trypsin yields 10 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      33   3479.084 .      Y      MAHALTPILFGILLMFSFSSLSTGYGESCQAGK
+     78      97   2182.620 R      G      YVPGPATARFPDCCPMVVCR
+     60      69   1128.306 R      M      YSLETLTCAK
+     53      59    938.072 K      Y      CINYNRR
+     34      40    844.969 K      S      YTIHVGR
+     47      52    725.901 K      C      SCILYK
+     41      46    662.698 R      S      SVQDSK
+     70      73    491.646 K      S      MTLK
+     74      77    421.472 K      Y      SGCR
+     98     100    219.197 R      .      GSG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000048.1.p1     from: 1   to: 61
+# HitCount: 7
+#
+# Complete digestion with Trypsin yields 7 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      33   3627.430 .      Q      MNTKLVLIMLMITSVILVFEAETVSSTSCINPK
+     54      61    924.177 K      .      CHCMLCSK
+     34      40    851.991 K      A      QCTELCR
+     49      53    650.812 K      C      CMNRK
+     46      48    340.382 K      C      HGK
+     43      45    306.380 K      H      GCK
+     41      42    217.268 R      G      AK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000685.1.p1     from: 1   to: 97
+# HitCount: 9
+#
+# Complete digestion with Trypsin yields 9 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      42   5079.870 .      S      METKFILMLLLVTFLTVCNLAQGDPDYYQYYWCGNQWDNCHK
+     58      71   1676.731 K      C      ECGDEKIGDNYDYR
+     87      96   1245.360 K      D      SLPDNWTTRR
+     76      86   1132.289 K      S      YCTCSGCPNGK
+     43      50    823.978 K      S      SCVLDGCK
+     51      57    799.946 K      E      SGHCIRK
+     72      73    249.328 R      T      CK
+     74      75    247.294 K      Y      TK
+     97      97    133.104 R      .      D
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000687.1.p1     from: 1   to: 166
+# HitCount: 13
+#
+# Complete digestion with Trypsin yields 13 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      32   3601.375 .      H      MQIGLATLMALLSLALYVYSRPNVHGWKLGRK
+     46      69   2681.028 R      G      SHAVYPSTVYEECCPTVTEIVQPK
+     86     106   2349.532 K      Y      NSTQSFYQTSCGENVAEKPCR
+    147     166   2260.704 R      .      SGCSCEISITRRRRPKIGKL
+    131     144   1824.026 R      V      EYNSDLPWRLDFIR
+     35      45   1442.683 R      S      NWIWDSPIKKR
+    107     117   1313.430 R      C      YVSEELAPYSR
+     75      85   1294.470 K      N      SGRILELYTDK
+    122     130   1121.258 R      E      YSYSYALVR
+    118     121    506.577 R      Y      CTQR
+     70      74    446.504 K      S      GGVSK
+     33      34    311.344 K      N      HR
+    145     146    273.335 R      S      VR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000719.1.p1     from: 1   to: 134
+# HitCount: 12
+#
+# Complete digestion with Trypsin yields 12 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      29   3371.012 .      N      MEWNLLFTFFALPCIVLGTSESAKFITYK
+     97     116   2217.514 K      S      GLYPDCCSGHIICEQQPEPK
+     79      96   1851.169 R      G      GCTPIAPLSPNCTVVHNK
+     48      57   1298.436 K      D      MIEQGDTWYR
+     30      40   1186.327 K      C      NDILSPLTEGK
+    117     126   1180.357 K      A      SDVEMAEMIR
+     69      78   1067.170 R      G      SGNLGHVEVR
+    127     134    998.196 R      .      ALLQNRRK
+     58      63    771.797 R      V      DDYCEK
+     64      68    652.810 K      S      VYCLR
+     43      47    577.653 K      M      MGNEK
+     41      42    249.328 K      M      CK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000592.1.p1     from: 1   to: 178
+# HitCount: 11
+#
+# Complete digestion with Trypsin yields 11 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     41      94   5667.054 K      E      GTVHFTQQSADGPVEVEGDIEGLKPGNHGFHIHEFGDTTNGCTSAGGHFNPFSK
+      3      30   3051.520 R      A      STYFLSTILLVLEAFSVSCNSGTNMPQK
+    161     178   1658.936 K      .      TTGNAGGRLACGVIGLAK
+    105     119   1465.586 R      A      HVGDLGNVVADANGK
+    141     153   1412.476 R      G      SAVVHENEDDLGK
+    128     140   1369.645 K      S      QIQLVGPCSVLGR
+     95     104   1125.120 K      H      EHGAPEDTNR
+     31      40    974.227 K      G      AVCVLVGSVK
+    120     127    948.174 K      Q      AKFKIVDK
+    154     160    714.733 K      T      GGHETSK
+      1       2    305.395 .      S      MR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000160.1.p1     from: 1   to: 454
+# HitCount: 31
+#
+# Complete digestion with Trypsin yields 31 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    252     307   6066.671 K      E      DQGQCGSCWAFSTTGNVEGQWAINKKKLISLSEQELVDCDRLDEGCDGGLPSNAYK
+    361     412   5761.620 K      S      NGPISIGINANAMQFYFGGISHPWKFLCNPANLDHGVLIVGYGEHNYPLFKK
+    190     237   5394.181 R      S      GTAAYGITKFTDLTELEFQTYYLGWRPDLAYPSSVPIEAKIPEMAIPK
+     32      61   3488.047 K      Q      QLAVYSTEHISFVSNSIFHRKLIEILDAKK
+      1      25   2762.359 .      D      MAKITLLLSLIVSITATGEWEQICK
+    112     135   2708.102 K      A      AWLNSTKINNFMCSASSHPETLKK
+     62      82   2374.824 K      D      QVVAGLQYELRLIIGETLCQK
+    176     189   1803.138 K      G      VNLKKIRKLNEYER
+     97     111   1767.971 R      A      NPEFVDTCTVTVWEK
+    421     434   1660.722 K      V      NSWGASWGEQGYYR
+    438     454   1639.856 R      .      GDGTCGLNLMATSSIIS
+     83      96   1583.693 K      N      DSISFNEAQNCSLR
+    308     320   1485.744 K      Y      EIIRLGGLETEKK
+    339     349   1180.367 R      N      VYINSSVAISK
+    148     156   1158.378 R      Y      SMFEEFIKK
+    321     329   1143.172 K      C      YPYEADEEK
+    168     175   1083.169 K      V      EERFNNFK
+    413     420   1003.252 K      N      SLPFWIIK
+    160     167    994.026 K      E      SYTTEHEK
+    238     244    966.108 K      N      SFDWRKK
+    354     360    818.045 K      N      MAAWLVK
+    136     142    817.851 K      N      ALEENDK
+    245     251    759.858 K      D      NAVTEVK
+    143     147    693.757 K      S      NELYR
+    330     334    611.757 K      Q      CSFKK
+    335     338    502.528 K      V      QEAR
+     26      29    493.532 K      T      DCEK
+    350     353    490.514 K      M      NETK
+    435     437    436.511 R      G      VYR
+    157     159    437.496 K      S      YQK
+     30      31    247.294 K      Q      TK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000432.1.p1     from: 1   to: 198
+# HitCount: 20
+#
+# Complete digestion with Trypsin yields 20 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     83     142   6359.760 K      G      CAPYPYTHIAPRPGECGSLGDVAWGTCVVNFEILIIAMSVIGGILIIGLLICCCCCCRKK
+      1      38   3981.589 .      V      MNLLFVGLSFLVTCYGATVTEITGAIDNNVTTASSTKK
+     53      70   1904.066 K      G      VETCSDGNTTTCEACLEK
+    183     198   1813.987 K      .      YGLKIGGDNPYQRFDA
+     39      52   1506.630 K      V      VQSSSETIQTTTPK
+    176     182    917.033 K      Y      TDEIRRK
+     74      79    819.007 K      T      CYFCRK
+    165     170    802.886 R      E      NEERKK
+    159     162    560.608 R      A      EERK
+    154     156    489.531 K      E      WER
+    150     153    473.530 K      W      QQAK
+    147     149    403.481 K      Q      WAK
+     80      82    375.469 K      C      TKK
+    173     175    345.399 R      T      QAK
+     71      73    304.346 K      C      GTK
+    171     172    303.318 K      Q      ER
+    157     158    303.318 R      E      ER
+    145     146    261.278 R      W      DK
+    163     164    245.282 K      N      AR
+    143     144    231.255 K      D      GR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000376.1.p1     from: 1   to: 1291
+# HitCount: 76
+#
+# Complete digestion with Trypsin yields 76 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    619     702   9104.235 K      E      SAHDAITLNVLYKPVFPESSTLQTYNVIEGETTTINLTALANPPTITYSWTTGGNVVPSVENSDNLLFPVYSIGSLLYITAARR
+   1232    1283   5634.440 R      D      YIPYPVGPVTPHVVANATPLLTTFNPHYQGSPVPPHQSHQLTVPPPDSVIVR
+   1040    1087   5480.606 K      A      GDIPRIIIITVSVVGSFLLVLNIILVICFVRKRRKKRLEEDSDHCSSK
+    721     768   5293.978 K      Q      VTIQVNVQYGAKITRITEVVTVTQEENAFLECVADANPISDGLITWSR
+    965    1012   5292.906 K      E      VDTVPPHMFIDVHPPNSTVYTVSNLDIGTTYVFQVQAINDLGQGEFSK
+    408     455   5239.904 K      M      MVSCYAINHGLGETVVETSVLSILYPPDRPNIFGYTEGTAISTDTIHR
+    480     522   4438.882 K      V      STSTTNGVVITGELSIIVEPSDNGAVYECQTSSSATPEPLVRK
+   1123    1161   4289.546 R      Y      STGEYSEEQGKPVATTYLIDQGDGTYIPDGTIGQYNTYR
+    909     943   3861.457 R      M      NELGTDRIKIGLEGLSIPDPPIHIKIINVTHDSVR
+    277     310   3837.977 K      C      NDEQIDYSYTTNGHESTNSITILVDSTDNEAVYK
+    193     226   3673.130 R      T      QNAISTMTLYPNPDDNGAVYTCEAVHPALSIPLR
+      1      31   3599.245 .      S      MLCSNRLRITLIVASATFCFELISAEQQHFR
+     32      62   3449.800 R      D      SRPQNTNVVEDHTVILPCEVENQAGAVQWSK
+    227     253   2971.335 R      G      TSVELSVCFPPGPPEIEGYQHGETIRK
+   1088    1114   2929.192 K      S      AATIEMYAPSSYNETMNGETLSCTSEK
+    347     373   2859.175 K      G      AGDIVDMTCITDPSNPPAEVTWVVDGR
+    874     896   2786.047 R      S      YLAETYQIDYNTWDSVLYVSSVR
+    545     568   2647.942 K      D      SDQQVTLVCESGSSNPGPKITWWK
+    592     614   2478.716 R      M      NLLHLNVTATDDGSVYTCQATNK
+   1017    1039   2400.711 K      G      VTTLSETPFNDTIPAAPQLLSGK
+   1209    1231   2333.604 K      Y      VGNPSVVPGHGSVVNIDLCENAR
+    384     404   2261.535 R      N      SPNGGWITMSNISVEITGLER
+     97     116   2192.342 K      A      AQLEDDGEYQCQVGPALNNK
+    523     541   2145.579 K      Q      VRLTVHFPPSGVTIQIRPK
+    148     168   2109.379 R      W      ESETLTFTCVAGGGKPAAEIK
+    795     814   2102.130 R      M      QDSGEFTCTANNGVGTEDTR
+     79      96   2084.334 R      A      YQMIGNPQDGVHNLQIEK
+    569     588   2069.212 K      S      DGFLVPSTPDGEFDAPYGGK
+    703     720   1967.005 R      V      EYAGSYNCEATNEEGTTK
+   1182    1197   1842.940 R      N      NIYEGEDGTYADALRR
+    132     147   1683.839 K      E      SITIAEHANGTTVDVR
+    311     325   1651.812 K      V      CEASNSVSPKPFTER
+    849     861   1552.753 R      N      AQGVPNITFTWYR
+    456     470   1526.789 R      W      MTCVSHGGNPLPSVK
+    173     184   1427.537 K      V      NVELRPDNVESR
+    897     908   1422.575 R      N      SFDYGIYDCLAR
+    265     276   1359.591 R      N      GGNPLAQLIWYK
+    862     873   1294.300 R      Y      NGESVGDYPSNR
+    120     131   1260.499 R      S      ADAHVTVLLPPK
+    326     336   1229.528 R      V      VKLIVQFAPSK
+    785     794   1171.318 K      Q      SYLTIFNASR
+    254     264   1153.273 K      G      GDTLTLSCTSR
+   1169    1177   1113.251 R      N      YNTLETNMK
+    374     383   1089.176 R      S      GINSTNATRR
+    955     961   1034.186 R      Y      EQWFRIR
+     63      71   1025.129 K      S      DGFVLGFDR
+    946     954   1004.113 R      E      WIPGFDGGR
+    185     192    983.990 R      Q      VEDVDDHR
+    769     775    924.039 R      T      QDFDMLR
+    776     784    918.959 R      S      TQQTAEGGK
+   1284    1291    914.986 R      .      DEMDGHLV
+   1115    1122    909.908 K      S      SEPYSDGR
+    822     828    884.046 K      S      HKPFIDK
+   1162    1168    879.968 R      Y      YLDQVSR
+    815     821    821.089 R      H      MAFLIVK
+     72      78    788.902 R      Y      SIPGYPR
+    835     842    746.775 K      A      AASEQGGK
+   1198    1203    736.782 R      V      NAYNQK
+    829     834    718.851 K      A      SPQFLK
+    843     848    690.859 K      A      AKITCR
+    337     343    688.822 K      E      VTITGAK
+    169     172    651.766 K      N      WYRK
+   1204    1208    522.602 K      V      VGYGK
+    615     618    518.672 K      S      MLQK
+   1178    1181    499.527 K      N      NPNR
+   1013    1016    491.499 K      V      ESEK
+    471     473    479.579 K      D      WFK
+    962     964    472.541 R      V      YYK
+    477     479    388.464 K      S      EIK
+    542     544    371.437 K      S      QPK
+    405     407    359.426 R      M      NVK
+    117     119    358.441 K      A      AIR
+    344     346    346.384 K      A      EAK
+    589     591    332.360 K      N      SAR
+    474     476    318.330 K      E      DGK
+    944     945    305.395 R      W      MR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000708.1.p1     from: 1   to: 124
+# HitCount: 10
+#
+# Complete digestion with Trypsin yields 10 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     71     107   4187.501 R      Y      NDLSSVEEWDQFICGEDAANEELTVVSDCFFETMNAK
+      2      29   3124.777 K      E      DCSGALMMYALQVIVLSILFCYVLSNEK
+     49      70   2559.016 R      N      NCGQDHFPLFMPIYGYCVGKLR
+    108     121   1774.917 K      S      YENVDEKLEECFEK
+     30      36    835.884 K      Y      EDEMANK
+     45      48    544.608 R      N      EQIR
+     37      40    483.583 K      D      YCAK
+     41      44    479.508 K      E      DCSR
+    122     124    265.284 K      .      SGC
+      1       1    146.189 .      D      K
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000073.1.p1     from: 1   to: 103
+# HitCount: 11
+#
+# Complete digestion with Trypsin yields 11 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      23   2580.284 .      E      MEIKLTILILLVITSFCSCGILR
+     30      52   2335.788 K      Q      AIDVLTPMIGVPVVSNIVNNAAK
+     61      69   1125.326 K      D      NQQLCMFNK
+     78      86   1045.135 K      G      SCQESVHQK
+     53      60    936.165 K      N      QLVHKIAK
+     96     103    907.095 K      .      CGIPLNYK
+     70      77    907.009 K      S      DVAGWCEK
+     87      93    764.854 K      C      GYCHGTK
+     26      29    517.585 K      A      YAHK
+     24      25    275.305 R      Y      EK
+     94      95    249.328 K      C      CK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000422.1.p1     from: 1   to: 445
+# HitCount: 40
+#
+# Complete digestion with Trypsin yields 40 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     62      94   3652.147 R      S      TSGADCCPDFWPTCLGIKRPDYIVTQQCYANGK
+      1      24   2891.482 .      G      MIVFWTFSIVILLSSVSCQFWDLR
+    396     417   2748.116 K      G      YWLCANSWGRLWGEDGYFRIVR
+    208     233   2697.919 R      G      DQGDCGASWAFSSTALAADRLAIQSR
+     41      61   2438.742 R      T      NDECTVPILDTLCYCDTFCNR
+    164     184   2366.868 K      T      YRLGTFKPTAPTMAMNAVKIR
+    418     436   2170.437 R      N      GEDECDIEMFIIGVWANTK
+    271     287   1943.074 R      D      HGVASEECYPYESGWTK
+    373     388   1904.121 R      S      EHGWHSVRIIGWGVDR
+    301     316   1798.994 R      S      HGHIICPNGQEDTLHK
+    132     146   1710.820 R      A      SELIESVNSGNYGWR
+     95     108   1582.792 K      C      SYDVGQTIKINCNK
+    360     372   1567.722 R      E      HTPTLDNKPEPYR
+    238     251   1561.835 K      G      MALSPQNLISCQTR
+    115     126   1430.552 K      V      SPTNYDFVCEQK
+     30      40   1355.512 K      N      HRRPESCCPDR
+    327     336   1293.501 R      N      EEVIMQEIFR
+    346     354   1236.392 K      G      VYNDFFLYR
+    147     156   1206.323 R      T      ASNYSFFWGK
+    199     207   1185.440 K      D      WHKLIHPVR
+    317     326   1117.273 K      E      STPAYRIGPR
+    188     196   1035.122 K      Q      ALPESFDTR
+    264     270   1011.194 R      H      AWFYLRR
+    337     345    961.086 R      V      NGPVQATFK
+    288     296    948.105 K      A      DGGLCSIRK
+    437     445    928.957 K      .      NNNNNAVGL
+    389     395    871.007 R      Y      SERRPVK
+    157     163    788.896 K      Y      TLEEGIK
+    258     263    653.696 K      A      GGHLDR
+    127     131    588.766 K      S      VCLVR
+     25      29    568.645 R      H      GDFCK
+    355     359    550.615 R      H      GGVYR
+    252     257    548.615 R      G      GQGGCK
+    109     112    481.585 K      Q      CTCR
+    185     187    375.469 R      A      TKK
+    234     237    361.398 R      M      GSAK
+    197     198    274.320 R      W      QK
+    113     114    274.320 R      S      QK
+    299     300    261.281 R      H      SR
+    297     298    245.282 K      S      AR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000692.1.p1     from: 1   to: 77
+# HitCount: 10
+#
+# Complete digestion with Trypsin yields 10 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      20   2207.924 .      C      MAGMKIFVIMVLACLLIVNK
+     44      59   1653.754 K      C      SCDHNPNGCCGNSSCR
+     60      68    952.152 R      C      CTLLGTNCK
+     21      28    851.884 K      Q      CSAEGEEK
+     29      33    656.740 K      S      QRPEK
+     69      72    561.660 K      G      CQRR
+     34      37    517.629 K      C      SRKK
+     73      77    486.569 R      .      GILQG
+     38      41    459.604 K      Y      CIPK
+     42      43    309.365 K      S      YK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000246.1.p1     from: 1   to: 1287
+# HitCount: 97
+#
+# Complete digestion with Trypsin yields 97 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    736     813   8722.572 R      T      YVELLNNTDFNGVSGHVYFEGLGRISDIIVLQWYNDTTHEIGIYHPSAQGDGHLILNESNIIWMTTSGQKPNDGTESK
+     22      70   5679.539 K      E      SEEVCRFWNHNPDSLSKKFYVGQAQNITVEVSSRITHQIVSHILIILLK
+   1076    1124   5590.343 R      G      WMAPESLIDGIFTPTSDIWSYGVLLYEIITFGSFPYQGLSNNQVLDYVK
+   1150    1197   5292.008 R      T      NPQDRPSASEIVEILANHPKLIAPCLDMPMASVEVEDTDSIELTICER
+    819     861   4803.954 K      Y      CVVESIRKLFGVNCESAIVIVNVMGFLIFAIVMLGGFIIFKRR
+    203     242   4706.264 K      S      YYCDFEDCSEGFYYPSQCHNQKLCATLLVDYPESTFAILK
+    110     149   4415.058 R      T      EFLPETMINLELWLGPGFNTEAWIQTGEVIDCGPLGPIGR
+    607     635   3665.052 K      E      QGMTAIQGYQWFLPSWFQINWYDTDYYNK
+    274     303   3487.894 K      M      STLFYNWKPNTVTSLGNFTNVAFPHCEDKR
+    384     413   3338.874 K      M      GFEKPKLYIGGIFPMNGTYWHQNGVITAAK
+    957     984   3132.739 K      T      NIVQLVGVCTLGEPVYTVMEFMLYGDLK
+   1046    1069   2977.423 R      G      TVKIADFGMCRPMYDSDYYRFNKR
+    895     921   2948.325 R      G      EYIVINRKLGEGAFGTVYGGEAFITDK
+    694     718   2920.051 K      E      MTSTYGGYXYDAVWVYAYALHDLLK
+    933     956   2857.307 K      N      MGATVEEKLDFLSEAEMMKRFEHK
+    243     266   2759.346 K      E      SEINHLKLLVQIAWIGPNLEMLVK
+    655     675   2599.697 K      T      GHMTLSYKFYADDXEMMQERK
+      1      21   2445.095 .      S      MMLSSFGWMVIVLILSTCVWK
+    875     894   2321.645 R      E      ELGLMSSSNLLTLDEWEMPR
+     86     107   2305.560 R      E      GTPISTLQRITGCESSDDCPPK
+   1125    1145   2186.597 K      C      GFNTLAVPSGCKPELASLLLR
+    460     481   2149.490 K      H      HTIGILGPACSDTVEPIAGVAK
+    482     500   2122.365 K      D      HYNTIIISYSAEGALISNR
+   1268    1287   2076.071 R      .      GDSDYGSDASQDFPQSVTSL
+   1002    1019   2034.272 K      G      SDEVSDRKLTNMALDIAR
+    582     598   2002.275 K      S      NMNAKIIIGDFYDFNAR
+    719     735   1998.148 K      Y      ENHNHVANLHLAETSRR
+    359     375   1992.147 R      T      NQDVTDVACTWLEQNQK
+    553     567   1936.280 K      H      MNHNNMEFLINKKFR
+     71      85   1688.945 K      G      EVLGYVDVQAVNVKR
+    174     188   1641.841 R      E      AFQLNSTASIFDISK
+    509     522   1609.904 R      V      TIPGNCQLINVYFK
+    424     436   1490.763 K      D      SILGNYTLELIVR
+    448     459   1420.585 K      H      SFINYVTNATYK
+    542     552   1418.566 K      M      YPEYISYLENK
+   1212    1223   1377.520 R      E      QNGSLDQAILYR
+    636     647   1348.537 K      E      EPFLEGVPCTTR
+   1200    1211   1340.505 R      Q      VHSVSSSWPAKR
+    308     318   1341.455 K      V      SCEYEVNQLEK
+    326     336   1278.473 K      S      ANAPDVFYLIR
+    344     353   1262.428 R      Q      SYFNLLNTYK
+    437     447   1201.335 R      S      DGHCAPDEVMK
+    523     531   1175.358 K      V      VFQRLGWNR
+   1241    1250   1100.194 R      V      ETSPVIDSPR
+   1256    1264   1078.233 K      G      GQYLTLQQK
+    532     541   1073.214 R      Y      VAALTEEGRK
+    166     173   1009.176 K      A      GIIIDHWR
+    189     196    990.164 K      N      EELLPYVK
+   1226    1233    982.061 K      G      QDINHVEK
+   1020    1028    979.141 R      Y      GLSYLADLK
+    150     157    979.100 R      V      TGWYIPDK
+    599     606    930.102 R      Q      SVMCEAYK
+    158     165    930.071 K      G      VLNEWAAK
+    683     690    907.078 K      Q      DYGLLAKK
+    503     508    892.025 K      T      YPYFFR
+    337     343    883.975 R      S      SMTFDQR
+   1038    1045    875.998 R      T      NCLVNASR
+    414     421    875.011 K      D      MAVDAVNR
+    319     325    873.106 K      A      VIWSKIK
+    985     991    862.043 K      H      TFLLGRR
+    676     682    860.968 K      D      TVGDWRK
+    922     929    843.037 K      T      GWIAVAVK
+   1234    1240    786.933 K      E      GASIKRR
+    576     581    777.959 R      N      YLLELK
+   1070    1075    671.856 R      W      GMLPVR
+    354     358    623.666 K      N      QFSSR
+    269     273    618.644 R      S      TEQNK
+   1033    1037    576.668 R      N      DLACR
+   1029    1032    573.652 K      D      YVHR
+    814     818    570.603 K      C      TEGHK
+    380     383    558.721 K      G      WILK
+   1251    1255    557.691 R      G      VALQK
+    862     865    551.640 R      M      YELK
+   1146    1149    550.633 R      N      CWSR
+    998    1001    541.561 K      S      EHEK
+    568     571    541.521 R      N      HDDR
+    376     379    530.624 K      W      TWPK
+    572     575    506.577 R      Y      NMSR
+    199     202    504.584 K      Y      ETKK
+    992     995    495.622 R      E      HLVK
+    304     307    479.549 R      S      MSDK
+    869     872    475.502 R      M      TEAR
+    651     654    475.542 K      G      ESIK
+    866     868    433.569 K      T      MKR
+    648     650    406.497 R      E      EMK
+    691     693    388.424 K      M      QNK
+    930     932    360.454 K      M      TLK
+   1265    1267    332.360 K      G      GTR
+    873     874    305.395 R      E      MR
+    267     268    303.318 K      T      ER
+    108     109    303.318 K      E      ER
+   1224    1225    275.305 R      Q      EK
+   1198    1199    275.308 R      V      TR
+    996     997    275.305 K      E      EK
+    501     502    261.278 R      Y      DK
+    422     423    261.278 R      S      DK
+    197     198    260.293 K      E      NK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000731.1.p1     from: 1   to: 109
+# HitCount: 7
+#
+# Complete digestion with Trypsin yields 7 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     72      94   2701.073 K      N      CSCFTKPIQELEIDDDPYIDMPK
+      1      20   2399.054 .      M      MSAIIWLFLLGFMHMIFTVK
+     21      37   2017.264 K      D      MESFPYHPAKIGDECHR
+     49      66   1986.290 R      C      CWSLGYNWGTCVGLLEGK
+     95     109   1796.031 K      .      NPHPKKLNPEEYICN
+     38      48   1285.481 R      C      DTLPPLECNKR
+     67      71    719.859 K      C      CWHFK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000164.1.p1     from: 1   to: 392
+# HitCount: 22
+#
+# Complete digestion with Trypsin yields 22 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+    271     354   9506.084 R      S      NESYYVGNATNEENSSWEEVTETLMETSIVEENATFVVTEIVPSDETSMEEDIEFLPSDETSVEEDIEFLPSTAPSEENTYLIK
+     76     131   6630.559 K      S      EYPLATNMELMNWDEELYTIARIHSLQCVEEPDCNLCHQIGDFPVEQNFAVKKFKK
+    149     180   3641.138 K      A      EWAAELQLYDPSVVSNLTITDGLPVNWINILR
+      1      27   3048.618 .      Y      MTSMIIPILALWIVITGTSAYYDCDEK
+     28      50   2772.251 K      G      YTNITLEHTMCKIANESCRFLRK
+    233     255   2718.067 K      T      DDGICDTEFKRLCVPTDFEMNIR
+    181     202   2354.675 R      E      ATTLFVGCASMNFYSDESGIIK
+    203     222   2319.611 K      T      EVYICNYGPAKLTEGEEIYK
+    132     148   1931.179 K      E      SEVDNNGPVKRFQTVIK
+     53      66   1635.846 K      N      TFAAQLLHTHNNIR
+     67      75   1057.220 R      E      NSIHRFVGK
+    355     363   1027.275 K      M      SKIRPLVSK
+    223     232   1012.121 K      D      TGNVSCSNCK
+    379     386    990.186 K      V      QLVTDMKR
+    256     264    980.987 R      Y      TTSSQNSTR
+    265     270    947.061 R      N      YPWYYR
+    367     373    805.973 K      G      YSAKLPK
+    374     378    575.724 K      Q      GMLQK
+    364     366    390.541 K      Y      MLK
+    387     389    386.495 R      H      VIR
+    390     392    381.475 R      .      HLI
+     51      52    203.241 K      T      GK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000034.1.p2     from: 1   to: 62
+# HitCount: 4
+#
+# Complete digestion with Trypsin yields 4 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      41   4714.662 .      N      MNSKLIFLMIVMITAVILTFEIETTSAANCLWDLQCEEFCK
+     52      62   1308.464 R      .      NGNCFCYQCEK
+     42      49   1015.155 K      C      NRFCNFSK
+     50      51    277.342 K      N      CR
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000705.1.p1     from: 1   to: 88
+# HitCount: 8
+#
+# Complete digestion with Trypsin yields 8 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     28      67   4181.893 R      E      CQSPNEVFQTCGPSCPPACIGVIKPGTLCSTECFPGCFCR
+      3      27   2726.171 K      C      VVLLLLAILFSVEINANQGADSNRR
+     76      82    728.865 R      A      GTCVPPR
+     68      72    572.662 R      T      EGLVR
+     73      75    362.386 R      G      TSR
+     83      85    348.420 R      S      ACR
+     86      88    347.328 R      .      SNQ
+      1       2    277.382 .      V      MK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000434.1.p1     from: 1   to: 467
+# HitCount: 30
+#
+# Complete digestion with Trypsin yields 30 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      52   5914.880 .      N      MHAVVICFALLTIFAMSECTIVNIICEVNEDNIFEGAESVPAEYVQFRLYTR
+    335     379   5305.000 K      S      SLYCLYHYAVFLKLSYSEDSINEIGQLYITLEGNNYETQKLLTPR
+    147     195   5162.985 K      D      VSGTDLSRIHLIGNSLGGQLVSFVGKRFDKIGRITALDPAGPCFSLYGK
+     99     128   3455.966 K      N      QFILMHDDVNVVMVDWSSGASEPYMPFAIR
+     69      98   3342.709 R      Q      QSTYNPYSQTIFIIHGYQSSPGSPDLISLK
+    196     220   2847.136 K      Q      DHRIHYTDAEFVDVIITNADGFGLK
+    412     436   2725.155 R      N      TSGGPYSSHKLYIDSIKISLMNGKK
+    221     245   2464.825 K      N      QPSGHVNFVVNGGVTQPGCGAVVLK
+    277     295   2147.376 K      C      CCPFVGYSCSNYEDFLDGK
+    249     264   1946.130 R      A      SHNFEALFLDNCSHRR
+     53      68   1943.103 R      Q      NNSENFILLTHEENIR
+    388     403   1861.168 K      S      EYSYLLTLPIDVGHLK
+    265     276   1459.677 R      C      ALEYYIDSLMNK
+    136     146   1354.670 R      V      EVAYFIQLLMK
+    296     305   1083.156 K      C      CTDCGEDGRK
+    404     411    999.264 K      T      SVILLWIR
+    459     465    951.050 R      C      YFVETHR
+    437     444    909.995 K      Q      NNTSTVFK
+    445     452    906.021 K      S      QCQTDALK
+    380     387    822.916 R      E      SQSFVAGK
+    306     312    750.911 K      A      CAPLGYK
+    129     135    731.807 R      E      NTVATAR
+    326     330    668.834 K      T      VFYLK
+    453     458    658.756 K      Y      SGVQLR
+    313     317    622.719 K      S      AIEYK
+    318     322    602.732 K      E      SKIQK
+    246     248    435.483 K      S      NFR
+    331     334    405.451 K      S      TASK
+    323     325    376.410 K      V      ETK
+    466     467    249.285 R      .      CQ
+
+#---------------------------------------
+#---------------------------------------
