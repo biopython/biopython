@@ -380,6 +380,7 @@ from Bio.SeqIO import GckIO
 from Bio.SeqIO import IgIO  # IntelliGenetics or MASE format
 from Bio.SeqIO import InsdcIO  # EMBL and GenBank
 from Bio.SeqIO import NibIO
+from Bio.SeqIO import pepdigestIO
 from Bio.SeqIO import PdbIO
 from Bio.SeqIO import PhdIO
 from Bio.SeqIO import PirIO
@@ -420,6 +421,7 @@ _FormatToIterator = {
     "nib": NibIO.NibIterator,
     "cif-seqres": PdbIO.CifSeqresIterator,
     "cif-atom": PdbIO.CifAtomIterator,
+    "pepdigest": pepdigestIO.pepdigestIterator,
     "pdb-atom": PdbIO.PdbAtomIterator,
     "pdb-seqres": PdbIO.PdbSeqresIterator,
     "phd": PhdIO.PhdIterator,
