@@ -34,6 +34,9 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+Parsing of pepdigest's 'seqtable' output format is now available through
+Bio.SeqIO.pepdigestIO.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -42,6 +45,7 @@ possible, especially the following contributors:
 
 - Aziz Khan
 - Alex Morehead
+- Caio Fontes
 - Chenghao Zhu
 - Damien Goutte-Gattat
 - Erik  Whiting
