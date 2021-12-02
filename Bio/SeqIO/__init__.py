@@ -421,7 +421,7 @@ _FormatToIterator = {
     "nib": NibIO.NibIterator,
     "cif-seqres": PdbIO.CifSeqresIterator,
     "cif-atom": PdbIO.CifAtomIterator,
-    "pepdigest": pepdigestIO.pepdigestIterator,
+    "pepdigest": pepdigestIO.PepdigestIterator,
     "pdb-atom": PdbIO.PdbAtomIterator,
     "pdb-seqres": PdbIO.PdbSeqresIterator,
     "phd": PhdIO.PhdIterator,
