@@ -1,0 +1,13 @@
+########################################
+# Program: pepdigest
+# Rundate: Sun 13 Jun 2021 13:18:29
+# Commandline: pepdigest
+#    [-seqall] selected_proteins.fasta
+# Report_format: seqtable
+# Report_file: 1.pepdigest
+########################################
+
+#=======================================
+#
+# Sequence: GFAH01000435.1.p1     from: 1   to: 243
+# HitCount: 24

@@ -1,0 +1,62 @@
+########################################
+# Program: pepdigest
+# Rundate: Sun 13 Jun 2021 13:18:29
+# Commandline: pepdigest
+#    [-seqall] selected_proteins.fasta
+# Report_format: seqtable
+# Report_file: 1.pepdigest
+########################################
+
+#=======================================
+#
+# Sequence: GFAH01000435.1.p1     from: 1   to: 243
+# HitCount: 24
+#
+# Complete digestion with Trypsin yields 24 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      35   3851.532 .      S      MGLIIVLVISVLSADAVLSMDNELYLNLEPHPSQR
+    215     243   2858.040 R      .      STSDECSNAVAEYTGETGPGAKLLNSAGK
+    116     140   2819.090 K      E      WCGAGNEAANYSELGYFYNVDLCCR
+    195     209   1834.033 R      C      YTYFELYGNGCYNVK
+     61      75   1690.950 R      E      MQGCQILESLNDIAR
+    177     188   1341.544 K      A      CLSDIPGYFAQK
+    141     152   1335.414 R      T      EHDHCDNIPAGK
+    159     169   1261.448 K      C      NEGAYTMMNCK
+     91      99   1159.236 K      C      DEMEFFEGR
+    100     109   1063.150 R      T      CLNVGGESER
+     83      90    952.168 R      D      HAIKRISK
+    170     176    840.903 K      C      CEEAFDK
+     36      42    801.900 R      A      SSWPVAR
+     46      51    763.895 R      S      VQFSKR
+    110     115    722.857 R      W      TMWGTK
+    189     194    661.818 K      Y      AVSMVR
+    210     214    577.613 K      S      CENGR
+     57      60    546.584 R      M      ESRR
+     52      56    504.500 R      E      SEGGR
+     76      79    487.556 R      T      EALR
+    155     158    479.577 K      N      YGLK
+     80      82    372.425 R      H      TPR
+     43      45    344.414 R      V      AVR
+    153     154    247.294 K      Y      TK
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GFAH01000035.1.p2     from: 1   to: 65
+# HitCount: 7
+#
+# Complete digestion with Trypsin yields 7 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+      1      28   3152.832 .      C      MNTKFVLMMLMITAVILVSEAEADDPIR
+     49      65   1997.481 K      .      CKRISSRKLICVCEQCK
+     33      40    919.038 K      N      EQCTAHCK
+     29      32    435.539 R      E      CVSK
+     43      45    336.406 K      S      SCK
+     46      48    290.3

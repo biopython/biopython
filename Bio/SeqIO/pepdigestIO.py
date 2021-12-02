@@ -21,7 +21,7 @@ class PepdigestIterator(SequenceIterator):
 
     main_header_pttrn = re.compile("#{2,}")
     digestion_title_pttrn = re.compile("#=+")
-    digestion_end_pttrn = re.compile("#-+")
+    max_iter = 100
 
     def __init__(self, source):
         """Break up a pepdigest seqtable file into SeqRecord objects.
@@ -34,10 +34,14 @@ class PepdigestIterator(SequenceIterator):
         """Start parsing the file, and return a SeqRecord generator."""
         # Reads the main header
         header_sep_count = 0
+        i = 0
         while header_sep_count < 2:
             line = handle.readline()
             if self.main_header_pttrn.search(line) is not None:
                 header_sep_count += 1
+            i += 1
+            if i > self.max_iter:
+                raise ValueError("Broken header in start of file.")
 
         records = self.iterate(handle)
 
@@ -49,9 +53,15 @@ class PepdigestIterator(SequenceIterator):
         Return usefull information for parsing the results.
         """
         # Read sequence name and positions
+        i = 0
         line = handle.readline()
         while not line.startswith("# Sequence"):
             line = handle.readline()
+            i += 1
+            if i > self.max_iter:
+                raise ValueError(
+                    "Can't find '# Sequence' section in digestion results header"
+                )
 
         line = line.rsplit("# Sequence:")[1].strip()
         orig_seq_name, line = line.split(None, 1)
@@ -69,8 +79,12 @@ class PepdigestIterator(SequenceIterator):
         enzyme = line.split("with")[1].split("yields")[0].strip()
 
         # Read end of header
+        i = 0
         while self.digestion_title_pttrn.search(line) is None:
             line = handle.readline()
+            i += 1
+            if i > self.max_iter:
+                raise ValueError("Malformed digestion results header")
 
         return orig_seq_name, seq_to, seq_from, hitcount, enzyme
 
@@ -116,7 +130,10 @@ class PepdigestIterator(SequenceIterator):
                 break
 
             if self.digestion_title_pttrn.search(line) is not None:
-                header = self.parse_digestion_header(handle)
+                try:
+                    header = self.parse_digestion_header(handle)
+                except IndexError:
+                    raise ValueError("File has broken digestion results header")
                 yield from self.parse_digestion_results(handle, header)
 
 

@@ -81,21 +81,18 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records[39].seq, Seq("DK"))
 
 
-# class TestReadCorruptFiles(unittest.TestCase):
-#     def test_for_errors(self):
-#         """Handling of corrupt files."""
-#         # SeqIO.parse reads the file in blocks until it finds the seqXML
-#         # element with global information such as the source and sourceVersion.
-#         # Since one block is likely large enough to cover the first few
-#         # entries in the file, the ValueError may be raised after we call
-#         # SeqIO.parse, before we start iterating over the file.
-#         def f(path):
-#             records = SeqIO.parse(path, "seqxml")
-#             for record in records:
-#                 pass
+class TestReadCorruptFiles(unittest.TestCase):
+    def test_for_errors(self):
+        """Handling of broken files."""
 
-#         self.assertRaises(ValueError, f, "SeqXML/corrupt_example1.xml")
-#         self.assertRaises(ValueError, f, "SeqXML/corrupt_example2.xml")
+        def f(path):
+            records = SeqIO.parse(path, "pepdigest")
+            for record in records:
+                pass
+
+        self.assertRaises(ValueError, f, "pepdigest/broken_seqtable.pepdigest")
+        self.assertRaises(ValueError, f, "pepdigest/broken_seqheader.pepdigest")
+        self.assertRaises(ValueError, f, "pepdigest/broken_mainheader.pepdigest")
 
 
 if __name__ == "__main__":
