@@ -274,8 +274,6 @@ from collections import namedtuple
 from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
 
-import warnings
-
 warnings.warn(
     "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
     "future release of Biopython. As an alternative, please consider using "
