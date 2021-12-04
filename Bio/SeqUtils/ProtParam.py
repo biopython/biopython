@@ -1,4 +1,5 @@
 # Copyright 2003 Yair Benita.  All rights reserved.
+# Isoelectric point extension 2021 by Lukasz P. Kozlowski. Public Domain.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -27,7 +28,7 @@ Examples
 >>> print("%0.2f" % X.instability_index())
 41.98
 >>> print("%0.2f" % X.isoelectric_point())
-7.72
+6.96
 >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
 >>> print("%0.2f" % sec_struc[0])  # helix
 0.28
@@ -307,13 +308,13 @@ class ProteinAnalysis:
         """
         aa_content = self.count_amino_acids()
 
-        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        ie_point = IsoelectricPoint(self.sequence, self.pKa_scale, aa_content)
         return ie_point.pi()
 
     def charge_at_pH(self, pH):
         """Calculate the charge of a protein at given pH."""
         aa_content = self.count_amino_acids()
-        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, self.pKa_scale, aa_content)
         return charge.charge_at_pH(pH)
 
     def secondary_structure_fraction(self):
