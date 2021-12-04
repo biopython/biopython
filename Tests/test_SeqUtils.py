@@ -321,7 +321,7 @@ class SeqUtilsTests(unittest.TestCase):
                             "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
                             "LPLPV")
         self.assertAlmostEqual(X.isoelectric_point(), 6.96, places=2)
-        self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 6.96, places=2)
+        self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 8.0, places=2)
 
 
 if __name__ == "__main__":
