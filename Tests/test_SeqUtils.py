@@ -22,6 +22,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
+from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint
 
 
 class SeqUtilsTests(unittest.TestCase):
@@ -305,6 +306,13 @@ class SeqUtilsTests(unittest.TestCase):
         llc_lst = lcc_mult(s1, len(s1))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+
+    def test_IsoelectricPoint(self):
+        protein = "ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV"
+        peptide = "EFYTVDGQK"
+        self.assertAlmostEqual(IsoelectricPoint(protein), 4.83, places=2)
+        self.assertAlmostEqual(IsoelectricPoint("EFYTVDGQK", "IPC2_peptide"), 4.28, places=2)
+        self.assertAlmostEqual(IsoelectricPoint("EFYTVDGQK", "Toseland"), 4.06, places=2)
 
 
 if __name__ == "__main__":
