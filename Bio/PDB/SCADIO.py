@@ -29,7 +29,7 @@ atomScale and bondRadius values can simplify the model by removing gaps and
 the corresponding need for supports, or you may wish to modify the
 hedronDispatch() routine to select residues or chain sections for printing
 separately and subsequently joining with rotatable bonds.  During this
-development phase you will likely have your version `include` only the data
+development phase you will likely have your version include only the data
 matrices generated here, by using the `includeCode=False` option to
 write_SCAD().  An example project using rotatable backbone and magnetic
 hydrogen bonds is at <https://www.thingiverse.com/thing:3957471>.
@@ -69,10 +69,10 @@ def write_SCAD(
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
 
-    This routine calls both (meth)`.internal_to_atom_coordinates` and
-    (meth)`.atom_to_internal_coordinates` due to requirements for scaling,
-    explicit bonds around rings, and setting the coordinate space of the output
-    model.
+    This routine calls both :meth:`.IC_Chain.internal_to_atom_coordinates` and
+    :meth:`.IC_Chain.atom_to_internal_coordinates` due to requirements for
+    scaling, explicit bonds around rings, and setting the coordinate space of
+    the output model.
 
     Output data format is primarily:
 
@@ -86,9 +86,9 @@ def write_SCAD(
     OpenSCAD software is included in this Python file to process these
     matrices into a model suitable for a 3D printing project.
 
-    :param entity: Biopython PDB (class)`.Structure` entity
+    :param entity: Biopython PDB :class:`.Structure` entity
         structure data to export
-    :param file: Bipoython (func)`.as_handle` filename or open file pointer
+    :param file: Bipoython :func:`.as_handle` filename or open file pointer
         file to write data to
     :param float scale:
         units (usually mm) per angstrom for STL output, written in output
@@ -109,11 +109,39 @@ def write_SCAD(
     :param str handle: default 'protein'
         name for top level of generated OpenSCAD matrix structure
 
-    See (meth)`.IC_Residue.set_flexible` to set flags for specific residues to
-    have rotatable bonds, and (meth)`.IC_Residue.set_hbond` to include cavities
+    See :meth:`.IC_Residue.set_flexible` to set flags for specific residues to
+    have rotatable bonds, and :meth:`.IC_Residue.set_hbond` to include cavities
     for small magnets to work as hydrogen bonds.
     See <https://www.thingiverse.com/thing:3957471> for implementation example.
 
+    The OpenSCAD code explicitly creates spheres and cylinders to
+    represent atoms and bonds in a 3D model.  Options are available
+    to support rotatable bonds and magnetic hydrogen bonds.
+
+    Matrices are written to link, enumerate and describe residues,
+    dihedra, hedra, and chains, mirroring contents of the relevant IC_*
+    data structures.
+
+    The OpenSCAD matrix of hedra has additional information as follows:
+
+    * the atom and bond state (single, double, resonance) are logged
+        so that covalent radii may be used for atom spheres in the 3D models
+
+    * bonds and atoms are tracked so that each is only created once
+
+    * bond options for rotation and magnet holders for hydrogen bonds
+        may be specified (see :meth:`.IC_Residue.set_flexible` and
+        :meth:`.IC_Residue.set_hbond` )
+
+    Note the application of :data:`Bio.PDB.internal_coords.IC_Chain.MaxPeptideBond`
+    :  missing residues may be linked (joining chain segments with arbitrarily
+    long bonds) by setting this to a large value.
+
+    Note this uses the serial assembly per residue, placing each residue at
+    the origin and supplying the coordinate space transform to OpenaSCAD
+
+    All ALTLOC (disordered) residues and atoms are written to the output
+    model.  (see :data:`Bio.PDB.internal_coords.IC_Residue.no_altloc`)
     """
     if maxPeptideBond is not None:
         mpbStash = IC_Chain.MaxPeptideBond
@@ -166,8 +194,8 @@ def write_SCAD(
     # AllBonds is a class attribute for IC_Residue.atom_to_internal_coordinates
     # to generate explicit hedra covering all bonds
 
-    allBondsStash = IC_Residue.AllBonds
-    IC_Residue.AllBonds = True
+    allBondsStash = IC_Residue._AllBonds
+    IC_Residue._AllBonds = True
     # trigger rebuild of hedra for AllBonds
     if "C" == entity.level:
         entity.internal_coord.ordered_aa_ic_list[0].hedra = {}
@@ -179,7 +207,7 @@ def write_SCAD(
             delattr(chn.internal_coord, "hAtoms_needs_update")
             delattr(chn.internal_coord, "hedraLen")
     entity.atom_to_internal_coordinates()
-    IC_Residue.AllBonds = allBondsStash
+    IC_Residue._AllBonds = allBondsStash
 
     # rebuild atom coordinates now with chain starting at origin: in OpenSCAD
     # code, each residue model is transformed to N-Ca-C start position instead
@@ -201,13 +229,13 @@ def write_SCAD(
         if "S" == entity.level or "M" == entity.level:
             for chn in entity.get_chains():
                 fp.write(" [\n")
-                chn.internal_coord.write_SCAD(
+                chn.internal_coord._write_SCAD(
                     fp, backboneOnly=backboneOnly, start=start, fin=fin
                 )
                 fp.write(" ]\n")
         elif "C" == entity.level:
             fp.write(" [\n")
-            entity.internal_coord.write_SCAD(
+            entity.internal_coord._write_SCAD(
                 fp, backboneOnly=backboneOnly, start=start, fin=fin
             )
             fp.write(" ]\n")

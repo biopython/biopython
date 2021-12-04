@@ -47,7 +47,7 @@ def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -
         only check atomArrays are identical
         in internal_to_atom_coords computation
     :returns: dict
-        comparison dict from (func)`.compare_residues`
+        comparison dict from :func:`.compare_residues`
     """
     sp = StringIO()
     entity.atom_to_internal_coordinates(verbose)
@@ -165,8 +165,8 @@ def report_IC(
 def IC_duplicate(entity) -> Structure:
     """Duplicate structure entity with IC data, no atom coordinates.
 
-    Employs (func)`.write_PIC`, (func)`.read_PIC` with StringIO buffer.
-    Calls (meth)`.Chain.atom_to_internal_coordinates` if needed.
+    Employs :func:`.write_PIC`, :func:`.read_PIC` with StringIO buffer.
+    Calls :meth:`.Chain.atom_to_internal_coordinates` if needed.
 
     :param Entity entity: Biopython PDB Entity (will fail for Atom)
     :returns: Biopython PDBStructure, no Atom objects
@@ -351,11 +351,11 @@ def compare_residues(
     :param Entity e0,e1: Biopython PDB Entity objects (S, M or C).
         Structures, Models or Chains to be compared
     :param bool verbose:
-        whether to print mismatch info, default False
+        Whether to print mismatch info, default False
     :param bool quick: default False.
-        only check atomArrays are identical, aCoordMatchCount=0 if different
-    :param float rtol,atol: default 1e-03, 1e-05 or round to 3 places.
-        numpy allclose parameters; default is to round atom coordinates to 3
+        Only check atomArrays are identical, aCoordMatchCount=0 if different
+    :param float rtol, atol: default 1e-03, 1e-05 or round to 3 places.
+        Numpy allclose parameters; default is to round atom coordinates to 3
         places and test equal.  For 'quick' will use defaults above for
         comparing ataomArrays
     :returns dict:

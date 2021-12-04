@@ -76,8 +76,9 @@ def read_PIC(
 
     Defaults will be supplied for any value if defaults=True.  Default values
     are supplied in ic_data.py, but structures degrade quickly with any
-    deviation from true coordinates.  Experiment with picFlags options to
-    write_PIC() to verify this.
+    deviation from true coordinates.  Experiment with
+    :data:`Bio.PDB.internal_coords.IC_Residue.pic_flags` options to
+    :func:`write_PIC` to verify this.
 
     N.B. dihedron (i-1)C-N-CA-CB is ignored in assembly if O exists.
 
@@ -85,10 +86,10 @@ def read_PIC(
     in some PDB file residues, which means the sidechain cannot be
     placed.  The alternate CB path (i-1)C-N-CA-CB is provided to
     circumvent this, but if this is needed then it must be adjusted in
-    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see (meth)`.bond_set`
-    and (meth)`.bond_rotate` to handle this automatically).
+    conjunction with PHI ((i-1)C-N-CA-C) as they overlap (see :meth:`.bond_set`
+    and :meth:`.bond_rotate` to handle this automatically).
 
-    :param Bio.File file: (func)`.as_handle` file name or handle
+    :param Bio.File file: :func:`.as_handle` file name or handle
     :param bool verbose: complain when lines not as expected
     :param bool quick: don't check residues for all dihedra (no default values)
     :param bool defaults: create di/hedra as needed from reference database.
@@ -568,7 +569,7 @@ def read_PIC(
             sha = {k: ha[k] for k in sorted(ha)}
             shl12 = {k: hl12[k] for k in sorted(hl12)}
             shl23 = {k: hl23[k] for k in sorted(hl23)}
-            sbcic.hedraDict2chain(shl12, sha, shl23, da, bfacs)
+            sbcic._hedraDict2chain(shl12, sha, shl23, da, bfacs)
 
     # read_PIC processing starts here:
     with as_handle(file, mode="r") as handle:
@@ -803,7 +804,7 @@ def read_PIC_seq(
     title: str = None,
     chain: str = None,
 ) -> Structure:
-    """Read (class)`.SeqRecord` into Structure with default internal coords."""
+    """Read :class:`.SeqRecord` into Structure with default internal coords."""
     read_pdbid, read_title, read_chain = None, None, None
 
     if seqRec.id is not None:
@@ -859,7 +860,7 @@ def _wpr(
                 pdbid = struct.header.get("idcode")
 
         fp.write(
-            entity.internal_coord.write_PIC(
+            entity.internal_coord._write_PIC(
                 pdbid, chainid, picFlags=picFlags, hCut=hCut, pCut=pCut
             )
         )
@@ -933,15 +934,15 @@ def write_PIC(
 ):
     """Write Protein Internal Coordinates (PIC) to file.
 
-    See (func)`read_PIC` for file format.
+    See :func:`read_PIC` for file format.
     Recurses to lower entity levels (M, C, R).
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
-    :param Bio.File file: (func)`.as_handle` file name or handle
+    :param Bio.File file: :func:`.as_handle` file name or handle
     :param str pdbid: PDB idcode, read from entity if not supplied
     :param char chainid: PDB Chain ID, set from C level entity.id if needed
-    :param flags: uint boolean flags controlling output, defined in
-        IC_Residue.pic_flags:
+    :param int picFlags: boolean flags controlling output, defined in
+        :data:`Bio.PDB.internal_coords.IC_Residue.pic_flags`
 
         * "psi",
         * "omg",
@@ -980,7 +981,8 @@ def write_PIC(
             picFlags = IC_Residue.picFlagsDefault
             picFlags &= ~IC_Residue.pic_flags.bFactors
 
-        read_PIC(defaults=True) will use default values for anything left out
+        :func:`read_PIC` with `(defaults=True)` will use default values for
+        anything left out
 
     :param float hCut: default None
         only write hedra with ref db angle std dev greater than this value
@@ -988,9 +990,27 @@ def write_PIC(
         only write primary dihedra with ref db angle std dev greater than this
         value
 
+    **Default values**:
+
+    Data averaged from Sep 2019 Dunbrack cullpdb_pc20_res2.2_R1.0.
+
+    Please see
+
+    `PISCES: A Protein Sequence Culling Server <https://dunbrack.fccc.edu/pisces/>`_
+
+    'G. Wang and R. L. Dunbrack, Jr. PISCES: a protein sequence culling
+    server. Bioinformatics, 19:1589-1591, 2003.'
+
     'primary' and 'secondary' dihedra are defined in ic_data.py.  Specifically,
     secondary dihedra can be determined as a fixed rotation from another known
-    angle, for example N-Ca-C-O can be estimated from N-Ca-C-N (psi)
+    angle, for example N-Ca-C-O can be estimated from N-Ca-C-N (psi).
+
+    Standard deviations are listed in
+    <biopython distribution>/Bio/PDB/ic_data.py for default values, and can be
+    used to limit which hedra and dihedra are defaulted vs. output exact
+    measurements from structure (see hCut and pCut above).  Default values for
+    primary dihedra (psi, phi, omega, chi1, etc.) are chosen as the most common
+    integer value, not an average.
 
     :raises PDBException: if entity level is A (Atom)
     :raises Exception: if entity does not have .level attribute
