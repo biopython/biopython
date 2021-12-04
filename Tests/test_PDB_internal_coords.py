@@ -26,6 +26,8 @@ from Bio.PDB.ic_rebuild import (
 )
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFParser
+
 from io import StringIO
 from Bio.PDB.SCADIO import write_SCAD
 from Bio.PDB.PICIO import read_PIC_seq
@@ -43,6 +45,7 @@ class Rebuild(unittest.TestCase):
 
     PDB_parser = PDBParser(PERMISSIVE=True, QUIET=True)
     CIF_parser = MMCIFParser(QUIET=True)
+    MMTF_parser = MMTFParser()
     pdb_1LCD = PDB_parser.get_structure("1LCD", "PDB/1LCD.pdb")
     # cif_1A7G = CIF_parser.get_structure("1A7G", "PDB/1A7G.cif")
     # cif_1A7G2 = CIF_parser.get_structure("1A7G", "PDB/1A7G.cif")
@@ -53,6 +56,14 @@ class Rebuild(unittest.TestCase):
     cif_4CUP2 = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4ZHL = CIF_parser.get_structure("4ZHL", "PDB/4ZHL.cif")
     cif_4ZHL2 = CIF_parser.get_structure("4ZHL", "PDB/4ZHL.cif")
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always", PDBConstructionWarning)
+        mmtf_1A8O = MMTF_parser.get_structure("PDB/1A8O.mmtf")
+
+    def test_mmtf(self):
+        chain = next(self.mmtf_1A8O.get_chains())
+        ic_chain = IC_Chain(chain)
+        self.assertEqual(len(ic_chain.ordered_aa_ic_list), 70)
 
     def test_rebuild_multichain_missing(self):
         """Convert multichain missing atom struct to, from internal coords."""
