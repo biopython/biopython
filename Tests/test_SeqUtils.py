@@ -312,12 +312,10 @@ class SeqUtilsTests(unittest.TestCase):
         X = IP("ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV")
         self.assertAlmostEqual(X.pi(), 4.83, places=2)
         self.assertAlmostEqual(X.charge_at_pH(7.4), -4.22)
-    
         Y = IP("EFYTVDGQK", "IPC2_peptide")
         self.assertAlmostEqual(Y.pi(), 4.28, places=2)
         Z = IP("EFYTVDGQK", "Toseland")
         self.assertAlmostEqual(Z.pi(), 4.06, places=2)
-        
 
     def test_ProteinAnalysis(self):
         X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
