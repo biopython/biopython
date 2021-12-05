@@ -310,7 +310,9 @@ class ProteinAnalysis:
         """
         aa_content = self.count_amino_acids()
 
-        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, pKa_scale, aa_content)
+        ie_point = IsoelectricPoint.IsoelectricPoint(
+            self.sequence, pKa_scale, aa_content
+        )
         return ie_point.pi()
 
     def charge_at_pH(self, pH, pKa_scale="IPC2_protein"):
