@@ -311,7 +311,7 @@ class SeqUtilsTests(unittest.TestCase):
     def test_IsoelectricPoint(self):
         X = IP("ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV")
         self.assertAlmostEqual(X.pi(), 4.83, places=2)
-        self.assertAlmostEqual(X.charge_at_pH(7.4), -5.22, places=2)
+        self.assertAlmostEqual(X.charge_at_pH(7.4), -4.22, places=2)
         Y = IP("EFYTVDGQK", "IPC2_peptide")
         self.assertAlmostEqual(Y.pi(), 4.28, places=2)
         Z = IP("EFYTVDGQK", "Toseland")
