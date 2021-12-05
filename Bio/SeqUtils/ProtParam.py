@@ -29,6 +29,8 @@ Examples
 41.98
 >>> print("%0.2f" % X.isoelectric_point())
 6.96
+>>> print("%0.2f" % X.isoelectric_point("Toseland"))
+7.04
 >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
 >>> print("%0.2f" % sec_struc[0])  # helix
 0.28
@@ -301,20 +303,20 @@ class ProteinAnalysis:
 
         return scores
 
-    def isoelectric_point(self):
+    def isoelectric_point(self, pKa_scale="IPC2_protein"):
         """Calculate the isoelectric point.
 
         Uses the module IsoelectricPoint to calculate the pI of a protein.
         """
         aa_content = self.count_amino_acids()
 
-        ie_point = IsoelectricPoint(self.sequence, self.pKa_scale, aa_content)
+        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, pKa_scale, aa_content)
         return ie_point.pi()
 
-    def charge_at_pH(self, pH):
+    def charge_at_pH(self, pH, pKa_scale="IPC2_protein"):
         """Calculate the charge of a protein at given pH."""
         aa_content = self.count_amino_acids()
-        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, self.pKa_scale, aa_content)
+        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, pKa_scale, aa_content)
         return charge.charge_at_pH(pH)
 
     def secondary_structure_fraction(self):
