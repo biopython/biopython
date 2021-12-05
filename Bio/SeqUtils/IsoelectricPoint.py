@@ -178,7 +178,7 @@ class IsoelectricPoint:
     >>> print(f"IEP of {peptide.sequence} is {peptide.isoelectric_point('Toseland'):.2f}")
     IEP of EFYTVDGQK is 4.06
     >>> print(f"Charge at pH 7.4 (cytoplasm) is {peptide.charge_at_pH(7.4, 'Toseland'):.2f}")
-    Charge at pH 7.4 is -1.05
+    Charge at pH 7.4 (cytoplasm) is -1.05
 
     """
 
