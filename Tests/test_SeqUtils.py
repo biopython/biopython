@@ -318,7 +318,9 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertAlmostEqual(Z.pi(), 4.06, places=2)
 
     def test_ProteinAnalysis(self):
-        X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
+        X = ProteinAnalysis(
+            "MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
+        )
         self.assertAlmostEqual(X.isoelectric_point(), 6.96, places=2)
         self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 8.00, places=2)
 
