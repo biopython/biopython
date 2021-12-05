@@ -22,7 +22,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
-from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint
+from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 
@@ -309,19 +309,17 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
 
     def test_IsoelectricPoint(self):
-        protein = "ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV"
-        peptide = "EFYTVDGQK"
-        self.assertAlmostEqual(IsoelectricPoint(protein), 4.83, places=2)
-        self.assertAlmostEqual(IsoelectricPoint("EFYTVDGQK", "IPC2_peptide"), 4.28, places=2)
-        self.assertAlmostEqual(IsoelectricPoint("EFYTVDGQK", "Toseland"), 4.06, places=2)
+        X = IP("ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV")
+        self.assertAlmostEqual(X.pi(), 4.83, places=2)
+        Y = IP("EFYTVDGQK", "IPC2_peptide")
+        self.assertAlmostEqual(Y.pi(), 4.28, places=2)
+        Z = IP("EFYTVDGQK", "Toseland")
+        self.assertAlmostEqual(Z.pi(), 4.06, places=2)
 
     def test_ProteinAnalysis(self):
-        X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
-                            "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
-                            "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
-                            "LPLPV")
+        X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
         self.assertAlmostEqual(X.isoelectric_point(), 6.96, places=2)
-        self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 8.0, places=2)
+        self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 8.00, places=2)
 
 
 if __name__ == "__main__":
