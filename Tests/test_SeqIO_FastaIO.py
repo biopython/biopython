@@ -17,7 +17,7 @@ from Bio.SeqIO.FastaIO import SimpleFastaParser
 def title_to_ids(title):
     """Convert a FASTA title line into the id, name, and description.
 
-    This is just a quick-n-dirty implementation, and is definetely not meant
+    This is just a quick-n-dirty implementation, and is definitely not meant
     to handle every FASTA title line case.
     """
     # first split the id information from the description
@@ -84,7 +84,7 @@ class TitleFunctions(unittest.TestCase):
 
     def simple_check(self, filename):
         """Test parsing single record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
+        msg = f"Test failure parsing file {filename}"
         title, seq = read_title_and_seq(filename)  # crude parser
         idn, name, descr = title_to_ids(title)
         # First check using Bio.SeqIO.FastaIO directly with title function.
@@ -107,7 +107,7 @@ class TitleFunctions(unittest.TestCase):
 
     def multi_check(self, filename):
         """Test parsing multi-record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
+        msg = f"Test failure parsing file {filename}"
         re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
         default = list(SeqIO.parse(filename, "fasta"))
         self.assertEqual(len(re_titled), len(default), msg=msg)

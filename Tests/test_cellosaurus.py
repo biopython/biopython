@@ -23,7 +23,7 @@ class TestCellosaurus(unittest.TestCase):
         self.assertEqual(record["DR"][2], ("IHW", "IHW9326"))
         self.assertEqual(record["DR"][3], ("IMGT/HLA", "10074"))
         self.assertEqual(
-            record["WW"][0], "http://bioinformatics.hsanmartino.it/ecbr/cl326.html",
+            record["WW"][0], "http://bioinformatics.hsanmartino.it/ecbr/cl326.html"
         )
         self.assertEqual(
             record["CC"][0],

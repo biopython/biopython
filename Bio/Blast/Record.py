@@ -87,7 +87,7 @@ class Description:
 
     def __str__(self):
         """Return the description as a string."""
-        return "%-66s %5s  %s" % (self.title, self.score, self.e)
+        return f"{self.title:<66} {self.score:>5}  {self.e}"
 
 
 class DescriptionExt(Description):
@@ -128,7 +128,7 @@ class DescriptionExtItem:
 
     def __str__(self):
         """Return the description identifier and title as a string."""
-        return "%s %s" % (self.id, self.title)
+        return f"{self.id} {self.title}"
 
 
 class Alignment:
@@ -154,7 +154,7 @@ class Alignment:
     def __str__(self):
         """Return the BLAST alignment as a formatted string."""
         lines = self.title.split("\n")
-        lines.append("Length = %s\n" % self.length)
+        lines.append(f"Length = {self.length}\n")
         return "\n           ".join(lines)
 
 
@@ -245,16 +245,16 @@ class HSP:
             lines.append(
                 "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
             )
-            lines.append("               %s" % self.match)
+            lines.append(f"               {self.match}")
             lines.append(
                 "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
             )
         else:
             lines.append(
                 "Query:%8s %s...%s %s"
-                % (self.query_start, self.query[:45], self.query[-3:], self.query_end,)
+                % (self.query_start, self.query[:45], self.query[-3:], self.query_end)
             )
-            lines.append("               %s...%s" % (self.match[:45], self.match[-3:]))
+            lines.append(f"               {self.match[:45]}...{self.match[-3:]}")
             lines.append(
                 "Sbjct:%8s %s...%s %s"
                 % (self.sbjct_start, self.sbjct[:45], self.sbjct[-3:], self.sbjct_end)

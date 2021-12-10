@@ -75,7 +75,7 @@ class TestPhenoMicro(unittest.TestCase):
             # I want to see the output when called from the test harness,
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            self.fail("%s\n\n%r\n\n%r" % (e, handle.read(), records))
+            self.fail(f"{e}\n\n{handle.read()!r}\n\n{records!r}")
 
         self.assertEqual(p1, records[0])
 
@@ -310,6 +310,22 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w2.get_signals()[-1], 107.0)
 
         w[1] = 1
+
+    def test_JsonIterator(self):
+        """Test basic functionalities of JsonIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO(
+            '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
+        )
+        for w in phenotype.phen_micro.JsonIterator(handle):
+            self.assertEqual(w.id, "PM999")
+
+    def test_CsvIterator(self):
+        """Test basic functionalities of CsvIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO('"Data File",3\n"Plate Type",PM-33\n')
+        for w in phenotype.phen_micro.CsvIterator(handle):
+            self.assertEqual(w.id, "PM33")
 
 
 if __name__ == "__main__":

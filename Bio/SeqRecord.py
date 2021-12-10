@@ -620,7 +620,7 @@ class SeqRecord:
         Number of features: 0
         Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
-        In this example you don't actually need to call str explicity, as the
+        In this example you don't actually need to call str explicitly, as the
         print command does this automatically:
 
         >>> print(record)
@@ -1348,7 +1348,7 @@ class SeqRecord:
             answer.features = features
         elif features:
             # Does not make sense to copy old features as locations wrong
-            raise TypeError("Unexpected features argument %r" % features)
+            raise TypeError(f"Unexpected features argument {features!r}")
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
@@ -1361,7 +1361,7 @@ class SeqRecord:
         elif letter_annotations:
             # Does not make sense to copy these as length now wrong
             raise TypeError(
-                "Unexpected letter_annotations argument %r" % letter_annotations
+                f"Unexpected letter_annotations argument {letter_annotations!r}"
             )
         return answer
 

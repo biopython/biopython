@@ -121,7 +121,7 @@ class FlawedPDB_tests(unittest.TestCase):
 
 
 class ParseDummyPDB_test(unittest.TestCase):
-    """Tests for artifical/dummy PDB files."""
+    """Tests for artificial/dummy PDB files."""
 
     @classmethod
     def setUpClass(cls):

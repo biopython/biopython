@@ -147,12 +147,12 @@ class GraphSet:
 
         """
         if not verbose:
-            return "%s" % self
+            return f"{self}"
         else:
-            outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+            outstr = [f"\n<{self.__class__}: {self.name}>"]
             outstr.append("%d graphs" % len(self._graphs))
             for key in self._graphs:
-                outstr.append("%s" % self._graphs[key])
+                outstr.append(f"{self._graphs[key]}")
             return "\n".join(outstr)
 
     def __len__(self):
@@ -165,7 +165,7 @@ class GraphSet:
 
     def __str__(self):
         """Return a formatted string with information about the feature set."""
-        outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+        outstr = [f"\n<{self.__class__}: {self.name}>"]
         outstr.append("%d graphs" % len(self._graphs))
         outstr = "\n".join(outstr)
         return outstr

@@ -3,7 +3,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Codon adaption indxes, including Sharp and Li (1987) E. coli index.
+"""Codon adaption indexes, including Sharp and Li (1987) E. coli index.
 
 Currently this module only defines a single codon adaption index from
 Sharp & Li, Nucleic Acids Res. 1987.

@@ -49,7 +49,7 @@ def _make_position(location_string, offset=0):
             )
         except ValueError:
             pass
-    raise NotImplementedError("Cannot parse location '%s'" % location_string)
+    raise NotImplementedError(f"Cannot parse location '{location_string}'")
 
 
 def SwissIterator(source):
@@ -86,7 +86,7 @@ def SwissIterator(source):
             if len(cross_reference) < 2:
                 continue
             database, accession = cross_reference[:2]
-            dbxref = "%s:%s" % (database, accession)
+            dbxref = f"{database}:{accession}"
             if dbxref not in record.dbxrefs:
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
@@ -132,7 +132,7 @@ def SwissIterator(source):
                     elif key == "AGRICOLA":
                         pass
                     else:
-                        raise ValueError("Unknown key %s found in references" % key)
+                        raise ValueError(f"Unknown key {key} found in references")
                 feature.authors = reference.authors
                 feature.title = reference.title
                 feature.journal = reference.location

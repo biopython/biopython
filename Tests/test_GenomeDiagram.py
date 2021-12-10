@@ -303,7 +303,7 @@ class GraphTest(unittest.TestCase):
 
         self.assertEqual(
             gd[4:16],
-            [(5, 15), (10, 20),],  # noqa 231
+            [(5, 15), (10, 20)],  # noqa 231
             "Unable to insert and retrieve points correctly",
         )
 
@@ -476,9 +476,7 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-            self.add_track_with_sigils(
-                track_caption='  sigil="%s"' % glyph, sigil=glyph
-            )
+            self.add_track_with_sigils(track_caption=f'  sigil="{glyph}"', sigil=glyph)
         self.finish("GD_sigils")
 
     def test_labels(self):
@@ -633,7 +631,7 @@ class SigilsTest(unittest.TestCase):
             feature, name="Reverse", sigil=glyph, arrowhead_length=0.05
         )
 
-        self.finish("GD_sigil_short_%s" % glyph)
+        self.finish(f"GD_sigil_short_{glyph}")
 
     def test_short_arrow(self):
         """Feature arrow sigil heads within bounding box."""
@@ -691,7 +689,7 @@ class SigilsTest(unittest.TestCase):
         self.gds_features.add_feature(
             feature, name="Standless", sigil=glyph, color="green", arrowhead_length=2.0
         )
-        self.finish("GD_sigil_long_%s" % glyph)
+        self.finish(f"GD_sigil_long_{glyph}")
 
     def test_long_arrow_heads(self):
         """Feature ARROW sigil heads within bounding box."""
@@ -811,7 +809,7 @@ class DiagramTest(unittest.TestCase):
 
         gdd = Diagram(
             "Test Diagram",
-            # For the circular diagram we don't want a closed cirle:
+            # For the circular diagram we don't want a closed circle:
             circular=False,
         )
         # Add a track of features,
@@ -842,8 +840,8 @@ class DiagramTest(unittest.TestCase):
             # of ReportLab.  You need ReportLab 2.4 or later
             try:
                 url = (
-                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                    + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                    + str(feature.qualifiers["protein_id"][0])
                 )
             except KeyError:
                 url = None
@@ -949,8 +947,8 @@ class DiagramTest(unittest.TestCase):
                 # of ReportLab.  You need ReportLab 2.4 or later
                 try:
                     url = (
-                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                        + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                        + str(feature.qualifiers["protein_id"][0])
                     )
                 except KeyError:
                     url = None

@@ -236,7 +236,7 @@ class KGMLCanvas:
             self.drawing.drawPath(p)
             self.drawing.setLineWidth(1)  # Return to default
         # KGML defines the (x, y) coordinates as the centre of the circle/
-        # rectangle/roundrectangle, but Reportlab uses the co-ordinates of the
+        # rectangle/roundrectangle, but Reportlab uses the coordinates of the
         # lower-left corner for rectangle/elif.
         if graphics.type == "circle":
             self.drawing.circle(
@@ -402,7 +402,7 @@ class KGMLCanvas:
         Draws an arrow from the g_from Entry object to the g_to
         Entry object; both must have Graphics objects.
         """
-        # Centre and bound co-ordinates for the from and two objects
+        # Centre and bound coordinates for the from and two objects
         bounds_from, bounds_to = g_from.bounds, g_to.bounds
         centre_from = (
             0.5 * (bounds_from[0][0] + bounds_from[1][0]),

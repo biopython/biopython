@@ -63,7 +63,7 @@ class AlignmentColumn(list):
 
     def __repr__(self):
         """Represent the AlignmentColumn object as a string for debugging."""
-        return "%s(%r, %r)" % (self.kind, self[0], self[1])
+        return f"{self.kind}({self[0]!r}, {self[1]!r})"
 
     def append(self, column_unit):
         """Add a unit to the Column."""

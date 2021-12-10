@@ -73,6 +73,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chenghao Zhu <zhuchcn@gmail.com>
 - Chris Daley <https://github.com/chebizarro>
+- Chris Jackson <https://github.com/chrisjackson-pellicle>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris MacRaild <https://github.com/macraild>
 - Chris Mitchell <https://github.com/chrismit>
@@ -89,6 +90,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Damien Goutte-Gattat <https://github.com/gouttegd>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - Darcy Mason <https://github.com/darcymason>
+- David Born <https://github.com/hypostulate>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
@@ -104,6 +106,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
 - Erik Cederstrand <https://github.com/ecederstrand>
+- Erik Whiting <https://github.com/erik-whiting>
 - Fabian Egli <https://github.com/fabianegli>
 - Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
@@ -225,6 +228,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
+- Neil P. <https://github.com/npars>
 - Nick Negretti <https://github.com/nimne>
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe>
@@ -284,6 +288,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
 - Tianyi Shi <https://github.com/TianyiShi2001>
+- Tim Burke <https://github.com/tipabu>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>

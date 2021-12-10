@@ -13,11 +13,7 @@ from Bio import AlignIO
 class ConvertTests(unittest.TestCase):
     def check_convert(self, in_filename, in_format, out_format, molecule_type):
         # Write it out using parse/write
-        msg = "Failed converting %s from %s to %s" % (
-            in_filename,
-            in_format,
-            out_format,
-        )
+        msg = f"Failed converting {in_filename} from {in_format} to {out_format}"
         handle = StringIO()
         aligns = list(AlignIO.parse(in_filename, in_format, None))
         if molecule_type:

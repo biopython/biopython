@@ -171,7 +171,7 @@ class _GenePopCommandline(AbstractCommandline):
     def __init__(self, genepop_dir=None, cmd="Genepop", **kwargs):
         self.parameters = [
             _Argument(["command"], "GenePop option to be called", is_required=True),
-            _Argument(["mode"], "Should allways be batch", is_required=True),
+            _Argument(["mode"], "Should always be batch", is_required=True),
             _Argument(["input"], "Input file", is_required=True),
             _Argument(["Dememorization"], "Dememorization step"),
             _Argument(["BatchNumber"], "Number of MCMC batches"),

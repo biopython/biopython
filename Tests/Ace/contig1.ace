@@ -595,7 +595,7 @@ BL060c3-LR5.g.ab1 matchElsewhereHighQual phrap 617 631 040217:110357
 }
 CT{
 Contig2 repeat phrap 42 43 123456:765432
-This is the forst line of comment for c2
+This is the first line of comment for c2
 and this the second for c2
 }
 RD BL060-LR8.5.g.ab1 877 0 0
@@ -841,20 +841,19 @@ BL060c5-LR0R.b.ab1 matchElsewhereHighQual phrap 617 631 040217:110357
 
 CT{
 unrelated_Contig repeat phrap 1142 143 122226:722232
-This is the forst line of comment for the unrelated ct tag 
+This is the first line of comment for the unrelated ct tag
 and this the second
 }
 
 CT{
 Contig1 repeat phrap 52 53 555456:555432
-This is the forst line of comment for c1
+This is the first line of comment for c1
 and this the second for c1
 }
 
 
 WA{
 phrap_params phrap 040203:114710
-phrap 304_nuclsu.fasta.screen -new_ace -retain_duplicates 
+phrap 304_nuclsu.fasta.screen -new_ace -retain_duplicates
 phrap version 0.990329
 }
-

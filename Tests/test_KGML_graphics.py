@@ -58,12 +58,12 @@ class PathwayData:
 
     def __init__(self, name, element_counts, show_pathway_image=False):
         """Initialize the class."""
-        self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
-        self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
+        self.infilename = os.path.join("KEGG", f"ko{name}.xml")
+        self.outfilename = os.path.join("KEGG", f"ko{name}.kgml")
         self.element_counts = element_counts
-        self.pathway_image = os.path.join("KEGG", "map%s.png" % name)
+        self.pathway_image = os.path.join("KEGG", f"map{name}.png")
         self.show_pathway_image = show_pathway_image
-        self.output_stem = "Graphics/map%s" % name
+        self.output_stem = f"Graphics/map{name}"
 
 
 class KGMLPathwayTest(unittest.TestCase):

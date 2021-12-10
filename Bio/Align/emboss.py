@@ -6,8 +6,8 @@
 # package.
 """Bio.Align support for "emboss" alignment output from EMBOSS tools.
 
-This module contains a parser for the EMBOSS pairs/simple file format, for
-example from the alignret, water and needle tools.
+This module contains a parser for the EMBOSS srspair/pair/simple file format,
+for example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -38,6 +38,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if line.rstrip() != "########################################":
             raise ValueError("Unexpected line: %s") % line
 
+        # assume srspair format (default) if not specified explicitly in
+        # the output file
+        self.align_format = "srspair"
         commandline = None
         for line in stream:
             if line.rstrip() == "########################################":
@@ -69,6 +72,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         identifiers = None
         number_of_sequences = None
+        annotations = {}
         for line in stream:
             line = line.rstrip("\r\n")
             if identifiers is None:
@@ -83,13 +87,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     identifiers = []
                     ncols = None
                     sequences = None
-                    matrix = None
-                    gap_penalty = None
-                    extend_penalty = None
-                    identity = None
-                    similarity = None
-                    gaps = None
-                    score = None
                 else:
                     raise ValueError("Unexpected line: %s" % line)
             elif sequences is None:
@@ -104,7 +101,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     aligned_sequences = [""] * number_of_sequences
                     consensus = ""
                     starts = [0] * number_of_sequences
-                    ends = [0] * number_of_sequences
                     column = 0
                     index = 0
                     continue
@@ -112,7 +108,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     continue
                 if not line.startswith("# "):
                     raise ValueError("Unexpected line: %s") % line
-                key, value = line[2:].split(":", 1)
+                try:
+                    key, value = line[2:].split(":", 1)
+                except ValueError:
+                    # An equal sign is used for Longest_Identity,
+                    # Longest_Similarity, Shortest_Identity, and
+                    # Shortest_Similarity, which are included if command line
+                    # argument -nobrief was used.
+                    key, value = line[2:].split(" = ", 1)
                 if key == "Aligned_sequences":
                     number_of_sequences = int(value.strip())
                     assert len(identifiers) == 0
@@ -126,21 +129,36 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if len(identifiers) == number_of_sequences:
                             break
                 elif key == "Matrix":
-                    matrix = value.strip()
+                    annotations["matrix"] = value.strip()
                 elif key == "Gap_penalty":
-                    gap_penalty = float(value.strip())
+                    annotations["gap_penalty"] = float(value.strip())
                 elif key == "Extend_penalty":
-                    extend_penalty = float(value.strip())
+                    annotations["extend_penalty"] = float(value.strip())
                 elif key == "Length":
                     ncols = int(value.strip())
                 elif key == "Identity":
-                    identity = int(value.strip().split("/")[0])
+                    annotations["identity"] = int(value.strip().split("/")[0])
                 elif key == "Similarity":
-                    similarity = int(value.strip().split("/")[0])
+                    annotations["similarity"] = int(value.strip().split("/")[0])
                 elif key == "Gaps":
-                    gaps = int(value.strip().split("/")[0])
+                    annotations["gaps"] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    score = float(value.strip())
+                    annotations["score"] = float(value.strip())
+                # TODO:
+                # The following are generated if the -nobrief command line
+                # argument used. We could simply calculate them from the
+                # alignment, but then we have to define what we mean by
+                # "similar". For now, simply store them as an annotation.
+                elif key == "Longest_Identity":
+                    annotations["longest_identity"] = value.strip()
+                elif key == "Longest_Similarity":
+                    annotations["longest_similarity"] = value.strip()
+                elif key == "Shortest_Identity":
+                    annotations["shortest_identity"] = value.strip()
+                elif key == "Shortest_Similarity":
+                    annotations["shortest_similarity"] = value.strip()
+                else:
+                    raise ValueError("Failed to parse line '%s'" % line)
             else:
                 # parse the sequences
                 if not line:
@@ -151,35 +169,30 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if column == ncols:
                             # reached the end of the sequences
                             coordinates = Alignment.infer_coordinates(aligned_sequences)
-                            for i, start in enumerate(starts):
-                                start -= 1  # Python counting
-                                coordinates[i, :] += start
-                            sequences = [Seq(sequence) for sequence in sequences]
-                            records = [
-                                SeqRecord(sequence, id=identifier)
-                                for sequence, identifier in zip(sequences, identifiers)
-                            ]
+                            records = []
+                            n = len(sequences)
+                            for i in range(n):
+                                start = starts[i]
+                                if start == 0:
+                                    sequence = Seq(sequences[i])
+                                else:
+                                    coordinates[i, :] += start
+                                    # create a partially defined sequence
+                                    length = start + len(sequences[i])
+                                    data = {start: sequences[i]}
+                                    sequence = Seq(data, length=length)
+                                record = SeqRecord(sequence, identifiers[i])
+                                records.append(record)
                             alignment = Alignment(records, coordinates)
-                            if matrix is not None:
-                                alignment.matrix = matrix
-                            if gap_penalty is not None:
-                                alignment.gap_penalty = gap_penalty
-                            if extend_penalty is not None:
-                                alignment.extend_penalty = extend_penalty
-                            if identity is not None:
-                                alignment.identity = identity
-                            if similarity is not None:
-                                alignment.similarity = similarity
-                            if gaps is not None:
-                                alignment.gaps = gaps
-                            if score is not None:
-                                alignment.score = score
+                            if annotations:
+                                alignment.annotations = annotations
                             if consensus:
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
                                 }
                             yield alignment
                             identifiers = None
+                            annotations = {}
                     continue
                 prefix = line[:21].strip()
                 if prefix == "":
@@ -187,23 +200,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     consensus += line[21:71]
                 else:
                     identifier, start = prefix.split(None, 1)
-                    aligned_sequence, end = line[21:].split(None, 1)
-                    start = int(start)
-                    end = int(end)
-                    sequence = aligned_sequence.replace("-", "")
-                    if len(sequences[index]) > 0:
-                        length = len(sequence)
-                        if length == 0:
-                            assert start == ends[index]
-                            assert end == ends[index]
-                        else:
-                            assert start == ends[index] + 1
-                            assert end == ends[index] + length
                     assert identifiers[index].startswith(identifier)
-                    if starts[index] == 0:
-                        # Record the start and end
+                    aligned_sequence, end = line[21:].split(None, 1)
+                    start = int(start) - 1  # Python counting
+                    end = int(end)
+                    length = len(sequences[index])
+                    sequence = aligned_sequence.replace("-", "")
+                    if length == 0 and len(sequence) > 0:
+                        # Record the start
                         starts[index] = start
-                    ends[index] = end
+                    else:
+                        if self.align_format == "srspair" and len(sequence) == 0:
+                            start += 1
+                        assert start == starts[index] + length
+                    assert end == start + len(sequence)
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:

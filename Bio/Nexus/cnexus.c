@@ -77,7 +77,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
             /* we replace the ; at the end of command lines with special
              * character to make subsequent parsing of blocks easier */
             if (t==';' && !(quotelevel || speciallevel))
-                /* need an ascii code thats not part of a nexus file, used as
+                /* need an ascii code that's not part of a nexus file, used as
                  * separator */
                 *(scanned++)=7;
             else

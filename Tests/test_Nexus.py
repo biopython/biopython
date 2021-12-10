@@ -877,7 +877,7 @@ Root:  16
         with self.assertRaises(Exception) as context:
             tree.randomize()
         self.assertIn(
-            "Either numer of taxa or list of taxa must be specified.",
+            "Either number of taxa or list of taxa must be specified.",
             str(context.exception),
         )
         tree_rand = Trees.Tree(ts1c)
@@ -1035,6 +1035,17 @@ Root:  16
             ],
         )
 
+    def test_to_string(self):
+        """Test to_string method."""
+        t = Trees.Tree(
+            "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"
+            "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"
+            "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"
+            "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        )
+        tree_a_val = "((A 6,(B 9,(C 8,C 4))),t2,((E 0,E 7),(F 1,(G 5,G 3))));"
+        self.assertEqual(t.to_string(ladderize="LEFT"), "tree a_tree = " + tree_a_val)
+
     def test_large_newick(self):
         with open(
             os.path.join(self.testfile_dir, "int_node_labels.nwk")
@@ -1141,7 +1152,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print(f"{r.seq!r} {r.name} {r.id}")
         print("Done")
 
     def test_repeated_names_with_taxa(self):
@@ -1171,7 +1182,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print(f"{r.seq!r} {r.name} {r.id}")
         print("Done")
 
     def test_empty_file_read(self):

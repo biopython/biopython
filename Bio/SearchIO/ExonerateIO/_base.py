@@ -182,7 +182,7 @@ def _split_fragment(frag):
     qstep = 1 if frag.query_strand >= 0 else -1
     hstep = 1 if frag.hit_strand >= 0 else -1
     qpos = min(frag.query_range) if qstep >= 0 else max(frag.query_range)
-    hpos = min(frag.hit_range) if qstep >= 0 else max(frag.hit_range)
+    hpos = min(frag.hit_range) if hstep >= 0 else max(frag.hit_range)
     abs_pos = 0
     # split according to hit, then query
     while simil:
@@ -311,6 +311,35 @@ def _parse_hit_or_query_line(line):
     return id, desc
 
 
+def _get_strand_from_desc(desc, is_protein, modify_desc=True):
+    """Determine the strand from the description (PRIVATE).
+
+    Exonerate appends ``:[revcomp]`` (versions <= 2.2) or ``[revcomp]``
+    (versions > 2.2) to the query and/or hit description string. This function
+    outputs '-' if the description has such modifications or '+' if not. If the
+    query and/or hit is a protein sequence, a '.' is output instead.
+
+    Aside from the strand, the input description value is also returned. It is
+    returned unmodified if ``modify_desc`` is ``False``. Otherwise, the appended
+    ``:[revcomp]`` or ``[revcomp]`` is removed.
+
+    """
+    if is_protein:
+        return ".", desc
+
+    suffix = ""
+    if desc.endswith("[revcomp]"):
+        suffix = ":[revcomp]" if desc.endswith(":[revcomp]") else "[revcomp]"
+
+    if not suffix:
+        return "+", desc
+
+    if modify_desc:
+        return "-", desc[: -len(suffix)]
+
+    return "-", desc
+
+
 class _BaseExonerateParser(ABC):
     """Abstract base class iterator for exonerate format."""
 
@@ -389,20 +418,21 @@ class _BaseExonerateParser(ABC):
                 hsp["hit_start"], hsp["hit_end"] = line.split(" ", 4)[2:5:2]
 
         # determine strand
-        if qresult["description"].endswith(":[revcomp]"):
-            hsp["query_strand"] = "-"
-            qresult["description"] = qresult["description"].replace(":[revcomp]", "")
-        elif "protein2" in qresult["model"]:
-            hsp["query_strand"] = "."
-        else:
-            hsp["query_strand"] = "+"
-        if hit["description"].endswith(":[revcomp]"):
-            hsp["hit_strand"] = "-"
-            hit["description"] = hit["description"].replace(":[revcomp]", "")
-        elif "2protein" in qresult["model"]:
-            hsp["hit_strand"] = "."
-        else:
-            hsp["hit_strand"] = "+"
+        qresult_strand, qresult_desc = _get_strand_from_desc(
+            desc=qresult["description"],
+            is_protein="protein2" in qresult["model"],
+            modify_desc=True,
+        )
+        hsp["query_strand"] = qresult_strand
+        qresult["description"] = qresult_desc
+
+        hit_strand, hit_desc = _get_strand_from_desc(
+            desc=hit["description"],
+            is_protein="2protein" in qresult["model"],
+            modify_desc=True,
+        )
+        hsp["hit_strand"] = hit_strand
+        hit["description"] = hit_desc
 
         # NOTE: we haven't processed the coordinates types
         # and the strands are not yet Biopython's standard (1 / -1 / 0)

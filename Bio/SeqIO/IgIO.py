@@ -77,7 +77,7 @@ class IgIterator(SequenceIterator):
             return
 
         if line[0] != ";":
-            raise ValueError("Records should start with ';' and not:\n%r" % line)
+            raise ValueError(f"Records should start with ';' and not:\n{line!r}")
         while line:
             # Now iterate over the records
 

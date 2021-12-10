@@ -453,7 +453,7 @@ class DSSP(AbstractResiduePropertyMap):
 
         def resid2code(res_id):
             """Serialize a residue's resseq and icode for easy comparison."""
-            return "%s%s" % (res_id[1], res_id[2])
+            return f"{res_id[1]}{res_id[2]}"
 
         # DSSP outputs label_asym_id from the mmCIF file as the chain ID
         # But MMCIFParser reads in the auth_asym_id
@@ -593,7 +593,7 @@ class DSSP(AbstractResiduePropertyMap):
                     aa = "C"
             # Take care of HETATM again
             if (resname != aa) and (res.id[0] == " " or aa != "X"):
-                raise PDBException("Structure/DSSP mismatch at %s" % res)
+                raise PDBException(f"Structure/DSSP mismatch at {res}")
 
             dssp_vals = (
                 dssp_index,

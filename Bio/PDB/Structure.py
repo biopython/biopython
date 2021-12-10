@@ -21,7 +21,7 @@ class Structure(Entity):
 
     def __repr__(self):
         """Return the structure identifier."""
-        return "<Structure id=%s>" % self.get_id()
+        return f"<Structure id={self.get_id()}>"
 
     def get_models(self):
         """Return models."""

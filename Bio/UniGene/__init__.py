@@ -250,12 +250,7 @@ class Record:
 
     def __repr__(self):
         """Represent the UniGene Record object as a string for debugging."""
-        return "<%s> %s %s %s" % (
-            self.__class__.__name__,
-            self.ID,
-            self.symbol,
-            self.title,
-        )
+        return f"<{self.__class__.__name__}> {self.ID} {self.symbol} {self.title}"
 
 
 def parse(handle):
@@ -306,7 +301,7 @@ def _read(handle):
             elif value == "NO":
                 record.homol = True
             else:
-                raise ValueError("Cannot parse HOMOL line %s" % line)
+                raise ValueError(f"Cannot parse HOMOL line {line}")
         elif tag == "EXPRESS":
             record.express = [word.strip() for word in value.split("|")]
         elif tag == "RESTR_EXPR":
@@ -335,6 +330,6 @@ def _read(handle):
                 )
             return record
         else:
-            raise ValueError("Unknown tag %s" % tag)
+            raise ValueError(f"Unknown tag {tag}")
     if record:
         raise ValueError("Unexpected end of stream.")

@@ -21,7 +21,11 @@ import warnings
 from Bio import BiopythonWarning
 from Bio.PDB import PDBParser, PDBIO, Select
 from Bio.PDB import Atom, Residue
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import (
+    PDBConstructionException,
+    PDBConstructionWarning,
+    PDBIOException,
+)
 
 
 class WriteTest(unittest.TestCase):
@@ -321,7 +325,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_unk_element(self):
-        """PDBIO raises ValueError when writing unrecognised atomic elements."""
+        """PDBIO raises PDBIOException when writing unrecognised atomic elements."""
         struct1 = self.structure
 
         atom = next(struct1.get_atoms())
@@ -332,7 +336,7 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(PDBIOException):
             self.io.save(filename)
         os.remove(filename)
 

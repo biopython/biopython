@@ -67,7 +67,7 @@ class _Matrix:
     >>> m[0,1]
     7
 
-    Also you can delete or insert a column&row of elemets by index.
+    Also you can delete or insert a column&row of elements by index.
 
     >>> m
     _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [7, 0], [8, 4, 0], [9, 5, 6, 0]])
@@ -499,15 +499,13 @@ class DistanceCalculator:
                     max_score1 += self.scoring_matrix[l1, l1]
                 except IndexError:
                     raise ValueError(
-                        "Bad letter '%s' in sequence '%s' at position '%s'"
-                        % (l1, seq1.id, i)
+                        f"Bad letter '{l1}' in sequence '{seq1.id}' at position '{i}'"
                     ) from None
                 try:
                     max_score2 += self.scoring_matrix[l2, l2]
                 except IndexError:
                     raise ValueError(
-                        "Bad letter '%s' in sequence '%s' at position '%s'"
-                        % (l2, seq2.id, i)
+                        f"Bad letter '{l2}' in sequence '{seq2.id}' at position '{i}'"
                     ) from None
                 score += self.scoring_matrix[l1, l2]
             # Take the higher score if the matrix is asymmetrical
@@ -914,7 +912,7 @@ class NNITreeSearcher(TreeSearcher):
                     left_right = left.clades[1]
                     right_left = right.clades[0]
                     right_right = right.clades[1]
-                    # neightbor 1 (left_left + right_right)
+                    # neighbor 1 (left_left + right_right)
                     del left.clades[1]
                     del right.clades[1]
                     left.clades.append(right_right)

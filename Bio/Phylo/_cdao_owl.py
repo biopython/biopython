@@ -22,7 +22,7 @@ def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False
     Optionally, converts CDAO named identifiers to OBO numeric identifiers.
     """
     if cdao_to_obo and s.startswith("cdao:"):
-        return resolve_uri("obo:%s" % cdao_elements[s[5:]], namespaces, cdao_to_obo)
+        return resolve_uri(f"obo:{cdao_elements[s[5:]]}", namespaces, cdao_to_obo)
 
     for prefix in namespaces:
         if xml_style:

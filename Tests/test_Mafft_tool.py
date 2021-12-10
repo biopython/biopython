@@ -33,7 +33,7 @@ if not mafft_exe:
 
 def check_mafft_version(mafft_exe):
     child = subprocess.Popen(
-        "%s --help" % mafft_exe,
+        f"{mafft_exe} --help",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
@@ -61,7 +61,7 @@ def check_mafft_version(mafft_exe):
         major = int(version.split(".", 1)[0])
         if major < 6:
             raise MissingExternalDependencyError(
-                "Test requires MAFFT v6 or later (found %s)." % version
+                f"Test requires MAFFT v6 or later (found {version})."
             )
         return (major, version)
     raise MissingExternalDependencyError("Couldn't determine MAFFT version.")

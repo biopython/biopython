@@ -29,7 +29,11 @@ except ImportError:
 
 
 from Bio.Seq import Seq
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import (
+    PDBConstructionException,
+    PDBConstructionWarning,
+    PDBIOException,
+)
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
@@ -282,7 +286,7 @@ class ParseReal(unittest.TestCase):
         self.assertTrue(res_15.is_disordered(), "Residue 15 is disordered")
 
         # Check a non-mutated residue just to be sure we didn't break the
-        # parser and cause everyhing to be disordered.
+        # parser and cause everything to be disordered.
         self.assertFalse(
             structure[0]["A"][13].is_disordered(), "Residue 13 is not disordered"
         )
@@ -383,7 +387,7 @@ class CIFtoPDB(unittest.TestCase):
         pdb_writer.set_structure(cif_struct)
         filenumber, filename = tempfile.mkstemp()
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(PDBIOException):
             pdb_writer.save(filename, preserve_atom_numbering=True)
 
 

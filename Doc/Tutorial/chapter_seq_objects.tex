@@ -19,6 +19,7 @@ In most ways, we can deal with Seq objects as if they were normal Python strings
 >>> my_seq = Seq("GATCG")
 >>> for index, letter in enumerate(my_seq):
 ...     print("%i %s" % (index, letter))
+...
 0 G
 1 A
 2 T
@@ -32,11 +33,11 @@ You can access elements of the sequence in the same way as for strings (but reme
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(my_seq[0]) #first letter
+>>> print(my_seq[0])  # first letter
 G
->>> print(my_seq[2]) #third letter
+>>> print(my_seq[2])  # third letter
 T
->>> print(my_seq[-1]) #last letter
+>>> print(my_seq[-1])  # last letter
 G
 \end{minted}
 
@@ -187,7 +188,7 @@ You may often have many sequences to add together, which can be done with a for 
 >>> list_of_seqs = [Seq("ACGT"), Seq("AACC"), Seq("GGTT")]
 >>> concatenated = Seq("")
 >>> for s in list_of_seqs:
-...      concatenated += s
+...     concatenated += s
 ...
 >>> concatenated
 Seq('ACGTAACCGGTT')
@@ -199,7 +200,7 @@ Like Python strings, Biopython \verb|Seq| also has a \verb|.join| method:
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> contigs = [Seq("ATG"), Seq("ATCCCG"), Seq("TTGCA")]
->>> spacer = Seq("N"*10)
+>>> spacer = Seq("N" * 10)
 >>> spacer.join(contigs)
 Seq('ATGNNNNNNNNNNATCCCGNNNNNNNNNNTTGCA')
 \end{minted}
@@ -436,11 +437,13 @@ for example the gene yaaX in \texttt{E. coli} K12:
 %TODO - handle line wrapping in doctest?
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
-...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
-...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
-...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
-...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA")
+>>> gene = Seq(
+...     "GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
+...     "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
+...     "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
+...     "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
+...     "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA"
+... )
 >>> gene.translate(table="Bacterial")
 Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
 ProteinAlpabet())
@@ -619,6 +622,52 @@ Bio.Seq.UndefinedSequenceError: Sequence content is undefined
 >>>
 \end{minted}
 
+\section{Sequences with partially defined sequence contents}
+
+Sometimes the sequence contents is defined for parts of the sequence only, and undefined elsewhere. For example, the following excerpt of a MAF (Multiple Alignment Format) file shows an alignment of human, chimp, macaque, mouse, rat, dog, and opossum  genome sequences:
+
+\begin{minted}{text}
+s hg38.chr7     117512683 36 + 159345973 TTGAAAACCTGAATGTGAGAGTCAGTCAAGGATAGT
+s panTro4.chr7  119000876 36 + 161824586 TTGAAAACCTGAATGTGAGAGTCACTCAAGGATAGT
+s rheMac3.chr3  156330991 36 + 198365852 CTGAAATCCTGAATGTGAGAGTCAATCAAGGATGGT
+s mm10.chr6      18207101 36 + 149736546 CTGAAAACCTAAGTAGGAGAATCAACTAAGGATAAT
+s rn5.chr4       42326848 36 + 248343840 CTGAAAACCTAAGTAGGAGAGACAGTTAAAGATAAT
+s canFam3.chr14  56325207 36 +  60966679 TTGAAAAACTGATTATTAGAGTCAATTAAGGATAGT
+s monDom5.chr8  173163865 36 + 312544902 TTAAGAAACTGGAAATGAGGGTTGAATGACAAACTT
+\end{minted}
+
+In each row, the first number indicates the starting position (in zero-based coordinates) of the aligned sequence on the chromosome, followed by the size of the aligned sequence, the strand, the size of the full chromosome, and the aligned sequence.
+
+A \verb+Seq+ object representing such a partially defined sequence can be created using a dictionary for the \verb+data+ argument, where the keys are the starting coordinates of the known sequence segments, and the values are the corresponding sequence contents. For example, for the first sequence we would use
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> seq = Seq({117512683: "TTGAAAACCTGAATGTGAGAGTCAGTCAAGGATAGT"}, length=159345973)
+\end{minted}
+
+Extracting a subsequence from a partially define sequence may return a fully defined sequence, an undefined sequence, or a partially defined sequence, depending on the coordinates:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq[1000:1020]
+Seq(None, length=20)
+>>> seq[117512690:117512700]
+Seq('CCTGAATGTG')
+>>> seq[117512670:117512690]
+Seq({13: 'TTGAAAA'}, length=20)
+>>> seq[117512700:]
+Seq({0: 'AGAGTCAGTCAAGGATAGT'}, length=41833273)
+\end{minted}
+
+Partially defined sequences can also be created by appending sequences, if at least one of the sequences is partially or fully undefined:
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq = Seq("ACGT")
+>>> undefined_seq = Seq(None, length=10)
+>>> seq + undefined_seq + seq
+Seq({0: 'ACGT', 14: 'ACGT'}, length=18)
+\end{minted}
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
@@ -675,7 +724,7 @@ MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA')
 MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 \end{minted}
 
-Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
+Note that the \verb|MutableSeq| object's \verb|reverse()| method, like the \verb|reverse()| method of a Python list, reverses the sequence in place.
 
 An important technical difference between mutable and immutable objects in Python means that you can't use a \verb|MutableSeq| object as a dictionary key, but you can use a Python string or a \verb|Seq| object in this way.
 
@@ -691,79 +740,12 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
-\section{UnknownSeq objects}
-
-\textbf{Note that }\texttt{UnknownSeq} \textbf{is deprecated. To represent a sequence of known length but unknown sequence contents, please use } \texttt{Seq(None, length)}\textbf{.}
-
-The \verb|UnknownSeq| object is a subclass of the basic \verb|Seq| object
-and its purpose is to represent a
-sequence where we know the length, but not the actual letters making it up.
-You could of course use a normal \verb|Seq| object in this situation, but it wastes
-rather a lot of memory to hold a string of a million ``N'' characters when you could
-just store a single letter ``N'' and the desired length as an integer.
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import UnknownSeq
->>> unk = UnknownSeq(20)
->>> unk
-UnknownSeq(20, character='?')
->>> print(unk)
-????????????????????
->>> len(unk)
-20
-\end{minted}
-
-For DNA or RNA sequences, unknown nucleotides are commonly denoted by the letter ``N'', while for proteins ``X'' is commonly used for unknown amino acids. When creating an `UnknownSeq`, you can specify the character to be used instead of ``?'' to represent unknown letters. For example
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import UnknownSeq
->>> unk_dna = UnknownSeq(20, character="N")
->>> unk_dna
-UnknownSeq(20, character='N')
->>> print(unk_dna)
-NNNNNNNNNNNNNNNNNNNN
-\end{minted}
-
-You can use all the usual \verb|Seq| object methods too, note these give back
-memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> unk_dna
-UnknownSeq(20, character='N')
->>> unk_dna.complement()
-UnknownSeq(20, character='N')
->>> unk_dna.reverse_complement()
-UnknownSeq(20, character='N')
->>> unk_dna.transcribe()
-UnknownSeq(20, character='N')
->>> unk_protein = unk_dna.translate()
->>> unk_protein
-UnknownSeq(6, character='X')
->>> print(unk_protein)
-XXXXXX
->>> len(unk_protein)
-6
-\end{minted}
-
-You may be able to find a use for the \verb|UnknownSeq| object in your own
-code, but it is more likely that you will first come across them in a
-\verb|SeqRecord| object created by \verb|Bio.SeqIO|
-(see Chapter~\ref{chapter:seqio}).
-Some sequence file formats don't always include the actual sequence, for
-example GenBank and EMBL files may include a list of features but for the
-sequence just present the contig information.  Alternatively, the QUAL files
-used in sequencing work hold quality scores but they \emph{never} contain a
-sequence -- instead there is a partner FASTA file which \emph{does} have the
-sequence.
-
 \section{Working with strings directly}
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
 there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
-\verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
+\verb|Seq| objects or \verb|MutableSeq| objects:
 
 %doctest
 \begin{minted}{pycon}

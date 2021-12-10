@@ -837,7 +837,7 @@ def get_feature(features, id, tags=["locus_tag", "gene"]):
 \end{minted}
 
 We can now turn those list of identifier pairs into SeqFeature pairs, and thus
-find their location co-ordinates. We can now add all that code and the following
+find their location coordinates. We can now add all that code and the following
 snippet to the previous example (just before the \verb|gd_diagram.draw(...)|
 line -- see the finished example script
 \href{https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py}{Proux\_et\_al\_2002\_Figure\_6.py}
@@ -872,7 +872,7 @@ for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [
 
 There are several important pieces to this code. First the \verb|GenomeDiagram| object
 has a \verb|cross_track_links| attribute which is just a list of \verb|CrossLink| objects.
-Each \verb|CrossLink| object takes two sets of track-specific co-ordinates (here given
+Each \verb|CrossLink| object takes two sets of track-specific coordinates (here given
 as tuples, you can alternatively use a \verb|GenomeDiagram.Feature| object instead).
 You can optionally supply a color, border color, and say if this link should be drawn
 flipped (useful for showing inversions).

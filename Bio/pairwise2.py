@@ -272,6 +272,15 @@ import warnings
 from collections import namedtuple
 
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
+    "future release of Biopython. As an alternative, please consider using "
+    "Bio.Align.PairwiseAligner as a replacement, and contact the "
+    "Biopython developers if you still need the Bio.pairwise2 module.",
+    BiopythonDeprecationWarning,
+)
 
 
 MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
@@ -363,11 +372,11 @@ class align:
             try:
                 match_args, match_doc = self.match2args[match_type]
             except KeyError:
-                raise AttributeError("unknown match type %r" % match_type)
+                raise AttributeError(f"unknown match type {match_type!r}")
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
             except KeyError:
-                raise AttributeError("unknown penalty type %r" % penalty_type)
+                raise AttributeError(f"unknown penalty type {penalty_type!r}")
 
             # Now get the names of the parameters to this function.
             param_names = ["sequenceA", "sequenceB"]
@@ -379,10 +388,7 @@ class align:
 
             self.__name__ = self.function_name
             # Set the doc string.
-            doc = "%s(%s) -> alignments\n" % (
-                self.__name__,
-                ", ".join(self.param_names),
-            )
+            doc = f"{self.__name__}({', '.join(self.param_names)}) -> alignments\n"
             doc += """\
 \nThe following parameters can also be used with optional
 keywords of the same name.\n\n
@@ -390,9 +396,9 @@ sequenceA and sequenceB must be of the same type, either
 strings, lists or Biopython sequence objects.\n
 """
             if match_doc:
-                doc += "\n%s\n" % match_doc
+                doc += f"\n{match_doc}\n"
             if penalty_doc:
-                doc += "\n%s\n" % penalty_doc
+                doc += f"\n{penalty_doc}\n"
             doc += """\
 \nalignments is a list of named tuples (seqA, seqB, score,
 begin, end). seqA and seqB are strings showing the alignment
@@ -459,7 +465,7 @@ where the alignment occurs.
                     keywds["gap_B_fn"] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError("unknown parameter %r" % self.param_names[i])
+                    raise ValueError(f"unknown parameter {self.param_names[i]!r}")
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
@@ -1311,7 +1317,7 @@ class affine_penalty:
 
 
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
-    """Calculate a penality score for the gap function."""
+    """Calculate a penalty score for the gap function."""
     if length <= 0:
         return 0.0
     penalty = open + extend * length
@@ -1403,7 +1409,7 @@ def format_alignment(align1, align2, score, begin, end, full_sequences=False):
         else:
             m_line.append("{:^{width}}".format(".", width=m_len))  # mismatch
 
-    s2_line.append("\n  Score=%g\n" % score)
+    s2_line.append(f"\n  Score={score:g}\n")
     return "\n".join(["".join(s1_line), "".join(m_line), "".join(s2_line)])
 
 

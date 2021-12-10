@@ -132,9 +132,9 @@ this is with the string object's join method.
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
->>> shuffled_rec = SeqRecord(Seq("".join(nuc_list)),
-...                          id="Shuffled", description="Based on %s" % original_rec.id)
-...
+>>> shuffled_rec = SeqRecord(
+...     Seq("".join(nuc_list)), id="Shuffled", description="Based on %s" % original_rec.id
+... )
 \end{minted}
 
 Let's put all these pieces together to make a complete Python script which
@@ -179,7 +179,9 @@ def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(
-        Seq("".join(nuc_list)), id=new_id, description="Based on %s" % original_rec.id,
+        Seq("".join(nuc_list)),
+        id=new_id,
+        description="Based on %s" % original_rec.id,
     )
 
 
@@ -728,7 +730,6 @@ For more details, see the built in help (also \href{http://www.biopython.org/doc
 \begin{minted}{pycon}
 >>> from Bio.SeqIO import QualityIO
 >>> help(QualityIO)
-...
 \end{minted}
 
 \subsection{Converting FASTA and QUAL files into FASTQ files}
@@ -883,7 +884,6 @@ For more information on the Biopython SFF support, consult the built in help:
 \begin{minted}{pycon}
 >>> from Bio.SeqIO import SffIO
 >>> help(SffIO)
-...
 \end{minted}
 
 \subsection{Identifying open reading frames}
@@ -919,11 +919,14 @@ get a list of all the possible ORF translations in the six reading frames:
 \begin{minted}{pycon}
 >>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
 ...     for frame in range(3):
-...         length = 3 * ((len(record)-frame) // 3) #Multiple of three
-...         for pro in nuc[frame:frame+length].translate(table).split("*"):
+...         length = 3 * ((len(record) - frame) // 3)  # Multiple of three
+...         for pro in nuc[frame : frame + length].translate(table).split("*"):
 ...             if len(pro) >= min_pro_len:
-...                 print("%s...%s - length %i, strand %i, frame %i" \
-...                       % (pro[:30], pro[-3:], len(pro), strand, frame))
+...                 print(
+...                     "%s...%s - length %i, strand %i, frame %i"
+...                     % (pro[:30], pro[-3:], len(pro), strand, frame)
+...                 )
+...
 GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
 GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
@@ -1180,7 +1183,7 @@ smoother plot than this.
 \subsection{Nucleotide dot plots}
 A dot plot is a way of visually comparing two nucleotide sequences for similarity to
 each other.  A sliding window is used to compare short sub-sequences to each other,
-often with a mis-match threshold.  Here for simplicity we'll only look for perfect
+often with a mismatch threshold.  Here for simplicity we'll only look for perfect
 matches (shown in black
 \begin{latexonly}
 in Figure~\ref{fig:nuc-dot-plot}).
@@ -1300,9 +1303,9 @@ for (seq, section_dict) in [
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}
-\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
+\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ coordinates:
 \begin{minted}{python}
-# Create lists of x and y co-ordinates for scatter plot
+# Create lists of x and y coordinates for scatter plot
 x = []
 y = []
 for section in matches:
@@ -1683,7 +1686,9 @@ R 0.1697
 The expected frequency of residue pairs is then
 %cont-doctest
 \begin{minted}{pycon}
->>> expected_frequencies = numpy.dot(residue_frequencies[:, None], residue_frequencies[None, :])
+>>> expected_frequencies = numpy.dot(
+...     residue_frequencies[:, None], residue_frequencies[None, :]
+... )
 >>> print(expected_frequencies.format("%.4f"))
        D      E      H      K      R
 D 0.0406 0.0553 0.0197 0.0518 0.0342
@@ -1698,7 +1703,7 @@ Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a sin
 We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
 %cont-doctest
 \begin{minted}{pycon}
->>> m = numpy.log2(observed_frequencies/expected_frequencies)
+>>> m = numpy.log2(observed_frequencies / expected_frequencies)
 >>> print(m)
       D    E    H     K    R
 D   2.1 -1.5 -5.1 -10.4 -4.2
@@ -1724,7 +1729,7 @@ DHHKK
 <BLANKLINE>
 >>> print("%.2f" % alignments.score)
 -2.18
->>> score = m['D','D'] + m['E','H'] + m['H','H'] + m['E','K'] + m['K','K']
+>>> score = m["D", "D"] + m["E", "H"] + m["H", "H"] + m["E", "K"] + m["K", "K"]
 >>> print("%.2f" % score)
 -2.18
 \end{minted}

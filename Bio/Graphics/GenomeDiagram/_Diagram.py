@@ -403,7 +403,7 @@ class Diagram:
 
     def __str__(self):
         """Return a formatted string describing the diagram."""
-        outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+        outstr = [f"\n<{self.__class__}: {self.name}>"]
         outstr.append("%d tracks" % len(self.tracks))
         for level in self.get_levels():
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))

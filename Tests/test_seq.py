@@ -130,6 +130,16 @@ class TestSeq(unittest.TestCase):
     def test_replace(self):
         self.assertEqual("ATCCCA", Seq.Seq("ATC-CCA").replace("-", ""))
 
+    def test_cast_to_list(self):
+        self.assertEqual(list("ATC"), list(Seq.Seq("ATC")))
+        self.assertEqual(list("ATC"), list(Seq.MutableSeq("ATC")))
+        self.assertEqual(list(""), list(Seq.MutableSeq("")))
+        self.assertEqual(list(""), list(Seq.Seq("")))
+        with self.assertRaises(Seq.UndefinedSequenceError):
+            list(Seq.Seq(None, length=3))
+        with self.assertRaises(Seq.UndefinedSequenceError):
+            list(Seq.Seq({3: "ACGT"}, length=10))
+
 
 class TestSeqStringMethods(unittest.TestCase):
     def setUp(self):
@@ -165,6 +175,8 @@ class TestSeqStringMethods(unittest.TestCase):
         for a in self.dna + self.rna + self.nuc + self.protein:
             self.assertEqual(a.lower(), str(a).lower())
             self.assertEqual(a.upper(), str(a).upper())
+            self.assertEqual(a.islower(), str(a).islower())
+            self.assertEqual(a.isupper(), str(a).isupper())
             self.assertEqual(a.strip(), str(a).strip())
             self.assertEqual(a.lstrip(), str(a).lstrip())
             self.assertEqual(a.rstrip(), str(a).rstrip())
@@ -174,22 +186,34 @@ class TestSeqStringMethods(unittest.TestCase):
         lseq = seq.lower()
         self.assertEqual(lseq, "acgt")
         self.assertEqual(seq, "ACgt")
+        self.assertTrue(lseq.islower())
+        self.assertFalse(seq.islower())
         lseq = seq.lower(inplace=False)
         self.assertEqual(lseq, "acgt")
         self.assertEqual(seq, "ACgt")
+        self.assertTrue(lseq.islower())
+        self.assertFalse(seq.islower())
         lseq = seq.lower(inplace=True)
         self.assertEqual(lseq, "acgt")
         self.assertIs(lseq, seq)
+        self.assertTrue(lseq.islower())
+        self.assertTrue(lseq.islower())
         seq = Seq.MutableSeq("ACgt")
         useq = seq.upper()
         self.assertEqual(useq, "ACGT")
         self.assertEqual(seq, "ACgt")
+        self.assertTrue(useq.isupper())
+        self.assertFalse(seq.isupper())
         useq = seq.upper(inplace=False)
         self.assertEqual(useq, "ACGT")
         self.assertEqual(seq, "ACgt")
+        self.assertTrue(useq.isupper())
+        self.assertFalse(seq.isupper())
         useq = seq.upper(inplace=True)
         self.assertEqual(useq, "ACGT")
         self.assertIs(useq, seq)
+        self.assertTrue(useq.isupper())
+        self.assertTrue(seq.isupper())
 
     def test_hash(self):
         with warnings.catch_warnings(record=True):
@@ -240,8 +264,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s + {}
 
     def test_radd_method_using_wrong_object(self):
-        with self.assertRaises(TypeError):
-            self.s.__radd__({})
+        self.assertEqual(self.s.__radd__({}), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
@@ -319,10 +342,7 @@ class TestSeqAddition(unittest.TestCase):
             Seq.Seq("U.CAG"),
             "UGCAU",
         ]
-        self.nuc = [
-            Seq.Seq("ATCG"),
-            "UUUTTTACG",
-        ]
+        self.nuc = [Seq.Seq("ATCG"), "UUUTTTACG"]
         self.protein = [
             Seq.Seq("ATCGPK"),
             Seq.Seq("atcGPK"),
@@ -595,8 +615,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s + 1234
 
     def test_radd_method_wrong_type(self):
-        with self.assertRaises(TypeError):
-            self.mutable_s.__radd__(1234)
+        self.assertEqual(self.mutable_s.__radd__(1234), NotImplemented)
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.mutable_s)
@@ -623,7 +642,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_setting_slices(self):
         self.assertEqual(
-            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
+            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq"
         )
 
         self.mutable_s[1:3] = "GAT"
@@ -642,7 +661,7 @@ class TestMutableSeq(unittest.TestCase):
         if numpy is not None:
             one, three, five, seven = numpy.array([1, 3, 5, 7])  # numpy integers
             self.assertEqual(
-                Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq",
+                Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq"
             )
 
             self.mutable_s[one:three] = "GAT"
@@ -926,12 +945,12 @@ class TestUnknownSeq(unittest.TestCase):
     def test_upper(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("NNNNNN", seq.upper())
-        self.assertRaises(ValueError, self.u.upper)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.upper()))
 
     def test_lower(self):
         seq = Seq.UnknownSeq(6, character="N")
         self.assertEqual("nnnnnn", seq.lower())
-        self.assertRaises(ValueError, self.u.lower)
+        self.assertEqual("Seq(None, length=6)", repr(self.u.lower()))
 
     def test_translation(self):
         self.assertEqual("XX", self.s.translate())
@@ -1001,6 +1020,23 @@ class TestComplement(unittest.TestCase):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
 
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
@@ -1060,6 +1096,23 @@ class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
+
+    def test_immutable(self):
+        from Bio.SeqRecord import SeqRecord
+
+        r = SeqRecord(Seq.Seq("ACGT"))
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna(r, inplace=True)
+        self.assertEqual(str(cm.exception), "SeqRecords are immutable")
+        with self.assertRaises(TypeError) as cm:
+            Seq.reverse_complement_rna("ACGT", inplace=True)
+        self.assertEqual(str(cm.exception), "strings are immutable")
 
 
 class TestDoubleReverseComplement(unittest.TestCase):
@@ -1236,8 +1289,13 @@ class TestTranslating(unittest.TestCase):
 
     def test_translation_with_bad_table_argument(self):
         table = {}
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "Bad table argument")
+        table = b"0x"
+        with self.assertRaises(TypeError) as cm:
+            Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+        self.assertEqual(str(cm.exception), "table argument must be integer or string")
 
     def test_translation_with_codon_table_as_table_argument(self):
         table = standard_dna_table
@@ -1401,6 +1459,43 @@ class TestAttributes(unittest.TestCase):
         with self.assertRaises(AttributeError):
             s.dog
         self.assertNotIn("dog", dir(s))
+
+
+class TestSeqDefined(unittest.TestCase):
+    def test_zero_length(self):
+        zero_length_seqs = [
+            Seq.Seq(""),
+            Seq.Seq(None, length=0),
+            Seq.Seq({}, length=0),
+            Seq.UnknownSeq(length=0),
+            Seq.MutableSeq(""),
+        ]
+
+        for seq in zero_length_seqs:
+            self.assertTrue(seq.defined, msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, (), msg=repr(seq))
+
+    def test_undefined(self):
+        seq = Seq.Seq(None, length=1)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ())
+        seq = Seq.Seq({3: "ACGT"}, length=10)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ((3, 7),))
+        seq = Seq.UnknownSeq(length=1)
+        self.assertFalse(seq.defined)
+        self.assertEqual(seq.defined_ranges, ())
+
+    def test_defined(self):
+        seqs = [
+            Seq.Seq("T"),
+            Seq.Seq({0: "A"}, length=1),
+            Seq.Seq({0: "A", 1: "C"}, length=2),
+        ]
+
+        for seq in seqs:
+            self.assertTrue(seq.defined, msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, ((0, len(seq)),), msg=repr(seq))
 
 
 if __name__ == "__main__":

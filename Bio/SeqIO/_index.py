@@ -79,7 +79,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
         handle = self._handle
         handle.seek(0)
-        # Alread did this in __init__ but need handle in right place
+        # Already did this in __init__ but need handle in right place
         (
             header_length,
             index_offset,
@@ -108,7 +108,7 @@ class SffRandomAccess(SeqFileRandomAccess):
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(
-                    "Could not parse the SFF index: %s" % err, BiopythonParserWarning
+                    f"Could not parse the SFF index: {err}", BiopythonParserWarning
                 )
                 assert count == 0, "Partially populated index"
                 handle.seek(0)
@@ -141,7 +141,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_seq_record(
-            handle, self._flows_per_read, self._flow_chars, self._key_sequence,
+            handle, self._flows_per_read, self._flow_chars, self._key_sequence
         )
 
     def get_raw(self, offset):
@@ -346,7 +346,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                 if key.endswith(b";"):
                     key = key[:-1]
             else:
-                raise ValueError("Did not recognise the ID line layout:\n%r" % line)
+                raise ValueError(f"Did not recognise the ID line layout:\n{line!r}")
             while True:
                 line = handle.readline()
                 if marker_re.match(line) or not line:
@@ -516,7 +516,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
             length = 0
             assert offset + len(line) == handle.tell()
             if not line.startswith(b";"):
-                raise ValueError("Records should start with ';' and not:\n%r" % line)
+                raise ValueError(f"Records should start with ';' and not:\n{line!r}")
             while line.startswith(b";"):
                 length += len(line)
                 line = handle.readline()
@@ -599,7 +599,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
             # Empty file!
             return
         if line[0:1] != b"@":
-            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
+            raise ValueError(f"Problem with FASTQ @ line:\n{line!r}")
         while line:
             # assert line[0]=="@"
             # This record seems OK (so far)
@@ -625,14 +625,14 @@ class FastqRandomAccess(SeqFileRandomAccess):
                         line = handle.readline()
                         if line.strip():
                             raise ValueError(
-                                "Expected blank quality line, not %r" % line
+                                f"Expected blank quality line, not {line!r}"
                             )
                         length += len(line)  # Need to include the blank ling
                     # Should be end of record...
                     end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0:1] != b"@":
-                        raise ValueError("Problem with line %r" % line)
+                        raise ValueError(f"Problem with line {line!r}")
                     break
                 else:
                     line = handle.readline()
@@ -652,7 +652,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         line = handle.readline()
         data = line
         if line[0:1] != b"@":
-            raise ValueError("Problem with FASTQ @ line:\n%r" % line)
+            raise ValueError(f"Problem with FASTQ @ line:\n{line!r}")
         # Find the seq line(s)
         seq_len = 0
         while line:
@@ -672,12 +672,12 @@ class FastqRandomAccess(SeqFileRandomAccess):
                     # Special case, quality line should be just "\n"
                     line = handle.readline()
                     if line.strip():
-                        raise ValueError("Expected blank quality line, not %r" % line)
+                        raise ValueError(f"Expected blank quality line, not {line!r}")
                     data += line
                 # Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != b"@":
-                    raise ValueError("Problem with line %r" % line)
+                    raise ValueError(f"Problem with line {line!r}")
                 break
             else:
                 line = handle.readline()

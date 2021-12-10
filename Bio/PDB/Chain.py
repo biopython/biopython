@@ -129,7 +129,7 @@ class Chain(Entity):
 
     def __repr__(self):
         """Return the chain identifier."""
-        return "<Chain id=%s>" % self.get_id()
+        return f"<Chain id={self.get_id()}>"
 
     # Public methods
 

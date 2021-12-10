@@ -221,7 +221,7 @@ def help():
     print("")
     print("Options:                                                       default")
     print("--start       Start position in sequence                             0")
-    print("--stop        Stop position in sequence            (end of seqence)")
+    print("--stop        Stop position in sequence            (end of sequence)")
     print("--minlength   Minimum length of orf in bp                          100")
     print("--maxlength   Maximum length of orf in bp, default           100000000")
     print("--strand      Strand to analyse [both, plus, minus]               both")

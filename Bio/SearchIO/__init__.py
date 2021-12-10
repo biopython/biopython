@@ -483,7 +483,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     from Bio.File import _IndexedSeqFileDict
 
     proxy_class = get_processor(format, _INDEXER_MAP)
-    repr = "SearchIO.index(%r, %r, key_function=%r)" % (filename, format, key_function)
+    repr = f"SearchIO.index({filename!r}, {format!r}, key_function={key_function!r})"
     return _IndexedSeqFileDict(
         proxy_class(filename, **kwargs), key_function, repr, "QueryResult"
     )
@@ -556,12 +556,7 @@ def index_db(index_filename, filenames=None, format=None, key_function=None, **k
 
     from Bio.File import _SQLiteManySeqFilesDict
 
-    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" % (
-        index_filename,
-        filenames,
-        format,
-        key_function,
-    )
+    repr = f"SearchIO.index_db({index_filename!r}, filenames={filenames!r}, {format!r}, key_function={key_function!r})"
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""

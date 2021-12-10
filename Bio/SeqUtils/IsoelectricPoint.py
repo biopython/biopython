@@ -6,7 +6,7 @@
 # package.
 """Calculate isoelectric points of polypeptides using methods of Bjellqvist.
 
-pK values and the methos are taken from::
+pK values and the methods are taken from::
 
     * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F.,
     Sanchez, J.-Ch., Frutiger, S. & Hochstrasser, D.F.

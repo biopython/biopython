@@ -52,7 +52,9 @@ Classes:
 
 """
 import functools
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
@@ -136,8 +138,7 @@ class SeqFeature:
         FeatureLocation must be specified via the appropriate position objects.
 
         Note that the strand, ref and ref_db arguments to the SeqFeature are
-        now obsolete and will be deprecated in a future release (which will
-        give warning messages) and later removed. Set them via the location
+        now deprecated and will later be removed. Set them via the location
         object instead.
 
         Note that location_operator and sub_features arguments can no longer
@@ -154,10 +155,18 @@ class SeqFeature:
         self.location = location
         self.type = type
         if location_operator:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the location_operator argument is deprecated, and will be removed in a future release. "
+                "Please do this via the CompoundLocation object instead.",
+                BiopythonDeprecationWarning,
+            )
             self.location_operator = location_operator
         if strand is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the strand argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                BiopythonDeprecationWarning,
+            )
             self.strand = strand
         self.id = id
         self.qualifiers = {}
@@ -166,10 +175,18 @@ class SeqFeature:
         if sub_features is not None:
             raise TypeError("Rather than sub_features, use a CompoundFeatureLocation")
         if ref is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the ref argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                BiopythonDeprecationWarning,
+            )
             self.ref = ref
         if ref_db is not None:
-            # TODO - Deprecation warning
+            warnings.warn(
+                "Using the ref_db argument is deprecated, and will be removed in a future release. "
+                "Please set it via the location object instead.",
+                BiopythonDeprecationWarning,
+            )
             self.ref_db = ref_db
 
     def _get_strand(self):
@@ -257,10 +274,10 @@ class SeqFeature:
                 self.location.operator = value
             elif self.location is None:
                 raise ValueError(
-                    "Location is None so can't set its operator (to %r)" % value
+                    f"Location is None so can't set its operator (to {value!r})"
                 )
             else:
-                raise ValueError("Only CompoundLocation gets an operator (%r)" % value)
+                raise ValueError(f"Only CompoundLocation gets an operator ({value!r})")
 
     location_operator = property(
         fget=_get_location_operator,
@@ -270,31 +287,31 @@ class SeqFeature:
 
     def __repr__(self):
         """Represent the feature as a string for debugging."""
-        answer = "%s(%r" % (self.__class__.__name__, self.location)
+        answer = f"{self.__class__.__name__}({self.location!r}"
         if self.type:
-            answer += ", type=%r" % self.type
+            answer += f", type={self.type!r}"
         if self.location_operator:
-            answer += ", location_operator=%r" % self.location_operator
+            answer += f", location_operator={self.location_operator!r}"
         if self.id and self.id != "<unknown id>":
-            answer += ", id=%r" % self.id
+            answer += f", id={self.id!r}"
         if self.qualifiers:
             answer += ", qualifiers=..."
         if self.ref:
-            answer += ", ref=%r" % self.ref
+            answer += f", ref={self.ref!r}"
         if self.ref_db:
-            answer += ", ref_db=%r" % self.ref_db
+            answer += f", ref_db={self.ref_db!r}"
         answer += ")"
         return answer
 
     def __str__(self):
         """Return the full feature as a python string."""
-        out = "type: %s\n" % self.type
-        out += "location: %s\n" % self.location
+        out = f"type: {self.type}\n"
+        out += f"location: {self.location}\n"
         if self.id and self.id != "<unknown id>":
-            out += "id: %s\n" % self.id
+            out += f"id: {self.id}\n"
         out += "qualifiers:\n"
         for qual_key in sorted(self.qualifiers):
-            out += "    Key: %s, Value: %s\n" % (qual_key, self.qualifiers[qual_key])
+            out += f"    Key: {qual_key}, Value: {self.qualifiers[qual_key]}\n"
         return out
 
     def _shift(self, offset):
@@ -622,21 +639,21 @@ class Reference:
         """Return the full Reference object as a python string."""
         out = ""
         for single_location in self.location:
-            out += "location: %s\n" % single_location
-        out += "authors: %s\n" % self.authors
+            out += f"location: {single_location}\n"
+        out += f"authors: {self.authors}\n"
         if self.consrtm:
-            out += "consrtm: %s\n" % self.consrtm
-        out += "title: %s\n" % self.title
-        out += "journal: %s\n" % self.journal
-        out += "medline id: %s\n" % self.medline_id
-        out += "pubmed id: %s\n" % self.pubmed_id
-        out += "comment: %s\n" % self.comment
+            out += f"consrtm: {self.consrtm}\n"
+        out += f"title: {self.title}\n"
+        out += f"journal: {self.journal}\n"
+        out += f"medline id: {self.medline_id}\n"
+        out += f"pubmed id: {self.pubmed_id}\n"
+        out += f"comment: {self.comment}\n"
         return out
 
     def __repr__(self):
         """Represent the Reference object as a string for debugging."""
         # TODO - Update this is __init__ later accepts values
-        return "%s(title=%r, ...)" % (self.__class__.__name__, self.title)
+        return f"{self.__class__.__name__}(title={self.title!r}, ...)"
 
     def __eq__(self, other):
         """Check if two Reference objects should be considered equal.
@@ -784,13 +801,13 @@ class FeatureLocation:
         elif isinstance(start, int):
             self._start = ExactPosition(start)
         else:
-            raise TypeError("start=%r %s" % (start, type(start)))
+            raise TypeError(f"start={start!r} {type(start)}")
         if isinstance(end, AbstractPosition):
             self._end = end
         elif isinstance(end, int):
             self._end = ExactPosition(end)
         else:
-            raise TypeError("end=%r %s" % (end, type(end)))
+            raise TypeError(f"end={end!r} {type(end)}")
         if (
             isinstance(self.start.position, int)
             and isinstance(self.end.position, int)
@@ -811,7 +828,7 @@ class FeatureLocation:
     def _set_strand(self, value):
         """Set function for the strand property (PRIVATE)."""
         if value not in [+1, -1, 0, None]:
-            raise ValueError("Strand should be +1, -1, 0 or None, not %r" % value)
+            raise ValueError(f"Strand should be +1, -1, 0 or None, not {value!r}")
         self._strand = value
 
     strand = property(
@@ -827,9 +844,9 @@ class FeatureLocation:
         (zero based counting) which GenBank would call 123..150 (one based
         counting).
         """
-        answer = "[%s:%s]" % (self._start, self._end)
+        answer = f"[{self._start}:{self._end}]"
         if self.ref and self.ref_db:
-            answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
+            answer = f"{self.ref_db}:{self.ref}{answer}"
         elif self.ref:
             answer = self.ref + answer
         # Is ref_db without ref meaningful?
@@ -847,17 +864,12 @@ class FeatureLocation:
         """Represent the FeatureLocation object as a string for debugging."""
         optional = ""
         if self.strand is not None:
-            optional += ", strand=%r" % self.strand
+            optional += f", strand={self.strand!r}"
         if self.ref is not None:
-            optional += ", ref=%r" % self.ref
+            optional += f", ref={self.ref!r}"
         if self.ref_db is not None:
-            optional += ", ref_db=%r" % self.ref_db
-        return "%s(%r, %r%s)" % (
-            self.__class__.__name__,
-            self.start,
-            self.end,
-            optional,
-        )
+            optional += f", ref_db={self.ref_db!r}"
+        return f"{self.__class__.__name__}({self.start!r}, {self.end!r}{optional})"
 
     def __add__(self, other):
         """Combine location with another FeatureLocation object, or shift it.
@@ -1220,7 +1232,7 @@ class CompoundLocation:
                 )
         if len(parts) < 2:
             raise ValueError(
-                "CompoundLocation should have at least 2 parts, not %r" % parts
+                f"CompoundLocation should have at least 2 parts, not {parts!r}"
             )
 
     def __str__(self):
@@ -1229,7 +1241,7 @@ class CompoundLocation:
 
     def __repr__(self):
         """Represent the CompoundLocation object as string for debugging."""
-        return "%s(%r, %r)" % (self.__class__.__name__, self.parts, self.operator)
+        return f"{self.__class__.__name__}({self.parts!r}, {self.operator!r})"
 
     def _get_strand(self):
         """Get function for the strand property (PRIVATE)."""
@@ -1308,7 +1320,7 @@ class CompoundLocation:
         join{[15:17], [20:30], [40:50], [60:70]}
 
         Also, as with the FeatureLocation, adding an integer shifts the
-        location's co-ordinates by that offset:
+        location's coordinates by that offset:
 
         >>> print(f1 + 100)
         join{[115:117], [120:130]}
@@ -1323,7 +1335,7 @@ class CompoundLocation:
             if self.operator != other.operator:
                 # Handle join+order -> order as a special case?
                 raise ValueError(
-                    "Mixed operators %s and %s" % (self.operator, other.operator)
+                    f"Mixed operators {self.operator} and {other.operator}"
                 )
             return CompoundLocation(self.parts + other.parts, self.operator)
         elif isinstance(other, int):
@@ -1562,7 +1574,7 @@ class AbstractPosition:
 
     def __repr__(self):
         """Represent the AbstractPosition object as a string for debugging."""
-        return "%s(...)" % (self.__class__.__name__)
+        return f"{self.__class__.__name__}(...)"
 
 
 class ExactPosition(int, AbstractPosition):
@@ -1603,9 +1615,7 @@ class ExactPosition(int, AbstractPosition):
     def __new__(cls, position, extension=0):
         """Create an ExactPosition object."""
         if extension != 0:
-            raise AttributeError(
-                "Non-zero extension %s for exact position." % extension
-            )
+            raise AttributeError(f"Non-zero extension {extension} for exact position.")
         return int.__new__(cls, position)
 
     # Must define this on Python 3.8 onwards because we redefine __repr__
@@ -1656,7 +1666,7 @@ class UnknownPosition(AbstractPosition):
 
     def __repr__(self):
         """Represent the UnknownPosition object as a string for debugging."""
-        return "%s()" % self.__class__.__name__
+        return f"{self.__class__.__name__}()"
 
     def __hash__(self):
         """Return the hash value of the UnknownPosition object."""
@@ -1796,7 +1806,7 @@ class WithinPosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the WithinPosition object (with python counting)."""
-        return "(%s.%s)" % (self._left, self._right)
+        return f"({self._left}.{self._right})"
 
     @property
     def position(self):
@@ -1914,7 +1924,7 @@ class BetweenPosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the BetweenPosition object (with python counting)."""
-        return "(%s^%s)" % (self._left, self._right)
+        return f"({self._left}^{self._right})"
 
     @property
     def position(self):
@@ -1976,9 +1986,7 @@ class BeforePosition(int, AbstractPosition):
     def __new__(cls, position, extension=0):
         """Create a new instance in BeforePosition object."""
         if extension != 0:
-            raise AttributeError(
-                "Non-zero extension %s for exact position." % extension
-            )
+            raise AttributeError(f"Non-zero extension {extension} for exact position.")
         return int.__new__(cls, position)
 
     @property
@@ -1997,7 +2005,7 @@ class BeforePosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the BeforePosition object (with python counting)."""
-        return "<%s" % self.position
+        return f"<{self.position}"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2052,9 +2060,7 @@ class AfterPosition(int, AbstractPosition):
     def __new__(cls, position, extension=0):
         """Create a new instance of the AfterPosition object."""
         if extension != 0:
-            raise AttributeError(
-                "Non-zero extension %s for exact position." % extension
-            )
+            raise AttributeError(f"Non-zero extension {extension} for exact position.")
         return int.__new__(cls, position)
 
     @property
@@ -2073,7 +2079,7 @@ class AfterPosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the AfterPosition object (with python counting)."""
-        return ">%s" % self.position
+        return f">{self.position}"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2145,7 +2151,7 @@ class OneOfPosition(int, AbstractPosition):
         """
         if position not in choices:
             raise ValueError(
-                "OneOfPosition: %r should match one of %r" % (position, choices)
+                f"OneOfPosition: {position!r} should match one of {choices!r}"
             )
         obj = int.__new__(cls, position)
         obj.position_choices = choices
@@ -2181,7 +2187,7 @@ class OneOfPosition(int, AbstractPosition):
         """Return a representation of the OneOfPosition object (with python counting)."""
         out = "one-of("
         for position in self.position_choices:
-            out += "%s," % position
+            out += f"{position},"
         # replace the last comma with the closing parenthesis
         return out[:-1] + ")"
 
@@ -2202,16 +2208,16 @@ class PositionGap:
     """Simple class to hold information about a gap between positions."""
 
     def __init__(self, gap_size):
-        """Intialize with a position object containing the gap information."""
+        """Initialize with a position object containing the gap information."""
         self.gap_size = gap_size
 
     def __repr__(self):
         """Represent the position gap as a string for debugging."""
-        return "%s(%r)" % (self.__class__.__name__, self.gap_size)
+        return f"{self.__class__.__name__}({self.gap_size!r})"
 
     def __str__(self):
         """Return a representation of the PositionGap object (with python counting)."""
-        return "gap(%s)" % self.gap_size
+        return f"gap({self.gap_size})"
 
 
 if __name__ == "__main__":

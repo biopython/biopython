@@ -183,7 +183,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             pass
 
         if os.path.isfile(input_file + ".aln"):
-            # Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            # Clustalw 2.1 made an empty aln file, clustalw 1.83 did not
             self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
@@ -194,7 +194,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
         err = str(cm.exception)
         # Ideally we'd catch the return code and raise the specific
         # error for "invalid format", rather than just notice there

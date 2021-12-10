@@ -122,9 +122,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_equal_probabilities()
 
-        self.assertEqual(
-            self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5},
-        )
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5})
         self.assertEqual(
             self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5}
         )

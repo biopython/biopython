@@ -35,7 +35,7 @@ available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
 Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
 and tblastx.
 \item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI Guide to BLAST 
+the options for this are available on the NCBI Guide to BLAST
 \url{ftp://ftp.ncbi.nlm.nih.gov/pub/factsheets/HowTo_BLASTGuide.pdf}.
 \item The third argument is a string containing your query sequence.  This
 can either be the sequence itself, the sequence in fasta format,
@@ -65,7 +65,6 @@ documentation, or that built into Biopython:
 \begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
-...
 \end{minted}
 
 Note that the default settings on the NCBI BLAST website are not quite
@@ -355,7 +354,8 @@ StopIteration
 Or, you can use a \verb|for|-loop:
 \begin{minted}{pycon}
 >>> for blast_record in blast_records:
-...     # Do something with blast_record
+...     pass  # Do something with blast_record
+...
 \end{minted}
 
 Note though that you can step through the BLAST records only once.
@@ -411,6 +411,7 @@ threshold. The following code does this:
 ...             print(hsp.query[0:75] + "...")
 ...             print(hsp.match[0:75] + "...")
 ...             print(hsp.sbjct[0:75] + "...")
+...
 \end{minted}
 
 This will print out summary reports like the following:

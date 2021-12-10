@@ -330,7 +330,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(86, hsp.query_start)
         self.assertEqual(141, hsp.query_end)
         self.assertEqual(
-            "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA", hsp.query.seq,
+            "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA", hsp.query.seq
         )
         self.assertEqual(17, hsp.hit_start)
         self.assertEqual(69, hsp.hit_end)

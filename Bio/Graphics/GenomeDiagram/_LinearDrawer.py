@@ -381,7 +381,7 @@ class LinearDrawer(AbstractDrawer):
                 "Tick at %i, but showing %r to %r for track"
                 % (tickpos, track.start, track.end)
             )
-        fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
+        fragment, tickx = self.canvas_location(tickpos)  # Tick coordinates
         assert fragment >= 0, "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]  # Center line of the track
         tickx += self.x0  # Tick X co-ord
@@ -538,16 +538,16 @@ class LinearDrawer(AbstractDrawer):
                         minval, maxval = quartiles[0], quartiles[4]
                         if graph.center is None:
                             midval = (maxval + minval) / 2.0
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                         else:
                             diff = max((graph.center - minval), (maxval - graph.center))
                             minval = graph.center - diff
                             maxval = graph.center + diff
                             midval = graph.center
-                            graph_label_mid.append("%.3f" % midval)
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_mid.append(f"{midval:.3f}")
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                     for fragment in range(
                         start_f, end_f + 1
                     ):  # Add to all used fragment axes
@@ -1049,14 +1049,14 @@ class LinearDrawer(AbstractDrawer):
 
         Arguments:
          - feature       Feature object
-         - x0            Start X co-ordinate on diagram
-         - x1            End X co-ordinate on diagram
+         - x0            Start X coordinate on diagram
+         - x1            End X coordinate on diagram
          - fragment      The fragment on which the feature appears
 
         Returns a drawable indicator of the feature, and any required label
         for it.
         """
-        # Establish co-ordinates for drawing
+        # Establish coordinates for drawing
         x0, x1 = self.x0 + x0, self.x0 + x1
         btm, ctr, top = self.track_offsets[self.current_track_level]
         try:
@@ -1065,13 +1065,13 @@ class LinearDrawer(AbstractDrawer):
             top += self.fragment_lines[fragment][0]
         except Exception:  # Only called if the method screws up big time
             print("We've got a screw-up")
-            print("%s %s" % (self.start, self.end))
+            print(f"{self.start} {self.end}")
             print(self.fragment_bases)
-            print("%r %r" % (x0, x1))
+            print(f"{x0!r} {x1!r}")
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
-            print("FEATURE\n%s" % feature)
+            print(f"FEATURE\n{feature}")
             raise
 
         # Distribution dictionary for various ways of drawing the feature
@@ -1104,7 +1104,7 @@ class LinearDrawer(AbstractDrawer):
             strand=feature.strand,
             color=feature.color,
             border=feature.border,
-            **kwargs
+            **kwargs,
         )
 
         if feature.label_strand:
@@ -1552,7 +1552,7 @@ class LinearDrawer(AbstractDrawer):
             strokeWidth=1,
             strokeLineJoin=1,  # 1=round
             fillColor=color,
-            **kwargs
+            **kwargs,
         )
 
     def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):

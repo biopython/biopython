@@ -184,14 +184,12 @@ class Test_build(unittest.TestCase):
         # Test set 1
         seq1 = SeqRecord(
             Seq(
-                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG",
+                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG"
             ),
             id="pro1",
         )
         seq2 = SeqRecord(
-            Seq(
-                "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG",
-            ),
+            Seq("TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG"),
             id="pro2",
         )
         pro1 = SeqRecord(Seq("SGTARTKLLLLLAALCAAGGALE"), id="pro1")

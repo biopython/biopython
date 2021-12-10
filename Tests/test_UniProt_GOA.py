@@ -120,9 +120,7 @@ class GoaTests(unittest.TestCase):
         self.assertEqual(recs[0]["DB"], "UniProtKB")
         self.assertEqual(recs[0]["DB_Object_ID"], "A0A024R1R8")
         self.assertEqual(recs[0]["DB_Object_Symbol"], "hCG_2014768")
-        self.assertEqual(
-            recs[0]["DB_Object_Name"], ["HCG2014768, isoform CRA_a"],
-        )
+        self.assertEqual(recs[0]["DB_Object_Name"], ["HCG2014768, isoform CRA_a"])
         self.assertEqual(recs[0]["DB_Object_Synonym"], ["hCG_2014768"])
         self.assertEqual(recs[0]["DB_Object_Type"], "protein")
         self.assertEqual(recs[0]["Taxon"], "taxon:9606")

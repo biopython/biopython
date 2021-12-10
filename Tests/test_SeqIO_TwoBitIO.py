@@ -362,7 +362,7 @@ class TestBaseClassMethods(unittest.TestCase):
             self.seq1_twobit.find("CT", 75), self.seq1_fasta.find("CT", 75)
         )
         self.assertEqual(
-            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100),
+            self.seq1_twobit.find("CT", 75, 100), self.seq1_fasta.find("CT", 75, 100)
         )
         self.assertEqual(
             self.seq1_twobit.find("CT", None, 100),
@@ -459,6 +459,14 @@ class TestBaseClassMethods(unittest.TestCase):
         self.assertEqual(seq2_twobit_lower, seq2_fasta_lower)
         self.assertEqual(seq2_twobit_lower[140:210], seq2_fasta_lower[140:210])
 
+    def test_isupper(self):
+        self.assertEqual(self.seq1_twobit.isupper(), self.seq1_fasta.isupper())
+        self.assertEqual(self.seq2_twobit.isupper(), self.seq2_fasta.isupper())
+
+    def test_islower(self):
+        self.assertEqual(self.seq1_twobit.islower(), self.seq1_fasta.islower())
+        self.assertEqual(self.seq2_twobit.islower(), self.seq2_fasta.islower())
+
     def test_replace(self):
         # seq.transcribe uses seq._data.replace
         self.assertEqual(self.seq1_twobit.transcribe(), self.seq1_fasta.transcribe())
@@ -466,6 +474,12 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_translate(self):
         # seq.complement uses seq._data.translate
         self.assertEqual(self.seq1_twobit.complement(), self.seq1_fasta.complement())
+
+    def test_defined(self):
+        self.assertTrue(self.seq1_twobit.defined)
+        self.assertTrue(self.seq2_twobit.defined)
+        self.assertEqual(self.seq1_twobit.defined_ranges, ((0, len(self.seq1_twobit)),))
+        self.assertEqual(self.seq2_twobit.defined_ranges, ((0, len(self.seq2_twobit)),))
 
 
 if __name__ == "__main__":

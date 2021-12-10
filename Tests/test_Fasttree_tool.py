@@ -58,7 +58,7 @@ else:
     likely_exes = ["FastTree", "fasttree"]
     for filename in likely_exes:
         # Checking the -help argument
-        output = getoutput("%s -help" % filename)
+        output = getoutput(f"{filename} -help")
         # Since "is not recognized" may be in another language, try and be sure this
         # is really the fasttree tool's output
         if (
@@ -80,7 +80,7 @@ class FastTreeTestCase(unittest.TestCase):
     def check(self, path, length):
         input_records = SeqIO.to_dict(SeqIO.parse(path, "fasta"))
         self.assertEqual(len(input_records), length)
-        # Any filesnames with spaces should get escaped with quotes
+        # Any filenames with spaces should get escaped with quotes
         #  automatically.
         # Using keyword arguments here.
         cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=path, nt=True)
@@ -136,7 +136,7 @@ class FastTreeTestCase(unittest.TestCase):
             or "No sequences in file" in message
             or "Error parsing header line:" in message
             or "Non-zero return code " in message,
-            msg="Unknown ApplicationError raised: %s" % message,
+            msg=f"Unknown ApplicationError raised: {message}",
         )
 
     def test_single(self):
@@ -156,9 +156,9 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertTrue(
             "Cannot open sequence file" in message
             or "Cannot open sequence file" in message
-            or "Cannot read %s" % path in message
+            or f"Cannot read {path}" in message
             or "Non-zero return code " in message,
-            msg="Unknown ApplicationError raised: %s" % message,
+            msg=f"Unknown ApplicationError raised: {message}",
         )
 
 

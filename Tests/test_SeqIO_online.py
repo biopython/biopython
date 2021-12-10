@@ -59,17 +59,14 @@ class EntrezTests(unittest.TestCase):
             record = SeqIO.read(handle, f)
             handle.close()
             # NCBI still takes GI on input, but phasing it out in output
-            gi_to_acc = {
-                "6273291": "AF191665.1",
-                "16130152": "NP_416719.1",
-            }
+            gi_to_acc = {"6273291": "AF191665.1", "16130152": "NP_416719.1"}
             if entry in gi_to_acc:
                 entry = gi_to_acc[entry]
             self.assertTrue(
                 (entry in record.name)
                 or (entry in record.id)
                 or ("gi" in record.annotations and record.annotations["gi"] == entry),
-                "%s got %s, %s" % (entry, record.name, record.id),
+                f"{entry} got {record.name}, {record.id}",
             )
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
@@ -89,12 +86,12 @@ for database, formats, entry, length, checksum in [
 
     def funct(d, f, e, l, c):
         method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
-        method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
+        method.__doc__ = f"Bio.Entrez.efetch({d!r}, id={e!r}, ...)"
         return method
 
     setattr(
         EntrezTests,
-        "test_%s_%s" % (database, entry),
+        f"test_{database}_{entry}",
         funct(database, formats, entry, length, checksum),
     )
     del funct

@@ -38,7 +38,7 @@ def read(handle):
     >>> print(motif.name)
     IFXA
 
-    This function wont retrieve instances, as there are none in minimal meme format.
+    This function won't retrieve instances, as there are none in minimal meme format.
 
     """
     motif_number = 0

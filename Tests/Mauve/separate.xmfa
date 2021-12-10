@@ -1,0 +1,24 @@
+#FormatVersion Mauve1
+#Sequence1File	equCab1.fa
+#Sequence1Format	FastA
+#Sequence2File	canFam2.fa
+#Sequence2Format	FastA
+#Sequence3File	mm9.fa
+#Sequence3Format	FastA
+#BackboneFile	separate.xmfa.bbcols
+> 1:0-0 + equCab1.fa
+------------------------
+> 2:26-49 + canFam2.fa
+GTCCCGGGCCCTGCTTTCCTTTTC
+> 3:1-24 - mm9.fa
+GCCAGGGATCTACTTTTCCTCTTC
+=
+> 1:1-50 + equCab1.fa
+GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
+=
+> 2:1-25 + canFam2.fa
+CAAGCCCTGCGCGCTCAGCCGGAGT
+=
+> 3:25-41 + mm9.fa
+GTCCGGAGCTGGGACGT
+=

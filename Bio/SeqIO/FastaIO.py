@@ -203,7 +203,7 @@ class FastaIterator(SequenceIterator):
                     # Should we use SeqRecord default for no ID?
                     first_word = ""
                 yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title,
+                    Seq(sequence), id=first_word, name=first_word, description=title
                 )
 
 
@@ -239,7 +239,7 @@ class FastaTwoLineIterator(SequenceIterator):
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title,
+                Seq(sequence), id=first_word, name=first_word, description=title
             )
 
 
@@ -302,13 +302,13 @@ class FastaWriter(SequenceWriter):
                 # The description includes the id at the start
                 title = description
             elif description:
-                title = "%s %s" % (id, description)
+                title = f"{id} {description}"
             else:
                 title = id
 
         assert "\n" not in title
         assert "\r" not in title
-        self.handle.write(">%s\n" % title)
+        self.handle.write(f">{title}\n")
 
         data = _get_seq_string(record)  # Catches sequence being None
 
@@ -379,12 +379,12 @@ def as_fasta(record):
         # The description includes the id at the start
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
     assert "\n" not in title
     assert "\r" not in title
-    lines = [">%s\n" % title]
+    lines = [f">{title}\n"]
 
     data = _get_seq_string(record)  # Catches sequence being None
     assert "\n" not in data
@@ -407,7 +407,7 @@ def as_fasta_2line(record):
         # The description includes the id at the start
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
     assert "\n" not in title
@@ -417,7 +417,7 @@ def as_fasta_2line(record):
     assert "\n" not in data
     assert "\r" not in data
 
-    return ">%s\n%s\n" % (title, data)
+    return f">{title}\n{data}\n"
 
 
 if __name__ == "__main__":

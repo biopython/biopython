@@ -106,7 +106,7 @@ test_records = [
             SeqRecord(
                 Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA"),
                 id="Y",
-                description="an%sevil\rdescription right\nhere" % os.linesep,
+                description=f"an{os.linesep}evil\rdescription right\nhere",
                 annotations={"molecule_type": "DNA"},
             ),
             SeqRecord(
@@ -162,13 +162,13 @@ test_records = [
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
 test_records[4][0][2].annotations["note"] = [
-    "Note%salso" % os.linesep + "\r\nhas\n evil line\rbreaks!",
+    f"Note{os.linesep}also\r\nhas\n evil line\rbreaks!",
     "Wow",
 ]
 # Add a simple string
-test_records[4][0][2].annotations["comment"] = (
-    "More%sof" % os.linesep + "\r\nthese\n evil line\rbreaks!"
-)
+test_records[4][0][2].annotations[
+    "comment"
+] = f"More{os.linesep}of\r\nthese\n evil line\rbreaks!"
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 
@@ -240,7 +240,7 @@ class WriterTests(SeqIOTestBaseClass):
             self.check_simple(records, fmt, descr)
 
     def check_simple(self, records, fmt, descr):
-        msg = "Test failure %s for %s" % (fmt, descr)
+        msg = f"Test failure {fmt} for {descr}"
         mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()
@@ -267,7 +267,7 @@ class WriterTests(SeqIOTestBaseClass):
         handle.close()
 
     def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):
-        msg = "Test failure %s for %s" % (fmt, descr)
+        msg = f"Test failure {fmt} for {descr}"
         mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()

@@ -98,7 +98,7 @@ class TestHMMCasino(unittest.TestCase):
         test_rolls, test_states = generate_rolls(300)
         predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
-            print("Prediction probability: %f" % prob)
+            print(f"Prediction probability: {prob:f}")
             Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
     def test_baum_welch_training_without(self):
@@ -108,7 +108,7 @@ class TestHMMCasino(unittest.TestCase):
         def stop_training(log_likelihood_change, num_iterations):
             """Tell the training model when to stop."""
             if VERBOSE:
-                print("ll change: %f" % log_likelihood_change)
+                print(f"ll change: {log_likelihood_change:f}")
             if log_likelihood_change < 0.01:
                 return 1
             elif num_iterations >= 10:
@@ -125,7 +125,7 @@ class TestHMMCasino(unittest.TestCase):
         test_rolls, test_states = generate_rolls(300)
         predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
-            print("Prediction probability: %f" % prob)
+            print(f"Prediction probability: {prob:f}")
             Utilities.pretty_print_prediction(
                 self.test_rolls, test_states, predicted_states
             )

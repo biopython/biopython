@@ -54,7 +54,7 @@ class NovoalignCommandline(AbstractCommandline):
             _Option(["-f", "readfile"], "read file", filename=True, equate=False),
             _Option(
                 ["-F", "format"],
-                "Format of read files.\n\nAllowed values: %s" % ", ".join(READ_FORMAT),
+                f"Format of read files.\n\nAllowed values: {', '.join(READ_FORMAT)}",
                 checker_function=lambda x: x in READ_FORMAT,
                 equate=False,
             ),

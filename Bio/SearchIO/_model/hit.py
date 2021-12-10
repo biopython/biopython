@@ -144,7 +144,7 @@ class Hit(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of Hit object."""
-        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, len(self))
+        return f"Hit(id={self.id!r}, query_id={self.query_id!r}, {len(self)!r} hsps)"
 
     def __iter__(self):
         """Iterate over hsps."""
@@ -190,7 +190,7 @@ class Hit(_BaseSearchObject):
 
         # set attributes lines
         for key, value in sorted(self.attributes.items()):
-            lines.append(" %s: %s" % (key, value))
+            lines.append(f" {key}: {value}")
 
         # set dbxrefs line
         if self.dbxrefs:
@@ -222,7 +222,7 @@ class Hit(_BaseSearchObject):
                 # query region
                 query_start = getattr_str(hsp, "query_start")
                 query_end = getattr_str(hsp, "query_end")
-                query_range = "[%s:%s]" % (query_start, query_end)
+                query_range = f"[{query_start}:{query_end}]"
                 # max column length is 18
                 query_range = (
                     query_range[:13] + "~]" if len(query_range) > 15 else query_range
@@ -230,7 +230,7 @@ class Hit(_BaseSearchObject):
                 # hit region
                 hit_start = getattr_str(hsp, "hit_start")
                 hit_end = getattr_str(hsp, "hit_end")
-                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = f"[{hit_start}:{hit_end}]"
                 hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
                 # append the hsp row
                 lines.append(
@@ -441,7 +441,7 @@ class Hit(_BaseSearchObject):
         :param in_place: whether to do in-place sorting or no
         :type in_place: bool
 
-        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        ``sort`` defaults to sorting in-place, to mimic Python's ``list.sort``
         method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted Hit object and keep the initial one unsorted
 

@@ -157,7 +157,7 @@ def parse_domain(term):
 
 
 def _open_scop_file(scop_dir_path, version, filetype):
-    filename = "dir.%s.scop.txt_%s" % (filetype, version)
+    filename = f"dir.{filetype}.scop.txt_{version}"
     handle = open(os.path.join(scop_dir_path, filename))
     return handle
 
@@ -499,7 +499,7 @@ class Scop:
 
         for p in self._sunidDict.values():
             for c in p.children:
-                cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
+                cur.execute(f"INSERT INTO hie VALUES ({p.sunid},{c.sunid})")
 
     def write_cla_sql(self, handle):
         """Write CLA data to SQL database."""
@@ -770,8 +770,8 @@ class Astral:
                 raise RuntimeError("must provide dir_path and version")
 
             self.version = version
-            self.path = os.path.join(dir_path, "scopseq-%s" % version)
-            astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
+            self.path = os.path.join(dir_path, f"scopseq-{version}")
+            astral_file = f"astral-scopdom-seqres-all-{self.version}.fa"
             astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
@@ -814,7 +814,7 @@ class Astral:
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
+                filename = f"{file_prefix}-bib-{id}-{self.version}.id"
                 filename = os.path.join(self.path, filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
@@ -926,7 +926,7 @@ def search(
     dir=None,
     loc=None,
     cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
-    **keywds
+    **keywds,
 ):
     """Access SCOP search and return a handle to the results.
 

@@ -101,7 +101,7 @@ class RaxmlCommandline(AbstractCommandline):
 
                         b: Draw bipartition information on a tree provided with '-t'
                         based on multiple trees (e.g. form a bootstrap) in a file
-                        specifed by '-z'.
+                        specified by '-z'.
 
                         c: Check if the alignment can be properly read by RAxML.
 
@@ -121,7 +121,7 @@ class RaxmlCommandline(AbstractCommandline):
                         bootstrap tree under GAMMA and a more exhaustive algorithm.
 
                         j: Generate a bunch of bootstrapped alignment files from an
-                        original alignemnt file.
+                        original alignment file.
 
                         m: Compare bipartitions between two bunches of trees passed
                         via '-t' and '-z' respectively. This will return the

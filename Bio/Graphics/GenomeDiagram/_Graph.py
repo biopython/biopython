@@ -184,10 +184,10 @@ class GraphData:
 
     def __str__(self):
         """Return a string describing the graph data."""
-        outstr = ["\nGraphData: %s, ID: %s" % (self.name, self.id)]
+        outstr = [f"\nGraphData: {self.name}, ID: {self.id}"]
         outstr.append("Number of points: %d" % len(self.data))
-        outstr.append("Mean data value: %s" % self.mean())
-        outstr.append("Sample SD: %.3f" % self.stdev())
+        outstr.append(f"Mean data value: {self.mean()}")
+        outstr.append(f"Sample SD: {self.stdev():.3f}")
         outstr.append(
             "Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles()
         )

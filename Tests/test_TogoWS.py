@@ -67,7 +67,7 @@ class TogoFields(unittest.TestCase):
         }
         self.assertTrue(
             dbs.issuperset(expected),
-            "Missing DB: %s" % ", ".join(sorted(expected.difference(dbs))),
+            f"Missing DB: {', '.join(sorted(expected.difference(dbs)))}",
         )
 
     def test_pubmed(self):
@@ -163,7 +163,7 @@ class TogoEntry(unittest.TestCase):
         data = Medline.read(handle)
         handle.close()
         self.assertEqual(
-            data["TI"], "From genomics to chemical genomics: new developments in KEGG.",
+            data["TI"], "From genomics to chemical genomics: new developments in KEGG."
         )
         self.assertEqual(
             data["AU"],
@@ -576,7 +576,7 @@ class TogoSearch(unittest.TestCase):
         try:
             search_count = TogoWS.search_count(database, search_term)
         except HTTPError as err:
-            raise ValueError("%s from %s" % (err, err.url)) from None
+            raise ValueError(f"{err} from {err.url}") from None
         if expected_matches:
             self.assertGreaterEqual(search_count, len(expected_matches))
         if search_count > 5000 and not limit:
@@ -591,7 +591,7 @@ class TogoSearch(unittest.TestCase):
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:
-            self.assertIn(match, search_iter, "Expected %s in results" % match)
+            self.assertIn(match, search_iter, f"Expected {match} in results")
 
 
 class TogoConvert(unittest.TestCase):

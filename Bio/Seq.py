@@ -39,8 +39,8 @@ def _maketrans(complement_mapping):
      - complement_mapping - a dictionary such as ambiguous_dna_complement
        and ambiguous_rna_complement from Data.IUPACData.
 
-    Returns a translation table (a string of length 256) for use with the
-    python string's translate method to use in a (reverse) complement.
+    Returns a translation table (a bytes object of length 256) for use with
+    the python string's translate method to use in a (reverse) complement.
 
     Compatible with lower case and upper case sequences.
 
@@ -131,13 +131,18 @@ class SequenceDataAbstractBaseClass(ABC):
         return bytes(self) >= other
 
     def __add__(self, other):
-        return bytes(self) + other
+        try:
+            return bytes(self) + bytes(other)
+        except UndefinedSequenceError:
+            return NotImplemented
+            # will be handled by _UndefinedSequenceData.__radd__ or
+            # by _PartiallyDefinedSequenceData.__radd__
 
     def __radd__(self, other):
         return other + bytes(self)
 
     def __mul__(self, other):
-        return bytes(self) * other
+        return other * bytes(self)
 
     def __contains__(self, item):
         return bytes(self).__contains__(item)
@@ -276,6 +281,20 @@ class SequenceDataAbstractBaseClass(ABC):
         """Return a copy of data with all ASCII characters converted to lowercase."""
         return bytes(self).lower()
 
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return bytes(self).isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return bytes(self).islower()
+
     def replace(self, old, new):
         """Return a copy with all occurrences of substring old replaced by new."""
         return bytes(self).replace(old, new)
@@ -289,7 +308,27 @@ class SequenceDataAbstractBaseClass(ABC):
         All characters occurring in the optional argument delete are removed.
         The remaining characters are mapped through the given translation table.
         """
-        return bytes(self).translate(table)
+        return bytes(self).translate(table, delete)
+
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        return True
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        length = len(self)
+        if length > 0:
+            return ((0, length),)
+        else:
+            return ()
 
 
 class _SeqAbstractBaseClass(ABC):
@@ -315,6 +354,17 @@ class _SeqAbstractBaseClass(ABC):
         data = self._data
         if isinstance(data, _UndefinedSequenceData):
             return f"Seq(None, length={len(self)})"
+        if isinstance(data, _PartiallyDefinedSequenceData):
+            d = {}
+            for position, seq in data._data.items():
+                if len(seq) > 60:
+                    start = seq[:54].decode("ASCII")
+                    end = seq[-3:].decode("ASCII")
+                    seq = f"{start}...{end}"
+                else:
+                    seq = seq.decode("ASCII")
+                d[position] = seq
+            return "Seq(%r, length=%d)" % (d, len(self))
         if len(data) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
@@ -412,6 +462,10 @@ class _SeqAbstractBaseClass(ABC):
         """Return the length of the sequence."""
         return len(self._data)
 
+    def __iter__(self):
+        """Return an iterable of the sequence."""
+        return self._data.decode("ASCII").__iter__()
+
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.
 
@@ -450,14 +504,10 @@ class _SeqAbstractBaseClass(ABC):
             return self.__class__(self._data + other._data)
         elif isinstance(other, str):
             return self.__class__(self._data + other.encode("ASCII"))
-
-        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-
-        if isinstance(other, SeqRecord):
-            # Get the SeqRecord's __radd__ to handle this
-            return NotImplemented
         else:
-            raise TypeError
+            # If other is a SeqRecord, then SeqRecord's __radd__ will handle
+            # this. If not, returning NotImplemented will trigger a TypeError.
+            return NotImplemented
 
     def __radd__(self, other):
         """Add a sequence string on the left.
@@ -473,7 +523,7 @@ class _SeqAbstractBaseClass(ABC):
         if isinstance(other, str):
             return self.__class__(other.encode("ASCII") + self._data)
         else:
-            raise TypeError
+            return NotImplemented
 
     def __mul__(self, other):
         """Multiply sequence by integer.
@@ -749,7 +799,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         The location of the typical start codon before that can be found by
-        ending the search at positon 15:
+        ending the search at position 15:
 
         >>> my_rna.rfind("AUG", end=15)
         3
@@ -838,7 +888,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         The location of the typical start codon before that can be found by
-        ending the search at positon 15:
+        ending the search at position 15:
 
         >>> my_rna.rindex("AUG", end=15)
         3
@@ -1289,6 +1339,20 @@ class _SeqAbstractBaseClass(ABC):
         else:
             return self.__class__(data)
 
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self._data.isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self._data.islower()
+
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
     ):
@@ -1371,14 +1435,6 @@ class _SeqAbstractBaseClass(ABC):
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead
         """
-        if isinstance(table, str) and len(table) == 256:
-            raise ValueError(
-                "The MutableSeq object translate method DOES NOT "
-                "take a 256 character string mapping table like "
-                "the python string object's translate method. "
-                "Use str(my_seq).translate(...) instead."
-            )
-
         try:
             data = str(self)
         except UndefinedSequenceError:
@@ -1448,13 +1504,32 @@ class _SeqAbstractBaseClass(ABC):
                         BiopythonDeprecationWarning,
                     )
                     inplace = True
-                if b"U" in self._data or b"u" in self._data:
+                if isinstance(self._data, _PartiallyDefinedSequenceData):
+                    for seq in self._data._data.values():
+                        if b"U" in seq or b"u" in seq:
+                            warnings.warn(
+                                "seq.complement() will change in the near "
+                                "future to always return DNA nucleotides only. "
+                                "Please use\n"
+                                "\n"
+                                "seq.complement_rna()\n"
+                                "\n"
+                                "if you want to receive an RNA sequence instead.",
+                                BiopythonDeprecationWarning,
+                            )
+                            for seq in self._data._data.values():
+                                if b"t" in seq or b"T" in seq:
+                                    raise ValueError("Mixed RNA/DNA found")
+                            ttable = _rna_complement_table
+                            break
+
+                elif b"U" in self._data or b"u" in self._data:
                     warnings.warn(
-                        "mutable_seq.complement() will change in the near "
-                        "future to always return DNA nucleotides only. "
+                        "seq.complement() will change in the near future to "
+                        "always return DNA nucleotides only. "
                         "Please use\n"
                         "\n"
-                        "mutable_seq.complement_rna()\n"
+                        "seq.complement_rna()\n"
                         "\n"
                         "if you want to receive an RNA sequence instead.",
                         BiopythonDeprecationWarning,
@@ -1574,13 +1649,30 @@ class _SeqAbstractBaseClass(ABC):
                     inplace = True
                 else:
                     inplace = False
-                if b"U" in self._data or b"u" in self._data:
+                if isinstance(self._data, _PartiallyDefinedSequenceData):
+                    for seq in self._data._data.values():
+                        if b"U" in seq or b"u" in seq:
+                            warnings.warn(
+                                "seq.reverse_complement() will change in the near "
+                                "future to always return DNA nucleotides only. "
+                                "Please use\n"
+                                "\n"
+                                "seq.reverse_complement_rna()\n"
+                                "\n"
+                                "if you want to receive an RNA sequence instead.",
+                                BiopythonDeprecationWarning,
+                            )
+                            for seq in self._data._data.values():
+                                if b"t" in seq or b"T" in seq:
+                                    raise ValueError("Mixed RNA/DNA found")
+                            return self.reverse_complement_rna(inplace=inplace)
+                elif b"U" in self._data or b"u" in self._data:
                     warnings.warn(
-                        "mutable_seq.reverse_complement() will change in the "
-                        "near future to always return DNA nucleotides only. "
+                        "seq.reverse_complement() will change in the near "
+                        "future to always return DNA nucleotides only. "
                         "Please use\n"
                         "\n"
-                        "mutable_seq.reverse_complement_rna()\n"
+                        "seq.reverse_complement_rna()\n"
                         "\n"
                         "if you want to receive an RNA sequence instead.",
                         BiopythonDeprecationWarning,
@@ -1690,12 +1782,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
-        try:
-            data = self._data.replace(b"T", b"U").replace(b"t", b"u")
-        except UndefinedSequenceError:
-            # transcribing an undefined sequence yields an undefined sequence
-            # of the same length
-            return self
+        data = self._data.replace(b"T", b"U").replace(b"t", b"u")
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1743,12 +1830,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
-        try:
-            data = self._data.replace(b"U", b"T").replace(b"u", b"t")
-        except UndefinedSequenceError:
-            # back-transcribing an undefined sequence yields an undefined
-            # sequence of the same length
-            return self
+        data = self._data.replace(b"U", b"T").replace(b"u", b"t")
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1839,6 +1921,32 @@ class _SeqAbstractBaseClass(ABC):
             return self
         return self.__class__(data)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if isinstance(self._data, (bytes, bytearray)):
+            return True
+        else:
+            return self._data.defined
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        if isinstance(self._data, (bytes, bytearray)):
+            length = len(self)
+            if length > 0:
+                return ((0, length),)
+            else:
+                return ()
+        else:
+            return self._data.defined_ranges
+
 
 class Seq(_SeqAbstractBaseClass):
     """Read-only sequence object (essentially a string with biological methods).
@@ -1860,7 +1968,7 @@ class Seq(_SeqAbstractBaseClass):
 
         Arguments:
          - data - Sequence, required (string)
-         - length - Sequence length, used only if data is None (integer)
+         - length - Sequence length, used only if data is None or a dictionary (integer)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -1881,31 +1989,89 @@ class Seq(_SeqAbstractBaseClass):
         sequence contents of a Seq object created in this way will raise
         an UndefinedSequenceError:
 
-        >>> my_undefined_seq = Seq(None, 20)
-        >>> my_undefined_seq
+        >>> my_undefined_sequence = Seq(None, 20)
+        >>> my_undefined_sequence
         Seq(None, length=20)
-        >>> len(my_undefined_seq)
+        >>> len(my_undefined_sequence)
         20
-        >>> print(my_undefined_seq)
+        >>> print(my_undefined_sequence)
         Traceback (most recent call last):
         ...
         Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+
+        If the sequence contents is known for parts of the sequence only, use
+        a dictionary for the data argument to pass the known sequence segments:
+
+        >>> my_partially_defined_sequence = Seq({3: "ACGT"}, 10)
+        >>> my_partially_defined_sequence
+        Seq({3: 'ACGT'}, length=10)
+        >>> len(my_partially_defined_sequence)
+        10
+        >>> print(my_partially_defined_sequence)
+        Traceback (most recent call last):
+        ...
+        Bio.Seq.UndefinedSequenceError: Sequence content is only partially defined
+        >>> my_partially_defined_sequence[3:7]
+        Seq('ACGT')
+        >>> print(my_partially_defined_sequence[3:7])
+        ACGT
         """
-        if length is None:
-            if isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
-                self._data = data
-            elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
-                self._data = bytes(data)
-            elif isinstance(data, str):
-                self._data = bytes(data, encoding="ASCII")
+        if data is None:
+            if length is None:
+                raise ValueError("length must not be None if data is None")
+            elif length == 0:
+                self._data = b""
+            elif length < 0:
+                raise ValueError("length must not be negative.")
             else:
-                raise TypeError(
-                    "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
-                )
+                self._data = _UndefinedSequenceData(length)
+        elif isinstance(data, (bytes, SequenceDataAbstractBaseClass)):
+            self._data = data
+        elif isinstance(data, (bytearray, _SeqAbstractBaseClass)):
+            self._data = bytes(data)
+        elif isinstance(data, str):
+            self._data = bytes(data, encoding="ASCII")
+        elif isinstance(data, dict):
+            if length is None:
+                raise ValueError("length must not be None if data is a dictionary")
+            elif length == 0:
+                self._data = b""
+            elif length < 0:
+                raise ValueError("length must not be negative.")
+            else:
+                end = -1
+                starts = sorted(data.keys())
+                _data = {}
+                for start in starts:
+                    seq = data[start]
+                    if isinstance(seq, str):
+                        seq = bytes(seq, encoding="ASCII")
+                    else:
+                        try:
+                            seq = bytes(seq)
+                        except Exception:
+                            raise ValueError("Expected bytes-like objects or strings")
+                    if start < end:
+                        raise ValueError("Sequence data are overlapping.")
+                    elif start == end:
+                        _data[current] += seq  # noqa: F821
+                    else:
+                        _data[start] = seq
+                        current = start
+                    end = start + len(seq)
+                if end > length:
+                    raise ValueError(
+                        "Provided sequence data extend beyond sequence length."
+                    )
+                elif end == length and current == 0:
+                    # sequence is fully defined
+                    self._data = _data[current]
+                else:
+                    self._data = _PartiallyDefinedSequenceData(length, _data)
         else:
-            if data is not None:
-                raise ValueError("length should be None if data is None")
-            self._data = _UndefinedSequenceData(length)
+            raise TypeError(
+                "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
+            )
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -2215,7 +2381,7 @@ class UnknownSeq(Seq):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
-                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
             )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
@@ -2266,7 +2432,7 @@ class UnknownSeq(Seq):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError(
-                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
             )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
@@ -2541,6 +2707,25 @@ class UnknownSeq(Seq):
             return self.__class__(len(temp_data), character=self._character)
         return Seq(temp_data)
 
+    @property
+    def defined(self):
+        """Return True if the sequence is defined, False if undefined or partially defined.
+
+        Zero-length sequences are always considered to be defined.
+        """
+        if self._length == 0:
+            return True
+        return False
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        As the sequence contents of an UnknownSeq object is fully undefined,
+        the return value is always an empty tuple.
+        """
+        return ()
+
 
 class MutableSeq(_SeqAbstractBaseClass):
     """An editable sequence object.
@@ -2643,7 +2828,7 @@ class MutableSeq(_SeqAbstractBaseClass):
             elif isinstance(value, str):
                 self._data[index] = value.encode("ASCII")
             else:
-                raise TypeError("received unexpected type %s" % type(value))
+                raise TypeError(f"received unexpected type '{type(value).__name__}'")
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -2776,17 +2961,19 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
 
     Objects of this class can be used to create a Seq object to represent
     sequences with a known length, but an unknown sequence contents.
-    Calling __len__ returns the sequence length, calling __getitem__ raises a
-    ValueError except for requests of zero size, for which it returns an empty
-    bytes object.
+    Calling __len__ returns the sequence length, calling __getitem__ raises an
+    UndefinedSequenceError except for requests of zero size, for which it
+    returns an empty bytes object.
     """
 
     __slots__ = ("_length",)
 
     def __init__(self, length):
-        """Initialize the object with the sequence length."""
-        if length < 0:
-            raise ValueError("Length must not be negative.")
+        """Initialize the object with the sequence length.
+
+        The calling function is responsible for ensuring that the length is
+        greater than zero.
+        """
         self._length = length
         super().__init__()
 
@@ -2804,14 +2991,300 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         return self._length
 
     def __bytes__(self):
-        if self._length == 0:
-            return b""
         raise UndefinedSequenceError("Sequence content is undefined")
 
     def __add__(self, other):
-        if isinstance(other, _UndefinedSequenceData):
-            return _UndefinedSequenceData(self._length + other._length)
-        raise TypeError
+        length = len(self) + len(other)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            if isinstance(other, _UndefinedSequenceData):
+                return _UndefinedSequenceData(length)
+            else:
+                return NotImplemented
+                # _PartiallyDefinedSequenceData.__radd__ will handle this
+        else:
+            data = {len(self): other}
+            return _PartiallyDefinedSequenceData(length, data)
+
+    def __radd__(self, other):
+        data = {0: bytes(other)}
+        length = len(other) + len(self)
+        return _PartiallyDefinedSequenceData(length, data)
+
+    def upper(self):
+        """Return an upper case copy of the sequence."""
+        # An upper case copy of an undefined sequence is an undefined
+        # sequence of the same length
+        return _UndefinedSequenceData(self._length)
+
+    def lower(self):
+        """Return a lower case copy of the sequence."""
+        # A lower case copy of an undefined sequence is an undefined
+        # sequence of the same length
+        return _UndefinedSequenceData(self._length)
+
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is undefined")
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is undefined")
+
+    def replace(self, old, new):
+        """Return a copy with all occurrences of substring old replaced by new."""
+        # Replacing substring old by new in an undefined sequence will result
+        # in an undefined sequence of the same length, if old and new have the
+        # number of characters.
+        if len(old) != len(new):
+            raise UndefinedSequenceError("Sequence content is undefined")
+        return _UndefinedSequenceData(self._length)
+
+    @property
+    def defined(self):
+        """Return False, as the sequence is not defined and has a non-zero length."""
+        return False
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        As the sequence contents of an _UndefinedSequenceData object is fully
+        undefined, the return value is always an empty tuple.
+        """
+        return ()
+
+
+class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
+    """Stores the length of a sequence with an undefined sequence contents (PRIVATE).
+
+    Objects of this class can be used to create a Seq object to represent
+    sequences with a known length, but with a sequence contents that is only
+    partially known.
+    Calling __len__ returns the sequence length, calling __getitem__ returns
+    the sequence contents if known, otherwise an UndefinedSequenceError is
+    raised.
+    """
+
+    __slots__ = ("_length", "_data")
+
+    def __init__(self, length, data):
+        """Initialize with the sequence length and defined sequence segments.
+
+        The calling function is responsible for ensuring that the length is
+        greater than zero.
+        """
+        self._length = length
+        self._data = data
+        super().__init__()
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            start, end, step = key.indices(self._length)
+            size = len(range(start, end, step))
+            if size == 0:
+                return b""
+            data = {}
+            for s, d in self._data.items():
+                indices = range(-s, -s + self._length)[key]
+                e = indices.stop
+                if step > 0:
+                    if e <= 0:
+                        continue
+                    if indices.start < 0:
+                        s = indices.start % step
+                    else:
+                        s = indices.start
+                else:  # step < 0
+                    if e < 0:
+                        e = None
+                    end = len(d) - 1
+                    if indices.start > end:
+                        s = end + (indices.start - end) % step
+                    else:
+                        s = indices.start
+                    if s < 0:
+                        continue
+                start = (s - indices.start) // step
+                d = d[s:e:step]
+                if d:
+                    data[start] = d
+            if len(data) == 0:  # Fully undefined sequence
+                return _UndefinedSequenceData(size)
+            # merge adjacent sequence segments
+            end = -1
+            previous = None  # not needed here, but it keeps flake happy
+            items = data.items()
+            data = {}
+            for start, seq in items:
+                if end == start:
+                    data[previous] += seq
+                else:
+                    data[start] = seq
+                    previous = start
+                end = start + len(seq)
+            if len(data) == 1:
+                seq = data.get(0)
+                if seq is not None and len(seq) == size:
+                    return seq  # Fully defined sequence; return bytes
+            if step < 0:
+                # use this after we drop Python 3.7:
+                # data = {start: data[start] for start in reversed(data)}
+                # use this as long as we support Python 3.7:
+                data = {start: data[start] for start in reversed(list(data.keys()))}
+            return _PartiallyDefinedSequenceData(size, data)
+        elif self._length <= key:
+            raise IndexError("sequence index out of range")
+        else:
+            for start, seq in self._data.items():
+                if start <= key and key < start + len(seq):
+                    return seq[key - start]
+            raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
+
+    def __len__(self):
+        return self._length
+
+    def __bytes__(self):
+        raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def __add__(self, other):
+        length = len(self) + len(other)
+        data = dict(self._data)
+        items = list(self._data.items())
+        start, seq = items[-1]
+        end = start + len(seq)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            if isinstance(other, _UndefinedSequenceData):
+                pass
+            elif isinstance(other, _PartiallyDefinedSequenceData):
+                other_items = list(other._data.items())
+                if end == len(self):
+                    other_start, other_seq = other_items.pop(0)
+                    if other_start == 0:
+                        data[start] += other_seq
+                    else:
+                        data[len(self) + other_start] = other_seq
+                for other_start, other_seq in other_items:
+                    data[len(self) + other_start] = other_seq
+        else:
+            if end == len(self):
+                data[start] += other
+            else:
+                data[len(self)] = other
+        return _PartiallyDefinedSequenceData(length, data)
+
+    def __radd__(self, other):
+        length = len(other) + len(self)
+        try:
+            other = bytes(other)
+        except UndefinedSequenceError:
+            data = {len(other) + start: seq for start, seq in self._data.items()}
+        else:
+            data = {0: other}
+            items = list(self._data.items())
+            start, seq = items.pop(0)
+            if start == 0:
+                data[0] += seq
+            else:
+                data[len(other) + start] = seq
+            for start, seq in items:
+                data[len(other) + start] = seq
+        return _PartiallyDefinedSequenceData(length, data)
+
+    def __mul__(self, other):
+        length = self._length
+        items = self._data.items()
+        data = {}
+        end = -1
+        previous = None  # not needed here, but it keeps flake happy
+        for i in range(other):
+            for start, seq in items:
+                start += i * length
+                if end == start:
+                    data[previous] += seq
+                else:
+                    data[start] = seq
+                    previous = start
+            end = start + len(seq)
+        return _PartiallyDefinedSequenceData(length * other, data)
+
+    def upper(self):
+        """Return an upper case copy of the sequence."""
+        data = {start: seq.upper() for start, seq in self._data.items()}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def lower(self):
+        """Return a lower case copy of the sequence."""
+        data = {start: seq.lower() for start, seq in self._data.items()}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def isupper(self):
+        """Return True if all ASCII characters in data are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def islower(self):
+        """Return True if all ASCII characters in data are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        # Character case is irrelevant for an undefined sequence
+        raise UndefinedSequenceError("Sequence content is only partially defined")
+
+    def translate(self, table, delete=b""):
+        """Return a copy with each character mapped by the given translation table.
+
+          table
+            Translation table, which must be a bytes object of length 256.
+
+        All characters occurring in the optional argument delete are removed.
+        The remaining characters are mapped through the given translation table.
+        """
+        items = self._data.items()
+        data = {start: seq.translate(table, delete) for start, seq in items}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    def replace(self, old, new):
+        """Return a copy with all occurrences of substring old replaced by new."""
+        # Replacing substring old by new in the undefined sequence segments
+        # will result in an undefined sequence segment of the same length, if
+        # old and new have the number of characters. If not, an error is raised,
+        # as the correct start positions cannot be calculated reliably.
+        if len(old) != len(new):
+            raise UndefinedSequenceError(
+                "Sequence content is only partially defined; substring \n"
+                "replacement cannot be performed reliably"
+            )
+        items = self._data.items()
+        data = {start: seq.replace(old, new) for start, seq in items}
+        return _PartiallyDefinedSequenceData(self._length, data)
+
+    @property
+    def defined(self):
+        """Return False, as the sequence is not fully defined and has a non-zero length."""
+        return False
+
+    @property
+    def defined_ranges(self):
+        """Return a tuple of the ranges where the sequence contents is defined.
+
+        The return value has the format ((start1, end1), (start2, end2), ...).
+        """
+        return tuple((start, start + len(seq)) for start, seq in self._data.items())
 
 
 # The transcribe, backward_transcribe, and translate functions are
@@ -2929,8 +3402,18 @@ def _translate_str(
     except ValueError:
         # Assume it's a table name
         # The same table can be used for RNA or DNA
-        codon_table = CodonTable.ambiguous_generic_by_name[table]
-
+        try:
+            codon_table = CodonTable.ambiguous_generic_by_name[table]
+        except KeyError:
+            if isinstance(table, str):
+                raise ValueError(
+                    "The Bio.Seq translate methods and function DO NOT "
+                    "take a character string mapping table like the python "
+                    "string object's translate method. "
+                    "Use str(my_seq).translate(...) instead."
+                ) from None
+            else:
+                raise TypeError("table argument must be integer or string") from None
     except (AttributeError, TypeError):
         # Assume it's a CodonTable object
         if isinstance(table, CodonTable.CodonTable):

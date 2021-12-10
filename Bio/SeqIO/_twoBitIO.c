@@ -360,7 +360,7 @@ blocks_converter(PyObject* object, void* pointer)
     }
     if (view->shape[1] != 2) {
         PyErr_Format(PyExc_RuntimeError,
-                     "blocks should have two colums (found %zd)",
+                     "blocks should have two columns (found %zd)",
                      view->shape[1]);
         goto exit;
     }

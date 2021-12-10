@@ -402,9 +402,7 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 emission_counts[(cur_state, cur_emission)] += 1
             except KeyError:
-                raise KeyError(
-                    "Unexpected emission (%s, %s)" % (cur_state, cur_emission)
-                )
+                raise KeyError(f"Unexpected emission ({cur_state}, {cur_emission})")
         return emission_counts
 
     def _count_transitions(self, state_seq, transition_counts):
@@ -423,8 +421,6 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 transition_counts[(cur_state, next_state)] += 1
             except KeyError:
-                raise KeyError(
-                    "Unexpected transition (%s, %s)" % (cur_state, next_state)
-                )
+                raise KeyError(f"Unexpected transition ({cur_state}, {next_state})")
 
         return transition_counts

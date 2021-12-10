@@ -87,7 +87,7 @@ class NeighborSearch:
 
         """
         if level not in entity_levels:
-            raise PDBException("%s: Unknown level" % level)
+            raise PDBException(f"{level}: Unknown level")
         center = numpy.require(center, dtype="d", requirements="C")
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
@@ -110,7 +110,7 @@ class NeighborSearch:
 
         """
         if level not in entity_levels:
-            raise PDBException("%s: Unknown level" % level)
+            raise PDBException(f"{level}: Unknown level")
         neighbors = self.kdt.neighbor_search(radius)
         atom_list = self.atom_list
         atom_pair_list = []

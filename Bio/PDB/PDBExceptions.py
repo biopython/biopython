@@ -29,3 +29,10 @@ class PDBConstructionWarning(BiopythonWarning):
     """Define class PDBConstructionWarning."""
 
     pass
+
+
+# The SMCRA structure could not be written to file
+class PDBIOException(Exception):
+    """Define class PDBIOException."""
+
+    pass
