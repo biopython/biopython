@@ -34,6 +34,8 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+Store information for 'i' lines in MAF.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -50,6 +52,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Erik  Whiting
 - Neil P. (first contribution)
+- Lucille Lopez-Delisle (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================
