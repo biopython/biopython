@@ -254,6 +254,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Robert Ernst <https://github.com/rernst>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
+- Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sean Davis <https://github.com/seandavi>

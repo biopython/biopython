@@ -98,7 +98,7 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertFalse(EcoRI.is_unknown())
         self.assertTrue(EcoRI.is_palindromic())
         self.assertTrue(EcoRI.is_comm())
-        self.assertIn("Life Technologies", EcoRI.supplier_list())
+        self.assertIn("Thermo Fisher Scientific", EcoRI.supplier_list())
         self.assertEqual(EcoRI.elucidate(), "G^AATT_C")
         self.assertEqual(EcoRI.search(self.ecosite_seq), [6])
         self.assertEqual(EcoRI.characteristic(), (1, -1, None, None, "GAATTC"))
@@ -469,7 +469,7 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(batch.current_suppliers(), ["Sigma Chemical Corporation"])
         self.assertIn(EcoRI, batch)
         self.assertNotIn(AanI, batch)
-        batch.add_supplier("B")  # Life Technologies
+        batch.add_supplier("B")  #Thermo Fisher Scientific
         self.assertIn(AanI, batch)
 
     def test_batch_analysis(self):
@@ -564,7 +564,7 @@ class TestPrintOutputs(unittest.TestCase):
         out = self.StringIO()
         self.sys.stdout = out
         EcoRI.suppliers()
-        self.assertIn("Life Technologies", out.getvalue())
+        self.assertIn("Thermo Fisher Scientific", out.getvalue())
         self.assertIsNone(SnaI.suppliers())
         EcoRI.all_suppliers()  # Independent of enzyme, list of all suppliers
         self.assertIn("Agilent Technologies", out.getvalue())
