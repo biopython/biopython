@@ -469,7 +469,7 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(batch.current_suppliers(), ["Sigma Chemical Corporation"])
         self.assertIn(EcoRI, batch)
         self.assertNotIn(AanI, batch)
-        batch.add_supplier("B")  #Thermo Fisher Scientific
+        batch.add_supplier("B")  # Thermo Fisher Scientific
         self.assertIn(AanI, batch)
 
     def test_batch_analysis(self):
