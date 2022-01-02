@@ -925,6 +925,60 @@ class FeatureLocation:
             return self._shift(other)
         else:
             return NotImplemented
+    
+    def __sub__(self,other):
+        """Combine location with another FeatureLocation object, or shift it.
+        
+        You can subtract two feature locations to make a join CompoundLocation:
+            
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> f1 = FeatureLocation(5, 10)
+        >>> f2 = FeatureLocation(20, 30)
+        >>> start = -f2.start
+        >>> end = -f2.end
+        >>> f2 = FeatureLocation(end, start)
+        >>> combined = f1 + f2
+        >>> print(combined)
+        join{[5:10], [-30:-0]}
+        
+        This is thus equivalent to:
+            
+        >>> from Bio.SeqFeature import CompoundLocation
+        >>> join = CompoundLocation([f1, f2])
+        >>> print(join)
+        join{[5:10], [-30:-20]}
+        
+        You can also use sum(...) in this way:
+            
+        >>> join = sum([f1, f2])
+        >>> print(join)
+        join{[5:10], [-30:-20]}
+        
+        Furthermore, you can combine a FeatureLocation with a CompoundLocation
+        in this way.
+        
+        Separately, subtracting an integer will give a new FeatureLocation with
+        its start and end offset by that amount. For example:
+            
+        >>> print(f1)
+        [5:10]
+        >>> print(f1 + (-100))
+        [-95:-90]
+        >>> print((-200) + f1)
+        [-195:-190]
+        
+        This can be useful when editing annotation.
+        """
+        
+        if isinstance(other, FeatureLocation):
+            start = -other.start
+            end = -other.end
+            other = FeatureLocation(end, start)
+            return CompoundLocation([self, other])
+        elif isinstance(other, int):
+            return self._shift(-other)
+        else:
+            return NotImplemented
 
     def __nonzero__(self):
         """Return True regardless of the length of the feature.
