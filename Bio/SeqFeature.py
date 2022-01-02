@@ -939,7 +939,7 @@ class FeatureLocation:
         >>> f2 = FeatureLocation(end, start)
         >>> combined = f1 + f2
         >>> print(combined)
-        join{[5:10], [-30:-0]}
+        join{[5:10], [-30:-20]}
         
         This is thus equivalent to:
             
