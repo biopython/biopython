@@ -295,7 +295,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>
--Vishesh Soni <https://github.com/vishesh2802>
+- Vishesh Soni <https://github.com/vishesh2802>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
