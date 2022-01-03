@@ -326,18 +326,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             blockSizes = numpy.array(blockSizes)
             qStarts = numpy.array(qStarts)
             tStarts = numpy.array(tStarts)
-            if strand == "++":
+            if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 qStarts *= 3
+                qSize *= 3
                 blockSizes *= 3
             qPosition = qStarts[0]
             tPosition = tStarts[0]
             coordinates = [[tPosition, qPosition]]
             for blockSize, tStart, qStart in zip(blockSizes, tStarts, qStarts):
-                if tStart > tPosition:
+                if tStart != tPosition:
                     coordinates.append([tStart, qPosition])
                     tPosition = tStart
-                if qStart > qPosition:
+                if qStart != qPosition:
                     coordinates.append([tPosition, qStart])
                     qPosition = qStart
                 tPosition += blockSize
@@ -346,6 +347,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             coordinates = numpy.array(coordinates).transpose()
             if strand == "-":
                 coordinates[1, :] = qSize - coordinates[1, :]
+            elif strand == "+-":
+                coordinates[0, :] = tSize - coordinates[0, :]
             alignment = Alignment(records, coordinates)
             alignment.matches = int(words[0])
             alignment.misMatches = int(words[1])
@@ -357,7 +360,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             tEnd = int(words[16])
             if strand == "-":
                 qStart, qEnd = qEnd, qStart
-            elif strand == "++":
+            if strand == "+-":
+                tStart, tEnd = tEnd, tStart
+            if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 qStart *= 3
                 qEnd *= 3
@@ -373,6 +378,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if strand == "-":
                 coordinates = coordinates.copy()
                 coordinates[1, :] = qSize - coordinates[1, :]
+            if strand == "+-":
+                coordinates = coordinates.copy()
+                coordinates[0, :] = tSize - coordinates[0, :]
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0
@@ -394,11 +402,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     tStart = tEnd
                     qStart = qEnd
-            if strand == "++":
+            if strand in ("++", "+-"):
                 assert qBaseInsert % 3 == 0
                 qBaseInsert //= 3
             if qNumInsert != int(words[4]):
-                raise ValueError("Inconsistent qNumInsert found (%s, expected %d):\n%s" % (words[4], qNumInsert, line))
+                raise ValueError("Inconsistent qNumInsert found (%s, expected %d)" % (words[4], qNumInsert))
             if qBaseInsert != int(words[5]):
                 raise ValueError("Inconsistent qBaseInsert found (%s, expected %d)" % (words[5], qBaseInsert))
             if tNumInsert != int(words[6]):
