@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Classes and methods for tree construction."""
+"""Classes and methods for tree construction and distance matrices."""
 
 import itertools
 import copy
@@ -355,6 +355,51 @@ class DistanceMatrix(_Matrix):
 
 # Shim for compatibility with Biopython<1.70 (#1304)
 _DistanceMatrix = DistanceMatrix
+
+
+def parse_phylip_distance_matrix(handle):
+    """Parse a PHYLIP format distance matrix file into a DistanceMatrix object.
+
+    Argument handle should be an open file handle in text mode.
+
+    Duplicate names are not supported (a limitation of the distanceMatrix
+    object).
+
+    >>> with open("../Tests/TreeConstruction/msa.phylip-dist.txt") as handle:
+    ...     dm = parse_phylip_distance_matrix(handle)
+    ...
+    >>> len(dm)
+    5
+    >>> dm.names
+    ['Gamma', 'Beta', 'Epsilon', 'Alpha', 'Delta']
+    >>> dm["Alpha", "Epsilon"]
+    0.615385
+
+    NOTE - Will only look at the LOWER triangular entries and generate a
+    symmetrix matrix. If a full matrix file is supplied, we do check for a
+    zero diagonal, but ignore the upper triangular entries which are ASSUMED
+    to be symetric.
+    """
+    line = handle.readline().rstrip("\n").rstrip("\r").strip()
+    n = int(line)
+
+    names = []
+    lower_triangular_matrix = []
+    i = 0
+    for line in handle.readlines():
+        line.rstrip("\n").rstrip("\r")
+        parts = line.split()
+        if parts:
+            i = i + 1
+            names.append(parts[0])
+            lower_triangular_matrix.append([float(_) for _ in parts[1 : 1 + i]])
+            if len(parts) >= i:
+                assert (
+                    float(parts[i]) == 0
+                ), f"Bad zero element {parts[i]} for {parts[0]}"
+    assert i == n, f"Number of lines {i}, did not match header {n}"
+    handle.close()
+    return DistanceMatrix(names, lower_triangular_matrix)
 
 
 class DistanceCalculator:
@@ -1175,3 +1220,9 @@ class ParsimonyTreeConstructor(TreeConstructor):
             dtc = DistanceTreeConstructor(DistanceCalculator("identity"), "upgma")
             self.starting_tree = dtc.build_tree(alignment)
         return self.searcher.search(self.starting_tree, alignment)
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()
