@@ -1344,23 +1344,25 @@ class Alignment:
         """
         import numpy
 
+        coordinates = self.coordinates.copy()
         if isinstance(key, slice):
-            if key.indices(len(self)) == (0, 2, 1):
+            n = len(self)
+            if key.indices(n) == (0, n, 1):
                 sequences = self.sequences
-                coordinates = self.coordinates.copy()
                 alignment = Alignment(sequences, coordinates)
-                alignment.score = self.score
+                try:
+                    alignment.score = self.score
+                except AttributeError:
+                    pass
                 return alignment
             raise NotImplementedError
         sequences = list(self.sequences)
-        coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
-            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                n = len(sequences[i])
-                coordinates[i, :] = n - coordinates[i, :]
+            if coordinates[i, 0] > coordinates[i, -1]:  # reverse strand
+                coordinates[i, :] = len(sequences[i]) - coordinates[i, :]
                 sequences[i] = reverse_complement(sequences[i], inplace=False)
+        n, m = self.shape
         if isinstance(key, int):
-            n, m = self.shape
             row = key
             if row < 0:
                 row += n
@@ -1373,31 +1375,37 @@ class Alignment:
                 pass
             line = ""
             steps = numpy.diff(coordinates, 1)
-            gaps = steps[row] == 0  # seriously, flake8??
-            steps = steps.max(0)
+            gaps = steps.max(0)
+            steps = steps[row]
             i = coordinates[row, 0]
             for step, gap in zip(steps, gaps):
-                if gap:
-                    line += "-" * step
-                else:
+                if step:
                     j = i + step
                     line += str(sequence[i:j])
                     i = j
-            # line may be a str or a Seq at this point.
-            return str(line)
+                else:
+                    line += "-" * gap
+            return line
         if isinstance(key, tuple):
             try:
                 row, col = key
             except ValueError:
                 raise ValueError("only tuples of length 2 can be alignment indices")
             if isinstance(row, int):
-                n, m = self.shape
                 if row < 0:
                     row += n
                 if row < 0 or row >= n:
                     raise IndexError(
                         "row index %d is out of bounds (%d rows)" % (row, n)
                     )
+                steps = numpy.diff(coordinates, 1)
+                gaps = steps.max(0)
+                steps = steps[row]
+                sequence = sequences[row]
+                try:
+                    sequence = sequence.seq  # SeqRecord confusion
+                except AttributeError:
+                    pass
                 if isinstance(col, int):
                     start_index = col
                     if start_index < 0:
@@ -1406,74 +1414,71 @@ class Alignment:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    steps = numpy.diff(coordinates, 1)
-                    indices = steps.max(0).cumsum()
-                    steps = steps[row]
+                    indices = gaps.cumsum()
                     index = indices.searchsorted(start_index, side="right")
                     if steps[index]:
                         offset = start_index - indices[index]
                         indices = coordinates[row, 0] + steps.cumsum()
                         i = indices[index] + offset
-                        line = sequences[row][i : i + 1]
+                        line = sequence[i]
                     else:
                         line = "-"
                     return line
                 if isinstance(col, slice):
-                    sequence = sequences[row]
-                    try:
-                        sequence = sequence.seq  # SeqRecord confusion
-                    except AttributeError:
-                        pass
-                    sequence = str(sequence)
                     start_index, stop_index, step = col.indices(m)
                     if start_index < stop_index and step == 1:
-                        steps = numpy.diff(coordinates, 1)
-                        gaps = steps[row] == 0  # come on flake8, this is ugly
-                        sequence_indices = coordinates[row, 0] + steps[row, :].cumsum()
-                        steps = steps.max(0)
-                        indices = steps.cumsum()
+                        sequence_indices = coordinates[row, 0] + steps.cumsum()
+                        indices = gaps.cumsum()
                         i = indices.searchsorted(start_index, side="right")
                         j = i + indices[i:].searchsorted(stop_index, side="right")
                         if i == j:
                             length = stop_index - start_index
-                            if gaps[i]:
+                            if steps[i] == 0:
                                 line = "-" * length
                             else:
                                 offset = start_index - indices[i]
                                 start = sequence_indices[i] + offset
                                 stop = start + length
-                                line = sequence[start:stop]
+                                line = str(sequence[start:stop])
                         else:
                             length = indices[i] - start_index
                             stop = sequence_indices[i]
-                            if gaps[i]:
+                            if steps[i] == 0:
                                 line = "-" * length
                             else:
                                 start = stop - length
-                                line = sequence[start:stop]
+                                line = str(sequence[start:stop])
                             i += 1
                             while i < j:
-                                step = steps[i]
-                                if gaps[i]:
+                                step = gaps[i]
+                                if steps[i] == 0:
                                     line += "-" * step
                                 else:
                                     start = stop
                                     stop = start + step
-                                    line += sequence[start:stop]
+                                    line += str(sequence[start:stop])
                                 i += 1
                             length = stop_index - indices[j - 1]
                             if length > 0:
-                                if gaps[j]:
+                                if steps[j] == 0:
                                     line += "-" * length
                                 else:
                                     start = stop
                                     stop = start + length
-                                    line += sequence[start:stop]
+                                    line += str(sequence[start:stop])
                         return line
                     # make an iterable if step != 1
                     col = range(start_index, stop_index, step)
                 # try if we can use col as an iterable
-                line = self[row]
+                line = ""
+                i = coordinates[row, 0]
+                for step, gap in zip(steps, gaps):
+                    if step:
+                        j = i + step
+                        line += str(sequence[i:j])
+                        i = j
+                    else:
+                        line += "-" * gap
                 try:
                     line = "".join(line[index] for index in col)
                 except IndexError:
@@ -1485,7 +1490,6 @@ class Alignment:
                 else:
                     return line
             if isinstance(row, slice):
-                n, m = self.shape
                 if isinstance(col, int):
                     if col < 0:
                         col += m
@@ -1505,6 +1509,7 @@ class Alignment:
                         starts = ends
                     else:
                         raise IndexError("column index %d is out of bounds" % col)
+
                     offset = index - col
                     line = ""
                     start, stop, step = row.indices(n)
@@ -1708,6 +1713,8 @@ class Alignment:
             else:
                 s1 = seq1[start1:end1]
                 s2 = seq2[start2:end2]
+                if len(s1) != len(s2):
+                    raise ValueError("Unequal step sizes in alignment")
                 aligned_seq1 += s1
                 aligned_seq2 += s2
                 for c1, c2 in zip(s1, s2):
@@ -1817,7 +1824,10 @@ class Alignment:
             coordinates = coordinates.copy()
             n = len(query)
             coordinates[1, :] = n - coordinates[1, :]
-        score = self.score
+        try:
+            score = self.score
+        except AttributeError:
+            score = 0
         blockSizes = []
         tStarts = []
         tStart, qStart = coordinates[:, 0]
@@ -1829,7 +1839,8 @@ class Alignment:
             elif qCount == 0:
                 tStart = tEnd
             else:
-                assert tCount == qCount
+                if tCount != qCount:
+                    raise ValueError("Unequal step sizes in alignment")
                 tStarts.append(tStart)
                 blockSizes.append(tCount)
                 tStart = tEnd
@@ -1941,7 +1952,8 @@ class Alignment:
                     tBaseInsert += tCount
                 tStart = tEnd
             else:
-                assert tCount == qCount
+                if tCount != qCount:
+                    raise ValueError("Unequal step sizes in alignment")
                 tStarts.append(tStart)
                 qStarts.append(qStart)
                 blockSizes.append(tCount)
@@ -2078,7 +2090,8 @@ class Alignment:
                     operation = None
                 tStart = tEnd
             else:
-                assert tCount == qCount
+                if tCount != qCount:
+                    raise ValueError("Unequal step sizes in alignment")
                 if pos is None:
                     pos = tStart
                 tStart = tEnd
@@ -2211,8 +2224,11 @@ class Alignment:
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 k = len(self.sequences[i])
                 coordinates[i, :] = k - coordinates[i, :]
-        steps = numpy.diff(coordinates, 1).max(0)
-        m = sum(steps)
+        steps = numpy.diff(coordinates, 1)
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps == 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        m = sum(gaps)
         return (n, m)
 
     @property
@@ -2613,6 +2629,8 @@ class Alignment:
                     if start1 < end1 and start2 < end2:  # aligned
                         segment1 = sequence1[start1:end1]
                         segment2 = sequence2[start2:end2]
+                        if len(segment1) != len(segment2):
+                            raise ValueError("Unequal step sizes in alignment")
                         for c1, c2 in zip(segment1, segment2):
                             m[c1, c2] += 1.0
                     start1, start2 = end1, end2
