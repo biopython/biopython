@@ -189,7 +189,7 @@ jobs:
       if: steps.cache-pip.outputs.cache-hit != 'true'
       run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+          python -m pip install --upgrade --upgrade-strategy eager -r .github/workflows/ci-dependencies.txt
 
     - name: Debug Info
       run: |
