@@ -297,6 +297,7 @@ class _Matrix:
 
     def __str__(self):
         """Get a lower triangular matrix string."""
+        # TODO - Change this to avoid cross platform float differences?
         matrix_string = "\n".join(
             [
                 self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
@@ -328,20 +329,23 @@ class DistanceMatrix(_Matrix):
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
 
-    def format_phylip(self, handle):
-        """Write data in Phylip format to a given file-like object or handle.
+    def format_phylip(self, handle=None):
+        """Write distance matrix data in Phylip format.
 
-        The output stream is the input distance matrix format used with Phylip
-        programs (e.g. 'neighbor'). See:
+        The PHYLIP distance matrix is used with programs like 'neighbor'. See:
         http://evolution.genetics.washington.edu/phylip/doc/neighbor.html
 
+        By default returns a string, but the optional argument handle can be
+        an open output file-like object.
+
         :Parameters:
-            handle : file or file-like object
+            handle : file or file-like object, default None.
                 A writeable text mode file handle or other object supporting
                 the 'write' method, such as StringIO or sys.stdout.
 
         """
-        handle.write(f"    {len(self.names)}\n")
+        # TODO - Additional argument for number of decimal places?
+        result = f"    {len(self.names)}\n"
         # Phylip needs space-separated, vertically aligned columns
         name_width = max(12, max(map(len, self.names)) + 1)
         value_fmts = ("{" + str(x) + ":.4f}" for x in range(1, len(self.matrix) + 1))
@@ -350,7 +354,11 @@ class DistanceMatrix(_Matrix):
             # Mirror the matrix values across the diagonal
             mirror_values = (self.matrix[j][i] for j in range(i + 1, len(self.matrix)))
             fields = itertools.chain([name], values, mirror_values)
-            handle.write(row_fmt.format(*fields))
+            result += row_fmt.format(*fields)
+        if handle:
+            handle.write(result)
+        else:
+            return result
 
 
 # Shim for compatibility with Biopython<1.70 (#1304)
@@ -374,6 +382,14 @@ def parse_phylip_distance_matrix(handle):
     ['Gamma', 'Beta', 'Epsilon', 'Alpha', 'Delta']
     >>> dm["Alpha", "Epsilon"]
     0.615385
+    >>> print(dm.format_phylip())
+        5
+    Gamma       0.0000  0.2308  0.4615  0.3846  0.5385
+    Beta        0.2308  0.0000  0.3846  0.2308  0.5385
+    Epsilon     0.4615  0.3846  0.0000  0.6154  0.1538
+    Alpha       0.3846  0.2308  0.6154  0.0000  0.5385
+    Delta       0.5385  0.5385  0.1538  0.5385  0.0000
+    <BLANKLINE>
 
     NOTE - Will only look at the LOWER triangular entries and generate a
     symmetrix matrix. If a full matrix file is supplied, we do check for a
@@ -436,25 +452,27 @@ class DistanceCalculator:
 
     >>> calculator = DistanceCalculator("identity")
     >>> dm = calculator.get_distance(aln)
-    >>> print(dm)  # doctest: +NORMALIZE_WHITESPACE
-    Alpha	0
-    Beta	0.23076923076923073	0
-    Gamma	0.3846153846153846	0.23076923076923073	0
-    Delta	0.5384615384615384	0.5384615384615384	0.5384615384615384	0
-    Epsilon	0.6153846153846154	0.3846153846153846	0.46153846153846156	0.15384615384615385	0
-        Alpha	Beta	Gamma	Delta	Epsilon
+    >>> print(dm.format_phylip())
+        5
+    Alpha       0.0000  0.2308  0.3846  0.5385  0.6154
+    Beta        0.2308  0.0000  0.2308  0.5385  0.3846
+    Gamma       0.3846  0.2308  0.0000  0.5385  0.4615
+    Delta       0.5385  0.5385  0.5385  0.0000  0.1538
+    Epsilon     0.6154  0.3846  0.4615  0.1538  0.0000
+    <BLANKLINE>
 
     Protein calculator with 'blosum62' model:
 
     >>> calculator = DistanceCalculator("blosum62")
     >>> dm = calculator.get_distance(aln)
-    >>> print(dm)  # doctest: +NORMALIZE_WHITESPACE
-    Alpha	0
-    Beta	0.36904761904761907	0
-    Gamma	0.49397590361445787	0.25	0
-    Delta	0.5853658536585367	0.5476190476190477	0.5662650602409638	0
-    Epsilon	0.7	0.3555555555555555	0.48888888888888893	0.2222222222222222	0
-        Alpha	Beta	Gamma	Delta	Epsilon
+    >>> print(dm.format_phylip())
+        5
+    Alpha       0.0000  0.3690  0.4940  0.5854  0.7000
+    Beta        0.3690  0.0000  0.2500  0.5476  0.3556
+    Gamma       0.4940  0.2500  0.0000  0.5663  0.4889
+    Delta       0.5854  0.5476  0.5663  0.0000  0.2222
+    Epsilon     0.7000  0.3556  0.4889  0.2222  0.0000
+    <BLANKLINE>
 
     """
 
