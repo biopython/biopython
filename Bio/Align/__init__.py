@@ -15,6 +15,7 @@ class, used in the Bio.AlignIO module.
 
 import sys
 import warnings
+import numbers
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
@@ -1367,12 +1368,31 @@ class Alignment:
             raise ValueError("Unequal step sizes in alignment")
         n = len(sequences)
         m = sum(gaps)
-        if isinstance(key, int):
+        if isinstance(key, numbers.Integral):
             row = key
+            col = None
+        elif isinstance(key, tuple):
+            try:
+                row, col = key
+            except ValueError:
+                raise ValueError("only tuples of length 2 can be alignment indices")
+        else:
+            raise TypeError("alignment indices must be integers, slices, or tuples")
+        if isinstance(row, numbers.Integral):
             if row < 0:
                 row += n
             if row < 0 or row >= n:
-                raise IndexError("row index %d is out of bounds (%d rows)" % (row, n))
+                raise IndexError(
+                    "row index %d is out of bounds (%d rows)" % (row, n)
+                )
+        if isinstance(col, numbers.Integral):
+            if col < 0:
+                col += m
+            if col < 0 or col >= m:
+                raise IndexError(
+                    "column index %d is out of bounds (%d columns)" % (col, m)
+                )
+        if isinstance(key, numbers.Integral):
             sequence = sequences[row]
             try:
                 sequence = sequence.seq  # SeqRecord confusion
@@ -1389,216 +1409,191 @@ class Alignment:
                 else:
                     line += "-" * gap
             return line
-        if isinstance(key, tuple):
+        if isinstance(row, numbers.Integral):
+            steps = steps[row]
+            sequence = sequences[row]
             try:
-                row, col = key
-            except ValueError:
-                raise ValueError("only tuples of length 2 can be alignment indices")
-            if isinstance(row, int):
-                if row < 0:
-                    row += n
-                if row < 0 or row >= n:
-                    raise IndexError(
-                        "row index %d is out of bounds (%d rows)" % (row, n)
-                    )
-                steps = steps[row]
-                sequence = sequences[row]
+                sequence = sequence.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
+            if isinstance(col, numbers.Integral):
+                start_index = col
+                indices = gaps.cumsum()
+                index = indices.searchsorted(start_index, side="right")
+                if steps[index]:
+                    offset = start_index - indices[index]
+                    indices = coordinates[row, 0] + steps.cumsum()
+                    i = indices[index] + offset
+                    line = sequence[i]
+                else:
+                    line = "-"
+                return line
+            if isinstance(col, slice):
+                start_index, stop_index, step = col.indices(m)
+                if start_index < stop_index and step == 1:
+                    sequence_indices = coordinates[row, 0] + steps.cumsum()
+                    indices = gaps.cumsum()
+                    i = indices.searchsorted(start_index, side="right")
+                    j = i + indices[i:].searchsorted(stop_index, side="right")
+                    if i == j:
+                        length = stop_index - start_index
+                        if steps[i] == 0:
+                            line = "-" * length
+                        else:
+                            offset = start_index - indices[i]
+                            start = sequence_indices[i] + offset
+                            stop = start + length
+                            line = str(sequence[start:stop])
+                    else:
+                        length = indices[i] - start_index
+                        stop = sequence_indices[i]
+                        if steps[i] == 0:
+                            line = "-" * length
+                        else:
+                            start = stop - length
+                            line = str(sequence[start:stop])
+                        i += 1
+                        while i < j:
+                            step = gaps[i]
+                            if steps[i] == 0:
+                                line += "-" * step
+                            else:
+                                start = stop
+                                stop = start + step
+                                line += str(sequence[start:stop])
+                            i += 1
+                        length = stop_index - indices[j - 1]
+                        if length > 0:
+                            if steps[j] == 0:
+                                line += "-" * length
+                            else:
+                                start = stop
+                                stop = start + length
+                                line += str(sequence[start:stop])
+                    return line
+                # make an iterable if step != 1
+                col = range(start_index, stop_index, step)
+            # try if we can use col as an iterable
+            line = ""
+            i = coordinates[row, 0]
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line += str(sequence[i:j])
+                    i = j
+                else:
+                    line += "-" * gap
+            try:
+                line = "".join(line[index] for index in col)
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
+            return line
+        if isinstance(row, slice):
+            if isinstance(col, numbers.Integral):
+                indices = gaps.cumsum()
+                j = indices.searchsorted(col, side="right")
+                offset = indices[j] - col
+                line = ""
+                start, stop, step = row.indices(n)
+                for i in range(start, stop, step):
+                    if steps[i, j] == 0:
+                        line += "-"
+                    else:
+                        sequence = sequences[i]
+                        index = coordinates[i, j] + steps[i, j] - offset
+                        line += sequence[index]
+                return line
+            if row.indices(n) != (0, n, 1):
+                raise NotImplementedError
+            if isinstance(col, slice):
+                start_index, stop_index, step = col.indices(m)
+                if start_index < stop_index and step == 1:
+                    indices = gaps.cumsum()
+                    i = indices.searchsorted(start_index, side="right")
+                    j = i + indices[i:].searchsorted(stop_index, side="left") + 1
+                    offset = steps[:, i] - indices[i] + start_index
+                    coordinates[:, i] += offset * (steps[:, i] > 0)
+                    offset = indices[j - 1] - stop_index
+                    coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
+                    coordinates = coordinates[:, i : j + 1]
+                    for i, sequence in enumerate(sequences):
+                        if self.coordinates[i, 0] > self.coordinates[i, -1]:
+                            # mapped to reverse strand
+                            n = len(sequence)
+                            coordinates[i, :] = n - coordinates[i, :]
+                    sequences = self.sequences
+                    alignment = Alignment(sequences, coordinates)
+                    if numpy.array_equal(coordinates, self.coordinates):
+                        try:
+                            alignment.score = self.score
+                        except AttributeError:
+                            pass
+                    try:
+                        column_annotations = self.column_annotations
+                    except AttributeError:
+                        pass
+                    else:
+                        alignment.column_annotations = {}
+                        for key, value in column_annotations.items():
+                            value = value[start_index:stop_index]
+                            try:
+                                value = value.copy()
+                            except AttributeError:
+                                # immutable tuples like str, tuple
+                                pass
+                            alignment.column_annotations[key] = value
+                    return alignment
+                # make an iterable if step != 1
+                col = range(start_index, stop_index, step)
+            # try if we can use col as an iterable
+            indices = tuple(col)
+            lines = []
+            for i in range(n):
+                sequence = sequences[i]
                 try:
                     sequence = sequence.seq  # SeqRecord confusion
                 except AttributeError:
                     pass
-                if isinstance(col, int):
-                    start_index = col
-                    if start_index < 0:
-                        start_index += m
-                    if start_index < 0 or start_index >= m:
-                        raise IndexError(
-                            "column index %d is out of bounds (%d columns)" % (col, m)
-                        )
-                    indices = gaps.cumsum()
-                    index = indices.searchsorted(start_index, side="right")
-                    if steps[index]:
-                        offset = start_index - indices[index]
-                        indices = coordinates[row, 0] + steps.cumsum()
-                        i = indices[index] + offset
-                        line = sequence[i]
-                    else:
-                        line = "-"
-                    return line
-                if isinstance(col, slice):
-                    start_index, stop_index, step = col.indices(m)
-                    if start_index < stop_index and step == 1:
-                        sequence_indices = coordinates[row, 0] + steps.cumsum()
-                        indices = gaps.cumsum()
-                        i = indices.searchsorted(start_index, side="right")
-                        j = i + indices[i:].searchsorted(stop_index, side="right")
-                        if i == j:
-                            length = stop_index - start_index
-                            if steps[i] == 0:
-                                line = "-" * length
-                            else:
-                                offset = start_index - indices[i]
-                                start = sequence_indices[i] + offset
-                                stop = start + length
-                                line = str(sequence[start:stop])
-                        else:
-                            length = indices[i] - start_index
-                            stop = sequence_indices[i]
-                            if steps[i] == 0:
-                                line = "-" * length
-                            else:
-                                start = stop - length
-                                line = str(sequence[start:stop])
-                            i += 1
-                            while i < j:
-                                step = gaps[i]
-                                if steps[i] == 0:
-                                    line += "-" * step
-                                else:
-                                    start = stop
-                                    stop = start + step
-                                    line += str(sequence[start:stop])
-                                i += 1
-                            length = stop_index - indices[j - 1]
-                            if length > 0:
-                                if steps[j] == 0:
-                                    line += "-" * length
-                                else:
-                                    start = stop
-                                    stop = start + length
-                                    line += str(sequence[start:stop])
-                        return line
-                    # make an iterable if step != 1
-                    col = range(start_index, stop_index, step)
-                # try if we can use col as an iterable
                 line = ""
-                i = coordinates[row, 0]
-                for step, gap in zip(steps, gaps):
+                k = coordinates[i, 0]
+                for step, gap in zip(steps[i], gaps):
                     if step:
-                        j = i + step
-                        line += str(sequence[i:j])
-                        i = j
+                        j = k + step
+                        line += str(sequence[k:j])
+                        k = j
                     else:
                         line += "-" * gap
                 try:
-                    line = "".join(line[index] for index in col)
+                    line = "".join(line[index] for index in indices)
                 except IndexError:
                     raise
                 except Exception:
                     raise TypeError(
                         "second index must be an integer, slice, or iterable of integers"
                     ) from None
-                else:
-                    return line
-            if isinstance(row, slice):
-                if isinstance(col, int):
-                    indices = gaps.cumsum()
-                    if col < 0:
-                        col += m
-                    if col < 0 or col >= m:
-                        raise IndexError(
-                            "column index %d is out of bounds (%d columns)" % (col, m)
-                        )
-                    j = indices.searchsorted(col, side="right")
-                    offset = indices[j] - col
-                    line = ""
-                    start, stop, step = row.indices(n)
-                    for i in range(start, stop, step):
-                        if steps[i, j] == 0:
-                            line += "-"
-                        else:
-                            sequence = sequences[i]
-                            index = coordinates[i, j] + steps[i, j] - offset
-                            line += sequence[index]
-                    return line
-                if row.indices(n) != (0, n, 1):
-                    raise NotImplementedError
-                if isinstance(col, slice):
-                    start_index, stop_index, step = col.indices(m)
-                    if start_index < stop_index and step == 1:
-                        indices = gaps.cumsum()
-                        i = indices.searchsorted(start_index, side="right")
-                        j = i + indices[i:].searchsorted(stop_index, side="left") + 1
-                        offset = steps[:, i] - indices[i] + start_index
-                        coordinates[:, i] += offset * (steps[:, i] > 0)
-                        offset = indices[j - 1] - stop_index
-                        coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
-                        coordinates = coordinates[:, i : j + 1]
-                        for i, sequence in enumerate(sequences):
-                            if self.coordinates[i, 0] > self.coordinates[i, -1]:
-                                # mapped to reverse strand
-                                n = len(sequence)
-                                coordinates[i, :] = n - coordinates[i, :]
-                        sequences = self.sequences
-                        alignment = Alignment(sequences, coordinates)
-                        if numpy.array_equal(coordinates, self.coordinates):
-                            try:
-                                alignment.score = self.score
-                            except AttributeError:
-                                pass
-                        try:
-                            column_annotations = self.column_annotations
-                        except AttributeError:
-                            pass
-                        else:
-                            alignment.column_annotations = {}
-                            for key, value in column_annotations.items():
-                                value = value[start_index:stop_index]
-                                try:
-                                    value = value.copy()
-                                except AttributeError:
-                                    # immutable tuples like str, tuple
-                                    pass
-                                alignment.column_annotations[key] = value
-                        return alignment
-                    # make an iterable if step != 1
-                    col = range(start_index, stop_index, step)
-                # try if we can use col as an iterable
-                indices = tuple(col)
-                lines = []
-                for i in range(n):
-                    sequence = sequences[i]
-                    try:
-                        sequence = sequence.seq  # SeqRecord confusion
-                    except AttributeError:
-                        pass
-                    line = ""
-                    k = coordinates[i, 0]
-                    for step, gap in zip(steps[i], gaps):
-                        if step:
-                            j = k + step
-                            line += str(sequence[k:j])
-                            k = j
-                        else:
-                            line += "-" * gap
-                    try:
-                        line = "".join(line[index] for index in indices)
-                    except IndexError:
-                        raise
-                    except Exception:
-                        raise TypeError(
-                            "second index must be an integer, slice, or iterable of integers"
-                        ) from None
-                    lines.append(line)
-                sequences = [line.replace("-", "") for line in lines]
-                coordinates = self.infer_coordinates(lines)
-                alignment = Alignment(sequences, coordinates)
-                try:
-                    column_annotations = self.column_annotations
-                except AttributeError:
-                    pass
-                else:
-                    alignment.column_annotations = {}
-                    for key, value in column_annotations.items():
-                        value_generator = (value[index] for index in indices)
-                        if isinstance(value, str):
-                            value = "".join(value_generator)
-                        else:
-                            value = value.__class__(value_generator)
-                        alignment.column_annotations[key] = value
-                return alignment
-            raise TypeError("first index must be an integer or slice")
-        raise TypeError("alignment indices must be integers, slices, or tuples")
+                lines.append(line)
+            sequences = [line.replace("-", "") for line in lines]
+            coordinates = self.infer_coordinates(lines)
+            alignment = Alignment(sequences, coordinates)
+            try:
+                column_annotations = self.column_annotations
+            except AttributeError:
+                pass
+            else:
+                alignment.column_annotations = {}
+                for key, value in column_annotations.items():
+                    value_generator = (value[index] for index in indices)
+                    if isinstance(value, str):
+                        value = "".join(value_generator)
+                    else:
+                        value = value.__class__(value_generator)
+                    alignment.column_annotations[key] = value
+            return alignment
+        raise TypeError("first index must be an integer or slice")
 
     def _convert_sequence_string(self, sequence):
         """Convert given sequence to string using the appropriate method (PRIVATE)."""
