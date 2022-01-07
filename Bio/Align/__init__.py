@@ -1491,36 +1491,26 @@ class Alignment:
                     return line
             if isinstance(row, slice):
                 if isinstance(col, int):
+                    steps = numpy.diff(coordinates, 1)
+                    gaps = steps.max(0)
+                    indices = gaps.cumsum()
                     if col < 0:
                         col += m
                     if col < 0 or col >= m:
                         raise IndexError(
                             "column index %d is out of bounds (%d columns)" % (col, m)
                         )
-                    starts = numpy.full(n, sys.maxsize)
-                    for ends in coordinates.transpose():
-                        step = max(ends - starts)
-                        if step < 0:
-                            index = 0
-                        else:
-                            index += step
-                            if col < index:
-                                break
-                        starts = ends
-                    else:
-                        raise IndexError("column index %d is out of bounds" % col)
-
-                    offset = index - col
+                    j = indices.searchsorted(col, side="right")
+                    offset = indices[j] - col
                     line = ""
                     start, stop, step = row.indices(n)
                     for i in range(start, stop, step):
-                        s = starts[i]
-                        e = ends[i]
-                        if s == e:
+                        if steps[i, j] == 0:
                             line += "-"
                         else:
                             sequence = sequences[i]
-                            line += sequence[e - offset]
+                            index = coordinates[i, j] + steps[i, j] - offset
+                            line += sequence[index]
                     return line
                 if row.indices(n) != (0, n, 1):
                     raise NotImplementedError
