@@ -1359,9 +1359,14 @@ class Alignment:
         sequences = list(self.sequences)
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # reverse strand
-                coordinates[i, :] = len(sequences[i]) - coordinates[i, :]
-                sequences[i] = reverse_complement(sequences[i], inplace=False)
-        n, m = self.shape
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+                sequences[i] = reverse_complement(sequence, inplace=False)
+        steps = numpy.diff(coordinates, 1)
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps == 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        n = len(sequences)
+        m = sum(gaps)
         if isinstance(key, int):
             row = key
             if row < 0:
@@ -1374,8 +1379,6 @@ class Alignment:
             except AttributeError:
                 pass
             line = ""
-            steps = numpy.diff(coordinates, 1)
-            gaps = steps.max(0)
             steps = steps[row]
             i = coordinates[row, 0]
             for step, gap in zip(steps, gaps):
@@ -1398,8 +1401,6 @@ class Alignment:
                     raise IndexError(
                         "row index %d is out of bounds (%d rows)" % (row, n)
                     )
-                steps = numpy.diff(coordinates, 1)
-                gaps = steps.max(0)
                 steps = steps[row]
                 sequence = sequences[row]
                 try:
@@ -1491,8 +1492,6 @@ class Alignment:
                     return line
             if isinstance(row, slice):
                 if isinstance(col, int):
-                    steps = numpy.diff(coordinates, 1)
-                    gaps = steps.max(0)
                     indices = gaps.cumsum()
                     if col < 0:
                         col += m
@@ -1517,8 +1516,7 @@ class Alignment:
                 if isinstance(col, slice):
                     start_index, stop_index, step = col.indices(m)
                     if start_index < stop_index and step == 1:
-                        steps = numpy.diff(coordinates, 1)
-                        indices = steps.max(0).cumsum()
+                        indices = gaps.cumsum()
                         i = indices.searchsorted(start_index, side="right")
                         j = i + indices[i:].searchsorted(stop_index, side="left") + 1
                         offset = steps[:, i] - indices[i] + start_index
@@ -1557,32 +1555,48 @@ class Alignment:
                     col = range(start_index, stop_index, step)
                 # try if we can use col as an iterable
                 indices = tuple(col)
-                try:
-                    lines = [self[i, indices] for i in range(n)]
-                except IndexError:
-                    raise
-                except Exception:
-                    raise TypeError(
-                        "second index must be an integer, slice, or iterable of integers"
-                    ) from None
-                else:
-                    sequences = [line.replace("-", "") for line in lines]
-                    coordinates = self.infer_coordinates(lines)
-                    alignment = Alignment(sequences, coordinates)
+                lines = []
+                for i in range(n):
+                    sequence = sequences[i]
                     try:
-                        column_annotations = self.column_annotations
+                        sequence = sequence.seq  # SeqRecord confusion
                     except AttributeError:
                         pass
-                    else:
-                        alignment.column_annotations = {}
-                        for key, value in column_annotations.items():
-                            value_generator = (value[index] for index in indices)
-                            if isinstance(value, str):
-                                value = "".join(value_generator)
-                            else:
-                                value = value.__class__(value_generator)
-                            alignment.column_annotations[key] = value
-                    return alignment
+                    line = ""
+                    k = coordinates[i, 0]
+                    for step, gap in zip(steps[i], gaps):
+                        if step:
+                            j = k + step
+                            line += str(sequence[k:j])
+                            k = j
+                        else:
+                            line += "-" * gap
+                    try:
+                        line = "".join(line[index] for index in indices)
+                    except IndexError:
+                        raise
+                    except Exception:
+                        raise TypeError(
+                            "second index must be an integer, slice, or iterable of integers"
+                        ) from None
+                    lines.append(line)
+                sequences = [line.replace("-", "") for line in lines]
+                coordinates = self.infer_coordinates(lines)
+                alignment = Alignment(sequences, coordinates)
+                try:
+                    column_annotations = self.column_annotations
+                except AttributeError:
+                    pass
+                else:
+                    alignment.column_annotations = {}
+                    for key, value in column_annotations.items():
+                        value_generator = (value[index] for index in indices)
+                        if isinstance(value, str):
+                            value = "".join(value_generator)
+                        else:
+                            value = value.__class__(value_generator)
+                        alignment.column_annotations[key] = value
+                return alignment
             raise TypeError("first index must be an integer or slice")
         raise TypeError("alignment indices must be integers, slices, or tuples")
 
