@@ -43,6 +43,7 @@ possible, especially the following contributors:
 - Aziz Khan
 - Chenghao Zhu
 - Damien Goutte-Gattat
+- Dominique Sydow (first contribution)
 - Fabian Egli
 - Sebastian Bassi
 - Tim Burke

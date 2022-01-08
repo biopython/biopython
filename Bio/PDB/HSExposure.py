@@ -24,7 +24,16 @@ class _AbstractHSExposure(AbstractPropertyMap):
     subclasses.
     """
 
-    def __init__(self, model, radius, offset, hse_up_key, hse_down_key, angle_key=None):
+    def __init__(
+        self,
+        model,
+        radius,
+        offset,
+        hse_up_key,
+        hse_down_key,
+        skip_residues=False,
+        angle_key=None,
+    ):
         """Initialize class.
 
         :param model: model
@@ -42,6 +51,10 @@ class _AbstractHSExposure(AbstractPropertyMap):
 
         :param hse_down_key: key used to store HSEdown in the entity.xtra attribute
         :type hse_down_key: string
+
+        :param skip_residues: skip residues missing CA, N, C, or CB atoms required for the
+                              CB calculation (default: do not skip).
+        :type skip_residues: bool
 
         :param angle_key: key used to store the angle between CA-CB and CA-pCB in
                           the entity.xtra attribute
@@ -70,7 +83,14 @@ class _AbstractHSExposure(AbstractPropertyMap):
                 result = self._get_cb(r1, r2, r3)
                 if result is None:
                     # Missing atoms, or i==0, or i==len(pp1)-1
-                    continue
+                    if skip_residues:
+                        continue
+                    else:
+                        raise KeyError(
+                            f"Residue {r2} contains missing CA, N, C, or CB atoms required for "
+                            f"the (real or approximate) CA-CB vector calculation. "
+                            f"Set `skip_residues=True` to skip these residues."
+                        )
                 pcb, angle = result
                 hse_u = 0
                 hse_d = 0
@@ -118,7 +138,10 @@ class _AbstractHSExposure(AbstractPropertyMap):
             n_v = residue["N"].get_vector()
             c_v = residue["C"].get_vector()
             ca_v = residue["CA"].get_vector()
-        except Exception:
+        except KeyError:
+            warnings.warn(
+                f"pCB vector not calculated for {residue} (no CA, N, or C atoms)"
+            )
             return None
         # center at origin
         n_v = n_v - ca_v
@@ -139,7 +162,7 @@ class HSExposureCA(_AbstractHSExposure):
     Uses three consecutive CA positions.
     """
 
-    def __init__(self, model, radius=12, offset=0):
+    def __init__(self, model, radius=12, offset=0, skip_residues=False):
         """Initialize class.
 
         :param model: the model that contains the residues
@@ -151,6 +174,10 @@ class HSExposureCA(_AbstractHSExposure):
         :param offset: number of flanking residues that are ignored
                        in the calculation of the number of neighbors
         :type offset: int
+
+        :param skip_residues: skip residues missing CA, N, C, or CB atoms required for the
+                              CB calculation (default: do not skip).
+        :type skip_residues: bool
         """
         _AbstractHSExposure.__init__(
             self,
@@ -159,6 +186,7 @@ class HSExposureCA(_AbstractHSExposure):
             offset,
             "EXP_HSE_A_U",
             "EXP_HSE_A_D",
+            skip_residues,
             "EXP_CB_PCB_ANGLE",
         )
 
@@ -175,12 +203,18 @@ class HSExposureCA(_AbstractHSExposure):
         :type r1, r2, r3: L{Residue}
         """
         if r1 is None or r3 is None:
+            warnings.warn(
+                f"Approx. CA-CB vector not calculated for {r2} (missing neighbors)."
+            )
             return None
         try:
             ca1 = r1["CA"].get_vector()
             ca2 = r2["CA"].get_vector()
             ca3 = r3["CA"].get_vector()
-        except Exception:
+        except KeyError:
+            warnings.warn(
+                f"Approx. CA-CB vector not calculated for {r2} (missing CA atoms)."
+            )
             return None
         # center
         d1 = ca2 - ca1
@@ -238,7 +272,7 @@ class HSExposureCA(_AbstractHSExposure):
 class HSExposureCB(_AbstractHSExposure):
     """Class to calculate HSE based on the real CA-CB vectors."""
 
-    def __init__(self, model, radius=12, offset=0):
+    def __init__(self, model, radius=12, offset=0, skip_residues=False):
         """Initialize class.
 
         :param model: the model that contains the residues
@@ -250,9 +284,13 @@ class HSExposureCB(_AbstractHSExposure):
         :param offset: number of flanking residues that are ignored
                        in the calculation of the number of neighbors
         :type offset: int
+
+        :param skip_residues: skip residues missing CA, N, C, or CB atoms required for the
+                              CB calculation (default: do not skip).
+        :type skip_residues: bool
         """
         _AbstractHSExposure.__init__(
-            self, model, radius, offset, "EXP_HSE_B_U", "EXP_HSE_B_D"
+            self, model, radius, offset, "EXP_HSE_B_U", "EXP_HSE_B_D", skip_residues
         )
 
     def _get_cb(self, r1, r2, r3):
@@ -262,13 +300,21 @@ class HSExposureCB(_AbstractHSExposure):
         :type r1, r2, r3: L{Residue}
         """
         if r2.get_resname() == "GLY":
-            return self._get_gly_cb_vector(r2), 0.0
+            vcb_gly = self._get_gly_cb_vector(r2)
+            if vcb_gly is None:
+                return None
+            else:
+                return vcb_gly, 0.0
         else:
             if r2.has_id("CB") and r2.has_id("CA"):
                 vcb = r2["CB"].get_vector()
                 vca = r2["CA"].get_vector()
                 return (vcb - vca), 0.0
-        return None
+            else:
+                warnings.warn(
+                    f"CA-CB vector not calculated for {r2} (missing CA or CB atoms)."
+                )
+                return None
 
 
 class ExposureCN(AbstractPropertyMap):
