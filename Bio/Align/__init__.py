@@ -1426,6 +1426,47 @@ class Alignment:
                     pass
                 alignment.column_annotations[key] = value
         return alignment
+
+    def _get_rows_cols_iterable(self, coordinates, col, steps, gaps, sequences):
+        indices = tuple(col)
+        lines = []
+        for i, sequence in enumerate(sequences):
+            line = ""
+            k = coordinates[i, 0]
+            for step, gap in zip(steps[i], gaps):
+                if step:
+                    j = k + step
+                    line += str(sequence[k:j])
+                    k = j
+                else:
+                    line += "-" * gap
+            try:
+                line = "".join(line[index] for index in indices)
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
+            lines.append(line)
+        sequences = [line.replace("-", "") for line in lines]
+        coordinates = self.infer_coordinates(lines)
+        alignment = Alignment(sequences, coordinates)
+        try:
+            column_annotations = self.column_annotations
+        except AttributeError:
+            pass
+        else:
+            alignment.column_annotations = {}
+            for key, value in column_annotations.items():
+                values = (value[index] for index in indices)
+                if isinstance(value, str):
+                    value = "".join(values)
+                else:
+                    value = value.__class__(values)
+                alignment.column_annotations[key] = value
+        return alignment
+
     def __getitem__(self, key):
         """Return self[key].
 
@@ -1586,45 +1627,7 @@ class Alignment:
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
             # try if we can use col as an iterable
-            indices = tuple(col)
-            lines = []
-            for i in range(n):
-                sequence = sequences[i]
-                line = ""
-                k = coordinates[i, 0]
-                for step, gap in zip(steps[i], gaps):
-                    if step:
-                        j = k + step
-                        line += str(sequence[k:j])
-                        k = j
-                    else:
-                        line += "-" * gap
-                try:
-                    line = "".join(line[index] for index in indices)
-                except IndexError:
-                    raise
-                except Exception:
-                    raise TypeError(
-                        "second index must be an integer, slice, or iterable of integers"
-                    ) from None
-                lines.append(line)
-            sequences = [line.replace("-", "") for line in lines]
-            coordinates = self.infer_coordinates(lines)
-            alignment = Alignment(sequences, coordinates)
-            try:
-                column_annotations = self.column_annotations
-            except AttributeError:
-                pass
-            else:
-                alignment.column_annotations = {}
-                for key, value in column_annotations.items():
-                    value_generator = (value[index] for index in indices)
-                    if isinstance(value, str):
-                        value = "".join(value_generator)
-                    else:
-                        value = value.__class__(value_generator)
-                    alignment.column_annotations[key] = value
-            return alignment
+            return self._get_rows_cols_iterable(coordinates, col, steps, gaps, sequences)
         raise TypeError("first index must be an integer or slice")
 
     def _convert_sequence_string(self, sequence):
