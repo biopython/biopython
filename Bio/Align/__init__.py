@@ -17,12 +17,21 @@ import sys
 import warnings
 import numbers
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Please install numpy if you want to use Bio.Cluster. "
+        "See http://www.numpy.org/"
+    ) from None
+
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
-
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -973,8 +982,6 @@ class Alignment:
                [ 0,  0,  3,  5, 10, 11]])
         >>> alignment = Alignment(sequences, coordinates)
         """
-        import numpy
-
         n = len(lines)
         m = len(lines[0])
         for line in lines:
@@ -1016,8 +1023,6 @@ class Alignment:
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
         """
-        import numpy
-
         self.sequences = sequences
         if coordinates is None:
             lengths = {len(sequence) for sequence in sequences}
@@ -1075,7 +1080,6 @@ class Alignment:
 
     def __eq__(self, other):
         """Check if two Alignment objects specify the same alignment."""
-        import numpy
         from itertools import zip_longest
 
         for left, right in zip_longest(self.sequences, other.sequences):
@@ -1093,7 +1097,6 @@ class Alignment:
 
     def __ne__(self, other):
         """Check if two Alignment objects have different alignments."""
-        import numpy
         from itertools import zip_longest
 
         for left, right in zip_longest(self.sequences, other.sequences):
@@ -1232,8 +1235,6 @@ class Alignment:
 
     @path.setter
     def path(self, value):
-        import numpy
-
         warnings.warn(
             "The path attribute is deprecated; please use the coordinates "
             "attribute instead. The coordinates attribute is a numpy array "
@@ -1242,6 +1243,69 @@ class Alignment:
             BiopythonDeprecationWarning,
         )
         self.coordinates = numpy.array(value).transpose()
+
+    def _get_row(self, index):
+        """Return self[index], where index is an integer (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[index]
+
+        where index is an integer.
+        """
+        coordinates = self.coordinates.copy()
+        for sequence, row in zip(self.sequences, coordinates):
+            if row[0] > row[-1]:  # reverse strand
+                row[:] = len(sequence) - row[:]
+        steps = numpy.diff(coordinates, 1)
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps == 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        sequence = self.sequences[index]
+        try:
+            sequence = sequence.seq  # SeqRecord confusion
+        except AttributeError:
+            pass
+        coordinates = coordinates[index]
+        if self.coordinates[index, 0] > self.coordinates[index, -1]:
+            # reverse strand
+            sequence = reverse_complement(sequence, inplace=False)
+        line = ""
+        steps = steps[index]
+        i = coordinates[0]
+        for step, gap in zip(steps, gaps):
+            if step:
+                j = i + step
+                line += str(sequence[i:j])
+                i = j
+            else:
+                line += "-" * gap
+        return line
+
+    def _get_rows(self, key):
+        """Return self[key], where key is a slice (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[:]
+        self[start:]
+        self[:stop]
+        self[::step]
+        self[start:stop]
+        self[start::step]
+        self[:stop:step]
+        self[start:stop:step]
+        """
+        n = len(self)
+        sequences = self.sequences[key]
+        coordinates = self.coordinates[key].copy()
+        alignment = Alignment(sequences, coordinates)
+        if key.indices(n) == (0, n, 1):
+            try:
+                alignment.score = self.score
+            except AttributeError:
+                pass
+        return alignment
 
     def __getitem__(self, key):
         """Return self[key].
@@ -1343,19 +1407,12 @@ class Alignment:
         -TG
         <BLANKLINE>
         """
-        import numpy
-
-        coordinates = self.coordinates.copy()
+        if isinstance(key, numbers.Integral):
+            return self._get_row(key)
         if isinstance(key, slice):
-            n = len(self)
-            alignment = Alignment(self.sequences[key], coordinates[key])
-            if key.indices(n) == (0, n, 1):
-                try:
-                    alignment.score = self.score
-                except AttributeError:
-                    pass
-            return alignment
+            return self._get_rows(key)
         sequences = list(self.sequences)
+        coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
             try:
                 sequence = sequence.seq  # SeqRecord confusion
@@ -1369,25 +1426,15 @@ class Alignment:
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
             raise ValueError("Unequal step sizes in alignment")
-        n = len(sequences)
+        n = len(self.sequences)
         m = sum(gaps)
-        if isinstance(key, numbers.Integral):
-            row = key
-            col = None
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             try:
                 row, col = key
             except ValueError:
                 raise ValueError("only tuples of length 2 can be alignment indices")
         else:
             raise TypeError("alignment indices must be integers, slices, or tuples")
-        if isinstance(row, numbers.Integral):
-            if row < 0:
-                row += n
-            if row < 0 or row >= n:
-                raise IndexError(
-                    "row index %d is out of bounds (%d rows)" % (row, n)
-                )
         if isinstance(col, numbers.Integral):
             if col < 0:
                 col += m
@@ -1395,19 +1442,6 @@ class Alignment:
                 raise IndexError(
                     "column index %d is out of bounds (%d columns)" % (col, m)
                 )
-        if isinstance(key, numbers.Integral):
-            sequence = sequences[row]
-            line = ""
-            steps = steps[row]
-            i = coordinates[row, 0]
-            for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line += str(sequence[i:j])
-                    i = j
-                else:
-                    line += "-" * gap
-            return line
         if isinstance(row, numbers.Integral):
             steps = steps[row]
             sequence = sequences[row]
@@ -2212,8 +2246,6 @@ class Alignment:
         >>> alignment.shape
         (2, 7)
         """
-        import numpy
-
         coordinates = self.coordinates.copy()
         n = len(coordinates)
         for i in range(n):
@@ -2305,8 +2337,6 @@ class Alignment:
         The property can be used to identify alignments that are identical
         to each other in terms of their aligned sequences.
         """
-        import numpy
-
         if len(self.sequences) > 2:
             raise NotImplementedError(
                 "aligned is currently implemented for pairwise alignments only"
@@ -2447,8 +2477,6 @@ class Alignment:
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
         """
-        import numpy
-
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):
             raise ValueError(
@@ -2695,8 +2723,6 @@ class PairwiseAlignments:
         return self
 
     def __next__(self):
-        import numpy
-
         path = next(self.paths)
         self.index += 1
         coordinates = numpy.array(path)
@@ -2964,8 +2990,6 @@ class PairwiseAlignment(Alignment):
         You would normally obtain a PairwiseAlignment object by iterating
         over a PairwiseAlignments object.
         """
-        import numpy
-
         warnings.warn(
             "The PairwiseAlignment class is deprecated; please use the "
             "Alignment class instead.  Note that the coordinates attribute of "
