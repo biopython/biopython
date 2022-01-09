@@ -1249,9 +1249,9 @@ class Alignment:
 
         This method is called by __getitem__ for invocations of the form
 
-        self[index]
+        self[row]
 
-        where index is an integer.
+        where row is an integer.
         """
         coordinates = self.coordinates.copy()
         for sequence, row in zip(self.sequences, coordinates):
@@ -1283,18 +1283,13 @@ class Alignment:
         return line
 
     def _get_rows(self, key):
-        """Return self[key], where key is a slice (PRIVATE).
+        """Return self[key], where key is a slice object (PRIVATE).
 
         This method is called by __getitem__ for invocations of the form
 
-        self[:]
-        self[start:]
-        self[:stop]
-        self[::step]
-        self[start:stop]
-        self[start::step]
-        self[:stop:step]
-        self[start:stop:step]
+        self[rows]
+
+        where rows is a slice object.
         """
         n = len(self)
         sequences = self.sequences[key]
@@ -1308,6 +1303,14 @@ class Alignment:
         return alignment
 
     def _get_row_col(self, j, col, steps, gaps, sequence):
+        """Return the sequence contents at alignment column j (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[row, col]
+
+        where both row and col are integers.
+        """
         indices = gaps.cumsum()
         index = indices.searchsorted(col, side="right")
         if steps[index]:
@@ -1318,6 +1321,14 @@ class Alignment:
             return "-"
 
     def _get_row_cols_slice(self, coordinate, start_index, stop_index, steps, gaps, sequence):
+        """Return the alignment contents of one row and consecutive columns (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[row, cols]
+
+        where row is an integer and cols is a slice object with step 1.
+        """
         sequence_indices = coordinate + steps.cumsum()
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
@@ -1359,7 +1370,15 @@ class Alignment:
                     line += str(sequence[start:stop])
         return line
 
-    def _get_row_cols_iterable(self, i, col, steps, gaps, sequence):
+    def _get_row_cols_iterable(self, i, cols, steps, gaps, sequence):
+        """Return the alignment contents of one row and multiple columns (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[row, cols]
+
+        where row is an integer and cols is an iterable of integers.
+        """
         line = ""
         for step, gap in zip(steps, gaps):
             if step:
@@ -1369,7 +1388,7 @@ class Alignment:
             else:
                 line += "-" * gap
         try:
-            line = "".join(line[index] for index in col)
+            line = "".join(line[col] for col in cols)
         except IndexError:
             raise
         except Exception:
@@ -1379,6 +1398,14 @@ class Alignment:
         return line
 
     def _get_rows_col(self, coordinates, col, steps, gaps, sequences):
+        """Return the alignment contents of multiple rows and one column (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[rows, col]
+
+        where rows is a slice object, and col is an integer.
+        """
         indices = gaps.cumsum()
         j = indices.searchsorted(col, side="right")
         offset = indices[j] - col
@@ -1392,6 +1419,16 @@ class Alignment:
         return line
 
     def _get_rows_cols_slice(self, coordinates, row, start_index, stop_index, steps, gaps, sequences):
+        """Return a subalignment of multiple rows and consecutive columns (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[rows, cols]
+
+        where rows is an arbitrary slice object, and cols is a slice object
+        with step 1, allowing the alignment sequences to be reused in the
+        subalignment.
+        """
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
         j = i + indices[i:].searchsorted(stop_index, side="left") + 1
@@ -1428,6 +1465,16 @@ class Alignment:
         return alignment
 
     def _get_rows_cols_iterable(self, coordinates, col, steps, gaps, sequences):
+        """Return a subalignment of multiple rows and columns (PRIVATE).
+
+        This method is called by __getitem__ for invocations of the form
+
+        self[rows, cols]
+
+        where rows is a slice object and cols is an iterable of integers.
+        This method will create new sequences for use by the subalignment
+        object.
+        """
         indices = tuple(col)
         lines = []
         for i, sequence in enumerate(sequences):
