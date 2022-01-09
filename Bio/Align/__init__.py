@@ -1307,6 +1307,16 @@ class Alignment:
                 pass
         return alignment
 
+    def _get_row_col(self, j, col, steps, gaps, sequence):
+        indices = gaps.cumsum()
+        index = indices.searchsorted(col, side="right")
+        if steps[index]:
+            offset = col - indices[index]
+            j += sum(steps[:index+1]) + offset
+            return sequence[j]
+        else:
+            return "-"
+
     def __getitem__(self, key):
         """Return self[key].
 
@@ -1442,25 +1452,16 @@ class Alignment:
                 raise IndexError(
                     "column index %d is out of bounds (%d columns)" % (col, m)
                 )
+        steps = steps[row]
         if isinstance(row, numbers.Integral):
-            steps = steps[row]
             sequence = sequences[row]
+            coordinate = coordinates[row, 0]
             if isinstance(col, numbers.Integral):
-                start_index = col
-                indices = gaps.cumsum()
-                index = indices.searchsorted(start_index, side="right")
-                if steps[index]:
-                    offset = start_index - indices[index]
-                    indices = coordinates[row, 0] + steps.cumsum()
-                    i = indices[index] + offset
-                    line = sequence[i]
-                else:
-                    line = "-"
-                return line
+                return self._get_row_col(coordinate, col, steps, gaps, sequence)
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
-                    sequence_indices = coordinates[row, 0] + steps.cumsum()
+                    sequence_indices = coordinate + steps.cumsum()
                     indices = gaps.cumsum()
                     i = indices.searchsorted(start_index, side="right")
                     j = i + indices[i:].searchsorted(stop_index, side="right")
@@ -1504,7 +1505,7 @@ class Alignment:
                 col = range(start_index, stop_index, step)
             # try if we can use col as an iterable
             line = ""
-            i = coordinates[row, 0]
+            i = coordinate
             for step, gap in zip(steps, gaps):
                 if step:
                     j = i + step
@@ -1524,7 +1525,6 @@ class Alignment:
         if isinstance(row, slice):
             sequences = sequences[row]
             coordinates = coordinates[row]
-            steps = steps[row]
             if isinstance(col, numbers.Integral):
                 indices = gaps.cumsum()
                 j = indices.searchsorted(col, side="right")
