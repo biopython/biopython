@@ -1317,6 +1317,48 @@ class Alignment:
         else:
             return "-"
 
+    def _get_row_cols_slice(self, coordinate, start_index, stop_index, steps, gaps, sequence):
+        sequence_indices = coordinate + steps.cumsum()
+        indices = gaps.cumsum()
+        i = indices.searchsorted(start_index, side="right")
+        j = i + indices[i:].searchsorted(stop_index, side="right")
+        if i == j:
+            length = stop_index - start_index
+            if steps[i] == 0:
+                line = "-" * length
+            else:
+                offset = start_index - indices[i]
+                start = sequence_indices[i] + offset
+                stop = start + length
+                line = str(sequence[start:stop])
+        else:
+            length = indices[i] - start_index
+            stop = sequence_indices[i]
+            if steps[i] == 0:
+                line = "-" * length
+            else:
+                start = stop - length
+                line = str(sequence[start:stop])
+            i += 1
+            while i < j:
+                step = gaps[i]
+                if steps[i] == 0:
+                    line += "-" * step
+                else:
+                    start = stop
+                    stop = start + step
+                    line += str(sequence[start:stop])
+                i += 1
+            length = stop_index - indices[j - 1]
+            if length > 0:
+                if steps[j] == 0:
+                    line += "-" * length
+                else:
+                    start = stop
+                    stop = start + length
+                    line += str(sequence[start:stop])
+        return line
+
     def __getitem__(self, key):
         """Return self[key].
 
@@ -1461,46 +1503,7 @@ class Alignment:
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
-                    sequence_indices = coordinate + steps.cumsum()
-                    indices = gaps.cumsum()
-                    i = indices.searchsorted(start_index, side="right")
-                    j = i + indices[i:].searchsorted(stop_index, side="right")
-                    if i == j:
-                        length = stop_index - start_index
-                        if steps[i] == 0:
-                            line = "-" * length
-                        else:
-                            offset = start_index - indices[i]
-                            start = sequence_indices[i] + offset
-                            stop = start + length
-                            line = str(sequence[start:stop])
-                    else:
-                        length = indices[i] - start_index
-                        stop = sequence_indices[i]
-                        if steps[i] == 0:
-                            line = "-" * length
-                        else:
-                            start = stop - length
-                            line = str(sequence[start:stop])
-                        i += 1
-                        while i < j:
-                            step = gaps[i]
-                            if steps[i] == 0:
-                                line += "-" * step
-                            else:
-                                start = stop
-                                stop = start + step
-                                line += str(sequence[start:stop])
-                            i += 1
-                        length = stop_index - indices[j - 1]
-                        if length > 0:
-                            if steps[j] == 0:
-                                line += "-" * length
-                            else:
-                                start = stop
-                                stop = start + length
-                                line += str(sequence[start:stop])
-                    return line
+                    return self._get_row_cols_slice(coordinate, start_index, stop_index, steps, gaps, sequence)
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
             # try if we can use col as an iterable
