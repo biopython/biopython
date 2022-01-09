@@ -1359,6 +1359,73 @@ class Alignment:
                     line += str(sequence[start:stop])
         return line
 
+    def _get_row_cols_iterable(self, i, col, steps, gaps, sequence):
+        line = ""
+        for step, gap in zip(steps, gaps):
+            if step:
+                j = i + step
+                line += str(sequence[i:j])
+                i = j
+            else:
+                line += "-" * gap
+        try:
+            line = "".join(line[index] for index in col)
+        except IndexError:
+            raise
+        except Exception:
+            raise TypeError(
+                "second index must be an integer, slice, or iterable of integers"
+            ) from None
+        return line
+
+    def _get_rows_col(self, coordinates, col, steps, gaps, sequences):
+        indices = gaps.cumsum()
+        j = indices.searchsorted(col, side="right")
+        offset = indices[j] - col
+        line = ""
+        for sequence, coordinate, step in zip(sequences, coordinates, steps):
+            if step[j] == 0:
+                line += "-"
+            else:
+                index = coordinate[j] + step[j] - offset
+                line += sequence[index]
+        return line
+
+    def _get_rows_cols_slice(self, coordinates, row, start_index, stop_index, steps, gaps, sequences):
+        indices = gaps.cumsum()
+        i = indices.searchsorted(start_index, side="right")
+        j = i + indices[i:].searchsorted(stop_index, side="left") + 1
+        offset = steps[:, i] - indices[i] + start_index
+        coordinates[:, i] += offset * (steps[:, i] > 0)
+        offset = indices[j - 1] - stop_index
+        coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
+        coordinates = coordinates[:, i : j + 1]
+        reverse_complemented = self.coordinates[row, 0] > self.coordinates[row, -1]
+        for i, sequence in enumerate(sequences):
+            if reverse_complemented[i]:
+                # mapped to reverse strand
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+        alignment = Alignment(self.sequences[row], coordinates)
+        if numpy.array_equal(self.coordinates, coordinates):
+            try:
+                alignment.score = self.score
+            except AttributeError:
+                pass
+        try:
+            column_annotations = self.column_annotations
+        except AttributeError:
+            pass
+        else:
+            alignment.column_annotations = {}
+            for key, value in column_annotations.items():
+                value = value[start_index:stop_index]
+                try:
+                    value = value.copy()
+                except AttributeError:
+                    # immutable tuples like str, tuple
+                    pass
+                alignment.column_annotations[key] = value
+        return alignment
     def __getitem__(self, key):
         """Return self[key].
 
@@ -1506,77 +1573,16 @@ class Alignment:
                     return self._get_row_cols_slice(coordinate, start_index, stop_index, steps, gaps, sequence)
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
-            # try if we can use col as an iterable
-            line = ""
-            i = coordinate
-            for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line += str(sequence[i:j])
-                    i = j
-                else:
-                    line += "-" * gap
-            try:
-                line = "".join(line[index] for index in col)
-            except IndexError:
-                raise
-            except Exception:
-                raise TypeError(
-                    "second index must be an integer, slice, or iterable of integers"
-                ) from None
-            return line
+            return self._get_row_cols_iterable(coordinate, col, steps, gaps, sequence)
         if isinstance(row, slice):
             sequences = sequences[row]
             coordinates = coordinates[row]
             if isinstance(col, numbers.Integral):
-                indices = gaps.cumsum()
-                j = indices.searchsorted(col, side="right")
-                offset = indices[j] - col
-                line = ""
-                for sequence, coordinate, step in zip(sequences, coordinates, steps):
-                    if step[j] == 0:
-                        line += "-"
-                    else:
-                        index = coordinate[j] + step[j] - offset
-                        line += sequence[index]
-                return line
+                return self._get_rows_col(coordinates, col, steps, gaps, sequences)
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
-                    indices = gaps.cumsum()
-                    i = indices.searchsorted(start_index, side="right")
-                    j = i + indices[i:].searchsorted(stop_index, side="left") + 1
-                    offset = steps[:, i] - indices[i] + start_index
-                    coordinates[:, i] += offset * (steps[:, i] > 0)
-                    offset = indices[j - 1] - stop_index
-                    coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
-                    coordinates = coordinates[:, i : j + 1]
-                    forward = self.coordinates[row, 0] < self.coordinates[row, -1]
-                    for i, sequence in enumerate(sequences):
-                        if not forward[i]:
-                            # mapped to reverse strand
-                            coordinates[i, :] = len(sequence) - coordinates[i, :]
-                    alignment = Alignment(self.sequences[row], coordinates)
-                    if row.indices(n) == (0, n, 1):
-                        try:
-                            alignment.score = self.score
-                        except AttributeError:
-                            pass
-                    try:
-                        column_annotations = self.column_annotations
-                    except AttributeError:
-                        pass
-                    else:
-                        alignment.column_annotations = {}
-                        for key, value in column_annotations.items():
-                            value = value[start_index:stop_index]
-                            try:
-                                value = value.copy()
-                            except AttributeError:
-                                # immutable tuples like str, tuple
-                                pass
-                            alignment.column_annotations[key] = value
-                    return alignment
+                    return self._get_rows_cols_slice(coordinates, row, start_index, stop_index, steps, gaps, sequences)
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
             # try if we can use col as an iterable
