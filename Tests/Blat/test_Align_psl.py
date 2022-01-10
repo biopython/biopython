@@ -30,6 +30,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 3707))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -39,7 +40,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "NR_104151.1")
         self.assertEqual(len(alignment.target.seq), 3800)
         self.assertEqual(len(alignment.query.seq), 207)
-        self.assertEqual(alignment.shape, (2, 3707))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -52,6 +52,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -61,7 +62,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "NR_046654.1")
         self.assertEqual(len(alignment.target.seq), 1900)
         self.assertEqual(len(alignment.query.seq), 181)
-        self.assertEqual(alignment.shape, (2, 1711))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -74,6 +74,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 3707))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -83,7 +84,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "NR_104151.1_extended")
         self.assertEqual(len(alignment.target.seq), 3800)
         self.assertEqual(len(alignment.query.seq), 215)
-        self.assertEqual(alignment.shape, (2, 3707))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -96,6 +96,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -105,7 +106,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "NR_046654.1_extended")
         self.assertEqual(len(alignment.target.seq), 1900)
         self.assertEqual(len(alignment.query.seq), 194)
-        self.assertEqual(alignment.shape, (2, 1711))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -125,6 +125,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -134,7 +135,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 16))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -147,6 +147,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -156,7 +157,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 33))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -169,6 +169,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -178,7 +179,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 17))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -191,6 +191,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -200,7 +201,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -213,6 +213,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -222,7 +223,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -235,6 +235,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -244,7 +245,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -257,6 +257,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -266,7 +267,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 48))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -279,6 +279,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -288,7 +289,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 170))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -301,6 +301,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -310,7 +311,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -323,6 +323,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -332,7 +333,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 28))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -345,6 +345,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -354,7 +355,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 54))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -367,6 +367,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -376,7 +377,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 50))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -389,6 +389,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -398,7 +399,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -411,6 +411,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -420,7 +421,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 44))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -433,6 +433,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -442,7 +443,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 37))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -455,6 +455,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -464,7 +465,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -477,6 +477,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -486,7 +487,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -499,6 +499,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -508,7 +509,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -521,6 +521,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -530,7 +531,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -543,6 +543,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -552,7 +553,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 25))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -565,6 +565,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -574,7 +575,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -587,6 +587,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -596,7 +597,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -623,6 +623,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -632,7 +633,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 16))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -645,6 +645,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -654,7 +655,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 33))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -667,6 +667,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -676,7 +677,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 17))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -696,6 +696,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -705,7 +706,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -718,6 +718,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -727,7 +728,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -740,6 +740,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -749,7 +750,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -762,6 +762,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -771,7 +772,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 48))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -784,6 +784,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -793,7 +794,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 170))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -806,6 +806,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -815,7 +816,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -828,6 +828,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -837,7 +838,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 28))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -850,6 +850,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -859,7 +860,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 54))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -872,6 +872,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -881,7 +882,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 50))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -894,6 +894,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -903,7 +904,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -916,6 +916,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -925,7 +926,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 44))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -938,6 +938,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -947,7 +948,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 37))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -960,6 +960,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -969,7 +970,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -982,6 +982,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -991,7 +992,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1004,6 +1004,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1013,7 +1014,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1026,6 +1026,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1035,7 +1036,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1048,6 +1048,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1057,7 +1058,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 25))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1070,6 +1070,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1079,7 +1080,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1092,6 +1092,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1101,7 +1102,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1120,6 +1120,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1129,7 +1130,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 16))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1142,6 +1142,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1151,7 +1152,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 33))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1164,6 +1164,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1173,7 +1174,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        self.assertEqual(alignment.shape, (2, 17))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1186,6 +1186,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1195,7 +1196,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1208,6 +1208,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1217,7 +1218,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 41))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1230,6 +1230,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1239,7 +1240,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1252,6 +1252,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1261,7 +1262,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 48))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1274,6 +1274,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1283,7 +1284,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 170))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1296,6 +1296,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1305,7 +1306,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1318,6 +1318,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1327,7 +1328,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 28))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1340,6 +1340,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1349,7 +1350,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 54))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1362,6 +1362,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1371,7 +1372,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 50))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1384,6 +1384,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1393,7 +1394,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1406,6 +1406,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1415,7 +1416,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 44))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1428,6 +1428,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1437,7 +1438,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 37))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1450,6 +1450,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1459,7 +1460,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1472,6 +1472,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1481,7 +1482,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1494,6 +1494,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1503,7 +1504,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 39))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1516,6 +1516,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1525,7 +1526,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1538,6 +1538,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1547,7 +1548,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 25))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1560,6 +1560,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1569,7 +1570,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 36))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1582,6 +1582,7 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1591,7 +1592,6 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        self.assertEqual(alignment.shape, (2, 34))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1620,12 +1620,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 156))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75566694, 75566850],
-                             [     183,      339]]),
+                             [      61,      113]]),
             )
         )
         alignment = next(alignments)
@@ -1642,12 +1641,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 132))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75560749, 75560881],
-                             [      51,      183]]),
+                             [      17,       61]]),
             )
         )
         alignment = next(alignments)
@@ -1664,12 +1662,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 17786))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75549820, 75549865, 75567225, 75567225, 75567312],
-                             [       0,       45,       45,      339,      426]]),
+                             [       0,       15,       15,      113,      142]]),
             )
         )
         alignment = next(alignments)
@@ -1686,12 +1683,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 1042))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75604767, 75604827, 75605728, 75605809],
-                             [     549,      609,      609,      690]]),
+                             [     183,      203,      203,      230]]),
             )
         )
         alignment = next(alignments)
@@ -1708,12 +1704,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 75))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75594914, 75594989],
-                             [     474,      549]]),
+                             [     158,      183]]),
             )
         )
         alignment = next(alignments)
@@ -1730,12 +1725,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 48))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[75569459, 75569507],
-                             [     426,      474]]),
+                             [     142,      158]]),
             )
         )
         alignment = next(alignments)
@@ -1752,12 +1746,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 190214555)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 102))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[41260685, 41260787],
-                             [     228,      330]]),
+                             [      76,      110]]),
             )
         )
         alignment = next(alignments)
@@ -1774,12 +1767,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 190214555)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 5994))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[41257605, 41257731, 41263227, 41263227, 41263290],
-                             [      51,      177,      177,      486,      549]]),
+                             [      17,       59,       59,      162,      183]]),
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -1803,14 +1795,13 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 14052872)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 31938))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
                               9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
-                             [     51,     183,     183,     339,     339,     426,     426,
-                                  474,     474,     549,     549,     609,     609,     690]]),
+                             [     17,      61,      61,     113,     113,     142,     142,
+                                  158,     158,     183,     183,     203,     203,     230]]),
             )
         )
         alignment = next(alignments)
@@ -1827,12 +1818,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 7819582)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 690))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[2103463, 2103523, 2103522, 2103522, 2104149],
-                             [      0,      60,      60,      63,     690]]),
+                             [      0,      20,      20,      21,     230]]),
             )
         )
         alignment = next(alignments)
@@ -1849,12 +1839,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 37111980)
         self.assertEqual(len(alignment.query.seq), 230)
-        self.assertEqual(alignment.shape, (2, 691))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[20873021, 20872472, 20872471, 20872471, 20872390],
-                             [       0,      549,      549,      609,      690]]),
+                             [       0,      183,      183,      203,      230]]),
             )
         )
         self.assertRaises(StopIteration, next, alignments)

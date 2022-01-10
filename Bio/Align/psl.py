@@ -263,31 +263,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             self.line = line
 
-    @staticmethod
-    def create_alignment(
-        records,
-        aligned_sequences,
-        strands,
-        annotations,
-        column_annotations,
-        score,
-    ):
-        """Create the Alignment object from the collected alignment data."""
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for record, strand, row in zip(records, strands, coordinates):
-            if strand == "-":
-                row[:] = row[-1] - row[0] - row
-            start = record.seq.defined_ranges[0][0]
-            row += start
-        alignment = Alignment(records, coordinates)
-        if annotations is not None:
-            alignment.annotations = annotations
-        if column_annotations is not None:
-            alignment.column_annotations = column_annotations
-        if score is not None:
-            alignment.score = score
-        return alignment
-
     def parse(self, stream):
         """Parse the next alignment from the stream."""
         if stream is None:
@@ -323,26 +298,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query_sequence = Seq(None, length=qSize)
             query_record = SeqRecord(query_sequence, id=qName)
             records = [target_record, query_record]
-            blockSizes = numpy.array(blockSizes)
+            qBlockSizes = numpy.array(blockSizes)
             qStarts = numpy.array(qStarts)
             tStarts = numpy.array(tStarts)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
-                qStarts *= 3
-                qSize *= 3
-                blockSizes *= 3
+                tBlockSizes = 3 * qBlockSizes
+            else:
+                tBlockSizes = qBlockSizes
             qPosition = qStarts[0]
             tPosition = tStarts[0]
             coordinates = [[tPosition, qPosition]]
-            for blockSize, tStart, qStart in zip(blockSizes, tStarts, qStarts):
+            for tBlockSize, qBlockSize, tStart, qStart in zip(tBlockSizes, qBlockSizes, tStarts, qStarts):
                 if tStart != tPosition:
                     coordinates.append([tStart, qPosition])
                     tPosition = tStart
                 if qStart != qPosition:
                     coordinates.append([tPosition, qStart])
                     qPosition = qStart
-                tPosition += blockSize
-                qPosition += blockSize
+                tPosition += tBlockSize
+                qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
             coordinates = numpy.array(coordinates).transpose()
             if strand == "-":
@@ -362,11 +337,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 qStart, qEnd = qEnd, qStart
             if strand == "+-":
                 tStart, tEnd = tEnd, tStart
-            if strand in ("++", "+-"):
-                # protein sequence aligned against translated DNA sequence
-                qStart *= 3
-                qEnd *= 3
-                qSize *= 3
             if tStart != coordinates[0, 0]:
                 raise ValueError("Inconsistent tStart found (%d, expected %d)" % (tStart, coordinates[0, 0]))
             if tEnd != coordinates[0, -1]:
@@ -402,9 +372,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     tStart = tEnd
                     qStart = qEnd
-            if strand in ("++", "+-"):
-                assert qBaseInsert % 3 == 0
-                qBaseInsert //= 3
             if qNumInsert != int(words[4]):
                 raise ValueError("Inconsistent qNumInsert found (%s, expected %d)" % (words[4], qNumInsert))
             if qBaseInsert != int(words[5]):

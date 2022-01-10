@@ -25,9 +25,6 @@ from Bio.SeqUtils import GC
 
 class TestPairwiseAlignment(unittest.TestCase):
     def check_indexing_slicing(self, alignment, msg):
-        subalignment = alignment[:1, :]
-        self.assertEqual(len(subalignment.sequences), 1)
-        return
         self.assertEqual(
             repr(alignment),
             "<Bio.Align.Alignment object (2 rows x 12 columns) at 0x%x>"
