@@ -22,6 +22,12 @@ except ImportError:
 
 
 class TestAlign_reading(unittest.TestCase):
+    def setUp(self):
+        records = SeqIO.parse("dna.fa", "fasta")
+        self.dna = {record.id: record.seq for record in records}
+        records = SeqIO.parse("rna.fa", "fasta")
+        self.rna = {record.id: record.seq for record in records}
+
     def test_reading_dna_rna(self):
         """Test parsing dna_rna.psl."""
         path = "dna_rna.psl"
@@ -49,6 +55,26 @@ class TestAlign_reading(unittest.TestCase):
                              [   0,   70,   70,  185,  185,  207]]),
             )
         )
+        alignment.target.seq = self.dna[alignment.target.id]
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(numpy.array_equal(
+            alignment.substitutions,
+            numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 47.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ])
+                )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
+        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet)
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 175)
         self.assertEqual(alignment.misMatches, 0)
@@ -71,6 +97,26 @@ class TestAlign_reading(unittest.TestCase):
                              [ 181,  118,  118,   43,   43,    0]]),
             )
         )
+        alignment.target.seq = self.dna[alignment.target.id]
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(numpy.array_equal(
+            alignment.substitutions,
+            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ])
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
+        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet)
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 207)
         self.assertEqual(alignment.misMatches, 0)
@@ -93,6 +139,27 @@ class TestAlign_reading(unittest.TestCase):
                              [   3,   73,   73,  188,  188,  210]]),
             )
         )
+        alignment.target.seq = self.dna[alignment.target.id]
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(numpy.array_equal(
+            alignment.substitutions,
+            numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 47.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ]),
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
+        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
+        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet if c != "X")
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 175)
         self.assertEqual(alignment.misMatches, 0)
@@ -115,6 +182,27 @@ class TestAlign_reading(unittest.TestCase):
                              [ 184,  121,  121,   46,   46,    3]]),
             )
         )
+        alignment.target.seq = self.dna[alignment.target.id]
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(numpy.array_equal(
+            alignment.substitutions,
+            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ]),
+                )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
+        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
+        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet if c != "X")
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_001(self):
