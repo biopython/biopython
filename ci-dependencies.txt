@@ -17,8 +17,9 @@ codecov
 numpy
 matplotlib
 mmtf-python
-mysqlclient
-mysql-connector-python
+#MySQL testing disabled due to #3834:
+#mysqlclient
+#mysql-connector-python
 networkx
 rdflib
 reportlab
