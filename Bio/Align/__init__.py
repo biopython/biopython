@@ -1291,13 +1291,16 @@ class Alignment:
 
         where rows is a slice object.
         """
-        n = len(self)
         sequences = self.sequences[key]
         coordinates = self.coordinates[key].copy()
         alignment = Alignment(sequences, coordinates)
-        if key.indices(n) == (0, n, 1):
+        if numpy.array_equal(self.coordinates, coordinates):
             try:
                 alignment.score = self.score
+            except AttributeError:
+                pass
+            try:
+                alignment.column_annotations = self.column_annotations
             except AttributeError:
                 pass
         return alignment

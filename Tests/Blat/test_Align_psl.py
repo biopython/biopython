@@ -6,7 +6,9 @@
 import unittest
 
 
-from Bio.Align import psl
+from Bio.Align import Alignment, psl
+from Bio.Seq import Seq
+from Bio import SeqIO
 
 
 try:
@@ -1847,6 +1849,65 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+        # As a bonus, for the last alignment, let's extract the translated DNA
+        # to protein alignment.
+        length = len(alignment.sequences[0].seq)
+        self.assertEqual(length, 37111980)
+        # To avoid having to include a 37Mb Fasta file in Biopython, we used
+        # twoBitToFa -noMask balAcu1.2bit:KI537194:20872390-20873021 KI537194_part.fa
+        # to create a Fasta file containing only the relevant DNA sequence.
+        filename = "KI537194_part.fa"
+        dna = SeqIO.read(filename, "fasta")
+        name, start_end = dna.id.split(":")
+        self.assertEqual(alignment.sequences[0].id, name)
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        self.assertEqual(start, 20872390)
+        self.assertEqual(end, 20873021)
+        sequence = str(dna.seq)
+        dna = Seq({start: sequence}, length=length)
+        # Now we have a partially defined sequence with the appropriate length,
+        # and with the sequence contents starting at the correct position in the
+        # genome.
+        alignment.sequences[0] = dna
+        # Load the protein sequence:
+        filename = "CAG33136.1.fasta"
+        protein = SeqIO.read(filename, "fasta")
+        self.assertEqual(alignment.sequences[1].id, protein.id)
+        alignment.sequences[1] = protein.seq
+        # The alignment is on the reverse strand of the DNA sequence:
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        # so we take the reverse complement:
+        alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
+        alignment.sequences[0] = dna.reverse_complement()
+        # Now the alignment is on the forward strand:
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        # The protein alignment was already in the forward orientation:
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        # Now extract the aligned sequences:
+        aligned_dna = ""
+        aligned_protein = ""
+        for start, end in alignment.aligned[0]:
+            aligned_dna += alignment.sequences[0][start:end]
+        for start, end in alignment.aligned[1]:
+            aligned_protein += alignment.sequences[1][start:end]
+        self.assertEqual(len(aligned_dna), 630)
+        self.assertEqual(len(aligned_protein), 210)
+        # Create a new alignment including the aligned sequences only:
+        sequences = [aligned_dna, aligned_protein]
+        coordinates = numpy.array([[0, len(aligned_dna)],
+                                   [0, len(aligned_protein)]])
+        alignment = Alignment(sequences, coordinates)
+        # and translate the aligned DNA sequence:
+        alignment.sequences[0] = alignment.sequences[0].translate()
+        alignment.coordinates[0, :] //= 3
+        # Now we can print the alignment:
+        self.assertEqual(str(alignment), """\
+MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
+||.|||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||.||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
+""")
 
 
 if __name__ == "__main__":
