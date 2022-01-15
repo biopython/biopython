@@ -1849,6 +1849,8 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+        # These alignments were generated using
+        # blat -t=dnax -q=prot balAcu1.2bit CAG33136.1.fasta psl_35_002.psl
         # As a bonus, for the last alignment, let's extract the translated DNA
         # to protein alignment.
         length = len(alignment.sequences[0].seq)
