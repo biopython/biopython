@@ -31,202 +31,237 @@ import numpy
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Accepts Alignment objects, writes a MAF file."""
+    """Alignment file writer for the Pattern Space Layout (PSL) file format."""
 
-    def _write_trackline(self, metadata):
-        stream = self.stream
-        stream.write("track")
-        for key, value in metadata.items():
-            if key in ("name", "description", "frames"):
-                pass
-            elif key == "mafDot":
-                if value not in ("on", "off"):
-                    raise ValueError(
-                        "mafDot value must be 'on' or 'off' (received '%s')" % value
-                    )
-            elif key == "visibility":
-                if value not in ("dense", "pack", "full"):
-                    raise ValueError(
-                        "visibility value must be 'dense', 'pack', or 'full' (received '%s')"
-                        % value
-                    )
-            elif key == "speciesOrder":
-                value = " ".join(value)
+    def __init__(self, target, mode="w", header=True, mask=None, wildcard="N"):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target    - output stream or file name
+         - header    = If True (default), write the PSL header consisting of
+                       five lines containing the PSL format version and a
+                       header for each column.
+                       If False, suppress the PSL header, resulting in a simple
+                       tab-delimited file.
+         - mask      - Specify if repeat regions in the target sequence are
+                       masked and should be reported in the `repMatches` field
+                       of the PSL file instead of in the `matches` field.
+                       Acceptable values are
+                       None   : no masking (default);
+                       "lower": masking by lower-case characters;
+                       "upper": masking by upper-case characters.
+         - wildcard  - Report alignments to the wildcard character in the
+                       target or query sequence in the `nCount` field of the
+                       PSL file instead of in the `matches`, `misMatches`, or
+                       `repMatches` fields.
+                       Default value is 'N'.
+
+        """
+        super().__init__(target, mode="w")
+        self.header = header
+        if wildcard is not None:
+            if mask == "upper":
+                wildcard = ord(wildcard.lower())
             else:
-                continue
-            if " " in value:
-                value = '"%s"' % value
-            stream.write(f" {key}={value}")
-        stream.write("\n")
+                wildcard = ord(wildcard.upper())
+        self.wildcard = wildcard
+        self.mask = mask
 
     def write_header(self, alignments):
-        """Write the MAF header."""
-        stream = self.stream
-        metadata = alignments.metadata
-        track_keys = (
-            "name",
-            "description",
-            "frames",
-            "mafDot",
-            "visibility",
-            "speciesOrder",
-        )
-        for key in track_keys:
-            if key in metadata:
-                self._write_trackline(metadata)
-                break
-        stream.write("##maf")
-        for key, value in metadata.items():
-            if key in track_keys:
-                continue
-            if key == "comments":
-                continue
-            if key not in ("version", "scoring", "program"):
-                raise ValueError("Unexpected key '%s' for header" % key)
-            if key == "version" and value != "1":
-                raise ValueError("MAF version must be 1")
-            stream.write(f" {key}={value}")
-        stream.write("\n")
-        comments = metadata.get("comments")
-        if comments is not None:
-            for comment in comments:
-                stream.write(f"# {comment}\n")
-            stream.write("\n")
-
-    def _write_score_line(self, alignment, annotations):
-        stream = self.stream
-        stream.write("a")
+        """Write the PSL header."""
+        if not self.header:
+            return
         try:
-            score = alignment.score
+            metadata = alignments.metadata
         except AttributeError:
-            pass
+            version = "3"
         else:
-            stream.write(f" score={score:.6f}")
-        if annotations is not None:
-            value = annotations.get("pass")
-            if value is not None:
-                stream.write(f" pass={value}")
-        stream.write("\n")
+            version = metadata.get("version", "3")
+        self.stream.write(f"""\
+psLayout version {version}
+
+match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
+     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+""")
 
     def write_alignment(self, alignment):
-        """Write a complete alignment to a MAF block."""
+        """Write a complete alignment as one PSL line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
+        coordinates = alignment.coordinates
+        if not coordinates.size:  # alignment consists of gaps only
+            return ""
+        target, query = alignment.sequences
         try:
-            alignment_annotations = alignment.annotations
+            qName = query.id
         except AttributeError:
-            alignment_annotations = None
-        self._write_score_line(alignment, alignment_annotations)
-        name_width = 0
-        start_width = 0
-        size_width = 0
-        length_width = 0
-        stream = self.stream
-        n = len(alignment.sequences)
-        for i in range(n):
-            record = alignment.sequences[i]
-            coordinates = alignment.coordinates[i]
-            name = record.id
-            start = coordinates[0]
-            end = coordinates[-1]
-            length = len(record.seq)
-            if start < end:
-                size = end - start
+            qName = "query"
+        try:
+            query = query.seq
+        except AttributeError:
+            pass
+        try:
+            tName = target.id
+        except AttributeError:
+            tName = "target"
+        try:
+            target = target.seq
+        except AttributeError:
+            pass
+        n1 = len(target)
+        n2 = len(query)
+        try:
+            seq1 = bytes(target)
+        except TypeError:  # string
+            seq1 = bytes(target, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq1 = None
+        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
+            strand = "+"
+            seq2 = query
+        else:  # mapped to reverse strand
+            strand = "-"
+            seq2 = reverse_complement(query, inplace=False)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = n2 - coordinates[1, :]
+        try:
+            seq2 = bytes(seq2)
+        except TypeError:  # string
+            seq2 = bytes(seq2, "ASCII")
+        except UndefinedSequenceError:  # sequence contents is unknown
+            seq2 = None
+        wildcard = self.wildcard
+        mask = self.mask
+        # variable names follow those in the PSL file format specification
+        matches = 0
+        misMatches = 0
+        repMatches = 0
+        nCount = 0
+        qNumInsert = 0
+        qBaseInsert = 0
+        tNumInsert = 0
+        tBaseInsert = 0
+        qSize = n2
+        tSize = n1
+        blockSizes = []
+        qStarts = []
+        tStarts = []
+        tStart, qStart = coordinates[:, 0]
+        for tEnd, qEnd in coordinates[:, 1:].transpose():
+            tCount = tEnd - tStart
+            qCount = qEnd - qStart
+            if tCount == 0:
+                if qStart > 0 and qEnd < qSize:
+                    qNumInsert += 1
+                    qBaseInsert += qCount
+                qStart = qEnd
+            elif qCount == 0:
+                if tStart > 0 and tEnd < tSize:
+                    tNumInsert += 1
+                    tBaseInsert += tCount
+                tStart = tEnd
             else:
-                size = start - end
-                start = length - start
-            name_width = max(name_width, len(name))
-            start_width = max(start_width, len(str(start)))
-            size_width = max(size_width, len(str(size)))
-            length_width = max(length_width, len(str(length)))
-        for empty in alignment_annotations.get("empty", []):
-            record, segment, status = empty
-            name = record.id
-            name_width = max(name_width, len(name))
-            start, end = segment
-            length = len(record.seq)
-            if start <= end:
-                size = end - start
-            else:
-                size = start - end
-                start = length - start
-            start_width = max(start_width, len(str(start)))
-            size_width = max(size_width, len(str(size)))
-            length_width = max(length_width, len(str(length)))
-        quality_width = name_width + start_width + size_width + length_width + 5
-        for i in range(n):
-            record = alignment.sequences[i]
-            coordinates = alignment.coordinates[i]
-            name = record.id
-            start = coordinates[0]
-            end = coordinates[-1]
-            length = len(record.seq)
-            if start < end:
-                size = end - start
-                strand = "+"
-            else:
-                size = start - end
-                start = length - start
-                strand = "-"
-            text = alignment[i]
-            name = record.id.ljust(name_width)
-            start = str(start).rjust(start_width)
-            size = str(size).rjust(size_width)
-            length = str(length).rjust(length_width)
-            line = f"s {name} {start} {size} {strand} {length} {text}\n"
-            stream.write(line)
-            try:
-                annotations = record.annotations
-            except AttributeError:
-                annotations = None
-            if annotations is not None:
-                quality = annotations.get("quality")
-                if quality is not None:
-                    gapped_quality = ""
-                    i = 0
-                    for letter in text:
-                        if letter == "-":
-                            gapped_quality += "-"
-                        else:
-                            gapped_quality += quality[i]
-                            i += 1
-                    name = record.id.ljust(quality_width)
-                    line = f"q {name} {gapped_quality}\n"
-                    stream.write(line)
-                try:
-                    leftStatus = annotations["leftStatus"]
-                    leftCount = annotations["leftCount"]
-                    rightStatus = annotations["rightStatus"]
-                    rightCount = annotations["rightCount"]
-                except KeyError:
-                    pass
+                if tCount != qCount:
+                    raise ValueError("Unequal step sizes in alignment")
+                tStarts.append(tStart)
+                qStarts.append(qStart)
+                blockSizes.append(tCount)
+                if seq1 is None or seq2 is None:
+                    # contents of at least one sequence is unknown;
+                    # count all aligned letters as matches:
+                    matches += tCount
                 else:
-                    name = record.id.ljust(name_width)
-                    line = f"i {name} {leftStatus} {leftCount} {rightStatus} {rightCount}\n"
-                    stream.write(line)
-        for empty in alignment_annotations.get("empty", []):
-            record, segment, status = empty
-            name = record.id.ljust(name_width)
-            start, end = segment
-            length = len(record.seq)
-            if start <= end:
-                size = end - start
-                strand = "+"
-            else:
-                size = start - end
-                start = length - start
-                strand = "-"
-            start = str(start).rjust(start_width)
-            size = str(size).rjust(size_width)
-            length = str(length).rjust(length_width)
-            line = f"e {name} {start} {size} {strand} {length} {status}\n"
-            stream.write(line)
-        stream.write("\n")
+                    s1 = seq1[tStart:tEnd]
+                    s2 = seq2[qStart:qEnd]
+                    if mask == "lower":
+                        for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    elif mask == "upper":
+                        for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                if u1 == c1:
+                                    matches += 1
+                                else:
+                                    repMatches += 1
+                            else:
+                                misMatches += 1
+                    else:
+                        for u1, u2 in zip(s1.upper(), s2.upper()):
+                            if u1 == wildcard or u2 == wildcard:
+                                nCount += 1
+                            elif u1 == u2:
+                                matches += 1
+                            else:
+                                misMatches += 1
+                tStart = tEnd
+                qStart = qEnd
+        try:
+            matches = alignment.matches
+        except AttributeError:
+            pass
+        try:
+            misMatches = alignment.misMatches
+        except AttributeError:
+            pass
+        try:
+            repMatches = alignment.repMatches
+        except AttributeError:
+            pass
+        try:
+            nCount = alignment.nCount
+        except AttributeError:
+            pass
+        tStart = tStarts[0]  # start of alignment in target
+        qStart = qStarts[0]  # start of alignment in query
+        tEnd = tStarts[-1] + blockSizes[-1]  # end of alignment in target
+        qEnd = qStarts[-1] + blockSizes[-1]  # end of alignment in query
+        if strand == "-":
+            qStart, qEnd = qSize - qEnd, qSize - qStart
+        blockCount = len(blockSizes)
+        blockSizes = ",".join(map(str, blockSizes)) + ","
+        qStarts = ",".join(map(str, qStarts)) + ","
+        tStarts = ",".join(map(str, tStarts)) + ","
+        words = [
+            str(matches),
+            str(misMatches),
+            str(repMatches),
+            str(nCount),
+            str(qNumInsert),
+            str(qBaseInsert),
+            str(tNumInsert),
+            str(tBaseInsert),
+            strand,
+            qName,
+            str(qSize),
+            str(qStart),
+            str(qEnd),
+            tName,
+            str(tSize),
+            str(tStart),
+            str(tEnd),
+            str(blockCount),
+            blockSizes,
+            qStarts,
+            tStarts,
+        ]
+        line = "\t".join(words) + "\n"
+        self.stream.write(line)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

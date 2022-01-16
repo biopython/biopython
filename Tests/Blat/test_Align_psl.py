@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for Align.psl module."""
 import unittest
+from io import StringIO
 
 
 from Bio.Align import Alignment, psl
@@ -21,14 +22,14 @@ except ImportError:
     ) from None
 
 
-class TestAlign_reading(unittest.TestCase):
+class TestAlign_dna_rna(unittest.TestCase):
     def setUp(self):
         records = SeqIO.parse("dna.fa", "fasta")
         self.dna = {record.id: record.seq for record in records}
         records = SeqIO.parse("rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
 
-    def test_reading_dna_rna(self):
+    def test_reading(self):
         """Test parsing dna_rna.psl."""
         path = "dna_rna.psl"
         alignments = psl.AlignmentIterator(path)
@@ -205,6 +206,47 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(repMatches, alignment.repMatches)
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_writing(self):
+        """Test writing the alignments in dna_rna.psl."""
+        path = "dna_rna.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        self.assertEqual(n, 4)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
+        # Try this again. This time, we first strip the matches, misMatches,
+        # repMatches, and nCount attributes from each alignment, and insert the
+        # appropriate sequence data in each alignment. The writer will then
+        # recalculate the matches, misMatches, repMatches, and nCount values
+        # from the sequence data and the alignment, and store those values in
+        # the PSL file.
+        alignments = psl.AlignmentIterator(path)
+        def clean(alignment):
+            del alignment.matches
+            del alignment.misMatches
+            del alignment.repMatches
+            del alignment.nCount
+            alignment.sequences[0].seq = self.dna[alignment.sequences[0].id]
+            alignment.sequences[1].seq = self.rna[alignment.sequences[1].id]
+            return alignment
+        alignments = (clean(alignment) for alignment in alignments)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        self.assertEqual(n, 4)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
+
+
+class TestAlign_reading(unittest.TestCase):
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl."""
         path = "psl_34_001.psl"
@@ -696,12 +738,42 @@ class TestAlign_reading(unittest.TestCase):
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_writing_psl_34_001(self):
+        """Test writing the alignments in psl_34_001.psl."""
+        path = "psl_34_001.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        self.assertEqual(n, 22)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
+
     def test_reading_psl_34_002(self):
         """Test parsing psl_34_002.psl."""
         path = "psl_34_002.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_writing_psl_34_002(self):
+        """Test writing the alignments in psl_34_002.psl."""
+        path = "psl_34_002.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=0, maxcount=0)
+        self.assertEqual(n, 0)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.psl."""
@@ -775,6 +847,21 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_writing_psl_34_003(self):
+        """Test writing the alignments in psl_34_003.psl."""
+        path = "psl_34_003.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.psl."""
@@ -1200,6 +1287,21 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_writing_psl_34_004(self):
+        """Test writing the alignments in psl_34_004.psl."""
+        path = "psl_34_004.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=19, maxcount=19)
+        self.assertEqual(n, 19)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.psl."""
@@ -1690,6 +1792,21 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_writing_psl_34_005(self):
+        """Test writing the alignments in psl_34_005.psl."""
+        path = "psl_34_005.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, header=False, mask="lower")
+        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        self.assertEqual(n, 22)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl."""
