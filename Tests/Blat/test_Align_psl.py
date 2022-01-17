@@ -246,7 +246,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(original_data, written_data)
 
 
-class TestAlign_reading(unittest.TestCase):
+class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl."""
         path = "psl_34_001.psl"
@@ -1808,6 +1808,8 @@ class TestAlign_reading(unittest.TestCase):
         stream.close()
         self.assertEqual(original_data, written_data)
 
+
+class TestAlign_dnax_prot(unittest.TestCase):
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl."""
         path = "psl_35_001.psl"
@@ -1982,6 +1984,21 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_writing_psl_35_001(self):
+        """Test writing the alignments in psl_35_001.psl."""
+        path = "psl_35_001.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=8, maxcount=8)
+        self.assertEqual(n, 8)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
