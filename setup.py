@@ -54,8 +54,6 @@ if sys.version_info[:2] < MIN_PY_VER:
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
-elif sys.version_info[:2] == (3, 6):
-    sys.stderr.write("WARNING: Biopython will soon drop support for Python 3.6\n")
 
 
 class test_biopython(Command):
@@ -244,7 +242,6 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
