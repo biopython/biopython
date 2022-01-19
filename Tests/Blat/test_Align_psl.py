@@ -2197,67 +2197,125 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        # These alignments were generated using
-        # blat -t=dnax -q=prot balAcu1.2bit CAG33136.1.fasta psl_35_002.psl
-        # As a bonus, for the last alignment, let's extract the translated DNA
-        # to protein alignment.
-        length = len(alignment.sequences[0].seq)
-        self.assertEqual(length, 37111980)
-        # To avoid having to include a 37Mb Fasta file in Biopython, we used
-        # twoBitToFa -noMask balAcu1.2bit:KI537194:20872390-20873021 KI537194_part.fa
-        # to create a Fasta file containing only the relevant DNA sequence.
-        filename = "KI537194_part.fa"
-        dna = SeqIO.read(filename, "fasta")
-        name, start_end = dna.id.split(":")
-        self.assertEqual(alignment.sequences[0].id, name)
-        start, end = start_end.split("-")
-        start = int(start)
-        end = int(end)
-        self.assertEqual(start, 20872390)
-        self.assertEqual(end, 20873021)
-        sequence = str(dna.seq)
-        dna = Seq({start: sequence}, length=length)
-        # Now we have a partially defined sequence with the appropriate length,
-        # and with the sequence contents starting at the correct position in the
-        # genome.
-        alignment.sequences[0] = dna
+
+    def test_writing_psl_35_002(self):
+        """Test writing the alignments in psl_35_002.psl."""
+        path = "psl_35_002.psl"
+        with open(path) as stream:
+            original_data = stream.read()
+        alignments = psl.AlignmentIterator(path)
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, mask="lower")
+        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        written_data = stream.read()
+        stream.close()
+        self.assertEqual(original_data, written_data)
+        # Convert the alignment to a protein alignment and insert the
+        # appropriate sequence data. Write this alignment in a PSL file;
+        # the writer will recalculate the values for matches, misMatches,
+        # repMatches, and nCount from the sequence data and the alignment.
+        #
+        # The alignments were generated using
+        # blat -t=dnax -q=prot hg38.2bit CAG33136.1.fasta psl_35_001.psl
+        #
+        # To save disk space, we extracted the necessary sequence data using
+        #
+        # twoBitToFa balAcu1.2bit:KI537979:9712654-9744592 stdout
+        # twoBitToFa balAcu1.2bit:KI538594:2103463-2104149 stdout
+        # twoBitToFa balAcu1.2bit:KI537194:20872390-20873021 stdout
+        #
+        # and concatenating the results into file balAcu1.fa. We will use this
+        # file below, and create partially defined Seq objects.
+        #
         # Load the protein sequence:
         filename = "CAG33136.1.fasta"
         protein = SeqIO.read(filename, "fasta")
-        self.assertEqual(alignment.sequences[1].id, protein.id)
-        alignment.sequences[1] = protein.seq
-        # The alignment is on the reverse strand of the DNA sequence:
-        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        # so we take the reverse complement:
-        alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
-        alignment.sequences[0] = dna.reverse_complement()
-        # Now the alignment is on the forward strand:
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        # The protein alignment was already in the forward orientation:
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        # Now extract the aligned sequences:
-        aligned_dna = ""
-        aligned_protein = ""
-        for start, end in alignment.aligned[0]:
-            aligned_dna += alignment.sequences[0][start:end]
-        for start, end in alignment.aligned[1]:
-            aligned_protein += alignment.sequences[1][start:end]
-        self.assertEqual(len(aligned_dna), 630)
-        self.assertEqual(len(aligned_protein), 210)
-        # Create a new alignment including the aligned sequences only:
-        sequences = [aligned_dna, aligned_protein]
-        coordinates = numpy.array([[0, len(aligned_dna)],
-                                   [0, len(aligned_protein)]])
-        alignment = Alignment(sequences, coordinates)
-        # and translate the aligned DNA sequence:
-        alignment.sequences[0] = alignment.sequences[0].translate()
-        alignment.coordinates[0, :] //= 3
-        # Now we can print the alignment:
-        self.assertEqual(str(alignment), """\
+        protein_alignments = []
+        alignments = psl.AlignmentIterator(path)
+        filename = "balAcu1.fa"
+        for i, alignment in enumerate(alignments):
+            records = SeqIO.parse(filename, "fasta")
+            for record in records:
+                name, start_end = record.id.split(":")
+                if name == alignment.sequences[0].id:
+                    break
+            else:
+                raise Exception("Failed to find DNA sequence")
+            start, end = start_end.split("-")
+            start = int(start)
+            end = int(end)
+            length = len(alignment.sequences[0])
+            sequence = str(record.seq)
+            dna = Seq({start: sequence}, length=length)
+            alignment.sequences[0].seq = dna
+            self.assertEqual(alignment.sequences[1].id, protein.id)
+            alignment.sequences[1].seq = protein.seq
+            if i == 0 or i == 1:
+                # The alignment is on the forward strand of the DNA sequence:
+                self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+            elif i == 2:
+                # The alignment is on the reverse strand of the DNA sequence:
+                self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+                # so we take the reverse complement:
+                alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
+                alignment.sequences[0].seq = dna.reverse_complement()
+            # The protein alignment is always in the forward orientation:
+            self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+            # Now extract the aligned sequences:
+            aligned_dna = ""
+            aligned_protein = ""
+            for start, end in alignment.aligned[0]:
+                aligned_dna += alignment.sequences[0].seq[start:end]
+            for start, end in alignment.aligned[1]:
+                aligned_protein += alignment.sequences[1].seq[start:end]
+            # Translate the aligned DNA sequence:
+            aligned_dna = Seq(aligned_dna)
+            aligned_dna_translated = Seq(aligned_dna.translate())
+            aligned_protein = Seq(aligned_protein)
+            # Create a new alignment including the aligned sequences only:
+            records = [SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
+                       SeqRecord(aligned_protein, id=alignment.sequences[1].id),
+                      ]
+            coordinates = numpy.array([[0, len(aligned_dna_translated)],
+                                       [0, len(aligned_protein)]])
+            protein_alignment = Alignment(records, coordinates)
+            protein_alignments.append(protein_alignment)
+            if i == 0:
+                self.assertEqual(str(protein_alignment), """\
+QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+""")
+            elif i == 1:
+                self.assertEqual(str(protein_alignment), """\
+MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLYELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA
+||||.|||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||..|||.|||.||||.|||||||||||||||||||||||||||||||||.|.||||||.||||||.|||||.||.|||||||..||||||||||||||||||||||||.||||||||||||.|||.|||||.|||.||||||.|||.||||||
+MEGQRWLPLEANPEVTNQFLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+""")
+            elif i == 2:
+                self.assertEqual(str(protein_alignment), """\
 MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
 ||.|||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||.||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
 MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
 """)
+        # Write the protein alignments to a PSL file:
+        stream = StringIO()
+        writer = psl.AlignmentWriter(stream, wildcard="X")
+        n = writer.write_file(protein_alignments, mincount=3, maxcount=3)
+        self.assertEqual(n, 3)
+        # Read the alignments back in:
+        alignments = psl.AlignmentIterator(path)
+        stream.seek(0)
+        protein_alignments = psl.AlignmentIterator(stream)
+        for alignment, protein_alignment in zip(alignments, protein_alignments):
+            # Confirm that the recalculated values for matches, misMatches,
+            # repMatches, and nCount are correct:
+            self.assertEqual(alignment.matches, protein_alignment.matches)
+            self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
+            self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
+            self.assertEqual(alignment.nCount, protein_alignment.nCount)
 
 
 if __name__ == "__main__":
