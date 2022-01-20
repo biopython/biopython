@@ -766,7 +766,7 @@ def Tm_GC(
        concentration is calculated and used for salt correction (von Ahsen et
        al., 2001).
      - saltcorr: Type of salt correction (see method salt_correction).
-       Default=5. 0 or None means no salt correction.
+       Default=0. 0 or None means no salt correction.
      - mismatch: If 'True' (default) every 'X' in the sequence is counted as
        mismatch.
 
@@ -800,19 +800,19 @@ def Tm_GC(
             saltcorr = 0
         if valueset == 3:
             A, B, C, D = (81.5, 0.41, 675, 1)
-            saltcorr = 2
+            saltcorr = 1
         if valueset == 4:
             A, B, C, D = (81.5, 0.41, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 5:
             A, B, C, D = (78.0, 0.7, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 6:
             A, B, C, D = (67.0, 0.8, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 7:
             A, B, C, D = (81.5, 0.41, 600, 1)
-            saltcorr = 2
+            saltcorr = 1
         if valueset == 8:
             A, B, C, D = (77.1, 0.41, 528, 1)
             saltcorr = 4
