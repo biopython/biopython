@@ -168,19 +168,19 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         tStarts = []
         tStart, qStart = coordinates[:, 0]
         for tEnd, qEnd in coordinates[:, 1:].transpose():
-            tCount = tEnd - tStart
-            qCount = qEnd - qStart
-            if tCount == 0:
+            if tStart == tEnd:
                 if qStart > 0 and qEnd < qSize:
                     qNumInsert += 1
-                    qBaseInsert += qCount
+                    qBaseInsert += qEnd - qStart
                 qStart = qEnd
-            elif qCount == 0:
+            elif qStart == qEnd:
                 if tStart > 0 and tEnd < tSize:
                     tNumInsert += 1
-                    tBaseInsert += tCount
+                    tBaseInsert += tEnd - tStart
                 tStart = tEnd
             else:
+                tCount = tEnd - tStart
+                qCount = qEnd - qStart
                 tStarts.append(tStart)
                 qStarts.append(qStart)
                 blockSizes.append(qCount)
@@ -250,6 +250,8 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             pass
         tStart = tStarts[0]  # start of alignment in target
         qStart = qStarts[0]  # start of alignment in query
+        tEnd = tStarts[-1] + tCount  # end of alignment in target
+        qEnd = qStarts[-1] + qCount  # end of alignment in query
         if strand == "-":
             if dnax is True:
                 tStart, tEnd = tSize - tEnd, tSize - tStart
