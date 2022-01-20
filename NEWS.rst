@@ -43,13 +43,14 @@ possible, especially the following contributors:
 - Aziz Khan
 - Chenghao Zhu
 - Damien Goutte-Gattat
+- Erik  Whiting
 - Fabian Egli
+- Markus Piotrowski
+- Michiel de Hoon
+- Neil P. (first contribution)
+- Peter Cock
 - Sebastian Bassi
 - Tim Burke
-- Michiel de Hoon
-- Peter Cock
-- Erik  Whiting
-- Neil P. (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================
