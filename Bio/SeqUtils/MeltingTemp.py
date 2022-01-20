@@ -62,7 +62,7 @@ For example:
     >>> print('%0.2f' % mt.Tm_Wallace(myseq))
     84.00
     >>> print('%0.2f' % mt.Tm_GC(myseq))
-    58.73
+    58.97
     >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
