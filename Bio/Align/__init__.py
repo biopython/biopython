@@ -30,7 +30,7 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import Seq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1318,7 +1318,7 @@ class Alignment:
         index = indices.searchsorted(col, side="right")
         if steps[index]:
             offset = col - indices[index]
-            j += sum(steps[:index+1]) + offset
+            j += sum(steps[:index + 1]) + offset
             return sequence[j]
         else:
             return "-"
@@ -1636,7 +1636,6 @@ class Alignment:
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
             raise ValueError("Unequal step sizes in alignment")
-        n = len(self.sequences)
         m = sum(gaps)
         if isinstance(key, tuple):
             try:
@@ -2001,7 +2000,6 @@ class Alignment:
         n1 = len(target)
         n2 = len(query)
         pos = None
-        qSize = n2
         tSize = n1
         cigar = []
         coordinates = self.coordinates

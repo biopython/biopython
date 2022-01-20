@@ -88,7 +88,7 @@ psLayout version {version}
 match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
      	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-""")
+""")  # noqa: W191, E101
 
     def write_alignment(self, alignment):
         """Write a complete alignment as one PSL line."""
@@ -117,7 +117,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         n1 = len(target)
         n2 = len(query)
         dnax = None  # set to True for translated DNA aligned to protein,
-                     # and to False for DNA/RNA aligned to DNA/RNA
+                     # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -307,7 +307,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="PSL")
         stream = self.stream
-        metadata = {}
         line = next(stream)
         if line.startswith("psLayout "):
             words = line.split()

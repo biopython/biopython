@@ -53,14 +53,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[  77,  147, 2182, 2297, 3762, 3784],
                              [   0,   70,   70,  185,  185,  207]]),
+                # fmt: on
             )
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(numpy.array_equal(
             alignment.substitutions,
+            # fmt: off
+# flake8: noqa
             numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.],
@@ -95,14 +100,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[  95,  158, 1220, 1295, 1763, 1806],
                              [ 181,  118,  118,   43,   43,    0]]),
+                # fmt: on
             )
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(numpy.array_equal(
             alignment.substitutions,
+            # fmt: off
+# flake8: noqa
             numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
@@ -137,14 +147,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[  77,  147, 2182, 2297, 3762, 3784],
                              [   3,   73,   73,  188,  188,  210]]),
+                # fmt: on
             )
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(numpy.array_equal(
             alignment.substitutions,
+            # fmt: off
+# flake8: noqa
             numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -180,14 +195,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[  95,  158, 1220, 1295, 1763, 1806],
                              [ 184,  121,  121,   46,   46,    3]]),
+                # fmt: on
             )
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(numpy.array_equal(
             alignment.substitutions,
+            # fmt: off
+# flake8: noqa
             numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -270,8 +290,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61646095, 61646111],
                              [      11,       27]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -292,8 +315,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[10271783, 10271816],
                              [       0,       33]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -314,8 +340,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[53575980, 53575997],
                              [      25,        8]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -336,8 +365,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[85737865, 85737906],
                              [       9,       50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -358,8 +390,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[95160479, 95160520],
                              [       8,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -380,8 +415,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[42144400, 42144436],
                              [      11,       47]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -402,8 +440,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[183925984, 183925990, 183925990, 183926028],
                              [        1,         7,        11,        49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -424,8 +465,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
                              [      10,       35,       35,       46]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -446,8 +490,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[23891310, 23891349],
                              [      10,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -468,8 +515,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[43252217, 43252245],
                              [      21,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -490,8 +540,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                              [       1,        8,        8,       11,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -512,8 +565,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1207056, 1207106],
                              [      0,      50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -534,8 +590,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61700837, 61700871],
                              [       1,       35]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -556,8 +615,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                              [      49,       39,       39,       29,       11]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -578,8 +640,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[48997405, 48997442],
                              [      49,       12]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -600,8 +665,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[120641740, 120641776],
                              [       49,        13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -622,8 +690,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[54017130, 54017169],
                              [      49,       10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -644,8 +715,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[553742, 553781],
                              [    49,     10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -666,8 +740,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[99388555, 99388591],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -688,8 +765,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[112178171, 112178196],
                              [       35,        10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -710,8 +790,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[39368490, 39368526],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -732,8 +815,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[220325687, 220325721],
                              [       47,        13]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -798,8 +884,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61646095, 61646111],
                              [      11,       27]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -820,8 +909,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[10271783, 10271816],
                              [       0,       33]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -842,8 +934,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[53575980, 53575997],
                              [      25,        8]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -886,8 +981,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[85737865, 85737906],
                              [       9,       50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -908,8 +1006,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[95160479, 95160520],
                              [       8,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -930,8 +1031,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[42144400, 42144436],
                              [      11,       47]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -952,8 +1056,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[183925984, 183925990, 183925990, 183926028],
                              [        1,         7,        11,        49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -974,8 +1081,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
                              [      10,       35,       35,       46]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -996,8 +1106,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[23891310, 23891349],
                              [      10,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1018,8 +1131,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[43252217, 43252245],
                              [      21,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1040,8 +1156,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                              [       1,        8,        8,       11,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1062,8 +1181,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1207056, 1207106],
                              [      0,      50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1084,8 +1206,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61700837, 61700871],
                              [       1,       35]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1106,8 +1231,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                              [      49,       39,       39,       29,       11]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1128,8 +1256,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[48997405, 48997442],
                              [      49,       12]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1150,8 +1281,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[120641740, 120641776],
                              [       49,        13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1172,8 +1306,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[54017130, 54017169],
                              [      49,       10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1194,8 +1331,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[553742, 553781],
                              [    49,     10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1216,8 +1356,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[99388555, 99388591],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1238,8 +1381,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[112178171, 112178196],
                              [       35,        10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1260,8 +1406,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[39368490, 39368526],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1282,8 +1431,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[220325687, 220325721],
                              [       47,        13]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -1325,8 +1477,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61646095, 61646111],
                              [      11,       27]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1347,8 +1502,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[10271783, 10271816],
                              [       0,       33]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1369,8 +1527,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[53575980, 53575997],
                              [      25,        8]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1391,8 +1552,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[85737865, 85737906],
                              [       9,       50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1413,8 +1577,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[95160479, 95160520],
                              [       8,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1435,8 +1602,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[42144400, 42144436],
                              [      11,       47]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1457,8 +1627,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[183925984, 183925990, 183925990, 183926028],
                              [        1,         7,        11,        49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1479,8 +1652,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
                              [      10,       35,       35,       46]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1501,8 +1677,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[23891310, 23891349],
                              [      10,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1523,8 +1702,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[43252217, 43252245],
                              [      21,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1545,8 +1727,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                              [       1,        8,        8,       11,       49]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1567,8 +1752,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1207056, 1207106],
                              [      0,      50]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1589,8 +1777,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[61700837, 61700871],
                              [       1,       35]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1611,8 +1802,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                              [      49,       39,       39,       29,       11]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1633,8 +1827,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[48997405, 48997442],
                              [      49,       12]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1655,8 +1852,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[120641740, 120641776],
                              [       49,        13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1677,8 +1877,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[54017130, 54017169],
                              [      49,       10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1699,8 +1902,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[553742, 553781],
                              [    49,     10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1721,8 +1927,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[99388555, 99388591],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1743,8 +1952,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[112178171, 112178196],
                              [       35,        10]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1767,6 +1979,7 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 numpy.array([[39368490, 39368526],
                              [      49,       13]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1787,8 +2000,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[220325687, 220325721],
                              [       47,        13]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -1832,8 +2048,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75566694, 75566850],
                              [      61,      113]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1853,8 +2072,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75560749, 75560881],
                              [      17,       61]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1874,8 +2096,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75549820, 75549865, 75567225, 75567225, 75567312],
                              [       0,       15,       15,      113,      142]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1895,8 +2120,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75604767, 75604827, 75605728, 75605809],
                              [     183,      203,      203,      230]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1916,8 +2144,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75594914, 75594989],
                              [     158,      183]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1937,8 +2168,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[75569459, 75569507],
                              [     142,      158]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1958,8 +2192,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[41260685, 41260787],
                              [      76,      110]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1979,8 +2216,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[41257605, 41257731, 41263227, 41263227, 41263290],
                              [      17,       59,       59,      162,      183]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -2148,10 +2388,13 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
                               9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
                              [     17,      61,      61,     113,     113,     142,     142,
                                   158,     158,     183,     183,     203,     203,     230]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2171,8 +2414,11 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[2103463, 2103523, 2103522, 2103522, 2104149],
                              [      0,      20,      20,      21,     230]]),
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2192,8 +2438,11 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[20873021, 20872472, 20872471, 20872471, 20872390],
                              [       0,      183,      183,      203,      230]]),
+                # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
