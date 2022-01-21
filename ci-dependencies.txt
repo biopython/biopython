@@ -28,6 +28,5 @@ scipy
 ## Documentation
 numpydoc==1.0.0
 pygments
-sphinx>=4.2.0
+sphinx==4.3
 sphinx_rtd_theme
-
