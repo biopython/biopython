@@ -72,9 +72,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.wildcard = wildcard
         self.mask = mask
 
+    # fmt: off
     def write_header(self, alignments):
         """Write the PSL header."""
-        # fmt: off
         if not self.header:
             return
         try:
@@ -92,7 +92,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 """
         )  # noqa: W191, E101
-        # fmt: on
+    # fmt: on
 
     def write_alignment(self, alignment):
         """Write a complete alignment as one PSL line."""
