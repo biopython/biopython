@@ -62,9 +62,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(numpy.array_equal(
-            alignment.substitutions,
-            # fmt: off
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
 # flake8: noqa
             numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -75,11 +76,16 @@ class TestAlign_dna_rna(unittest.TestCase):
                          [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                         ])
-                )
+            )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
-        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet)
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
@@ -109,9 +115,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(numpy.array_equal(
-            alignment.substitutions,
-            # fmt: off
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
 # flake8: noqa
             numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -125,8 +132,13 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
-        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet)
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
@@ -156,9 +168,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(numpy.array_equal(
-            alignment.substitutions,
-            # fmt: off
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
 # flake8: noqa
             numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -173,8 +186,14 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
-        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
-        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet if c != "X")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
@@ -204,9 +223,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         alignment.target.seq = self.dna[alignment.target.id]
         alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(numpy.array_equal(
-            alignment.substitutions,
-            # fmt: off
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
 # flake8: noqa
             numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -218,11 +238,17 @@ class TestAlign_dna_rna(unittest.TestCase):
                          [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                         ]),
-                )
+            )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
-        matches = sum(alignment.substitutions[c,c] for c in alignment.substitutions.alphabet)
-        repMatches = sum(alignment.substitutions[c,c.swapcase()] for c in alignment.substitutions.alphabet if c != "X")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         self.assertRaises(StopIteration, next, alignments)
@@ -1977,6 +2003,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
                 numpy.array([[39368490, 39368526],
                              [      49,       13]]),
                 # fmt: on
@@ -2292,61 +2319,87 @@ class TestAlign_dnax_prot(unittest.TestCase):
             aligned_dna_translated = Seq(aligned_dna.translate())
             aligned_protein = Seq(aligned_protein)
             # Create a new alignment including the aligned sequences only:
-            records = [SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
-                       SeqRecord(aligned_protein, id=alignment.sequences[1].id),
-                      ]
-            coordinates = numpy.array([[0, len(aligned_dna_translated)],
-                                       [0, len(aligned_protein)]])
+            records = [
+                SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
+                SeqRecord(aligned_protein, id=alignment.sequences[1].id),
+            ]
+            coordinates = numpy.array(
+                [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
+            )
             protein_alignment = Alignment(records, coordinates)
             protein_alignments.append(protein_alignment)
             if i == 0:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
 ||||||||||||||||||||||||||||||||||||||||||||||||||||
 YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
-""")
+""",
+                )
             elif i == 1:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
 ||||||||||||||||||||||||||||||||||||||||||||
 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
-""")
+""",
+                )
             elif i == 2:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
 ||||||||||||||||||||||||||||||||||||||||||||
 MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
-""")
+""",
+                )
             elif i == 3:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
 |||||||||||||||||||||||||||||||||||||||||||||||
 DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
-""")
+""",
+                )
             elif i == 4:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 APSIDEKVDLHFIALVHVDGHLYEL
 |||||||||||||||||||||||||
 APSIDEKVDLHFIALVHVDGHLYEL
-""")
+""",
+                )
             elif i == 5:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 AIRVTHETSAHEGQTE
 ||||||||||||||||
 AIRVTHETSAHEGQTE
-""")
+""",
+                )
             elif i == 6:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK
 ||.|...||||||||.|.|||||||||.|||.||
 GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK
-""")
+""",
+                )
             elif i == 7:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHLYEL
 |.|..||....|.||||.|...|.|..||.|.||.|||||.||.||..|||....||||||||
 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
-""")
+""",
+                )
         # Write the protein alignments to a PSL file:
         stream = StringIO()
         writer = psl.AlignmentWriter(stream, wildcard="X")
@@ -2499,10 +2552,14 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
             alignment.sequences[1].seq = protein.seq
             if i == 0 or i == 1:
                 # The alignment is on the forward strand of the DNA sequence:
-                self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+                self.assertLess(
+                    alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                )
             elif i == 2:
                 # The alignment is on the reverse strand of the DNA sequence:
-                self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+                self.assertGreater(
+                    alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                )
                 # so we take the reverse complement:
                 alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
                 alignment.sequences[0].seq = dna.reverse_complement()
@@ -2520,31 +2577,42 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
             aligned_dna_translated = Seq(aligned_dna.translate())
             aligned_protein = Seq(aligned_protein)
             # Create a new alignment including the aligned sequences only:
-            records = [SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
-                       SeqRecord(aligned_protein, id=alignment.sequences[1].id),
-                      ]
-            coordinates = numpy.array([[0, len(aligned_dna_translated)],
-                                       [0, len(aligned_protein)]])
+            records = [
+                SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
+                SeqRecord(aligned_protein, id=alignment.sequences[1].id),
+            ]
+            coordinates = numpy.array(
+                [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
+            )
             protein_alignment = Alignment(records, coordinates)
             protein_alignments.append(protein_alignment)
             if i == 0:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
 ||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
-""")
+""",
+                )
             elif i == 1:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLYELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA
 ||||.|||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||..|||.|||.||||.|||||||||||||||||||||||||||||||||.|.||||||.||||||.|||||.||.|||||||..||||||||||||||||||||||||.||||||||||||.|||.|||||.|||.||||||.|||.||||||
 MEGQRWLPLEANPEVTNQFLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
-""")
+""",
+                )
             elif i == 2:
-                self.assertEqual(str(protein_alignment), """\
+                self.assertEqual(
+                    str(protein_alignment),
+                    """\
 MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
 ||.|||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||.||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
 MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA
-""")
+""",
+                )
         # Write the protein alignments to a PSL file:
         stream = StringIO()
         writer = psl.AlignmentWriter(stream, wildcard="X")
