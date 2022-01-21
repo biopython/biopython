@@ -82,13 +82,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             version = "3"
         else:
             version = metadata.get("version", "3")
-        self.stream.write(f"""\
+        self.stream.write(
+            f"""\
 psLayout version {version}
 
 match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
      	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-""")  # noqa: W191, E101
+"""
+        )  # noqa: W191, E101
 
     def write_alignment(self, alignment):
         """Write a complete alignment as one PSL line."""
@@ -116,6 +118,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             pass
         n1 = len(target)
         n2 = len(query)
+        # fmt: off
         dnax = None  # set to True for translated DNA aligned to protein,
                      # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
         if coordinates[1, 0] > coordinates[1, -1]:
@@ -138,6 +141,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             strand = "+"
             seq1 = target
             seq2 = query
+        # fmt: on
         try:
             seq1 = bytes(target)
         except TypeError:  # string
@@ -344,15 +348,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             tName = words[13]
             tSize = int(words[14])
             blockCount = int(words[17])
-            blockSizes = [int(blockSize) for blockSize in words[18].rstrip(",").split(",")]
+            blockSizes = [
+                int(blockSize) for blockSize in words[18].rstrip(",").split(",")
+            ]
             qStarts = [int(start) for start in words[19].rstrip(",").split(",")]
             tStarts = [int(start) for start in words[20].rstrip(",").split(",")]
             if len(blockSizes) != blockCount:
-                raise ValueError("Inconsistent number of blocks (%d found, expected %d)" % (len(blockSizes), blockCount))
+                raise ValueError(
+                    "Inconsistent number of blocks (%d found, expected %d)"
+                    % (len(blockSizes), blockCount)
+                )
             if len(qStarts) != blockCount:
-                raise ValueError("Inconsistent number of query start positions (%d found, expected %d)" % (len(qStarts), blockCount))
+                raise ValueError(
+                    "Inconsistent number of query start positions (%d found, expected %d)"
+                    % (len(qStarts), blockCount)
+                )
             if len(tStarts) != blockCount:
-                raise ValueError("Inconsistent number of target start positions (%d found, expected %d)" % (len(tStarts), blockCount))
+                raise ValueError(
+                    "Inconsistent number of target start positions (%d found, expected %d)"
+                    % (len(tStarts), blockCount)
+                )
             target_sequence = Seq(None, length=tSize)
             target_record = SeqRecord(target_sequence, id=tName)
             query_sequence = Seq(None, length=qSize)
@@ -369,7 +384,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             qPosition = qStarts[0]
             tPosition = tStarts[0]
             coordinates = [[tPosition, qPosition]]
-            for tBlockSize, qBlockSize, tStart, qStart in zip(tBlockSizes, qBlockSizes, tStarts, qStarts):
+            for tBlockSize, qBlockSize, tStart, qStart in zip(
+                tBlockSizes, qBlockSizes, tStarts, qStarts
+            ):
                 if tStart != tPosition:
                     coordinates.append([tStart, qPosition])
                     tPosition = tStart
@@ -398,13 +415,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if strand == "+-":
                 tStart, tEnd = tEnd, tStart
             if tStart != coordinates[0, 0]:
-                raise ValueError("Inconsistent tStart found (%d, expected %d)" % (tStart, coordinates[0, 0]))
+                raise ValueError(
+                    "Inconsistent tStart found (%d, expected %d)"
+                    % (tStart, coordinates[0, 0])
+                )
             if tEnd != coordinates[0, -1]:
-                raise ValueError("Inconsistent tEnd found (%d, expected %d)" % (tEnd, coordinates[0, -1]))
+                raise ValueError(
+                    "Inconsistent tEnd found (%d, expected %d)"
+                    % (tEnd, coordinates[0, -1])
+                )
             if qStart != coordinates[1, 0]:
-                raise ValueError("Inconsistent qStart found (%d, expected %d)" % (qStart, coordinates[1, 0]))
+                raise ValueError(
+                    "Inconsistent qStart found (%d, expected %d)"
+                    % (qStart, coordinates[1, 0])
+                )
             if qEnd != coordinates[1, -1]:
-                raise ValueError("Inconsistent qEnd found (%d, expected %d)" % (qEnd, coordinates[1, -1]))
+                raise ValueError(
+                    "Inconsistent qEnd found (%d, expected %d)"
+                    % (qEnd, coordinates[1, -1])
+                )
             if strand == "-":
                 coordinates = coordinates.copy()
                 coordinates[1, :] = qSize - coordinates[1, :]
@@ -433,11 +462,23 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     tStart = tEnd
                     qStart = qEnd
             if qNumInsert != int(words[4]):
-                raise ValueError("Inconsistent qNumInsert found (%s, expected %d)" % (words[4], qNumInsert))
+                raise ValueError(
+                    "Inconsistent qNumInsert found (%s, expected %d)"
+                    % (words[4], qNumInsert)
+                )
             if qBaseInsert != int(words[5]):
-                raise ValueError("Inconsistent qBaseInsert found (%s, expected %d)" % (words[5], qBaseInsert))
+                raise ValueError(
+                    "Inconsistent qBaseInsert found (%s, expected %d)"
+                    % (words[5], qBaseInsert)
+                )
             if tNumInsert != int(words[6]):
-                raise ValueError("Inconsistent tNumInsert found (%s, expected %d)" % (words[6], tNumInsert))
+                raise ValueError(
+                    "Inconsistent tNumInsert found (%s, expected %d)"
+                    % (words[6], tNumInsert)
+                )
             if tBaseInsert != int(words[7]):
-                raise ValueError("Inconsistent tBaseInsert found (%s, expected %d)" % (words[7], tBaseInsert))
+                raise ValueError(
+                    "Inconsistent tBaseInsert found (%s, expected %d)"
+                    % (words[7], tBaseInsert)
+                )
             yield alignment
