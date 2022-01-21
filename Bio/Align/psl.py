@@ -1,4 +1,4 @@
-# Copyright 2021 by Michiel de Hoon.  All rights reserved.
+# Copyright 2022 by Michiel de Hoon.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -6,9 +6,9 @@
 # package.
 """Bio.Align support for the "psl" multiple alignment format.
 
-The Pattern Space Layout (PSL foramt, described by UCSC, stores a series
+The Pattern Space Layout (PSL) format, described by UCSC, stores a series
 of pairwise alignments in a single file. Typically they are used for
-transcript to genome alignments. PSL files stored the alignment positions
+transcript to genome alignments. PSL files store the alignment positions
 and alignment scores, but do not store the aligned sequences.
 
 See http://genome.ucsc.edu/FAQ/FAQformat.html#format5
@@ -43,7 +43,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         Arguments:
          - target    - output stream or file name
-         - header    = If True (default), write the PSL header consisting of
+         - header    - If True (default), write the PSL header consisting of
                        five lines containing the PSL format version and a
                        header for each column.
                        If False, suppress the PSL header, resulting in a simple
