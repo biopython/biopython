@@ -90,8 +90,8 @@ psLayout version {version}
 match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
      	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-"""
-        )  # noqa: W191, E101
+"""  # noqa: W191, E101
+        )
         # fmt: on
 
     def write_alignment(self, alignment):
