@@ -11,8 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
-This release of Biopython supports Python 3.7, 3.8 and 3.9. It has also been
-tested on PyPy3.7 v7.3.5.
+This release of Biopython supports Python 3.7, 3.8, 3.9 and 3.10. It has also
+been tested on PyPy3.7 v7.3.5.
 
 Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
