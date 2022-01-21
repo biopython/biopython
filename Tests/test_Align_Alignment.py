@@ -329,7 +329,7 @@ A-G
         self.assertTrue(
             numpy.array_equal(
                 subalignment.coordinates,
-                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]])
+                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
         subalignment = alignment[:1, :]
@@ -343,7 +343,7 @@ A-G
         self.assertTrue(
             numpy.array_equal(
                 subalignment.coordinates,
-                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]])
+                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
         self.assertEqual(alignment, alignment[:])
@@ -997,14 +997,18 @@ TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG""
         self.assertEqual(
             subalignment.column_annotations["clustal_consensus"], "* *", msg=msg
         )
-        self.assertEqual(str(alignment[1::3]), """\
+        self.assertEqual(
+            str(alignment[1::3]),
+            """\
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
 ||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
 """,
             msg=msg,
         )
-        self.assertEqual(str(alignment[1::3, :]), """\
+        self.assertEqual(
+            str(alignment[1::3, :]),
+            """\
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
 ||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
