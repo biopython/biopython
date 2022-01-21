@@ -74,6 +74,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def write_header(self, alignments):
         """Write the PSL header."""
+        # fmt: off
         if not self.header:
             return
         try:
@@ -82,7 +83,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             version = "3"
         else:
             version = metadata.get("version", "3")
-        # fmt: off
         self.stream.write(
             f"""\
 psLayout version {version}
