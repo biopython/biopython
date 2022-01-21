@@ -25,14 +25,14 @@ except ImportError:
 
 class TestAlign_dna_rna(unittest.TestCase):
     def setUp(self):
-        records = SeqIO.parse("dna.fa", "fasta")
+        records = SeqIO.parse("Blat/dna.fa", "fasta")
         self.dna = {record.id: record.seq for record in records}
-        records = SeqIO.parse("rna.fa", "fasta")
+        records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
 
     def test_reading(self):
         """Test parsing dna_rna.psl."""
-        path = "dna_rna.psl"
+        path = "Blat/dna_rna.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -229,7 +229,7 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.psl."""
-        path = "dna_rna.psl"
+        path = "Blat/dna_rna.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -269,7 +269,7 @@ class TestAlign_dna_rna(unittest.TestCase):
 class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl."""
-        path = "psl_34_001.psl"
+        path = "Blat/psl_34_001.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -826,7 +826,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_writing_psl_34_001(self):
         """Test writing the alignments in psl_34_001.psl."""
-        path = "psl_34_001.psl"
+        path = "Blat/psl_34_001.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -841,14 +841,14 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_002(self):
         """Test parsing psl_34_002.psl."""
-        path = "psl_34_002.psl"
+        path = "Blat/psl_34_002.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_002(self):
         """Test writing the alignments in psl_34_002.psl."""
-        path = "psl_34_002.psl"
+        path = "Blat/psl_34_002.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -863,7 +863,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.psl."""
-        path = "psl_34_003.psl"
+        path = "Blat/psl_34_003.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -945,7 +945,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_writing_psl_34_003(self):
         """Test writing the alignments in psl_34_003.psl."""
-        path = "psl_34_003.psl"
+        path = "Blat/psl_34_003.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -960,7 +960,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.psl."""
-        path = "psl_34_004.psl"
+        path = "Blat/psl_34_004.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -1442,7 +1442,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_writing_psl_34_004(self):
         """Test writing the alignments in psl_34_004.psl."""
-        path = "psl_34_004.psl"
+        path = "Blat/psl_34_004.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -1457,7 +1457,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.psl."""
-        path = "psl_34_005.psl"
+        path = "Blat/psl_34_005.psl"
         alignments = psl.AlignmentIterator(path)
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -2011,7 +2011,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_writing_psl_34_005(self):
         """Test writing the alignments in psl_34_005.psl."""
-        path = "psl_34_005.psl"
+        path = "Blat/psl_34_005.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -2028,7 +2028,7 @@ class TestAlign_dna(unittest.TestCase):
 class TestAlign_dnax_prot(unittest.TestCase):
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl."""
-        path = "psl_35_001.psl"
+        path = "Blat/psl_35_001.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -2227,7 +2227,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     def test_writing_psl_35_001(self):
         """Test writing the alignments in psl_35_001.psl."""
-        path = "psl_35_001.psl"
+        path = "Blat/psl_35_001.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -2256,13 +2256,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         # file below, and create partially defined Seq objects.
         #
         # Load the protein sequence:
-        filename = "CAG33136.1.fasta"
-        protein = SeqIO.read(filename, "fasta")
+        protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
         alignments = psl.AlignmentIterator(path)
-        filename = "hg38.fa"
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse(filename, "fasta")
+            records = SeqIO.parse("Blat/hg38.fa", "fasta")
             for record in records:
                 name, start_end = record.id.split(":")
                 if name == alignment.sequences[0].id:
@@ -2368,7 +2366,7 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
-        path = "psl_35_002.psl"
+        path = "Blat/psl_35_002.psl"
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -2449,7 +2447,7 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
 
     def test_writing_psl_35_002(self):
         """Test writing the alignments in psl_35_002.psl."""
-        path = "psl_35_002.psl"
+        path = "Blat/psl_35_002.psl"
         with open(path) as stream:
             original_data = stream.read()
         alignments = psl.AlignmentIterator(path)
@@ -2479,13 +2477,11 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         # file below, and create partially defined Seq objects.
         #
         # Load the protein sequence:
-        filename = "CAG33136.1.fasta"
-        protein = SeqIO.read(filename, "fasta")
+        protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
         alignments = psl.AlignmentIterator(path)
-        filename = "balAcu1.fa"
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse(filename, "fasta")
+            records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
             for record in records:
                 name, start_end = record.id.split(":")
                 if name == alignment.sequences[0].id:
