@@ -1318,12 +1318,14 @@ class Alignment:
         index = indices.searchsorted(col, side="right")
         if steps[index]:
             offset = col - indices[index]
-            j += sum(steps[:index + 1]) + offset
+            j += sum(steps[: index + 1]) + offset
             return sequence[j]
         else:
             return "-"
 
-    def _get_row_cols_slice(self, coordinate, start_index, stop_index, steps, gaps, sequence):
+    def _get_row_cols_slice(
+        self, coordinate, start_index, stop_index, steps, gaps, sequence
+    ):
         """Return the alignment contents of one row and consecutive columns (PRIVATE).
 
         This method is called by __getitem__ for invocations of the form
@@ -1421,7 +1423,9 @@ class Alignment:
                 line += sequence[index]
         return line
 
-    def _get_rows_cols_slice(self, coordinates, row, start_index, stop_index, steps, gaps, sequences):
+    def _get_rows_cols_slice(
+        self, coordinates, row, start_index, stop_index, steps, gaps, sequences
+    ):
         """Return a subalignment of multiple rows and consecutive columns (PRIVATE).
 
         This method is called by __getitem__ for invocations of the form
@@ -1660,7 +1664,9 @@ class Alignment:
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
-                    return self._get_row_cols_slice(coordinate, start_index, stop_index, steps, gaps, sequence)
+                    return self._get_row_cols_slice(
+                        coordinate, start_index, stop_index, steps, gaps, sequence
+                    )
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
             return self._get_row_cols_iterable(coordinate, col, steps, gaps, sequence)
@@ -1672,11 +1678,21 @@ class Alignment:
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
-                    return self._get_rows_cols_slice(coordinates, row, start_index, stop_index, steps, gaps, sequences)
+                    return self._get_rows_cols_slice(
+                        coordinates,
+                        row,
+                        start_index,
+                        stop_index,
+                        steps,
+                        gaps,
+                        sequences,
+                    )
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
             # try if we can use col as an iterable
-            return self._get_rows_cols_iterable(coordinates, col, steps, gaps, sequences)
+            return self._get_rows_cols_iterable(
+                coordinates, col, steps, gaps, sequences
+            )
         raise TypeError("first index must be an integer or slice")
 
     def _convert_sequence_string(self, sequence):
@@ -1969,6 +1985,7 @@ class Alignment:
         """
         from io import StringIO
         from . import psl
+
         stream = StringIO()
         writer = psl.AlignmentWriter(stream, header=False, mask=mask, wildcard=wildcard)
         alignments = [self]
