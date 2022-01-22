@@ -87,8 +87,8 @@ from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 from typing import List, Dict, Set, TextIO, Union, Tuple, cast, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from Bio.PDB.Chain import Chain
     from Bio.PDB.Residue import Residue
+    from Bio.PDB.Chain import Chain
 
 HKT = Tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
 DKT = Tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
