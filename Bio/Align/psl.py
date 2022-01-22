@@ -4,7 +4,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.Align support for the "psl" multiple alignment format.
+"""Bio.Align support for the "psl" pairwise alignment format.
 
 The Pattern Space Layout (PSL) format, described by UCSC, stores a series
 of pairwise alignments in a single file. Typically they are used for
@@ -21,7 +21,7 @@ positions (like Python) and aligning region sizes.
 A minimal aligned region of length one and starting at first position in the
 source sequence would have ``start == 0`` and ``size == 1``.
 
-As we can see on this example, ``start + size`` will give one more than the
+As we can see in this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
