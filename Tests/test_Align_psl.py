@@ -24,6 +24,10 @@ except ImportError:
 
 
 class TestAlign_dna_rna(unittest.TestCase):
+
+    # The PSL file dna_rna.psl was generated using this command:
+    # blat -mask=lower dna.fa rna.fa dna_rna.psl
+
     def setUp(self):
         records = SeqIO.parse("Blat/dna.fa", "fasta")
         self.dna = {record.id: record.seq for record in records}
