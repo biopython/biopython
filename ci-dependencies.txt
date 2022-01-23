@@ -17,8 +17,9 @@ codecov
 numpy
 matplotlib
 mmtf-python
-mysqlclient
-mysql-connector-python
+#MySQL testing disabled due to #3834:
+#mysqlclient
+#mysql-connector-python
 networkx
 rdflib
 reportlab
@@ -27,6 +28,5 @@ scipy
 ## Documentation
 numpydoc==1.0.0
 pygments
-sphinx>=4.2.0
+sphinx==4.3
 sphinx_rtd_theme
-
