@@ -393,49 +393,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
             coordinates = numpy.array(coordinates).transpose()
-            if strand == "-":
-                coordinates[1, :] = qSize - coordinates[1, :]
-            elif strand == "+-":
-                coordinates[0, :] = tSize - coordinates[0, :]
-            alignment = Alignment(records, coordinates)
-            alignment.matches = int(words[0])
-            alignment.misMatches = int(words[1])
-            alignment.repMatches = int(words[2])
-            alignment.nCount = int(words[3])
-            qStart = int(words[11])
-            qEnd = int(words[12])
-            tStart = int(words[15])
-            tEnd = int(words[16])
-            if strand == "-":
-                qStart, qEnd = qEnd, qStart
-            if strand == "+-":
-                tStart, tEnd = tEnd, tStart
-            if tStart != coordinates[0, 0]:
-                raise ValueError(
-                    "Inconsistent tStart found (%d, expected %d)"
-                    % (tStart, coordinates[0, 0])
-                )
-            if tEnd != coordinates[0, -1]:
-                raise ValueError(
-                    "Inconsistent tEnd found (%d, expected %d)"
-                    % (tEnd, coordinates[0, -1])
-                )
-            if qStart != coordinates[1, 0]:
-                raise ValueError(
-                    "Inconsistent qStart found (%d, expected %d)"
-                    % (qStart, coordinates[1, 0])
-                )
-            if qEnd != coordinates[1, -1]:
-                raise ValueError(
-                    "Inconsistent qEnd found (%d, expected %d)"
-                    % (qEnd, coordinates[1, -1])
-                )
-            if strand == "-":
-                coordinates = coordinates.copy()
-                coordinates[1, :] = qSize - coordinates[1, :]
-            if strand == "+-":
-                coordinates = coordinates.copy()
-                coordinates[0, :] = tSize - coordinates[0, :]
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0
@@ -477,4 +434,39 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent tBaseInsert found (%s, expected %d)"
                     % (words[7], tBaseInsert)
                 )
+            qStart = int(words[11])
+            qEnd = int(words[12])
+            tStart = int(words[15])
+            tEnd = int(words[16])
+            if strand == "-":
+                qStart, qEnd = qEnd, qStart
+                coordinates[1, :] = qSize - coordinates[1, :]
+            elif strand == "+-":
+                tStart, tEnd = tEnd, tStart
+                coordinates[0, :] = tSize - coordinates[0, :]
+            if tStart != coordinates[0, 0]:
+                raise ValueError(
+                    "Inconsistent tStart found (%d, expected %d)"
+                    % (tStart, coordinates[0, 0])
+                )
+            if tEnd != coordinates[0, -1]:
+                raise ValueError(
+                    "Inconsistent tEnd found (%d, expected %d)"
+                    % (tEnd, coordinates[0, -1])
+                )
+            if qStart != coordinates[1, 0]:
+                raise ValueError(
+                    "Inconsistent qStart found (%d, expected %d)"
+                    % (qStart, coordinates[1, 0])
+                )
+            if qEnd != coordinates[1, -1]:
+                raise ValueError(
+                    "Inconsistent qEnd found (%d, expected %d)"
+                    % (qEnd, coordinates[1, -1])
+                )
+            alignment = Alignment(records, coordinates)
+            alignment.matches = int(words[0])
+            alignment.misMatches = int(words[1])
+            alignment.repMatches = int(words[2])
+            alignment.nCount = int(words[3])
             yield alignment
