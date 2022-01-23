@@ -186,7 +186,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                 try:
                     tSeq = bytes(tSeq)
                 except TypeError:  # string
-                    target = bytes(tSeq, "ASCII")
+                    tSeq = bytes(tSeq, "ASCII")
                 except UndefinedSequenceError:  # sequence contents is unknown
                     tSeq = None
                 try:
