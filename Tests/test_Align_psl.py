@@ -2522,7 +2522,7 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         # repMatches, and nCount from the sequence data and the alignment.
         #
         # The alignments were generated using
-        # blat -t=dnax -q=prot hg38.2bit CAG33136.1.fasta psl_35_001.psl
+        # blat -t=dnax -q=prot balAcu1.2bit CAG33136.1.fasta psl_35_001.psl
         #
         # To save disk space, we extracted the necessary sequence data using
         #
