@@ -11,7 +11,7 @@ of pairwise alignments in a single file. Typically they are used for
 transcript to genome alignments. PSL files store the alignment positions
 and alignment scores, but do not store the aligned sequences.
 
-See http://genome.ucsc.edu/FAQ/FAQformat.html#format5
+See http://genome.ucsc.edu/FAQ/FAQformat.html#format2
 
 You are expected to use this module via the Bio.Align functions.
 
@@ -118,44 +118,40 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             target = target.seq
         except AttributeError:
             pass
-        n1 = len(target)
-        n2 = len(query)
+        tSize = len(target)
+        qSize = len(query)
         # fmt: off
         dnax = None  # set to True for translated DNA aligned to protein,
                      # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
-            seq1 = target
-            seq2 = reverse_complement(query, inplace=False)
+            query = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
+            coordinates[1, :] = qSize - coordinates[1, :]
         elif coordinates[0, 0] > coordinates[0, -1]:
             # protein mapped to reverse strand of DNA
             strand = "-"
-            seq1 = reverse_complement(target, inplace=False)
-            seq2 = query
+            target = reverse_complement(target, inplace=False)
             coordinates = coordinates.copy()
-            coordinates[0, :] = n1 - coordinates[0, :]
+            coordinates[0, :] = tSize - coordinates[0, :]
             dnax = True
         else:
             # mapped to forward strand
             strand = "+"
-            seq1 = target
-            seq2 = query
         # fmt: on
         try:
-            seq1 = bytes(target)
+            target = bytes(target)
         except TypeError:  # string
-            seq1 = bytes(target, "ASCII")
+            target = bytes(target, "ASCII")
         except UndefinedSequenceError:  # sequence contents is unknown
-            seq1 = None
+            target = None
         try:
-            seq2 = bytes(seq2)
+            query = bytes(query)
         except TypeError:  # string
-            seq2 = bytes(seq2, "ASCII")
+            query = bytes(query, "ASCII")
         except UndefinedSequenceError:  # sequence contents is unknown
-            seq2 = None
+            query = None
         wildcard = self.wildcard
         mask = self.mask
         # variable names follow those in the PSL file format specification
@@ -167,8 +163,6 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         qBaseInsert = 0
         tNumInsert = 0
         tBaseInsert = 0
-        qSize = n2
-        tSize = n1
         blockSizes = []
         qStarts = []
         tStarts = []
@@ -199,15 +193,15 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                     assert tCount == 3 * qCount
                     assert dnax is not False
                     dnax = True
-                if seq1 is None or seq2 is None:
+                if target is None or query is None:
                     # contents of at least one sequence is unknown;
                     # count all aligned letters as matches:
                     matches += qCount
                 else:
-                    s1 = seq1[tStart:tEnd]
-                    s2 = seq2[qStart:qEnd]
+                    tSeq = target[tStart:tEnd]
+                    qSeq = query[qStart:qEnd]
                     if mask == "lower":
-                        for u1, u2, c1 in zip(s1.upper(), s2.upper(), s1):
+                        for u1, u2, c1 in zip(tSeq.upper(), qSeq.upper(), tSeq):
                             if u1 == wildcard or u2 == wildcard:
                                 nCount += 1
                             elif u1 == u2:
@@ -218,7 +212,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                             else:
                                 misMatches += 1
                     elif mask == "upper":
-                        for u1, u2, c1 in zip(s1.lower(), s2.lower(), s1):
+                        for u1, u2, c1 in zip(tSeq.lower(), qSeq.lower(), tSeq):
                             if u1 == wildcard or u2 == wildcard:
                                 nCount += 1
                             elif u1 == u2:
@@ -229,7 +223,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                             else:
                                 misMatches += 1
                     else:
-                        for u1, u2 in zip(s1.upper(), s2.upper()):
+                        for u1, u2 in zip(tSeq.upper(), qSeq.upper()):
                             if u1 == wildcard or u2 == wildcard:
                                 nCount += 1
                             elif u1 == u2:
