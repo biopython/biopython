@@ -140,18 +140,6 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             # mapped to forward strand
             strand = "+"
         # fmt: on
-        try:
-            target = bytes(target)
-        except TypeError:  # string
-            target = bytes(target, "ASCII")
-        except UndefinedSequenceError:  # sequence contents is unknown
-            target = None
-        try:
-            query = bytes(query)
-        except TypeError:  # string
-            query = bytes(query, "ASCII")
-        except UndefinedSequenceError:  # sequence contents is unknown
-            query = None
         wildcard = self.wildcard
         mask = self.mask
         # variable names follow those in the PSL file format specification
@@ -193,13 +181,25 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                     assert tCount == 3 * qCount
                     assert dnax is not False
                     dnax = True
-                if target is None or query is None:
+                tSeq = target[tStart:tEnd]
+                qSeq = query[qStart:qEnd]
+                try:
+                    tSeq = bytes(tSeq)
+                except TypeError:  # string
+                    target = bytes(tSeq, "ASCII")
+                except UndefinedSequenceError:  # sequence contents is unknown
+                    tSeq = None
+                try:
+                    qSeq = bytes(qSeq)
+                except TypeError:  # string
+                    qSeq = bytes(qSeq, "ASCII")
+                except UndefinedSequenceError:  # sequence contents is unknown
+                    qSeq = None
+                if tSeq is None or qSeq is None:
                     # contents of at least one sequence is unknown;
                     # count all aligned letters as matches:
                     matches += qCount
                 else:
-                    tSeq = target[tStart:tEnd]
-                    qSeq = query[qStart:qEnd]
                     if mask == "lower":
                         for u1, u2, c1 in zip(tSeq.upper(), qSeq.upper(), tSeq):
                             if u1 == wildcard or u2 == wildcard:
