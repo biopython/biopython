@@ -19,6 +19,7 @@ except ImportError:
 
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
+from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import GC
 
 
@@ -45,10 +46,40 @@ A-C-GG-AAC--
         self.assertEqual(alignment[1], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[-2], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[-1], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[0, 0], "A", msg=msg)
+        self.assertEqual(alignment[0, 1], "A", msg=msg)
+        self.assertEqual(alignment[0, 2], "C", msg=msg)
+        self.assertEqual(alignment[0, 3], "C", msg=msg)
+        self.assertEqual(alignment[0, 4], "G", msg=msg)
+        self.assertEqual(alignment[0, 5], "G", msg=msg)
+        self.assertEqual(alignment[0, 6], "G", msg=msg)
+        self.assertEqual(alignment[0, 7], "A", msg=msg)
+        self.assertEqual(alignment[0, 8], "-", msg=msg)
+        self.assertEqual(alignment[0, 9], "C", msg=msg)
+        self.assertEqual(alignment[0, 10], "C", msg=msg)
+        self.assertEqual(alignment[0, 11], "G", msg=msg)
+        self.assertEqual(alignment[1, 0], "A", msg=msg)
+        self.assertEqual(alignment[1, 1], "-", msg=msg)
+        self.assertEqual(alignment[1, 2], "C", msg=msg)
+        self.assertEqual(alignment[1, 3], "-", msg=msg)
+        self.assertEqual(alignment[1, 4], "G", msg=msg)
+        self.assertEqual(alignment[1, 5], "G", msg=msg)
+        self.assertEqual(alignment[1, 6], "-", msg=msg)
+        self.assertEqual(alignment[1, 7], "A", msg=msg)
+        self.assertEqual(alignment[1, 8], "A", msg=msg)
+        self.assertEqual(alignment[1, 9], "C", msg=msg)
+        self.assertEqual(alignment[1, 10], "-", msg=msg)
+        self.assertEqual(alignment[1, 11], "-", msg=msg)
         self.assertEqual(alignment[0, :], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1, :], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[-2, :], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[-1, :], "A-C-GG-AAC--", msg=msg)
+        self.assertEqual(alignment[0, 1:2], "A", msg=msg)
+        self.assertEqual(alignment[1, 1:2], "-", msg=msg)
+        self.assertEqual(alignment[0, 4:5], "G", msg=msg)
+        self.assertEqual(alignment[1, 4:5], "G", msg=msg)
+        self.assertEqual(alignment[0, 10:11], "C", msg=msg)
+        self.assertEqual(alignment[1, 10:11], "-", msg=msg)
         self.assertEqual(alignment[:, 0], "AA", msg=msg)
         self.assertEqual(alignment[:, 1], "A-", msg=msg)
         self.assertEqual(alignment[:, 2], "CC", msg=msg)
@@ -287,30 +318,81 @@ A-G
 """,
             msg=msg,
         )
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1]
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1, :]
+        subalignment = alignment[:1]
+        self.assertEqual(len(subalignment.sequences), 1)
+        sequence = subalignment.sequences[0]
+        try:
+            sequence = sequence.seq
+        except AttributeError:
+            pass
+        self.assertEqual(sequence, "AACCGGGACCG")
+        self.assertTrue(
+            numpy.array_equal(
+                subalignment.coordinates,
+                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+            )
+        )
+        subalignment = alignment[:1, :]
+        self.assertEqual(len(subalignment.sequences), 1)
+        sequence = subalignment.sequences[0]
+        try:
+            sequence = sequence.seq
+        except AttributeError:
+            pass
+        self.assertEqual(sequence, "AACCGGGACCG")
+        self.assertTrue(
+            numpy.array_equal(
+                subalignment.coordinates,
+                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+            )
+        )
+        self.assertEqual(alignment, alignment[:])
 
     def test_indexing_slicing(self):
         target = "AACCGGGACCG"
         query = "ACGGAAC"
+        query_rc = reverse_complement(query)
         sequences = (target, query)
-        coordinates = numpy.array(
+        forward_coordinates = numpy.array(
             [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]]
         )
-        alignment = Align.Alignment(sequences, coordinates)
+        alignment = Align.Alignment(sequences, forward_coordinates)
         alignment.score = 6.0
-        msg = "forward strand"
+        msg = "str, forward strand"
         self.check_indexing_slicing(alignment, msg)
-        query = reverse_complement(query)
-        sequences = (target, query)
-        coordinates = numpy.array(
+        sequences = (target, query_rc)
+        reverse_coordinates = numpy.array(
             [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
         )
-        alignment = Align.Alignment(sequences, coordinates)
+        alignment = Align.Alignment(sequences, reverse_coordinates)
         alignment.score = 6.0
-        msg = "reverse strand"
+        msg = "str, reverse strand"
+        self.check_indexing_slicing(alignment, msg)
+        target = Seq(target)
+        query = Seq(query)
+        query_rc = Seq(query_rc)
+        sequences = (target, query)
+        alignment = Align.Alignment(sequences, forward_coordinates)
+        alignment.score = 6.0
+        msg = "Seq, forward strand"
+        self.check_indexing_slicing(alignment, msg)
+        sequences = (target, query_rc)
+        alignment = Align.Alignment(sequences, reverse_coordinates)
+        alignment.score = 6.0
+        msg = "Seq, reverse strand"
+        self.check_indexing_slicing(alignment, msg)
+        target = SeqRecord(target)
+        query = SeqRecord(query)
+        query_rc = SeqRecord(query_rc)
+        sequences = (target, query)
+        alignment = Align.Alignment(sequences, forward_coordinates)
+        alignment.score = 6.0
+        msg = "SeqRecord, forward strand"
+        self.check_indexing_slicing(alignment, msg)
+        sequences = (target, query_rc)
+        alignment = Align.Alignment(sequences, reverse_coordinates)
+        alignment.score = 6.0
+        msg = "SeqRecord, reverse strand"
         self.check_indexing_slicing(alignment, msg)
 
     def test_sort(self):
@@ -488,34 +570,39 @@ ACTT
             ]
         )
         sequences = (target, query)
-        alignment = Align.Alignment(sequences, coordinates)
-        m = alignment.substitutions
-        self.assertEqual(
-            str(m),
-            """\
+        forward_alignment = Align.Alignment(sequences, coordinates)
+        sequences = (target, query.reverse_complement())
+        coordinates = coordinates.copy()
+        coordinates[1, :] = len(query) - coordinates[1, :]
+        reverse_alignment = Align.Alignment(sequences, coordinates)
+        for alignment in (forward_alignment, reverse_alignment):
+            m = alignment.substitutions
+            self.assertEqual(
+                str(m),
+                """\
       A     C     G     T
 A 191.0   3.0  15.0  13.0
 C   5.0 186.0   9.0  14.0
 G  12.0  11.0 248.0   8.0
 T  11.0  19.0   6.0 145.0
 """,
-        )
-        self.assertAlmostEqual(m["T", "C"], 19.0)
-        self.assertAlmostEqual(m["C", "T"], 14.0)
-        m += m.transpose()
-        m /= 2.0
-        self.assertEqual(
-            str(m),
-            """\
+            )
+            self.assertAlmostEqual(m["T", "C"], 19.0)
+            self.assertAlmostEqual(m["C", "T"], 14.0)
+            m += m.transpose()
+            m /= 2.0
+            self.assertEqual(
+                str(m),
+                """\
       A     C     G     T
 A 191.0   4.0  13.5  12.0
 C   4.0 186.0  10.0  16.5
 G  13.5  10.0 248.0   7.0
 T  12.0  16.5   7.0 145.0
 """,
-        )
-        self.assertAlmostEqual(m["C", "T"], 16.5)
-        self.assertAlmostEqual(m["T", "C"], 16.5)
+            )
+            self.assertAlmostEqual(m["C", "T"], 16.5)
+            self.assertAlmostEqual(m["T", "C"], 16.5)
 
     def test_target_query_properties(self):
         target = "ABCD"
@@ -910,10 +997,25 @@ TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG""
         self.assertEqual(
             subalignment.column_annotations["clustal_consensus"], "* *", msg=msg
         )
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1]
-        with self.assertRaises(NotImplementedError, msg=msg):
-            alignment[:1, :]
+        self.assertEqual(
+            str(alignment[1::3]),
+            """\
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+""",
+            msg=msg,
+        )
+        self.assertEqual(
+            str(alignment[1::3, :]),
+            """\
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+""",
+            msg=msg,
+        )
+        self.assertEqual(alignment, alignment[:])
 
     def test_indexing_slicing(self):
         alignment = self.alignment
