@@ -31,7 +31,6 @@ import numpy
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 
@@ -54,11 +53,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chrom = target.id
         except AttributeError:
             chrom = "target"
-        if coordinates[0, 0] > coordinates[0, -1]:
-            # protein mapped to reverse strand of DNA
-            strand = "-"
-            coordinates = coordinates.copy()
-            coordinates[0, :] = tSize - coordinates[0, :]
+        assert coordinates[0, 0] < coordinates[0, -1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -75,10 +70,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             elif qStart == qEnd:
                 tStart = tEnd
             else:
-                tCount = tEnd - tStart
-                qCount = qEnd - qStart
+                blockSize = tEnd - tStart
                 blockStarts.append(tStart)
-                blockSizes.append(tCount)
+                blockSizes.append(blockSize)
                 tStart = tEnd
                 qStart = qEnd
         try:
@@ -86,7 +80,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             score = 0
         chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + tCount  # end of alignment in target
+        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
         blockStarts -= chromStart
         blockCount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
