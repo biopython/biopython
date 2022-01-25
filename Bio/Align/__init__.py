@@ -1913,69 +1913,17 @@ class Alignment:
 
         Helper for self.format() .
         """
-        target, query = self.sequences
-        # variable names follow those in the BED file format specification
-        try:
-            chrom = target.id
-        except AttributeError:
-            chrom = "target"
-        try:
-            name = query.id
-        except AttributeError:
-            name = "query"
-        coordinates = self.coordinates
-        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
-            strand = "+"
-        else:  # mapped to reverse strand
-            strand = "-"
-            coordinates = coordinates.copy()
-            n = len(query)
-            coordinates[1, :] = n - coordinates[1, :]
-        try:
-            score = self.score
-        except AttributeError:
-            score = 0
-        blockSizes = []
-        tStarts = []
-        tStart, qStart = coordinates[:, 0]
-        for tEnd, qEnd in coordinates[:, 1:].transpose():
-            tCount = tEnd - tStart
-            qCount = qEnd - qStart
-            if tCount == 0:
-                qStart = qEnd
-            elif qCount == 0:
-                tStart = tEnd
-            else:
-                if tCount != qCount:
-                    raise ValueError("Unequal step sizes in alignment")
-                tStarts.append(tStart)
-                blockSizes.append(tCount)
-                tStart = tEnd
-                qStart = qEnd
-        chromStart = tStarts[0]
-        chromEnd = tStarts[-1] + blockSizes[-1]
-        blockStarts = [tStart - chromStart for tStart in tStarts]
-        blockCount = len(blockSizes)
-        blockSizes = ",".join(map(str, blockSizes)) + ","
-        blockStarts = ",".join(map(str, blockStarts)) + ","
-        thickStart = chromStart
-        thickEnd = chromEnd
-        itemRgb = "0"
-        words = [
-            chrom,
-            str(chromStart),
-            str(chromEnd),
-            name,
-            str(score),
-            strand,
-            str(thickStart),
-            str(thickEnd),
-            itemRgb,
-            str(blockCount),
-            blockSizes,
-            blockStarts,
-        ]
-        line = "\t".join(words) + "\n"
+        from io import StringIO
+        from . import bed
+
+        stream = StringIO()
+        writer = bed.AlignmentWriter(stream)
+        alignments = [self]
+        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        assert n == 1
+        stream.seek(0)
+        line = stream.read()
+        stream.close()
         return line
 
     def _format_psl(self, mask=False, wildcard="N"):

@@ -293,7 +293,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for Pattern Space Layout (PSL) files.
 
-    Each line in the file contains one pairwise alignments, which are loaded
+    Each line in the file contains one pairwise alignment, which are loaded
     and returned incrementally.  Alignment score information such as the number
     of matches and mismatches are stored as attributes of each alignment.
     """

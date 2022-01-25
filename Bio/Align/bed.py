@@ -124,7 +124,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for Browser Extensible Data (BED) files.
 
-    Each line in the file contains one pairwise alignments, which are loaded
+    Each line in the file contains one pairwise alignment, which are loaded
     and returned incrementally.  Additional alignment information is stored as
     attributes of each alignment.
     """
