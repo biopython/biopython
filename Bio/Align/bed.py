@@ -180,7 +180,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             blockSizes = [
                 int(blockSize) for blockSize in words[10].rstrip(",").split(",")
             ]
-            blockStarts = [int(blockStart) for blockStart in words[11].rstrip(",").split(",")]
+            blockStarts = [
+                int(blockStart) for blockStart in words[11].rstrip(",").split(",")
+            ]
             if len(blockSizes) != blockCount:
                 raise ValueError(
                     "Inconsistent number of block sizes (%d found, expected %d)"
