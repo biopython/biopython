@@ -2183,7 +2183,14 @@ class Alignment:
         n = len(coordinates)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                k = len(self.sequences[i])
+                try:
+                    k = len(self.sequences[i])
+                except TypeError:
+                    # This may happen for BED files, which don't store the
+                    # sequence length.  Assume the full sequence was aligned;
+                    # the sequence length is then coordinates[i, 0] or
+                    # coordinates[i, 1], whichever is larger.
+                    k = coordinates[i, 0]
                 coordinates[i, :] = k - coordinates[i, :]
         steps = numpy.diff(coordinates, 1)
         gaps = steps.max(0)
