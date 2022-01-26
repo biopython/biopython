@@ -449,10 +449,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     gr_mapping = {value: key for key, value in AlignmentIterator.gr_mapping.items()}
     gc_mapping = {value: key for key, value in AlignmentIterator.gc_mapping.items()}
 
-    def write_alignment(self, alignment):
-        """Use this to write the alignment to an open file."""
-        stream = self.stream
-
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment in the Stockholm format."""
         rows, columns = alignment.shape
 
         if rows == 0:
@@ -460,7 +458,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
 
-        stream.write("# STOCKHOLM 1.0\n")
+        lines = []
+        lines.append("# STOCKHOLM 1.0\n")
         # #=GF Above the alignment; alignment.annotations
         for key, feature in self.gf_mapping.items():
             if key == "comment":
@@ -471,41 +470,41 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 feature = self.gf_mapping[key]
                 if key in ("author", "wikipedia"):
                     for item in value:
-                        stream.write(f"#=GF {feature}   {item}\n")
+                        lines.append(f"#=GF {feature}   {item}\n")
                 else:
-                    stream.write(f"#=GF {feature}   {value}\n")
+                    lines.append(f"#=GF {feature}   {value}\n")
         nested_domains = alignment.annotations.get("nested domains")
         if nested_domains is not None:
             for nested_domain in nested_domains:
                 accession = nested_domain.get("accession")
                 if accession is not None:
-                    stream.write(f"#=GF NE   {accession}\n")
+                    lines.append(f"#=GF NE   {accession}\n")
                 location = nested_domain.get("location")
                 if location is not None:
-                    stream.write(f"#=GF NL   {location}\n")
+                    lines.append(f"#=GF NL   {location}\n")
         references = alignment.annotations.get("references")
         if references is not None:
             for reference in references:
                 comment = reference.get("comment")
-                AlignmentWriter._write_long_line(stream, "#=GF RC   ", comment)
-                stream.write(f"#=GF RN   [{reference['number']}]\n")
-                stream.write(f"#=GF RM   {reference['medline']}\n")
+                lines.append(AlignmentWriter._format_long_text("#=GF RC   ", comment))
+                lines.append(f"#=GF RN   [{reference['number']}]\n")
+                lines.append(f"#=GF RM   {reference['medline']}\n")
                 title = reference["title"]
-                AlignmentWriter._write_long_line(stream, "#=GF RT   ", title)
-                stream.write(f"#=GF RA   {reference['author']}\n")
-                stream.write(f"#=GF RL   {reference['location']}\n")
+                lines.append(AlignmentWriter._format_long_text("#=GF RT   ", title))
+                lines.append(f"#=GF RA   {reference['author']}\n")
+                lines.append(f"#=GF RL   {reference['location']}\n")
         database_references = alignment.annotations.get("database references")
         if database_references is not None:
             for database_reference in database_references:
-                stream.write(f"#=GF DR   {database_reference['reference']}\n")
+                lines.append(f"#=GF DR   {database_reference['reference']}\n")
                 comment = database_reference.get("comment")
                 if comment is not None:
-                    stream.write(f"#=GF DC   {comment}\n")
+                    lines.append(f"#=GF DC   {comment}\n")
         key = "comment"
         value = alignment.annotations.get(key)
         if value is not None:
             prefix = "#=GF %s   " % self.gf_mapping[key]
-            AlignmentWriter._write_long_line(stream, prefix, value)
+            lines.append(AlignmentWriter._format_long_text(prefix, value))
         for key in alignment.annotations:
             if key in self.gf_mapping:
                 continue
@@ -518,7 +517,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise ValueError(
                 "Unknown annotation %s found in alignment.annotations" % key
             )
-        stream.write("#=GF SQ   %i\n" % rows)
+        lines.append("#=GF SQ   %i\n" % rows)
         # #=GS Above the alignment or just below the corresponding sequence;
         #    record.annotations
         # #=GR Just below the corresponding sequence;
@@ -529,50 +528,47 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = record.id.ljust(width)
             for key, value in record.annotations.items():
                 feature = self.gs_mapping[key]
-                stream.write(f"#=GS {name}  {feature} {value}\n")
+                lines.append(f"#=GS {name}  {feature} {value}\n")
             if record.description != "<unknown description>":
-                stream.write(f"#=GS {name}  DE {record.description}\n")
+                lines.append(f"#=GS {name}  DE {record.description}\n")
             for value in record.dbxrefs:
-                stream.write(f"#=GS {name}  DR {value}\n")
+                lines.append(f"#=GS {name}  DR {value}\n")
         for aligned_sequence, record in zip(alignment, alignment.sequences):
-            AlignmentWriter._write_record(
-                stream, width, start, aligned_sequence, record
-            )
+            lines.extend(AlignmentWriter._format_record(width, start, aligned_sequence, record))
         # #=GC Below the alignment;
         #    alignment.column_annotations
         if alignment.column_annotations:
             for key, value in alignment.column_annotations.items():
                 feature = self.gc_mapping[key]
                 line = f"#=GC {feature}".ljust(start) + value + "\n"
-                stream.write(line)
-        stream.write("//\n")
+                lines.append(line)
+        lines.append("//\n")
+        return "".join(lines)
 
     @staticmethod
-    def _write_long_line(stream, prefix, text):
-        """Write the text as wrapped lines to the file (PRIVATE)."""
+    def _format_long_text(prefix, text):
+        """Format the text as wrapped lines (PRIVATE)."""
         if text is None:
-            return
-        lines = textwrap.wrap(
+            return ""
+        return textwrap.fill(
             text,
             width=79,
             break_long_words=False,
             initial_indent=prefix,
             subsequent_indent=prefix,
-        )
-        for line in lines:
-            stream.write(line + "\n")
+        ) + "\n"
 
     @staticmethod
-    def _write_record(stream, width, start, aligned_sequence, record):
-        """Write a single SeqRecord to the file (PRIVATE)."""
+    def _format_record(width, start, aligned_sequence, record):
+        """Format lines for a single SeqRecord (PRIVATE)."""
         name = record.id.ljust(start)
         line = name + aligned_sequence + "\n"
-        stream.write(line)
+        yield line
         name = record.id.ljust(width)
         for key, value in record.letter_annotations.items():
             feature = AlignmentWriter.gr_mapping[key]
             line = f"#=GR {name}  {feature}".ljust(start) + value + "\n"
-            stream.write(line)
+            yield line
 
 
 if __name__ == "__main__":

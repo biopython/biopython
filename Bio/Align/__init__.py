@@ -1908,41 +1908,25 @@ class Alignment:
         pattern = " ".join(pattern)
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
-    def _format_bed(self):
+    def _format_bed(self, bedN=12):
         """Return BED file format string representation (PRIVATE).
 
-        Helper for self.format() .
+        Helper for self.format().
         """
-        from io import StringIO
         from . import bed
 
-        stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        alignments = [self]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
-        assert n == 1
-        stream.seek(0)
-        line = stream.read()
-        stream.close()
-        return line
+        writer = bed.AlignmentWriter(None, bedN=12)
+        return writer.format_alignment(self)
 
     def _format_psl(self, mask=False, wildcard="N"):
         """Return PSL file format string representation (PRIVATE).
 
         Helper for self.format() .
         """
-        from io import StringIO
         from . import psl
 
-        stream = StringIO()
-        writer = psl.AlignmentWriter(stream, header=False, mask=mask, wildcard=wildcard)
-        alignments = [self]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
-        assert n == 1
-        stream.seek(0)
-        line = stream.read()
-        stream.close()
-        return line
+        writer = psl.AlignmentWriter(None, header=False, mask=mask, wildcard=wildcard)
+        return writer.format_alignment(self)
 
     def _format_sam(self):
         """Return SAM file format string representation (PRIVATE).

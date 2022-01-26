@@ -37,15 +37,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write("\n")
         stream.write("\n")
 
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment in the Clustal format."""
         nseqs, length = alignment.shape
         if nseqs == 0:
             raise ValueError("Must have at least one sequence")
         if length == 0:
             raise ValueError("Non-empty sequences are required")
 
-        stream = self.stream
         try:
             column_annotations = alignment.column_annotations
         except AttributeError:
@@ -69,6 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = name.ljust(36)
             names.append(name)
 
+        lines = []
         start = 0
         while start != length:
             # calculate the number of letters to show, which will
@@ -79,15 +79,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
             for name, gapped_sequence in zip(names, gapped_sequences):
                 line = f"{name}{gapped_sequence[start:stop]}\n"
-                stream.write(line)
+                lines.append(line)
 
             # now we need to print out the star info, if we've got it
             if consensus is not None:
                 line = " " * 36 + consensus[start:stop] + "\n"
-                stream.write(line)
+                lines.append(line)
 
-            stream.write("\n")
+            lines.append("\n")
             start = stop
+        lines.append("\n")
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

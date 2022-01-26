@@ -72,8 +72,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         count = interfaces.AlignmentWriter.write_file(self, alignments)
         return count
 
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment in the Mauve format."""
         n, m = alignment.shape
 
         if n == 0:
@@ -82,7 +82,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise ValueError("Non-empty sequences are required")
 
         filename = self._filename
-        stream = self.stream
+        lines = []
         for i in range(n):
             identifier = alignment.sequences[i].id
             start = alignment.coordinates[i, 0]
@@ -105,10 +105,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 number = int(identifier) + 1  # Switch to 1-based counting
                 line = f"> {number}:{start}-{end} {strand} {filename}\n"
-            stream.write(line)
+            lines.append(line)
             line = f"{sequence}\n"
-            stream.write(line)
-        stream.write("=\n")
+            lines.append(line)
+        lines.append("=\n")
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

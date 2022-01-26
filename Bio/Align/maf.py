@@ -102,35 +102,34 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(f"# {comment}\n")
             stream.write("\n")
 
-    def _write_score_line(self, alignment, annotations):
-        stream = self.stream
-        stream.write("a")
+    def _format_score_line(self, alignment, annotations):
         try:
             score = alignment.score
         except AttributeError:
-            pass
+            line = "a"
         else:
-            stream.write(f" score={score:.6f}")
+            line = f"a score={score:.6f}"
         if annotations is not None:
             value = annotations.get("pass")
             if value is not None:
-                stream.write(f" pass={value}")
-        stream.write("\n")
+                line += f" pass={value}"
+        return line + "\n"
 
-    def write_alignment(self, alignment):
-        """Write a complete alignment to a MAF block."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment formatted as a MAF block."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
         try:
             alignment_annotations = alignment.annotations
         except AttributeError:
             alignment_annotations = None
-        self._write_score_line(alignment, alignment_annotations)
+        lines = []
+        line = self._format_score_line(alignment, alignment_annotations)
+        lines.append(line)
         name_width = 0
         start_width = 0
         size_width = 0
         length_width = 0
-        stream = self.stream
         n = len(alignment.sequences)
         for i in range(n):
             record = alignment.sequences[i]
@@ -183,7 +182,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             size = str(size).rjust(size_width)
             length = str(length).rjust(length_width)
             line = f"s {name} {start} {size} {strand} {length} {text}\n"
-            stream.write(line)
+            lines.append(line)
             try:
                 annotations = record.annotations
             except AttributeError:
@@ -201,7 +200,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                             i += 1
                     name = record.id.ljust(quality_width)
                     line = f"q {name} {gapped_quality}\n"
-                    stream.write(line)
+                    lines.append(line)
                 try:
                     leftStatus = annotations["leftStatus"]
                     leftCount = annotations["leftCount"]
@@ -212,7 +211,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 else:
                     name = record.id.ljust(name_width)
                     line = f"i {name} {leftStatus} {leftCount} {rightStatus} {rightCount}\n"
-                    stream.write(line)
+                    lines.append(line)
         for empty in alignment_annotations.get("empty", []):
             record, segment, status = empty
             name = record.id.ljust(name_width)
@@ -229,8 +228,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             size = str(size).rjust(size_width)
             length = str(length).rjust(length_width)
             line = f"e {name} {start} {size} {strand} {length} {status}\n"
-            stream.write(line)
-        stream.write("\n")
+            lines.append(line)
+        lines.append("\n")
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

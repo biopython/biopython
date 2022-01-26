@@ -13,6 +13,8 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
+from io import StringIO
+
 import Bio
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -43,8 +45,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream = self.stream
         stream.write("#NEXUS\n")
 
-    def write_alignment(self, alignment, interleave=None):
-        """Write an alignment to file.
+    def format_alignment(self, alignment, interleave=None):
+        """Return a string with a single alignment in the Nexus format.
 
         Creates an empty Nexus object, adds the sequences
         and then gets Nexus to prepare the output.
@@ -57,7 +59,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if length == 0:
             raise ValueError("Non-empty sequences are required")
 
-        stream = self.stream
         rows, columns = alignment.shape
         if rows == 0:
             raise ValueError("Must have at least one sequence")
@@ -79,7 +80,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
             interleave = columns > 1000
+        stream = StringIO()
         n.write_nexus_data(stream, interleave=interleave)
+        stream.seek(0)
+        return stream.read()
 
     def _classify_mol_type_for_nexus(self, alignment):
         """Return 'protein', 'dna', or 'rna' based on records' molecule type (PRIVATE).

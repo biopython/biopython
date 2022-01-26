@@ -37,18 +37,29 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Browser Extensible Data (BED) file format."""
 
-    def write_alignment(self, alignment):
-        """Write a complete alignment as one BED line."""
+    def __init__(self, target, bedN=12):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target    - output stream or file name
+         - bedN      - number of columns in the BED file.
+                       This must be between 3 and 12; default value is 12.
+
+        """
+        if bedN < 3 or bedN > 12:
+            raise ValueError("bedN must be between 3 and 12")
+        super().__init__(target, mode="w")
+        self.bedN = bedN
+
+    def format_alignment(self, alignment):
+        """Return a string with one alignment formatted as a BED line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
         coordinates = alignment.coordinates
         if not coordinates.size:  # alignment consists of gaps only
             return ""
+        bedN = self.bedN
         target, query = alignment.sequences
-        try:
-            name = query.id
-        except AttributeError:
-            name = "query"
         try:
             chrom = target.id
         except AttributeError:
@@ -75,44 +86,59 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 blockSizes.append(blockSize)
                 tStart = tEnd
                 qStart = qEnd
+        chromStart = blockStarts[0]  # start of alignment in target
+        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        fields = [chrom, str(chromStart), str(chromEnd)]
+        if bedN == 3:
+            return "\t".join(fields) + "\n"
+        try:
+            name = query.id
+        except AttributeError:
+            name = "query"
+        fields.append(name)
+        if bedN == 4:
+            return "\t".join(fields) + "\n"
         try:
             score = alignment.score
         except AttributeError:
             score = 0
-        chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
-        blockStarts -= chromStart
-        blockCount = len(blockSizes)
-        blockSizes = ",".join(map(str, blockSizes)) + ","
-        blockStarts = ",".join(map(str, blockStarts)) + ","
+        fields.append(str(score))
+        if bedN == 5:
+            return "\t".join(fields) + "\n"
+        fields.append(strand)
+        if bedN == 6:
+            return "\t".join(fields) + "\n"
         try:
             thickStart = alignment.thickStart
         except AttributeError:
             thickStart = chromStart
+        fields.append(str(thickStart))
+        if bedN == 7:
+            return "\t".join(fields) + "\n"
         try:
             thickEnd = alignment.thickEnd
         except AttributeError:
             thickEnd = chromEnd
+        fields.append(str(thickEnd))
+        if bedN == 8:
+            return "\t".join(fields) + "\n"
         try:
             itemRgb = alignment.itemRgb
         except AttributeError:
             itemRgb = "0"
-        words = [
-            chrom,
-            str(chromStart),
-            str(chromEnd),
-            str(name),
-            str(score),
-            strand,
-            str(thickStart),
-            str(thickEnd),
-            itemRgb,
-            str(blockCount),
-            blockSizes,
-            blockStarts,
-        ]
-        line = "\t".join(words) + "\n"
-        self.stream.write(line)
+        fields.append(str(itemRgb))
+        if bedN == 9:
+            return "\t".join(fields) + "\n"
+        blockCount = len(blockSizes)
+        fields.append(str(blockCount))
+        if bedN == 10:
+            return "\t".join(fields) + "\n"
+        fields.append(",".join(map(str, blockSizes)) + ",")
+        if bedN == 11:
+            return "\t".join(fields) + "\n"
+        blockStarts -= chromStart
+        fields.append(",".join(map(str, blockStarts)) + ",")
+        return "\t".join(fields) + "\n"
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
