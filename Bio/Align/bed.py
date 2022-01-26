@@ -131,38 +131,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="BED")
-        stream = self.stream
-        line = next(stream)
-        if line.startswith("psLayout "):
-            words = line.split()
-            if words[1] != "version":
-                raise ValueError("Unexpected word '%s' in header line" % words[1])
-            self.metadata = {"version": words[2]}
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
-            if line.lstrip("-").strip() != "":
-                raise ValueError("End of header not found")
-            self.line = None
-        else:
-            self.line = line
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
         if stream is None:
             raise StopIteration
 
-        line = self.line
-        self.line = None
-        if line is not None:
-            lines = chain([line], stream)
-        else:
-            lines = stream
-        for line in lines:
+        for line in stream:
             words = line.split()
             if len(words) != 12:
-                raise ValueError("line has %d columns; expected 21" % len(words))
+                raise ValueError("line has %d columns; expected 12" % len(words))
             chrom = words[0]
             chromStart = int(words[1])
             chromEnd = int(words[2])
