@@ -119,7 +119,9 @@ class AlignmentWriter:
                     target.write(b"")
                 except TypeError:
                     # target was opened in text mode
-                    raise StreamModeError("File must be opened in binary mode.") from None
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
                 except AttributeError:
                     # target is a path
                     stream = open(target, mode)

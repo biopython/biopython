@@ -534,7 +534,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for value in record.dbxrefs:
                 lines.append(f"#=GS {name}  DR {value}\n")
         for aligned_sequence, record in zip(alignment, alignment.sequences):
-            lines.extend(AlignmentWriter._format_record(width, start, aligned_sequence, record))
+            lines.extend(
+                AlignmentWriter._format_record(width, start, aligned_sequence, record)
+            )
         # #=GC Below the alignment;
         #    alignment.column_annotations
         if alignment.column_annotations:
@@ -550,13 +552,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """Format the text as wrapped lines (PRIVATE)."""
         if text is None:
             return ""
-        return textwrap.fill(
-            text,
-            width=79,
-            break_long_words=False,
-            initial_indent=prefix,
-            subsequent_indent=prefix,
-        ) + "\n"
+        return (
+            textwrap.fill(
+                text,
+                width=79,
+                break_long_words=False,
+                initial_indent=prefix,
+                subsequent_indent=prefix,
+            )
+            + "\n"
+        )
 
     @staticmethod
     def _format_record(width, start, aligned_sequence, record):
