@@ -1915,7 +1915,7 @@ class Alignment:
         """
         from . import bed
 
-        writer = bed.AlignmentWriter(None, bedN=12)
+        writer = bed.AlignmentWriter(None, bedN=bedN)
         return writer.format_alignment(self)
 
     def _format_psl(self, mask=False, wildcard="N"):
