@@ -30,6 +30,7 @@ import numpy
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -215,8 +216,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 coordinates = numpy.array([[0, blockSize], [0, blockSize]])
                 qSize = blockSize
             coordinates[0, :] += chromStart
+            query_sequence = Seq(None, length=qSize)
+            query_record = SeqRecord(query_sequence, id=name)
             target_record = SeqRecord(None, id=chrom)
-            query_record = SeqRecord(None, id=name)
             records = [target_record, query_record]
             if strand == "-":
                 coordinates[1, :] = qSize - coordinates[1, :]
