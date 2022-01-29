@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for Align.bed module."""
 import unittest
+import os
 from io import StringIO
 
 
@@ -1872,6 +1873,119 @@ class TestAlign_dnax_prot(unittest.TestCase):
         written_data = stream.read()
         stream.close()
         self.assertEqual(original_data, written_data)
+
+
+class TestAlign_bed12(unittest.TestCase):
+
+    def test_reading(self):
+        """Test parsing alignments in file formats BED3 through BED12."""
+        for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
+            filename = "bed%d.bed" % bedN
+            path = os.path.join("Blat", filename)
+            alignments = bed.AlignmentIterator(path)
+            alignment = next(alignments)
+            if bedN >= 5:
+                self.assertEqual(alignment.score, 960, msg=filename)
+            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
+            self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename)
+            self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+            self.assertEqual(len(alignment), 2, msg=filename)
+            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
+            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
+            self.assertEqual(alignment.target.id, "chr22", msg=filename)
+            if bedN >= 4:
+                self.assertEqual(alignment.query.id, "mRNA1", msg=filename)
+            else:
+                self.assertIsNone(alignment.query.id, msg=filename)
+            if bedN == 12:
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates,
+                        # fmt: off
+# flake8: noqa
+                        numpy.array([[1000, 1567, 4512, 5000],
+                                     [   0,  567,  567, 1055]]),
+                        # fmt: on
+                    )
+                , msg=filename)
+            else:
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[1000, 5000], [0, 4000]]),
+                    )
+                , msg=filename)
+            if bedN >= 7:
+                self.assertEqual(alignment.thickStart, 1200, msg=filename)
+            if bedN >= 8:
+                self.assertEqual(alignment.thickEnd, 5900, msg=filename)
+            if bedN >= 9:
+                self.assertEqual(alignment.itemRgb, "255,0,0", msg=filename)
+            alignment = next(alignments)
+            if bedN >= 5:
+                self.assertEqual(alignment.score, 900, msg=filename)
+            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
+            self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename)
+            if bedN >= 6:
+                self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+            else:
+                self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+            self.assertEqual(len(alignment), 2, msg=filename)
+            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
+            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
+            self.assertEqual(alignment.target.id, "chr22", msg=filename)
+            if bedN >= 4:
+                self.assertEqual(alignment.query.id, "mRNA2", msg=filename)
+            else:
+                self.assertIsNone(alignment.query.id, msg=filename)
+            if bedN == 12:
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates,
+                        # fmt: off
+# flake8: noqa
+                        numpy.array([[2000, 2433, 5601, 6000],
+                                     [ 832,  399,  399,    0]])
+                        # fmt: on
+                    )
+                , msg=filename)
+            elif bedN >= 6:
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[2000, 6000], [4000, 0]]),
+                    )
+                , msg=filename)
+            else:
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[2000, 6000], [0, 4000]]),
+                    )
+                , msg=filename)
+            if bedN >= 7:
+                self.assertEqual(alignment.thickStart, 2300, msg=filename)
+            if bedN >= 8:
+                self.assertEqual(alignment.thickEnd, 5960, msg=filename)
+            if bedN >= 9:
+                self.assertEqual(alignment.itemRgb, "0,255,0", msg=filename)
+            with self.assertRaises(StopIteration) as cm:
+                next(alignments)
+                self.fail(f"More than two alignments reported in {filename}")
+
+    def test_writing(self):
+        """Test writing the alignments in bed12.bed as BED3 through BED12."""
+        for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
+            filename = "bed%d.bed" % bedN
+            path = os.path.join("Blat", filename)
+            with open(path) as stream:
+                original_data = stream.read()
+            alignments = bed.AlignmentIterator(path)
+            stream = StringIO()
+            writer = bed.AlignmentWriter(stream, bedN=bedN)
+            n = writer.write_file(alignments, mincount=2, maxcount=2)
+            self.assertEqual(n, 2, msg=filename)
+            stream.seek(0)
+            written_data = stream.read()
+            stream.close()
+            self.assertEqual(original_data, written_data, msg=filename)
 
 
 if __name__ == "__main__":
