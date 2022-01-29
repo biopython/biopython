@@ -25,7 +25,6 @@ As we can see in this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
-from itertools import chain
 import numpy
 
 
@@ -212,9 +211,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 coordinates = numpy.array(coordinates).transpose()
                 qSize = sum(blockSizes)
             else:
-                 blockSize = chromEnd - chromStart
-                 coordinates = numpy.array([[0, blockSize], [0, blockSize]])
-                 qSize = blockSize
+                blockSize = chromEnd - chromStart
+                coordinates = numpy.array([[0, blockSize], [0, blockSize]])
+                qSize = blockSize
             coordinates[0, :] += chromStart
             target_record = SeqRecord(None, id=chrom)
             query_record = SeqRecord(None, id=name)

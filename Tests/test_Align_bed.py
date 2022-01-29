@@ -1876,7 +1876,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
 
 class TestAlign_bed12(unittest.TestCase):
-
     def test_reading(self):
         """Test parsing alignments in file formats BED3 through BED12."""
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
@@ -1887,8 +1886,12 @@ class TestAlign_bed12(unittest.TestCase):
             if bedN >= 5:
                 self.assertEqual(alignment.score, 960, msg=filename)
             self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename)
-            self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+            self.assertLess(
+                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
+            )
+            self.assertLess(
+                alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename
+            )
             self.assertEqual(len(alignment), 2, msg=filename)
             self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
             self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
@@ -1906,14 +1909,17 @@ class TestAlign_bed12(unittest.TestCase):
                         numpy.array([[1000, 1567, 4512, 5000],
                                      [   0,  567,  567, 1055]]),
                         # fmt: on
-                    )
-                , msg=filename)
+                    ),
+                    msg=filename,
+                )
             else:
                 self.assertTrue(
                     numpy.array_equal(
-                        alignment.coordinates, numpy.array([[1000, 5000], [0, 4000]]),
-                    )
-                , msg=filename)
+                        alignment.coordinates,
+                        numpy.array([[1000, 5000], [0, 4000]]),
+                    ),
+                    msg=filename,
+                )
             if bedN >= 7:
                 self.assertEqual(alignment.thickStart, 1200, msg=filename)
             if bedN >= 8:
@@ -1924,11 +1930,21 @@ class TestAlign_bed12(unittest.TestCase):
             if bedN >= 5:
                 self.assertEqual(alignment.score, 900, msg=filename)
             self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename)
+            self.assertLess(
+                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
+            )
             if bedN >= 6:
-                self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+                self.assertGreater(
+                    alignment.coordinates[1, 0],
+                    alignment.coordinates[1, -1],
+                    msg=filename,
+                )
             else:
-                self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename)
+                self.assertLess(
+                    alignment.coordinates[1, 0],
+                    alignment.coordinates[1, -1],
+                    msg=filename,
+                )
             self.assertEqual(len(alignment), 2, msg=filename)
             self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
             self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
@@ -1946,20 +1962,25 @@ class TestAlign_bed12(unittest.TestCase):
                         numpy.array([[2000, 2433, 5601, 6000],
                                      [ 832,  399,  399,    0]])
                         # fmt: on
-                    )
-                , msg=filename)
+                    ),
+                    msg=filename,
+                )
             elif bedN >= 6:
                 self.assertTrue(
                     numpy.array_equal(
-                        alignment.coordinates, numpy.array([[2000, 6000], [4000, 0]]),
-                    )
-                , msg=filename)
+                        alignment.coordinates,
+                        numpy.array([[2000, 6000], [4000, 0]]),
+                    ),
+                    msg=filename,
+                )
             else:
                 self.assertTrue(
                     numpy.array_equal(
-                        alignment.coordinates, numpy.array([[2000, 6000], [0, 4000]]),
-                    )
-                , msg=filename)
+                        alignment.coordinates,
+                        numpy.array([[2000, 6000], [0, 4000]]),
+                    ),
+                    msg=filename,
+                )
             if bedN >= 7:
                 self.assertEqual(alignment.thickStart, 2300, msg=filename)
             if bedN >= 8:
