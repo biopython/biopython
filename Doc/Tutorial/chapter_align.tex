@@ -909,9 +909,7 @@ This also allows you to change the order of letters in the alphabet.
 
 There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
 and multiple sequence alignments. These calculations are relatively slow, and you generally
-wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains
-the \verb|Bio.pairwise2| module , which is supplemented by functions written in C for speed
-enhancements and the new \verb|PairwiseAligner| (see Section~\ref{sec:pairwise}). In addition,
+wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains \verb|PairwiseAligner| (see Section~\ref{sec:pairwise}). In addition,
 you can use Biopython to invoke a command line tool on your behalf. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
@@ -1485,219 +1483,14 @@ alignments.
 \label{sec:pairwise}
 
 Pairwise sequence alignment is the process of aligning two sequences to each
-other by optimizing the similarity score between them. Biopython includes two
-built-in pairwise aligners: the 'old' \verb|Bio.pairwise2| module and the new
-\verb|PairwiseAligner| class within the \verb|Bio.Align| module (since Biopython
-version 1.72). Both can perform global and local alignments and offer numerous
-options to change the alignment parameters. Although \verb|pairwise2| has gained
-some speed and memory enhancements recently, the new \verb|PairwiseAligner| is
-much faster; so if you need to make many alignments with larger sequences, the
-latter would be the tool to choose.
-
-Given that the parameters and sequences are the same, both aligners will return
-the same alignments and alignment score (if the number of alignments is too
-high, \verb|pairwise2| may return a subset of all valid alignments).
-
-\subsection{pairwise2}
-\label{sec:pairwise2}
-
-\verb|Bio.pairwise2| contains essentially the same algorithms as
-\texttt{water} (local) and \texttt{needle} (global) from the
-\href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
-return the same results. The \verb|pairwise2| module has undergone some
-optimization regarding speed and memory consumption recently (Biopython versions
-\textgreater 1.67) so that for short sequences (global alignments:
-\textasciitilde 2000 residues, local alignments \textasciitilde 600 residues)
-it's faster (or equally fast) to use \verb|pairwise2| than calling EMBOSS'
-\texttt{water} or \texttt{needle} via the command line tools.
-
-Suppose you want to do a global pairwise alignment between the same two
-hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
-stored in \texttt{alpha.faa} and \texttt{beta.faa}:
-
-%doctest examples
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio import SeqIO
->>> seq1 = SeqIO.read("alpha.faa", "fasta")
->>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
-\end{minted}
-
-As you see, we call the alignment function with \verb|align.globalxx|. The tricky
-part are the last two letters of the function name (here: \texttt{xx}), which are
-used for  decoding the scores and penalties for matches (and mismatches) and gaps.
-The first letter decodes the match score, e.g. \texttt{x} means that a match counts
-1 while mismatches have no costs. With \texttt{m} general values for either matches
-or mismatches can be defined
-(for more options see \href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}).
-The second letter decodes the cost for gaps; \texttt{x} means no gap costs at all,
-with \texttt{s} different penalties for opening and extending a gap can be assigned.
-So, \verb|globalxx| means that only matches between both sequences are counted.
-
-Our variable \texttt{alignments} now contains a list of alignments (at least one) which
-have the same optimal score for the given conditions. In our example this are 80
-different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
-alignments). Have a look at one of these alignments:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> len(alignments)
-80
->>> print(alignments[0])  # doctest:+ELLIPSIS
-Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
-\end{minted}
-
-Each alignment is a named tuple consisting of the two aligned sequences, the score, the
-start and the end positions of the alignment (in global alignments the start is
-always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
-function \verb|format_alignment| for a nicer printout:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> print(pairwise2.format_alignment(*alignments[0]))  # doctest:+ELLIPSIS
-MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
-|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
-MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
-  Score=72
-<BLANKLINE>
-\end{minted}
-
-Since Biopython 1.77 the required parameters can be supplied with keywords. The
-last example can now also be written as:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
-\end{minted}
-
-Better alignments are usually obtained by penalizing gaps: higher costs
-for opening a gap and lower costs for extending an existing gap. For amino
-acid sequences match scores are usually encoded in matrices like \texttt{PAM}
-or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
-obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
-and a gap extension penalty of 0.5 (using \verb|globalds|):
-
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio import SeqIO
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> seq1 = SeqIO.read("alpha.faa", "fasta")
->>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
->>> len(alignments)
-2
->>> print(pairwise2.format_alignment(*alignments[0]))
-MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
-|| |.|..|..|.|.|||| ......|............|.......||.
-MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
-  Score=292.5
-
-\end{minted}
-
-This alignment has the same score that we obtained earlier with EMBOSS needle
-using the same sequences and the same parameters.
-
-Local alignments are called similarly with the function \verb|align.localXX|,
-where again XX stands for a two letter code for the match and gap functions:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0]))
-3 PADKTNV
-  |..|..|
-1 PEEKSAV
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-In recent Biopython versions, \verb|format_alignment| will only print the
-aligned part of a local alignment (together with the start positions in 1-based
-notation, as shown in the above example). If you are also interested in the non-
-aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=True|:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
-LSPADKTNVKAA
-  |..|..|   
---PEEKSAV---
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-Note that local alignments must, as defined by Smith \& Waterman, have a
-positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
-alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
-will not report alignments which are the result of the addition of zero-scoring
-extensions on either site. In the next example, the pairs serine/aspartic acid (S/D)
-and lysine/asparagine (K/N) both have a match score of 0. As you see, the aligned
-part has not been extended:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0]))
-4 PADKTNV
-  |..|..|
-3 PEEKSAV
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-Instead of supplying a complete match/mismatch matrix, the match code
-\texttt{m} allows for easy defining general match/mismatch values. The next
-example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
-of 2/0.5 using \verb|localms|:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
->>> print(pairwise2.format_alignment(*alignments[0]))
-2 GAAC
-  | ||
-1 G-AC
-  Score=13
-<BLANKLINE>
-\end{minted}
-
-One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
-\texttt{score\_only}. When set to \texttt{True} it will only return the score
-of the best alignment(s), but in a significantly shorter time. It will also
-allow the alignment of longer sequences before a memory error is raised.
-Another useful keyword argument is \texttt{one\_alignment\_only=True} which
-will also result in some speed gain.
-
-Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
-sequence alignment objects (yet).
-However, the module has some interesting advanced features: you can
-define your own match and gap functions (interested in testing affine
-logarithmic gap costs?), gap penalties and end gaps penalties can be different
-for both sequences, sequences can be supplied as lists (useful if you have
-residues that are encoded by more than one character), etc. These features
-are hard (if at all) to realize with other alignment tools. For more details
-see the modules documentation in
-\href{http://biopython.org/docs/\bpversion/api/Bio.pairwise2.html}{Biopython's API}.
-
-\subsection{PairwiseAligner}
-\label{sec:pairwisealigner}
-The new \verb|Bio.Align.PairwiseAligner| implements the Needleman-Wunsch, Smith-Waterman,
-Gotoh (three-state), and Waterman-Smith-Beyer global and local pairwise alignment algorithms.
+other by optimizing the similarity score between them.  The \verb|Bio.Align|
+module contains the \verb|PairwiseAligner| class for global and local
+alignments using the Needleman-Wunsch, Smith-Waterman, Gotoh (three-state), and
+Waterman-Smith-Beyer global and local pairwise alignment algorithms, with
+numerous options to change the alignment parameters.
 We refer to Durbin {\textit et al.} \cite{durbin1998} for in-depth information on sequence alignment algorithms.
 
-\subsubsection{Basic usage}
+\subsection{Basic usage}
 \label{sec:pairwise-basic}
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
@@ -1783,7 +1576,7 @@ AGAACTC
 
 Note that there is some ambiguity in the definition of the best local alignments if segments with a score 0 can be added to the alignment. We follow the suggestion by Waterman \& Eggert \cite{waterman1987} and disallow such extensions.
 
-\subsubsection{The pairwise aligner object}
+\subsection{The pairwise aligner object}
 \label{sec:pairwise-aligner}
 
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
@@ -1836,7 +1629,7 @@ A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used 
 \end{minted}
 Two scores will be considered equal to each other for the purpose of the alignment if the absolute difference between them is less than $\epsilon$.
 
-\subsubsection{Substitution scores}
+\subsection{Substitution scores}
 \label{sec:pairwise-substitution-scores}
 
 Substitution scores define the value to be added to the total score when two letters (nucleotides or amino acids) are aligned to each other. The substitution scores to be used by the \verb+PairwiseAligner+ can be specified in two ways:
@@ -1915,7 +1708,7 @@ The attributes \verb+aligner.match_score+ and \verb+aligner.mismatch_score+ are
 ignored if \verb+aligner.substitution_matrix+ is not \verb+None+.
 Setting \verb+aligner.match_score+ or \verb+aligner.mismatch_score+ to valid values will reset \verb+aligner.substitution_matrix+ to \verb+None+.
 
-\subsubsection{Affine gap scores}
+\subsection{Affine gap scores}
 \label{sec:pairwise-affine-gapscores}
 
 Affine gap scores are defined by a score to open a gap, and a score to extend
@@ -2025,7 +1818,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \label{table:align-meta-attributes}
 \end{table}
 
-\subsubsection{General gap scores}
+\subsection{General gap scores}
 \label{sec:pairwise-general-gapscores}
 
 For even more fine-grained control over the gap scores, you can specify a gap scoring function. For example, the gap scoring function below disallows a gap after two nucleotides in the query sequence:
@@ -2063,7 +1856,7 @@ AATT-
 <BLANKLINE>
 \end{minted}
 
-\subsubsection{Iterating over alignments}
+\subsection{Iterating over alignments}
 
 The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similar to a \verb+tuple+ or \verb+list+ of \verb+Alignment+ objects, they are different in the sense that each \verb+Alignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
 
@@ -2155,7 +1948,7 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 \end{minted}
 \end{itemize}
 
-\subsubsection{Alignment objects}
+\subsection{Alignment objects}
 The \verb+aligner.align+ method returns \verb+Alignment+ objects, each representing one alignment between the two sequences.
 
 %doctest
@@ -2651,8 +2444,7 @@ The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   
 \end{minted}
 Note that optional keyword arguments cannot be used with the \verb+format+ function or with formatted strings.
 
-
-\subsubsection{Aligning to the reverse strand}
+\subsection{Aligning to the reverse strand}
 \label{sec:pairwise-general-gapscores}
 
 By default, the pairwise aligner aligns the forward strand of the query to the forward strand of the target. To calculate the alignment score for \verb+query+ to the reverse strand of \verb+target+, use \verb+strand="-"+:
@@ -2744,7 +2536,7 @@ AAAACCC
 \end{minted}
 
 
-\subsubsection{Examples}
+\subsection{Examples}
 \label{sec:pairwise-examples}
 
 Suppose you want to do a global pairwise alignment between the same two
@@ -2854,7 +2646,7 @@ LSPADKTNVKAA
 16.0
 \end{minted}
 
-\subsubsection{Generalized pairwise alignments}
+\subsection{Generalized pairwise alignments}
 \label{sec:generalized-pairwise}
 
 In most cases, \verb+PairwiseAligner+ is used to perform alignments of sequences (strings or \verb+Seq+ objects) consisting of single-letter nucleotides or amino acids. More generally, \verb+PairwiseAligner+ can also be applied to lists or tuples of arbitrary objects. This section will describe some examples of such generalized pairwise alignments.
@@ -3072,7 +2864,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 
 The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
 
-\subsection*{Creating an Array object}
+\subsection{Creating an Array object}
 
 To create a one-dimensional \verb+Array+, only the alphabet of allowed letters needs to be specified:
 
@@ -3241,7 +3033,7 @@ C 11.0 0.0 10.0
 <BLANKLINE>
 \end{minted}
 
-\subsection*{Calculating a substitution matrix from a pairwise sequence alignment}
+\subsection{Calculating a substitution matrix from a pairwise sequence alignment}
 
 As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
 
@@ -3366,7 +3158,7 @@ Traceback (most recent call last):
 ValueError: alphabets are inconsistent
 \end{minted}
 
-\subsection*{Reading \texttt{Array} object from file}
+\subsection{Reading \texttt{Array} objects from file}
 
 \verb+Bio.Align.substitution_matrices+ includes a parser to read one- and two-dimensional \verb+Array+ objects from file. One-dimensional arrays are represented by a simple two-column format, with the first column containing the key and the second column the corresponding value. For example, the file \verb+hg38.chrom.sizes+ (obtained from UCSC), available in the \verb+Tests/Align+ subdirectory of the Biopython distribution, contains the size in nucleotides of each chromosome in human genome assembly hg38:
 \begin{minted}{text}
@@ -3488,7 +3280,7 @@ C  0.0 -3.0 -3.0 -3.0  9.0 -3.0 -4.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0 -3.0 -1.
 \end{minted}
 and write the \verb+text+ to a file.
 
-\subsection*{Loading predefined substitution matrices}
+\subsection{Loading predefined substitution matrices}
 
 Biopython contains a large set of substitution matrices defined in the literature, including BLOSUM (Blocks Substitution Matrix) \cite{henikoff1992} and PAM (Point Accepted Mutation) matrices \cite{dayhoff1978}. These matrices are available as flat files in the \verb+Bio/Align/scoring_matrices/data+ directory, and can be loaded into Python using the \verb+load+ function in the \verb+scoring_matrices+ submodule. For example, the BLOSUM62 matrix can be loaded by running
 
@@ -3523,3 +3315,199 @@ Note that the substitution matrix provided by Schneider \textit{et al.} \cite{sc
 >>> m.alphabet  # doctest: +ELLIPSIS
 ('AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', ..., 'TTG', 'TTT')
 \end{minted}
+
+\section{Pairwise alignments using pairwise2}
+\label{sec:pairwise2}
+
+\textbf{Please note that Bio.pairwise2 was deprecated in Release 1.80.} As an alternative, please consider using \verb|Bio.Align.PairwiseAligner| (described in section~\ref{sec:pairwise}).
+
+\verb|Bio.pairwise2| contains essentially the same algorithms as
+\texttt{water} (local) and \texttt{needle} (global) from the
+\href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
+return the same results. The \verb|pairwise2| module has undergone some
+optimization regarding speed and memory consumption recently (Biopython versions
+\textgreater 1.67) so that for short sequences (global alignments:
+\textasciitilde 2000 residues, local alignments \textasciitilde 600 residues)
+it's faster (or equally fast) to use \verb|pairwise2| than calling EMBOSS'
+\texttt{water} or \texttt{needle} via the command line tools.
+
+Suppose you want to do a global pairwise alignment between the same two
+hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
+stored in \texttt{alpha.faa} and \texttt{beta.faa}:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio import SeqIO
+>>> seq1 = SeqIO.read("alpha.faa", "fasta")
+>>> seq2 = SeqIO.read("beta.faa", "fasta")
+>>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
+\end{minted}
+
+As you see, we call the alignment function with \verb|align.globalxx|. The tricky
+part are the last two letters of the function name (here: \texttt{xx}), which are
+used for  decoding the scores and penalties for matches (and mismatches) and gaps.
+The first letter decodes the match score, e.g. \texttt{x} means that a match counts
+1 while mismatches have no costs. With \texttt{m} general values for either matches
+or mismatches can be defined
+(for more options see \href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}).
+The second letter decodes the cost for gaps; \texttt{x} means no gap costs at all,
+with \texttt{s} different penalties for opening and extending a gap can be assigned.
+So, \verb|globalxx| means that only matches between both sequences are counted.
+
+Our variable \texttt{alignments} now contains a list of alignments (at least one) which
+have the same optimal score for the given conditions. In our example this are 80
+different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
+alignments). Have a look at one of these alignments:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignments)
+80
+>>> print(alignments[0])  # doctest:+ELLIPSIS
+Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
+\end{minted}
+
+Each alignment is a named tuple consisting of the two aligned sequences, the score, the
+start and the end positions of the alignment (in global alignments the start is
+always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
+function \verb|format_alignment| for a nicer printout:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise2.format_alignment(*alignments[0]))  # doctest:+ELLIPSIS
+MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
+|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
+MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
+  Score=72
+<BLANKLINE>
+\end{minted}
+
+Since Biopython 1.77 the required parameters can be supplied with keywords. The
+last example can now also be written as:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
+\end{minted}
+
+Better alignments are usually obtained by penalizing gaps: higher costs
+for opening a gap and lower costs for extending an existing gap. For amino
+acid sequences match scores are usually encoded in matrices like \texttt{PAM}
+or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
+obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
+and a gap extension penalty of 0.5 (using \verb|globalds|):
+
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio import SeqIO
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> seq1 = SeqIO.read("alpha.faa", "fasta")
+>>> seq2 = SeqIO.read("beta.faa", "fasta")
+>>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
+>>> len(alignments)
+2
+>>> print(pairwise2.format_alignment(*alignments[0]))
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
+|| |.|..|..|.|.|||| ......|............|.......||.
+MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
+  Score=292.5
+
+\end{minted}
+
+This alignment has the same score that we obtained earlier with EMBOSS needle
+using the same sequences and the same parameters.
+
+Local alignments are called similarly with the function \verb|align.localXX|,
+where again XX stands for a two letter code for the match and gap functions:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+3 PADKTNV
+  |..|..|
+1 PEEKSAV
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+In recent Biopython versions, \verb|format_alignment| will only print the
+aligned part of a local alignment (together with the start positions in 1-based
+notation, as shown in the above example). If you are also interested in the non-
+aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=True|:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
+LSPADKTNVKAA
+  |..|..|   
+--PEEKSAV---
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+Note that local alignments must, as defined by Smith \& Waterman, have a
+positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
+alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
+will not report alignments which are the result of the addition of zero-scoring
+extensions on either site. In the next example, the pairs serine/aspartic acid (S/D)
+and lysine/asparagine (K/N) both have a match score of 0. As you see, the aligned
+part has not been extended:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+4 PADKTNV
+  |..|..|
+3 PEEKSAV
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+Instead of supplying a complete match/mismatch matrix, the match code
+\texttt{m} allows for easy defining general match/mismatch values. The next
+example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
+of 2/0.5 using \verb|localms|:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+2 GAAC
+  | ||
+1 G-AC
+  Score=13
+<BLANKLINE>
+\end{minted}
+
+One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
+\texttt{score\_only}. When set to \texttt{True} it will only return the score
+of the best alignment(s), but in a significantly shorter time. It will also
+allow the alignment of longer sequences before a memory error is raised.
+Another useful keyword argument is \texttt{one\_alignment\_only=True} which
+will also result in some speed gain.
+
+Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
+sequence alignment objects (yet).
+However, the module has some interesting advanced features: you can
+define your own match and gap functions (interested in testing affine
+logarithmic gap costs?), gap penalties and end gaps penalties can be different
+for both sequences, sequences can be supplied as lists (useful if you have
+residues that are encoded by more than one character), etc. These features
+are hard (if at all) to realize with other alignment tools. For more details
+see the modules documentation in
+\href{http://biopython.org/docs/\bpversion/api/Bio.pairwise2.html}{Biopython's API}.
+

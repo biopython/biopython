@@ -696,6 +696,10 @@ Bio.Phylo._utils
 ----------------
 The ``draw_graphviz`` function was removed in Release 1.79.
 
+Bio.pairwise2
+-------------
+The ``Bio.pairwise2`` module was deprecated in Release 1.80.
+
 Scripts/Restriction/ranacompiler.py
 -----------------------------------
 The ``is_palindrom`` function was removed in Release 1.79.

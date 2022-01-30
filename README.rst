@@ -88,7 +88,7 @@ We currently recommend using Python 3.9 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.7, 3.8, 3.9 -- see http://www.python.org
+- Python 3.7, 3.8, 3.9, and 3.10 -- see http://www.python.org
 
 - PyPy3.7 v7.3.5 -- or later, see http://www.pypy.org
 

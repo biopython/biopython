@@ -272,6 +272,15 @@ import warnings
 from collections import namedtuple
 
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
+    "future release of Biopython. As an alternative, please consider using "
+    "Bio.Align.PairwiseAligner as a replacement, and contact the "
+    "Biopython developers if you still need the Bio.pairwise2 module.",
+    BiopythonDeprecationWarning,
+)
 
 
 MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback

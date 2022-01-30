@@ -2125,7 +2125,6 @@ except ImportError:
         commandlines = _adjust_lines(lines)
         return commandlines
 
-
 else:
 
     def _get_command_lines(file_contents):

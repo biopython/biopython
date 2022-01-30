@@ -12,7 +12,7 @@
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version 001 (2020).
+Used REBASE emboss files version 112 (2021).
 """
 
 rest_dict = {}
@@ -97,6 +97,26 @@ rest_dict["AatII"] = {
     "suppl": ("B", "I", "K", "M", "N", "V"),
 }
 
+rest_dict["Aba13301I"] = {
+    "charac": (None, None, None, None, "GCAAAC"),
+    "compsite": "(?=(?P<Aba13301I>GCAAAC))|(?=(?P<Aba13301I_as>GTTTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAAAC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Aba6411II"] = {
     "charac": (None, None, None, None, "CRRTAAG"),
     "compsite": "(?=(?P<Aba6411II>C[AG][AG]TAAG))|(?=(?P<Aba6411II_as>CTTA[CT][CT]G))",
@@ -153,6 +173,26 @@ rest_dict["AbaCIII"] = {
     "scd5": None,
     "site": "CTATCAV",
     "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["AbaPBA3II"] = {
+    "charac": (None, None, None, None, "CAYGAC"),
+    "compsite": "(?=(?P<AbaPBA3II>CA[CT]GAC))|(?=(?P<AbaPBA3II_as>GTC[AG]TG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAYGAC",
+    "size": 6,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -394,7 +434,7 @@ rest_dict["AccI"] = {
     "site": "GTMKAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "Q", "X"),
 }
 
 rest_dict["AccII"] = {
@@ -434,7 +474,47 @@ rest_dict["AccIII"] = {
     "site": "TCCGGA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "R"),
+    "suppl": ("J", "K"),
+}
+
+rest_dict["AccIX"] = {
+    "charac": (None, None, None, None, "GACRAC"),
+    "compsite": "(?=(?P<AccIX>GAC[AG]AC))|(?=(?P<AccIX_as>GT[CT]GTC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACRAC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["AccX"] = {
+    "charac": (None, None, None, None, "GGARCA"),
+    "compsite": "(?=(?P<AccX>GGA[AG]CA))|(?=(?P<AccX_as>TG[CT]TCC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGARCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["AceIII"] = {
@@ -1394,7 +1474,7 @@ rest_dict["ApaI"] = {
     "site": "GGGCCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "V", "X"),
 }
 
 rest_dict["ApaLI"] = {
@@ -1655,6 +1735,26 @@ rest_dict["AsiSI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+}
+
+rest_dict["Asl11923II"] = {
+    "charac": (None, None, None, None, "GGGABCC"),
+    "compsite": "(?=(?P<Asl11923II>GGGA[CGT]CC))|(?=(?P<Asl11923II_as>GG[ACG]TCCC))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGGABCC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["Asp103I"] = {
@@ -2114,7 +2214,7 @@ rest_dict["AvaII"] = {
     "site": "GGWCC",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("J", "N", "R", "X"),
+    "suppl": ("J", "N", "X"),
 }
 
 rest_dict["AvaIII"] = {
@@ -2274,7 +2374,7 @@ rest_dict["BalI"] = {
     "site": "TGGCCA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "Q", "X"),
 }
 
 rest_dict["BamHI"] = {
@@ -2314,7 +2414,7 @@ rest_dict["BanI"] = {
     "site": "GGYRCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("N", "R"),
+    "suppl": ("N",),
 }
 
 rest_dict["BanII"] = {
@@ -2677,6 +2777,26 @@ rest_dict["BccI"] = {
     "suppl": ("N",),
 }
 
+rest_dict["Bce10661III"] = {
+    "charac": (None, None, None, None, "TATCNAG"),
+    "compsite": "(?=(?P<Bce10661III>TATC.AG))|(?=(?P<Bce10661III_as>CT.GATA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TATCNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Bce3081I"] = {
     "charac": (None, None, None, None, "TAGGAG"),
     "compsite": "(?=(?P<Bce3081I>TAGGAG))|(?=(?P<Bce3081I_as>CTCCTA))",
@@ -2875,6 +2995,26 @@ rest_dict["BcnI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+}
+
+rest_dict["Bco11035III"] = {
+    "charac": (None, None, None, None, "GAAGCY"),
+    "compsite": "(?=(?P<Bco11035III>GAAGC[CT]))|(?=(?P<Bco11035III_as>[AG]GCTTC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAGCY",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["BcoDI"] = {
@@ -3717,6 +3857,26 @@ rest_dict["BpmI"] = {
     "suppl": ("I", "N"),
 }
 
+rest_dict["Bps6700III"] = {
+    "charac": (None, None, None, None, "TACCNAG"),
+    "compsite": "(?=(?P<Bps6700III>TACC.AG))|(?=(?P<Bps6700III_as>CT.GGTA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TACCNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Bpu10I"] = {
     "charac": (2, -2, None, None, "CCTNAGC"),
     "compsite": "(?=(?P<Bpu10I>CCT.AGC))|(?=(?P<Bpu10I_as>GCT.AGG))",
@@ -4053,6 +4213,26 @@ rest_dict["BscGI"] = {
     "scd5": None,
     "site": "CCCGT",
     "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["BscXI"] = {
+    "charac": (5, -5, None, None, "GCAGGC"),
+    "compsite": "(?=(?P<BscXI>GCAGGC))|(?=(?P<BscXI_as>GCCTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": -5,
+    "fst5": 5,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 4,
+    "ovhgseq": "CAGG",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAGGC",
+    "size": 6,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -5774,7 +5954,7 @@ rest_dict["BssHII"] = {
     "site": "GCGCGC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "M", "N", "Q", "R", "X"),
+    "suppl": ("J", "K", "M", "N", "Q", "X"),
 }
 
 rest_dict["BssMI"] = {
@@ -6174,7 +6354,7 @@ rest_dict["BstEII"] = {
     "site": "GGTNACC",
     "size": 7,
     "substrat": "DNA",
-    "suppl": ("C", "J", "N", "R"),
+    "suppl": ("C", "J", "N"),
 }
 
 rest_dict["BstENI"] = {
@@ -6634,7 +6814,7 @@ rest_dict["BstXI"] = {
     "site": "CCANNNNNNTGG",
     "size": 12,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "V", "X", "Y"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "V", "X", "Y"),
 }
 
 rest_dict["BstYI"] = {
@@ -7277,6 +7457,46 @@ rest_dict["CciNI"] = {
     "suppl": ("I", "V"),
 }
 
+rest_dict["Cco11366VI"] = {
+    "charac": (None, None, None, None, "GAAGAA"),
+    "compsite": "(?=(?P<Cco11366VI>GAAGAA))|(?=(?P<Cco11366VI_as>TTCTTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAGAA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Cco11437V"] = {
+    "charac": (None, None, None, None, "CAYNNNNNRTAG"),
+    "compsite": "(?=(?P<Cco11437V>CA[CT].....[AG]TAG))|(?=(?P<Cco11437V_as>CTA[CT].....[AG]TG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAYNNNNNRTAG",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Cco14983V"] = {
     "charac": (None, None, None, None, "GGGTDA"),
     "compsite": "(?=(?P<Cco14983V>GGGT[AGT]A))|(?=(?P<Cco14983V_as>T[ACT]ACCC))",
@@ -7357,6 +7577,46 @@ rest_dict["Cdi11397I"] = {
     "suppl": (),
 }
 
+rest_dict["Cdi13746V"] = {
+    "charac": (None, None, None, None, "RGAAAGR"),
+    "compsite": "(?=(?P<Cdi13746V>[AG]GAAAG[AG]))|(?=(?P<Cdi13746V_as>[CT]CTTTC[CT]))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "RGAAAGR",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Cdi13750III"] = {
+    "charac": (None, None, None, None, "CCGATCC"),
+    "compsite": "(?=(?P<Cdi13750III>CCGATCC))|(?=(?P<Cdi13750III_as>GGATCGG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGATCC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["CdiI"] = {
     "charac": (4, -1, None, None, "CATCG"),
     "compsite": "(?=(?P<CdiI>CATCG))|(?=(?P<CdiI_as>CGATG))",
@@ -7412,6 +7672,26 @@ rest_dict["Cdu23823II"] = {
     "scd3": None,
     "scd5": None,
     "site": "GTGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Cfa8380I"] = {
+    "charac": (None, None, None, None, "GRGGAY"),
+    "compsite": "(?=(?P<Cfa8380I>G[AG]GGA[CT]))|(?=(?P<Cfa8380I_as>[AG]TCC[CT]C))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRGGAY",
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
@@ -7657,6 +7937,26 @@ rest_dict["ChaI"] = {
     "suppl": (),
 }
 
+rest_dict["Cin11811I"] = {
+    "charac": (None, None, None, None, "TGKMCA"),
+    "compsite": "(?=(?P<Cin11811I>TG[GT][AC]CA))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGKMCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Cje265V"] = {
     "charac": (None, None, None, None, "GKAAGC"),
     "compsite": "(?=(?P<Cje265V>G[GT]AAGC))|(?=(?P<Cje265V_as>GCTT[AC]C))",
@@ -7897,6 +8197,26 @@ rest_dict["CjuII"] = {
     "suppl": (),
 }
 
+rest_dict["Cko11077IV"] = {
+    "charac": (None, None, None, None, "TGACAG"),
+    "compsite": "(?=(?P<Cko11077IV>TGACAG))|(?=(?P<Cko11077IV_as>CTGTCA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGACAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Cla11845III"] = {
     "charac": (None, None, None, None, "GCGAA"),
     "compsite": "(?=(?P<Cla11845III>GCGAA))|(?=(?P<Cla11845III_as>TTCGC))",
@@ -7957,9 +8277,29 @@ rest_dict["Cly7489II"] = {
     "suppl": (),
 }
 
-rest_dict["Cma23826I"] = {
-    "charac": (None, None, None, None, "CGGAAG"),
-    "compsite": "(?=(?P<Cma23826I>CGGAAG))|(?=(?P<Cma23826I_as>CTTCCG))",
+rest_dict["Cpe10578V"] = {
+    "charac": (None, None, None, None, "GANGAGY"),
+    "compsite": "(?=(?P<Cpe10578V>GA.GAG[CT]))|(?=(?P<Cpe10578V_as>[AG]CTC.TC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GANGAGY",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Cpe13170II"] = {
+    "charac": (None, None, None, None, "GTTGNAG"),
+    "compsite": "(?=(?P<Cpe13170II>GTTG.AG))|(?=(?P<Cpe13170II_as>CT.CAAC))",
     "dna": None,
     "freq": 4096.0,
     "fst3": None,
@@ -7971,8 +8311,28 @@ rest_dict["Cma23826I"] = {
     "results": None,
     "scd3": None,
     "scd5": None,
-    "site": "CGGAAG",
-    "size": 6,
+    "site": "GTTGNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Cpe2837III"] = {
+    "charac": (None, None, None, None, "GRNACAYT"),
+    "compsite": "(?=(?P<Cpe2837III>G[AG].ACA[CT]T))|(?=(?P<Cpe2837III_as>A[AG]TGT.[CT]C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRNACAYT",
+    "size": 8,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -7995,6 +8355,46 @@ rest_dict["CpoI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+}
+
+rest_dict["Cre7908I"] = {
+    "charac": (None, None, None, None, "GCGGGA"),
+    "compsite": "(?=(?P<Cre7908I>GCGGGA))|(?=(?P<Cre7908I_as>TCCCGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCGGGA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Csa9238II"] = {
+    "charac": (None, None, None, None, "CAAANTC"),
+    "compsite": "(?=(?P<Csa9238II>CAAA.TC))|(?=(?P<Csa9238II_as>GA.TTTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAAANTC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["CseI"] = {
@@ -8317,6 +8717,66 @@ rest_dict["DinI"] = {
     "suppl": ("V",),
 }
 
+rest_dict["Dpi3069I"] = {
+    "charac": (None, None, None, None, "GACAG"),
+    "compsite": "(?=(?P<Dpi3069I>GACAG))|(?=(?P<Dpi3069I_as>CTGTC))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACAG",
+    "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Dpi3084I"] = {
+    "charac": (None, None, None, None, "CGRAG"),
+    "compsite": "(?=(?P<Dpi3084I>CG[AG]AG))|(?=(?P<Dpi3084I_as>CT[CT]CG))",
+    "dna": None,
+    "freq": 512.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGRAG",
+    "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Dpi3090II"] = {
+    "charac": (None, None, None, None, "AAGRAG"),
+    "compsite": "(?=(?P<Dpi3090II>AAG[AG]AG))|(?=(?P<Dpi3090II_as>CT[CT]CTT))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AAGRAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["DpnI"] = {
     "charac": (2, -2, None, None, "GATC"),
     "compsite": "(?=(?P<DpnI>GATC))",
@@ -8374,7 +8834,7 @@ rest_dict["DraI"] = {
     "site": "TTTAAA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "S", "V", "X"),
 }
 
 rest_dict["DraII"] = {
@@ -8497,6 +8957,66 @@ rest_dict["DrdIV"] = {
     "suppl": (),
 }
 
+rest_dict["DrdV"] = {
+    "charac": (17, 8, None, None, "CATGNAC"),
+    "compsite": "(?=(?P<DrdV>CATG.AC))|(?=(?P<DrdV_as>GT.CATG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 8,
+    "fst5": 17,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CATGNAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["DrdVI"] = {
+    "charac": (None, None, None, None, "GCAGCC"),
+    "compsite": "(?=(?P<DrdVI>GCAGCC))|(?=(?P<DrdVI_as>GGCTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAGCC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["DrdVIII"] = {
+    "charac": (None, None, None, None, "ARGAGC"),
+    "compsite": "(?=(?P<DrdVIII>A[AG]GAGC))|(?=(?P<DrdVIII_as>GCTC[CT]T))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARGAGC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["DriI"] = {
     "charac": (6, -6, None, None, "GACNNNNNGTC"),
     "compsite": "(?=(?P<DriI>GAC.....GTC))",
@@ -8555,6 +9075,26 @@ rest_dict["DseDI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+}
+
+rest_dict["DspS02II"] = {
+    "charac": (None, None, None, None, "TGCCGAC"),
+    "compsite": "(?=(?P<DspS02II>TGCCGAC))|(?=(?P<DspS02II_as>GTCGGCA))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGCCGAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["DvuIII"] = {
@@ -8897,6 +9437,26 @@ rest_dict["Eco32I"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Eco4174I"] = {
+    "charac": (None, None, None, None, "GCACAG"),
+    "compsite": "(?=(?P<Eco4174I>GCACAG))|(?=(?P<Eco4174I_as>CTGTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCACAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Eco43896II"] = {
     "charac": (None, None, None, None, "CRARCAG"),
     "compsite": "(?=(?P<Eco43896II>C[AG]A[AG]CAG))|(?=(?P<Eco43896II_as>CTG[CT]T[CT]G))",
@@ -8974,7 +9534,7 @@ rest_dict["Eco47III"] = {
     "site": "AGCGCT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "M", "R", "S"),
+    "suppl": ("B", "M", "S"),
 }
 
 rest_dict["Eco52I"] = {
@@ -9077,6 +9637,26 @@ rest_dict["Eco72I"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Eco8164I"] = {
+    "charac": (None, None, None, None, "GCCKAG"),
+    "compsite": "(?=(?P<Eco8164I>GCC[GT]AG))|(?=(?P<Eco8164I_as>CT[AC]GGC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCKAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Eco81I"] = {
     "charac": (2, -2, None, None, "CCTNAGG"),
     "compsite": "(?=(?P<Eco81I>CCT.AGG))",
@@ -9117,6 +9697,66 @@ rest_dict["Eco88I"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Eco9009II"] = {
+    "charac": (None, None, None, None, "GAAANTC"),
+    "compsite": "(?=(?P<Eco9009II>GAAA.TC))|(?=(?P<Eco9009II_as>GA.TTTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAANTC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Eco9020I"] = {
+    "charac": (None, None, None, None, "CGAABTT"),
+    "compsite": "(?=(?P<Eco9020I>CGAA[CGT]TT))|(?=(?P<Eco9020I_as>AA[ACG]TTCG))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGAABTT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Eco9035I"] = {
+    "charac": (None, None, None, None, "GGGANTT"),
+    "compsite": "(?=(?P<Eco9035I>GGGA.TT))|(?=(?P<Eco9035I_as>AA.TCCC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGGANTT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Eco91I"] = {
     "charac": (1, -1, None, None, "GGTNACC"),
     "compsite": "(?=(?P<Eco91I>GGT.ACC))",
@@ -9135,6 +9775,26 @@ rest_dict["Eco91I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+}
+
+rest_dict["Eco9699II"] = {
+    "charac": (None, None, None, None, "TAGARC"),
+    "compsite": "(?=(?P<Eco9699II>TAGA[AG]C))|(?=(?P<Eco9699II_as>G[CT]TCTA))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TAGARC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["EcoBLMcrX"] = {
@@ -9234,7 +9894,7 @@ rest_dict["EcoICRI"] = {
     "site": "GAGCTC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "R", "V"),
+    "suppl": ("I", "V"),
 }
 
 rest_dict["EcoMVII"] = {
@@ -9497,6 +10157,26 @@ rest_dict["EheI"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Ehi46392I"] = {
+    "charac": (None, None, None, None, "CCCNNAG"),
+    "compsite": "(?=(?P<Ehi46392I>CCC..AG))|(?=(?P<Ehi46392I_as>CT..GGG))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCNNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Eli8509II"] = {
     "charac": (None, None, None, None, "CCGGAG"),
     "compsite": "(?=(?P<Eli8509II>CCGGAG))|(?=(?P<Eli8509II_as>CTCCGG))",
@@ -9513,6 +10193,26 @@ rest_dict["Eli8509II"] = {
     "scd5": None,
     "site": "CCGGAG",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["ErhG4T10I"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTC"),
+    "compsite": "(?=(?P<ErhG4T10I>CGA......TC))|(?=(?P<ErhG4T10I_as>GA......TCG))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTC",
+    "size": 11,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -9897,6 +10597,66 @@ rest_dict["FmuI"] = {
     "suppl": (),
 }
 
+rest_dict["Fna13121I"] = {
+    "charac": (None, None, None, None, "TTGAYC"),
+    "compsite": "(?=(?P<Fna13121I>TTGA[CT]C))|(?=(?P<Fna13121I_as>G[AG]TCAA))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TTGAYC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Fnu11326II"] = {
+    "charac": (None, None, None, None, "GAGNNNNRTAY"),
+    "compsite": "(?=(?P<Fnu11326II>GAG....[AG]TA[CT]))|(?=(?P<Fnu11326II_as>[AG]TA[CT]....CTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAGNNNNRTAY",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Fnu11326IV"] = {
+    "charac": (None, None, None, None, "CTTAATT"),
+    "compsite": "(?=(?P<Fnu11326IV>CTTAATT))|(?=(?P<Fnu11326IV_as>AATTAAG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CTTAATT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Fnu4HI"] = {
     "charac": (2, -2, None, None, "GCNGC"),
     "compsite": "(?=(?P<Fnu4HI>GC.GC))",
@@ -10237,6 +10997,26 @@ rest_dict["GluI"] = {
     "suppl": ("I",),
 }
 
+rest_dict["Gru56503II"] = {
+    "charac": (None, None, None, None, "CARABGC"),
+    "compsite": "(?=(?P<Gru56503II>CA[AG]A[CGT]GC))|(?=(?P<Gru56503II_as>GC[ACG]T[CT]TG))",
+    "dna": None,
+    "freq": 2730.6666666666665,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CARABGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["GsaI"] = {
     "charac": (5, -5, None, None, "CCCAGC"),
     "compsite": "(?=(?P<GsaI>CCCAGC))|(?=(?P<GsaI_as>GCTGGG))",
@@ -10314,7 +11094,7 @@ rest_dict["HaeII"] = {
     "site": "RGCGCY",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "N", "R"),
+    "suppl": ("J", "K", "N"),
 }
 
 rest_dict["HaeIII"] = {
@@ -10393,6 +11173,26 @@ rest_dict["HbaII"] = {
     "scd5": None,
     "site": "GCCCAG",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Hca13221V"] = {
+    "charac": (None, None, None, None, "CACNNNNNRTAY"),
+    "compsite": "(?=(?P<Hca13221V>CAC.....[AG]TA[CT]))|(?=(?P<Hca13221V_as>[AG]TA[CT].....GTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACNNNNNRTAY",
+    "size": 12,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -10694,7 +11494,7 @@ rest_dict["HincII"] = {
     "site": "GTYRAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "N", "O", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "N", "O", "Q", "X"),
 }
 
 rest_dict["HindII"] = {
@@ -10774,7 +11574,7 @@ rest_dict["HpaI"] = {
     "site": "GTTAAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "S", "V", "X"),
 }
 
 rest_dict["HpaII"] = {
@@ -11018,8 +11818,8 @@ rest_dict["Hpy99XIV_mut1"] = {
 }
 
 rest_dict["Hpy99XXII"] = {
-    "charac": (None, None, None, None, "TCANNNNNNTRG"),
-    "compsite": "(?=(?P<Hpy99XXII>TCA......T[AG]G))|(?=(?P<Hpy99XXII_as>C[CT]A......TGA))",
+    "charac": (None, None, None, None, "CYANNNNNNTGA"),
+    "compsite": "(?=(?P<Hpy99XXII>C[CT]A......TGA))|(?=(?P<Hpy99XXII_as>TCA......T[AG]G))",
     "dna": None,
     "freq": 2048.0,
     "fst3": None,
@@ -11031,7 +11831,27 @@ rest_dict["Hpy99XXII"] = {
     "results": None,
     "scd3": None,
     "scd5": None,
-    "site": "TCANNNNNNTRG",
+    "site": "CYANNNNNNTGA",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["HpyAS001VI"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTTC"),
+    "compsite": "(?=(?P<HpyAS001VI>C[CT]A......TTC))|(?=(?P<HpyAS001VI_as>GAA......T[AG]G))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTTC",
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
@@ -11235,6 +12055,46 @@ rest_dict["HpyF3I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+}
+
+rest_dict["HpyLIM6XII"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTCC"),
+    "compsite": "(?=(?P<HpyLIM6XII>C[CT]A......TCC))|(?=(?P<HpyLIM6XII_as>GGA......T[AG]G))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTCC",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["HpyPU007XIX"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTGY"),
+    "compsite": "(?=(?P<HpyPU007XIX>C[CT]A......TG[CT]))|(?=(?P<HpyPU007XIX_as>[AG]CA......T[AG]G))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTGY",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["HpySE526I"] = {
@@ -11517,6 +12377,26 @@ rest_dict["Jsp2502II"] = {
     "suppl": (),
 }
 
+rest_dict["Kas9737III"] = {
+    "charac": (None, None, None, None, "CCCRAG"),
+    "compsite": "(?=(?P<Kas9737III>CCC[AG]AG))|(?=(?P<Kas9737III_as>CT[CT]GGG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCRAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["KasI"] = {
     "charac": (1, -1, None, None, "GGCGCC"),
     "compsite": "(?=(?P<KasI>GGCGCC))",
@@ -11637,6 +12517,46 @@ rest_dict["Kpn327I"] = {
     "suppl": (),
 }
 
+rest_dict["Kpn9178I"] = {
+    "charac": (None, None, None, None, "GNGCGAG"),
+    "compsite": "(?=(?P<Kpn9178I>G.GCGAG))|(?=(?P<Kpn9178I_as>CTCGC.C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GNGCGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Kpn9644II"] = {
+    "charac": (None, None, None, None, "GRACRAC"),
+    "compsite": "(?=(?P<Kpn9644II>G[AG]AC[AG]AC))|(?=(?P<Kpn9644II_as>GT[CT]GT[CT]C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRACRAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["KpnI"] = {
     "charac": (5, -5, None, None, "GGTACC"),
     "compsite": "(?=(?P<KpnI>GGTACC))",
@@ -11717,6 +12637,26 @@ rest_dict["KpnNIH50I"] = {
     "suppl": (),
 }
 
+rest_dict["Kro7512II"] = {
+    "charac": (None, None, None, None, "ARCAGKC"),
+    "compsite": "(?=(?P<Kro7512II>A[AG]CAG[GT]C))|(?=(?P<Kro7512II_as>G[AC]CTG[CT]T))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARCAGKC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["KroI"] = {
     "charac": (1, -1, None, None, "GCCGGC"),
     "compsite": "(?=(?P<KroI>GCCGGC))",
@@ -11728,6 +12668,26 @@ rest_dict["KroI"] = {
     "opt_temp": 37,
     "ovhg": -4,
     "ovhgseq": "CCGG",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCGGC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": ("I",),
+}
+
+rest_dict["KroNI"] = {
+    "charac": (3, -3, None, None, "GCCGGC"),
+    "compsite": "(?=(?P<KroNI>GCCGGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": -3,
+    "fst5": 3,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 0,
+    "ovhgseq": "",
     "results": None,
     "scd3": None,
     "scd5": None,
@@ -12013,6 +12973,46 @@ rest_dict["Lpl1004II"] = {
     "scd5": None,
     "site": "AGGRAG",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Lpn11417II"] = {
+    "charac": (None, None, None, None, "ACGAAT"),
+    "compsite": "(?=(?P<Lpn11417II>ACGAAT))|(?=(?P<Lpn11417II_as>ATTCGT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ACGAAT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Lpn12272I"] = {
+    "charac": (None, None, None, None, "GCNCAAC"),
+    "compsite": "(?=(?P<Lpn12272I>GC.CAAC))|(?=(?P<Lpn12272I_as>GTTG.GC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCNCAAC",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -12394,7 +13394,7 @@ rest_dict["MboII"] = {
     "site": "GAAGA",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "N", "Q", "R", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "N", "Q", "V", "X"),
 }
 
 rest_dict["McaTI"] = {
@@ -12413,6 +13413,46 @@ rest_dict["McaTI"] = {
     "scd5": None,
     "site": "GCGCGC",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Mch10819I"] = {
+    "charac": (None, None, None, None, "CYCAGCG"),
+    "compsite": "(?=(?P<Mch10819I>C[CT]CAGCG))|(?=(?P<Mch10819I_as>CGCTG[AG]G))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYCAGCG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Mch946II"] = {
+    "charac": (None, None, None, None, "WCGATCT"),
+    "compsite": "(?=(?P<Mch946II>[AT]CGATCT))|(?=(?P<Mch946II_as>AGATCG[AT]))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "WCGATCT",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -12553,6 +13593,26 @@ rest_dict["MkaDII"] = {
     "scd5": None,
     "site": "GAGAYGT",
     "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Mla10359I"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTCA"),
+    "compsite": "(?=(?P<Mla10359I>CGA......TCA))|(?=(?P<Mla10359I_as>TGA......TCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTCA",
+    "size": 12,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -12954,7 +14014,7 @@ rest_dict["MspA1I"] = {
     "site": "CMGCKG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "N", "R", "V"),
+    "suppl": ("I", "N", "V"),
 }
 
 rest_dict["MspCI"] = {
@@ -12975,6 +14035,26 @@ rest_dict["MspCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+}
+
+rest_dict["MspF392I"] = {
+    "charac": (None, None, None, None, "CCCAATV"),
+    "compsite": "(?=(?P<MspF392I>CCCAAT[ACG]))|(?=(?P<MspF392I_as>[CGT]ATTGGG))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCAATV",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["MspGI"] = {
@@ -13354,7 +14434,7 @@ rest_dict["NarI"] = {
     "site": "GGCGCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "M", "N", "Q", "R", "X"),
+    "suppl": ("J", "M", "N", "Q", "X"),
 }
 
 rest_dict["Nbr128II"] = {
@@ -13394,7 +14474,7 @@ rest_dict["NciI"] = {
     "site": "CCSGG",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("J", "N", "R"),
+    "suppl": ("J", "N"),
 }
 
 rest_dict["NcoI"] = {
@@ -13794,7 +14874,7 @@ rest_dict["NruI"] = {
     "site": "TCGCGA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "S", "X"),
 }
 
 rest_dict["NsbI"] = {
@@ -13834,7 +14914,7 @@ rest_dict["NsiI"] = {
     "site": "ATGCAT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("J", "M", "N", "Q", "S", "X"),
 }
 
 rest_dict["NspBII"] = {
@@ -13853,6 +14933,26 @@ rest_dict["NspBII"] = {
     "scd5": None,
     "site": "CMGCKG",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["NspES21II"] = {
+    "charac": (None, None, None, None, "CRTTCAG"),
+    "compsite": "(?=(?P<NspES21II>C[AG]TTCAG))|(?=(?P<NspES21II_as>CTGAA[CT]G))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CRTTCAG",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -14057,6 +15157,46 @@ rest_dict["PacIII"] = {
     "suppl": (),
 }
 
+rest_dict["Pae10662III"] = {
+    "charac": (None, None, None, None, "TGACGAG"),
+    "compsite": "(?=(?P<Pae10662III>TGACGAG))|(?=(?P<Pae10662III_as>CTCGTCA))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGACGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Pae8506I"] = {
+    "charac": (None, None, None, None, "CATCGAR"),
+    "compsite": "(?=(?P<Pae8506I>CATCGA[AG]))|(?=(?P<Pae8506I_as>[CT]TCGATG))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CATCGAR",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["PaeI"] = {
     "charac": (5, -5, None, None, "GCATGC"),
     "compsite": "(?=(?P<PaeI>GCATGC))",
@@ -14177,6 +15317,26 @@ rest_dict["PalAI"] = {
     "suppl": ("I",),
 }
 
+rest_dict["PaqCI"] = {
+    "charac": (11, 8, None, None, "CACCTGC"),
+    "compsite": "(?=(?P<PaqCI>CACCTGC))|(?=(?P<PaqCI_as>GCAGGTG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": 8,
+    "fst5": 11,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": -4,
+    "ovhgseq": "NNNN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACCTGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": ("N",),
+}
+
 rest_dict["PasI"] = {
     "charac": (2, -2, None, None, "CCCWGGG"),
     "compsite": "(?=(?P<PasI>CCC[AT]GGG))",
@@ -14233,6 +15393,26 @@ rest_dict["Pba2294I"] = {
     "scd5": None,
     "site": "GTAAG",
     "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Pbu13063II"] = {
+    "charac": (None, None, None, None, "GTATYC"),
+    "compsite": "(?=(?P<Pbu13063II>GTAT[CT]C))|(?=(?P<Pbu13063II_as>G[AG]ATAC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTATYC",
+    "size": 6,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -14497,6 +15677,26 @@ rest_dict["PfeI"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Pfl10783II"] = {
+    "charac": (None, None, None, None, "GCGTCAG"),
+    "compsite": "(?=(?P<Pfl10783II>GCGTCAG))|(?=(?P<Pfl10783II_as>CTGACGC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCGTCAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Pfl1108I"] = {
     "charac": (None, None, None, None, "TCGTAG"),
     "compsite": "(?=(?P<Pfl1108I>TCGTAG))|(?=(?P<Pfl1108I_as>CTACGA))",
@@ -14535,6 +15735,26 @@ rest_dict["Pfl23II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+}
+
+rest_dict["Pfl3756II"] = {
+    "charac": (None, None, None, None, "CCCTNAG"),
+    "compsite": "(?=(?P<Pfl3756II>CCCT.AG))|(?=(?P<Pfl3756II_as>CT.AGGG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCTNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["Pfl8569I"] = {
@@ -14917,6 +16137,26 @@ rest_dict["PmaCI"] = {
     "suppl": ("K",),
 }
 
+rest_dict["Pme10899I"] = {
+    "charac": (None, None, None, None, "GACAGG"),
+    "compsite": "(?=(?P<Pme10899I>GACAGG))|(?=(?P<Pme10899I_as>CCTGTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACAGG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["PmeI"] = {
     "charac": (4, -4, None, None, "GTTTAAAC"),
     "compsite": "(?=(?P<PmeI>GTTTAAAC))",
@@ -15075,6 +16315,26 @@ rest_dict["PpuMI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+}
+
+rest_dict["Pru8113I"] = {
+    "charac": (None, None, None, None, "CAGANGC"),
+    "compsite": "(?=(?P<Pru8113I>CAGA.GC))|(?=(?P<Pru8113I_as>GC.TCTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAGANGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["PscI"] = {
@@ -15317,6 +16577,26 @@ rest_dict["PspCI"] = {
     "suppl": ("I", "V"),
 }
 
+rest_dict["PspD7DII"] = {
+    "charac": (None, None, None, None, "CCGCGAG"),
+    "compsite": "(?=(?P<PspD7DII>CCGCGAG))|(?=(?P<PspD7DII_as>CTCGCGG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGCGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["PspEI"] = {
     "charac": (1, -1, None, None, "GGTNACC"),
     "compsite": "(?=(?P<PspEI>GGT.ACC))",
@@ -15513,6 +16793,26 @@ rest_dict["PspPRI"] = {
     "scd5": None,
     "site": "CCYCAG",
     "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["PspR84I"] = {
+    "charac": (None, None, None, None, "TACYCAC"),
+    "compsite": "(?=(?P<PspR84I>TAC[CT]CAC))|(?=(?P<PspR84I_as>GTG[AG]GTA))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TACYCAC",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -15794,7 +17094,27 @@ rest_dict["PvuII"] = {
     "site": "CAGCTG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "S", "V", "X"),
+}
+
+rest_dict["Ran11014IV"] = {
+    "charac": (None, None, None, None, "GAAAGAG"),
+    "compsite": "(?=(?P<Ran11014IV>GAAAGAG))|(?=(?P<Ran11014IV_as>CTCTTTC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAAGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["Rba2021I"] = {
@@ -15897,6 +17217,26 @@ rest_dict["RdeGBIII"] = {
     "suppl": (),
 }
 
+rest_dict["Rer8036II"] = {
+    "charac": (None, None, None, None, "CCGAKGG"),
+    "compsite": "(?=(?P<Rer8036II>CCGA[GT]GG))|(?=(?P<Rer8036II_as>CC[AC]TCGG))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGAKGG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["RflFIII"] = {
     "charac": (None, None, None, None, "CGCCAG"),
     "compsite": "(?=(?P<RflFIII>CGCCAG))|(?=(?P<RflFIII_as>CTGGCG))",
@@ -15937,6 +17277,46 @@ rest_dict["RgaI"] = {
     "suppl": ("I",),
 }
 
+rest_dict["Rgo13296IV"] = {
+    "charac": (None, None, None, None, "GRAAGCG"),
+    "compsite": "(?=(?P<Rgo13296IV>G[AG]AAGCG))|(?=(?P<Rgo13296IV_as>CGCTT[CT]C))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRAAGCG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Rho5650I"] = {
+    "charac": (None, None, None, None, "AACGAG"),
+    "compsite": "(?=(?P<Rho5650I>AACGAG))|(?=(?P<Rho5650I_as>CTCGTT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AACGAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["RigI"] = {
     "charac": (6, -6, None, None, "GGCCGGCC"),
     "compsite": "(?=(?P<RigI>GGCCGGCC))",
@@ -15955,6 +17335,26 @@ rest_dict["RigI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I",),
+}
+
+rest_dict["Rkr11038I"] = {
+    "charac": (None, None, None, None, "GGANNNNNRTGA"),
+    "compsite": "(?=(?P<Rkr11038I>GGA.....[AG]TGA))|(?=(?P<Rkr11038I_as>TCA[CT].....TCC))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGANNNNNRTGA",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["RlaI"] = {
@@ -16154,7 +17554,7 @@ rest_dict["RsaI"] = {
     "site": "GTAC",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "M", "N", "Q", "R", "S", "V", "X", "Y"),
+    "suppl": ("B", "C", "I", "J", "M", "N", "Q", "R", "V", "X", "Y"),
 }
 
 rest_dict["RsaNI"] = {
@@ -16434,7 +17834,7 @@ rest_dict["SalI"] = {
     "site": "GTCGAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "V", "X"),
 }
 
 rest_dict["SanDI"] = {
@@ -16517,6 +17917,26 @@ rest_dict["SatI"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Sau1803III"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTAC"),
+    "compsite": "(?=(?P<Sau1803III>CGA......TAC))|(?=(?P<Sau1803III_as>GTA......TCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTAC",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["Sau3AI"] = {
     "charac": (0, 0, None, None, "GATC"),
     "compsite": "(?=(?P<Sau3AI>GATC))",
@@ -16534,7 +17954,27 @@ rest_dict["Sau3AI"] = {
     "site": "GATC",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("C", "J", "K", "M", "N", "R", "X"),
+    "suppl": ("C", "J", "K", "M", "N", "X"),
+}
+
+rest_dict["Sau5656II"] = {
+    "charac": (None, None, None, None, "GTTGCA"),
+    "compsite": "(?=(?P<Sau5656II>GTTGCA))|(?=(?P<Sau5656II_as>TGCAAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTTGCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["Sau64037IV"] = {
@@ -16592,6 +18032,26 @@ rest_dict["SauI"] = {
     "scd3": None,
     "scd5": None,
     "site": "CCTNAGG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["SauMJ015III"] = {
+    "charac": (None, None, None, None, "GARCNAG"),
+    "compsite": "(?=(?P<SauMJ015III>GA[AG]C.AG))|(?=(?P<SauMJ015III_as>CT.G[CT]TC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GARCNAG",
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
@@ -16674,7 +18134,7 @@ rest_dict["ScaI"] = {
     "site": "AGTACT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "X"),
 }
 
 rest_dict["SchI"] = {
@@ -16837,6 +18297,66 @@ rest_dict["SduI"] = {
     "suppl": ("B",),
 }
 
+rest_dict["Sdy5370I"] = {
+    "charac": (None, None, None, None, "CACNNNNNTCY"),
+    "compsite": "(?=(?P<Sdy5370I>CAC.....TC[CT]))|(?=(?P<Sdy5370I_as>[AG]GA.....GTG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACNNNNNTCY",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Sdy7136I"] = {
+    "charac": (None, None, None, None, "GAGNNNNNTAA"),
+    "compsite": "(?=(?P<Sdy7136I>GAG.....TAA))|(?=(?P<Sdy7136I_as>TTA.....CTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAGNNNNNTAA",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Sdy9603I"] = {
+    "charac": (None, None, None, None, "GCANNNNNNNTGA"),
+    "compsite": "(?=(?P<Sdy9603I>GCA.......TGA))|(?=(?P<Sdy9603I_as>TCA.......TGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCANNNNNNNTGA",
+    "size": 13,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["SecI"] = {
     "charac": (1, -1, None, None, "CCNNGG"),
     "compsite": "(?=(?P<SecI>CC..GG))",
@@ -16897,6 +18417,46 @@ rest_dict["Sen17963III"] = {
     "suppl": (),
 }
 
+rest_dict["Sen5794III"] = {
+    "charac": (None, None, None, None, "ACGAACB"),
+    "compsite": "(?=(?P<Sen5794III>ACGAAC[CGT]))|(?=(?P<Sen5794III_as>[ACG]GTTCGT))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ACGAACB",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Sen6480IV"] = {
+    "charac": (None, None, None, None, "GTTCAT"),
+    "compsite": "(?=(?P<Sen6480IV>GTTCAT))|(?=(?P<Sen6480IV_as>ATGAAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTTCAT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["SenA1673III"] = {
     "charac": (None, None, None, None, "GNGGCAG"),
     "compsite": "(?=(?P<SenA1673III>G.GGCAG))|(?=(?P<SenA1673III_as>CTGCC.C))",
@@ -16952,6 +18512,26 @@ rest_dict["SenTFIV"] = {
     "scd3": None,
     "scd5": None,
     "site": "GATCAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Sep11964I"] = {
+    "charac": (None, None, None, None, "CGYCAT"),
+    "compsite": "(?=(?P<Sep11964I>CG[CT]CAT))|(?=(?P<Sep11964I_as>ATG[AG]CG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGYCAT",
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
@@ -17094,7 +18674,27 @@ rest_dict["SfiI"] = {
     "site": "GGCCNNNNNGGCC",
     "size": 13,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "V", "X"),
+}
+
+rest_dict["Sfl13829III"] = {
+    "charac": (None, None, None, None, "GNYCAG"),
+    "compsite": "(?=(?P<Sfl13829III>G.[CT]CAG))|(?=(?P<Sfl13829III_as>CTG[AG].C))",
+    "dna": None,
+    "freq": 512.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GNYCAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["SfoI"] = {
@@ -17215,6 +18815,26 @@ rest_dict["SgfI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("R",),
+}
+
+rest_dict["Sgr7807I"] = {
+    "charac": (None, None, None, None, "GCCGAGG"),
+    "compsite": "(?=(?P<Sgr7807I>GCCGAGG))|(?=(?P<Sgr7807I_as>CCTCGGC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCGAGG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
 }
 
 rest_dict["SgrAI"] = {
@@ -17397,6 +19017,46 @@ rest_dict["SlaI"] = {
     "suppl": ("C", "Y"),
 }
 
+rest_dict["Sma10259II"] = {
+    "charac": (None, None, None, None, "CAAAGA"),
+    "compsite": "(?=(?P<Sma10259II>CAAAGA))|(?=(?P<Sma10259II_as>TCTTTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAAAGA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Sma325I"] = {
+    "charac": (None, None, None, None, "ARCCCT"),
+    "compsite": "(?=(?P<Sma325I>A[AG]CCCT))|(?=(?P<Sma325I_as>AGGG[CT]T))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARCCCT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["SmaI"] = {
     "charac": (3, -3, None, None, "CCCGGG"),
     "compsite": "(?=(?P<SmaI>CCCGGG))",
@@ -17574,7 +19234,7 @@ rest_dict["SnaBI"] = {
     "site": "TACGTA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("C", "K", "M", "N", "R"),
+    "suppl": ("C", "K", "M", "N"),
 }
 
 rest_dict["SnaI"] = {
@@ -17674,7 +19334,7 @@ rest_dict["SphI"] = {
     "site": "GCATGC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "V", "X"),
 }
 
 rest_dict["SplI"] = {
@@ -17974,7 +19634,7 @@ rest_dict["SspI"] = {
     "site": "AATATT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "N", "Q", "R", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "N", "Q", "V", "X"),
 }
 
 rest_dict["SspJOR1II"] = {
@@ -18174,7 +19834,7 @@ rest_dict["StuI"] = {
     "site": "AGGCCT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "Q", "X"),
 }
 
 rest_dict["StyD4I"] = {
@@ -18314,7 +19974,7 @@ rest_dict["TaqI"] = {
     "site": "TCGA",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "V", "X"),
 }
 
 rest_dict["TaqII"] = {
@@ -18437,6 +20097,46 @@ rest_dict["TfiI"] = {
     "suppl": ("N",),
 }
 
+rest_dict["TkoI"] = {
+    "charac": (26, 18, None, None, "GTGAAG"),
+    "compsite": "(?=(?P<TkoI>GTGAAG))|(?=(?P<TkoI_as>CTTCAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 18,
+    "fst5": 26,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["TkoII"] = {
+    "charac": (16, 8, None, None, "TTCAAG"),
+    "compsite": "(?=(?P<TkoII>TTCAAG))|(?=(?P<TkoII_as>CTTGAA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 8,
+    "fst5": 16,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TTCAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
 rest_dict["TpyTP2I"] = {
     "charac": (None, None, None, None, "ACCAAG"),
     "compsite": "(?=(?P<TpyTP2I>ACCAAG))|(?=(?P<TpyTP2I_as>CTTGGT))",
@@ -18494,7 +20194,7 @@ rest_dict["Tru9I"] = {
     "site": "TTAA",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("I", "M", "R", "V"),
+    "suppl": ("I", "M", "V"),
 }
 
 rest_dict["TscAI"] = {
@@ -19174,7 +20874,7 @@ rest_dict["VspI"] = {
     "site": "ATTAAT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "R", "V"),
+    "suppl": ("B", "I", "V"),
 }
 
 rest_dict["Vtu19109I"] = {
@@ -19354,7 +21054,7 @@ rest_dict["XhoI"] = {
     "site": "CTCGAG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "X"),
 }
 
 rest_dict["XhoII"] = {
@@ -19394,7 +21094,7 @@ rest_dict["XmaI"] = {
     "site": "CCCGGG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "N", "R", "V"),
+    "suppl": ("I", "N", "V"),
 }
 
 rest_dict["XmaIII"] = {
@@ -19474,7 +21174,7 @@ rest_dict["XmnI"] = {
     "site": "GAANNNNTTC",
     "size": 10,
     "substrat": "DNA",
-    "suppl": ("N", "R"),
+    "suppl": ("N",),
 }
 
 rest_dict["XspI"] = {
@@ -19513,6 +21213,46 @@ rest_dict["YkrI"] = {
     "scd5": None,
     "site": "C",
     "size": 1,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Yps3606I"] = {
+    "charac": (None, None, None, None, "CGGAAG"),
+    "compsite": "(?=(?P<Yps3606I>CGGAAG))|(?=(?P<Yps3606I_as>CTTCCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+}
+
+rest_dict["Yru12986I"] = {
+    "charac": (None, None, None, None, "AGGAAG"),
+    "compsite": "(?=(?P<Yru12986I>AGGAAG))|(?=(?P<Yru12986I_as>CTTCCT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AGGAAG",
+    "size": 6,
     "substrat": "DNA",
     "suppl": (),
 }
@@ -19584,7 +21324,7 @@ rest_dict["Zsp2I"] = {
 suppliers = {}
 
 suppliers["B"] = (
-    "Life Technologies",
+    "Thermo Fisher Scientific",
     ["AanI", "AarI", "AasI", "AatII", "AccI", "Acc65I", "AdeI", "AfaI", "AjiI", "AjuI", "AloI", "AluI", "Alw21I", "Alw26I", "Alw44I", "ApaI", "BalI", "BamHI", "BauI", "BclI", "BcnI", "BcuI", "BfmI", "BfoI", "BfuI", "BglI", "BglII", "Bme1390I", "BmeT110I", "BmsI", "BoxI", "BpiI", "BplI", "Bpu10I", "Bpu1102I", "BseDI", "BseGI", "BseJI", "BseLI", "BseMI", "BseMII", "BseNI", "BseSI", "BseXI", "Bsh1236I", "Bsh1285I", "BshNI", "BshTI", "Bsp68I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspLI", "BspOI", "BspPI", "BspTI", "Bst1107I", "BstXI", "Bsu15I", "BsuRI", "BveI", "CaiI", "Cfr9I", "Cfr10I", "Cfr13I", "Cfr42I", "ClaI", "CpoI", "CseI", "CsiI", "Csp6I", "DpnI", "DraI", "Eam1104I", "Eam1105I", "Ecl136II", "Eco24I", "Eco31I", "Eco32I", "Eco47I", "Eco47III", "Eco52I", "Eco57I", "Eco72I", "Eco81I", "Eco88I", "Eco91I", "Eco105I", "Eco130I", "Eco147I", "EcoO109I", "EcoRI", "EcoRII", "EcoRV", "EcoT22I", "EheI", "Esp3I", "FaqI", "FokI", "FspAI", "FspBI", "GsuI", "HaeIII", "HapII", "HhaI", "Hin1I", "Hin1II", "Hin6I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy8I", "HpyF3I", "HpyF10VI", "KflI", "KpnI", "Kpn2I", "KspAI", "LguI", "Lsp1109I", "LweI", "MauBI", "MbiI", "MboI", "MboII", "MlsI", "MluI", "MnlI", "Mph1103I", "MreI", "MspI", "MssI", "MunI", "MvaI", "Mva1269I", "NcoI", "NdeI", "NheI", "NmuCI", "NotI", "NruI", "NsbI", "OliI", "PacI", "PaeI", "PagI", "PasI", "PauI", "PdiI", "PdmI", "PfeI", "Pfl23II", "PfoI", "Ppu21I", "PscI", "Psp5II", "Psp1406I", "PspFI", "PstI", "PsuI", "PsyI", "PteI", "PvuI", "PvuII", "RruI", "RsaI", "RseI", "SacI", "SacII", "SalI", "SaqAI", "SatI", "ScaI", "SchI", "SdaI", "SduI", "SfaAI", "SfiI", "SgeI", "SgrDI", "SgsI", "SmaI", "SmiI", "SmoI", "SpeI", "SphI", "SsiI", "SspI", "SspDI", "StuI", "TaaI", "TaiI", "TaqI", "TasI", "TatI", "TauI", "Tru1I", "TscAI", "Van91I", "VspI", "XagI", "XapI", "XbaI", "XceI", "XhoI", "XmaJI", "XmiI"],
 )
 
@@ -19600,7 +21340,7 @@ suppliers["E"] = (
 
 suppliers["I"] = (
     "SibEnzyme Ltd.",
-    ["AatII", "AbsI", "Acc16I", "Acc36I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AclWI", "AcoI", "AcsI", "AcuI", "AfeI", "AgsI", "AhlI", "AjnI", "AluI", "AluBI", "Ama87I", "AoxI", "ApaI", "ArsI", "AsiGI", "AsiSI", "AspA2I", "AspLEI", "AspS9I", "AsuC2I", "AsuHPI", "AsuNHI", "BamHI", "BarI", "Bbv12I", "BglI", "BglII", "BisI", "BlsI", "Bme18I", "BmtI", "BmuI", "BpmI", "Bpu10I", "Bpu14I", "Bsa29I", "Bsc4I", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BslFI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BspACI", "BspFNI", "BssECI", "BssNAI", "BssT1I", "Bst6I", "BstACI", "BstAFI", "BstAPI", "BstAUI", "Bst2BI", "BstBAI", "Bst4CI", "BstC8I", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstKTI", "BstMAI", "BstMBI", "BstMCI", "BstMWI", "BstNSI", "BstPAI", "BstSCI", "BstSFI", "BstSLI", "BstSNI", "Bst2UI", "BstV1I", "BstV2I", "BstXI", "BstX2I", "BsuI", "BsuRI", "BtrI", "CciI", "CciNI", "DraI", "DraIII", "DriI", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "EgeI", "ErhI", "FaeI", "FaiI", "FalI", "FatI", "FauI", "FauNDI", "FblI", "FokI", "FriOI", "Fsp4HI", "GlaI", "GluI", "GsaI", "HaeIII", "HgaI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HpySE526I", "HspAI", "KpnI", "KroI", "Ksp22I", "Kzo9I", "LmnI", "MabI", "MalI", "MboII", "MfeI", "MhlI", "MluI", "Mly113I", "MnlI", "Mox20I", "MroNI", "MroXI", "MspI", "MspA1I", "MspR9I", "MteI", "NruI", "PalAI", "PceI", "PciI", "PciSI", "PcsI", "PctI", "PkrI", "Ple19I", "PpsI", "PsiI", "Psp6I", "Psp124BI", "PspCI", "PspEI", "PspLI", "PspN4I", "PspOMI", "PspPPI", "PspXI", "PsrI", "PstI", "PstNI", "PvuII", "RgaI", "RigI", "RsaI", "RsaNI", "Rsr2I", "SalI", "SbfI", "SetI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "SspMI", "TaqI", "Tru9I", "TseFI", "Tth111I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "ZrmI", "Zsp2I"],
+    ["AatII", "AbsI", "Acc16I", "Acc36I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AclWI", "AcoI", "AcsI", "AcuI", "AfeI", "AgsI", "AhlI", "AjnI", "AluI", "AluBI", "Ama87I", "AoxI", "ApaI", "ArsI", "AsiGI", "AsiSI", "AspA2I", "AspLEI", "AspS9I", "AsuC2I", "AsuHPI", "AsuNHI", "BamHI", "BarI", "Bbv12I", "BglI", "BglII", "BisI", "BlsI", "Bme18I", "BmtI", "BmuI", "BpmI", "Bpu10I", "Bpu14I", "Bsa29I", "Bsc4I", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BslFI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BspACI", "BspFNI", "BssECI", "BssNAI", "BssT1I", "Bst6I", "BstACI", "BstAFI", "BstAPI", "BstAUI", "Bst2BI", "BstBAI", "Bst4CI", "BstC8I", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstKTI", "BstMAI", "BstMBI", "BstMCI", "BstMWI", "BstNSI", "BstPAI", "BstSCI", "BstSFI", "BstSLI", "BstSNI", "Bst2UI", "BstV1I", "BstV2I", "BstXI", "BstX2I", "BsuI", "BsuRI", "BtrI", "CciI", "CciNI", "DraI", "DraIII", "DriI", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "EgeI", "ErhI", "FaeI", "FaiI", "FalI", "FatI", "FauI", "FauNDI", "FblI", "FokI", "FriOI", "Fsp4HI", "GlaI", "GluI", "GsaI", "HaeIII", "HgaI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HpySE526I", "HspAI", "KpnI", "KroI", "KroNI", "Ksp22I", "Kzo9I", "LmnI", "MabI", "MalI", "MboII", "MfeI", "MhlI", "MluI", "Mly113I", "MnlI", "Mox20I", "MroNI", "MroXI", "MspI", "MspA1I", "MspR9I", "MteI", "NruI", "PalAI", "PceI", "PciI", "PciSI", "PcsI", "PctI", "PkrI", "Ple19I", "PpsI", "PsiI", "Psp6I", "Psp124BI", "PspCI", "PspEI", "PspLI", "PspN4I", "PspOMI", "PspPPI", "PspXI", "PsrI", "PstI", "PstNI", "PvuII", "RgaI", "RigI", "RsaI", "RsaNI", "Rsr2I", "SalI", "SbfI", "SetI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "SspMI", "TaqI", "Tru9I", "TseFI", "Tth111I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "ZrmI", "Zsp2I"],
 )
 
 suppliers["J"] = (
@@ -19620,7 +21360,7 @@ suppliers["M"] = (
 
 suppliers["N"] = (
     "New England Biolabs",
-    ["AatII", "AbaSI", "AccI", "Acc65I", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwI", "AlwNI", "ApaI", "ApaLI", "ApeKI", "ApoI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeI", "BaeGI", "BamHI", "BanI", "BanII", "BbsI", "BbvI", "BbvCI", "BccI", "BceAI", "BcgI", "BciVI", "BclI", "BcoDI", "BfaI", "BfuAI", "BglI", "BglII", "BlpI", "BmgBI", "BmrI", "BmtI", "BpmI", "Bpu10I", "BpuEI", "BsaI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsaXI", "BseRI", "BseYI", "BsgI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "BsmI", "BsmAI", "BsmBI", "BsmFI", "BsoBI", "Bsp1286I", "BspCNI", "BspDI", "BspEI", "BspHI", "BspMI", "BspQI", "BsrI", "BsrBI", "BsrDI", "BsrFI", "BsrGI", "BssHII", "BssSI", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BtgZI", "BtsI", "BtsIMutI", "BtsCI", "Cac8I", "ClaI", "CspCI", "CviAII", "CviKI_1", "CviQI", "DdeI", "DpnI", "DpnII", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EarI", "EciI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "Esp3I", "FatI", "FauI", "Fnu4HI", "FokI", "FseI", "FspI", "FspEI", "HaeII", "HaeIII", "HgaI", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyAV", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnPI", "MboI", "MboII", "MfeI", "MluI", "MluCI", "MlyI", "MmeI", "MnlI", "MscI", "MseI", "MslI", "MspI", "MspA1I", "MspJI", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "NmeAIII", "NotI", "NruI", "NsiI", "NspI", "PacI", "PaeR7I", "PciI", "PflFI", "PflMI", "PleI", "PluTI", "PmeI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspGI", "PspOMI", "PspXI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "SapI", "Sau96I", "Sau3AI", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "SspI", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspMI", "TspRI", "Tth111I", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"],
+    ["AatII", "AbaSI", "AccI", "Acc65I", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwI", "AlwNI", "ApaI", "ApaLI", "ApeKI", "ApoI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeI", "BaeGI", "BamHI", "BanI", "BanII", "BbsI", "BbvI", "BbvCI", "BccI", "BceAI", "BcgI", "BciVI", "BclI", "BcoDI", "BfaI", "BfuAI", "BglI", "BglII", "BlpI", "BmgBI", "BmrI", "BmtI", "BpmI", "Bpu10I", "BpuEI", "BsaI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsaXI", "BseRI", "BseYI", "BsgI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "BsmI", "BsmAI", "BsmBI", "BsmFI", "BsoBI", "Bsp1286I", "BspCNI", "BspDI", "BspEI", "BspHI", "BspMI", "BspQI", "BsrI", "BsrBI", "BsrDI", "BsrFI", "BsrGI", "BssHII", "BssSI", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BtgZI", "BtsI", "BtsIMutI", "BtsCI", "Cac8I", "ClaI", "CspCI", "CviAII", "CviKI_1", "CviQI", "DdeI", "DpnI", "DpnII", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EarI", "EciI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "Esp3I", "FatI", "FauI", "Fnu4HI", "FokI", "FseI", "FspI", "FspEI", "HaeII", "HaeIII", "HgaI", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyAV", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnPI", "MboI", "MboII", "MfeI", "MluI", "MluCI", "MlyI", "MmeI", "MnlI", "MscI", "MseI", "MslI", "MspI", "MspA1I", "MspJI", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "NmeAIII", "NotI", "NruI", "NsiI", "NspI", "PacI", "PaeR7I", "PaqCI", "PciI", "PflFI", "PflMI", "PleI", "PluTI", "PmeI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspGI", "PspOMI", "PspXI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "SapI", "Sau96I", "Sau3AI", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "SspI", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspMI", "TspRI", "Tth111I", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"],
 )
 
 suppliers["O"] = (
@@ -19635,12 +21375,12 @@ suppliers["Q"] = (
 
 suppliers["R"] = (
     "Promega Corporation",
-    ["AccI", "AccIII", "AgeI", "AluI", "ApaI", "AvaII", "BalI", "BamHI", "BanI", "BclI", "BglI", "BglII", "BssHII", "BstEII", "BstXI", "BstZI", "CfoI", "ClaI", "CspI", "DdeI", "DpnI", "DraI", "Eco47III", "EcoICRI", "EcoRI", "EcoRV", "HaeII", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "Hsp92I", "Hsp92II", "KpnI", "MboI", "MboII", "MluI", "MspI", "MspA1I", "NarI", "NciI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SgfI", "SmaI", "SnaBI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "Tru9I", "VspI", "XbaI", "XhoI", "XmaI", "XmnI"],
+    ["AgeI", "AluI", "ApaI", "BamHI", "BclI", "BglI", "BglII", "BstZI", "CfoI", "ClaI", "CspI", "DdeI", "DpnI", "EcoRI", "EcoRV", "HaeIII", "HhaI", "HindIII", "HinfI", "HpaII", "Hsp92I", "Hsp92II", "KpnI", "MboI", "MluI", "MspI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "RsaI", "SacI", "SacII", "SalI", "ScaI", "SgfI", "SmaI", "SpeI", "SphI", "TaqI", "XbaI", "XhoI"],
 )
 
 suppliers["S"] = (
     "Sigma Chemical Corporation",
-    ["AflIII", "AluI", "ApaI", "Asp718I", "BamHI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "EclXI", "Eco47III", "EcoRI", "EcoRV", "HaeIII", "HindII", "HindIII", "HpaI", "KpnI", "KspI", "MaeIII", "MluI", "MunI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SalI", "ScaI", "SfiI", "SfuI", "SmaI", "SpeI", "SphI", "StuI", "SwaI", "TaqI", "XbaI", "XhoI"],
+    ["AflIII", "AluI", "Asp718I", "BamHI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "EclXI", "Eco47III", "EcoRI", "EcoRV", "HaeIII", "HindII", "HindIII", "HpaI", "KpnI", "KspI", "MaeIII", "MluI", "MunI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "SacI", "SfuI", "SmaI", "SpeI", "SwaI", "XbaI"],
 )
 
 suppliers["V"] = (
@@ -19688,7 +21428,7 @@ typedict["type144"] = (
 
 typedict["type146"] = (
     ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["Aba6411II", "AbaB8342IV", "AbaCIII", "Abr4036II", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdu23823II", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cla11845III", "Cly7489II", "Cma23826I", "Csp2014I", "DrdII", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4465II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Eli8509II", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "HbaII", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kor51II", "Kpn156V", "Kpn327I", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Lba2029III", "Lbr124II", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mcr10I", "MkaDII", "Mlu211III", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "PaePA99III", "Pal408I", "Pba2294I", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "PpiP13II", "Pse18267I", "Psp0357II", "Pst145I", "Pst273I", "Pst14472I", "Rba2021I", "RdeGBI", "RflFIII", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau64037IV", "Sba460II", "Sbo46I", "ScoDS2II", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "SgrAII", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV"],
+    ["Aba6411II", "Aba13301I", "AbaB8342IV", "AbaCIII", "AbaPBA3II", "Abr4036II", "AccIX", "AccX", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asl11923II", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "Bce10661III", "Bco11035III", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "Bps6700III", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco11366VI", "Cco11437V", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdi13746V", "Cdi13750III", "Cdu23823II", "Cfa8380I", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cko11077IV", "Cla11845III", "Cly7489II", "Cpe2837III", "Cpe10578V", "Cpe13170II", "Cre7908I", "Csa9238II", "Csp2014I", "Dpi3069I", "Dpi3084I", "Dpi3090II", "DrdII", "DrdVI", "DrdVIII", "DspS02II", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4174I", "Eco4465II", "Eco8164I", "Eco9009II", "Eco9020I", "Eco9035I", "Eco9699II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Ehi46392I", "Eli8509II", "ErhG4T10I", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "Fna13121I", "Fnu11326II", "Fnu11326IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "Gru56503II", "HbaII", "Hca13221V", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyAS001VI", "HpyLIM6XII", "HpyPU007XIX", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kas9737III", "Kor51II", "Kpn156V", "Kpn327I", "Kpn9178I", "Kpn9644II", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Kro7512II", "Lba2029III", "Lbr124II", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lpn11417II", "Lpn12272I", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mch946II", "Mch10819I", "Mcr10I", "MkaDII", "Mla10359I", "Mlu211III", "MspF392I", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "NspES21II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pae8506I", "Pae10662III", "PaePA99III", "Pal408I", "Pba2294I", "Pbu13063II", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "Pfl3756II", "Pfl10783II", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "Pme10899I", "PpiP13II", "Pru8113I", "Pse18267I", "Psp0357II", "PspD7DII", "PspR84I", "Pst145I", "Pst273I", "Pst14472I", "Ran11014IV", "Rba2021I", "RdeGBI", "Rer8036II", "RflFIII", "Rgo13296IV", "Rho5650I", "Rkr11038I", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau1803III", "Sau5656II", "Sau64037IV", "SauMJ015III", "Sba460II", "Sbo46I", "ScoDS2II", "Sdy5370I", "Sdy7136I", "Sdy9603I", "Sen5794III", "Sen6480IV", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "Sep11964I", "Sfl13829III", "Sgr7807I", "SgrAII", "Sma325I", "Sma10259II", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV", "Yps3606I", "Yru12986I"],
 )
 
 typedict["type148"] = (
@@ -19698,7 +21438,7 @@ typedict["type148"] = (
 
 typedict["type2"] = (
     ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["AvaIII", "HpyUM032XIII", "Hso63250IV", "MjaIV"],
+    ["AvaIII", "Cin11811I", "HpyUM032XIII", "Hso63250IV", "MjaIV"],
 )
 
 typedict["type209"] = (
@@ -19748,12 +21488,17 @@ typedict["type226"] = (
 
 typedict["type227"] = (
     ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AarI", "Acc36I", "AclWI", "BbsI", "BmsI", "BpiI", "BseXI", "BslFI", "Bso31I", "BspPI", "BspQI", "BspTNI", "Bst6I", "BstMAI", "BstV1I", "BstV2I", "BveI", "CseI", "Eam1104I", "FaqI", "FauI", "FspEI", "LguI", "LpnPI", "LweI", "MspJI", "PciSI", "PpsI", "SfaNI"],
+    ["AarI", "Acc36I", "AclWI", "BbsI", "BmsI", "BpiI", "BseXI", "BslFI", "Bso31I", "BspPI", "BspQI", "BspTNI", "Bst6I", "BstMAI", "BstV1I", "BstV2I", "BveI", "CseI", "Eam1104I", "FaqI", "FauI", "FspEI", "LguI", "LpnPI", "LweI", "MspJI", "PaqCI", "PciSI", "PpsI", "SfaNI"],
 )
 
 typedict["type228"] = (
     ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
     ["AceIII", "AspBHI", "BbvII", "BcefI", "BinI", "BspD6I", "EcoBLMcrX", "Ksp632I", "SgrTI", "Sth132I"],
+)
+
+typedict["type234"] = (
+    ("NonPalindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
+    ["BscXI"],
 )
 
 typedict["type235"] = (
@@ -19768,7 +21513,7 @@ typedict["type237"] = (
 
 typedict["type238"] = (
     ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["AmaCSI", "ApyPI", "AquII", "AquIII", "AquIV", "BfiI", "BsbI", "CchII", "CchIII", "CdpI", "CjeNIII", "CstMI", "DraRI", "DrdIV", "MaqI", "NlaCI", "NmeA6CIII", "PlaDI", "PspOMII", "PspPRI", "RceI", "RdeGBII", "RlaII", "RpaI", "RpaBI", "RpaB5I", "SdeAI", "SstE37I", "TaqIII", "TsoI", "Tth111II", "WviI"],
+    ["AmaCSI", "ApyPI", "AquII", "AquIII", "AquIV", "BfiI", "BsbI", "CchII", "CchIII", "CdpI", "CjeNIII", "CstMI", "DraRI", "DrdIV", "DrdV", "MaqI", "NlaCI", "NmeA6CIII", "PlaDI", "PspOMII", "PspPRI", "RceI", "RdeGBII", "RlaII", "RpaI", "RpaBI", "RpaB5I", "SdeAI", "SstE37I", "TaqIII", "TkoI", "TkoII", "TsoI", "Tth111II", "WviI"],
 )
 
 typedict["type239"] = (
@@ -19788,7 +21533,7 @@ typedict["type274"] = (
 
 typedict["type285"] = (
     ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AloI", "BcgI", "CspCI"],
+    ["AloI", "BaeI", "BcgI", "CspCI"],
 )
 
 typedict["type286"] = (
@@ -19798,7 +21543,7 @@ typedict["type286"] = (
 
 typedict["type287"] = (
     ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AjuI", "ArsI", "BaeI", "BarI", "BsaXI", "PsrI"],
+    ["AjuI", "ArsI", "BarI", "BsaXI", "PsrI"],
 )
 
 typedict["type288"] = (
@@ -19813,7 +21558,7 @@ typedict["type4"] = (
 
 typedict["type65"] = (
     ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AleI", "AluI", "AluBI", "BalI", "BsaAI", "BstC8I", "BstUI", "BsuRI", "Cac8I", "CviJI", "DraI", "EcoRV", "FspI", "HaeIII", "HincII", "HindII", "HpaI", "Hpy8I", "MspA1I", "NaeI", "NlaIV", "NruI", "PmlI", "PshAI", "PsiI", "PvuII", "RsaI", "ScaI", "SfoI", "SmaI", "SnaBI", "SspI", "SwaI", "XmnI"],
+    ["AccII", "AleI", "AluI", "AluBI", "BalI", "BsaAI", "BstC8I", "BstUI", "BsuRI", "Cac8I", "CviJI", "DraI", "EcoRV", "FspI", "HaeIII", "HincII", "HindII", "HpaI", "Hpy8I", "MspA1I", "NaeI", "NlaIV", "NruI", "PmlI", "PshAI", "PsiI", "PvuII", "RsaI", "ScaI", "SfoI", "SmaI", "SnaBI", "SspI", "SwaI", "XmnI"],
 )
 
 typedict["type66"] = (
@@ -19823,7 +21568,7 @@ typedict["type66"] = (
 
 typedict["type67"] = (
     ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AanI", "AccII", "Acc16I", "AcvI", "AfaI", "AfeI", "Aor51HI", "Asp700I", "BbrPI", "BmcAI", "BmiI", "BoxI", "BsaBI", "Bse8I", "BseJI", "Bsh1236I", "BshFI", "BsnI", "Bsp68I", "BspANI", "BspFNI", "BspLI", "BssNAI", "Bst1107I", "BstBAI", "BstFNI", "BstPAI", "BstSNI", "BstZ17I", "BtuMI", "CviKI_1", "DinI", "DpnI", "Ecl136II", "Eco32I", "Eco47III", "Eco72I", "Eco105I", "Eco147I", "EcoICRI", "Eco53kI", "EgeI", "EheI", "FaiI", "FspAI", "GlaI", "Hpy166II", "HpyCH4V", "KspAI", "MalI", "MlsI", "MluNI", "Mox20I", "MroXI", "MscI", "MslI", "Msp20I", "MssI", "MvnI", "NsbI", "OliI", "PceI", "PdiI", "PdmI", "PmaCI", "PmeI", "Ppu21I", "PspCI", "PspN4I", "RruI", "RseI", "SmiI", "SmiMI", "SrfI", "SseBI", "StuI", "ZraI", "ZrmI"],
+    ["AanI", "Acc16I", "AcvI", "AfaI", "AfeI", "Aor51HI", "Asp700I", "BbrPI", "BmcAI", "BmiI", "BoxI", "BsaBI", "Bse8I", "BseJI", "Bsh1236I", "BshFI", "BsnI", "Bsp68I", "BspANI", "BspFNI", "BspLI", "BssNAI", "Bst1107I", "BstBAI", "BstFNI", "BstPAI", "BstSNI", "BstZ17I", "BtuMI", "CviKI_1", "DinI", "DpnI", "Ecl136II", "Eco32I", "Eco47III", "Eco72I", "Eco105I", "Eco147I", "EcoICRI", "Eco53kI", "EgeI", "EheI", "FaiI", "FspAI", "GlaI", "Hpy166II", "HpyCH4V", "KroNI", "KspAI", "MalI", "MlsI", "MluNI", "Mox20I", "MroXI", "MscI", "MslI", "Msp20I", "MssI", "MvnI", "NsbI", "OliI", "PceI", "PdiI", "PdmI", "PmaCI", "PmeI", "Ppu21I", "PspCI", "PspN4I", "RruI", "RseI", "SmiI", "SmiMI", "SrfI", "SseBI", "StuI", "ZraI", "ZrmI"],
 )
 
 typedict["type68"] = (
@@ -19833,7 +21578,7 @@ typedict["type68"] = (
 
 typedict["type77"] = (
     ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccIII", "Acc65I", "AclI", "AflII", "AgeI", "ApaLI", "ApoI", "AscI", "AseI", "BamHI", "BclI", "BglII", "BsaHI", "BsaWI", "BseCI", "BsiWI", "BspHI", "BsrFI", "BssHII", "BstYI", "Bsu15I", "Cfr9I", "Cfr10I", "ClaI", "CviAII", "CviQI", "DpnII", "EaeI", "EagI", "EcoRI", "FatI", "HapII", "HinP1I", "HindIII", "HpaII", "HpyCH4IV", "HspAI", "KasI", "Kpn2I", "MboI", "MfeI", "MluI", "MseI", "MspI", "MunI", "NcoI", "NdeI", "NgoMIV", "NheI", "NotI", "PaeR7I", "SalI", "Sau3AI", "SgrAI", "Sse9I", "TaqI", "TspMI", "VspI", "XbaI", "XhoI", "XmaI"],
+    ["AccIII", "Acc65I", "AclI", "AflII", "AgeI", "ApaLI", "ApoI", "AscI", "AseI", "BamHI", "BclI", "BglII", "BsaHI", "BsaWI", "BseCI", "BsiWI", "BspHI", "BsrFI", "BssHII", "BstYI", "Bsu15I", "Cfr9I", "Cfr10I", "ClaI", "CviAII", "CviQI", "DpnII", "EaeI", "EagI", "EcoRI", "FatI", "HapII", "HinP1I", "HindIII", "HpaII", "HpyCH4IV", "HspAI", "KasI", "Kpn2I", "MboI", "MfeI", "MluI", "MseI", "MspI", "MunI", "NcoI", "NdeI", "NgoMIV", "NheI", "NotI", "PaeR7I", "PspOMI", "SalI", "Sau3AI", "SgrAI", "SpeI", "Sse9I", "TaqI", "TspMI", "VspI", "XbaI", "XhoI", "XmaI"],
 )
 
 typedict["type78"] = (
@@ -19843,7 +21588,7 @@ typedict["type78"] = (
 
 typedict["type79"] = (
     ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AbsI", "AcoI", "AcsI", "AcyI", "AhlI", "Alw44I", "Aor13HI", "AoxI", "AsiGI", "Asp718I", "AspA2I", "AsuII", "AsuNHI", "AvrII", "BcuI", "BfaI", "BfrI", "BlnI", "Bpu14I", "Bsa29I", "Bse118I", "BseAI", "BsePI", "BseX3I", "BshTI", "BshVI", "BsiSI", "Bsp13I", "Bsp19I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspDI", "BspEI", "BspTI", "BspT104I", "BsrGI", "BssAI", "BssMI", "BssNI", "BstACI", "BstAFI", "BstAUI", "BstBI", "BstMBI", "BstX2I", "BstZI", "BsuTUI", "CciI", "CciNI", "Csp6I", "CspAI", "EclXI", "Eco52I", "FauNDI", "FbaI", "FspBI", "Hin1I", "Hin6I", "HpySE526I", "Hsp92I", "KroI", "Ksp22I", "Kzo9I", "MaeI", "MaeII", "MauBI", "MflI", "MluCI", "Mly113I", "MreI", "MroI", "MroNI", "MspCI", "NarI", "NdeII", "NspV", "PagI", "PalAI", "PauI", "PciI", "Pfl23II", "PinAI", "PscI", "PshBI", "Psp1406I", "PspLI", "PspOMI", "PspXI", "PsuI", "PteI", "RsaNI", "SaqAI", "Sfr274I", "SfuI", "SgrDI", "SgsI", "SlaI", "SpeI", "SspDI", "SspMI", "TasI", "TatI", "Tru1I", "Tru9I", "Vha464I", "VneI", "XapI", "XmaJI", "XspI"],
+    ["AbsI", "AcoI", "AcsI", "AcyI", "AhlI", "Alw44I", "Aor13HI", "AoxI", "AsiGI", "Asp718I", "AspA2I", "AsuII", "AsuNHI", "AvrII", "BcuI", "BfaI", "BfrI", "BlnI", "Bpu14I", "Bsa29I", "Bse118I", "BseAI", "BsePI", "BseX3I", "BshTI", "BshVI", "BsiSI", "Bsp13I", "Bsp19I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspDI", "BspEI", "BspTI", "BspT104I", "BsrGI", "BssAI", "BssMI", "BssNI", "BstACI", "BstAFI", "BstAUI", "BstBI", "BstMBI", "BstX2I", "BstZI", "BsuTUI", "CciI", "CciNI", "Csp6I", "CspAI", "EclXI", "Eco52I", "FauNDI", "FbaI", "FspBI", "Hin1I", "Hin6I", "HpySE526I", "Hsp92I", "KroI", "Ksp22I", "Kzo9I", "MaeI", "MaeII", "MauBI", "MflI", "MluCI", "Mly113I", "MreI", "MroI", "MroNI", "MspCI", "NarI", "NdeII", "NspV", "PagI", "PalAI", "PauI", "PciI", "Pfl23II", "PinAI", "PscI", "PshBI", "Psp1406I", "PspLI", "PspXI", "PsuI", "PteI", "RsaNI", "SaqAI", "Sfr274I", "SfuI", "SgrDI", "SgsI", "SlaI", "SspDI", "SspMI", "TasI", "TatI", "Tru1I", "Tru9I", "Vha464I", "VneI", "XapI", "XmaJI", "XspI"],
 )
 
 typedict["type80"] = (
@@ -19853,7 +21598,7 @@ typedict["type80"] = (
 
 typedict["type81"] = (
     ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccI", "AflIII", "AjnI", "ApeKI", "AspS9I", "AvaI", "AvaII", "BanI", "BcnI", "BlpI", "BsaJI", "BsoBI", "BssECI", "BstNI", "Bsu36I", "Cfr13I", "DdeI", "EcoNI", "EcoO109I", "EcoRII", "Fnu4HI", "Fsp4HI", "HinfI", "MvaI", "NciI", "PpuMI", "PspGI", "PspPI", "RsrII", "Sau96I", "ScrFI", "SexAI", "SinI", "SmlI", "StyI", "StyD4I", "TfiI", "TseI", "Tsp45I", "Tth111I"],
+    ["AccI", "AflIII", "AjnI", "ApeKI", "AspS9I", "AvaI", "AvaII", "BanI", "BcnI", "BlpI", "BsaJI", "BsoBI", "BssECI", "BstEII", "BstNI", "Bsu36I", "Cfr13I", "DdeI", "EcoNI", "EcoO109I", "EcoRII", "Fnu4HI", "Fsp4HI", "HinfI", "MvaI", "NciI", "PpuMI", "PspGI", "PspPI", "RsrII", "Sau96I", "ScrFI", "SexAI", "SinI", "SmlI", "StyI", "StyD4I", "TfiI", "TseI", "Tsp45I", "Tth111I"],
 )
 
 typedict["type82"] = (
@@ -19863,7 +21608,7 @@ typedict["type82"] = (
 
 typedict["type83"] = (
     ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccB1I", "Ama87I", "AsuC2I", "AxyI", "BciT130I", "BfmI", "BisI", "Bme18I", "Bme1390I", "BmeT110I", "BmgT120I", "BmrFI", "Bpu1102I", "BpuMI", "Bse21I", "BseBI", "BseDI", "BshNI", "BsiHKCI", "Bsp1720I", "BspT107I", "BssT1I", "BstDEI", "BstDSI", "BstEII", "BstENI", "BstPI", "BstSCI", "BstSFI", "Bst2UI", "BtgI", "CpoI", "CsiI", "CspI", "Eco47I", "Eco81I", "Eco88I", "Eco91I", "Eco130I", "EcoO65I", "EcoT14I", "ErhI", "FblI", "GluI", "Hpy188III", "HpyF3I", "KflI", "MabI", "MaeIII", "MspR9I", "MteI", "NmuCI", "PasI", "PfeI", "PflFI", "PfoI", "Psp5II", "Psp6I", "PspEI", "PspPPI", "PsyI", "Rsr2I", "SatI", "SfcI", "SgeI", "SmoI", "TseFI", "VpaK11BI", "XagI", "XmiI"],
+    ["AccB1I", "Ama87I", "AsuC2I", "AxyI", "BciT130I", "BfmI", "BisI", "Bme18I", "Bme1390I", "BmeT110I", "BmgT120I", "BmrFI", "Bpu1102I", "BpuMI", "Bse21I", "BseBI", "BseDI", "BshNI", "BsiHKCI", "Bsp1720I", "BspT107I", "BssT1I", "BstDEI", "BstDSI", "BstENI", "BstPI", "BstSCI", "BstSFI", "Bst2UI", "BtgI", "CpoI", "CsiI", "CspI", "Eco47I", "Eco81I", "Eco88I", "Eco91I", "Eco130I", "EcoO65I", "EcoT14I", "ErhI", "FblI", "GluI", "Hpy188III", "HpyF3I", "KflI", "MabI", "MaeIII", "MspR9I", "MteI", "NmuCI", "PasI", "PfeI", "PflFI", "PfoI", "Psp5II", "Psp6I", "PspEI", "PspPPI", "PsyI", "Rsr2I", "SatI", "SfcI", "SgeI", "SmoI", "TseFI", "VpaK11BI", "XagI", "XmiI"],
 )
 
 typedict["type84"] = (
@@ -19873,7 +21618,7 @@ typedict["type84"] = (
 
 typedict["type89"] = (
     ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AatII", "ApaI", "AsiSI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NsiI", "NspI", "PluTI", "PstI", "SacI", "SacII"],
+    ["AatII", "ApaI", "AsiSI", "BmtI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NsiI", "NspI", "PluTI", "PstI", "SacI", "SacII"],
 )
 
 typedict["type90"] = (
@@ -19883,7 +21628,7 @@ typedict["type90"] = (
 
 typedict["type91"] = (
     ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AspLEI", "BfoI", "BmtI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
+    ["AspLEI", "BfoI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
 )
 
 typedict["type92"] = (
@@ -19893,7 +21638,7 @@ typedict["type92"] = (
 
 typedict["type93"] = (
     ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AgsI", "AhdI", "BaeGI", "BanII", "BglI", "Bsc4I", "BslI", "Bsp1286I", "BstAPI", "BstXI", "DraIII", "EcoT38I", "Hpy99I", "Hpy188I", "MwoI", "SfiI", "TspRI", "XcmI"],
+    ["AgsI", "AhdI", "BaeGI", "BanII", "BglI", "Bsc4I", "BslI", "Bsp1286I", "BstAPI", "BstXI", "DraIII", "DrdI", "EcoT38I", "Hpy99I", "Hpy188I", "MwoI", "SfiI", "TspRI", "XcmI"],
 )
 
 typedict["type94"] = (
@@ -19903,7 +21648,7 @@ typedict["type94"] = (
 
 typedict["type95"] = (
     ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AasI", "AccB7I", "AdeI", "AfiI", "Alw21I", "AlwNI", "Bbv12I", "BlsI", "BmeRI", "BseLI", "BseSI", "Bsh1285I", "BsiEI", "BsiHKAI", "Bst4CI", "BstMCI", "BstMWI", "BstSLI", "CaiI", "DrdI", "DriI", "DseDI", "Eam1105I", "Eco24I", "FriOI", "HpyCH4III", "HpyF10VI", "MhlI", "PcsI", "PflMI", "PkrI", "PstNI", "SduI", "SetI", "TaaI", "TauI", "TscAI", "Van91I"],
+    ["AasI", "AccB7I", "AdeI", "AfiI", "Alw21I", "AlwNI", "Bbv12I", "BlsI", "BmeRI", "BseLI", "BseSI", "Bsh1285I", "BsiEI", "BsiHKAI", "Bst4CI", "BstMCI", "BstMWI", "BstSLI", "CaiI", "DriI", "DseDI", "Eam1105I", "Eco24I", "FriOI", "HpyCH4III", "HpyF10VI", "MhlI", "PcsI", "PflMI", "PkrI", "PstNI", "SduI", "SetI", "TaaI", "TauI", "TscAI", "Van91I"],
 )
 
 typedict["type96"] = (
