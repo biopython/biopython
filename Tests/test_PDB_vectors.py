@@ -78,10 +78,10 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
         self.assertEqual(v1 * v2, 0.0)
         self.assertTrue(
-            numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0]))
+            numpy.array_equal((v1**v2).get_array(), numpy.array([0.0, -0.0, 0.0]))
         )
         self.assertTrue(
-            numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0]))
+            numpy.array_equal((v1**2).get_array(), numpy.array([0.0, 0.0, 2.0]))
         )
         self.assertTrue(
             numpy.array_equal(

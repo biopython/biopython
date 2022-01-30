@@ -236,9 +236,9 @@ def calc_dihedral(v1, v2, v3, v4):
     ab = v1 - v2
     cb = v3 - v2
     db = v4 - v3
-    u = ab ** cb
-    v = db ** cb
-    w = u ** v
+    u = ab**cb
+    v = db**cb
+    w = u**v
     angle = u.angle(v)
     # Determine sign of angle
     try:
