@@ -226,7 +226,7 @@ def _read_v4(f):
     # the record.AlgorithmParameters repeated in the data section, until an
     # EOF, i.e. b"\x04".
     char = b"\x00"
-    safetyValve = 10 ** 4
+    safetyValve = 10**4
     for i in range(safetyValve):
         char = f.read(1)
         # For debugging

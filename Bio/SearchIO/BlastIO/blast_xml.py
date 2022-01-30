@@ -574,7 +574,7 @@ class BlastXmlIndexer(SearchIndexer):
         handle.seek(0)
         re_desc = re.compile(
             b"<Iteration_query-ID>(.*?)"
-            br"</Iteration_query-ID>\s+?"
+            rb"</Iteration_query-ID>\s+?"
             b"<Iteration_query-def>"
             b"(.*?)</Iteration_query-def>"
         )

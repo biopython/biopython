@@ -783,7 +783,7 @@ def _sff_read_seq_record(
     return record
 
 
-_powers_of_36 = [36 ** i for i in range(6)]
+_powers_of_36 = [36**i for i in range(6)]
 
 
 def _string_as_base_36(string):
