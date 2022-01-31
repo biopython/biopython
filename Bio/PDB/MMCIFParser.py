@@ -231,6 +231,20 @@ class MMCIFParser:
             resseq = seq_id_list[i]
             if resseq == ".":
                 # Non-existing residue ID
+                try:
+                    msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
+                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
+                        chainid, msg_resseq
+                    )
+                except (KeyError, IndexError):
+                    msg = "Non-existing residue ID in chain '{}'".format(
+                        chainid
+                    )
+                warnings.warn(
+                    "PDBConstructionWarning: ",
+                    msg,
+                    PDBConstructionWarning,
+                )
                 continue
             int_resseq = int(resseq)
             icode = icode_list[i]
@@ -510,6 +524,20 @@ class FastMMCIFParser:
             resseq = seq_id_list[i]
             if resseq == ".":
                 # Non-existing residue ID
+                try:
+                    msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
+                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
+                        chainid, msg_resseq
+                    )
+                except (KeyError, IndexError):
+                    msg = "Non-existing residue ID in chain '{}'".format(
+                        chainid
+                    )
+                warnings.warn(
+                    "PDBConstructionWarning: ",
+                    msg,
+                    PDBConstructionWarning,
+                )
                 continue
             int_resseq = int(resseq)
             icode = icode_list[i]
