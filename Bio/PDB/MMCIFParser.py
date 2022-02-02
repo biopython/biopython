@@ -237,9 +237,7 @@ class MMCIFParser:
                         chainid, msg_resseq
                     )
                 except (KeyError, IndexError):
-                    msg = "Non-existing residue ID in chain '{}'".format(
-                        chainid
-                    )
+                    msg = "Non-existing residue ID in chain '{}'".format(chainid)
                 warnings.warn(
                     "PDBConstructionWarning: ",
                     msg,
@@ -530,9 +528,7 @@ class FastMMCIFParser:
                         chainid, msg_resseq
                     )
                 except (KeyError, IndexError):
-                    msg = "Non-existing residue ID in chain '{}'".format(
-                        chainid
-                    )
+                    msg = "Non-existing residue ID in chain '{}'".format(chainid)
                 warnings.warn(
                     "PDBConstructionWarning: ",
                     msg,
