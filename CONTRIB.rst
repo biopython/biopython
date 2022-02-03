@@ -267,7 +267,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
-- Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
+- Sjoerd de Vries <https://github.com/sjdv1982>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
 - Stefans Mezulis <https://github.com/StefansM>
