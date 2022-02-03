@@ -572,7 +572,7 @@ if __name__ == "__main__":
 
         elif sys.argv[1][0] == "(":
             # get a set of PDB entries
-            pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
+            pdb_ids = re.findall("[0-9A-Za-z]{4}", sys.argv[1])
             for pdb_id in pdb_ids:
                 pl.retrieve_pdb_file(
                     pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite

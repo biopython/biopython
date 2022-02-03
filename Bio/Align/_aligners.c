@@ -5031,6 +5031,9 @@ exit: \
     if (M_row[nB] < score - epsilon) M[nA][nB].trace = 0; \
     if (Ix_row[nB] < score - epsilon) gaps[nA][nB].Ix = 0; \
     if (Iy_row[nB] < score - epsilon) gaps[nA][nB].Iy = 0; \
+    PyMem_Free(M_row); \
+    PyMem_Free(Ix_row); \
+    PyMem_Free(Iy_row); \
     return Py_BuildValue("fN", score, paths); \
 exit: \
     Py_DECREF(paths); \

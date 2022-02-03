@@ -123,7 +123,7 @@ class ShrakeRupley:
         """
         n = self.n_points
 
-        dl = np.pi * (3 - 5 ** 0.5)
+        dl = np.pi * (3 - 5**0.5)
         dz = 2.0 / n
 
         longitude = 0

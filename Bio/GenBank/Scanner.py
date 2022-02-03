@@ -1738,7 +1738,7 @@ class GenBankScanner(InsdcScanner):
                         print("Found comment")
                     comment_list = []
                     structured_comment_dict = defaultdict(dict)
-                    regex = fr"([^#]+){self.STRUCTURED_COMMENT_START}$"
+                    regex = rf"([^#]+){self.STRUCTURED_COMMENT_START}$"
                     structured_comment_key = re.search(regex, data)
                     if structured_comment_key is not None:
                         structured_comment_key = structured_comment_key.group(1)

@@ -1209,7 +1209,7 @@ approximation with a given precision to keep computation cost manageable:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> distribution = pssm.distribution(background=background, precision=10 ** 4)
+>>> distribution = pssm.distribution(background=background, precision=10**4)
 \end{minted}
 The \verb+distribution+ object can be used to determine a number of different thresholds.
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):

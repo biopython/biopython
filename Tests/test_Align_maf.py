@@ -20,7 +20,7 @@ except ImportError:
     ) from None
 
 
-class TestAlignIO_reading(unittest.TestCase):
+class TestAlign_reading(unittest.TestCase):
     def test_reading_bundle_without_target(self):
         """Test parsing bundle_without_target.maf."""
         path = "MAF/bundle_without_target.maf"
@@ -7165,7 +7165,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertRaises(StopIteration, next, alignments)
 
 
-class TestAlignIO_writing(unittest.TestCase):
+class TestAlign_writing(unittest.TestCase):
     def test_writing_ucsc_test(self):
         """Test reading and writing ucsc_test.maf."""
         path = "MAF/ucsc_test.maf"

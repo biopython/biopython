@@ -317,7 +317,7 @@ class AffyTest(unittest.TestCase):
         preHeadersOrder = ["magic", "version", "columns", "rows", "cellNo", "headerLen"]
         headersEncoded = struct.pack(
             "<" + "i" * len(preHeadersOrder),
-            *(preHeaders[header] for header in preHeadersOrder)
+            *(preHeaders[header] for header in preHeadersOrder),
         )
 
         def packData(intensity, sdev, pixel):

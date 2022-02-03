@@ -380,7 +380,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         else:
             return scores
 
-    def search(self, sequence, threshold=0.0, both=True, chunksize=10 ** 6):
+    def search(self, sequence, threshold=0.0, both=True, chunksize=10**6):
         """Find hits with PWM score above given threshold.
 
         A generator function, returning found hits in the given sequence
@@ -537,7 +537,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         denominator = math.sqrt((sxx - sx * sx) * (syy - sy * sy))
         return numerator / denominator
 
-    def distribution(self, background=None, precision=10 ** 3):
+    def distribution(self, background=None, precision=10**3):
         """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
 

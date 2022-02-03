@@ -901,14 +901,10 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.constructors[name] = (DictionaryElement, args)
             return
         # List-type elements
-        if (
-            model[0]
-            in (
-                expat.model.XML_CTYPE_CHOICE,
-                expat.model.XML_CTYPE_SEQ,
-            )
-            and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP)
-        ):
+        if model[0] in (
+            expat.model.XML_CTYPE_CHOICE,
+            expat.model.XML_CTYPE_SEQ,
+        ) and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP):
             children = model[3]
             allowed_tags = frozenset(child[2] for child in children)
             if model[0] == expat.model.XML_CTYPE_SEQ:
