@@ -229,6 +229,13 @@ class StructureBuilder:
                     % (duplicate_fullname, fullname, self.line_counter),
                     PDBConstructionWarning,
                 )
+            else:
+                resname, resseq, icode = residue.id
+                raise PDBConstructionException(
+                    "Duplicate atom %s in residue ('%s', %i, '%s')"
+                    % (fullname, resname, resseq, icode)
+                )
+
         if not is_pqr:
             self.atom = Atom(
                 name,
