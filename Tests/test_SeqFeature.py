@@ -58,6 +58,19 @@ class TestReference(unittest.TestCase):
 class TestFeatureLocation(unittest.TestCase):
     """Tests for the SeqFeature.FeatureLocation class."""
 
+    def test_offsets(self):
+        """Test adding and subtracting integer offsets."""
+        loc1 = FeatureLocation(23, 42, -1)
+        loc2 = FeatureLocation(123, 142, -1)
+        self.assertEqual(loc1 + 100, loc2)
+        self.assertEqual(loc1, loc2 + (-100))
+        self.assertEqual(loc1, loc2 - 100)
+        self.assertEqual(loc1 + 50, loc2 - 50)
+        with self.assertRaises(TypeError):
+            loc1 + "Hello"
+        with self.assertRaises(TypeError):
+            loc1 - "Hello"
+
     def test_eq_identical(self):
         """Test two identical locations are equal."""
         loc1 = FeatureLocation(23, 42, 1)
