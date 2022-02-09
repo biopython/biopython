@@ -269,6 +269,7 @@ class PDBParser:
 
                 segid = line[72:76]
                 element = line[76:78].strip().upper()
+                charge = line[78:80].strip()
                 if current_segid != segid:
                     current_segid = segid
                     structure_builder.init_seg(current_segid)
@@ -305,6 +306,7 @@ class PDBParser:
                             fullname,
                             serial_number,
                             element,
+                            charge,
                         )
                     except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)

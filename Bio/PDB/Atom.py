@@ -41,6 +41,7 @@ class Atom:
         fullname,
         serial_number,
         element=None,
+        pdb_charge=None,
         pqr_charge=None,
         radius=None,
     ):
@@ -67,6 +68,9 @@ class Atom:
 
         :param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         :type element: uppercase string (or None if unknown)
+
+        :param pdb_charge: atom charge
+        :type pdb_charge: number
 
         :param pqr_charge: atom charge
         :type pqr_charge: number
@@ -96,6 +100,7 @@ class Atom:
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
+        self.pdb_charge = pdb_charge
         self.pqr_charge = pqr_charge
         self.radius = radius
 
@@ -312,9 +317,13 @@ class Atom:
         """
         self.anisou_array = anisou_array
 
-    def set_charge(self, pqr_charge):
-        """Set charge."""
+    def set_pqr_charge(self, pqr_charge):
+        """Set the charge in PQR format."""
         self.pqr_charge = pqr_charge
+
+    def set_pdb_charge(self, pdb_charge):
+        """Set the charge in PDB format."""
+        self.pdb_charge = pdb_charge
 
     def set_radius(self, radius):
         """Set radius."""
@@ -411,9 +420,13 @@ class Atom:
         """Return level."""
         return self.level
 
-    def get_charge(self):
-        """Return charge."""
+    def get_pqr_charge(self):
+        """Return charge in PQR format."""
         return self.pqr_charge
+
+    def get_pdb_charge(self):
+        """Return charge in PDB format."""
+        return self.pdb_charge
 
     def get_radius(self):
         """Return radius."""

@@ -186,6 +186,7 @@ class StructureBuilder:
         fullname,
         serial_number=None,
         element=None,
+        pdb_charge=None,
         pqr_charge=None,
         radius=None,
         is_pqr=False,
@@ -200,6 +201,7 @@ class StructureBuilder:
          - altloc - string, alternative location specifier
          - fullname - string, atom name including spaces, e.g. " CA "
          - element - string, upper case, e.g. "HG" for mercury
+         - pdb_charge - float, atom charge (PDB format)
          - pqr_charge - float, atom charge (PQR format)
          - radius - float, atom radius (PQR format)
          - is_pqr - boolean, flag to specify if a .pqr file is being parsed
@@ -237,6 +239,7 @@ class StructureBuilder:
                 fullname,
                 serial_number,
                 element,
+                pdb_charge,
             )
         elif is_pqr:
             self.atom = Atom(
@@ -248,6 +251,7 @@ class StructureBuilder:
                 fullname,
                 serial_number,
                 element,
+                None,
                 pqr_charge,
                 radius,
             )
