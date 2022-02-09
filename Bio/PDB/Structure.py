@@ -7,7 +7,38 @@
 
 """The structure class, representing a macromolecular structure."""
 
+from typing import NamedTuple
+
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Chain import Chain
 from Bio.PDB.Entity import Entity
+
+
+class DisulfideBond(NamedTuple):
+    """Stores the relevant information of a SSBOND line."""
+
+    atom1: Atom
+    atom2: Atom
+    distance: float
+    serial_number: str
+    insertion_code1: str
+    symmetry_operator1: int
+    insertion_code2: str
+    symmetry_operator2: int
+
+
+class Link(NamedTuple):
+    """Stores the relevant information of a LINK line."""
+
+    atom1: Atom
+    atom2: Atom
+    distance: float
+    alternate_location1: str
+    insertion_code1: str
+    symmetry_operator1: int
+    alternate_location2: str
+    insertion_code2: str
+    symmetry_operator2: int
 
 
 class Structure(Entity):
@@ -63,3 +94,85 @@ class Structure(Entity):
         """
         for chn in self.get_chains():
             chn.internal_to_atom_coordinates(verbose)
+
+    def _find_residue_by_id(self, chain: Chain, id_: int):
+        """
+        Return the residue with `id_` from the `chain`.
+
+        This is a workaround required due to Biopython's residue indexing e.g.
+        ('H_GLC', 100, 'A') instead of 100. For more info please refer to the
+        section "What is a residue id?" at
+        https://biopython.org/wiki/The_Biopython_Structural_Bioinformatics_FAQ
+        """
+        for residue in chain.get_residues():
+            if residue.id[1] == id_:
+                return residue
+
+    def get_links(self) -> list[Link]:
+        """
+        Return intramolecular links of the Structure.
+
+        Each link consists of two Atom objects and their associated distance.
+        """
+        raw_links = self.header["links"]
+        links = []
+        for link in raw_links:
+            for model in self.get_models():
+                chain1 = model[link.res1.chain]
+                residue1 = self._find_residue_by_id(chain1, link.res1.id)
+                atom1 = residue1[link.res1.atom]
+
+                chain2 = model[link.res2.chain]
+                residue1 = self._find_residue_by_id(chain2, link.res2.id)
+                atom2 = residue1[link.res2.atom]
+
+                links.append(
+                    Link(
+                        atom1=atom1,
+                        atom2=atom2,
+                        alternate_location1=link.alternate_location1,
+                        alternate_location2=link.alternate_location2,
+                        symmetry_operator1=link.symmetry_operator1,
+                        symmetry_operator2=link.symmetry_operator2,
+                        insertion_code1=link.insertion_code1,
+                        insertion_code2=link.insertion_code2,
+                        distance=link.distance,
+                    )
+                )
+
+        return links
+
+    def get_disulfide_bonds(self) -> list[DisulfideBond]:
+        """
+        Return disulfide bonds as DisulfideBond objects.
+
+        Each bond consists of two Atom objects and their associated distance.
+        """
+        raw_ss_bonds = self.header["ss_bonds"]
+        disulfide_bonds = []
+        for ss_bond in raw_ss_bonds:
+            for model in self.get_models():
+
+                residue1 = model[ss_bond.res1.chain][ss_bond.res1.id]
+                residue2 = model[ss_bond.res2.chain][ss_bond.res2.id]
+                atoms = [
+                    atom
+                    for i, residue in enumerate([residue1, residue2])
+                    for atom in residue.get_atoms()
+                    if "S" in atom.name  # sulfur atoms could be S, SD, SG, etc.
+                ]
+
+                disulfide_bonds.append(
+                    DisulfideBond(
+                        atom1=atoms[0],
+                        atom2=atoms[1],
+                        serial_number=ss_bond.serial_number,
+                        symmetry_operator1=ss_bond.symmetry_operator1,
+                        symmetry_operator2=ss_bond.symmetry_operator2,
+                        insertion_code1=ss_bond.insertion_code1,
+                        insertion_code2=ss_bond.insertion_code2,
+                        distance=ss_bond.distance,
+                    )
+                )
+
+        return disulfide_bonds
