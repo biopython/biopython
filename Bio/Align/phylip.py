@@ -20,8 +20,8 @@ _PHYLIP_ID_WIDTH = 10
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment in the Phylip format."""
         names = []
         for record in alignment.sequences:
             name = record.id.strip()
@@ -32,15 +32,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = name[:_PHYLIP_ID_WIDTH]
             names.append(name)
 
-        stream = self.stream
-
+        lines = []
         nseqs, length = alignment.shape
         if nseqs == 0:
             raise ValueError("Must have at least one sequence")
         if length == 0:
             raise ValueError("Non-empty sequences are required")
         line = "%d %d\n" % (nseqs, length)
-        stream.write(line)
+        lines.append(line)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
@@ -48,10 +47,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         # format, separated by blanks".  We'll use spaces to keep EMBOSS
         # happy.
         for name, sequence in zip(names, alignment):
-            stream.write(name[:_PHYLIP_ID_WIDTH].ljust(_PHYLIP_ID_WIDTH))
             # Write the entire sequence to one line
-            stream.write(sequence)
-            stream.write("\n")
+            line = name[:_PHYLIP_ID_WIDTH].ljust(_PHYLIP_ID_WIDTH) + sequence + "\n"
+            lines.append(line)
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

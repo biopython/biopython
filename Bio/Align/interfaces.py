@@ -92,7 +92,7 @@ class AlignmentWriter:
     file containing the alignments.
 
     Alternatively, users may call the write_header(), followed
-    by multiple calls to write_alignment() and/or write_alignments(),
+    by multiple calls to format_alignment() and/or write_alignments(),
     followed finally by write_footer().
 
     Note that write_header() cannot require any assumptions about
@@ -101,33 +101,37 @@ class AlignmentWriter:
 
     def __init__(self, target, mode="w"):
         """Create the writer object."""
-        if mode == "w":
-            try:
-                target.write("")
-            except TypeError:
-                # target was opened in binary mode
-                raise StreamModeError("File must be opened in text mode.") from None
-            except AttributeError:
-                # target is a path
-                stream = open(target, mode)
+        if target is not None:
+            # target is None if we only use the writer to format strings.
+            if mode == "w":
+                try:
+                    target.write("")
+                except TypeError:
+                    # target was opened in binary mode
+                    raise StreamModeError("File must be opened in text mode.") from None
+                except AttributeError:
+                    # target is a path
+                    stream = open(target, mode)
+                else:
+                    stream = target
+            elif mode == "wb":
+                try:
+                    target.write(b"")
+                except TypeError:
+                    # target was opened in text mode
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
+                except AttributeError:
+                    # target is a path
+                    stream = open(target, mode)
+                else:
+                    stream = target
             else:
-                stream = target
-        elif mode == "wb":
-            try:
-                target.write(b"")
-            except TypeError:
-                # target was opened in text mode
-                raise StreamModeError("File must be opened in binary mode.") from None
-            except AttributeError:
-                # target is a path
-                stream = open(target, mode)
-            else:
-                stream = target
-        else:
-            raise RuntimeError("Unknown mode '%s'" % mode)
+                raise RuntimeError("Unknown mode '%s'" % mode)
+            self.stream = stream
 
         self._target = target
-        self.stream = stream
 
     def write_header(self, alignments):
         """Write the file header to the output file."""
@@ -145,8 +149,8 @@ class AlignmentWriter:
         # if the file format defines a file footer.      #
         ##################################################
 
-    def write_alignment(self, alignment):
-        """Write a single alignment to the output file.
+    def format_alignment(self, alignment):
+        """Format a single alignment as a string.
 
         alignment - an Alignment object
         """
@@ -165,7 +169,8 @@ class AlignmentWriter:
         count = 0
         if maxcount is None:
             for alignment in alignments:
-                self.write_alignment(alignment)
+                line = self.format_alignment(alignment)
+                self.stream.write(line)
                 count += 1
         else:
             for alignment in alignments:
@@ -176,7 +181,8 @@ class AlignmentWriter:
                         raise ValueError(
                             "Number of alignments is larger than %d" % maxcount
                         )
-                self.write_alignment(alignment)
+                line = self.format_alignment(alignment)
+                self.stream.write(line)
                 count += 1
         return count
 

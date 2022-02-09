@@ -38,7 +38,7 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Pattern Space Layout (PSL) file format."""
 
-    def __init__(self, target, mode="w", header=True, mask=None, wildcard="N"):
+    def __init__(self, target, header=True, mask=None, wildcard="N"):
         """Create an AlignmentWriter object.
 
         Arguments:
@@ -94,8 +94,8 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         )
         # fmt: on
 
-    def write_alignment(self, alignment):
-        """Write a complete alignment as one PSL line."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment formatted as one PSL line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
         coordinates = alignment.coordinates
@@ -287,13 +287,13 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             tStarts,
         ]
         line = "\t".join(words) + "\n"
-        self.stream.write(line)
+        return line
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for Pattern Space Layout (PSL) files.
 
-    Each line in the file contains one pairwise alignments, which are loaded
+    Each line in the file contains one pairwise alignment, which are loaded
     and returned incrementally.  Alignment score information such as the number
     of matches and mismatches are stored as attributes of each alignment.
     """
