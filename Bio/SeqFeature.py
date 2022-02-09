@@ -935,7 +935,7 @@ class FeatureLocation:
             return NotImplemented
 
     def __sub__(self, other):
-        """Subtracting an integer will shift back its start and end offset by that amount.
+        """Subtracting an integer will shift the start and end by that amount.
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> f1 = FeatureLocation(105, 150)
@@ -944,7 +944,8 @@ class FeatureLocation:
         >>> print(f1 - 100)
         [5:50]
 
-        This can be useful when editing annotation.
+        This can be useful when editing annotation. You can also add an integer
+        to a feature location (which shifts in the opposite direction).
         """
         if isinstance(other, int):
             return self._shift(-other)
