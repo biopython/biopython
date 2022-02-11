@@ -26,11 +26,21 @@ except ImportError:
 class TestAlign_dna_rna(unittest.TestCase):
 
     # The PSL file dna_rna.psl was generated using this command:
-    # blat -mask=lower dna.fa rna.fa dna_rna.psl
+    # blat -mask=lower hg38.2bit rna.fa dna_rna.psl
 
     def setUp(self):
+        data = {}
         records = SeqIO.parse("Blat/dna.fa", "fasta")
-        self.dna = {record.id: record.seq for record in records}
+        for record in records:
+            name, start_end = record.id.split(":")
+            assert name == "chr3"
+            start, end = start_end.split("-")
+            start = int(start)
+            end = int(end)
+            sequence = str(record.seq)
+            assert len(sequence) == end - start
+            data[start] = sequence
+        self.dna = data
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
 
@@ -40,45 +50,47 @@ class TestAlign_dna_rna(unittest.TestCase):
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 207)
+        self.assertEqual(alignment.matches, 165)
         self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.repMatches, 39)
         self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 3707))
+        self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chrY:22316600-22320400")
-        self.assertEqual(alignment.query.id, "NR_104151.1")
-        self.assertEqual(len(alignment.target.seq), 3800)
-        self.assertEqual(len(alignment.query.seq), 207)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_111921.1")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 216)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  77,  147, 2182, 2297, 3762, 3784],
-                             [   0,   70,   70,  185,  185,  207]]),
+
+                numpy.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+                              [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna[alignment.target.id]
+        dna = Seq(self.dna, length=len(alignment.target.seq))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 47.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
+                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
                         ])
             )
         )
@@ -103,21 +115,22 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3:42530800-42532700")
+        self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
-        self.assertEqual(len(alignment.target.seq), 1900)
+        self.assertEqual(len(alignment.target.seq), 198295559)
         self.assertEqual(len(alignment.query.seq), 181)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  95,  158, 1220, 1295, 1763, 1806],
-                             [ 181,  118,  118,   43,   43,    0]]),
+                numpy.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+                             [     181,      118,      118,       43,       43,        0]])
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna[alignment.target.id]
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
@@ -146,50 +159,53 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 207)
+        self.assertEqual(alignment.matches, 164)
         self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.repMatches, 39)
         self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 3707))
+        self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chrY:22316600-22320400")
-        self.assertEqual(alignment.query.id, "NR_104151.1_extended")
-        self.assertEqual(len(alignment.target.seq), 3800)
-        self.assertEqual(len(alignment.query.seq), 215)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_111921.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 220)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  77,  147, 2182, 2297, 3762, 3784],
-                             [   3,   73,   73,  188,  188,  210]]),
+                numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
+                              48665716, 48665716, 48665722, 48669098, 48669174],
+                             [       3,       31,       31,       48,       48,
+                                   124,      126,      132,      132,      208]
+                            ])
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna[alignment.target.id]
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[64.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 44.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 52.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 47.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
+                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
                         ]),
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         matches = sum(
             alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
         )
@@ -201,50 +217,53 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 175)
+        self.assertEqual(alignment.matches, 173)
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3:42530800-42532700")
-        self.assertEqual(alignment.query.id, "NR_046654.1_extended")
-        self.assertEqual(len(alignment.target.seq), 1900)
-        self.assertEqual(len(alignment.query.seq), 194)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 190)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  95,  158, 1220, 1295, 1763, 1806],
-                             [ 184,  121,  121,   46,   46,    3]]),
+                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
+                              42532037, 42532039, 42532095, 42532563, 42532606],
+                             [     185,      158,      155,      119,      119,
+                                   102,      102,       46,       46,        3],
+                            ])
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna[alignment.target.id]
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[35.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                         ]),
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTXacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         matches = sum(
             alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
         )
@@ -283,8 +302,9 @@ class TestAlign_dna_rna(unittest.TestCase):
             del alignment.misMatches
             del alignment.repMatches
             del alignment.nCount
-            alignment.sequences[0].seq = self.dna[alignment.sequences[0].id]
-            alignment.sequences[1].seq = self.rna[alignment.sequences[1].id]
+            dna = Seq(self.dna, length=len(alignment.target))
+            alignment.target.seq = dna
+            alignment.query.seq = self.rna[alignment.sequences[1].id]
             alignments.append(alignment)
         stream = StringIO()
         writer = psl.AlignmentWriter(stream, mask="lower")
