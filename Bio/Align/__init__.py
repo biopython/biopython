@@ -30,7 +30,7 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq, MutableSeq, reverse_complement
+from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -2505,7 +2505,20 @@ class Alignment:
         is 3.5 + 3.5 = 7.
         """
         sequences = self.sequences
-        letters = set.union(*(set(sequence) for sequence in sequences))
+        letters = set()
+        for sequence in sequences:
+            try:
+                s = set(sequence)
+            except UndefinedSequenceError:
+                try:
+                    sequence = sequence.seq  # SeqRecord confusion
+                except AttributeError:
+                    pass
+                for start, end in sequence.defined_ranges:
+                    s = set(sequence[start:end])
+                    letters.update(s)
+            else:
+                letters.update(s)
         letters = "".join(sorted(letters))
         m = substitution_matrices.Array(letters, dims=2)
         n = len(sequences)
