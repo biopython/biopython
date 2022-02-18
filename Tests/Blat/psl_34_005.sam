@@ -24,25 +24,25 @@
 @SQ	SN:chr21	LN:48129895
 @SQ	SN:chrM	LN:16571
 @PG	ID:samtools	PN:samtools	VN:1.14	CL:samtools view -h -t hg19.chrom.sizes -
-hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
+hg18_dna	0	chr4	61646096	0	11S16M6S	*	0	0	*	*	AS:i:16
 hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
-hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
-hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
-hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
-hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
-hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
-hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
-hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
-hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
-hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
+hg18_dna	16	chr2	53575981	0	8S17M8S	*	0	0	*	*	AS:i:17
+hg19_dna	0	chr9	85737866	0	9S41M	*	0	0	*	*	AS:i:29
+hg19_dna	0	chr8	95160480	0	8S41M1S	*	0	0	*	*	AS:i:41
+hg19_dna	0	chr22	42144401	0	11S36M3S	*	0	0	*	*	AS:i:24
+hg19_dna	0	chr2	183925985	0	1S6M4I38M1S	*	0	0	*	*	AS:i:27
+hg19_dna	0	chr19	35483341	0	10S25M134D11M4S	*	0	0	*	*	AS:i:0
+hg19_dna	0	chr18	23891311	0	10S39M1S	*	0	0	*	*	AS:i:39
+hg19_dna	0	chr18	43252218	0	21S28M1S	*	0	0	*	*	AS:i:24
+hg19_dna	0	chr13	52759148	0	1S10M3D38M1S	*	0	0	*	*	AS:i:30
 hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
-hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
-hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
-hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
-hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
-hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
-hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
-hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
-hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
-hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
-hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
+hg19_dna	0	chr1	61700838	0	1S34M15S	*	0	0	*	*	AS:i:22
+hg19_dna	16	chr4	37558158	0	1S16M4I18M11S	*	0	0	*	*	AS:i:15
+hg19_dna	16	chr22	48997406	0	1S37M12S	*	0	0	*	*	AS:i:29
+hg19_dna	16	chr2	120641741	0	1S36M13S	*	0	0	*	*	AS:i:32
+hg19_dna	16	chr19	54017131	0	1S39M10S	*	0	0	*	*	AS:i:39
+hg19_dna	16	chr19	553743	0	1S39M10S	*	0	0	*	*	AS:i:27
+hg19_dna	16	chr10	99388556	0	1S36M13S	*	0	0	*	*	AS:i:24
+hg19_dna	16	chr10	112178172	0	15S25M10S	*	0	0	*	*	AS:i:21
+hg19_dna	16	chr1	39368491	0	1S36M13S	*	0	0	*	*	AS:i:32
+hg19_dna	16	chr1	220325688	0	3S34M13S	*	0	0	*	*	AS:i:30
