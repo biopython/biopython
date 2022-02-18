@@ -282,7 +282,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         super().__init__(source, mode="t", fmt="SAM")
         stream = self.stream
         self.metadata = {}
-        self._lengths = {}
+        self.targets = {}
         line = next(stream)
         if not line.startswith("@"):
             raise ValueError("Header is missing")
@@ -298,28 +298,51 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         tag = words[0]
         values = {}
         if tag == "SQ":
+            annotations = {}
+            description = None
             for word in words[1:]:
                 key, value = word.split(":", 1)
                 assert len(key) == 2
                 if key == "SN":
                     rname = value
                 elif key == "LN":
-                    value = int(value)
-                    length = value
-                values[key] = value
-            assert rname not in self._lengths
-            self._lengths[rname] = length
+                    length = int(value)
+                elif key == "AH":
+                    annotations["alternate_locus"] = value
+                elif key == "AH":
+                    annotations["names"] = value.split(",")
+                elif key == "AS":
+                    annotations["assembly"] = value
+                elif key == "DS":
+                    description = value
+                elif key == "M5":
+                    annotations["MD5"] = value
+                elif key == "SP":
+                    annotations["species"] = value
+                elif key == "TP":
+                    assert value in ("linear", "circular")
+                    annotations["topology"] = value
+                elif key == "URI":
+                    annotations["URI"] = value
+                else:
+                    annotations[key] = value
+            assert rname not in self.targets
+            sequence = Seq(None, length=length)
+            record = SeqRecord(sequence, id=rname, annotations=annotations)
+            if description is not None:
+                record.description = description
+            self.targets[rname] = record
         else:
             for word in words[1:]:
                 key, value = word.split(":", 1)
                 assert len(key) == 2
                 values[key] = value
-        if tag == "HD":
-            self.metadata[tag] = values
-        else:
-            if tag not in self.metadata:
-                self.metadata[tag] = []
-            self.metadata[tag].append(values)
+            if tag == "HD":
+                self.metadata[tag] = values
+            else:
+                if tag not in self.metadata:
+                    self.metadata[tag] = []
+                self.metadata[tag].append(values)
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -347,7 +370,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             tlen = int(words[8])
             seq = words[9]
             qual = words[10]
-            length = self._lengths[rname]
             number = ""
             query_pos = 0
             coordinates = [[pos, query_pos]]
@@ -379,18 +401,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     number += letter
             coordinates = numpy.array(coordinates).transpose()
-            target_sequence = Seq(None, length=length)
-            target_record = SeqRecord(target_sequence, id=rname)
+            target = self.targets[rname]
             if seq == "*":
-                query_sequence = Seq(None, length=query_pos)
+                sequence = Seq(None, length=query_pos)
             else:
-                query_sequence = Seq(seq)
+                sequence = Seq(seq)
                 if flag & 0x10:
-                    query_sequence = query_sequence.reverse_complement()
+                    sequence = sequence.reverse_complement()
             if flag & 0x10:
                 coordinates[1, :] = query_pos - coordinates[1, :]
-            query_record = SeqRecord(query_sequence, id=qname)
-            records = [target_record, query_record]
+            query = SeqRecord(sequence, id=qname)
+            records = [target, query]
             alignment = Alignment(records, coordinates)
             alignment.flag = flag
             if mapq != 255:
