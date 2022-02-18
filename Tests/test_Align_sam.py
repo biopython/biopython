@@ -28,6 +28,8 @@ class TestAlign_dna_rna(unittest.TestCase):
     # The SAM file dna_rna.sam was generated using these commands:
     # twoBitToFa hg38.2bit stdout | samtools dict -a hg38 -s "Homo sapiens" | grep -v chrUn | grep -v alt | grep -v random > dna_rna.sam
     # psl2sam.pl dna_rna.psl >> dna_rna.sam
+    # The CIGAR string was then edited to replace D by N for introns and H by S
+    # where appropriate.
 
     def setUp(self):
         data = {}
@@ -44,17 +46,18 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.dna = data
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
+        self.rna["NR_111921.1"] = self.rna["NR_111921.1"][:-12]
+        self.rna["NR_111921.1_modified"] = self.rna["NR_111921.1_modified"][:-12]
+        # Last 12 nucleotides were clipped by Blat as the poly(A) tail
 
     def test_reading(self):
         """Test parsing dna_rna.sam."""
         path = "Blat/dna_rna.sam"
         alignments = sam.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "3")
+        self.assertEqual(list(alignments.metadata), ["HD", "SQ"])
+        self.assertEqual(alignments.metadata["HD"], {"VN": "1.0", "SO": "unsorted"})
+        self.assertEqual(len(alignments.metadata["SQ"]), 25)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 165)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 39)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -64,7 +67,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 216)
+        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -96,20 +99,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 175)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -119,7 +109,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 181)
+        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -157,14 +147,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignment.substitutions[c, c.swapcase()]
             for c in alignment.substitutions.alphabet
         )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 164)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 39)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 5409))
+        self.assertEqual(alignment.shape, (2, 5412))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -173,16 +157,18 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 220)
+        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
-                              48665716, 48665716, 48665722, 48669098, 48669174],
-                             [       3,       31,       31,       48,       48,
-                                   124,      126,      132,      132,      208]
+                numpy.array([[48663767, 48663767, 48663795, 48663796, 48663813,
+                              48665640, 48665716, 48665716, 48665722, 48669098,
+                              48669174],
+                             [       0,        3,       31,       31,       48,
+                                    48,      124,      126,      132,      132,
+                                   208],
                             ])
                 # fmt: on
             )
@@ -207,22 +193,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 173)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1714))
+        self.assertEqual(alignment.shape, (2, 1722))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -231,16 +203,18 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 190)
+        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
-                              42532037, 42532039, 42532095, 42532563, 42532606],
-                             [     185,      158,      155,      119,      119,
-                                   102,      102,       46,       46,        3],
+                numpy.array([[42530895, 42530895, 42530922, 42530922, 42530958,
+                              42532020, 42532037, 42532039, 42532095, 42532563,
+                              42532606, 42532606],
+                             [     190,      185,      158,      155,      119,
+                                   119,      102,      102,       46,       46,
+                                     3,        0],
                             ])
                 # fmt: on
             )
@@ -265,16 +239,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing(self):
@@ -350,7 +314,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
-        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,

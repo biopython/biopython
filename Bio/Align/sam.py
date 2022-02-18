@@ -34,25 +34,6 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Sequence Alignment/Map (SAM) ile format."""
 
-    def __init__(self, target, header=True):
-        """Create an AlignmentWriter object.
-
-        Arguments:
-         - target    - output stream or file name
-         - header    - If True (default), write the SAM header.
-                       If False, do not write the SAM header.
-
-        """
-        super().__init__(target, mode="w")
-        self.header = header
-        if wildcard is not None:
-            if mask == "upper":
-                wildcard = ord(wildcard.lower())
-            else:
-                wildcard = ord(wildcard.upper())
-        self.wildcard = wildcard
-        self.mask = mask
-
     def write_header(self, alignments):
         """Write the SAM header."""
         if not self.header:
@@ -275,8 +256,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for Sequence Alignment/Map (SAM) files.
 
     Each line in the file contains one genomic alignment, which are loaded
-    and returned incrementally.  Other information associated with the
-    alignment by its tags are stored as attributes of each alignment.
+    and returned incrementally.  The following columns are stored as attributes
+    of the alignment:
+
+      - flag: The FLAG combination of bitwise flags;
+      - mapq: Mapping Quality (only stored if available)
+      - rnext: Reference sequence name of the primary alignment of the next read
+               in the alignment (only stored if available)
+      - pnext: Zero-based position of the primary alignment of the next read in
+               the template (only stored if available)
+      - tlen: signed observed template length (only stored if available)
+      - qual: ASCII of base quality plus 33 (only stored if available)
+
+    Other information associated with the alignment by its tags are stored in
+    the annotations attribute of each alignment.
     """
 
     def __init__(self, source):
@@ -288,21 +281,45 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="SAM")
         stream = self.stream
+        self.metadata = {}
+        self._lengths = {}
         line = next(stream)
-        if line.startswith("psLayout "):
-            words = line.split()
-            if words[1] != "version":
-                raise ValueError("Unexpected word '%s' in header line" % words[1])
-            self.metadata = {"version": words[2]}
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
-            if line.lstrip("-").strip() != "":
-                raise ValueError("End of header not found")
-            self.line = None
+        if not line.startswith("@"):
+            raise ValueError("Header is missing")
+        self._parse_header_line(line)
+        for line in stream:
+            if not line.startswith("@"):
+                self.line = line
+                break
+            self._parse_header_line(line)
+
+    def _parse_header_line(self, line):
+        words = line[1:].strip().split("\t")
+        tag = words[0]
+        values = {}
+        if tag == "SQ":
+            for word in words[1:]:
+                key, value = word.split(":", 1)
+                assert len(key) == 2
+                if key == "SN":
+                    rname = value
+                elif key == "LN":
+                    value = int(value)
+                    length = value
+                values[key] = value
+            assert rname not in self._lengths
+            self._lengths[rname] = length
         else:
-            self.line = line
+            for word in words[1:]:
+                key, value = word.split(":", 1)
+                assert len(key) == 2
+                values[key] = value
+        if tag == "HD":
+            self.metadata[tag] = values
+        else:
+            if tag not in self.metadata:
+                self.metadata[tag] = []
+            self.metadata[tag].append(values)
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -317,137 +334,75 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             lines = stream
         for line in lines:
             words = line.split()
-            if len(words) != 21:
-                raise ValueError("line has %d columns; expected 21" % len(words))
-            strand = words[8]
-            qName = words[9]
-            qSize = int(words[10])
-            tName = words[13]
-            tSize = int(words[14])
-            blockCount = int(words[17])
-            blockSizes = [
-                int(blockSize) for blockSize in words[18].rstrip(",").split(",")
-            ]
-            qStarts = [int(start) for start in words[19].rstrip(",").split(",")]
-            tStarts = [int(start) for start in words[20].rstrip(",").split(",")]
-            if len(blockSizes) != blockCount:
-                raise ValueError(
-                    "Inconsistent number of blocks (%d found, expected %d)"
-                    % (len(blockSizes), blockCount)
-                )
-            if len(qStarts) != blockCount:
-                raise ValueError(
-                    "Inconsistent number of query start positions (%d found, expected %d)"
-                    % (len(qStarts), blockCount)
-                )
-            if len(tStarts) != blockCount:
-                raise ValueError(
-                    "Inconsistent number of target start positions (%d found, expected %d)"
-                    % (len(tStarts), blockCount)
-                )
-            target_sequence = Seq(None, length=tSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_sequence = Seq(None, length=qSize)
-            query_record = SeqRecord(query_sequence, id=qName)
-            records = [target_record, query_record]
-            qBlockSizes = numpy.array(blockSizes)
-            qStarts = numpy.array(qStarts)
-            tStarts = numpy.array(tStarts)
-            if strand in ("++", "+-"):
-                # protein sequence aligned against translated DNA sequence
-                tBlockSizes = 3 * qBlockSizes
-            else:
-                tBlockSizes = qBlockSizes
-            qPosition = qStarts[0]
-            tPosition = tStarts[0]
-            coordinates = [[tPosition, qPosition]]
-            for tBlockSize, qBlockSize, tStart, qStart in zip(
-                tBlockSizes, qBlockSizes, tStarts, qStarts
-            ):
-                if tStart != tPosition:
-                    coordinates.append([tStart, qPosition])
-                    tPosition = tStart
-                if qStart != qPosition:
-                    coordinates.append([tPosition, qStart])
-                    qPosition = qStart
-                tPosition += tBlockSize
-                qPosition += qBlockSize
-                coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
-            qNumInsert = 0
-            qBaseInsert = 0
-            tNumInsert = 0
-            tBaseInsert = 0
-            tStart, qStart = coordinates[:, 0]
-            for tEnd, qEnd in coordinates[:, 1:].transpose():
-                tCount = tEnd - tStart
-                qCount = qEnd - qStart
-                if tCount == 0:
-                    if qStart > 0 and qEnd < qSize:
-                        qNumInsert += 1
-                        qBaseInsert += qCount
-                    qStart = qEnd
-                elif qCount == 0:
-                    if tStart > 0 and tEnd < tSize:
-                        tNumInsert += 1
-                        tBaseInsert += tCount
-                    tStart = tEnd
+            if len(words) < 11:
+                raise ValueError("line has %d columns; expected at least 11" % len(words))
+            qname = words[0]
+            flag = int(words[1])
+            rname = words[2]
+            pos = int(words[3]) - 1
+            mapq = int(words[4])
+            cigar = words[5]
+            rnext = words[6]
+            pnext = int(words[7]) - 1
+            tlen = int(words[8])
+            seq = words[9]
+            qual = words[10]
+            length = self._lengths[rname]
+            number = ""
+            query_pos = 0
+            coordinates = [[pos, query_pos]]
+            for letter in cigar:
+                if letter in "M=X":
+                    number = int(number)
+                    pos += number
+                    query_pos += number
+                    coordinates.append([pos, query_pos])
+                    number = ""
+                elif letter in "IS":
+                    number = int(number)
+                    query_pos += number
+                    coordinates.append([pos, query_pos])
+                    number = ""
+                elif letter in "DN":
+                    number = int(number)
+                    pos += number
+                    coordinates.append([pos, query_pos])
+                    number = ""
+                elif letter == "H":
+                    # hard clipping (clipped sequences not present in sequence)
+                    number = int(number)
+                    number = ""
+                elif letter == "P":
+                    number = int(number)
+                    raise NotImplementedError("padding operator is not yet implemented")
+                    number = ""
                 else:
-                    tStart = tEnd
-                    qStart = qEnd
-            if qNumInsert != int(words[4]):
-                raise ValueError(
-                    "Inconsistent qNumInsert found (%s, expected %d)"
-                    % (words[4], qNumInsert)
-                )
-            if qBaseInsert != int(words[5]):
-                raise ValueError(
-                    "Inconsistent qBaseInsert found (%s, expected %d)"
-                    % (words[5], qBaseInsert)
-                )
-            if tNumInsert != int(words[6]):
-                raise ValueError(
-                    "Inconsistent tNumInsert found (%s, expected %d)"
-                    % (words[6], tNumInsert)
-                )
-            if tBaseInsert != int(words[7]):
-                raise ValueError(
-                    "Inconsistent tBaseInsert found (%s, expected %d)"
-                    % (words[7], tBaseInsert)
-                )
-            qStart = int(words[11])
-            qEnd = int(words[12])
-            tStart = int(words[15])
-            tEnd = int(words[16])
-            if strand == "-":
-                qStart, qEnd = qEnd, qStart
-                coordinates[1, :] = qSize - coordinates[1, :]
-            elif strand == "+-":
-                tStart, tEnd = tEnd, tStart
-                coordinates[0, :] = tSize - coordinates[0, :]
-            if tStart != coordinates[0, 0]:
-                raise ValueError(
-                    "Inconsistent tStart found (%d, expected %d)"
-                    % (tStart, coordinates[0, 0])
-                )
-            if tEnd != coordinates[0, -1]:
-                raise ValueError(
-                    "Inconsistent tEnd found (%d, expected %d)"
-                    % (tEnd, coordinates[0, -1])
-                )
-            if qStart != coordinates[1, 0]:
-                raise ValueError(
-                    "Inconsistent qStart found (%d, expected %d)"
-                    % (qStart, coordinates[1, 0])
-                )
-            if qEnd != coordinates[1, -1]:
-                raise ValueError(
-                    "Inconsistent qEnd found (%d, expected %d)"
-                    % (qEnd, coordinates[1, -1])
-                )
+                    number += letter
+            coordinates = numpy.array(coordinates).transpose()
+            target_sequence = Seq(None, length=length)
+            target_record = SeqRecord(target_sequence, id=rname)
+            if seq == "*":
+                query_sequence = Seq(None, length=query_pos)
+            else:
+                query_sequence = Seq(seq)
+                if flag & 0x10:
+                    query_sequence = query_sequence.reverse_complement()
+            if flag & 0x10:
+                coordinates[1, :] = query_pos - coordinates[1, :]
+            query_record = SeqRecord(query_sequence, id=qname)
+            records = [target_record, query_record]
             alignment = Alignment(records, coordinates)
-            alignment.matches = int(words[0])
-            alignment.misMatches = int(words[1])
-            alignment.repMatches = int(words[2])
-            alignment.nCount = int(words[3])
+            alignment.flag = flag
+            if mapq != 255:
+                alignment.mapq = mapq
+            if rnext == "=":
+                alignment.rnext = rname
+            elif rnext != "*":
+                alignment.rnext = rnext
+            if pnext >= 0:
+                alignment.pnext = pnext
+            if tlen > 0:
+                alignment.tlen = tlen
+            if qual != "*":
+                alignment.qual = qual
             yield alignment
