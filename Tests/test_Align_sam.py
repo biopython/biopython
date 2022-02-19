@@ -140,7 +140,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -154,7 +153,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         dna = Seq(self.dna, length=len(alignment.target.seq))
         alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -182,7 +181,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -195,7 +193,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -230,7 +228,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -248,7 +245,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -276,7 +273,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
         self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), len(self.rna[alignment.query.id]))
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -294,7 +290,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
