@@ -50,10 +50,8 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.rna["NR_111921.1_modified"] = self.rna["NR_111921.1_modified"][:-12]
         # Last 12 nucleotides were clipped by Blat as the poly(A) tail
 
-    def test_reading(self):
-        """Test parsing dna_rna.sam."""
-        path = "Blat/dna_rna.sam"
-        alignments = sam.AlignmentIterator(path)
+    def check_alignments(self, alignments):
+        """Check the alignments."""
         self.assertEqual(list(alignments.metadata), ["HD"])
         self.assertEqual(alignments.metadata["HD"], {"VN": "1.0", "SO": "unsorted"})
         self.assertEqual(len(alignments.targets), 25)
@@ -316,44 +314,24 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading(self):
+        """Test parsing dna_rna.sam."""
+        path = "Blat/dna_rna.sam"
+        alignments = sam.AlignmentIterator(path)
+        self.check_alignments(alignments)
+
     def test_writing(self):
         """Test writing the alignments in dna_rna.sam."""
         path = "Blat/dna_rna.sam"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
         writer = sam.AlignmentWriter(stream)
         n = writer.write_file(alignments, mincount=4, maxcount=4)
         self.assertEqual(n, 4)
         stream.seek(0)
-        written_data = stream.read()
+        alignments = sam.AlignmentIterator(stream)
+        self.check_alignments(alignments)
         stream.close()
-        self.assertEqual(original_data, written_data)
-        # Try this again. This time, we first strip the matches, misMatches,
-        # repMatches, and nCount attributes from each alignment, and insert the
-        # appropriate sequence data in each alignment. The writer will then
-        # recalculate the matches, misMatches, repMatches, and nCount values
-        # from the sequence data and the alignment, and store those values in
-        # the PSL file.
-        alignments = []
-        for alignment in sam.AlignmentIterator(path):
-            del alignment.matches
-            del alignment.misMatches
-            del alignment.repMatches
-            del alignment.nCount
-            dna = Seq(self.dna, length=len(alignment.target))
-            alignment.target.seq = dna
-            alignment.query.seq = self.rna[alignment.sequences[1].id]
-            alignments.append(alignment)
-        stream = StringIO()
-        writer = sam.AlignmentWriter(stream, mask="lower")
-        n = writer.write_file(alignments, mincount=4, maxcount=4)
-        self.assertEqual(n, 4)
-        stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
 
 
 class TestAlign_dna(unittest.TestCase):
@@ -372,10 +350,8 @@ class TestAlign_dna(unittest.TestCase):
     # The hard clipping symbols H were replaced by soft clipping symbols S in
     # the file psl_34_005.sam.
 
-    def test_reading_psl_34_001(self):
-        """Test parsing psl_34_001.sam."""
-        path = "Blat/psl_34_001.sam"
-        alignments = sam.AlignmentIterator(path)
+    def check_alignments_psl_34_001(self, alignments):
+        """Check the alignments for psl_34_001/sam."""
         self.assertEqual(list(alignments.metadata), ["PG"])
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets["chr1"].id, "chr1")
@@ -892,25 +868,27 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_34_001(self):
+        """Test parsing psl_34_001.sam."""
+        path = "Blat/psl_34_001.sam"
+        alignments = sam.AlignmentIterator(path)
+        self.check_alignments_psl_34_001(alignments)
+
     def test_writing_psl_34_001(self):
         """Test writing the alignments in psl_34_001.sam."""
         path = "Blat/psl_34_001.sam"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
         writer = sam.AlignmentWriter(stream)
         n = writer.write_file(alignments, mincount=22, maxcount=22)
         self.assertEqual(n, 22)
         stream.seek(0)
-        written_data = stream.read()
+        alignments = sam.AlignmentIterator(stream)
+        self.check_alignments_psl_34_001(alignments)
         stream.close()
-        self.assertEqual(original_data, written_data)
 
-    def test_reading_psl_34_003(self):
-        """Test parsing psl_34_003.sam."""
-        path = "Blat/psl_34_003.sam"
-        alignments = sam.AlignmentIterator(path)
+    def check_alignments_psl_34_003(self, alignments):
+        """Check the alignments for psl_34_003/sam."""
         self.assertEqual(list(alignments.metadata), ["PG"])
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets["chr1"].id, "chr1")
@@ -1031,25 +1009,27 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_34_003(self):
+        """Test parsing psl_34_003.sam."""
+        path = "Blat/psl_34_003.sam"
+        alignments = sam.AlignmentIterator(path)
+        self.check_alignments_psl_34_003(alignments)
+
     def test_writing_psl_34_003(self):
         """Test writing the alignments in psl_34_003.sam."""
         path = "Blat/psl_34_003.sam"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
         writer = sam.AlignmentWriter(stream)
         n = writer.write_file(alignments, mincount=3, maxcount=3)
         self.assertEqual(n, 3)
         stream.seek(0)
-        written_data = stream.read()
+        alignments = sam.AlignmentIterator(stream)
+        self.check_alignments_psl_34_003(alignments)
         stream.close()
-        self.assertEqual(original_data, written_data)
 
-    def test_reading_psl_34_004(self):
-        """Test parsing psl_34_004.sam."""
-        path = "Blat/psl_34_004.sam"
-        alignments = sam.AlignmentIterator(path)
+    def check_alignments_psl_34_004(self, alignments):
+        """Check the alignments for psl_34_004/sam."""
         self.assertEqual(list(alignments.metadata), ["PG"])
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets["chr1"].id, "chr1")
@@ -1506,25 +1486,27 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_34_004(self):
+        """Test parsing psl_34_004.sam."""
+        path = "Blat/psl_34_004.sam"
+        alignments = sam.AlignmentIterator(path)
+        self.check_alignments_psl_34_004(alignments)
+
     def test_writing_psl_34_004(self):
         """Test writing the alignments in psl_34_004.sam."""
         path = "Blat/psl_34_004.sam"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
         writer = sam.AlignmentWriter(stream)
         n = writer.write_file(alignments, mincount=19, maxcount=19)
         self.assertEqual(n, 19)
         stream.seek(0)
-        written_data = stream.read()
+        alignments = sam.AlignmentIterator(stream)
+        self.check_alignments_psl_34_004(alignments)
         stream.close()
-        self.assertEqual(original_data, written_data)
 
-    def test_reading_psl_34_005(self):
-        """Test parsing psl_34_005.sam."""
-        path = "Blat/psl_34_005.sam"
-        alignments = sam.AlignmentIterator(path)
+    def check_alignments_psl_34_005(self, alignments):
+        """Check the alignments for psl_34_005/sam."""
         self.assertEqual(list(alignments.metadata), ["PG"])
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets["chr1"].id, "chr1")
@@ -2043,20 +2025,24 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_34_005(self):
+        """Test parsing psl_34_005.sam."""
+        path = "Blat/psl_34_005.sam"
+        alignments = sam.AlignmentIterator(path)
+        self.check_alignments_psl_34_005(alignments)
+
     def test_writing_psl_34_005(self):
         """Test writing the alignments in psl_34_005.sam."""
         path = "Blat/psl_34_005.sam"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream, header=False)
+        writer = sam.AlignmentWriter(stream)
         n = writer.write_file(alignments, mincount=22, maxcount=22)
         self.assertEqual(n, 22)
         stream.seek(0)
-        written_data = stream.read()
+        alignments = sam.AlignmentIterator(stream)
+        self.check_alignments_psl_34_005(alignments)
         stream.close()
-        self.assertEqual(original_data, written_data)
 
 
 if __name__ == "__main__":
