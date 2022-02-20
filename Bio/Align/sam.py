@@ -23,6 +23,7 @@ with Python and other alignment formats.
 """
 from itertools import chain
 import numpy
+import copy
 
 
 from Bio.Align import Alignment
@@ -337,71 +338,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             rnext = fields[6]
             pnext = int(fields[7]) - 1
             tlen = int(fields[8])
-            seq = fields[9]
+            query = fields[9]
             qual = fields[10]
-            number = ""
-            query_pos = 0
-            coordinates = [[pos, query_pos]]
-            for letter in cigar:
-                if letter in "M=X":
-                    number = int(number)
-                    pos += number
-                    query_pos += number
-                    coordinates.append([pos, query_pos])
-                    number = ""
-                elif letter in "IS":
-                    number = int(number)
-                    query_pos += number
-                    coordinates.append([pos, query_pos])
-                    number = ""
-                elif letter in "DN":
-                    number = int(number)
-                    pos += number
-                    coordinates.append([pos, query_pos])
-                    number = ""
-                elif letter == "H":
-                    # hard clipping (clipped sequences not present in sequence)
-                    number = int(number)
-                    number = ""
-                elif letter == "P":
-                    number = int(number)
-                    raise NotImplementedError("padding operator is not yet implemented")
-                    number = ""
-                else:
-                    number += letter
-            coordinates = numpy.array(coordinates).transpose()
-            target = self.targets[rname]
-            if seq == "*":
-                sequence = Seq(None, length=query_pos)
-            else:
-                sequence = Seq(seq)
-                if flag & 0x10:
-                    sequence = sequence.reverse_complement()
-            if flag & 0x10:
-                coordinates[1, :] = query_pos - coordinates[1, :]
-            query = SeqRecord(sequence, id=qname)
-            records = [target, query]
-            alignment = Alignment(records, coordinates)
+            md = None
+            score = None
             annotations = {}
             column_annotations = {}
-            alignment.flag = flag
-            if mapq != 255:
-                alignment.mapq = mapq
-            if rnext == "=":
-                alignment.rnext = rname
-            elif rnext != "*":
-                alignment.rnext = rnext
-            if pnext >= 0:
-                alignment.pnext = pnext
-            if tlen > 0:
-                alignment.tlen = tlen
-            if qual != "*":
-                column_annotations["quality"] = qual
             for field in fields[11:]:
                 tag, datatype, value = field.split(":", 2)
                 if tag == "AS":
                     assert datatype == "i"
-                    alignment.score = int(value)
+                    score = int(value)
+                elif tag == "MD":
+                    assert datatype == "Z"
+                    md = value
                 else:
                     if datatype == "i":
                         value = int(value)
@@ -423,6 +373,152 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             raise ValueError(f"Unknown number type '{letter}' in tag '{field}'")
                         value = numpy.array(value, dtype)
                     annotations[tag] = value
+            number = ""
+            query_pos = 0
+            coordinates = [[pos, query_pos]]
+            if md is None:
+                for letter in cigar:
+                    if letter in "M=X":
+                        number = int(number)
+                        pos += number
+                        query_pos += number
+                        coordinates.append([pos, query_pos])
+                        number = ""
+                    elif letter in "IS":
+                        number = int(number)
+                        query_pos += number
+                        coordinates.append([pos, query_pos])
+                        number = ""
+                    elif letter in "DN":
+                        number = int(number)
+                        pos += number
+                        coordinates.append([pos, query_pos])
+                        number = ""
+                    elif letter == "H":
+                        # hard clipping (clipped sequences not present in sequence)
+                        number = int(number)
+                        number = ""
+                    elif letter == "P":
+                        number = int(number)
+                        raise NotImplementedError("padding operator is not yet implemented")
+                        number = ""
+                    else:
+                        number += letter
+                target = self.targets[rname]
+            else:
+                seq = query
+                target = ""
+                starts = [pos]
+                size = 0
+                sizes = []
+                for letter in cigar:
+                    if letter in "M=X":
+                        number = int(number)
+                        pos += number
+                        query_pos += number
+                        coordinates.append([pos, query_pos])
+                        target += seq[:number]
+                        seq = seq[number:]
+                        size += number
+                        number = ""
+                    elif letter in "IS":
+                        number = int(number)
+                        query_pos += number
+                        coordinates.append([pos, query_pos])
+                        seq = seq[number:]
+                        number = ""
+                    elif letter == "D":
+                        number = int(number)
+                        pos += number
+                        coordinates.append([pos, query_pos])
+                        size += number
+                        number = ""
+                    elif letter == "N":
+                        number = int(number)
+                        pos += number
+                        coordinates.append([pos, query_pos])
+                        starts.append(pos)
+                        sizes.append(size)
+                        size = 0
+                        number = ""
+                    elif letter == "H":
+                        # hard clipping (clipped sequences not present in sequence)
+                        number = int(number)
+                        number = ""
+                    elif letter == "P":
+                        number = int(number)
+                        raise NotImplementedError("padding operator is not yet implemented")
+                        number = ""
+                    else:
+                        number += letter
+                sizes.append(size)
+                seq = target
+                target = ""
+                letters = iter(md)
+                number = ""
+                for letter in letters:
+                    if letter in "ACGTNacgtn":
+                        if number:
+                            number = int(number)
+                            target += seq[:number]
+                            seq = seq[number:]
+                            number = ""
+                        target += letter
+                        seq = seq[1:]
+                    elif letter == "^":
+                        if number:
+                            number = int(number)
+                            target += seq[:number]
+                            seq = seq[number:]
+                            number = ""
+                        for letter in letters:
+                            if letter not in "ACGTNacgtn":
+                                break
+                            target += letter
+                        else:
+                            break
+                        number = letter
+                    else:
+                        number += letter
+                if number:
+                    number = int(number)
+                    target += seq[:number]
+                seq = target
+                target = copy.deepcopy(self.targets[rname])
+                length = len(target.seq)
+                data = {}
+                index = 0
+                for start, size in zip(starts, sizes):
+                    data[start] = seq[index: index+size]
+                    index += size
+                target.seq = Seq(data, length=length)
+            coordinates = numpy.array(coordinates).transpose()
+            if query == "*":
+                sequence = Seq(None, length=query_pos)
+            else:
+                sequence = Seq(query)
+                if flag & 0x10:
+                    sequence = sequence.reverse_complement()
+            if flag & 0x10:
+                coordinates[1, :] = query_pos - coordinates[1, :]
+            query = SeqRecord(sequence, id=qname)
+            records = [target, query]
+            alignment = Alignment(records, coordinates)
+            alignment.flag = flag
+            if mapq != 255:
+                alignment.mapq = mapq
+            if rnext == "=":
+                alignment.rnext = rname
+            elif rnext != "*":
+                alignment.rnext = rnext
+            if pnext >= 0:
+                alignment.pnext = pnext
+            if tlen > 0:
+                alignment.tlen = tlen
+            if score is not None:
+                alignment.score = score
+            if qual != "*":
+                column_annotations["quality"] = qual
             if annotations:
                 alignment.annotations = annotations
             if column_annotations:

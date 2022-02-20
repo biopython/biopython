@@ -41,10 +41,10 @@ class TestAlign_dna_rna(unittest.TestCase):
             start, end = start_end.split("-")
             start = int(start)
             end = int(end)
-            sequence = str(record.seq)
+            sequence = str(record.seq).upper()
             assert len(sequence) == end - start
             data[start] = sequence
-        self.dna = data
+        self.dna = Seq(data, length=198295559)
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
         self.rna["NR_111921.1"] = self.rna["NR_111921.1"][:-12]
@@ -140,7 +140,14 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
-        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.target.seq), len(self.dna))
+        self.assertEqual(alignment.target.seq.defined_ranges,
+                         ((48663767, 48663813),
+                          (48665640, 48665722),
+                          (48669098, 48669174)))
+        for start, end in alignment.target.seq.defined_ranges:
+            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -152,26 +159,17 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        dna = Seq(self.dna, length=len(alignment.target.seq))
-        alignment.target.seq = dna
-        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
-                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
+            numpy.array([[62.,  0.,  0.,  0.],
+                         [ 0., 42.,  0.,  0.],
+                         [ 0.,  0., 66.,  0.],
+                         [ 0.,  0.,  0., 34.],
                         ])
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGT")
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.annotations["NM"], 0)
         alignment = next(alignments)
@@ -183,7 +181,14 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
-        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.target.seq), len(self.dna))
+        self.assertEqual(alignment.target.seq.defined_ranges,
+                         ((42530895, 42530958),
+                          (42532020, 42532095),
+                          (42532563, 42532606)))
+        for start, end in alignment.target.seq.defined_ranges:
+            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -194,32 +199,21 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[38.,  0.,  0.,  0.],
+                         [ 0., 41.,  0.,  0.],
+                         [ 0.,  0., 60.,  0.],
+                         [ 0.,  0.,  0., 42.],
                         ])
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGT")
         matches = sum(
             alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
         )
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.annotations["NM"], 0)
@@ -232,7 +226,14 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
-        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.target.seq), len(self.dna))
+        self.assertEqual(alignment.target.seq.defined_ranges,
+                         ((48663767, 48663813),
+                          (48665640, 48665722),
+                          (48669098, 48669174)))
+        for start, end in alignment.target.seq.defined_ranges:
+            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -248,26 +249,17 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
-                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
+            numpy.array([[62.,  0.,  0.,  0.],
+                         [ 0., 41.,  0.,  0.],
+                         [ 0.,  2., 64.,  0.],
+                         [ 0.,  0.,  0., 34.],
                         ]),
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGT")
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.annotations["NM"], 5)
         alignment = next(alignments)
@@ -279,7 +271,14 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
-        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.target.seq), len(self.dna))
+        self.assertEqual(alignment.target.seq.defined_ranges,
+                         ((42530895, 42530958),
+                          (42532020, 42532095),
+                          (42532563, 42532606)))
+        for start, end in alignment.target.seq.defined_ranges:
+            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -295,26 +294,17 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[36.,  0.,  0.,  1.],
+                         [ 0., 41.,  0.,  0.],
+                         [ 0.,  0., 60.,  0.],
+                         [ 0.,  0.,  0., 41.],
                         ]),
             )
         )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.substitutions.alphabet, "ACGT")
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.annotations["NM"], 6)
         self.assertRaises(StopIteration, next, alignments)
