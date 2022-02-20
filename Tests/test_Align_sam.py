@@ -30,6 +30,7 @@ class TestAlign_dna_rna(unittest.TestCase):
     # psl2sam.pl dna_rna.psl >> dna_rna.sam
     # The CIGAR string was then edited to replace D by N for introns and H by S
     # where appropriate.
+    # The alignment scores (AS tag) were copied from the BED file dna_rna.bed.
 
     def setUp(self):
         data = {}
@@ -171,6 +172,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.annotations["NM"], 0)
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -218,6 +221,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignment.substitutions[c, c.swapcase()]
             for c in alignment.substitutions.alphabet
         )
+        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.annotations["NM"], 0)
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5412))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -263,6 +268,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.score, 972)
+        self.assertEqual(alignment.annotations["NM"], 5)
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1722))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -308,6 +315,8 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        self.assertEqual(alignment.score, 978)
+        self.assertEqual(alignment.annotations["NM"], 6)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):

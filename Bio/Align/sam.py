@@ -47,53 +47,53 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         values = metadata.get("HD")
         if values is not None:
             # if HD is present, then VN is required and must come first
-            words = ["@HD", "VN:%s" % values["VN"]]
+            fields = ["@HD", "VN:%s" % values["VN"]]
             for key, value in values.items():
                 if key == "VN":
                     continue
-                words.append("%s:%s" % (key, value))
-            line = "\t".join(words) + "\n"
+                fields.append("%s:%s" % (key, value))
+            line = "\t".join(fields) + "\n"
             self.stream.write(line)
         for rname, record in targets.items():
             assert rname == record.id
-            words = ["@SQ"]
-            words.append("SN:%s" % rname)
+            fields = ["@SQ"]
+            fields.append("SN:%s" % rname)
             length = len(record.seq)
-            words.append("LN:%d" % length)
+            fields.append("LN:%d" % length)
             for key, value in record.annotations.items():
                 if key == "alternate_locus":
-                    words.append("AH:%s" % value)
+                    fields.append("AH:%s" % value)
                 elif key == "names":
-                    words.append("AN:%s" % ",".join(value))
+                    fields.append("AN:%s" % ",".join(value))
                 elif key == "assembly":
-                    words.append("AS:%s" % value)
+                    fields.append("AS:%s" % value)
                 elif key == "MD5":
-                    words.append("M5:%s" % value)
+                    fields.append("M5:%s" % value)
                 elif key == "species":
-                    words.append("SP:%s" % value)
+                    fields.append("SP:%s" % value)
                 elif key == "topology":
                     assert value in ("linear", "circular")
-                    words.append("PP:%s" % value)
+                    fields.append("PP:%s" % value)
                 elif key == "URI":
-                    words.append("UR:%s" % value)
+                    fields.append("UR:%s" % value)
                 else:
-                    words.append("%s:%s" % (key[:2], value))
+                    fields.append("%s:%s" % (key[:2], value))
                 try:
                     description = record.description
                 except AttributeError:
                     pass
                 else:
-                    words.append("DS:%s" % value)
-            line = "\t".join(words)+ "\n"
+                    fields.append("DS:%s" % value)
+            line = "\t".join(fields)+ "\n"
             self.stream.write(line)
         for tag, rows in metadata.items():
             if tag == "HD":  # already written
                 continue
             for row in rows:
-                words = ["@" + tag]
+                fields = ["@" + tag]
                 for key, value in row.items():
-                    words.append("%s:%s" % (key, value))
-                line = "\t".join(words)+ "\n"
+                    fields.append("%s:%s" % (key, value))
+                line = "\t".join(fields)+ "\n"
                 self.stream.write(line)
 
     def format_alignment(self, alignment):
@@ -173,7 +173,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except (AttributeError, KeyError):
             qual = "*"
         cigar = "".join(cigar)
-        words = [
+        fields = [
             qName,
             str(flag),
             rName,
@@ -191,9 +191,40 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             pass
         else:
-            word = "AS:i:%d" % int(round(score))
-            words.append(word)
-        line = "\t".join(words) + "\n"
+            field = "AS:i:%d" % int(round(score))
+            fields.append(field)
+        try:
+            annotations = alignment.annotations
+        except AttributeError:
+            pass
+        else:
+            for key, value in annotations.items():
+                if isinstance(value, int):
+                    datatype = "i"
+                    value = str(value)
+                elif isinstance(value, float):
+                    datatype = "f"
+                    value = str(value)
+                elif isinstance(value, str):
+                    if len(value) == 1:
+                        datatype = "A"
+                    else:
+                        datatype = "Z"
+                elif isinstance(value, bytes):
+                    datatype = "H"
+                    value = "".join(map(str, value))
+                elif isinstance(value, numpy.array):
+                    datatype = "B"
+                    if numpy.issubdtype(value.dtype, numpy.integer):
+                        letter = "i"
+                    elif numpy.issubdtype(value.dtype, float):
+                        letter = "f"
+                    else:
+                        raise ValueError(f"Array of incompatible data type {value.dtype} in annotation '{key}'")
+                    value = ",".join(map(str, value))
+                field = f"{key}:{datatype}:{value}"
+                fields.append(field)
+        line = "\t".join(fields) + "\n"
         return line
 
 
@@ -232,14 +263,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if not line.startswith("@"):
                 self.line = line
                 break
-            words = line[1:].strip().split("\t")
-            tag = words[0]
+            fields = line[1:].strip().split("\t")
+            tag = fields[0]
             values = {}
             if tag == "SQ":
                 annotations = {}
                 description = None
-                for word in words[1:]:
-                    key, value = word.split(":", 1)
+                for field in fields[1:]:
+                    key, value = field.split(":", 1)
                     assert len(key) == 2
                     if key == "SN":
                         rname = value
@@ -271,8 +302,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     record.description = description
                 self.targets[rname] = record
             else:
-                for word in words[1:]:
-                    key, value = word.split(":", 1)
+                for field in fields[1:]:
+                    key, value = field.split(":", 1)
                     assert len(key) == 2
                     values[key] = value
                 if tag == "HD":
@@ -294,20 +325,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             lines = stream
         for line in lines:
-            words = line.split()
-            if len(words) < 11:
-                raise ValueError("line has %d columns; expected at least 11" % len(words))
-            qname = words[0]
-            flag = int(words[1])
-            rname = words[2]
-            pos = int(words[3]) - 1
-            mapq = int(words[4])
-            cigar = words[5]
-            rnext = words[6]
-            pnext = int(words[7]) - 1
-            tlen = int(words[8])
-            seq = words[9]
-            qual = words[10]
+            fields = line.split()
+            if len(fields) < 11:
+                raise ValueError("line has %d columns; expected at least 11" % len(fields))
+            qname = fields[0]
+            flag = int(fields[1])
+            rname = fields[2]
+            pos = int(fields[3]) - 1
+            mapq = int(fields[4])
+            cigar = fields[5]
+            rnext = fields[6]
+            pnext = int(fields[7]) - 1
+            tlen = int(fields[8])
+            seq = fields[9]
+            qual = fields[10]
             number = ""
             query_pos = 0
             coordinates = [[pos, query_pos]]
@@ -351,6 +382,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query = SeqRecord(sequence, id=qname)
             records = [target, query]
             alignment = Alignment(records, coordinates)
+            annotations = {}
+            column_annotations = {}
             alignment.flag = flag
             if mapq != 255:
                 alignment.mapq = mapq
@@ -363,5 +396,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if tlen > 0:
                 alignment.tlen = tlen
             if qual != "*":
-                alignment.column_annotations["quality"] = qual
+                column_annotations["quality"] = qual
+            for field in fields[11:]:
+                tag, datatype, value = field.split(":", 2)
+                if tag == "AS":
+                    assert datatype == "i"
+                    alignment.score = int(value)
+                else:
+                    if datatype == "i":
+                        value = int(value)
+                    elif datatype == "f":
+                        value = float(value)
+                    elif datatype in ("A", "Z"):  # string
+                        pass
+                    elif datatype == "H":
+                        n = len(value)
+                        value = bytes(int(value[i: i + 2]) for i in range(0, n, 2))
+                    elif datatype == "B":
+                        letter = value[0]
+                        value = value[1:].split(",")
+                        if letter in "cCsSiI":
+                            dtype = int
+                        elif letter == "f":
+                            dtype = float
+                        else:
+                            raise ValueError(f"Unknown number type '{letter}' in tag '{field}'")
+                        value = numpy.array(value, dtype)
+                    annotations[tag] = value
+            if annotations:
+                alignment.annotations = annotations
+            if column_annotations:
+                alignment.column_annotations = column_annotations
             yield alignment
