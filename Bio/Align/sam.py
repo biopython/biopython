@@ -155,7 +155,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 if description != "<unknown description>":
                     fields.append("DS:%s" % description)
-            line = "\t".join(fields)+ "\n"
+            line = "\t".join(fields) + "\n"
             self.stream.write(line)
         for tag, rows in metadata.items():
             if tag == "HD":  # already written
@@ -164,7 +164,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 fields = ["@" + tag]
                 for key, value in row.items():
                     fields.append("%s:%s" % (key, value))
-                line = "\t".join(fields)+ "\n"
+                line = "\t".join(fields) + "\n"
                 self.stream.write(line)
 
     def format_alignment(self, alignment, md=None):
@@ -367,7 +367,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     elif numpy.issubdtype(value.dtype, float):
                         letter = "f"
                     else:
-                        raise ValueError(f"Array of incompatible data type {value.dtype} in annotation '{key}'")
+                        raise ValueError(
+                            f"Array of incompatible data type {value.dtype} in annotation '{key}'"
+                        )
                     value = ",".join(map(str, value))
                 field = f"{key}:{datatype}:{value}"
                 fields.append(field)
@@ -474,7 +476,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in lines:
             fields = line.split()
             if len(fields) < 11:
-                raise ValueError("line has %d columns; expected at least 11" % len(fields))
+                raise ValueError(
+                    "line has %d columns; expected at least 11" % len(fields)
+                )
             qname = fields[0]
             flag = int(fields[1])
             rname = fields[2]
@@ -532,7 +536,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         pass
                     elif datatype == "H":
                         n = len(value)
-                        value = bytes(int(value[i: i + 2]) for i in range(0, n, 2))
+                        value = bytes(int(value[i : i + 2]) for i in range(0, n, 2))
                     elif datatype == "B":
                         letter = value[0]
                         value = value[1:].split(",")
@@ -541,7 +545,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         elif letter == "f":
                             dtype = float
                         else:
-                            raise ValueError(f"Unknown number type '{letter}' in tag '{field}'")
+                            raise ValueError(
+                                f"Unknown number type '{letter}' in tag '{field}'"
+                            )
                         value = numpy.array(value, dtype)
                     annotations[tag] = value
             if flag & 0x10:
@@ -581,7 +587,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # hard clipping (clipped sequences not present in sequence)
                         continue
                     elif operation == 6:  # P
-                        raise NotImplementedError("padding operator is not yet implemented")
+                        raise NotImplementedError(
+                            "padding operator is not yet implemented"
+                        )
                 sizes.append(size)
                 seq = target
                 target = ""
@@ -620,7 +628,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 data = {}
                 index = 0
                 for start, size in zip(starts, sizes):
-                    data[start] = seq[index: index+size]
+                    data[start] = seq[index : index + size]
                     index += size
                 target.seq = Seq(data, length=length)
             if query == "*":
