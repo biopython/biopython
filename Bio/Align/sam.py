@@ -568,7 +568,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     target = self.targets.get(rname)
                     if target is None:
                         if self.targets:
-                            raise ValueError(f"Found target {rname} missing from header")
+                            raise ValueError(
+                                f"Found target {rname} missing from header"
+                            )
                         target = SeqRecord(None, id=rname)
             else:
                 seq = query

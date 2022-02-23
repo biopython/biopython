@@ -2267,7 +2267,9 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(n, 3270)
         self.assertEqual(alignment.sequences[0].id, "chr2")
         self.assertEqual(alignment.sequences[1].id, "EAS114_26:7:37:79:581")
-        self.assertEqual(alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA")
+        self.assertEqual(
+            alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA"
+        )
         self.assertEqual(alignment.flag, 83)
         self.assertEqual(alignment.mapq, 68)
         self.assertTrue(
@@ -2278,7 +2280,10 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
         self.assertEqual(alignment.tlen, -219)
-        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "3,,,===6===<===<;=====-============")
+        self.assertEqual(
+            alignment.sequences[1].letter_annotations["phred_quality"],
+            "3,,,===6===<===<;=====-============",
+        )
         self.assertEqual(len(alignment.annotations), 6)
         self.assertEqual(alignment.annotations["MF"], 18)
         self.assertEqual(alignment.annotations["Aq"], 27)
@@ -2302,7 +2307,9 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "chr2")
         self.assertEqual(len(alignment.sequences[0].seq), 1584)
         self.assertEqual(alignment.sequences[1].id, "EAS114_26:7:37:79:581")
-        self.assertEqual(alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA")
+        self.assertEqual(
+            alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA"
+        )
         self.assertEqual(alignment.flag, 83)
         self.assertEqual(alignment.mapq, 68)
         self.assertTrue(
@@ -2313,7 +2320,10 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
         self.assertEqual(alignment.tlen, -219)
-        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "3,,,===6===<===<;=====-============")
+        self.assertEqual(
+            alignment.sequences[1].letter_annotations["phred_quality"],
+            "3,,,===6===<===<;=====-============",
+        )
         self.assertEqual(len(alignment.annotations), 6)
         self.assertEqual(alignment.annotations["MF"], 18)
         self.assertEqual(alignment.annotations["Aq"], 27)
@@ -2340,12 +2350,20 @@ class TestAlign_sambam(unittest.TestCase):
             n += 1
         self.assertEqual(n, 200)
         self.assertIsNone(alignment.sequences[0])
-        self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:5516:2195")
-        self.assertEqual(alignment.sequences[1].seq, "GGCCCAACCGTCCTATATGAGATGTAGCATGGTACAGAACAAACTGCTTACACAGGTCTCACTAGTTAGAAACCTGTGGGCCATGGAGGTCAGACATCCAT")
+        self.assertEqual(
+            alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:5516:2195"
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "GGCCCAACCGTCCTATATGAGATGTAGCATGGTACAGAACAAACTGCTTACACAGGTCTCACTAGTTAGAAACCTGTGGGCCATGGAGGTCAGACATCCAT",
+        )
         self.assertEqual(alignment.flag, 141)
         self.assertEqual(alignment.mapq, 0)
         self.assertIsNone(alignment.coordinates)
-        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "B?1ADDDDAFFFDEGFEGHEED?D?EB<EGB;F>FHI>GEBHEF@@<BF>D?F<FB=C>F;C@FC7@=;=E=7=?@;;;856?@;;;;559(,,5?3>5>@")
+        self.assertEqual(
+            alignment.sequences[1].letter_annotations["phred_quality"],
+            "B?1ADDDDAFFFDEGFEGHEED?D?EB<EGB;F>FHI>GEBHEF@@<BF>D?F<FB=C>F;C@FC7@=;=E=7=?@;;;856?@;;;;559(,,5?3>5>@",
+        )
 
     def test_sam2(self):
         alignments = sam.AlignmentIterator("SamBam/sam2.sam")
@@ -2365,10 +2383,21 @@ class TestAlign_sambam(unittest.TestCase):
             if n == 8:
                 self.assertEqual(alignment.sequences[0].id, "1")
                 self.assertEqual(len(alignment.sequences[0].seq), 239940)
-                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((132615, 132716), ))
-                self.assertEqual(alignment.sequences[0].seq[132615:132716], "GGTCACACCCTGTCCTCCTCCTACACATACTCGGATGCTTCCTCCTCAACCTTGGCACCCACCTCCTTCTTACTGGGCCCAGGAGCCTTCAAAGCCCAGGA")
-                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204")
-                self.assertEqual(alignment.sequences[1].seq, "TCCTGGGCATTGAAGGCTCCTGGGCCCAGTAAGAAGGAGGTGGGTGCCAAGGTTGAGGAGGAAGCATCCGAGTATGTGTAGGAGGAGGACAAGGTGGGACC")
+                self.assertEqual(
+                    alignment.sequences[0].seq.defined_ranges, ((132615, 132716),)
+                )
+                self.assertEqual(
+                    alignment.sequences[0].seq[132615:132716],
+                    "GGTCACACCCTGTCCTCCTCCTACACATACTCGGATGCTTCCTCCTCAACCTTGGCACCCACCTCCTTCTTACTGGGCCCAGGAGCCTTCAAAGCCCAGGA",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].id,
+                    "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].seq,
+                    "TCCTGGGCATTGAAGGCTCCTGGGCCCAGTAAGAAGGAGGTGGGTGCCAAGGTTGAGGAGGAAGCATCCGAGTATGTGTAGGAGGAGGACAAGGTGGGACC",
+                )
                 self.assertEqual(alignment.flag, 83)
                 self.assertEqual(alignment.mapq, 60)
                 self.assertTrue(
@@ -2379,7 +2408,10 @@ class TestAlign_sambam(unittest.TestCase):
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 132490)
                 self.assertEqual(alignment.tlen, -226)
-                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "BBB@?C>???CBBDDDDDDDCC>C>>C???=DEEEDFEDBGGHIIEED=HFAGIIHDHGD?GIJJJIHIGFDHFIJJJIJJJJJJJJJHHHHFFFFFFCCC")
+                self.assertEqual(
+                    alignment.sequences[1].letter_annotations["phred_quality"],
+                    "BBB@?C>???CBBDDDDDDDCC>C>>C???=DEEEDFEDBGGHIIEED=HFAGIIHDHGD?GIJJJIHIGFDHFIJJJIJJJJJJJJJHHHHFFFFFFCCC",
+                )
                 self.assertEqual(len(alignment.annotations), 9)
                 self.assertEqual(alignment.annotations["XT"], "U")
                 self.assertEqual(alignment.annotations["NM"], 3)
@@ -2393,10 +2425,21 @@ class TestAlign_sambam(unittest.TestCase):
             elif n == 9:
                 self.assertEqual(alignment.sequences[0].id, "1")
                 self.assertEqual(len(alignment.sequences[0].seq), 239940)
-                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((132490, 132591), ))
-                self.assertEqual(alignment.sequences[0].seq[132490:132591], "GCAACAAGGGCTTTGGTGGGAAGGTATTTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC")
-                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204")
-                self.assertEqual(alignment.sequences[1].seq, "GCAACAAGGGCTTTGGTGGGAAGGTATCTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC")
+                self.assertEqual(
+                    alignment.sequences[0].seq.defined_ranges, ((132490, 132591),)
+                )
+                self.assertEqual(
+                    alignment.sequences[0].seq[132490:132591],
+                    "GCAACAAGGGCTTTGGTGGGAAGGTATTTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].id,
+                    "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].seq,
+                    "GCAACAAGGGCTTTGGTGGGAAGGTATCTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC",
+                )
                 self.assertEqual(alignment.flag, 163)
                 self.assertEqual(alignment.mapq, 60)
                 self.assertTrue(
@@ -2407,7 +2450,10 @@ class TestAlign_sambam(unittest.TestCase):
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 132615)
                 self.assertEqual(alignment.tlen, 226)
-                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCDFFFFHHHHHJJHEHIJIIIJ?EHIJIIJJJGHFGCHGJJIIIJJJJJJHIIIIIJJJJIJHFFBECEEDDBDDDDDDDDDDDD>@<59ABDDBB###")
+                self.assertEqual(
+                    alignment.sequences[1].letter_annotations["phred_quality"],
+                    "CCCDFFFFHHHHHJJHEHIJIIIJ?EHIJIIJJJGHFGCHGJJIIIJJJJJJHIIIIIJJJJIJHFFBECEEDDBDDDDDDDDDDDD>@<59ABDDBB###",
+                )
                 self.assertEqual(len(alignment.annotations), 9)
                 self.assertEqual(alignment.annotations["XT"], "U")
                 self.assertEqual(alignment.annotations["NM"], 1)
@@ -2421,10 +2467,21 @@ class TestAlign_sambam(unittest.TestCase):
             elif n == 100:
                 self.assertEqual(alignment.sequences[0].id, "1")
                 self.assertEqual(len(alignment.sequences[0].seq), 239940)
-                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((137538, 137639), ))
-                self.assertEqual(alignment.sequences[0].seq[137538:137639], "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGGCCGGGAGAGCCCGACTTCAG")
-                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125")
-                self.assertEqual(alignment.sequences[1].seq, "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGACCGGGAGAGGCCGACTTCAG")
+                self.assertEqual(
+                    alignment.sequences[0].seq.defined_ranges, ((137538, 137639),)
+                )
+                self.assertEqual(
+                    alignment.sequences[0].seq[137538:137639],
+                    "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGGCCGGGAGAGCCCGACTTCAG",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].id,
+                    "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].seq,
+                    "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGACCGGGAGAGGCCGACTTCAG",
+                )
                 self.assertEqual(alignment.flag, 97)
                 self.assertEqual(alignment.mapq, 37)
                 self.assertTrue(
@@ -2435,7 +2492,10 @@ class TestAlign_sambam(unittest.TestCase):
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 135649)
                 self.assertEqual(alignment.tlen, -1788)
-                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCFFFFFHHHHHJJJJJJJJJJJGHGIJIIIJJIJIHHHFFCCCEECEEDDBDDDCDDDCDCDDDDDDDDDD?B@BDDDDDDDDDDDBDDDB>@DB@CCD")
+                self.assertEqual(
+                    alignment.sequences[1].letter_annotations["phred_quality"],
+                    "CCCFFFFFHHHHHJJJJJJJJJJJGHGIJIIIJJIJIHHHFFCCCEECEEDDBDDDCDDDCDCDDDDDDDDDD?B@BDDDDDDDDDDDBDDDB>@DB@CCD",
+                )
                 self.assertEqual(len(alignment.annotations), 9)
                 self.assertEqual(alignment.annotations["XT"], "U")
                 self.assertEqual(alignment.annotations["NM"], 2)
@@ -2449,10 +2509,21 @@ class TestAlign_sambam(unittest.TestCase):
             elif n == 101:
                 self.assertEqual(alignment.sequences[0].id, "1")
                 self.assertEqual(len(alignment.sequences[0].seq), 239940)
-                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((135649, 135750), ))
-                self.assertEqual(alignment.sequences[0].seq[135649:135750], "TGGAGAGGCCACCGCGAGGCCTGAGCTGGGCCTGGGGAGCTTGGCTTAGGGAAGTTGTGGGCCTACCAGGGCCGCTGGGAGCTGGGCAGGAGCTGAGTCCA")
-                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125")
-                self.assertEqual(alignment.sequences[1].seq, "TGGACTCAGCTCCTGCCCAGCTCCCAGCGGCCCTGGTAGGCCCACAACTTCCCGAAGCCAAGCTCCCCAGGCCCAGCTCAGGCCTCACGGTGGCCTCTCCA")
+                self.assertEqual(
+                    alignment.sequences[0].seq.defined_ranges, ((135649, 135750),)
+                )
+                self.assertEqual(
+                    alignment.sequences[0].seq[135649:135750],
+                    "TGGAGAGGCCACCGCGAGGCCTGAGCTGGGCCTGGGGAGCTTGGCTTAGGGAAGTTGTGGGCCTACCAGGGCCGCTGGGAGCTGGGCAGGAGCTGAGTCCA",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].id,
+                    "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125",
+                )
+                self.assertEqual(
+                    alignment.sequences[1].seq,
+                    "TGGACTCAGCTCCTGCCCAGCTCCCAGCGGCCCTGGTAGGCCCACAACTTCCCGAAGCCAAGCTCCCCAGGCCCAGCTCAGGCCTCACGGTGGCCTCTCCA",
+                )
                 self.assertEqual(alignment.flag, 145)
                 self.assertEqual(alignment.mapq, 37)
                 self.assertTrue(
@@ -2463,7 +2534,10 @@ class TestAlign_sambam(unittest.TestCase):
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 137538)
                 self.assertEqual(alignment.tlen, 1788)
-                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCABCAABB@BBDDDDBDCDCDDBDDDDDB?DDDDDCBDECEDFFHFHIIJJIJJJIJJIIHHGJIJIJIJIGJJJJJJIJIIJJJJHHHHHFFFFFCCC")
+                self.assertEqual(
+                    alignment.sequences[1].letter_annotations["phred_quality"],
+                    "CCCABCAABB@BBDDDDBDCDCDDBDDDDDB?DDDDDCBDECEDFFHFHIIJJIJJJIJJIIHHGJIJIJIJIGJJJJJJIJIIJJJJHHHHHFFFFFCCC",
+                )
                 self.assertEqual(len(alignment.annotations), 9)
                 self.assertEqual(alignment.annotations["XT"], "U")
                 self.assertEqual(alignment.annotations["NM"], 2)
