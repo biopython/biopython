@@ -176,7 +176,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             qName = query.id
         except AttributeError:
             qName = "query"
+            qual = "*"
         else:
+            try:
+                qual = query.letter_annotations["phred_quality"]
+            except (AttributeError, KeyError):
+                qual = "*"
             query = query.seq
         try:
             rName = target.id
@@ -257,10 +262,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         rNext = "*"
         pNext = 0
         tLen = 0
-        try:
-            qual = alignment.column_annotations["qual"]
-        except (AttributeError, KeyError):
-            qual = "*"
         fields = [
             qName,
             str(flag),
@@ -391,10 +392,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
       - pnext: Zero-based position of the primary alignment of the next read in
                the template (only stored if available)
       - tlen: signed observed template length (only stored if available)
-      - qual: ASCII of base quality plus 33 (only stored if available)
 
     Other information associated with the alignment by its tags are stored in
     the annotations attribute of each alignment.
+
+    The sequence quality, if available, is stored as 'phred_quality' in the
+    letter_annotations dictionary attribute of the query sequence record.
     """
 
     def __init__(self, source):
@@ -554,9 +557,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 strand = "-"
             else:
                 strand = "+"
-            coordinates = Coordinates(cigar, pos, strand)
+            if pos >= 0:
+                coordinates = Coordinates(cigar, pos, strand)
+            else:
+                coordinates = None
             if md is None:
-                target = self.targets[rname]
+                if rname == "*":  # unmapped
+                    target = None
+                else:
+                    target = self.targets.get(rname)
+                    if target is None:
+                        if self.targets:
+                            raise ValueError(f"Found target {rname} missing from header")
+                        target = SeqRecord(None, id=rname)
             else:
                 seq = query
                 target = ""
@@ -639,6 +652,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if strand == "-":
                     sequence = sequence.reverse_complement()
             query = SeqRecord(sequence, id=qname)
+            if qual != "*":
+                query.letter_annotations["phred_quality"] = qual
             records = [target, query]
             alignment = Alignment(records, coordinates)
             alignment.flag = flag
@@ -650,14 +665,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 alignment.rnext = rnext
             if pnext >= 0:
                 alignment.pnext = pnext
-            if tlen > 0:
+            if tlen != 0:
                 alignment.tlen = tlen
             if score is not None:
                 alignment.score = score
-            if qual != "*":
-                column_annotations["quality"] = qual
             if annotations:
                 alignment.annotations = annotations
-            if column_annotations:
-                alignment.column_annotations = column_annotations
             yield alignment

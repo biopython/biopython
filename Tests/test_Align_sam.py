@@ -2258,6 +2258,230 @@ class TestAlign_dna(unittest.TestCase):
         stream.close()
 
 
+class TestAlign_sambam(unittest.TestCase):
+    def test_ex1(self):
+        alignments = sam.AlignmentIterator("SamBam/ex1.sam")
+        n = 0
+        for alignment in alignments:
+            n += 1
+        self.assertEqual(n, 3270)
+        self.assertEqual(alignment.sequences[0].id, "chr2")
+        self.assertEqual(alignment.sequences[1].id, "EAS114_26:7:37:79:581")
+        self.assertEqual(alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA")
+        self.assertEqual(alignment.flag, 83)
+        self.assertEqual(alignment.mapq, 68)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[1532, 1567], [35, 0]])
+            )
+        )
+        self.assertEqual(alignment.rnext, "chr2")
+        self.assertEqual(alignment.pnext, 1348)
+        self.assertEqual(alignment.tlen, -219)
+        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "3,,,===6===<===<;=====-============")
+        self.assertEqual(len(alignment.annotations), 6)
+        self.assertEqual(alignment.annotations["MF"], 18)
+        self.assertEqual(alignment.annotations["Aq"], 27)
+        self.assertEqual(alignment.annotations["NM"], 2)
+        self.assertEqual(alignment.annotations["UQ"], 23)
+        self.assertEqual(alignment.annotations["H0"], 0)
+        self.assertEqual(alignment.annotations["H1"], 1)
+
+    def test_ex1_header(self):
+        alignments = sam.AlignmentIterator("SamBam/ex1_header.sam")
+        self.assertEqual(alignments.metadata["HD"], {"VN": "1.3", "SO": "coordinate"})
+        self.assertEqual(len(alignments.targets), 2)
+        self.assertEqual(alignments.targets["chr1"].id, "chr1")
+        self.assertEqual(len(alignments.targets["chr1"].seq), 1575)
+        self.assertEqual(alignments.targets["chr2"].id, "chr2")
+        self.assertEqual(len(alignments.targets["chr2"].seq), 1584)
+        n = 0
+        for alignment in alignments:
+            n += 1
+        self.assertEqual(n, 3270)
+        self.assertEqual(alignment.sequences[0].id, "chr2")
+        self.assertEqual(len(alignment.sequences[0].seq), 1584)
+        self.assertEqual(alignment.sequences[1].id, "EAS114_26:7:37:79:581")
+        self.assertEqual(alignment.sequences[1].seq, "TTTTCTGGCATGAAAAAAAAAAAAAAAAAAAAAAA")
+        self.assertEqual(alignment.flag, 83)
+        self.assertEqual(alignment.mapq, 68)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[1532, 1567], [35, 0]])
+            )
+        )
+        self.assertEqual(alignment.rnext, "chr2")
+        self.assertEqual(alignment.pnext, 1348)
+        self.assertEqual(alignment.tlen, -219)
+        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "3,,,===6===<===<;=====-============")
+        self.assertEqual(len(alignment.annotations), 6)
+        self.assertEqual(alignment.annotations["MF"], 18)
+        self.assertEqual(alignment.annotations["Aq"], 27)
+        self.assertEqual(alignment.annotations["NM"], 2)
+        self.assertEqual(alignment.annotations["UQ"], 23)
+        self.assertEqual(alignment.annotations["H0"], 0)
+        self.assertEqual(alignment.annotations["H1"], 1)
+
+    def test_sam1(self):
+        alignments = sam.AlignmentIterator("SamBam/sam1.sam")
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets["1"].id, "1")
+        self.assertEqual(len(alignments.targets["1"].seq), 239940)
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "bwa",
+                "PN": "bwa",
+                "VN": "0.6.2-r126",
+            },
+        )
+        n = 0
+        for alignment in alignments:
+            n += 1
+        self.assertEqual(n, 200)
+        self.assertIsNone(alignment.sequences[0])
+        self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:5516:2195")
+        self.assertEqual(alignment.sequences[1].seq, "GGCCCAACCGTCCTATATGAGATGTAGCATGGTACAGAACAAACTGCTTACACAGGTCTCACTAGTTAGAAACCTGTGGGCCATGGAGGTCAGACATCCAT")
+        self.assertEqual(alignment.flag, 141)
+        self.assertEqual(alignment.mapq, 0)
+        self.assertIsNone(alignment.coordinates)
+        self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "B?1ADDDDAFFFDEGFEGHEED?D?EB<EGB;F>FHI>GEBHEF@@<BF>D?F<FB=C>F;C@FC7@=;=E=7=?@;;;856?@;;;;559(,,5?3>5>@")
+
+    def test_sam2(self):
+        alignments = sam.AlignmentIterator("SamBam/sam2.sam")
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets["1"].id, "1")
+        self.assertEqual(len(alignments.targets["1"].seq), 239940)
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "bwa",
+                "PN": "bwa",
+                "VN": "0.6.2-r126",
+            },
+        )
+        n = 0
+        for alignment in alignments:
+            if n == 8:
+                self.assertEqual(alignment.sequences[0].id, "1")
+                self.assertEqual(len(alignment.sequences[0].seq), 239940)
+                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((132615, 132716), ))
+                self.assertEqual(alignment.sequences[0].seq[132615:132716], "GGTCACACCCTGTCCTCCTCCTACACATACTCGGATGCTTCCTCCTCAACCTTGGCACCCACCTCCTTCTTACTGGGCCCAGGAGCCTTCAAAGCCCAGGA")
+                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204")
+                self.assertEqual(alignment.sequences[1].seq, "TCCTGGGCATTGAAGGCTCCTGGGCCCAGTAAGAAGGAGGTGGGTGCCAAGGTTGAGGAGGAAGCATCCGAGTATGTGTAGGAGGAGGACAAGGTGGGACC")
+                self.assertEqual(alignment.flag, 83)
+                self.assertEqual(alignment.mapq, 60)
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[132615, 132716], [101, 0]])
+                    )
+                )
+                self.assertEqual(alignment.rnext, "1")
+                self.assertEqual(alignment.pnext, 132490)
+                self.assertEqual(alignment.tlen, -226)
+                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "BBB@?C>???CBBDDDDDDDCC>C>>C???=DEEEDFEDBGGHIIEED=HFAGIIHDHGD?GIJJJIHIGFDHFIJJJIJJJJJJJJJHHHHFFFFFFCCC")
+                self.assertEqual(len(alignment.annotations), 9)
+                self.assertEqual(alignment.annotations["XT"], "U")
+                self.assertEqual(alignment.annotations["NM"], 3)
+                self.assertEqual(alignment.annotations["SM"], 37)
+                self.assertEqual(alignment.annotations["AM"], 37)
+                self.assertEqual(alignment.annotations["X0"], 1)
+                self.assertEqual(alignment.annotations["X1"], 0)
+                self.assertEqual(alignment.annotations["XM"], 3)
+                self.assertEqual(alignment.annotations["XO"], 0)
+                self.assertEqual(alignment.annotations["XG"], 0)
+            elif n == 9:
+                self.assertEqual(alignment.sequences[0].id, "1")
+                self.assertEqual(len(alignment.sequences[0].seq), 239940)
+                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((132490, 132591), ))
+                self.assertEqual(alignment.sequences[0].seq[132490:132591], "GCAACAAGGGCTTTGGTGGGAAGGTATTTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC")
+                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:2205:2204")
+                self.assertEqual(alignment.sequences[1].seq, "GCAACAAGGGCTTTGGTGGGAAGGTATCTGCACCTGTCATTCCTTCCTCCTTTACTCCTGCCGCCCCTTGCTGGATCCTGAGCCCCCAGGGTCCCCCGATC")
+                self.assertEqual(alignment.flag, 163)
+                self.assertEqual(alignment.mapq, 60)
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[132490, 132591], [0, 101]])
+                    )
+                )
+                self.assertEqual(alignment.rnext, "1")
+                self.assertEqual(alignment.pnext, 132615)
+                self.assertEqual(alignment.tlen, 226)
+                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCDFFFFHHHHHJJHEHIJIIIJ?EHIJIIJJJGHFGCHGJJIIIJJJJJJHIIIIIJJJJIJHFFBECEEDDBDDDDDDDDDDDD>@<59ABDDBB###")
+                self.assertEqual(len(alignment.annotations), 9)
+                self.assertEqual(alignment.annotations["XT"], "U")
+                self.assertEqual(alignment.annotations["NM"], 1)
+                self.assertEqual(alignment.annotations["SM"], 37)
+                self.assertEqual(alignment.annotations["AM"], 37)
+                self.assertEqual(alignment.annotations["X0"], 1)
+                self.assertEqual(alignment.annotations["X1"], 0)
+                self.assertEqual(alignment.annotations["XM"], 1)
+                self.assertEqual(alignment.annotations["XO"], 0)
+                self.assertEqual(alignment.annotations["XG"], 0)
+            elif n == 100:
+                self.assertEqual(alignment.sequences[0].id, "1")
+                self.assertEqual(len(alignment.sequences[0].seq), 239940)
+                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((137538, 137639), ))
+                self.assertEqual(alignment.sequences[0].seq[137538:137639], "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGGCCGGGAGAGCCCGACTTCAG")
+                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125")
+                self.assertEqual(alignment.sequences[1].seq, "AAAGTTCGGGGCCTACAAAGGCGGTTGGGAGCTGGGCAGGAGTTGAGCCAAAAGAGCTTGCTTACTTGCTGGGAGGCAGGACCGGGAGAGGCCGACTTCAG")
+                self.assertEqual(alignment.flag, 97)
+                self.assertEqual(alignment.mapq, 37)
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[137538, 137639], [0, 101]])
+                    )
+                )
+                self.assertEqual(alignment.rnext, "1")
+                self.assertEqual(alignment.pnext, 135649)
+                self.assertEqual(alignment.tlen, -1788)
+                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCFFFFFHHHHHJJJJJJJJJJJGHGIJIIIJJIJIHHHFFCCCEECEEDDBDDDCDDDCDCDDDDDDDDDD?B@BDDDDDDDDDDDBDDDB>@DB@CCD")
+                self.assertEqual(len(alignment.annotations), 9)
+                self.assertEqual(alignment.annotations["XT"], "U")
+                self.assertEqual(alignment.annotations["NM"], 2)
+                self.assertEqual(alignment.annotations["SM"], 37)
+                self.assertEqual(alignment.annotations["AM"], 37)
+                self.assertEqual(alignment.annotations["X0"], 1)
+                self.assertEqual(alignment.annotations["X1"], 0)
+                self.assertEqual(alignment.annotations["XM"], 2)
+                self.assertEqual(alignment.annotations["XO"], 0)
+                self.assertEqual(alignment.annotations["XG"], 0)
+            elif n == 101:
+                self.assertEqual(alignment.sequences[0].id, "1")
+                self.assertEqual(len(alignment.sequences[0].seq), 239940)
+                self.assertEqual(alignment.sequences[0].seq.defined_ranges, ((135649, 135750), ))
+                self.assertEqual(alignment.sequences[0].seq[135649:135750], "TGGAGAGGCCACCGCGAGGCCTGAGCTGGGCCTGGGGAGCTTGGCTTAGGGAAGTTGTGGGCCTACCAGGGCCGCTGGGAGCTGGGCAGGAGCTGAGTCCA")
+                self.assertEqual(alignment.sequences[1].id, "HWI-1KL120:88:D0LRBACXX:1:1101:4673:2125")
+                self.assertEqual(alignment.sequences[1].seq, "TGGACTCAGCTCCTGCCCAGCTCCCAGCGGCCCTGGTAGGCCCACAACTTCCCGAAGCCAAGCTCCCCAGGCCCAGCTCAGGCCTCACGGTGGCCTCTCCA")
+                self.assertEqual(alignment.flag, 145)
+                self.assertEqual(alignment.mapq, 37)
+                self.assertTrue(
+                    numpy.array_equal(
+                        alignment.coordinates, numpy.array([[135649, 135750], [101, 0]])
+                    )
+                )
+                self.assertEqual(alignment.rnext, "1")
+                self.assertEqual(alignment.pnext, 137538)
+                self.assertEqual(alignment.tlen, 1788)
+                self.assertEqual(alignment.sequences[1].letter_annotations["phred_quality"], "CCCABCAABB@BBDDDDBDCDCDDBDDDDDB?DDDDDCBDECEDFFHFHIIJJIJJJIJJIIHHGJIJIJIJIGJJJJJJIJIIJJJJHHHHHFFFFFCCC")
+                self.assertEqual(len(alignment.annotations), 9)
+                self.assertEqual(alignment.annotations["XT"], "U")
+                self.assertEqual(alignment.annotations["NM"], 2)
+                self.assertEqual(alignment.annotations["SM"], 37)
+                self.assertEqual(alignment.annotations["AM"], 37)
+                self.assertEqual(alignment.annotations["X0"], 1)
+                self.assertEqual(alignment.annotations["X1"], 0)
+                self.assertEqual(alignment.annotations["XM"], 2)
+                self.assertEqual(alignment.annotations["XO"], 0)
+                self.assertEqual(alignment.annotations["XG"], 0)
+            else:
+                self.assertIsNone(alignment.sequences[0])
+                self.assertEqual(alignment.mapq, 0)
+                self.assertIsNone(alignment.coordinates)
+            n += 1
+        self.assertEqual(n, 200)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

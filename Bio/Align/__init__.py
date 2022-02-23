@@ -1025,13 +1025,14 @@ class Alignment:
         """
         self.sequences = sequences
         if coordinates is None:
-            lengths = {len(sequence) for sequence in sequences}
-            if len(lengths) != 1:
-                raise ValueError(
-                    "sequences must have the same length if coordinates is None"
-                )
-            length = lengths.pop()
-            coordinates = numpy.array([[0, length]] * len(sequences))
+            if sequences[0] is not None:  # None means unmapped
+                lengths = {len(sequence) for sequence in sequences}
+                if len(lengths) != 1:
+                    raise ValueError(
+                        "sequences must have the same length if coordinates is None"
+                    )
+                length = lengths.pop()
+                coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
     @property
