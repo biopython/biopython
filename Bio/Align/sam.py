@@ -22,9 +22,17 @@ positions; the parser converts these to zero-based coordinates to be consistent
 with Python and other alignment formats.
 """
 from itertools import chain
-import numpy
 import copy
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Please install numpy if you want to use Bio.Align. "
+        "See http://www.numpy.org/"
+    ) from None
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -32,8 +40,69 @@ from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 
+class Coordinates(numpy.ndarray):
+    """numpy array subclass for alignment coordinates.
+
+    This class uses a ``cigar`` attribute to store a BAM/SAM-style cigar
+    representation of the alignment. The cigar can contain information about
+    the alignment that is not represented in the coordinates. For example, the
+    cigar string distinguishes between deletions from the reference and skipped
+    regions (e.g. introns) from the reference.
+
+    To ensure that the coordinates and the cigar remain consistent with each
+    other, the coordinates are read-only by default, and the cigar is stored
+    as an immutable tuple of tuples.
+    """
+
+    def __new__(cls, cigar, pos=0, strand="+"):
+        """Create a new Coordinates instance."""
+        query_pos = 0
+        coordinates = [[pos, query_pos]]
+        for operation, length in cigar:
+            if operation in (0, 7, 8):  # M=X
+                pos += length
+                query_pos += length
+            elif operation in (1, 4):  # IS
+                query_pos += length
+            elif operation in (2, 3):  # DN
+                pos += length
+            elif operation == 5:  # H
+                # hard clipping (clipped sequences not present in sequence)
+                continue
+            elif operation == 6:  # P
+                raise NotImplementedError("padding operator is not yet implemented")
+            coordinates.append([pos, query_pos])
+        shape = (len(coordinates), 2)
+        obj = super().__new__(cls, shape, int)
+        obj[:, :] = coordinates
+        obj = obj.transpose()
+        if strand == "-":
+            obj[1, :] = query_pos - obj[1, :]
+        obj.flags.writeable = False
+        obj.cigar = tuple(cigar)
+        return obj
+
+    def copy(self):
+        obj = super().copy()
+        obj.flags.writeable = self.flags.writeable
+        obj.cigar = self.cigar
+        return obj
+
+
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Alignment file writer for the Sequence Alignment/Map (SAM) ile format."""
+    """Alignment file writer for the Sequence Alignment/Map (SAM) file format."""
+
+    def __init__(self, target, md=False):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - md - If True, calculate the MD tag from the alignment and include it
+                in the output.
+                If False (default), do not include the MD tag in the output.
+
+        """
+        super().__init__(target, mode="w")
+        self.md = md
 
     def write_header(self, alignments):
         """Write the SAM header."""
@@ -79,12 +148,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     fields.append("UR:%s" % value)
                 else:
                     fields.append("%s:%s" % (key[:2], value))
-                try:
-                    description = record.description
-                except AttributeError:
-                    pass
-                else:
-                    fields.append("DS:%s" % value)
+            try:
+                description = record.description
+            except AttributeError:
+                pass
+            else:
+                if description != "<unknown description>":
+                    fields.append("DS:%s" % description)
             line = "\t".join(fields)+ "\n"
             self.stream.write(line)
         for tag, rows in metadata.items():
@@ -97,7 +167,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 line = "\t".join(fields)+ "\n"
                 self.stream.write(line)
 
-    def format_alignment(self, alignment):
+    def format_alignment(self, alignment, md=None):
         """Return a string with a single alignment formatted as one SAM line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
@@ -114,58 +184,76 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             rName = "target"
         else:
             target = target.seq
-        n1 = len(target)
-        n2 = len(query)
-        pos = None
-        tSize = n1
-        cigar = []
         coordinates = alignment.coordinates
+        try:
+            operations_lengths = coordinates.cigar
+        except AttributeError:
+            operations_lengths = None
         if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             flag = 0
-            seq = query
         else:  # mapped to reverse strand
             flag = 16
-            seq = reverse_complement(query, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
+            query = reverse_complement(query, inplace=False)
+            coordinates = numpy.array(coordinates)
+            coordinates[1, :] = len(query) - coordinates[1, :]
         try:
-            seq = bytes(seq)
+            query = bytes(query)
         except TypeError:  # string
             pass
         except UndefinedSequenceError:
-            seq = "*"
+            query = "*"
         else:
-            seq = str(seq, "ASCII")
-        tStart, qStart = coordinates[:, 0]
-        for tEnd, qEnd in coordinates[:, 1:].transpose():
-            tCount = tEnd - tStart
-            qCount = qEnd - qStart
-            if tCount == 0:
-                length = qCount
-                if pos is None or tEnd == tSize:
-                    operation = "S"
+            query = str(query, "ASCII")
+        if operations_lengths is None:
+            # calculate the cigar from the alignment coordinates
+            pos = None
+            operations_lengths = []
+            tSize = len(target)
+            tStart, qStart = coordinates[:, 0]
+            for tEnd, qEnd in coordinates[:, 1:].transpose():
+                tCount = tEnd - tStart
+                qCount = qEnd - qStart
+                if tCount == 0:
+                    length = qCount
+                    if pos is None or tEnd == tSize:
+                        operation = 4  # S; soft clipping
+                    else:
+                        operation = 1  # I; insertion to the reference
+                    qStart = qEnd
+                elif qCount == 0:
+                    if tStart > 0 and tEnd < tSize:
+                        length = tCount
+                        operation = 2  # D; deletion from the reference
+                    else:
+                        operation = None
+                    tStart = tEnd
                 else:
-                    operation = "I"
-                qStart = qEnd
-            elif qCount == 0:
-                if tStart > 0 and tEnd < tSize:
+                    if tCount != qCount:
+                        raise ValueError("Unequal step sizes in alignment")
+                    if pos is None:
+                        pos = tStart
+                    tStart = tEnd
+                    qStart = qEnd
+                    operation = 0  # M; alignment match
                     length = tCount
-                    operation = "D"
-                else:
-                    operation = None
-                tStart = tEnd
-            else:
-                if tCount != qCount:
-                    raise ValueError("Unequal step sizes in alignment")
-                if pos is None:
+                if operation is not None:
+                    operations_lengths.append([operation, length])
+        else:
+            # use the existing cigar
+            tStart, qStart = coordinates[:, 0]
+            for tEnd, qEnd in coordinates[:, 1:].transpose():
+                if tStart < tEnd and qStart < qEnd:
                     pos = tStart
+                    break
                 tStart = tEnd
                 qStart = qEnd
-                operation = "M"
-                length = tCount
-            if operation is not None:
-                cigar.append(str(length) + operation)
-        mapQ = 255  # not available
+        cigar = ""
+        for operation, length in operations_lengths:
+            cigar += str(length) + "MIDNSHP=X"[operation]
+        try:
+            mapq = alignment.mapq
+        except AttributeError:
+            mapq = 255  # not available
         rNext = "*"
         pNext = 0
         tLen = 0
@@ -173,20 +261,78 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             qual = alignment.column_annotations["qual"]
         except (AttributeError, KeyError):
             qual = "*"
-        cigar = "".join(cigar)
         fields = [
             qName,
             str(flag),
             rName,
             str(pos + 1),  # 1-based coordinates
-            str(mapQ),
+            str(mapq),
             cigar,
             rNext,
             str(pNext),
             str(tLen),
-            seq,
+            query,
             qual,
         ]
+        if md is None:
+            md = self.md
+        if md is True:
+            if query == "*":
+                raise ValueError("requested MD tag with undefined sequence")
+            number = 0
+            ts = pos
+            qs = 0
+            md = ""
+            for operation, length in operations_lengths:
+                if operation == 0:  # M; alignment match
+                    te = ts + length
+                    qe = qs + length
+                    for tc, qc in zip(target[ts:te], query[qs:qe]):
+                        if tc == qc:
+                            number += 1
+                        else:
+                            md += str(number) + tc
+                            number = 0
+                    ts = te
+                    qs = qe
+                elif operation == 1:  # I; insertion to the reference
+                    qe = qs + length
+                    qs = qe
+                elif operation == 2:  # D; deletion from the reference
+                    te = ts + length
+                    if number:
+                        md += str(number)
+                        number = 0
+                    md += "^" + target[ts:te]
+                    ts = te
+                elif operation == 3:  # N; skipped region from the reference
+                    te = ts + length
+                    ts = te
+                elif operation == 4:  # S; soft clipping
+                    qe = qs + length
+                    qs = qe
+                elif operation == 5:  # H; hard clipping
+                    pass
+                elif operation == 6:  # P; padding
+                    raise NotImplementedError("padding operator is not yet implemented")
+                elif operation == 7:  # =; sequence match
+                    te = ts + length
+                    qe = qs + length
+                    number += length
+                    ts = te
+                    qs = qe
+                elif operation == 8:  # X; sequence mismatch
+                    te = ts + length
+                    qe = qs + length
+                    for tc in target[ts:te]:
+                        md += str(number)
+                        number = 0
+                    ts = te
+                    qs = qe
+            if number:
+                md += str(number)
+            field = "MD:Z:%s" % md
+            fields.append(field)
         try:
             score = alignment.score
         except AttributeError:
@@ -398,24 +544,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             raise ValueError(f"Unknown number type '{letter}' in tag '{field}'")
                         value = numpy.array(value, dtype)
                     annotations[tag] = value
-            number = ""
-            query_pos = 0
-            coordinates = [[pos, query_pos]]
+            if flag & 0x10:
+                strand = "-"
+            else:
+                strand = "+"
+            coordinates = Coordinates(cigar, pos, strand)
             if md is None:
-                for operation, length in cigar:
-                    if operation in (0, 7, 8):  # M=X
-                        pos += length
-                        query_pos += length
-                    elif operation in (1, 4):  # IS
-                        query_pos += length
-                    elif operation in (2, 3):  # DN
-                        pos += length
-                    elif operation == 5:  # H
-                        # hard clipping (clipped sequences not present in sequence)
-                        continue
-                    elif operation == 6:  # P
-                        raise NotImplementedError("padding operator is not yet implemented")
-                    coordinates.append([pos, query_pos])
                 target = self.targets[rname]
             else:
                 seq = query
@@ -423,15 +557,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 starts = [pos]
                 size = 0
                 sizes = []
+                number = ""
                 for operation, length in cigar:
                     if operation in (0, 7, 8):  # M=X
                         pos += length
-                        query_pos += length
                         target += seq[:length]
                         seq = seq[length:]
                         size += length
                     elif operation in (1, 4):  # IS
-                        query_pos += length
                         seq = seq[length:]
                     elif operation == 2:  # D
                         pos += length
@@ -449,7 +582,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         continue
                     elif operation == 6:  # P
                         raise NotImplementedError("padding operator is not yet implemented")
-                    coordinates.append([pos, query_pos])
                 sizes.append(size)
                 seq = target
                 target = ""
@@ -491,15 +623,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     data[start] = seq[index: index+size]
                     index += size
                 target.seq = Seq(data, length=length)
-            coordinates = numpy.array(coordinates).transpose()
             if query == "*":
-                sequence = Seq(None, length=query_pos)
+                length = abs(coordinates[1, -1] - coordinates[1, 0])
+                sequence = Seq(None, length=length)
             else:
                 sequence = Seq(query)
-                if flag & 0x10:
+                if strand == "-":
                     sequence = sequence.reverse_complement()
-            if flag & 0x10:
-                coordinates[1, :] = query_pos - coordinates[1, :]
             query = SeqRecord(sequence, id=qname)
             records = [target, query]
             alignment = Alignment(records, coordinates)

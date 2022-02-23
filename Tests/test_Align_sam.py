@@ -170,6 +170,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
+        self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.annotations["NM"], 0)
         alignment = next(alignments)
@@ -212,6 +213,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
+        self.assertEqual(alignment.mapq, 0)
         matches = sum(
             alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
         )
@@ -260,6 +262,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
+        self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.annotations["NM"], 5)
         alignment = next(alignments)
@@ -305,6 +308,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
+        self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.annotations["NM"], 6)
         self.assertRaises(StopIteration, next, alignments)
@@ -320,7 +324,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.sam"
         alignments = sam.AlignmentIterator(path)
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream)
+        writer = sam.AlignmentWriter(stream, md=True)
         n = writer.write_file(alignments, mincount=4, maxcount=4)
         self.assertEqual(n, 4)
         stream.seek(0)

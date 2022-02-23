@@ -2030,7 +2030,7 @@ class Alignment:
         >>> alignment.shape
         (2, 7)
         """
-        coordinates = self.coordinates.copy()
+        coordinates = numpy.array(self.coordinates)
         n = len(coordinates)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
