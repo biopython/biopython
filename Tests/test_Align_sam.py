@@ -162,11 +162,13 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-            numpy.array([[62.,  0.,  0.,  0.],
-                         [ 0., 42.,  0.,  0.],
-                         [ 0.,  0., 66.,  0.],
-                         [ 0.,  0.,  0., 34.],
-                        ])
+                # fmt: off
+                numpy.array([[62.,  0.,  0.,  0.],
+                             [ 0., 42.,  0.,  0.],
+                             [ 0.,  0., 66.,  0.],
+                             [ 0.,  0.,  0., 34.],
+                            ])
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
@@ -205,11 +207,12 @@ class TestAlign_dna_rna(unittest.TestCase):
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[38.,  0.,  0.,  0.],
-                         [ 0., 41.,  0.,  0.],
-                         [ 0.,  0., 60.,  0.],
-                         [ 0.,  0.,  0., 42.],
-                        ])
+                numpy.array([[38.,  0.,  0.,  0.],
+                             [ 0., 41.,  0.,  0.],
+                             [ 0.,  0., 60.,  0.],
+                             [ 0.,  0.,  0., 42.],
+                            ])
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
@@ -254,11 +257,13 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-            numpy.array([[62.,  0.,  0.,  0.],
-                         [ 0., 41.,  0.,  0.],
-                         [ 0.,  2., 64.,  0.],
-                         [ 0.,  0.,  0., 34.],
-                        ]),
+                # fmt: off
+                numpy.array([[62.,  0.,  0.,  0.],
+                             [ 0., 41.,  0.,  0.],
+                             [ 0.,  2., 64.,  0.],
+                             [ 0.,  0.,  0., 34.],
+                            ]),
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
@@ -300,11 +305,13 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
-            numpy.array([[36.,  0.,  0.,  1.],
-                         [ 0., 41.,  0.,  0.],
-                         [ 0.,  0., 60.,  0.],
-                         [ 0.,  0.,  0., 41.],
-                        ]),
+                # fmt: off
+                numpy.array([[36.,  0.,  0.,  1.],
+                             [ 0., 41.,  0.,  0.],
+                             [ 0.,  0., 60.,  0.],
+                             [ 0.,  0.,  0., 41.],
+                            ]),
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGT")
