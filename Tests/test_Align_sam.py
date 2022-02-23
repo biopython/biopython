@@ -58,79 +58,254 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets["chr1"].id, "chr1")
         self.assertEqual(len(alignments.targets["chr1"]), 248956422)
-        self.assertEqual(alignments.targets["chr1"].annotations, {"MD5": "2648ae1bacce4ec4b6cf337dcae37816", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr1"].annotations,
+            {
+                "MD5": "2648ae1bacce4ec4b6cf337dcae37816",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr10"].id, "chr10")
         self.assertEqual(len(alignments.targets["chr10"]), 133797422)
-        self.assertEqual(alignments.targets["chr10"].annotations, {"MD5": "907112d17fcb73bcab1ed1c72b97ce68", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr10"].annotations,
+            {
+                "MD5": "907112d17fcb73bcab1ed1c72b97ce68",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr11"].id, "chr11")
         self.assertEqual(len(alignments.targets["chr11"]), 135086622)
-        self.assertEqual(alignments.targets["chr11"].annotations, {"MD5": "1511375dc2dd1b633af8cf439ae90cec", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr11"].annotations,
+            {
+                "MD5": "1511375dc2dd1b633af8cf439ae90cec",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr12"].id, "chr12")
         self.assertEqual(len(alignments.targets["chr12"]), 133275309)
-        self.assertEqual(alignments.targets["chr12"].annotations, {"MD5": "e81e16d3f44337034695a29b97708fce", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr12"].annotations,
+            {
+                "MD5": "e81e16d3f44337034695a29b97708fce",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr13"].id, "chr13")
         self.assertEqual(len(alignments.targets["chr13"]), 114364328)
-        self.assertEqual(alignments.targets["chr13"].annotations, {"MD5": "17dab79b963ccd8e7377cef59a54fe1c", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr13"].annotations,
+            {
+                "MD5": "17dab79b963ccd8e7377cef59a54fe1c",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr14"].id, "chr14")
         self.assertEqual(len(alignments.targets["chr14"]), 107043718)
-        self.assertEqual(alignments.targets["chr14"].annotations, {"MD5": "acbd9552c059d9b403e75ed26c1ce5bc", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr14"].annotations,
+            {
+                "MD5": "acbd9552c059d9b403e75ed26c1ce5bc",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr15"].id, "chr15")
         self.assertEqual(len(alignments.targets["chr15"]), 101991189)
-        self.assertEqual(alignments.targets["chr15"].annotations, {"MD5": "f036bd11158407596ca6bf3581454706", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr15"].annotations,
+            {
+                "MD5": "f036bd11158407596ca6bf3581454706",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr16"].id, "chr16")
         self.assertEqual(len(alignments.targets["chr16"]), 90338345)
-        self.assertEqual(alignments.targets["chr16"].annotations, {"MD5": "24e7cabfba3548a2bb4dff582b9ee870", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr16"].annotations,
+            {
+                "MD5": "24e7cabfba3548a2bb4dff582b9ee870",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr17"].id, "chr17")
         self.assertEqual(len(alignments.targets["chr17"]), 83257441)
-        self.assertEqual(alignments.targets["chr17"].annotations, {"MD5": "a8499ca51d6fb77332c2d242923994eb", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr17"].annotations,
+            {
+                "MD5": "a8499ca51d6fb77332c2d242923994eb",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr18"].id, "chr18")
         self.assertEqual(len(alignments.targets["chr18"]), 80373285)
-        self.assertEqual(alignments.targets["chr18"].annotations, {"MD5": "11eeaa801f6b0e2e36a1138616b8ee9a", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr18"].annotations,
+            {
+                "MD5": "11eeaa801f6b0e2e36a1138616b8ee9a",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr19"].id, "chr19")
         self.assertEqual(len(alignments.targets["chr19"]), 58617616)
-        self.assertEqual(alignments.targets["chr19"].annotations, {"MD5": "b0eba2c7bb5c953d1e06a508b5e487de", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr19"].annotations,
+            {
+                "MD5": "b0eba2c7bb5c953d1e06a508b5e487de",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr2"].id, "chr2")
         self.assertEqual(len(alignments.targets["chr2"]), 242193529)
-        self.assertEqual(alignments.targets["chr2"].annotations, {"MD5": "4bb4f82880a14111eb7327169ffb729b", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr2"].annotations,
+            {
+                "MD5": "4bb4f82880a14111eb7327169ffb729b",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr20"].id, "chr20")
         self.assertEqual(len(alignments.targets["chr20"]), 64444167)
-        self.assertEqual(alignments.targets["chr20"].annotations, {"MD5": "b18e6c531b0bd70e949a7fc20859cb01", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr20"].annotations,
+            {
+                "MD5": "b18e6c531b0bd70e949a7fc20859cb01",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr21"].id, "chr21")
         self.assertEqual(len(alignments.targets["chr21"]), 46709983)
-        self.assertEqual(alignments.targets["chr21"].annotations, {"MD5": "2f45a3455007b7e271509161e52954a9", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr21"].annotations,
+            {
+                "MD5": "2f45a3455007b7e271509161e52954a9",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr22"].id, "chr22")
         self.assertEqual(len(alignments.targets["chr22"]), 50818468)
-        self.assertEqual(alignments.targets["chr22"].annotations, {"MD5": "221733a2a15e2de66d33e73d126c5109", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr22"].annotations,
+            {
+                "MD5": "221733a2a15e2de66d33e73d126c5109",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr3"].id, "chr3")
         self.assertEqual(len(alignments.targets["chr3"]), 198295559)
-        self.assertEqual(alignments.targets["chr3"].annotations, {"MD5": "a48af509898d3736ba95dc0912c0b461", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr3"].annotations,
+            {
+                "MD5": "a48af509898d3736ba95dc0912c0b461",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr4"].id, "chr4")
         self.assertEqual(len(alignments.targets["chr4"]), 190214555)
-        self.assertEqual(alignments.targets["chr4"].annotations, {"MD5": "3210fecf1eb92d5489da4346b3fddc6e", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr4"].annotations,
+            {
+                "MD5": "3210fecf1eb92d5489da4346b3fddc6e",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr5"].id, "chr5")
         self.assertEqual(len(alignments.targets["chr5"]), 181538259)
-        self.assertEqual(alignments.targets["chr5"].annotations, {"MD5": "f7f05fb7ceea78cbc32ce652c540ff2d", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr5"].annotations,
+            {
+                "MD5": "f7f05fb7ceea78cbc32ce652c540ff2d",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr6"].id, "chr6")
         self.assertEqual(len(alignments.targets["chr6"]), 170805979)
-        self.assertEqual(alignments.targets["chr6"].annotations, {"MD5": "6a48dfa97e854e3c6f186c8ff973f7dd", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr6"].annotations,
+            {
+                "MD5": "6a48dfa97e854e3c6f186c8ff973f7dd",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr7"].id, "chr7")
         self.assertEqual(len(alignments.targets["chr7"]), 159345973)
-        self.assertEqual(alignments.targets["chr7"].annotations, {"MD5": "94eef2b96fd5a7c8db162c8c74378039", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr7"].annotations,
+            {
+                "MD5": "94eef2b96fd5a7c8db162c8c74378039",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr8"].id, "chr8")
         self.assertEqual(len(alignments.targets["chr8"]), 145138636)
-        self.assertEqual(alignments.targets["chr8"].annotations, {"MD5": "c67955b5f7815a9a1edfaa15893d3616", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr8"].annotations,
+            {
+                "MD5": "c67955b5f7815a9a1edfaa15893d3616",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chr9"].id, "chr9")
         self.assertEqual(len(alignments.targets["chr9"]), 138394717)
-        self.assertEqual(alignments.targets["chr9"].annotations, {"MD5": "addd2795560986b7491c40b1faa3978a", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chr9"].annotations,
+            {
+                "MD5": "addd2795560986b7491c40b1faa3978a",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chrM"].id, "chrM")
         self.assertEqual(len(alignments.targets["chrM"]), 16569)
-        self.assertEqual(alignments.targets["chrM"].annotations, {"MD5": "c68f52674c9fb33aef52dcf399755519", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chrM"].annotations,
+            {
+                "MD5": "c68f52674c9fb33aef52dcf399755519",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chrX"].id, "chrX")
         self.assertEqual(len(alignments.targets["chrX"]), 156040895)
-        self.assertEqual(alignments.targets["chrX"].annotations, {"MD5": "49527016a48497d9d1cbd8e4a9049bd3", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chrX"].annotations,
+            {
+                "MD5": "49527016a48497d9d1cbd8e4a9049bd3",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         self.assertEqual(alignments.targets["chrY"].id, "chrY")
         self.assertEqual(len(alignments.targets["chrY"]), 57227415)
-        self.assertEqual(alignments.targets["chrY"].annotations, {"MD5": "b2b7e6369564d89059e763cd6e736837", "assembly": "hg38", "species": "Homo sapiens"})
+        self.assertEqual(
+            alignments.targets["chrY"].annotations,
+            {
+                "MD5": "b2b7e6369564d89059e763cd6e736837",
+                "assembly": "hg38",
+                "species": "Homo sapiens",
+            },
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -141,12 +316,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
         self.assertEqual(len(alignment.target.seq), len(self.dna))
-        self.assertEqual(alignment.target.seq.defined_ranges,
-                         ((48663767, 48663813),
-                          (48665640, 48665722),
-                          (48669098, 48669174)))
+        self.assertEqual(
+            alignment.target.seq.defined_ranges,
+            ((48663767, 48663813), (48665640, 48665722), (48669098, 48669174)),
+        )
         for start, end in alignment.target.seq.defined_ranges:
-            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+            self.assertEqual(alignment.target.seq[start:end], self.dna[start:end])
         self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -185,12 +360,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
         self.assertEqual(len(alignment.target.seq), len(self.dna))
-        self.assertEqual(alignment.target.seq.defined_ranges,
-                         ((42530895, 42530958),
-                          (42532020, 42532095),
-                          (42532563, 42532606)))
+        self.assertEqual(
+            alignment.target.seq.defined_ranges,
+            ((42530895, 42530958), (42532020, 42532095), (42532563, 42532606)),
+        )
         for start, end in alignment.target.seq.defined_ranges:
-            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+            self.assertEqual(alignment.target.seq[start:end], self.dna[start:end])
         self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -232,12 +407,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
         self.assertEqual(len(alignment.target.seq), len(self.dna))
-        self.assertEqual(alignment.target.seq.defined_ranges,
-                         ((48663767, 48663813),
-                          (48665640, 48665722),
-                          (48669098, 48669174)))
+        self.assertEqual(
+            alignment.target.seq.defined_ranges,
+            ((48663767, 48663813), (48665640, 48665722), (48669098, 48669174)),
+        )
         for start, end in alignment.target.seq.defined_ranges:
-            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+            self.assertEqual(alignment.target.seq[start:end], self.dna[start:end])
         self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -280,12 +455,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
         self.assertEqual(len(alignment.target.seq), len(self.dna))
-        self.assertEqual(alignment.target.seq.defined_ranges,
-                         ((42530895, 42530958),
-                          (42532020, 42532095),
-                          (42532563, 42532606)))
+        self.assertEqual(
+            alignment.target.seq.defined_ranges,
+            ((42530895, 42530958), (42532020, 42532095), (42532563, 42532606)),
+        )
         for start, end in alignment.target.seq.defined_ranges:
-            self.assertEqual(alignment.target.seq[start: end], self.dna[start: end])
+            self.assertEqual(alignment.target.seq[start:end], self.dna[start:end])
         self.assertEqual(alignment.query.seq, self.rna[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -411,7 +586,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignments.targets["chrM"].id, "chrM")
         self.assertEqual(len(alignments.targets["chrM"]), 16571)
         self.assertEqual(len(alignments.metadata["PG"]), 1)
-        self.assertEqual(alignments.metadata["PG"][0], {"ID": "samtools", "PN": "samtools", "VN": "1.14", "CL": "samtools view -h -t hg19.chrom.sizes -"})
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "samtools",
+                "PN": "samtools",
+                "VN": "1.14",
+                "CL": "samtools view -h -t hg19.chrom.sizes -",
+            },
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -949,7 +1132,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignments.targets["chrM"]), 16571)
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(len(alignments.metadata["PG"]), 1)
-        self.assertEqual(alignments.metadata["PG"][0], {"ID": "samtools", "PN": "samtools", "VN": "1.14", "CL": "samtools view -h -t hg19.chrom.sizes -"})
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "samtools",
+                "PN": "samtools",
+                "VN": "1.14",
+                "CL": "samtools view -h -t hg19.chrom.sizes -",
+            },
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1090,7 +1281,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignments.targets["chrM"]), 16571)
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(len(alignments.metadata["PG"]), 1)
-        self.assertEqual(alignments.metadata["PG"][0], {"ID": "samtools", "PN": "samtools", "VN": "1.14", "CL": "samtools view -h -t hg19.chrom.sizes -"})
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "samtools",
+                "PN": "samtools",
+                "VN": "1.14",
+                "CL": "samtools view -h -t hg19.chrom.sizes -",
+            },
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1567,7 +1766,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignments.targets["chrM"]), 16571)
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(len(alignments.metadata["PG"]), 1)
-        self.assertEqual(alignments.metadata["PG"][0], {"ID": "samtools", "PN": "samtools", "VN": "1.14", "CL": "samtools view -h -t hg19.chrom.sizes -"})
+        self.assertEqual(
+            alignments.metadata["PG"][0],
+            {
+                "ID": "samtools",
+                "PN": "samtools",
+                "VN": "1.14",
+                "CL": "samtools view -h -t hg19.chrom.sizes -",
+            },
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
