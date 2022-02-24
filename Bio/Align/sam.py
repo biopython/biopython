@@ -83,6 +83,7 @@ class Coordinates(numpy.ndarray):
         return obj
 
     def copy(self):
+        """Return a copy of the array as an unwriteable Coordinates object."""
         obj = super().copy()
         obj.flags.writeable = self.flags.writeable
         obj.cigar = self.cigar
