@@ -50,6 +50,7 @@ possible, especially the following contributors:
 - Neil P. (first contribution)
 - Peter Cock
 - Sebastian Bassi
+- Sean Aubin
 - Tim Burke
 
 3 June 2021: Biopython 1.79
