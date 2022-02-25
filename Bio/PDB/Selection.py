@@ -74,7 +74,7 @@ def unfold_entities(entity_list, target_level):
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
             # find unique parents
-            entity_list = {entity.get_parent() for entity in entity_list}
+            entity_list = dict.fromkeys([entity.get_parent() for entity in entity_list])
     return list(entity_list)
 
 
