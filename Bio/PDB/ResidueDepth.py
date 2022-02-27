@@ -50,11 +50,10 @@ in a residue)::
 
 """
 
-
 import os
+import subprocess
 import tempfile
 import warnings
-import subprocess
 
 import numpy
 
@@ -514,6 +513,7 @@ def get_surface(model, MSMS="msms"):
     molecular surface.
 
     Arguments:
+     - model - BioPython PDB model object (used to get atoms for input model)
      - MSMS - msms executable (used as argument to subprocess.call)
 
     """
@@ -528,19 +528,29 @@ def get_surface(model, MSMS="msms"):
             radius = _get_atom_radius(atom, rtype="united")
             pdb_to_xyzr.write(f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n")
 
-    # make surface
+    # Make surface
     surface_tmp = tempfile.mktemp()
-    MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + tempfile.mktemp()
+    msms_tmp = tempfile.mktemp()
+    MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + msms_tmp
     make_surface = MSMS % (xyz_tmp, surface_tmp)
     subprocess.call(make_surface, shell=True)
+    face_file = surface_tmp + ".face"
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
         raise RuntimeError(
             f"Failed to generate surface file using command:\n{make_surface}"
         )
 
-    # read surface vertices from vertex file
+    # Read surface vertices from vertex file
     surface = _read_vertex_array(surface_file)
+
+    # Remove temporary files
+    for fn in [xyz_tmp, surface_tmp, msms_tmp, face_file, surface_file]:
+        try:
+            os.remove(fn)
+        except OSError:
+            pass
+
     return surface
 
 
