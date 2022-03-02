@@ -41,6 +41,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Aziz Khan
+- Alex Morehead
 - Chenghao Zhu
 - Damien Goutte-Gattat
 - Erik  Whiting
