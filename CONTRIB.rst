@@ -203,6 +203,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marco Galardini <https://github.com/mgalardini>
 - Marie Crane <https://github.com/mariecrane>
 - Mark Amery <https://github.com/ExplodingCabbage>
+- Mark Fingerhuth <https://github.com/markf94>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Martin Thoma <https://martin-thoma.com/author/martin-thoma/>
 - Marton Langa <https://github.com/martonlanga>

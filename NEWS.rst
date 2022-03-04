@@ -46,6 +46,7 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Mark Fingerhuth
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
