@@ -7,6 +7,13 @@
 """Bio.SeqIO support for the "pepdigest" file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
+
+The "pepdigest" format is the default output format ("seqtable" format) for the
+EMBOOS pepdigest tool, which performs in silico digestion of proteins.
+
+See Also:
+https://www.bioinformatics.nl/cgi-bin/emboss/pepdigest
+https://www.bioinformatics.nl/cgi-bin/emboss/help/pepdigest
 """
 import re
 
@@ -17,7 +24,7 @@ from .Interfaces import SequenceIterator
 
 
 class PepdigestIterator(SequenceIterator):
-    """TODO: class docstring."""
+    """Parser for EMBOSS pepdigest files."""
 
     main_header_pttrn = re.compile("#{2,}")
     digestion_title_pttrn = re.compile("#=+")
@@ -28,24 +35,41 @@ class PepdigestIterator(SequenceIterator):
 
         Argument source is a file-like object opened in text mode or a path to a file.
         """
-        return super().__init__(source)
+        return super().__init__(source, mode="t")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Parse the file and generate SeqRecord objects.
+
+        Reads the file by reading each block of results, with each peptide
+        produced by the in silico digestion being returned as a SeqRecord.
+        """
+        # Check for empty file
+        line = handle.readline()
+        if not line:
+            raise ValueError("Empty file.")
+
         # Reads the main header
         header_sep_count = 0
         i = 0
         while header_sep_count < 2:
-            line = handle.readline()
             if self.main_header_pttrn.search(line) is not None:
                 header_sep_count += 1
             i += 1
             if i > self.max_iter:
                 raise ValueError("Broken header in start of file.")
+            line = handle.readline()
 
-        records = self.iterate(handle)
+        while True:
+            line = handle.readline()
+            if not line:
+                break
 
-        return records
+            if self.digestion_title_pttrn.search(line) is not None:
+                try:
+                    header = self.parse_digestion_header(handle)
+                except IndexError:
+                    raise ValueError("File has broken digestion results header")
+                yield from self.parse_digestion_results(handle, header)
 
     def parse_digestion_header(self, handle):
         """Parse the header of a digestion.
@@ -117,24 +141,6 @@ class PepdigestIterator(SequenceIterator):
                 },
                 description="generated from pepdigest",
             )
-
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects.
-
-        Reads the file by reading each block of results, with each peptide
-        produced by the in silico digestion being returned as a SeqRecord.
-        """
-        while True:
-            line = handle.readline()
-            if not line:
-                break
-
-            if self.digestion_title_pttrn.search(line) is not None:
-                try:
-                    header = self.parse_digestion_header(handle)
-                except IndexError:
-                    raise ValueError("File has broken digestion results header")
-                yield from self.parse_digestion_results(handle, header)
 
 
 if __name__ == "__main__":
