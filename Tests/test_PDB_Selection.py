@@ -1,6 +1,7 @@
 import unittest
 
 from Bio.PDB import PDBParser
+from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities
 from Bio.PDB.Residue import Residue
 
@@ -129,6 +130,17 @@ class UnfoldEntitiesTests(unittest.TestCase):
         atom_unfold = unfold_entities(structure_atoms, "A")
         for at1, at2 in zip(structure_atoms, atom_unfold):
             assert at1 is at2
+
+    def test_invalid_level(self):
+        with self.assertRaises(PDBException):
+            unfold_entities(self.structure, "Z")
+
+    def test_entities_not_homogenous(self):
+        structure_atom = next(self.structure.get_atoms())
+        structure_chain = next(self.structure.get_chains())
+
+        with self.assertRaises(PDBException):
+            unfold_entities([structure_atom, structure_chain], "A")
 
 
 if __name__ == "__main__":
