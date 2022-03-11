@@ -68,14 +68,17 @@ def unfold_entities(entity_list, target_level):
     if level_index == target_index:  # already right level
         return entity_list
 
+    entities = entity_list
+
     if level_index > target_index:  # we're going down, e.g. S->A
         for i in range(target_index, level_index):
-            entity_list = itertools.chain.from_iterable(entity_list)
+            entities = itertools.chain.from_iterable(entities)
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
-            # find unique parents
-            entity_list = dict.fromkeys([entity.get_parent() for entity in entity_list])
-    return list(entity_list)
+            # get unique parents by removing duplicates while preserving order
+            entities = {entity.get_parent(): None for entity in entities}
+
+    return list(entities)
 
 
 if __name__ == "__main__":
