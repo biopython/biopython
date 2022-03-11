@@ -1,4 +1,5 @@
-# Copyright (C) 2015, Anuj Sharma (anuj.sharma80@gmail.com)
+# Copyright (C) 2022, Joao Rodrigues (j.p.g.l.m.rodrigues@gmail.com
+#                     Anuj Sharma (anuj.sharma80@gmail.com)
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -11,6 +12,13 @@ QCPSuperimposer finds the best rotation and translation to put
 two point sets on top of each other (minimizing the RMSD). This is
 eg. useful to superimpose crystal structures. QCP stands for
 Quaternion Characteristic Polynomial, which is used in the algorithm.
+
+Algorithm and original code described in:
+
+Theobald DL.
+Rapid calculation of RMSDs using a quaternion-based characteristic polynomial.
+Acta Crystallogr A. 2005 Jul;61(Pt 4):478-80. doi: 10.1107/S0108767305015266.
+Epub 2005 Jun 23. PMID: 15973002.
 """
 
 
