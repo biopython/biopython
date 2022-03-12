@@ -260,8 +260,9 @@ class QCPSuperimposer:
         """
         assert len(fixed) == len(moving), "Fixed and moving atom lists differ in size"
 
-        fix_coord = np.array([a.get_coord() for a in fixed])
-        mov_coord = np.array([a.get_coord() for a in moving])
+        # Grab coordinates in double precision
+        fix_coord = np.array([a.get_coord() for a in fixed], dtype=np.float64)
+        mov_coord = np.array([a.get_coord() for a in moving], dtype=np.float64)
 
         self.set(fix_coord, mov_coord)
         self.run()
@@ -275,8 +276,6 @@ class QCPSuperimposer:
             raise PDBException("No transformation has been calculated yet")
 
         rot, tran = self.rotran
-        rot = rot.astype("f")
-        tran = tran.astype("f")
         for atom in atom_list:
             atom.transform(rot, tran)
 

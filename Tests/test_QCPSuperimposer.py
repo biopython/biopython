@@ -77,7 +77,9 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertEqual(self._arr_to_list(self.sup.rot), calc_rot)
         calc_tran = [-7.439, 36.515, 36.811]
         self.assertEqual(self._arr_to_list(self.sup.tran), calc_tran)
-        self.assertAlmostEqual(self.sup.rms, 0.003, places=3)
+        # We can reduce precision here since we do a similar calculation
+        # for a full structure down below.
+        self.assertAlmostEqual(self.sup.rms, 0.003, places=2)
         self.assertIsNone(self.sup.init_rms)
 
     def test_get_transformed(self):
@@ -115,17 +117,16 @@ class QCPSuperimposerTest(unittest.TestCase):
         s2 = p.get_structure("MOVING", pdb1)
         moving = Selection.unfold_entities(s2, "A")
 
-        rot = np.eye(3, dtype=np.float32)
-        tran = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+        rot = np.eye(3, dtype=np.float64)
+        tran = np.array([1.0, 2.0, 3.0], dtype=np.float64)
         for atom in moving:
             atom.transform(rot, tran)
 
         sup = QCPSuperimposer()
         sup.set_atoms(fixed, moving)
-
         self.assertEqual(self._arr_to_list(sup.rotran[0]), self._arr_to_list(rot))
         self.assertEqual(self._arr_to_list(sup.rotran[1]), self._arr_to_list(-tran))
-        self.assertAlmostEqual(sup.rms, 0.0, places=2)
+        self.assertAlmostEqual(sup.rms, 0.0, places=6)
 
 
 if __name__ == "__main__":
