@@ -181,7 +181,7 @@ def qcp(coords1, coords2, natoms):
                     rot = np.eye(3)
                     return rmsd, rot, [q1, q2, q3, q4]
 
-    normq = qsqr ** 0.5
+    normq = qsqr**0.5
     q1 /= normq
     q2 /= normq
     q3 /= normq
