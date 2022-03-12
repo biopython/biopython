@@ -521,7 +521,7 @@ def get_surface(model, MSMS="msms"):
     # Make x,y,z,radius file
     atom_list = Selection.unfold_entities(model, "A")
 
-    xyz_tmp = tempfile.mkstemp()
+    xyz_tmp = tempfile.NamedTemporaryFile(delete=False)
     with open(xyz_tmp, "w") as pdb_to_xyzr:
         for atom in atom_list:
             x, y, z = atom.coord
@@ -529,8 +529,8 @@ def get_surface(model, MSMS="msms"):
             pdb_to_xyzr.write(f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n")
 
     # Make surface
-    surface_tmp = tempfile.mkstemp()
-    msms_tmp = tempfile.mkstemp()
+    surface_tmp = tempfile.NamedTemporaryFile(delete=False)
+    msms_tmp = tempfile.NamedTemporaryFile(delete=False)
     MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + msms_tmp
     make_surface = MSMS % (xyz_tmp, surface_tmp)
     subprocess.call(make_surface, shell=True)

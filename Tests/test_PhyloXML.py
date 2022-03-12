@@ -23,7 +23,7 @@ EX_PHYLO = "PhyloXML/phyloxml_examples.xml"
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.mkstemp()
+DUMMY = tempfile.NamedTemporaryFile(delete=False)
 
 
 # ---------------------------------------------------------
