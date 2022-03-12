@@ -22,7 +22,6 @@ Epub 2005 Jun 23. PMID: 15973002.
 """
 
 
-import math
 import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
@@ -118,7 +117,7 @@ def qcp(coords1, coords2, natoms):
 
     # The original code has a guard if minScore > 0 and rmsd < minScore, although
     # the default value of minScore is -1. For simplicity, we ignore that check.
-    rmsd = math.sqrt(2.0 * abs(E0 - mxEigenV) / natoms)
+    rmsd = (2.0 * abs(E0 - mxEigenV) / natoms) ** 0.5
 
     a11 = SxxpSyy + Szz - mxEigenV
     a12 = SyzmSzy
@@ -182,7 +181,7 @@ def qcp(coords1, coords2, natoms):
                     rot = np.eye(3)
                     return rmsd, rot, [q1, q2, q3, q4]
 
-    normq = math.sqrt(qsqr)
+    normq = qsqr ** 0.5
     q1 /= normq
     q2 /= normq
     q3 /= normq
@@ -201,17 +200,18 @@ def qcp(coords1, coords2, natoms):
     ax = q1 * q2
 
     rot = np.zeros((3, 3))
+    # Transposed rotation matrix.
     rot[0][0] = a2 + x2 - y2 - z2
-    rot[0][1] = 2 * (xy + az)
-    rot[0][2] = 2 * (zx - ay)
-    rot[1][0] = 2 * (xy - az)
+    rot[1][0] = 2 * (xy + az)
+    rot[2][0] = 2 * (zx - ay)
+    rot[0][1] = 2 * (xy - az)
     rot[1][1] = a2 - x2 + y2 - z2
-    rot[1][2] = 2 * (yz + ax)
-    rot[2][0] = 2 * (zx + ay)
-    rot[2][1] = 2 * (yz - ax)
+    rot[2][1] = 2 * (yz + ax)
+    rot[0][2] = 2 * (zx + ay)
+    rot[1][2] = 2 * (yz - ax)
     rot[2][2] = a2 - x2 - y2 + z2
 
-    return rmsd, rot.T, [q1, q2, q3, q4]
+    return rmsd, rot, (q1, q2, q3, q4)
 
 
 class QCPSuperimposer:
