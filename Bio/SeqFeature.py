@@ -285,6 +285,15 @@ class SeqFeature:
         doc="Location operator for compound locations (e.g. join).",
     )
 
+    def __eq__(self, other):
+        """Check if two SeqFeature objects should be considered equal."""
+        return (
+            self.id == other.id
+            and self.type == other.type
+            and self.location == other.location
+            and self.qualifiers == other.qualifiers
+        )
+
     def __repr__(self):
         """Represent the feature as a string for debugging."""
         answer = f"{self.__class__.__name__}({self.location!r}"
