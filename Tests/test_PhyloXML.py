@@ -23,7 +23,7 @@ EX_PHYLO = "PhyloXML/phyloxml_examples.xml"
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.NamedTemporaryFile(delete=False)
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------
@@ -504,7 +504,7 @@ class WriterTests(unittest.TestCase):
         """Parse, rewrite and retest a phyloXML example file."""
         with open(orig_fname) as infile:
             phx = PhyloXMLIO.read(infile)
-        with open(DUMMY.name, "w") as outfile:
+        with open(DUMMY, "w") as outfile:
             PhyloXMLIO.write(phx, outfile)
         for cls, tests in test_cases:
             inst = cls("setUp")
@@ -516,7 +516,7 @@ class WriterTests(unittest.TestCase):
         global EX_APAF
         orig_fname = EX_APAF
         try:
-            EX_APAF = DUMMY.name
+            EX_APAF = DUMMY
             self._rewrite_and_call(
                 orig_fname,
                 (
@@ -535,7 +535,7 @@ class WriterTests(unittest.TestCase):
         global EX_BCL2
         orig_fname = EX_BCL2
         try:
-            EX_BCL2 = DUMMY.name
+            EX_BCL2 = DUMMY
             self._rewrite_and_call(
                 orig_fname,
                 (
@@ -554,7 +554,7 @@ class WriterTests(unittest.TestCase):
         global EX_MADE
         orig_fname = EX_MADE
         try:
-            EX_MADE = DUMMY.name
+            EX_MADE = DUMMY
             self._rewrite_and_call(
                 orig_fname,
                 (
@@ -570,7 +570,7 @@ class WriterTests(unittest.TestCase):
         global EX_PHYLO
         orig_fname = EX_PHYLO
         try:
-            EX_PHYLO = DUMMY.name
+            EX_PHYLO = DUMMY
             self._rewrite_and_call(
                 orig_fname,
                 (
@@ -607,7 +607,7 @@ class WriterTests(unittest.TestCase):
         global EX_DOLLO
         orig_fname = EX_DOLLO
         try:
-            EX_DOLLO = DUMMY.name
+            EX_DOLLO = DUMMY
             self._rewrite_and_call(
                 orig_fname,
                 (
@@ -780,5 +780,5 @@ if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
     # Clean up the temporary file
-    if os.path.exists(DUMMY.name):
-        os.remove(DUMMY.name)
+    if os.path.exists(DUMMY):
+        os.remove(DUMMY)

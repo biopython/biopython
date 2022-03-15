@@ -25,7 +25,7 @@ except ImportError:
 cdao_files = ("test.cdao",)
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.NamedTemporaryFile(delete=False)
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------
@@ -60,9 +60,9 @@ def _test_write_factory(source):
         with open(filename) as infile:
             t1 = next(CDAOIO.Parser(infile).parse())
 
-        with open(DUMMY.name, "w") as outfile:
+        with open(DUMMY, "w") as outfile:
             CDAOIO.write([t1], outfile)
-        with open(DUMMY.name) as infile:
+        with open(DUMMY) as infile:
             t2 = next(CDAOIO.Parser(infile).parse())
 
         for prop_name in ("name", "branch_length", "confidence"):
@@ -104,5 +104,5 @@ if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
     # Clean up the temporary file
-    if os.path.exists(DUMMY.name):
-        os.remove(DUMMY.name)
+    if os.path.exists(DUMMY):
+        os.remove(DUMMY)
