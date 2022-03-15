@@ -15,8 +15,57 @@ Kristian Rother.
 
 
 import re
+from typing import NamedTuple
+import warnings
 
 from Bio import File
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+
+
+class RawResidue(NamedTuple):
+    """Stores the information about a raw PDB residue."""
+
+    name: str
+    id: int
+    atom: str
+    chain: str
+
+
+class RawLink(NamedTuple):
+    """
+    Stores the raw information of a LINK line.
+
+    Relates it to RawResidues rather than Atom objects
+    (which are not initialized yet).
+    """
+
+    res1: RawResidue
+    alternate_location1: str
+    insertion_code1: str
+    symmetry_operator1: int
+    res2: RawResidue
+    alternate_location2: str
+    insertion_code2: str
+    symmetry_operator2: int
+    distance: float
+
+
+class RawSSBond(NamedTuple):
+    """
+    Stores the raw information of a SSBOND line.
+
+    Relates it to RawResidues rather than Atom objects
+    (which are not initialized yet).
+    """
+
+    serial_number: str
+    res1: RawResidue
+    insertion_code1: str
+    symmetry_operator1: int
+    res2: RawResidue
+    insertion_code2: str
+    symmetry_operator2: int
+    distance: float
 
 
 def _get_journal(inl):
@@ -194,6 +243,8 @@ def _parse_pdb_header_list(header):
         "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
+        "ss_bonds": [],
+        "links": [],
     }
 
     pdbh_dict["structure_reference"] = _get_references(header)
@@ -318,6 +369,91 @@ def _parse_pdb_header_list(header):
                             pdbh_dict["astral"][remark_99_keyval[0]] = remark_99_keyval[
                                 1
                             ]
+        elif key == "LINK":
+            # all numbers were taken from the official PDB specs
+            atom1 = h[12:16].strip()
+            alternate_location1 = h[16]
+            resname1 = h[17:20].strip()
+            chainid1 = h[21].strip()
+            resid1 = int(h[22:26].strip())
+            insertion_code1 = h[26]
+
+            atom2 = h[42:46].strip()
+            alternate_location2 = h[46]
+            resname2 = h[47:50].strip()
+            chainid2 = h[51].strip()
+            resid2 = int(h[52:56].strip())
+            insertion_code2 = h[56]
+
+            symmetry_operator1 = int(h[59:65].strip())
+            symmetry_operator2 = int(h[66:72].strip())
+            distance = float(h[73:78].strip())
+
+            if distance > 1.5:
+                warnings.warn(
+                    "LINK distance between the %s atom of %s %i and %s atom of %s %i is >1.5Å which is unusual."
+                    % (atom1, resname1, resid1, atom2, resname2, resid2),
+                    PDBConstructionWarning,
+                )
+
+            pdbh_dict["links"].append(
+                RawLink(
+                    res1=RawResidue(
+                        name=resname1, id=resid1, atom=atom1, chain=chainid1
+                    ),
+                    res2=RawResidue(
+                        name=resname2, id=resid2, atom=atom2, chain=chainid2
+                    ),
+                    alternate_location1=alternate_location1,
+                    alternate_location2=alternate_location2,
+                    insertion_code1=insertion_code1,
+                    insertion_code2=insertion_code2,
+                    symmetry_operator1=symmetry_operator1,
+                    symmetry_operator2=symmetry_operator2,
+                    distance=distance,
+                )
+            )
+        elif key == "SSBOND":
+            # all numbers were taken from the official PDB specs
+            atom1, atom2 = "S", "S"  # by definition
+            serial_number = int(h[7:10].strip())
+            resname1 = h[11:14].strip()
+            chainid1 = h[15].strip()
+            resid1 = int(h[17:21].strip())
+            insertion_code1 = h[21]
+
+            resname2 = h[25:28].strip()
+            chainid2 = h[29].strip()
+            resid2 = int(h[31:35].strip())
+            insertion_code2 = h[35]
+
+            symmetry_operator1 = int(h[59:65].strip())
+            symmetry_operator2 = int(h[66:72].strip())
+            distance = float(h[73:78].strip())
+
+            if distance > 2.2:
+                warnings.warn(
+                    "SSBOND distance between the %s atom of %s %i and %s atom of %s %i is >2.2Å which is unusual."
+                    % (atom1, resname1, resid1, atom2, resname2, resid2),
+                    PDBConstructionWarning,
+                )
+
+            pdbh_dict["ss_bonds"].append(
+                RawSSBond(
+                    serial_number=serial_number,
+                    res1=RawResidue(
+                        name=resname1, id=resid1, atom=atom1, chain=chainid1
+                    ),
+                    res2=RawResidue(
+                        name=resname2, id=resid2, atom=atom2, chain=chainid2
+                    ),
+                    insertion_code1=insertion_code1,
+                    insertion_code2=insertion_code2,
+                    symmetry_operator1=symmetry_operator1,
+                    symmetry_operator2=symmetry_operator2,
+                    distance=distance,
+                )
+            )
         else:
             # print(key)
             pass

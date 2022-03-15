@@ -6,6 +6,7 @@
 """Output of PDB files."""
 
 
+from itertools import groupby
 import warnings
 
 # Exceptions and Warnings
@@ -22,9 +23,16 @@ from Bio.Data.IUPACData import atom_weights
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
+
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
+
+_SSBOND_FORMAT_STRING = (
+    "SSBOND %3i %3s %1s %4i%1s   %3s %1s %4i%1s                       %6i %6i %5.2f\n"
+)
+
+_LINK_FORMAT_STRING = "LINK        %-4s%1s%3s %1s%4i%1s               %-4s%1s%3s %1s%4i%1s  %6i %6i %5.2f\n"
 
 _TER_FORMAT_STRING = (
     "TER   %5i      %3s %c%4i%c                                                      \n"
@@ -189,23 +197,7 @@ class PDBIO(StructureIO):
                 " preserve_atom_numbering=False"
             )
 
-        # Check if the element is valid, unknown (X), or blank
-        if atom.element:
-            element = atom.element.strip().upper()
-            if element.capitalize() not in atom_weights and element != "X":
-                raise ValueError(f"Unrecognised element {atom.element}")
-            element = element.rjust(2)
-        else:
-            element = "  "
-
-        # Format atom name
-        # Pad if:
-        #     - smaller than 4 characters
-        # AND - is not C, N, O, S, H, F, P, ..., one letter elements
-        # AND - first character is NOT numeric (funky hydrogen naming rules)
-        name = atom.fullname.strip()
-        if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
-            name = " " + name
+        element, name = self._extract_element_and_name(atom)
 
         altloc = atom.altloc
         x, y, z = atom.coord
@@ -294,6 +286,92 @@ class PDBIO(StructureIO):
 
             return _PQR_ATOM_FORMAT_STRING % args
 
+    @staticmethod
+    def _extract_element_and_name(atom):
+        """Extract element and atom name as strings."""
+        # Check if the element is valid, unknown (X), or blank
+        if atom.element:
+            element = atom.element.strip().upper()
+            if element.capitalize() not in atom_weights and element != "X":
+                raise ValueError(f"Unrecognised element {atom.element}")
+            element = element.rjust(2)
+        else:
+            element = "  "
+
+        name = atom.fullname.strip()
+        if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
+            name = " " + name
+
+        return element, name
+
+    def _get_link_line(self, link):
+        """Return a LINK PDB string (PRIVATE)."""
+        _, atom_name1 = self._extract_element_and_name(link.atom1)
+        altloc1 = link.alternate_location1
+        res_name1 = link.atom1.parent.resname
+        chain_id1 = link.atom1.parent.parent.id
+        res_id1 = link.atom1.parent.id[1]
+        icode1 = link.insertion_code1
+        _, atom_name2 = self._extract_element_and_name(link.atom2)
+        altloc2 = link.alternate_location2
+        res_name2 = link.atom2.parent.resname
+        chain_id2 = link.atom2.parent.parent.id
+        res_id2 = link.atom2.parent.id[1]
+        icode2 = link.insertion_code2
+        symmetry_operator1 = link.symmetry_operator1
+        symmetry_operator2 = link.symmetry_operator2
+        distance = link.distance
+
+        args = (
+            atom_name1,
+            altloc1,
+            res_name1,
+            chain_id1,
+            res_id1,
+            icode1,
+            atom_name2,
+            altloc2,
+            res_name2,
+            chain_id2,
+            res_id2,
+            icode2,
+            symmetry_operator1,
+            symmetry_operator2,
+            distance,
+        )
+        return _LINK_FORMAT_STRING % args
+
+    def _get_ssbond_line(self, ssbond):
+        """Return a SSBOND PDB string (PRIVATE)."""
+        serial_number = ssbond.serial_number
+        res_name1 = ssbond.atom1.parent.resname
+        chain_id1 = ssbond.atom1.parent.parent.id
+        res_id1 = ssbond.atom1.parent.id[1]
+        icode1 = ssbond.insertion_code1
+        res_name2 = ssbond.atom2.parent.resname
+        chain_id2 = ssbond.atom2.parent.parent.id
+        res_id2 = ssbond.atom2.parent.id[1]
+        icode2 = ssbond.insertion_code2
+        symmetry_operator1 = ssbond.symmetry_operator1
+        symmetry_operator2 = ssbond.symmetry_operator2
+        distance = ssbond.distance
+
+        args = (
+            serial_number,
+            res_name1,
+            chain_id1,
+            res_id1,
+            icode1,
+            res_name2,
+            chain_id2,
+            res_id2,
+            icode2,
+            symmetry_operator1,
+            symmetry_operator2,
+            distance,
+        )
+        return _SSBOND_FORMAT_STRING % args
+
     # Public methods
 
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
@@ -332,6 +410,41 @@ class PDBIO(StructureIO):
                 model_flag = 1
             else:
                 model_flag = 0
+
+            # only apply SSBONDs once independent of the number of models present
+            ssbond_groups = groupby(
+                self.structure.get_disulfide_bonds(),
+                lambda x: (x.atom1.parent.id[1], x.atom2.parent.id[1]),
+            )
+            for _, ssbonds in ssbond_groups:
+                ssbond = next(ssbonds)
+                try:
+                    line = self._get_ssbond_line(ssbond)
+                except Exception as err:
+                    # catch and re-raise with more information
+                    raise PDBIOException(f"Error when writing SSBOND {ssbond}") from err
+                else:
+                    fhandle.write(line)
+
+            # only apply LINKs once independent of the number of models present
+            link_groups = groupby(
+                self.structure.get_links(),
+                lambda x: (
+                    x.atom1.id,
+                    x.atom1.parent.id[1],
+                    x.atom2.id,
+                    x.atom2.parent.id[1],
+                ),
+            )
+            for _, links in link_groups:
+                link = next(links)
+                try:
+                    line = self._get_link_line(link)
+                except Exception as err:
+                    # catch and re-raise with more information
+                    raise PDBIOException(f"Error when writing LINK {link}") from err
+                else:
+                    fhandle.write(line)
 
             for model in self.structure.get_list():
                 if not select.accept_model(model):
