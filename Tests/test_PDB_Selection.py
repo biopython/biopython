@@ -1,3 +1,9 @@
+"""
+Run Bio.PDB.Selection tests.
+
+Currently only tests unfold_entities.
+"""
+
 import unittest
 
 from Bio.PDB import PDBParser
@@ -7,7 +13,7 @@ from Bio.PDB.Residue import Residue
 
 
 def res_full_id(res: Residue):
-    """Used for thoroughly comparing residues."""
+    """Return full residue identifier for thoroughly comparing residues."""
     return (res.get_resname(), *res.get_id())
 
 
