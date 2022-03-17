@@ -7376,6 +7376,39 @@ qualifiers:
             dbxrefs,
         )
 
+    def test_features_spanning_origin(self):
+        """Test that features that span the origin on circular DNA are included correctly for different ways of specifying the topology."""
+        # This first one should fail (location of the feature should be set to none), because
+        # the file says the sequence is linear, but there is a feature that spans the origin.
+        file_fails = "GenBank/addgene-plasmid-11664-sequence-180430.gbk"
+
+        # The right warning is raised
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_fails, "gb")
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertTrue("Skipping feature" in str(caught[0].message))
+
+        # The last feature location is None
+        self.assertIsNone(record.features[-1].location)
+
+        # This one is circular and should include the features that span the origin
+        file_succeeds = "GenBank/addgene-plasmid-39296-sequence-49545.gbk"
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_succeeds, "gb")
+            # This gives the same error for features that span the origin
+            self.assertEqual(len(caught), 2)
+            for c in caught:
+                self.assertEqual(c.category, BiopythonParserWarning)
+                self.assertTrue("unintended behavior" in str(c.message))
+
+        # The last two features should not be none
+        self.assertIsNotNone(record.features[-1].location)
+        self.assertIsNotNone(record.features[-2].location)
+
 
 class GenBankTests(unittest.TestCase):
     """GenBank tests."""

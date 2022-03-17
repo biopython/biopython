@@ -269,7 +269,7 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
-def _loc(loc_str, expected_seq_length, strand, seq_type=None):
+def _loc(loc_str, expected_seq_length, strand, seq_is_circular=False):
     """Make FeatureLocation from non-compound non-complement location (PRIVATE).
 
     This is also invoked to 'automatically' fix ambiguous formatting of features
@@ -348,7 +348,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     s_pos = _pos(s, -1)
     e_pos = _pos(e)
     if int(s_pos) > int(e_pos):
-        if seq_type is None or "circular" not in seq_type.lower():
+        if not seq_is_circular:
             warnings.warn(
                 "It appears that %r is a feature that spans "
                 "the origin, but the sequence topology is "
@@ -1099,6 +1099,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         cur_feature = self._cur_feature
 
+        # Check if the sequence is circular for features that span the origin
+        seq_is_circular = (
+            "topology" in self.data.annotations
+            and self.data.annotations["topology"] == "circular"
+        )
+
         # Handle top level complement here for speed
         if location_line.startswith("complement("):
             assert location_line.endswith(")")
@@ -1125,7 +1131,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     location_line,
                     self._expected_size,
                     strand,
-                    seq_type=self._seq_type.lower(),
+                    seq_is_circular=seq_is_circular,
                 )
             return
 
@@ -1196,7 +1202,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 location_line,
                 self._expected_size,
                 strand,
-                seq_type=self._seq_type.lower(),
+                seq_is_circular=seq_is_circular,
             )
             return
 
@@ -1222,7 +1228,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                         part,
                         self._expected_size,
                         part_strand,
-                        seq_type=self._seq_type.lower(),
+                        seq_is_circular=seq_is_circular,
                     ).parts
 
                 except ValueError:
