@@ -5,11 +5,16 @@
 # as part of this package.
 """Tests for Bio.Align.phylip module."""
 import unittest
+import warnings
 
 from io import StringIO
 
-from Bio.Align.phylip import AlignmentIterator
-from Bio.Align.phylip import AlignmentWriter
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.phylip import AlignmentIterator
+    from Bio.Align.phylip import AlignmentWriter
 
 
 try:

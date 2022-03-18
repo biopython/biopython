@@ -634,7 +634,12 @@ T  12.0  16.5   7.0 145.0
 
 class TestMultipleAlignment(unittest.TestCase):
     def setUp(self):
-        from Bio.Align import clustal
+        import warnings
+        from Bio import BiopythonExperimentalWarning
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+            from Bio.Align import clustal
 
         path = "Clustalw/opuntia.aln"
         with open(path) as stream:

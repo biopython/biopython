@@ -5,9 +5,14 @@
 # as part of this package.
 """Tests for Bio.Align.nexus module."""
 import unittest
+import warnings
 from io import StringIO
 
-from Bio.Align.nexus import AlignmentIterator, AlignmentWriter
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.nexus import AlignmentIterator, AlignmentWriter
 
 try:
     import numpy

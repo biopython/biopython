@@ -9,7 +9,12 @@ import warnings
 
 
 from Bio import BiopythonParserWarning
-from Bio.Align.msf import AlignmentIterator
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.msf import AlignmentIterator
+
 
 try:
     import numpy

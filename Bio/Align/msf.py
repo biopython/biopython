@@ -20,6 +20,15 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from Bio import BiopythonParserWarning
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+
+warnings.warn(
+    "Bio.Align.bed is an experimental module which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
