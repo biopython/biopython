@@ -5,10 +5,16 @@
 # as part of this package.
 """Tests for Bio.Align.emboss module."""
 import unittest
+import warnings
 
 from io import StringIO
 
-from Bio.Align.emboss import AlignmentIterator
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.emboss import AlignmentIterator
+
 
 try:
     import numpy

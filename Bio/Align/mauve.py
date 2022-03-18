@@ -12,6 +12,16 @@ You are expected to use this module via the Bio.Align functions.
 from Bio.Align import interfaces, Alignment
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonExperimentalWarning
+
+
+import warnings
+
+warnings.warn(
+    "Bio.Align.mauve is an experimental module which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):

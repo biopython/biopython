@@ -6,12 +6,17 @@
 """Tests for Bio.Align.mauve module."""
 import os
 import unittest
+import warnings
 
 from io import StringIO
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import SeqIO
-from Bio.Align.mauve import AlignmentIterator, AlignmentWriter
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.mauve import AlignmentIterator, AlignmentWriter
 
 
 try:
