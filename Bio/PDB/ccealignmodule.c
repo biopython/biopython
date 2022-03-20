@@ -1,4 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
 //
 //  Original Code
 //      Copyright (C) Jason Vertrees
@@ -83,7 +82,6 @@
 //  All other endorsements employing the PyMOL trademark require specific,
 //  written prior permission.
 //
-//////////////////////////////////////////////////////////////////////////////
 
 #include "Python.h"
 
@@ -514,7 +512,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
         Py_INCREF(pathAList);
         Py_INCREF(pathBList);
 
-        int curLen = 0;
         int j = 0;
         int it = 0;
         // Grab the current path
@@ -535,7 +532,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
                 }
                 j++;
             } else {
-                curLen = it;
                 break;
             }
         }
@@ -559,7 +555,7 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
 
 // Main Function
 PyObject *
-PyCealign(PyObject *self, PyObject *args) {
+PyCealign(PyObject *Py_UNUSED(self), PyObject *args) {
 
     int i = 0;
     int windowSize = 8;
