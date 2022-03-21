@@ -42,6 +42,20 @@ Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
 or where appropriate by ``collections.defaultsdict``.
 
+Robert Miller has updated the ``Bio.PDB.internal_coords`` module  to
+make better use of Numpy for lossless structure assembly from dihedral
+angles and related internal coordinates.  In addition to speeding the
+assembly step by ~30%, this adds distance plot support (including
+re-generating structures from distance plot data), coordinate space
+transforms for superimposing residues and their environments, a
+per-chain all-atom array for Atom coordinates, and optional default
+values for all internal coordinates.  The internal coordinates module
+continues to support extracting dihedral angle, bond angle and bond
+length (internal coordinates) data, reading/writing structure files of
+internal coordinates, and OpenSCAD output of structures for 3D CAD/3D
+printing work.  See the Biopython Tutorial and Cookbook for more
+information.
+
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
 
@@ -124,6 +138,8 @@ possible, especially the following contributors:
 - Soroush Saffari (first contribution)
 - Tim Burke
 - Valentin Vareškić (first contribution)
+- Robert Miller
+
 
 3 June 2021: Biopython 1.79
 ===========================
