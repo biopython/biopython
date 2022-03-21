@@ -1,4 +1,4 @@
-# Copyright 2019-2021 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-2022 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -217,38 +217,42 @@ def read_PIC(
         Adds Hedron to current Chain.internal_coord, see ic_data for default
         values and reference database source.
         """
-        aks = []
+        atomkeys = []
         hkey = None
 
         atmNdx = AtomKey.fields.atm
         resNdx = AtomKey.fields.resname
         resPos = AtomKey.fields.respos
-        aks = [ek[i].akl for i in range(3)]
+        atomkeys = [ek[i].akl for i in range(3)]
 
-        atpl = tuple(aks[i][atmNdx] for i in range(3))
-        res = aks[0][resNdx]
+        atpl = tuple([atomkeys[i][atmNdx] for i in range(3)])
+        res = atomkeys[0][resNdx]
+
         if (
-            aks[0][resPos] != aks[2][resPos]  # hedra crosses amide bond so not reversed
+            atomkeys[0][resPos]
+            != atomkeys[2][resPos]  # hedra crosses amide bond so not reversed
             or atpl == ("N", "CA", "C")  # or chain start tau
             or atpl in ic_data_backbone  # or found forward hedron in ic_data
             or (res not in ["A", "G"] and atpl in ic_data_sidechains[res])
         ):
             hkey = ek
-            rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(3)]
+            rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(3)]
             try:
                 dflts = hedra_defaults["".join(rhcl)][0]
             except KeyError:
-                if aks[0][resPos] == aks[1][resPos]:
-                    rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(2)]
-                    rhc = "".join(rhcl) + "X" + aks[2][atmNdx]
+                if atomkeys[0][resPos] == atomkeys[1][resPos]:
+                    rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(2)]
+                    rhc = "".join(rhcl) + "X" + atomkeys[2][atmNdx]
                 else:
-                    rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(1, 3)]
-                    rhc = "X" + aks[0][atmNdx] + "".join(rhcl)
+                    rhcl = [
+                        atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(1, 3)
+                    ]
+                    rhc = "X" + atomkeys[0][atmNdx] + "".join(rhcl)
                 dflts = hedra_defaults[rhc][0]
         else:
             # must be reversed or fail
             hkey = ek[::-1]
-            rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(2, -1, -1)]
+            rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(2, -1, -1)]
             dflts = hedra_defaults["".join(rhcl)][0]
 
         process_hedron(
@@ -959,7 +963,7 @@ def write_PIC(
         * "classic",    # classic_b | chi
         * "hedra",      # all hedra including bond lengths
         * "primary",    # all primary dihedra
-        * "secondary",  # all secondary dihedra
+        * "secondary",  # all secondary dihedra (fixed angle from primary dihedra)
         * "all",        # hedra | primary | secondary
         * "initAtoms",  # XYZ coordinates of initial Tau (N-Ca-C)
         * "bFactors"

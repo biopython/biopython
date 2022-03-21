@@ -1,4 +1,4 @@
-# Copyright 2020-2021 by Robert T. Miller.  All rights reserved.
+# Copyright 2020-2022 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -51,6 +51,7 @@ class Rebuild(unittest.TestCase):
     # cif_1A7G2 = CIF_parser.get_structure("1A7G", "PDB/1A7G.cif")
     pdb_2XHE = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
     pdb_2XHE2 = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
+    pdb_1A8O = PDB_parser.get_structure("1A8O", "PDB/1A8O.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
     cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4CUP2 = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
@@ -64,6 +65,28 @@ class Rebuild(unittest.TestCase):
         chain = next(self.mmtf_1A8O.get_chains())
         ic_chain = IC_Chain(chain)
         self.assertEqual(len(ic_chain.ordered_aa_ic_list), 70)
+
+    def test_rebuild_1a8o(self):
+        """Duplicate tutorial doctests which fail under linux."""
+        IC_Chain.MaxPeptideBond = 4.0
+        r = structure_rebuild_test(self.pdb_1A8O, False)
+        self.assertTrue(r["pass"])
+
+        cic = list(self.pdb_1A8O.get_chains())[0].internal_coord
+        distances = cic.distance_plot()
+        chirality = cic.dihedral_signs()
+        c2 = IC_duplicate(cic.chain)[0]["A"]
+        cic2 = c2.internal_coord
+        cic2.atomArray = np.zeros((cic2.AAsiz, 4), dtype=np.float64)
+        cic2.dihedraAngle[:] = 0.0
+        cic2.hedraAngle[:] = 0.0
+        cic2.hedraL12[:] = 0.0
+        cic2.hedraL23[:] = 0.0
+        cic2.copy_initNCaCs(cic)
+        cic2.distplot_to_dh_arrays(distances)
+        cic2.distance_to_internal_coordinates(chirality)
+        c2.internal_to_atom_coordinates()
+        np.allclose(cic2.atomArray, cic.atomArray)
 
     def test_rebuild_multichain_missing(self):
         """Convert multichain missing atom struct to, from internal coords."""
@@ -185,6 +208,26 @@ class Rebuild(unittest.TestCase):
         self.assertEqual(hsum, 0.0)
         dsum = ddelta.sum()
         self.assertEqual(dsum, 0.0)
+
+        # test hedron len12, angle, len23 setters and getters
+        hed = list(cic0.hedra.values())[10]
+        val = hed.len12 + 0.5
+        hed.len12 = val
+        self.assertEqual(hed.len12, val)
+        val = hed.len23 + 0.5
+        hed.len23 = val
+        self.assertEqual(hed.len23, val)
+        val = hed.angle + 1
+        hed.angle = val
+        self.assertEqual(hed.angle, val)
+        dihed = list(cic0.dihedra.values())[10]
+        val = dihed.angle + 196
+        dihed.angle = val
+        if val > 180.0:
+            val -= 360.0
+        if val < -180.0:
+            val += 360.0
+        self.assertEqual(dihed.angle, val)
 
     def test_model_change_internal_coords(self):
         """Get model internal coords, modify psi and chi1 values and check."""
@@ -513,7 +556,7 @@ class Rebuild(unittest.TestCase):
             msg="hedron __repr__ error for M11 tau",
         )
         # some specific AtomKey compsrisons missed in other tests
-        a0, a1 = tau.aks[0], tau.aks[1]
+        a0, a1 = tau.atomkeys[0], tau.atomkeys[1]
         m = "AtomKey rich comparison failed"
         self.assertTrue(a1 > a0, msg=m)
         self.assertTrue(a1 >= a0, msg=m)
