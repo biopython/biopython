@@ -197,6 +197,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
 - Lukasz Walejko <https://github.com/lwalejko>
+- Manuel Lera Ramirez <https://github.com/manulera>
 - Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
