@@ -56,7 +56,8 @@ repos:
         files: \.(rst|md|tex)$
         args: [
             --ignore-regex,
-            '(^|\W)([A-Z]{2,3})(\W|$)',
+            '(^|\W)([A-Z]{2,3})(\W|$)|(.aks)',
+            # last grouping above is for filenames. Add more with a pipe, e.g., (.aks|.txt|.asm)
             -L,
             'ser,hsa,hist,fpr'
         ]
