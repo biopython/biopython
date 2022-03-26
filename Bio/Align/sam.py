@@ -272,14 +272,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 raise ValueError("requested MD tag with undefined sequence")
             # calculate the cigar from the alignment coordinates
             tStart, qStart = coordinates[0, :]
-            operations = iter(alignment.operations)
+            operations = alignment.operations
             number = 0
             md = ""
-            for tEnd, qEnd in coordinates[1:, :]:
+            for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    operation = next(operations)
                     if operation == 4:  # S; soft clipping
                         assert qStart == 0 or qEnd == qSize
                     elif operation == 1:  # I; insertion to the reference
@@ -288,23 +287,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         raise Exception("Unexpected operation %d" % operation)
                     qStart = qEnd
                 elif qCount == 0:
-                    if tStart > 0 and tEnd < tSize:
-                        length = tCount
-                        operation = next(operations)
-                        if operation == 2:  # D; deletion from the reference
-                            if number:
-                                md += str(number)
-                                number = 0
-                            md += "^" + target[tStart:tEnd]
-                        elif operation == 3:  # N; skipped region from the reference
-                            pass
-                        else:
-                            raise Exception("Unexpected operation %d" % operation)
+                    length = tCount
+                    if operation == 2:  # D; deletion from the reference
+                        if number:
+                            md += str(number)
+                            number = 0
+                        md += "^" + target[tStart:tEnd]
+                    elif operation == 3:  # N; skipped region from the reference
+                        pass
+                    else:
+                        raise Exception("Unexpected operation %d" % operation)
                     tStart = tEnd
                 else:
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
-                    operation = next(operations)
                     if operation == 0:  # M; alignment match
                         for tc, qc in zip(target[tStart:tEnd], query[qStart:qEnd]):
                             if tc == qc:
