@@ -40,56 +40,6 @@ from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 
-class Coordinates(numpy.ndarray):
-    """numpy array subclass for alignment coordinates.
-
-    This class uses a ``cigar`` attribute to store a BAM/SAM-style cigar
-    representation of the alignment. The cigar can contain information about
-    the alignment that is not represented in the coordinates. For example, the
-    cigar string distinguishes between deletions from the reference and skipped
-    regions (e.g. introns) from the reference.
-
-    To ensure that the coordinates and the cigar remain consistent with each
-    other, the coordinates are read-only by default, and the cigar is stored
-    as an immutable tuple of tuples.
-    """
-
-    def __new__(cls, cigar, pos=0, strand="+"):
-        """Create a new Coordinates instance."""
-        query_pos = 0
-        coordinates = [[pos, query_pos]]
-        for operation, length in cigar:
-            if operation in (0, 7, 8):  # M=X
-                pos += length
-                query_pos += length
-            elif operation in (1, 4):  # IS
-                query_pos += length
-            elif operation in (2, 3):  # DN
-                pos += length
-            elif operation == 5:  # H
-                # hard clipping (clipped sequences not present in sequence)
-                continue
-            elif operation == 6:  # P
-                raise NotImplementedError("padding operator is not yet implemented")
-            coordinates.append([pos, query_pos])
-        shape = (len(coordinates), 2)
-        obj = super().__new__(cls, shape, int)
-        obj[:, :] = coordinates
-        obj = obj.transpose()
-        if strand == "-":
-            obj[1, :] = query_pos - obj[1, :]
-        obj.flags.writeable = False
-        obj.cigar = tuple(cigar)
-        return obj
-
-    def copy(self):
-        """Return a copy of the array as an unwriteable Coordinates object."""
-        obj = super().copy()
-        obj.flags.writeable = self.flags.writeable
-        obj.cigar = self.cigar
-        return obj
-
-
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Sequence Alignment/Map (SAM) file format."""
 
@@ -639,7 +589,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 strand = "+"
             if pos >= 0:
-                coordinates = Coordinates(cigar, pos, strand)
+                target_pos = pos
+                query_pos = 0
+                coordinates = [[target_pos, query_pos]]
+                for operation, length in cigar:
+                    if operation in (0, 7, 8):  # M=X
+                        target_pos += length
+                        query_pos += length
+                    elif operation in (1, 4):  # IS
+                        query_pos += length
+                    elif operation in (2, 3):  # DN
+                        target_pos += length
+                    elif operation == 5:  # H
+                        # hard clipping (clipped sequences not present in sequence)
+                        continue
+                    elif operation == 6:  # P
+                        raise NotImplementedError("padding operator is not yet implemented")
+                    coordinates.append([target_pos, query_pos])
+                coordinates = numpy.array(coordinates).transpose()
+                if strand == "-":
+                    coordinates[1, :] = query_pos - coordinates[1, :]
             else:
                 coordinates = None
             if md is None:
