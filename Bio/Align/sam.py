@@ -178,12 +178,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             qName = "query"
             qual = "*"
+            qSize = abs(coordinates[1, -1] - coordinates[1, 0])
         else:
             try:
                 qual = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
             query = query.seq
+            qSize = len(query)
         try:
             rName = target.id
         except AttributeError:
@@ -192,9 +194,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target = target.seq
         coordinates = alignment.coordinates
         try:
-            operations_lengths = coordinates.cigar
+            operations = alignment.operations
         except AttributeError:
-            operations_lengths = None
+            operations = None
         if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand
@@ -210,10 +212,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query = "*"
         else:
             query = str(query, "ASCII")
-        if operations_lengths is None:
+        cigar2 = ""
+        try:
+            hard_clip_left = alignment.hard_clip_left
+        except AttributeError:
+            pass
+        else:
+            cigar2 += "%dH" % hard_clip_left
+        if operations is None:
             # calculate the cigar from the alignment coordinates
             pos = None
-            operations_lengths = []
+            operations = []
             tSize = len(target)
             tStart, qStart = coordinates[:, 0]
             for tEnd, qEnd in coordinates[:, 1:].transpose():
@@ -223,13 +232,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     length = qCount
                     if pos is None or tEnd == tSize:
                         operation = 4  # S; soft clipping
+                        cigar2 += "%dS" % length
                     else:
                         operation = 1  # I; insertion to the reference
+                        cigar2 += "%dI" % length
                     qStart = qEnd
                 elif qCount == 0:
                     if tStart > 0 and tEnd < tSize:
                         length = tCount
                         operation = 2  # D; deletion from the reference
+                        cigar2 += "%dD" % length
                     else:
                         operation = None
                     tStart = tEnd
@@ -242,10 +254,62 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     qStart = qEnd
                     operation = 0  # M; alignment match
                     length = tCount
-                if operation is not None:
-                    operations_lengths.append([operation, length])
+                    cigar2 += "%dM" % length
         else:
             # use the existing cigar
+            ###
+            # calculate the cigar from the alignment coordinates
+            pos = None
+            operations = iter(operations)
+            tSize = len(target)
+            tStart, qStart = coordinates[:, 0]
+            for tEnd, qEnd in coordinates[:, 1:].transpose():
+                tCount = tEnd - tStart
+                qCount = qEnd - qStart
+                if tCount == 0:
+                    length = qCount
+                    operation = next(operations)
+                    if operation == 1:  # I; insertion to the reference
+                        cigar2 += "%dI" % length
+                    elif operation == 4:  # S; soft clipping
+                        cigar2 += "%dS" % length
+                        assert qStart == 0 or qEnd == qSize
+                    else:
+                        raise ValueError("Unexpected operation %d" % operation)
+                    qStart = qEnd
+                elif qCount == 0:
+                    if tStart > 0 and tEnd < tSize:
+                        length = tCount
+                        operation = next(operations)
+                        if operation == 2:  # D; deletion from the reference
+                            cigar2 += "%dD" % length
+                        elif operation == 3:  # N; skipped region from the reference
+                            cigar2 += "%dN" % length
+                        else:
+                            raise ValueError("Unexpected operation %d" % operation)
+                    else:
+                        operation = None
+                    tStart = tEnd
+                else:
+                    if tCount != qCount:
+                        raise ValueError("Unequal step sizes in alignment")
+                    if pos is None:
+                        pos = tStart
+                    tStart = tEnd
+                    qStart = qEnd
+                    length = tCount
+                    operation = next(operations)
+                    if operation == 0:  # M; alignment match
+                        cigar2 += "%dM" % length
+                    elif operation == 7:  # =; sequence match
+                        cigar2 += "%d=" % length
+                    elif operation == 8:  # X; sequence mismatch
+                        cigar2 += "%dX" % length
+                    elif operation == 5:  # H; hard clipping
+                        pass
+                    else:
+                        raise ValueError("Unexpected operation %d" % operation)
+            ###
             tStart, qStart = coordinates[:, 0]
             for tEnd, qEnd in coordinates[:, 1:].transpose():
                 if tStart < tEnd and qStart < qEnd:
@@ -253,9 +317,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     break
                 tStart = tEnd
                 qStart = qEnd
-        cigar = ""
-        for operation, length in operations_lengths:
-            cigar += str(length) + "MIDNSHP=X"[operation]
+        try:
+            hard_clip_right = alignment.hard_clip_right
+        except AttributeError:
+            pass
+        else:
+            cigar2 += "%dH" % hard_clip_right
+        cigar = cigar2
         try:
             mapq = alignment.mapq
         except AttributeError:
@@ -281,56 +349,58 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if md is True:
             if query == "*":
                 raise ValueError("requested MD tag with undefined sequence")
+            # calculate the cigar from the alignment coordinates
+            tStart, qStart = coordinates[:, 0]
+            operations = iter(alignment.operations)
             number = 0
-            ts = pos
-            qs = 0
             md = ""
-            for operation, length in operations_lengths:
-                if operation == 0:  # M; alignment match
-                    te = ts + length
-                    qe = qs + length
-                    for tc, qc in zip(target[ts:te], query[qs:qe]):
-                        if tc == qc:
-                            number += 1
+            for tEnd, qEnd in coordinates[:, 1:].transpose():
+                tCount = tEnd - tStart
+                qCount = qEnd - qStart
+                if tCount == 0:
+                    operation = next(operations)
+                    if operation == 4:  # S; soft clipping
+                        assert qStart == 0 or qEnd == qSize
+                    elif operation == 1:  # I; insertion to the reference
+                        pass
+                    else:
+                        raise Exception("Unexpected operation %d" % operation)
+                    qStart = qEnd
+                elif qCount == 0:
+                    if tStart > 0 and tEnd < tSize:
+                        length = tCount
+                        operation = next(operations)
+                        if operation == 2:  # D; deletion from the reference
+                            if number:
+                                md += str(number)
+                                number = 0
+                            md += "^" + target[tStart:tEnd]
+                        elif operation == 3:  # N; skipped region from the reference
+                            pass
                         else:
+                            raise Exception("Unexpected operation %d" % operation)
+                    tStart = tEnd
+                else:
+                    if tCount != qCount:
+                        raise ValueError("Unequal step sizes in alignment")
+                    operation = next(operations)
+                    if operation == 0:  # M; alignment match
+                        for tc, qc in zip(target[tStart:tEnd], query[qStart:qEnd]):
+                            if tc == qc:
+                                number += 1
+                            else:
+                                md += str(number) + tc
+                                number = 0
+                    elif operation == 7:  # =; sequence match
+                        number += tCount
+                    elif operation == 8:  # X; sequence mismatch
+                        for tc in target[tStart:tEnd]:
                             md += str(number) + tc
                             number = 0
-                    ts = te
-                    qs = qe
-                elif operation == 1:  # I; insertion to the reference
-                    qe = qs + length
-                    qs = qe
-                elif operation == 2:  # D; deletion from the reference
-                    te = ts + length
-                    if number:
-                        md += str(number)
-                        number = 0
-                    md += "^" + target[ts:te]
-                    ts = te
-                elif operation == 3:  # N; skipped region from the reference
-                    te = ts + length
-                    ts = te
-                elif operation == 4:  # S; soft clipping
-                    qe = qs + length
-                    qs = qe
-                elif operation == 5:  # H; hard clipping
-                    pass
-                elif operation == 6:  # P; padding
-                    raise NotImplementedError("padding operator is not yet implemented")
-                elif operation == 7:  # =; sequence match
-                    te = ts + length
-                    qe = qs + length
-                    number += length
-                    ts = te
-                    qs = qe
-                elif operation == 8:  # X; sequence mismatch
-                    te = ts + length
-                    qe = qs + length
-                    for tc in target[ts:te]:
-                        md += str(number)
-                        number = 0
-                    ts = te
-                    qs = qe
+                    else:
+                        raise ValueError("Unexpected operation %d" % operation)
+                    tStart = tEnd
+                    qStart = qEnd
             if number:
                 md += str(number)
             field = "MD:Z:%s" % md
@@ -488,7 +558,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             rname = fields[2]
             pos = int(fields[3]) - 1
             mapq = int(fields[4])
+            hard_clip_left = None
+            hard_clip_right = None
             cigar = []
+            operations = []
             number = ""
             for letter in fields[5]:
                 if letter == "M":  # alignment match
@@ -512,6 +585,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     number += letter
                     continue
+                if operation == 5:  # hard clipping
+                    if operations:
+                        hard_clip_right = int(number)
+                    else:
+                        hard_clip_left = int(number)
+                else:
+                    operations.append(operation)
                 cigar.append((operation, int(number)))
                 number = ""
             rnext = fields[6]
@@ -674,4 +754,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 alignment.score = score
             if annotations:
                 alignment.annotations = annotations
+            alignment.operations = operations
+            if hard_clip_left is not None:
+                alignment.hard_clip_left = hard_clip_left
+            if hard_clip_right is not None:
+                alignment.hard_clip_right = hard_clip_right
             yield alignment
