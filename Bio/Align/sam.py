@@ -176,26 +176,26 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    length = qCount
+                    length = str(qCount)
                     if qStart == 0 or qEnd == qSize:
                         operation = "S"  # soft clipping
                     else:
                         operation = "I"  # insertion to the reference
                     qStart = qEnd
                 elif qCount == 0:
-                    length = tCount
+                    length = str(tCount)
                     operation = "D"  # deletion from the reference
                     tStart = tEnd
                 else:
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
+                    length = str(tCount)
                     if pos is None:
                         pos = tStart
                     tStart = tEnd
                     qStart = qEnd
                     operation = "M"  # alignment match
-                    length = tCount
-                cigar += str(length) + operation
+                cigar += length + operation
         else:
             # use the operations attribute
             tStart, qStart = coordinates[0, :]
@@ -203,42 +203,40 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    length = qCount
-                    if operation == 1:  # I; insertion to the reference
-                        cigar += "%dI" % length
-                    elif operation == 4:  # S; soft clipping
-                        cigar += "%dS" % length
+                    length = str(qCount)
+                    if operation == "I":  # insertion to the reference
+                        pass
+                    elif operation == "S":  # soft clipping
                         assert qStart == 0 or qEnd == qSize
                     else:
-                        raise ValueError("Unexpected operation %d" % operation)
+                        raise ValueError("Unexpected operation %s" % operation)
                     qStart = qEnd
                 elif qCount == 0:
-                    length = tCount
-                    if operation == 2:  # D; deletion from the reference
-                        cigar += "%dD" % length
-                    elif operation == 3:  # N; skipped region from the reference
-                        cigar += "%dN" % length
+                    length = str(tCount)
+                    if operation == "D":  # deletion from the reference
+                        pass
+                    elif operation == "N":  # skipped region from the reference
+                        pass
                     else:
                         raise ValueError("Unexpected operation %d" % operation)
                     tStart = tEnd
                 else:
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
-                    length = tCount
+                    length = str(tCount)
                     if pos is None:
                         pos = tStart
                     tStart = tEnd
                     qStart = qEnd
-                    if operation == 0:  # M; alignment match
-                        cigar += "%dM" % length
-                    elif operation == 7:  # =; sequence match
-                        cigar += "%d=" % length
-                    elif operation == 8:  # X; sequence mismatch
-                        cigar += "%dX" % length
-                    elif operation == 5:  # H; hard clipping
+                    if operation == "M":  # alignment match
+                        pass
+                    elif operation == "=":  # sequence match
+                        pass
+                    elif operation == "X":  # sequence mismatch
                         pass
                     else:
                         raise ValueError("Unexpected operation %d" % operation)
+                cigar += length + operation
         try:
             hard_clip_right = alignment.hard_clip_right
         except AttributeError:
@@ -270,7 +268,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if md is True:
             if query == "*":
                 raise ValueError("requested MD tag with undefined sequence")
-            # calculate the cigar from the alignment coordinates
+            # calculate the MD tag from the alignment coordinates and sequences
             tStart, qStart = coordinates[0, :]
             operations = alignment.operations
             number = 0
@@ -279,21 +277,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    if operation == 4:  # S; soft clipping
+                    if operation == "S":  # soft clipping
                         assert qStart == 0 or qEnd == qSize
-                    elif operation == 1:  # I; insertion to the reference
+                    elif operation == "I":  # insertion to the reference
                         pass
                     else:
-                        raise Exception("Unexpected operation %d" % operation)
+                        raise Exception("Unexpected operation %s" % operation)
                     qStart = qEnd
                 elif qCount == 0:
                     length = tCount
-                    if operation == 2:  # D; deletion from the reference
+                    if operation == "D":  # deletion from the reference
                         if number:
                             md += str(number)
                             number = 0
                         md += "^" + target[tStart:tEnd]
-                    elif operation == 3:  # N; skipped region from the reference
+                    elif operation == "N":  # skipped region from the reference
                         pass
                     else:
                         raise Exception("Unexpected operation %d" % operation)
@@ -301,16 +299,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 else:
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
-                    if operation == 0:  # M; alignment match
+                    if operation == "M":  # alignment match
                         for tc, qc in zip(target[tStart:tEnd], query[qStart:qEnd]):
                             if tc == qc:
                                 number += 1
                             else:
                                 md += str(number) + tc
                                 number = 0
-                    elif operation == 7:  # =; sequence match
+                    elif operation == "=":  # sequence match
                         number += tCount
-                    elif operation == 8:  # X; sequence mismatch
+                    elif operation == "X":  # sequence mismatch
                         for tc in target[tStart:tEnd]:
                             md += str(number) + tc
                             number = 0
@@ -522,7 +520,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 strand = "+"
             hard_clip_left = None
             hard_clip_right = None
-            operations = []
+            operations = ""
             if rname == "*":  # unmapped
                 target = None
                 coordinates = None
@@ -531,34 +529,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 coordinates = [[target_pos, query_pos]]
                 number = ""
                 for letter in cigar:
-                    if letter == "M":  # alignment match
-                        operation = 0
-                        operations.append(operation)
+                    if letter in "M=X":
+                        # M: alignment match
+                        # =: sequence match
+                        # X: sequence mismatch
                         length = int(number)
                         target_pos += length
                         query_pos += length
-                    elif letter == "I":  # insertion to the reference
-                        operation = 1
-                        operations.append(operation)
+                    elif letter in "IS":
+                        # I: insertion to the reference
+                        # S: soft clipping
                         length = int(number)
                         query_pos += length
-                    elif letter == "D":  # deletion from the reference
-                        operation = 2
-                        operations.append(operation)
+                    elif letter in "DN":
+                        # D: deletion from the reference
+                        # N: skipped region from the reference
                         length = int(number)
                         target_pos += length
-                    elif letter == "N":  # skipped region from the reference
-                        operation = 3
-                        operations.append(operation)
-                        length = int(number)
-                        target_pos += length
-                    elif letter == "S":  # soft clipping
-                        operation = 4
-                        operations.append(operation)
-                        length = int(number)
-                        query_pos += length
                     elif letter == "H":  # hard clipping
-                        operation = 5
                         if operations:
                             hard_clip_right = int(number)
                         else:
@@ -566,24 +554,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         number = ""
                         continue
                     elif letter == "P":  # padding
-                        operation = 6
-                        operations.append(operation)
                         raise NotImplementedError("padding operator is not yet implemented")
-                    elif letter == "=":  # sequence match
-                        operation = 7
-                        operations.append(operation)
-                        length = int(number)
-                        target_pos += length
-                        query_pos += length
-                    elif letter == "X":  # sequence mismatch
-                        operation = 8
-                        operations.append(operation)
-                        length = int(number)
-                        target_pos += length
-                        query_pos += length
                     else:
                         number += letter
                         continue
+                    operations += letter
                     coordinates.append([target_pos, query_pos])
                     number = ""
                 target = self.targets.get(rname)
@@ -605,8 +580,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 number = ""
                 for letter in cigar:
                     if letter == "M":  # alignment match
-                        operation = 0
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         target_pos += length
                         query_pos += length
@@ -614,14 +588,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         seq = seq[length:]
                         size += length
                     elif letter == "I":  # insertion to the reference
-                        operation = 1
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         query_pos += length
                         seq = seq[length:]
                     elif letter == "D":  # deletion from the reference
-                        operation = 2
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         target_pos += length
                         size += length
@@ -629,22 +601,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         sizes.append(size)
                         size = 0
                     elif letter == "N":  # skipped region from the reference
-                        operation = 3
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         target_pos += length
                         starts.append(target_pos)
                         sizes.append(size)
                         size = 0
                     elif letter == "S":  # soft clipping
-                        operation = 4
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         query_pos += length
                         seq = seq[length:]
                     elif letter == "H":
                         # hard clipping (clipped sequences not present in sequence)
-                        operation = 5
                         if operations:
                             hard_clip_right = int(number)
                         else:
@@ -652,11 +621,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         number = ""
                         continue
                     elif letter == "P":  # padding
-                        operation = 6
                         raise NotImplementedError("padding operator is not yet implemented")
                     elif letter == "=":  # sequence match
-                        operation = 7
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         target_pos += length
                         query_pos += length
@@ -664,8 +631,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         seq = seq[length:]
                         size += length
                     elif letter == "X":  # sequence mismatch
-                        operation = 8
-                        operations.append(operation)
+                        operations += letter
                         length = int(number)
                         target_pos += length
                         query_pos += length
