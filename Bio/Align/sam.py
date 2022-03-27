@@ -473,7 +473,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             qname = fields[0]
             flag = int(fields[1])
             rname = fields[2]
-            pos = int(fields[3]) - 1
+            target_pos = int(fields[3]) - 1
             mapq = int(fields[4])
             cigar = fields[5]
             rnext = fields[6]
@@ -527,8 +527,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target = None
                 coordinates = None
             elif md is None:
-###
-                target_pos = pos
                 query_pos = 0
                 coordinates = [[target_pos, query_pos]]
                 number = ""
@@ -588,7 +586,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         continue
                     coordinates.append([target_pos, query_pos])
                     number = ""
-###
                 target = self.targets.get(rname)
                 if target is None:
                     if self.targets:
@@ -598,94 +595,94 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     target = SeqRecord(None, id=rname)
             else:
 ###
-                cigar2 = []
+                query_pos = 0
+                coordinates = [[target_pos, query_pos]]
+                seq = query
+                target = ""
+                starts = [target_pos]
+                size = 0
+                sizes = []
                 number = ""
                 for letter in cigar:
                     if letter == "M":  # alignment match
                         operation = 0
+                        operations.append(operation)
+                        length = int(number)
+                        target_pos += length
+                        query_pos += length
+                        target += seq[:length]
+                        seq = seq[length:]
+                        size += length
                     elif letter == "I":  # insertion to the reference
                         operation = 1
+                        operations.append(operation)
+                        length = int(number)
+                        query_pos += length
+                        seq = seq[length:]
                     elif letter == "D":  # deletion from the reference
                         operation = 2
+                        operations.append(operation)
+                        length = int(number)
+                        target_pos += length
+                        size += length
+                        starts.append(target_pos)
+                        sizes.append(size)
+                        size = 0
                     elif letter == "N":  # skipped region from the reference
                         operation = 3
+                        operations.append(operation)
+                        length = int(number)
+                        target_pos += length
+                        starts.append(target_pos)
+                        sizes.append(size)
+                        size = 0
                     elif letter == "S":  # soft clipping
                         operation = 4
-                    elif letter == "H":  # hard clipping
+                        operations.append(operation)
+                        length = int(number)
+                        query_pos += length
+                        seq = seq[length:]
+                    elif letter == "H":
+                        # hard clipping (clipped sequences not present in sequence)
                         operation = 5
-                    elif letter == "P":  # padding
-                        operation = 6
-                    elif letter == "=":  # sequence match
-                        operation = 7
-                    elif letter == "X":  # sequence mismatch
-                        operation = 8
-                    else:
-                        number += letter
-                        continue
-                    if operation == 5:  # hard clipping
                         if operations:
                             hard_clip_right = int(number)
                         else:
                             hard_clip_left = int(number)
-                    else:
-                        operations.append(operation)
-                    cigar2.append((operation, int(number)))
-                    number = ""
-###
-                target_pos = pos
-                query_pos = 0
-                coordinates = [[target_pos, query_pos]]
-                for operation, length in cigar2:
-                    if operation in (0, 7, 8):  # M=X
-                        target_pos += length
-                        query_pos += length
-                    elif operation in (1, 4):  # IS
-                        query_pos += length
-                    elif operation in (2, 3):  # DN
-                        target_pos += length
-                    elif operation == 5:  # H
-                        # hard clipping (clipped sequences not present in sequence)
+                        number = ""
                         continue
-                    elif operation == 6:  # P
+                    elif letter == "P":  # padding
+                        operation = 6
                         raise NotImplementedError("padding operator is not yet implemented")
-                    coordinates.append([target_pos, query_pos])
-                seq = query
-                target = ""
-                starts = [pos]
-                size = 0
-                sizes = []
-                number = ""
-                for operation, length in cigar2:
-                    if operation in (0, 7, 8):  # M=X
-                        pos += length
+                    elif letter == "=":  # sequence match
+                        operation = 7
+                        operations.append(operation)
+                        length = int(number)
+                        target_pos += length
+                        query_pos += length
                         target += seq[:length]
                         seq = seq[length:]
                         size += length
-                    elif operation in (1, 4):  # IS
+                    elif letter == "X":  # sequence mismatch
+                        operation = 8
+                        operations.append(operation)
+                        length = int(number)
+                        target_pos += length
+                        query_pos += length
+                        target += seq[:length]
                         seq = seq[length:]
-                    elif operation == 2:  # D
-                        pos += length
                         size += length
-                        starts.append(pos)
-                        sizes.append(size)
-                        size = 0
-                    elif operation == 3:  # N
-                        pos += length
-                        starts.append(pos)
-                        sizes.append(size)
-                        size = 0
-                    elif operation == 5:  # H
-                        # hard clipping (clipped sequences not present in sequence)
+                    else:
+                        number += letter
                         continue
-                    elif operation == 6:  # P
-                        raise NotImplementedError(
-                            "padding operator is not yet implemented"
-                        )
+                    coordinates.append([target_pos, query_pos])
+                    number = ""
+###
                 sizes.append(size)
                 seq = target
                 target = ""
-                letters = iter(md)
                 number = ""
+                letters = iter(md)
                 for letter in letters:
                     if letter in "ACGTNacgtn":
                         if number:
