@@ -213,12 +213,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     qStart = qEnd
                 elif qCount == 0:
                     length = str(tCount)
-                    if operation == "D":  # deletion from the reference
-                        pass
-                    elif operation == "N":  # skipped region from the reference
-                        pass
-                    else:
-                        raise ValueError("Unexpected operation %d" % operation)
+                    if operation not in "DN":
+                        # D: deletion from the reference
+                        # N: skipped region from the reference
+                        raise ValueError("Unexpected operation %s" % operation)
                     tStart = tEnd
                 else:
                     if tCount != qCount:
@@ -228,14 +226,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         pos = tStart
                     tStart = tEnd
                     qStart = qEnd
-                    if operation == "M":  # alignment match
-                        pass
-                    elif operation == "=":  # sequence match
-                        pass
-                    elif operation == "X":  # sequence mismatch
-                        pass
-                    else:
-                        raise ValueError("Unexpected operation %d" % operation)
+                    if operation not in "M=X":
+                        # M: alignment match
+                        # =: sequence match
+                        # X: sequence mismatch
+                        raise ValueError("Unexpected operation %s" % operation)
                 cigar += length + operation
         try:
             hard_clip_right = alignment.hard_clip_right
@@ -294,7 +289,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     elif operation == "N":  # skipped region from the reference
                         pass
                     else:
-                        raise Exception("Unexpected operation %d" % operation)
+                        raise Exception("Unexpected operation %s" % operation)
                     tStart = tEnd
                 else:
                     if tCount != qCount:
@@ -313,7 +308,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                             md += str(number) + tc
                             number = 0
                     else:
-                        raise ValueError("Unexpected operation %d" % operation)
+                        raise ValueError("Unexpected operation %s" % operation)
                     tStart = tEnd
                     qStart = qEnd
             if number:
@@ -554,7 +549,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         number = ""
                         continue
                     elif letter == "P":  # padding
-                        raise NotImplementedError("padding operator is not yet implemented")
+                        raise NotImplementedError(
+                            "padding operator is not yet implemented"
+                        )
                     else:
                         number += letter
                         continue
@@ -564,12 +561,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target = self.targets.get(rname)
                 if target is None:
                     if self.targets:
-                        raise ValueError(
-                            f"Found target {rname} missing from header"
-                        )
+                        raise ValueError(f"Found target {rname} missing from header")
                     target = SeqRecord(None, id=rname)
             else:
-###
                 query_pos = 0
                 coordinates = [[target_pos, query_pos]]
                 seq = query
@@ -621,7 +615,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         number = ""
                         continue
                     elif letter == "P":  # padding
-                        raise NotImplementedError("padding operator is not yet implemented")
+                        raise NotImplementedError(
+                            "padding operator is not yet implemented"
+                        )
                     elif letter == "=":  # sequence match
                         operations += letter
                         length = int(number)
@@ -643,7 +639,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         continue
                     coordinates.append([target_pos, query_pos])
                     number = ""
-###
                 sizes.append(size)
                 seq = target
                 target = ""
