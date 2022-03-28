@@ -377,6 +377,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     Other information associated with the alignment by its tags are stored in
     the annotations attribute of each alignment.
 
+    Any hard clipping (clipped sequences not present in the query sequence)
+    are stored as 'hard_clip_left' and 'hard_clip_right' in the annotations
+    dictionary attribute of the query sequence record.
+
     The sequence quality, if available, is stored as 'phred_quality' in the
     letter_annotations dictionary attribute of the query sequence record.
     """
