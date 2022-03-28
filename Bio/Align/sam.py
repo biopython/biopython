@@ -577,7 +577,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 sizes = []
                 number = ""
                 for letter in cigar:
-                    if letter == "M":  # alignment match
+                    if letter in "M=X":
+                        # M: alignment match
+                        # =: sequence match
+                        # X: sequence mismatch
                         operations += letter
                         length = int(number)
                         target_pos += length
@@ -585,7 +588,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         target += seq[:length]
                         seq = seq[length:]
                         size += length
-                    elif letter == "I":  # insertion to the reference
+                    elif letter in "IS":
+                        # I: insertion to the reference
+                        # S: soft clipping
                         operations += letter
                         length = int(number)
                         query_pos += length
@@ -605,11 +610,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         starts.append(target_pos)
                         sizes.append(size)
                         size = 0
-                    elif letter == "S":  # soft clipping
-                        operations += letter
-                        length = int(number)
-                        query_pos += length
-                        seq = seq[length:]
                     elif letter == "H":
                         # hard clipping (clipped sequences not present in sequence)
                         if operations:
@@ -622,22 +622,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         raise NotImplementedError(
                             "padding operator is not yet implemented"
                         )
-                    elif letter == "=":  # sequence match
-                        operations += letter
-                        length = int(number)
-                        target_pos += length
-                        query_pos += length
-                        target += seq[:length]
-                        seq = seq[length:]
-                        size += length
-                    elif letter == "X":  # sequence mismatch
-                        operations += letter
-                        length = int(number)
-                        target_pos += length
-                        query_pos += length
-                        target += seq[:length]
-                        seq = seq[length:]
-                        size += length
                     else:
                         number += letter
                         continue
