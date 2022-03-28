@@ -132,6 +132,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             qSize = abs(coordinates[-1, 1] - coordinates[0, 1])
         else:
             try:
+                hard_clip_left = query.annotations["hard_clip_left"]
+            except (AttributeError, KeyError):
+                hard_clip_left = None
+            try:
+                hard_clip_right = query.annotations["hard_clip_right"]
+            except (AttributeError, KeyError):
+                hard_clip_right = None
+            try:
                 qual = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
@@ -161,11 +169,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query = str(query, "ASCII")
         pos = None
         cigar = ""
-        try:
-            hard_clip_left = alignment.hard_clip_left
-        except AttributeError:
-            pass
-        else:
+        if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
         try:
             operations = alignment.operations
@@ -232,11 +236,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         # X: sequence mismatch
                         raise ValueError("Unexpected operation %s" % operation)
                 cigar += length + operation
-        try:
-            hard_clip_right = alignment.hard_clip_right
-        except AttributeError:
-            pass
-        else:
+        if hard_clip_right is not None:
             cigar += "%dH" % hard_clip_right
         try:
             mapq = alignment.mapq
@@ -692,6 +692,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if strand == "-":
                     sequence = sequence.reverse_complement()
             query = SeqRecord(sequence, id=qname)
+            if hard_clip_left is not None:
+                query.annotations["hard_clip_left"] = hard_clip_left
+            if hard_clip_right is not None:
+                query.annotations["hard_clip_left"] = hard_clip_right
             if qual != "*":
                 query.letter_annotations["phred_quality"] = qual
             records = [target, query]
