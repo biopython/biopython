@@ -38,6 +38,15 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+
+warnings.warn(
+    "Bio.Align.sam is an experimental module which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -124,27 +133,28 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise TypeError("Expected an Alignment object")
         coordinates = alignment.coordinates.transpose()
         target, query = alignment.sequences
+        hard_clip_left = None
+        hard_clip_right = None
         try:
             qName = query.id
         except AttributeError:
             qName = "query"
             qual = "*"
-            qSize = abs(coordinates[-1, 1] - coordinates[0, 1])
         else:
             try:
                 hard_clip_left = query.annotations["hard_clip_left"]
             except (AttributeError, KeyError):
-                hard_clip_left = None
+                pass
             try:
                 hard_clip_right = query.annotations["hard_clip_right"]
             except (AttributeError, KeyError):
-                hard_clip_right = None
+                pass
             try:
                 qual = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
             query = query.seq
-            qSize = len(query)
+        qSize = len(query)
         try:
             rName = target.id
         except AttributeError:
@@ -167,7 +177,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query = "*"
         else:
             query = str(query, "ASCII")
-        pos = None
+        tStart, qStart = coordinates[0, :]
+        pos = tStart
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
@@ -175,16 +186,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             operations = alignment.operations
         except AttributeError:
             # calculate the cigar from the alignment coordinates
-            tStart, qStart = coordinates[0, :]
+            if qStart > 0:
+                # Use soft clipping for query segments skipped in local alignments
+                cigar += "%dS" % qStart
             for tEnd, qEnd in coordinates[1:, :]:
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
                     length = str(qCount)
-                    if qStart == 0 or qEnd == qSize:
-                        operation = "S"  # soft clipping
-                    else:
-                        operation = "I"  # insertion to the reference
+                    operation = "I"  # insertion to the reference
                     qStart = qEnd
                 elif qCount == 0:
                     length = str(tCount)
@@ -194,15 +204,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
                     length = str(tCount)
-                    if pos is None:
-                        pos = tStart
                     tStart = tEnd
                     qStart = qEnd
                     operation = "M"  # alignment match
                 cigar += length + operation
+            if qEnd < qSize:
+                # Use soft clipping for query segments skipped in local alignments
+                cigar += "%dS" % (qSize - qEnd)
         else:
             # use the operations attribute
-            tStart, qStart = coordinates[0, :]
+            operations = iter(operations)
+            if qStart > 0:
+                operation = next(operations)
+                assert operation in "DS"
+                cigar += str(qStart) + operation
             for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
@@ -226,8 +241,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
                     length = str(tCount)
-                    if pos is None:
-                        pos = tStart
                     tStart = tEnd
                     qStart = qEnd
                     if operation not in "M=X":
@@ -236,6 +249,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         # X: sequence mismatch
                         raise ValueError("Unexpected operation %s" % operation)
                 cigar += length + operation
+            if qEnd < qSize:
+                operation = next(operations)
+                assert operation in "DS"
+                cigar += "%dS" % (qSize - qEnd)
         if hard_clip_right is not None:
             cigar += "%dH" % hard_clip_right
         try:

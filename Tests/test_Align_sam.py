@@ -4,13 +4,19 @@
 # as part of this package.
 """Tests for Align.sam module."""
 import unittest
+import warnings
 from io import StringIO
 
 
-from Bio.Align import Alignment, sam
+from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import sam
 
 
 try:
