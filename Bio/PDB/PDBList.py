@@ -240,7 +240,8 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PDBML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
+            * "biounit" (Biological assembly in PDBx/mmCif format)
 
         :type file_format: string
 
@@ -276,13 +277,14 @@ class PDBList:
             "xml": "%s.xml.gz",
             "mmtf": "%s",
             "bundle": "%s-pdb-bundle.tar.gz",
+            "biounit": "%s-assembly1.cif.gz" # The example files currently aren't shown as compressed, some cases have multiple assemblies
         }
         archive_fn = archive[file_format] % code
 
         if file_format not in archive.keys():
             raise (
                 "Specified file_format %s doesn't exists or is not supported. Maybe a "
-                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
+                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle, biounit"
                 % file_format
             )
 
@@ -307,6 +309,12 @@ class PDBList:
                 code,
                 archive_fn,
             )
+        elif file_format == "biounit":
+            url = self.pdb_server + "/pub/pdb/data/assemblies/mmCIF/%s/%s/%s" % (
+                code[1:3],
+                code,
+                archive_fn  # This will currently just pull biological assembly 1
+            )              
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
 
@@ -326,6 +334,7 @@ class PDBList:
             "xml": "%s.xml",
             "mmtf": "%s.mmtf",
             "bundle": "%s-pdb-bundle.tar",
+            "biounit": "%s-assembly1.cif" # Again just pulling assembly 1
         }
         final_file = os.path.join(path, final[file_format] % code)
 
@@ -451,7 +460,8 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
+            * "biounit" (Biological assembly in PDBx/mmCif format)
 
         :param overwrite: if set to True, existing structure files will be overwritten. Default: False
         :type overwrite: bool
