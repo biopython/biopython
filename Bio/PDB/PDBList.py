@@ -505,7 +505,8 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
+            * "biounit" (Biological assembly in PDBx/mmCif format)
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
