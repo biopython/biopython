@@ -15,7 +15,7 @@ repos:
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.3.0
     hooks:
     -   id: black
         args: [--check,--target-version,py37]
@@ -44,7 +44,7 @@ repos:
     -   id: rstcheck
         args: [--report=warning]
 -   repo: https://github.com/PyCQA/doc8
-    rev: 0.10.1
+    rev: 0.11.1
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
