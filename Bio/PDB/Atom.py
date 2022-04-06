@@ -571,7 +571,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
         Loses parent relationship, and sets selected_child to own of it's own
         children.
         """
-        shallow = copy(self)
+        shallow = copy.copy(self)
         shallow.child_dict = {}
         shallow.detach_parent()
 
