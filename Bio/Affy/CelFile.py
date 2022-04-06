@@ -174,10 +174,10 @@ def _read_v4(f):
 
     char = f.read(preHeadersMap["headerLen"])
     header = char.decode("ascii", "ignore")
-    for header in header.split("\n"):
-        if "=" in header:
-            header = header.split("=")
-            headersMap[header[0]] = "=".join(header[1:])
+    for line in header.split("\n"):
+        if "=" in line:
+            headline = line.split("=")
+            headersMap[headline[0]] = "=".join(headline[1:])
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
