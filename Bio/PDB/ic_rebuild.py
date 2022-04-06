@@ -1,4 +1,4 @@
-# Copyright 2019-2022 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-2021 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -169,7 +169,7 @@ def IC_duplicate(entity) -> Structure:
     Calls :meth:`.Chain.atom_to_internal_coordinates` if needed.
 
     :param Entity entity: Biopython PDB Entity (will fail for Atom)
-    :returns: Biopython PDBStructure, no Atom objects except initial coords
+    :returns: Biopython PDBStructure, no Atom objects
     """
     sp = StringIO()
     hasInternalCoords = False
@@ -354,10 +354,10 @@ def compare_residues(
         Whether to print mismatch info, default False
     :param bool quick: default False.
         Only check atomArrays are identical, aCoordMatchCount=0 if different
-    :param float rtol, atol: default 1e-03, 1e-03 or round to 3 places.
+    :param float rtol, atol: default 1e-03, 1e-05 or round to 3 places.
         Numpy allclose parameters; default is to round atom coordinates to 3
         places and test equal.  For 'quick' will use defaults above for
-        comparing atomArrays
+        comparing ataomArrays
     :returns dict:
         Result counts for Residues, Full ID match Residues, Atoms,
         Full ID match atoms, and Coordinate match atoms; report string;
@@ -380,38 +380,30 @@ def compare_residues(
 
     if quick:
         if isinstance(e0, Chain):
-            if e0.internal_coord.atomArray is not None and numpy.allclose(
+            if numpy.allclose(
                 e0.internal_coord.atomArray,
                 e1.internal_coord.atomArray,
                 rtol=1e-03 if rtol is None else rtol,
-                atol=1e-03 if atol is None else atol,
+                atol=1e-05 if atol is None else atol,
             ):
+                cmpdict["pass"] = True
                 cmpdict["aCoordMatchCount"] = numpy.size(e0.internal_coord.atomArray, 0)
-                if cmpdict["aCoordMatchCount"] > 0:
-                    cmpdict["pass"] = True
-                else:
-                    cmpdict["pass"] = False
             else:
                 cmpdict["pass"] = False
         else:
             cmpdict["pass"] = True
             for c0, c1 in zip_longest(e0.get_chains(), e1.get_chains()):
-                if c0.internal_coord.atomArray is not None:
-                    if numpy.allclose(
-                        c0.internal_coord.atomArray,
-                        c1.internal_coord.atomArray,
-                        rtol=1e-03 if rtol is None else rtol,
-                        atol=1e-03 if atol is None else atol,
-                    ):
-                        cmpdict["aCoordMatchCount"] += numpy.size(
-                            c0.internal_coord.atomArray, 0
-                        )
-                    else:
-                        cmpdict["pass"] = False
-                    cmpdict["aCount"] += numpy.size(c0.internal_coord.atomArray, 0)
-            if cmpdict["aCoordMatchCount"] < cmpdict["aCount"]:
-                cmpdict["pass"] = False
-
+                if numpy.allclose(
+                    c0.internal_coord.atomArray,
+                    c1.internal_coord.atomArray,
+                    rtol=1e-03 if rtol is None else rtol,
+                    atol=1e-05 if atol is None else atol,
+                ):
+                    cmpdict["aCoordMatchCount"] += numpy.size(
+                        c0.internal_coord.atomArray, 0
+                    )
+                else:
+                    cmpdict["pass"] = False
     else:
         for r0, r1 in zip_longest(e0.get_residues(), e1.get_residues()):
             if 2 == r0.is_disordered() == r1.is_disordered():

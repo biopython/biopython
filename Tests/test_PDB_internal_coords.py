@@ -1,4 +1,4 @@
-# Copyright 2020-2022 by Robert T. Miller.  All rights reserved.
+# Copyright 2020-2021 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -513,7 +513,7 @@ class Rebuild(unittest.TestCase):
             msg="hedron __repr__ error for M11 tau",
         )
         # some specific AtomKey compsrisons missed in other tests
-        a0, a1 = tau.atomkeys[0], tau.atomkeys[1]
+        a0, a1 = tau.aks[0], tau.aks[1]
         m = "AtomKey rich comparison failed"
         self.assertTrue(a1 > a0, msg=m)
         self.assertTrue(a1 >= a0, msg=m)
