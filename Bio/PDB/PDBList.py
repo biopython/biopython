@@ -42,6 +42,7 @@ import os
 import shutil
 import re
 import sys
+import ftplib
 
 from urllib.request import urlopen
 from urllib.request import urlretrieve
@@ -84,7 +85,8 @@ class PDBList:
     """
 
     def __init__(
-        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True
+        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True,
+        assemblies=False
     ):
         """Initialize the class with the default server or a custom one.
 
@@ -110,6 +112,9 @@ class PDBList:
 
         # variable for command-line option
         self.flat_tree = False
+
+        # variable to fetch assemblies or not
+        self.assemblies = assemblies
 
     @staticmethod
     def _print_default_format_warning(file_format):
@@ -215,7 +220,8 @@ class PDBList:
         return obsolete
 
     def retrieve_pdb_file(
-        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False
+        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False,
+        assemblies=False
     ):
         """Fetch PDB structure file from PDB server, and store it locally.
 
@@ -330,7 +336,37 @@ class PDBList:
                     print(f"Structure exists: '{final_file}' ")
                 return final_file
 
-        # Retrieve the file
+        # Prepare assemblies to be retrieved
+        print(f"{assemblies=}")
+        if assemblies:
+            ftp = ftplib.FTP("ftp.wwpdb.org")
+            ftp.login()  # anonymous
+            ftp.cwd("pub/pdb/data/biounit/PDB/all/")
+            entries = []
+            ftp.retrlines("NLST", callback=entries.append)
+
+            assemblies_to_fetch = [e for e in entries if code in e]
+
+            assemblies_out = []
+
+            for assembly in assemblies_to_fetch:
+                assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/PDB/all/{assembly}"
+                assembly_num = assembly[-4]
+                assembly_filename = os.path.join(path, assembly)
+                try:
+                    urlcleanup()
+                    urlretrieve(assembly_url, assembly_filename)
+                except OSError:
+                    print("Desired assembly doesn't exists")
+                else:
+                    final_assembly_file = os.path.join(path, f"{code}_assembly{assembly_num}.pdb")
+                    with gzip.open(assembly_filename, "rb") as gz:
+                        with open(final_assembly_file, "wb") as out:
+                            out.writelines(gz)
+                    os.remove(assembly_filename)
+                    assemblies_out.append(final_assembly_file)
+
+        # Retrieve the file(s)
         if self._verbose:
             print(f"Downloading PDB structure '{pdb_code}'...")
         try:
@@ -343,7 +379,10 @@ class PDBList:
                 with open(final_file, "wb") as out:
                     out.writelines(gz)
             os.remove(filename)
-        return final_file
+            if assemblies:
+                return final_file, assemblies_out
+            else:
+                return final_file
 
     def update_pdb(self, file_format=None):
         """Update your local copy of the PDB files.
@@ -395,7 +434,7 @@ class PDBList:
                     print(f"Obsolete file {old_file} is missing")
 
     def download_pdb_files(
-        self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
+        self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False, assemblies=False
     ):
         """Fetch set of PDB structure files from the PDB server and stores them locally.
 
@@ -441,6 +480,7 @@ class PDBList:
                 pdir=pdir,
                 file_format=file_format,
                 overwrite=overwrite,
+                assemblies=assemblies
             )
 
     def download_entire_pdb(self, listfile=None, file_format=None):
@@ -533,6 +573,7 @@ if __name__ == "__main__":
 
     file_format = "mmCif"
     overwrite = False
+    assemblies = False
 
     if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
@@ -545,6 +586,14 @@ if __name__ == "__main__":
                     overwrite = True
                 elif option in ("-pdb", "-xml", "-mmtf"):
                     file_format = option[1:]
+                # Allow for download of assemblies alongside ASU
+                elif option == "-assemblies":
+                    assemblies = True
+                # Allow for download of assemblies alone
+                # elif option == "-assemblies-only":
+                #     assemblies_only = True
+
+
     else:
         pdb_path = os.getcwd()
         pl = PDBList()
@@ -567,7 +616,7 @@ if __name__ == "__main__":
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
             pl.retrieve_pdb_file(
-                sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite, assemblies=assemblies
             )
 
         elif sys.argv[1][0] == "(":
@@ -575,5 +624,5 @@ if __name__ == "__main__":
             pdb_ids = re.findall("[0-9A-Za-z]{4}", sys.argv[1])
             for pdb_id in pdb_ids:
                 pl.retrieve_pdb_file(
-                    pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                    pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite, assemblies=assemblies
                 )
