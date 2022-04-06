@@ -40,7 +40,7 @@ class TestDisordered(unittest.TestCase):
         self.assertNotEqual(id(resi27), id(resi27_copy))  # did we really copy
 
         resi27_atoms = resi27.get_unpacked_list()
-        resi27_copy_atoms = resi27.get_unpacked_list()
+        resi27_copy_atoms = resi27_copy.get_unpacked_list()
         self.assertEqual(len(resi27_atoms), len(resi27_copy_atoms))
 
         for ai, aj in zip(resi27_atoms, resi27_copy_atoms):
