@@ -221,9 +221,15 @@ class PdbSeqresIterator(SequenceIterator):
                 pdb_id = line[7:11]
                 # Chain identifier.
                 chn_id = line[12]
+                # Sequence database name.
+                database = line[26:32].strip()
+                # Sequence database identification code.
+                db_id_code = line[47:67].strip()
                 metadata[chn_id].append(
                     {
                         "pdb_id": pdb_id,
+                        "database": database,
+                        "db_id_code": db_id_code,
                     }
                 )
             # ENH: 'SEQADV' 'MODRES'
