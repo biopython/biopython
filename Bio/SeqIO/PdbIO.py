@@ -232,6 +232,15 @@ class PdbSeqresIterator(SequenceIterator):
                         "db_id_code": db_id_code,
                     }
                 )
+            elif rec_name == "DBREF2":
+                # ID code of this entry (PDB ID)
+                pdb_id = line[7:11]
+                # Chain identifier.
+                chn_id = line[12]
+                # Sequence database accession code.
+                db_acc = line[18:40].strip()
+                if chn_id in metadata:
+                    metadata[chn_id][0]["db_acc"] = db_acc
             # ENH: 'SEQADV' 'MODRES'
 
         if rec_name is None:
