@@ -122,7 +122,7 @@ class PdbSeqresIterator(SequenceIterator):
         The sequences are derived from the SEQRES lines in the
         PDB file header, not the atoms of the 3D structure.
 
-        Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
+        Specifically, these PDB records are handled: DBREF, DBREF1, DBREF2, SEQADV, SEQRES, MODRES
 
         See: http://www.wwpdb.org/documentation/format23/sect3.html
 
