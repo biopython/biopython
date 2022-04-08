@@ -537,7 +537,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             hard_clip_left = None
             hard_clip_right = None
             operations = ""
-            if rname == "*":  # unmapped
+            if flag & 0x4:  # unmapped
                 target = None
                 coordinates = None
             elif md is None:
@@ -552,11 +552,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         length = int(number)
                         target_pos += length
                         query_pos += length
-                    elif letter in "IS":
+                    elif letter == "I":
                         # I: insertion to the reference
-                        # S: soft clipping
                         length = int(number)
                         query_pos += length
+                    elif letter == "S":
+                        # S: soft clipping
+                        length = int(number)
+                        if query_pos == 0:
+                            coordinates[0][1] += length
+                        query_pos += length
+                        operations += letter
+                        number = ""
+                        continue
                     elif letter in "DN":
                         # D: deletion from the reference
                         # N: skipped region from the reference
@@ -690,12 +698,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if strand == "-":
                     coordinates[1, :] = query_pos - coordinates[1, :]
             if query == "*":
-                length = abs(coordinates[1, -1] - coordinates[1, 0])
+                length = query_pos
                 sequence = Seq(None, length=length)
             else:
                 sequence = Seq(query)
-                if strand == "-":
-                    sequence = sequence.reverse_complement()
+                if not (flag & 0x4):  # not unmapped
+                    assert len(query) == query_pos
+                    if strand == "-":
+                        sequence = sequence.reverse_complement()
             query = SeqRecord(sequence, id=qname)
             if hard_clip_left is not None:
                 query.annotations["hard_clip_left"] = hard_clip_left

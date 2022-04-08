@@ -1830,7 +1830,7 @@ class TestAlign_dna(unittest.TestCase):
             },
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 33))
+        self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1845,8 +1845,8 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61646095, 61646095, 61646111, 61646111],
-                             [       0,       11,       27,       33]]),
+                numpy.array([[61646095, 61646111],
+                             [      11,       27]]),
                 # fmt: on
             )
         )
@@ -1874,7 +1874,7 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 33))
+        self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1889,14 +1889,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[53575980, 53575980, 53575997, 53575997],
-                             [      33,       25,        8,        0]]),
+                numpy.array([[53575980, 53575997],
+                             [      25,        8]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1911,14 +1911,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[85737865, 85737865, 85737906],
-                             [       0,        9,       50]]),
+                numpy.array([[85737865, 85737906],
+                             [       9,       50]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SM")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1933,14 +1933,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[95160479, 95160479, 95160520, 95160520],
-                             [       0,        8,       49,       50]]),
+                numpy.array([[95160479, 95160520],
+                             [       8,       49]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1955,14 +1955,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42144400, 42144400, 42144436, 42144436],
-                             [       0,       11,       47,       50]]),
+                numpy.array([[42144400, 42144436],
+                             [      11,       47]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1977,14 +1977,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925984, 183925990, 183925990, 183926028, 183926028],
-                             [        0,         1,         7,        11,        49,        50]]),
+                numpy.array([[183925984, 183925990, 183925990, 183926028],
+                             [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMIMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 184))
+        self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1999,14 +1999,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[35483340, 35483340, 35483365, 35483499, 35483510, 35483510],
-                             [       0,       10,       35,       35,       46,       50]]),
+                numpy.array([[35483340, 35483365, 35483499, 35483510],
+                             [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMDMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2021,14 +2021,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[23891310, 23891310, 23891349, 23891349],
-                             [       0,       10,       49,       50]]),
+                numpy.array([[23891310, 23891349],
+                             [      10,       49]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2043,14 +2043,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[43252217, 43252217, 43252245, 43252245],
-                             [       0,       21,       49,       50]]),
+                numpy.array([[43252217, 43252245],
+                             [      21,       49]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 53))
+        self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2065,8 +2065,8 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759147, 52759157, 52759160, 52759198, 52759198],
-                             [       0,        1,       11,       11,       49,       50]]),
+                numpy.array([[52759147, 52759157, 52759160, 52759198],
+                             [       1,       11,       11,       49]]),
                 # fmt: on
             )
         )
@@ -2094,7 +2094,7 @@ class TestAlign_dna(unittest.TestCase):
         )
         self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2109,14 +2109,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61700837, 61700837, 61700871, 61700871],
-                             [       0,        1,       35,       50]]),
+                numpy.array([[61700837, 61700871],
+                             [       1,       35]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2131,14 +2131,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558157, 37558173, 37558173, 37558191, 37558191],
-                             [      50,       49,       33,       29,       11,        0]]),
+                numpy.array([[37558157, 37558173, 37558173, 37558191],
+                             [      49,       33,       29,       11]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMIMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2153,14 +2153,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48997405, 48997405, 48997442, 48997442],
-                             [      50,       49,       12,        0]]),
+                numpy.array([[48997405, 48997442],
+                             [      49,       12]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2175,14 +2175,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[120641740, 120641740, 120641776, 120641776],
-                             [       50,        49,        13,         0]]),
+                numpy.array([[120641740, 120641776],
+                             [       49,        13]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2197,14 +2197,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[54017130, 54017130, 54017169, 54017169],
-                             [      50,       49,       10,        0]]),
+                numpy.array([[54017130, 54017169],
+                             [      49,       10]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2219,14 +2219,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[553742, 553742, 553781, 553781],
-                             [    50,     49,     10,      0]]),
+                numpy.array([[553742, 553781],
+                             [    49,     10]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2241,14 +2241,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[99388555, 99388555, 99388591, 99388591],
-                             [      50,       49,       13,        0]]),
+                numpy.array([[99388555, 99388591],
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2263,14 +2263,14 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[112178171, 112178171, 112178196, 112178196],
-                             [       50,        35,        10,         0]]),
+                numpy.array([[112178171, 112178196],
+                             [       35,        10]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2284,14 +2284,14 @@ class TestAlign_dna(unittest.TestCase):
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[39368490, 39368490, 39368526, 39368526],
-                             [      50,       49,       13,        0]]),
+                numpy.array([[39368490, 39368526],
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 50))
+        self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -2306,8 +2306,8 @@ class TestAlign_dna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[220325687, 220325687, 220325721, 220325721],
-                             [       50,        47,        13,         0]]),
+                numpy.array([[220325687, 220325721],
+                             [       47,        13]]),
                 # fmt: on
             )
         )
@@ -2636,6 +2636,305 @@ class TestAlign_sambam(unittest.TestCase):
                 self.assertIsNone(alignment.coordinates)
             n += 1
         self.assertEqual(n, 200)
+
+
+class TestAlign_clippping(unittest.TestCase):
+    def test_6M(self):
+        """Test alignment starting at non-zero position."""
+        target_seq = Seq("AAAAAAAACCCCCC")
+        query_seq = Seq("CCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[8, 14], [0, 6]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+AAAAAAAACCCCCC
+        ||||||
+        CCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t9\t255\t6M\t*\t0\t0\tCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 8)
+        cigar = fields[5]
+        self.assertEqual(cigar, "6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_8D6M_ex1(self):
+        """Test alignment starting with deletion."""
+        target_seq = Seq("AAAAAAAACCCCCC")
+        query_seq = Seq("CCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 8, 14], [0, 0, 6]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+AAAAAAAACCCCCC
+--------||||||
+--------CCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t8D6M\t*\t0\t0\tCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "8D6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_8D6M_ex2(self):
+        """Test alignment starting with deletion at non-zero position."""
+        target_seq = Seq("GGGGAAAAAAAACCCCCC")
+        query_seq = Seq("CCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[4, 12, 18], [0, 0, 6]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+GGGGAAAAAAAACCCCCC
+    --------||||||
+    --------CCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t5\t255\t8D6M\t*\t0\t0\tCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 4)
+        cigar = fields[5]
+        self.assertEqual(cigar, "8D6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_8I6M_ex1(self):
+        """Test alignment starting with insertion."""
+        target_seq = Seq("CCCCCC")
+        query_seq = Seq("AAAAAAAACCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 0, 6], [0, 8, 14]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+--------CCCCCC
+--------||||||
+AAAAAAAACCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "8I6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_8I6M_ex2(self):
+        """Test alignment starting with insertion at non-zero position."""
+        target_seq = Seq("GGGGCCCCCC")
+        query_seq = Seq("AAAAAAAACCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[4, 4, 10], [0, 8, 14]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+GGGG--------CCCCCC
+    --------||||||
+    AAAAAAAACCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t5\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 4)
+        cigar = fields[5]
+        self.assertEqual(cigar, "8I6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_8S6M(self):
+        """Test alignment starting with soft clip."""
+        target_seq = Seq("CCCCCC")
+        query_seq = Seq("AAAAAAAACCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 6], [8, 14]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+        CCCCCC
+        ||||||
+AAAAAAAACCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t8S6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "8S6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_4S8D6M(self):
+        """Test alignment starting with soft clip followed by deletion."""
+        target_seq = Seq("AAAAAAAACCCCCC")
+        query_seq = Seq("GGGGCCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 8, 14], [4, 4, 10]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+    AAAAAAAACCCCCC
+    --------||||||
+GGGG--------CCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4S8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "4S8D6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_4I8D6M(self):
+        """Test alignment starting with insertion followed by deletion."""
+        target_seq = Seq("AAAAAAAACCCCCC")
+        query_seq = Seq("GGGGCCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 0, 8, 14], [0, 4, 4, 10]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+----AAAAAAAACCCCCC
+------------||||||
+GGGG--------CCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4I8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "4I8D6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_4S6M(self):
+        """Test alignment starting with soft clip at non-zero position."""
+        target_seq = Seq("AAAAAAAACCCCCC")
+        query_seq = Seq("GGGGCCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[8, 14], [4, 10]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+AAAAAAAACCCCCC
+        ||||||
+    GGGGCCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t9\t255\t4S6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 8)
+        cigar = fields[5]
+        self.assertEqual(cigar, "4S6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_4D8I6M(self):
+        """Test alignment starting with deletion followed by insertion."""
+        target_seq = Seq("GGGGCCCCCC")
+        query_seq = Seq("AAAAAAAACCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 4, 4, 10], [0, 0, 8, 14]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+GGGG--------CCCCCC
+------------||||||
+----AAAAAAAACCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4D8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "4D8I6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
+
+    def test_4S8I6M(self):
+        """Test alignment starting with soft clip followed by insertion."""
+        target_seq = Seq("CCCCCC")
+        query_seq = Seq("GGGGAAAAAAAACCCCCC")
+        target = SeqRecord(target_seq, id="target")
+        query = SeqRecord(query_seq, id="query")
+        sequences = [target, query]
+        coordinates = numpy.array([[0, 0, 6], [4, 12, 18]])
+        alignment = Alignment(sequences, coordinates)
+        self.assertEqual(str(alignment), """\
+    --------CCCCCC
+    --------||||||
+GGGGAAAAAAAACCCCCC
+""")
+        line = alignment.format("sam")
+        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4S8I6M\t*\t0\t0\tGGGGAAAAAAAACCCCCC\t*\n")
+        fields = line.split()
+        pos = int(fields[3]) - 1
+        self.assertEqual(pos, 0)
+        cigar = fields[5]
+        self.assertEqual(cigar, "4S8I6M")
+        stream = StringIO(line)
+        alignments = sam.AlignmentIterator(stream)
+        alignment = next(alignments)
+        stream.close()
+        self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
 
 
 if __name__ == "__main__":
