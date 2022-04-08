@@ -340,7 +340,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MNMNM")
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -386,7 +385,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MNMNM")
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -439,7 +437,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMDMNMIMNM")
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -488,7 +485,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMIMNMDMNMS")
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -630,7 +626,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -652,7 +647,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -674,7 +668,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -696,7 +689,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -718,7 +710,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -740,7 +731,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -761,7 +751,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MIM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -783,7 +772,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MDM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -805,7 +793,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -827,7 +814,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -849,7 +835,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MDM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -871,7 +856,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -893,7 +877,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -915,7 +898,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MIM")
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -936,7 +918,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -958,7 +939,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -980,7 +960,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1002,7 +981,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1024,7 +1002,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1046,7 +1023,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1068,7 +1044,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1090,7 +1065,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_001(self):
@@ -1198,7 +1172,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1220,7 +1193,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1242,7 +1214,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
@@ -1350,7 +1321,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1372,7 +1342,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1394,7 +1363,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1416,7 +1384,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MIM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1438,7 +1405,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MDM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1460,7 +1426,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1482,7 +1447,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1504,7 +1468,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MDM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1526,7 +1489,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1548,7 +1510,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1570,7 +1531,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "MIM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1592,7 +1552,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1614,7 +1573,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1636,7 +1594,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1658,7 +1615,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1680,7 +1636,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1702,7 +1657,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1724,7 +1678,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1746,7 +1699,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
@@ -1854,7 +1806,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1876,7 +1827,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1898,7 +1848,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1920,7 +1869,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SM")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1942,7 +1890,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1964,7 +1911,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1986,7 +1932,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMIMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2008,7 +1953,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMDMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2030,7 +1974,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2052,7 +1995,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2074,7 +2016,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMDMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2096,7 +2037,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "M")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2118,7 +2058,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2140,7 +2079,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMIMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2162,7 +2100,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2184,7 +2121,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2206,7 +2142,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2228,7 +2163,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2250,7 +2184,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2272,7 +2205,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2293,7 +2225,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2315,7 +2246,6 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, "SMS")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_005(self):
@@ -2357,7 +2287,6 @@ class TestAlign_sambam(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1532, 1567], [35, 0]])
             )
         )
-        self.assertEqual(alignment.operations, "M")
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
         self.assertEqual(alignment.tlen, -219)
@@ -2398,7 +2327,6 @@ class TestAlign_sambam(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1532, 1567], [35, 0]])
             )
         )
-        self.assertEqual(alignment.operations, "M")
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
         self.assertEqual(alignment.tlen, -219)
@@ -2487,7 +2415,6 @@ class TestAlign_sambam(unittest.TestCase):
                         alignment.coordinates, numpy.array([[132615, 132716], [101, 0]])
                     )
                 )
-                self.assertEqual(alignment.operations, "M")
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 132490)
                 self.assertEqual(alignment.tlen, -226)
@@ -2530,7 +2457,6 @@ class TestAlign_sambam(unittest.TestCase):
                         alignment.coordinates, numpy.array([[132490, 132591], [0, 101]])
                     )
                 )
-                self.assertEqual(alignment.operations, "M")
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 132615)
                 self.assertEqual(alignment.tlen, 226)
@@ -2573,7 +2499,6 @@ class TestAlign_sambam(unittest.TestCase):
                         alignment.coordinates, numpy.array([[137538, 137639], [0, 101]])
                     )
                 )
-                self.assertEqual(alignment.operations, "M")
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 135649)
                 self.assertEqual(alignment.tlen, -1788)
@@ -2616,7 +2541,6 @@ class TestAlign_sambam(unittest.TestCase):
                         alignment.coordinates, numpy.array([[135649, 135750], [101, 0]])
                     )
                 )
-                self.assertEqual(alignment.operations, "M")
                 self.assertEqual(alignment.rnext, "1")
                 self.assertEqual(alignment.pnext, 137538)
                 self.assertEqual(alignment.tlen, 1788)

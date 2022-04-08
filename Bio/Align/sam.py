@@ -189,66 +189,28 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
-        if len(splicesites) == 0:
-            try:
-                del alignment.operations
-            except AttributeError:
-                pass
-        if len(splicesites) == 0:
-            # calculate the cigar from the alignment coordinates
-            if qStart > 0:
-                cigar += "%dS" % qStart  # soft clipping
-            for tEnd, qEnd in coordinates[1:, :]:
-                tCount = tEnd - tStart
-                qCount = qEnd - qStart
-                if tCount == 0:
-                    qStart = qEnd
-                    cigar += "%dI" % qCount  # insertion to the reference
-                elif qCount == 0:
-                    tStart = tEnd
+        if qStart > 0:
+            cigar += "%dS" % qStart
+        for tEnd, qEnd in coordinates[1:, :]:
+            tCount = tEnd - tStart
+            qCount = qEnd - qStart
+            if tCount == 0:
+                cigar += "%dI" % qCount  # insertion to the reference
+                qStart = qEnd
+            elif qCount == 0:
+                if qStart in splicesites:
+                    cigar += "%dN" % tCount  # skipped region from the reference
+                else:
                     cigar += "%dD" % tCount  # deletion from the reference
-                else:
-                    if tCount != qCount:
-                        raise ValueError("Unequal step sizes in alignment")
-                    tStart = tEnd
-                    qStart = qEnd
-                    cigar += "%dM" % tCount  # alignment match
-            if qEnd < qSize:
-                cigar += "%dS" % (qSize - qEnd)  # soft clipping
-        else:
-            # use the operations attribute
-            operations = alignment.operations
-            operations = iter(operations)
-            if qStart > 0:
-                operation = next(operations)
-                cigar += "%dS" % qStart
-            for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
-                tCount = tEnd - tStart
-                qCount = qEnd - qStart
-                if tCount == 0:
-                    cigar += "%dI" % qCount  # insertion to the reference
-                    qStart = qEnd
-                elif qCount == 0:
-                    if qStart in splicesites:
-                        cigar += "%dN" % tCount  # N: skipped region from the reference
-                    else:
-                        cigar += "%dD" % tCount  # D: deletion from the reference
-                    tStart = tEnd
-                else:
-                    if tCount != qCount:
-                        raise ValueError("Unequal step sizes in alignment")
-                    length = str(tCount)
-                    tStart = tEnd
-                    qStart = qEnd
-                    if operation not in "M=X":
-                        # M: alignment match
-                        # =: sequence match
-                        # X: sequence mismatch
-                        raise ValueError("Unexpected operation %s" % operation)
-                    cigar += length + operation
-            if qEnd < qSize:
-                operation = next(operations)
-                cigar += "%dS" % (qSize - qEnd)
+                tStart = tEnd
+            else:
+                if tCount != qCount:
+                    raise ValueError("Unequal step sizes in alignment")
+                cigar += "%dM" % tCount
+                tStart = tEnd
+                qStart = qEnd
+        if qEnd < qSize:
+            cigar += "%dS" % (qSize - qEnd)
         if hard_clip_right is not None:
             cigar += "%dH" % hard_clip_right
         try:
@@ -278,53 +240,33 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 raise ValueError("requested MD tag with undefined sequence")
             # calculate the MD tag from the alignment coordinates and sequences
             tStart, qStart = coordinates[0, :]
-            operations = iter(alignment.operations)
             number = 0
             md = ""
-            if qStart > 0:
-                operation = next(operations)
-                assert operation == "S"
-            for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
+            for tEnd, qEnd in coordinates[1:, :]:
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    if operation == "S":  # soft clipping
-                        assert qStart == 0 or qEnd == qSize
-                    elif operation == "I":  # insertion to the reference
-                        pass
-                    else:
-                        raise Exception("Unexpected operation %s" % operation)
+                    # insertion to the reference
                     qStart = qEnd
                 elif qCount == 0:
                     length = tCount
-                    if operation == "D":  # deletion from the reference
+                    if qStart not in splicesites:
+                        # deletion from the reference
                         if number:
                             md += str(number)
                             number = 0
                         md += "^" + target[tStart:tEnd]
-                    elif operation == "N":  # skipped region from the reference
-                        pass
-                    else:
-                        raise Exception("Unexpected operation %s" % operation)
                     tStart = tEnd
                 else:
+                    # alignment match
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
-                    if operation == "M":  # alignment match
-                        for tc, qc in zip(target[tStart:tEnd], query[qStart:qEnd]):
-                            if tc == qc:
-                                number += 1
-                            else:
-                                md += str(number) + tc
-                                number = 0
-                    elif operation == "=":  # sequence match
-                        number += tCount
-                    elif operation == "X":  # sequence mismatch
-                        for tc in target[tStart:tEnd]:
+                    for tc, qc in zip(target[tStart:tEnd], query[qStart:qEnd]):
+                        if tc == qc:
+                            number += 1
+                        else:
                             md += str(number) + tc
                             number = 0
-                    else:
-                        raise ValueError("Unexpected operation %s" % operation)
                     tStart = tEnd
                     qStart = qEnd
             if number:
@@ -536,7 +478,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             hard_clip_left = None
             hard_clip_right = None
             splicesites = []
-            operations = ""
             if flag & 0x4:  # unmapped
                 target = None
                 coordinates = None
@@ -562,7 +503,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if query_pos == 0:
                             coordinates[0][1] += length
                         query_pos += length
-                        operations += letter
                         number = ""
                         continue
                     elif letter == "D":
@@ -588,7 +528,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     else:
                         number += letter
                         continue
-                    operations += letter
                     coordinates.append([target_pos, query_pos])
                     number = ""
                 target = self.targets.get(rname)
@@ -610,7 +549,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # M: alignment match
                         # =: sequence match
                         # X: sequence mismatch
-                        operations += letter
                         length = int(number)
                         target_pos += length
                         query_pos += length
@@ -619,13 +557,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         size += length
                     elif letter == "I":
                         # I: insertion to the reference
-                        operations += letter
                         length = int(number)
                         query_pos += length
                         seq = seq[length:]
                     elif letter == "S":
                         # S: soft clipping
-                        operations += letter
                         length = int(number)
                         if query_pos == 0:
                             coordinates[0][1] += length
@@ -634,7 +570,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         number = ""
                         continue
                     elif letter == "D":  # deletion from the reference
-                        operations += letter
                         length = int(number)
                         target_pos += length
                         size += length
@@ -642,7 +577,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         sizes.append(size)
                         size = 0
                     elif letter == "N":  # skipped region from the reference
-                        operations += letter
                         length = int(number)
                         target_pos += length
                         starts.append(target_pos)
@@ -746,7 +680,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 alignment.score = score
             if annotations:
                 alignment.annotations = annotations
-            alignment.operations = operations
             if splicesites:
                 if strand == "-":
                     splicesites = [query_pos - splicesite for splicesite in splicesites]
