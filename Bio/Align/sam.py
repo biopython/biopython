@@ -173,7 +173,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             flag = 16
             query = reverse_complement(query, inplace=False)
             coordinates = numpy.array(coordinates)
-            coordinates[:, 1] = len(query) - coordinates[:, 1]
+            coordinates[:, 1] = qSize - coordinates[:, 1]
+            splicesites = [qSize - splicesite for splicesite in splicesites]
         try:
             query = bytes(query)
         except TypeError:  # string
@@ -219,26 +220,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             operations = iter(operations)
             if qStart > 0:
                 operation = next(operations)
-                assert operation in "DS"
-                cigar += str(qStart) + operation
+                cigar += "%dS" % qStart
             for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    length = str(qCount)
-                    if operation == "I":  # insertion to the reference
-                        pass
-                    elif operation == "S":  # soft clipping
-                        assert qStart == 0 or qEnd == qSize
+                    if qStart == 0 or qEnd == qSize:
+                        cigar += "%dS" % qCount  # soft clipping
                     else:
-                        raise ValueError("Unexpected operation %s" % operation)
+                        cigar += "%dI" % qCount  # insertion to the reference
                     qStart = qEnd
                 elif qCount == 0:
-                    length = str(tCount)
-                    if operation not in "DN":
-                        # D: deletion from the reference
-                        # N: skipped region from the reference
-                        raise ValueError("Unexpected operation %s" % operation)
+                    if qStart in splicesites:
+                        cigar += "%dN" % tCount  # N: skipped region from the reference
+                    else:
+                        cigar += "%dD" % tCount  # D: deletion from the reference
                     tStart = tEnd
                 else:
                     if tCount != qCount:
@@ -251,10 +247,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         # =: sequence match
                         # X: sequence mismatch
                         raise ValueError("Unexpected operation %s" % operation)
-                cigar += length + operation
+                    cigar += length + operation
             if qEnd < qSize:
                 operation = next(operations)
-                assert operation in "DS"
                 cigar += "%dS" % (qSize - qEnd)
         if hard_clip_right is not None:
             cigar += "%dH" % hard_clip_right
