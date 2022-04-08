@@ -171,6 +171,9 @@ class PDBIO(StructureIO):
         else:
             record_type = "ATOM  "
 
+        # Ensure chain id isn't longer than 1 character
+        if len(chain_id) > 1:
+            raise ValueError(f"Chain ID ('{chain_id!r} exceeds PDB format limit")
         # Atom properties
 
         # Check if the atom serial number is an integer
@@ -481,42 +484,14 @@ class PDBIO(StructureIO):
                     for atom in residue.get_unpacked_list():
                         if not select.accept_atom(atom):
                             continue
-                        chain_residues_written = 1
-                        model_residues_written = 1
-                        if preserve_atom_numbering:
-                            atom_number = atom.serial_number
+                        res_str = self.pdb_residue_string(residue)
+                        if res_str is not None:
+                            chain_residues_written = 1
+                            model_residues_written = 1
+                            fhandle.write(res_str)
 
-                        try:
-                            s = get_atom_line(
-                                atom,
-                                hetfield,
-                                segid,
-                                atom_number,
-                                resname,
-                                resseq,
-                                icode,
-                                chain_id,
-                            )
-                        except Exception as err:
-                            # catch and re-raise with more information
-                            raise PDBIOException(
-                                f"Error when writing atom {atom.full_id}"
-                            ) from err
-                        else:
-                            fhandle.write(s)
-                            # inconsequential if preserve_atom_numbering is True
-                            atom_number += 1
-
-                if chain_residues_written:
-                    fhandle.write(
-                        _TER_FORMAT_STRING
-                        % (atom_number, resname, chain_id, resseq, icode)
-                    )
-
-            if model_flag and model_residues_written:
-                fhandle.write("ENDMDL\n")
-        if write_end:
-            fhandle.write("END   \n")
+                    if chain_residues_written:
+                        fhandle.write(self.get_ter_str())
 
         if isinstance(file, str):
             fhandle.close()
