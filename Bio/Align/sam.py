@@ -135,6 +135,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target, query = alignment.sequences
         hard_clip_left = None
         hard_clip_right = None
+        splicesites = []
         try:
             qName = query.id
         except AttributeError:
@@ -147,6 +148,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 pass
             try:
                 hard_clip_right = query.annotations["hard_clip_right"]
+            except (AttributeError, KeyError):
+                pass
+            try:
+                splicesites = query.annotations["splicesites"]
             except (AttributeError, KeyError):
                 pass
             try:
@@ -182,37 +187,35 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
-        try:
-            operations = alignment.operations
-        except AttributeError:
+        if len(splicesites) == 0:
+            try:
+                del alignment.operations
+            except AttributeError:
+                pass
+        if len(splicesites) == 0:
             # calculate the cigar from the alignment coordinates
             if qStart > 0:
-                # Use soft clipping for query segments skipped in local alignments
-                cigar += "%dS" % qStart
+                cigar += "%dS" % qStart  # soft clipping
             for tEnd, qEnd in coordinates[1:, :]:
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    length = str(qCount)
-                    operation = "I"  # insertion to the reference
                     qStart = qEnd
+                    cigar += "%dI" % qCount  # insertion to the reference
                 elif qCount == 0:
-                    length = str(tCount)
-                    operation = "D"  # deletion from the reference
                     tStart = tEnd
+                    cigar += "%dD" % tCount  # deletion from the reference
                 else:
                     if tCount != qCount:
                         raise ValueError("Unequal step sizes in alignment")
-                    length = str(tCount)
                     tStart = tEnd
                     qStart = qEnd
-                    operation = "M"  # alignment match
-                cigar += length + operation
+                    cigar += "%dM" % tCount  # alignment match
             if qEnd < qSize:
-                # Use soft clipping for query segments skipped in local alignments
-                cigar += "%dS" % (qSize - qEnd)
+                cigar += "%dS" % (qSize - qEnd)  # soft clipping
         else:
             # use the operations attribute
+            operations = alignment.operations
             operations = iter(operations)
             if qStart > 0:
                 operation = next(operations)
