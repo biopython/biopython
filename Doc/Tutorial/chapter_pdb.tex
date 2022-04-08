@@ -1214,7 +1214,6 @@ Note that it is easy to 'break' the view linkage between the Atom coord arrays a
 chain atomArray.  When modifying Atom coordinates directly, use syntax for an
 element-by-element copy to avoid this:
 
-%cont-doctest
 \begin{minted}{pycon}
 # use these:
 myAtom1.coord[:] = myAtom2.coord
