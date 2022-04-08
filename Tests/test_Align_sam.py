@@ -357,6 +357,8 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.annotations["NM"], 0)
+        self.assertNotIn("hard_clip_left", alignment.query.annotations)
+        self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -405,8 +407,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.annotations["NM"], 0)
+        self.assertNotIn("hard_clip_left", alignment.query.annotations)
+        self.assertNotIn("hard_clip_right", alignment.query.annotations)
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 5412))
+        self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -427,12 +431,10 @@ class TestAlign_dna_rna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48663767, 48663767, 48663795, 48663796, 48663813,
-                              48665640, 48665716, 48665716, 48665722, 48669098,
-                              48669174],
-                             [       0,        3,       31,       31,       48,
-                                    48,      124,      126,      132,      132,
-                                   208],
+                numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
+                              48665716, 48665716, 48665722, 48669098, 48669174],
+                             [       3,       31,       31,       48,       48,
+                                   124,      126,      132,      132,      208],
                             ])
                 # fmt: on
             )
@@ -454,8 +456,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.annotations["NM"], 5)
+        self.assertNotIn("hard_clip_left", alignment.query.annotations)
+        self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
         alignment = next(alignments)
-        self.assertEqual(alignment.shape, (2, 1722))
+        self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -476,12 +480,10 @@ class TestAlign_dna_rna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530895, 42530922, 42530922, 42530958,
-                              42532020, 42532037, 42532039, 42532095, 42532563,
-                              42532606, 42532606],
-                             [     190,      185,      158,      155,      119,
-                                   119,      102,      102,       46,       46,
-                                     3,        0],
+                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
+                              42532037, 42532039, 42532095, 42532563, 42532606],
+                             [     185,      158,      155,      119,      119,
+                                   102,      102,       46,       46,        3],
                             ])
                 # fmt: on
             )
@@ -503,6 +505,8 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.mapq, 0)
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.annotations["NM"], 6)
+        self.assertNotIn("hard_clip_left", alignment.query.annotations)
+        self.assertNotIn("hard_clip_right", alignment.query.annotations)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):

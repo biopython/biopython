@@ -175,6 +175,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             coordinates = numpy.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             splicesites = [qSize - splicesite for splicesite in splicesites]
+            hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
         try:
             query = bytes(query)
         except TypeError:  # string
@@ -225,10 +226,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
                 if tCount == 0:
-                    if qStart == 0 or qEnd == qSize:
-                        cigar += "%dS" % qCount  # soft clipping
-                    else:
-                        cigar += "%dI" % qCount  # insertion to the reference
+                    cigar += "%dI" % qCount  # insertion to the reference
                     qStart = qEnd
                 elif qCount == 0:
                     if qStart in splicesites:
@@ -280,9 +278,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 raise ValueError("requested MD tag with undefined sequence")
             # calculate the MD tag from the alignment coordinates and sequences
             tStart, qStart = coordinates[0, :]
-            operations = alignment.operations
+            operations = iter(alignment.operations)
             number = 0
             md = ""
+            if qStart > 0:
+                operation = next(operations)
+                assert operation == "S"
             for (tEnd, qEnd), operation in zip(coordinates[1:, :], operations):
                 tCount = tEnd - tStart
                 qCount = qEnd - qStart
@@ -574,10 +575,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         target_pos += length
                         splicesites.append(query_pos)
                     elif letter == "H":  # hard clipping
-                        if operations:
-                            hard_clip_right = int(number)
-                        else:
+                        if query_pos == 0:
                             hard_clip_left = int(number)
+                        else:
+                            hard_clip_right = int(number)
                         number = ""
                         continue
                     elif letter == "P":  # padding
@@ -616,13 +617,22 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         target += seq[:length]
                         seq = seq[length:]
                         size += length
-                    elif letter in "IS":
+                    elif letter == "I":
                         # I: insertion to the reference
-                        # S: soft clipping
                         operations += letter
                         length = int(number)
                         query_pos += length
                         seq = seq[length:]
+                    elif letter == "S":
+                        # S: soft clipping
+                        operations += letter
+                        length = int(number)
+                        if query_pos == 0:
+                            coordinates[0][1] += length
+                        query_pos += length
+                        seq = seq[length:]
+                        number = ""
+                        continue
                     elif letter == "D":  # deletion from the reference
                         operations += letter
                         length = int(number)
@@ -641,10 +651,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         size = 0
                     elif letter == "H":
                         # hard clipping (clipped sequences not present in sequence)
-                        if operations:
-                            hard_clip_right = int(number)
-                        else:
+                        if query_pos == 0:
                             hard_clip_left = int(number)
+                        else:
+                            hard_clip_right = int(number)
                         number = ""
                         continue
                     elif letter == "P":  # padding
@@ -711,10 +721,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if strand == "-":
                         sequence = sequence.reverse_complement()
             query = SeqRecord(sequence, id=qname)
+            if strand == "-":
+                hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
             if hard_clip_left is not None:
                 query.annotations["hard_clip_left"] = hard_clip_left
             if hard_clip_right is not None:
-                query.annotations["hard_clip_left"] = hard_clip_right
+                query.annotations["hard_clip_right"] = hard_clip_right
             if qual != "*":
                 query.letter_annotations["phred_quality"] = qual
             records = [target, query]
