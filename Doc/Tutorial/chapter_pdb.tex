@@ -921,6 +921,7 @@ the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
 \end{minted}
 
 \subsection{Internal coordinates module - distances, angles, torsion angles, distance plots and more}
+\label{sec:internal_coordinates}
 
 Protein structures are normally supplied in 3D XYZ coordinates relative to a fixed origin, as in a PDB or mmCIF file.
 The \texttt{internal\_coords} module facilitates converting this system to and from bond lengths, angles and dihedral
@@ -1004,7 +1005,7 @@ True
 1.53
 \end{minted}
 
-The \texttt{Chain.internal_coord} object holds arrays and dictionaries of hedra (3
+The \texttt{Chain.internal\_coord} object holds arrays and dictionaries of hedra (3
 bonded atoms) and dihedra (4 bonded atoms) objects.  The dictionaries are indexed 
 by tuples of \texttt{AtomKey} objects; \texttt{AtomKey} objects capture residue position, insertion
 code, 1 or 3-character residue name, atom name, altloc and occupancy.  
@@ -1061,13 +1062,13 @@ positions:
 1.53
 \end{minted}
 
-Please use the \texttt{Residue} level \texttt{set_length()}
+Please use the \texttt{Residue} level \texttt{set\_length\(\)}
 function instead.
 
 \subsubsection{Testing structures for completeness}
 
 Missing atoms and other issues can cause problems when rebuilding a structure.  Use
-\texttt{structure_rebuild_test()} to determine quickly if a structure has sufficient
+\texttt{structure\_rebuild\_test\(\)} to determine quickly if a structure has sufficient
 data for a clean rebuild.  Add \texttt{verbose=True} and/or inspect the result dictionary
 for more detail:
 
@@ -1082,11 +1083,11 @@ True
 
 \subsubsection{Modifying and rebuilding structures}
 
-It's preferable to use the residue level \texttt{set_angle()} and \texttt{set_length()}
+It's preferable to use the residue level \texttt{set\_angle\(\)} and \texttt{set\_length\(\)}
 facilities for modifying internal coordinates rather than directly accessing the \texttt{Chain}
 structures.  While directly modifying hedra angles is safe, bond lengths appear in multiple
-overlapping hedra as noted above, and this is handled by \texttt{set_length()}.  When applied
-to a dihedral angle, \texttt{set_angle()} will wrap the result to +/-180 and rotate adjacent
+overlapping hedra as noted above, and this is handled by \texttt{set\_length\(\)}.  When applied
+to a dihedral angle, \texttt{set\_angle\(\)} will wrap the result to +/-180 and rotate adjacent
 dihedra as well (such as both bonds for an isoleucine \textit{chi1} angle - which is probably
 what you want).
 
@@ -1101,7 +1102,7 @@ what you want).
 1.49
 \end{minted}
 
-Rebuilding a structure from internal coordinates is a simple call to \texttt{internal_to_atom_coordinates()}:
+Rebuilding a structure from internal coordinates is a simple call to \texttt{internal\_to\_atom\_coordinates\(\)}:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -1120,39 +1121,39 @@ Rebuilding a structure from internal coordinates is a simple call to \texttt{int
 The generated structure can be written with PDBIO, as normal:
 
 % don't really write files in doctest
-\begin{minted}{pycon}
->>> write_PDB(myProtein, "myChain.pdb")
->>> # or just the ATOM records without headers:
->>> io = PDBIO()
->>> io.set_structure(myProtein)
->>> io.save("myChain2.pdb")
+\begin{minted}{python}
+write_PDB(myProtein, "myChain.pdb")
+# or just the ATOM records without headers:
+io = PDBIO()
+io.set_structure(myProtein)
+io.save("myChain2.pdb")
 \end{minted}
 
 \subsubsection{Protein Internal Coordinate (.pic) files and default values}
 
 A file format is defined in the \texttt{PICIO} module to describe protein chains as hedra and
 dihedra relative to initial coordinates.  All parts of the file other than the residue sequence
-information (e.g. \texttt{('1A8O', 0, 'A', (' ', 153, ' ')) ILE}) are optional, and will be
-filled in with default values if not specified and \texttt{read_PIC()} is called with the
+information (e.g. \texttt{\('1A8O', 0, 'A', \(' ', 153, ' '\)\) ILE}) are optional, and will be
+filled in with default values if not specified and \texttt{read\_PIC\(\)} is called with the
 \texttt{defaults=True} option.  Default values are calculated from Sep 2019 Dunbrack
-cullpdb_pc20_res2.2_R1.0.
+cullpdb\_pc20\_res2.2\_R1.0.
 
 Here we write `myChain' as a \texttt{.pic} file of internal coordinate specifications and then
 read it back in as `myProtein2'.  
 
 % no doctest to avoid writing files
-\begin{minted}{pycon}
+\begin{minted}{python}
 # write chain as 'protein internal coordinates' (.pic) file
 write_PIC(myProtein, "myChain.pic")
 # read .pic file
 myProtein2 = read_PIC("myChain.pic")
 \end{minted}
 
-As all internal coordinate values can be replaced with defaults, \texttt{PICIO.read_PIC_seq()} is
+As all internal coordinate values can be replaced with defaults, \texttt{PICIO.read\_PIC\_seq\(\)} is
 supplied as a utility function to create a valid (mostly helical) default structure from an input
 sequence:
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 # create default structure for random sequence by reading as .pic file
 myProtein3 = read_PIC_seq(
     SeqRecord(
@@ -1164,17 +1165,17 @@ myProtein3 = read_PIC_seq(
 myProtein3.internal_to_atom_coordinates()
 write_PDB(myProtein3, "myRandom.pdb")
 \end{minted}
-
+    
 It may be of interest to explore the accuracy required in e.g. \textit{omega} angles (180.0), hedra angles
 and/or bond lengths when generating structures from internal coordinates.  The picFlags
-option to \texttt{write_PIC()} enables this, allowing the selection of data to be written
+option to \texttt{write\_PIC\(\)} enables this, allowing the selection of data to be written
 to the .pic file vs. left unspecified to get default values.  
 
 Various combinations are possible and some presets are supplied, for example \texttt{classic}
 will write only \textit{psi, phi, tau}, proline \textit{omega} and sidechain \textit{chi}
 angles to the .pic file:
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 write_PIC(myProtein, "myChain.pic", picFlags=IC_Residue.pic_flags.classic)
 myProtein2 = read_PIC("myChain.pic", defaults=True)
 \end{minted}
@@ -1183,12 +1184,12 @@ myProtein2 = read_PIC("myChain.pic", defaults=True)
 
 All 3D XYZ coordinates in Biopython \texttt{Atom} objects are moved to a single large array
 in the \texttt{Chain} class and replaced by Numpy `views' into this array in an early step of
-\texttt{atom_to_internal_coordinates()}.  Software accessing Biopython \texttt{Atom} coordinates
+\texttt{atom\_to\_internal\_coordinates\(\)}.  Software accessing Biopython \texttt{Atom} coordinates
 is not affected, but the new array may offer efficiencies for future work.  
 
 Unlike the \texttt{Atom} XYZ coordinates, \texttt{AtomArray} coordinates are homogeneous, meaning
-they are arrays \texttt{[ x y z 1.0]}.  This facilitates efficient transformation using combined
-translation and rotation matrices throughout the \texttt{internal_coords} module.  There is a 
+they are arrays like \texttt{[ x y z 1.0]} with 1.0 as the fourth element.  This facilitates efficient transformation using combined
+translation and rotation matrices throughout the \texttt{internal\_coords} module.  There is a 
 corresponding \texttt{AtomArrayIndex} dictionary, mapping \texttt{AtomKeys} to their coordinates.
 
 Here we demonstrate reading coordinates for a specific C$\beta$ atom from the array, then show
@@ -1210,24 +1211,25 @@ that modifying the array value modifies the \texttt{Atom} object at the same tim
 >>> r2_cBeta_coords[1] -= 1.0  # restore
 \end{minted}
 
-Note that it is easy to 'break' the view linkage between the Atom coord arrays and the
+Note that it is easy to `break' the view linkage between the Atom coord arrays and the
 chain atomArray.  When modifying Atom coordinates directly, use syntax for an
 element-by-element copy to avoid this:
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 # use these:
 myAtom1.coord[:] = myAtom2.coord
+myAtom1.coord[...] = myAtom2.coord
 myAtom1.coord[:] = [1, 2, 3]
 for i in range(3):
     myAtom1.coord[i] = myAtom2.coord[i]
 
 # do not use:
 myAtom1.coord = myAtom2.coord
-myAtom1.coord = [ 1, 2, 3 ]
+myAtom1.coord = [1, 2, 3]
 \end{minted}
 
 
-Using the \texttt{AtomArrayIndex} and knowledge of the \texttt{AtomKey} class
+Using the \texttt{atomArrayIndex} and knowledge of the \texttt{AtomKey} class
 enables us to create Numpy `selectors', as shown below to extract an array of
 only the C$\alpha$ atom coordinates:
 
@@ -1248,25 +1250,37 @@ only the C$\alpha$ atom coordinates:
 A benefit of the \texttt{atomArray} is that generating a distance plot from it
 is a single line of \texttt{Numpy} code:
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 numpy.linalg.norm(atomArray[:, None, :] - atomArray[None, :, :], axis=-1)
 \end{minted}
 
 Despite its briefness, the idiom cam be difficult to remember and in the form
 above generates all-atom distances rather than the classic C$\alpha$ plot
-as may be desired.  The \texttt{distance_plot()} method wraps the line above
+as may be desired.  The \texttt{distance\_plot\(\)} method wraps the line above
 and accepts an optional selector like \texttt{CaSelect} defined in the previous
-section:
+section.  See Figure~\ref{fig:distanceplot}.
 
-\begin{minted}{pycon}
+\begin{figure}[h!]
+\begin{minted}{python}
 # create a C-alpha distance plot
 caDistances = myChain.internal_coord.distance_plot(CaSelect)
-
 # display with e.g. MatPlotLib:
 import matplotlib.pyplot as plt
+
 plt.imshow(caDistances, cmap="hot", interpolation="nearest")
 plt.show()
 \end{minted}
+
+\begin{htmlonly}
+\imgsrc[width=280, height=280]{images/1a8o-ca-plot.png}
+\end{htmlonly}
+\begin{latexonly}
+\includegraphics[width=0.3\textwidth]{images/1a8o-ca-plot.png}
+\end{latexonly}
+\caption{C$\alpha$ distance plot for PDB file 1A8O (HIV capsid C-terminal domain)}
+\label{fig:distanceplot}
+\end{figure}
+    
 
 \subsubsection{Building a structure from a distance plot}
 
@@ -1280,7 +1294,7 @@ This work uses equations developed by Blue, the Hedronometer,
 discussed in \url{https://math.stackexchange.com/a/49340/409} and further in 
 \url{http://daylateanddollarshort.com/mathdocs/Heron-like-Results-for-Tetrahedral-Volume.pdf}.
 
-To begin, we extract the distances and chirality values from `myChain`:
+To begin, we extract the distances and chirality values from `myChain':
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -1293,7 +1307,7 @@ To begin, we extract the distances and chirality values from `myChain`:
 \end{minted}
 
 We need a valid data structure matching `myChain' to correctly rebuild it; using
-\texttt{read_PIC_seq()} above would work in the general case, but the 1A8O example
+\texttt{read\_PIC\_seq\(\)} above would work in the general case, but the 1A8O example
 used here has some ALTLOC complexity which the sequence alone would not generate.
 For demonstration the easiest approach is to simply duplicate the `myChain'
 structure, but we set all the atom and internal coordinate chain arrays to 0s
@@ -1327,11 +1341,11 @@ to demonstrate equivalence at end):
 >>> cic2.copy_initNCaCs(myChain.internal_coord)
 \end{minted}
 
-The \texttt{distance_to_internal_coordinates()} routine needs arrays of the six
+The \texttt{distance\_to\_internal\_coordinates\(\)} routine needs arrays of the six
 inter-atom distances for each dihedron for the target structure.  The convenience
-routine \texttt{distplot_to_dh_arrays()} extracts these values from the previously
+routine \texttt{distplot\_to\_dh\_arrays\(\)} extracts these values from the previously
 generated distance matrix as needed, and may be replaced by a user method to
-write these data to the arrays in the \texttt{Chain.internal_coords} object.
+write these data to the arrays in the \texttt{Chain.internal\_coords} object.
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -1342,7 +1356,7 @@ write these data to the arrays in the \texttt{Chain.internal_coords} object.
 \end{minted}
 
 The steps below generate the atom coordinates from the newly generated `myChain2' internal
-coordinates, then use the Numpy \texttt{allclose()} routine to confirm that all values match to
+coordinates, then use the Numpy \texttt{allclose\(\)} routine to confirm that all values match to
 better than PDB file resolution:
 
 % this exact test passes on linux as unittest test_rebuild_1a8o, but returns False on linux here!
@@ -1360,7 +1374,7 @@ between the four atoms of each dihedral angle.
 
 \subsubsection{Superimposing residues and their neighborhoods}
 
-The \texttt{internal_coords} module relies on transforming atom coordinates between
+The \texttt{internal\_coords} module relies on transforming atom coordinates between
 different coordinate spaces for both calculation of torsion angles and reconstruction of
 structures.  Each dihedron has a coordinate space transform placing its first atom on the
 XZ plane, second atom at the origin, and third atom on the +Z axis, as well as a corresponding
@@ -1374,7 +1388,7 @@ and presents all PHEs in the chain in the respective coordinate space as a simpl
 A more realistic exploration of pairwise sidechain interactions would examine a dataset of
 structures and filter for interaction classes as descussed in the relevant literature.
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 # superimpose all phe-phe pairs - quick hack just to demonstrate concept
 # for analyzing pairwise residue interactions.  Generates PDB ATOM records
 # placing each PHE at origin and showing all other PHEs in environment
@@ -1386,7 +1400,7 @@ aaNdx = cic.atomArrayIndex
 
 ## select just PHE atoms:
 pheAtomSelect = [aaNdx.get(k) for k in aaNdx.keys() if k.akl[resNameNdx] == "F"]
-aaF = cic.atomArray[ pheAtomSelect ]  # numpy fancy indexing makes COPY not view
+aaF = cic.atomArray[pheAtomSelect]  # numpy fancy indexing makes COPY not view
 
 for ric in cic.ordered_aa_ic_list:  # internal_coords version of get_residues()
     if ric.lc == "F":  # if PHE, get transform matrices for chi1 dihedral
@@ -1413,7 +1427,7 @@ in the OpenSCAD code for special handling, such as highlighting by size or addin
 rotatable bonds in specific positions (see \url{https://www.thingiverse.com/thing:3957471}
 for an example).
 
-\begin{minted}{pycon}
+\begin{minted}{python}
 # write OpenSCAD program of spheres and cylinders to 3d print myChain backbone
 ## set atom load filter to accept backbone only:
 IC_Residue.accept_atoms = IC_Residue.accept_backbone
@@ -1424,7 +1438,7 @@ myChain.internal_coord = None
 write_SCAD(myChain, "myChain.scad", scale=10.0)
 \end{minted}
 
-\subsubsection{\texttt{internal_coords} control attributes}
+\subsubsection{\texttt{internal\_coords} control attributes}
 
 A few control attributes are available in the \texttt{internal\_coords} classes to modify or
 filter data as internal coordinates are calculated.  These are listed in Table~\ref{table:ic-attribs}:
