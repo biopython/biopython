@@ -1280,7 +1280,6 @@ plt.show()
 \caption{C$\alpha$ distance plot for PDB file 1A8O (HIV capsid C-terminal domain)}
 \label{fig:distanceplot}
 \end{figure}
-    
 
 \subsubsection{Building a structure from a distance plot}
 
@@ -1381,8 +1380,20 @@ XZ plane, second atom at the origin, and third atom on the +Z axis, as well as a
 reverse transform which will return it to the coordinates in the original structure.  These
 transform matrices are available to use as shown below.  By judicious choice of a reference
 dihedron, pairwise and higher order residue intereactions can be investigated and visualized
-across multiple protein structures.
+across multiple protein structures, e.g. Figure~\ref{fig:phepairs}.
 
+\begin{figure}[htbp]
+\centering
+\begin{htmlonly}
+\imgsrc[width=360, height=360]{images/phe-pairs-3pbl.png}
+\end{htmlonly}
+\begin{latexonly}
+\includegraphics[width=0.7\textwidth]{images/phe-pairs-3pbl.png}
+\end{latexonly}
+\caption{Neighboring phenylalanine sidechains in PDB file 3PBL (human dopamine D3 receptor)}
+\label{fig:phepairs}
+\end{figure}
+	
 This example superimposes each PHE residue in a chain on its N-C$\alpha$-C$\beta$ atoms,
 and presents all PHEs in the chain in the respective coordinate space as a simple demonstration.
 A more realistic exploration of pairwise sidechain interactions would examine a dataset of
