@@ -536,6 +536,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 strand = "+"
             hard_clip_left = None
             hard_clip_right = None
+            splicesites = []
             operations = ""
             if flag & 0x4:  # unmapped
                 target = None
@@ -565,11 +566,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         operations += letter
                         number = ""
                         continue
-                    elif letter in "DN":
+                    elif letter == "D":
                         # D: deletion from the reference
+                        length = int(number)
+                        target_pos += length
+                    elif letter == "N":
                         # N: skipped region from the reference
                         length = int(number)
                         target_pos += length
+                        splicesites.append(query_pos)
                     elif letter == "H":  # hard clipping
                         if operations:
                             hard_clip_right = int(number)
@@ -634,6 +639,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         target_pos += length
                         starts.append(target_pos)
                         sizes.append(size)
+                        splicesites.append(query_pos)
                         size = 0
                     elif letter == "H":
                         # hard clipping (clipped sequences not present in sequence)
@@ -731,6 +737,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if annotations:
                 alignment.annotations = annotations
             alignment.operations = operations
+            if splicesites:
+                if strand == "-":
+                    splicesites = [query_pos - splicesite for splicesite in splicesites]
+                query.annotations["splicesites"] = tuple(splicesites)
             if hard_clip_left is not None:
                 alignment.hard_clip_left = hard_clip_left
             if hard_clip_right is not None:
