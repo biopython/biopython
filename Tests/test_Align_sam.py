@@ -16,7 +16,7 @@ from Bio import BiopythonExperimentalWarning
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import sam
+    from Bio.Align import sam, psl
 
 
 try:
@@ -510,6 +510,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.sam"
         alignments = sam.AlignmentIterator(path)
         self.check_alignments(alignments)
+
+    def test_reading_psl_comparising(self):
+        """Test parsing dna_rna.sam and comparing to dna_rna.psl."""
+        path = "Blat/dna_rna.sam"
+        sam_alignments = sam.AlignmentIterator(path)
+        path = "Blat/dna_rna.psl"
+        psl_alignments = psl.AlignmentIterator(path)
+        for sam_alignment, psl_alignment in zip(sam_alignments, psl_alignments):
+            self.assertEqual(sam_alignment.target.id, psl_alignment.target.id)
+            self.assertEqual(sam_alignment.query.id, psl_alignment.query.id)
+            self.assertTrue(
+                numpy.array_equal(sam_alignment.coordinates, psl_alignment.coordinates)
+            )
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.sam."""
