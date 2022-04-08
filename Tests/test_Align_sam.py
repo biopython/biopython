@@ -2648,11 +2648,14 @@ class TestAlign_clippping(unittest.TestCase):
         sequences = [target, query]
         coordinates = numpy.array([[8, 14], [0, 6]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAACCCCCC
         ||||||
         CCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
         self.assertEqual(line, "query\t0\ttarget\t9\t255\t6M\t*\t0\t0\tCCCCCC\t*\n")
         fields = line.split()
@@ -2675,11 +2678,14 @@ AAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 8, 14], [0, 0, 6]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAACCCCCC
 --------||||||
 --------CCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
         self.assertEqual(line, "query\t0\ttarget\t1\t255\t8D6M\t*\t0\t0\tCCCCCC\t*\n")
         fields = line.split()
@@ -2702,11 +2708,14 @@ AAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[4, 12, 18], [0, 0, 6]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GGGGAAAAAAAACCCCCC
     --------||||||
     --------CCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
         self.assertEqual(line, "query\t0\ttarget\t5\t255\t8D6M\t*\t0\t0\tCCCCCC\t*\n")
         fields = line.split()
@@ -2729,13 +2738,18 @@ GGGGAAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 0, 6], [0, 8, 14]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 --------CCCCCC
 --------||||||
 AAAAAAAACCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
@@ -2756,13 +2770,18 @@ AAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[4, 4, 10], [0, 8, 14]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GGGG--------CCCCCC
     --------||||||
     AAAAAAAACCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t5\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t5\t255\t8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 4)
@@ -2783,13 +2802,18 @@ GGGG--------CCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 6], [8, 14]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
         CCCCCC
         ||||||
 AAAAAAAACCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t8S6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t8S6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
@@ -2810,13 +2834,18 @@ AAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 8, 14], [4, 4, 10]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
     AAAAAAAACCCCCC
     --------||||||
 GGGG--------CCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4S8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t4S8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
@@ -2837,13 +2866,18 @@ GGGG--------CCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 0, 8, 14], [0, 4, 4, 10]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ----AAAAAAAACCCCCC
 ------------||||||
 GGGG--------CCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4I8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t4I8D6M\t*\t0\t0\tGGGGCCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
@@ -2864,13 +2898,18 @@ GGGG--------CCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[8, 14], [4, 10]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAAAAAACCCCCC
         ||||||
     GGGGCCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t9\t255\t4S6M\t*\t0\t0\tGGGGCCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t9\t255\t4S6M\t*\t0\t0\tGGGGCCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 8)
@@ -2891,13 +2930,18 @@ AAAAAAAACCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 4, 4, 10], [0, 0, 8, 14]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GGGG--------CCCCCC
 ------------||||||
 ----AAAAAAAACCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4D8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t4D8I6M\t*\t0\t0\tAAAAAAAACCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
@@ -2918,13 +2962,18 @@ GGGG--------CCCCCC
         sequences = [target, query]
         coordinates = numpy.array([[0, 0, 6], [4, 12, 18]])
         alignment = Alignment(sequences, coordinates)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
     --------CCCCCC
     --------||||||
 GGGGAAAAAAAACCCCCC
-""")
+""",
+        )
         line = alignment.format("sam")
-        self.assertEqual(line, "query\t0\ttarget\t1\t255\t4S8I6M\t*\t0\t0\tGGGGAAAAAAAACCCCCC\t*\n")
+        self.assertEqual(
+            line, "query\t0\ttarget\t1\t255\t4S8I6M\t*\t0\t0\tGGGGAAAAAAAACCCCCC\t*\n"
+        )
         fields = line.split()
         pos = int(fields[3]) - 1
         self.assertEqual(pos, 0)
