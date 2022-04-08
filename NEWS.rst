@@ -34,12 +34,15 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+PDB ``DBREF1`` and ``DBREF2`` records are now read alongside ``DBREF``.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
