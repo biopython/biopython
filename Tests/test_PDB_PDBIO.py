@@ -89,8 +89,18 @@ class WriteTest(unittest.TestCase):
         structure[0]["A"][10000].id = (het, ori, ins)
         os.remove(filename)
 
-        # Atom id
+        # Atom id too many digits
         structure[0]["A"][152]["CA"].serial_number = 1e6
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with self.assertRaises(PDBIOException):
+            # perserve_... must be True for exception to trigger
+            self.io.save(filename, preserve_atom_numbering=True)
+        os.remove(filename)
+
+        # Atom id non-numeric
+        structure[0]["A"][152]["CA"].serial_number = "Q"
         self.io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)

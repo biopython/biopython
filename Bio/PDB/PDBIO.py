@@ -184,11 +184,11 @@ class PDBIO(StructureIO):
         except ValueError:
             raise ValueError(
                 f"{atom_number!r} is not a number."
-                "Atom serial numbers must be numerical"
+                " PDB Atom serial numbers must be numerical"
                 " If you are converting from an mmCIF"
                 " structure, try using"
                 " preserve_atom_numbering=False"
-            )
+            ) from None
 
         if atom_number > 99999:
             raise ValueError(
@@ -349,19 +349,6 @@ class PDBIO(StructureIO):
             if self.select.accept_atom(atom):
                 if self.atom_number is None:  # preserve_atom_numbering == True
                     atom_number = atom.get_serial_number()
-
-                    # Check if the atom serial number is an integer
-                    # Not always the case for mmCIF files.
-                    try:
-                        atom_number = int(atom_number)
-                    except ValueError:
-                        raise ValueError(
-                            f"{repr(atom_number)} is not a number."
-                            "Atom serial numbers must be numerical"
-                            " If you are converting from an mmCIF"
-                            " structure, try using"
-                            " preserve_atom_numbering=False"
-                        )
                 else:
                     atom_number = self.atom_number
                     self.atom_number += 1
