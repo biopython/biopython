@@ -785,8 +785,8 @@ class ExonerateTextCases(unittest.TestCase):
                               318839, 318839, 318851, 318870, 318870, 318889,
                               318893, 318893, 318897, 318897, 318913, 318919,
                               318919, 318924, 318933, 318933, 318944, 318954,
-                              318954, 318959, 318972, 318972, 318974, 318994]
-                             [   110,    117,    148,    148,    159,    169
+                              318954, 318959, 318972, 318972, 318974, 318994],
+                             [   110,    117,    148,    148,    159,    169,
                                  169,    182,    184,    184,    189,    190,
                                  197,    227,    227,    231,    231,    238,
                                  238,    244,    255,    255,    261,    266,
@@ -869,314 +869,613 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_q_multiple(self):
         """Test parsing exonerate output (exn_22_q_multiple.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_q_multiple.exn")
-        qresults = list(parse(exn_file, self.fmt))
-        self.assertEqual(2, len(qresults))
-        # check common attributes
-        for qresult in qresults:
-            for hit in qresult:
-                self.assertEqual(qresult.id, hit.query_id)
-                for hsp in hit:
-                    self.assertEqual(hit.id, hsp.hit_id)
-                    self.assertEqual(qresult.id, hsp.query_id)
-
-        # test first qresult
-        qresult = qresults[0]
-        self.assertEqual("gi|296142823|ref|NM_001178508.1|", qresult.id)
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("est2genome", qresult.model)
-        self.assertEqual(3, len(qresult))
-        # first qresult, first hit
-        hit = qresult[0]
-        self.assertEqual("gi|330443482|ref|NC_001134.8|", hit.id)
-        self.assertEqual(1, len(hit.hsps))
-        # first qresult, first hit, first hsp
-        # first hit, first hsp
-        hsp = qresult[0].hsps[0]
-        self.assertEqual(4485, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(1, hsp[0].hit_strand)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(560077, hsp.hit_start)
-        self.assertEqual(897, hsp.query_end)
-        self.assertEqual(560974, hsp.hit_end)
-        self.assertEqual([(0, 897)], hsp.query_range_all)
-        self.assertEqual([(560077, 560974)], hsp.hit_range_all)
-        self.assertEqual([], hsp.query_inter_ranges)
-        self.assertEqual([], hsp.hit_inter_ranges)
-        self.assertEqual(1, len(hsp.query_all))
-        self.assertEqual(1, len(hsp.hit_all))
-        self.assertEqual(
-            "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAG", hsp.query_all[0].seq[:40]
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes")
+        self.assertEqual(alignments.hostname, "blackbriar")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443482|ref|NC_001134.8|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome II, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 4485)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({560077: 'ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACA...TAA'}, length=560974)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
+            )
         )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][:40],
+        self.assertEqual(alignment[0], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(alignment[1], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443482|ref|NC_001134.8|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome II, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 4485)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({560077: 'ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACA...TAA'}, length=560974)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
+            )
         )
-        self.assertEqual(
-            "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAG", hsp.hit_all[0].seq[:40]
+        self.assertEqual(alignment[0], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(alignment[1], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443482|ref|NC_001134.8|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome II, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 4485)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({560077: 'ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACA...TAA'}, length=560974)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
+            )
         )
-        self.assertEqual(
-            "CAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA", hsp.query_all[0].seq[-40:]
+        self.assertEqual(alignment[0], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        self.assertEqual(alignment[1], "ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGAGGGTATTCCAAAGGACCAACCGTTAGGAGCTGATATTGTTAAGAAGTTTATGATGCAACTTTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAAAGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGGAAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAGTGGTACCAAGTCTAGATCCACGCGGTATTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCCAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XVI, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 941)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({2: 'GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATA...ATA'}, length=896)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({492033: 'TAGTACTCTGCAAACCAAGGGTGATGCAGAGCCTGCTTGGCGCTCAGCCTCATA...CTC'}, length=492933)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[492933, 492929, 492929, 492908, 492908, 492857,
+                              492857, 492851, 492851, 492840, 492840, 492839,
+                              492839, 492813, 492813, 492711, 492711, 492710,
+                              492710, 492709, 492709, 492654, 492651, 492646,
+                              492646, 492639, 492638, 492634, 492633, 492624,
+                              492624, 492621, 492620, 492618, 492616, 492614,
+                              492611, 492608, 492607, 492585, 492584, 492575,
+                              492575, 492507, 492506, 492503, 492503, 492329,
+                              492329, 492321, 492320, 492166, 492163, 492155,
+                              492154, 492150, 492148, 492139, 492137, 492136,
+                              492135, 492130, 492124, 492071, 492070, 492056,
+                              492056, 492033],
+                             [     2,      6,      8,     29,     30,     81,
+                                  83,     89,     92,    103,    106,    107,
+                                 108,    134,    137,    239,    240,    241,
+                                 242,    243,    244,    299,    299,    304,
+                                 306,    313,    313,    317,    317,    326,
+                                 327,    330,    330,    332,    332,    334,
+                                 334,    337,    337,    359,    359,    368,
+                                 369,    437,    437,    440,    441,    615,
+                                 616,    624,    624,    778,    778,    786,
+                                 786,    790,    790,    799,    799,    800,
+                                 800,    805,    805,    858,    858,    872,
+                                 873,    896]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][-40:],
+        self.assertEqual(alignment[0], "GAGC--TCTATGAACAGATTTAAGCAG-TTAGAAAAGCTTGGCAATGGTACGTATGCCACAGTGTACAAGGGACTGAAC--AAAACC---ACAGGGGTATA---T-GTTGCCCTGAAAGAGGTAAAACTGGA---TTCAGAGGAAGGTACACCCTCTACGGCCATCCGTGAGATCTCCCTAATGAAAGAATTGAAACATGAGAACATTGTTAGACTTTATGACGTTATTCACACAGA-G-A-ACAAGTTGACTTTGGTTTTTGAATTCATGGACAACGATTTAAAGAAATACATGGATTCCCGCA--CCGTGGGCAACACACCAAGAGG-GCTAGAACTAAACTTGGTTAAATACTTCCAGTGGCAACTACTGCAAGGG-CTGGCCTTTTGCCATGAAAACAAGATTCTCCACCGTGATTTAAAACCTCAAAACCTATTAATCAACAAGAGA-GGCCAGTTGAAATTGGGTGATTTCGGTCTGGCCCGTGCTTTCGGTATTCCGGTCAACACATTTTCAAGCGAAGTCGTAACGTTGTGGTACCGTGCTCCTGATGTGCTAATGGGTTCTAGGACGTACTCCACATCCATTGATATATGGTCGTGTGGGTGCATTCTTGCGGAAATG-ATAACGGGTAAGCCTTTGTTTCCTGGCACCAACGACGAAGAACAACTGAAATTGATCTTCGACATCATGGGCACTCCTAATGAGTCCCTATGGCCCAGTGTAACAAAGTTACCCAAATACAACCCAAATATCCAGCAACGACCACCAAGAGACCTACGTCAAGTATTGCAACCACACACCAAAGAACCGCTAGACGGGAATCTCATGGATTTCTTACACGGACTCTTGCAACTTAATCCGGATATGAGGCTGAGCGCCAAGCAGGCTCTGCAT-CACCCTTGGTTTGCAGAGTACTA")
+        self.assertEqual(alignment[1], "GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGA---GGGTATTCCAAAGG-ACCA-ACCGTTAGGAGCT-GA--TA---TTG-TTAAGAAGTTTATGATGCAACT-TTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAA-AGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGG-AAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAG---TGGTACCA-AGTC--TAGATCCAC--G-CGGTA------TTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCC-AGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XVI, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 941)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({2: 'GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATA...ATA'}, length=896)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({492033: 'TAGTACTCTGCAAACCAAGGGTGATGCAGAGCCTGCTTGGCGCTCAGCCTCATA...CTC'}, length=492933)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[492933, 492929, 492929, 492908, 492908, 492857,
+                              492857, 492851, 492851, 492840, 492840, 492839,
+                              492839, 492813, 492813, 492711, 492711, 492710,
+                              492710, 492709, 492709, 492654, 492651, 492646,
+                              492646, 492639, 492638, 492634, 492633, 492624,
+                              492624, 492621, 492620, 492618, 492616, 492614,
+                              492611, 492608, 492607, 492585, 492584, 492575,
+                              492575, 492507, 492506, 492503, 492503, 492329,
+                              492329, 492321, 492320, 492166, 492163, 492155,
+                              492154, 492150, 492148, 492139, 492137, 492136,
+                              492135, 492130, 492124, 492071, 492070, 492056,
+                              492056, 492033],
+                             [     2,      6,      8,     29,     30,     81,
+                                  83,     89,     92,    103,    106,    107,
+                                 108,    134,    137,    239,    240,    241,
+                                 242,    243,    244,    299,    299,    304,
+                                 306,    313,    313,    317,    317,    326,
+                                 327,    330,    330,    332,    332,    334,
+                                 334,    337,    337,    359,    359,    368,
+                                 369,    437,    437,    440,    441,    615,
+                                 616,    624,    624,    778,    778,    786,
+                                 786,    790,    790,    799,    799,    800,
+                                 800,    805,    805,    858,    858,    872,
+                                 873,    896]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "CAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA", hsp.hit_all[0].seq[-40:]
+        self.assertEqual(alignment[0], "GAGC--TCTATGAACAGATTTAAGCAG-TTAGAAAAGCTTGGCAATGGTACGTATGCCACAGTGTACAAGGGACTGAAC--AAAACC---ACAGGGGTATA---T-GTTGCCCTGAAAGAGGTAAAACTGGA---TTCAGAGGAAGGTACACCCTCTACGGCCATCCGTGAGATCTCCCTAATGAAAGAATTGAAACATGAGAACATTGTTAGACTTTATGACGTTATTCACACAGA-G-A-ACAAGTTGACTTTGGTTTTTGAATTCATGGACAACGATTTAAAGAAATACATGGATTCCCGCA--CCGTGGGCAACACACCAAGAGG-GCTAGAACTAAACTTGGTTAAATACTTCCAGTGGCAACTACTGCAAGGG-CTGGCCTTTTGCCATGAAAACAAGATTCTCCACCGTGATTTAAAACCTCAAAACCTATTAATCAACAAGAGA-GGCCAGTTGAAATTGGGTGATTTCGGTCTGGCCCGTGCTTTCGGTATTCCGGTCAACACATTTTCAAGCGAAGTCGTAACGTTGTGGTACCGTGCTCCTGATGTGCTAATGGGTTCTAGGACGTACTCCACATCCATTGATATATGGTCGTGTGGGTGCATTCTTGCGGAAATG-ATAACGGGTAAGCCTTTGTTTCCTGGCACCAACGACGAAGAACAACTGAAATTGATCTTCGACATCATGGGCACTCCTAATGAGTCCCTATGGCCCAGTGTAACAAAGTTACCCAAATACAACCCAAATATCCAGCAACGACCACCAAGAGACCTACGTCAAGTATTGCAACCACACACCAAAGAACCGCTAGACGGGAATCTCATGGATTTCTTACACGGACTCTTGCAACTTAATCCGGATATGAGGCTGAGCGCCAAGCAGGCTCTGCAT-CACCCTTGGTTTGCAGAGTACTA")
+        self.assertEqual(alignment[1], "GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGA---GGGTATTCCAAAGG-ACCA-ACCGTTAGGAGCT-GA--TA---TTG-TTAAGAAGTTTATGATGCAACT-TTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAA-AGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGG-AAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAG---TGGTACCA-AGTC--TAGATCCAC--G-CGGTA------TTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCC-AGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XVI, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 941)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({2: 'GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATA...ATA'}, length=896)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({492033: 'TAGTACTCTGCAAACCAAGGGTGATGCAGAGCCTGCTTGGCGCTCAGCCTCATA...CTC'}, length=492933)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[492933, 492929, 492929, 492908, 492908, 492857,
+                              492857, 492851, 492851, 492840, 492840, 492839,
+                              492839, 492813, 492813, 492711, 492711, 492710,
+                              492710, 492709, 492709, 492654, 492651, 492646,
+                              492646, 492639, 492638, 492634, 492633, 492624,
+                              492624, 492621, 492620, 492618, 492616, 492614,
+                              492611, 492608, 492607, 492585, 492584, 492575,
+                              492575, 492507, 492506, 492503, 492503, 492329,
+                              492329, 492321, 492320, 492166, 492163, 492155,
+                              492154, 492150, 492148, 492139, 492137, 492136,
+                              492135, 492130, 492124, 492071, 492070, 492056,
+                              492056, 492033],
+                             [     2,      6,      8,     29,     30,     81,
+                                  83,     89,     92,    103,    106,    107,
+                                 108,    134,    137,    239,    240,    241,
+                                 242,    243,    244,    299,    299,    304,
+                                 306,    313,    313,    317,    317,    326,
+                                 327,    330,    330,    332,    332,    334,
+                                 334,    337,    337,    359,    359,    368,
+                                 369,    437,    437,    440,    441,    615,
+                                 616,    624,    624,    778,    778,    786,
+                                 786,    790,    790,    799,    799,    800,
+                                 800,    805,    805,    858,    858,    872,
+                                 873,    896]])
+                # fmt: on
+            )
         )
-
-        # first qresult, second hit
-        hit = qresult[1]
-        self.assertEqual("gi|330443753|ref|NC_001148.4|", hit.id)
-        self.assertEqual(1, len(hit.hsps))
-        # first qresult, second hit, first hsp
-        # second hit, first hsp
-        hsp = qresult[1].hsps[0]
-        self.assertEqual(941, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(-1, hsp[0].hit_strand)
-        self.assertEqual(2, hsp.query_start)
-        self.assertEqual(492033, hsp.hit_start)
-        self.assertEqual(896, hsp.query_end)
-        self.assertEqual(492933, hsp.hit_end)
-        self.assertEqual([(2, 896)], hsp.query_range_all)
-        self.assertEqual([(492033, 492933)], hsp.hit_range_all)
-        self.assertEqual([], hsp.query_inter_ranges)
-        self.assertEqual([], hsp.hit_inter_ranges)
-        self.assertEqual(1, len(hsp.query_all))
-        self.assertEqual(1, len(hsp.hit_all))
-        self.assertEqual(
-            "GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTC", hsp.query_all[0].seq[:40]
+        self.assertEqual(alignment[0], "GAGC--TCTATGAACAGATTTAAGCAG-TTAGAAAAGCTTGGCAATGGTACGTATGCCACAGTGTACAAGGGACTGAAC--AAAACC---ACAGGGGTATA---T-GTTGCCCTGAAAGAGGTAAAACTGGA---TTCAGAGGAAGGTACACCCTCTACGGCCATCCGTGAGATCTCCCTAATGAAAGAATTGAAACATGAGAACATTGTTAGACTTTATGACGTTATTCACACAGA-G-A-ACAAGTTGACTTTGGTTTTTGAATTCATGGACAACGATTTAAAGAAATACATGGATTCCCGCA--CCGTGGGCAACACACCAAGAGG-GCTAGAACTAAACTTGGTTAAATACTTCCAGTGGCAACTACTGCAAGGG-CTGGCCTTTTGCCATGAAAACAAGATTCTCCACCGTGATTTAAAACCTCAAAACCTATTAATCAACAAGAGA-GGCCAGTTGAAATTGGGTGATTTCGGTCTGGCCCGTGCTTTCGGTATTCCGGTCAACACATTTTCAAGCGAAGTCGTAACGTTGTGGTACCGTGCTCCTGATGTGCTAATGGGTTCTAGGACGTACTCCACATCCATTGATATATGGTCGTGTGGGTGCATTCTTGCGGAAATG-ATAACGGGTAAGCCTTTGTTTCCTGGCACCAACGACGAAGAACAACTGAAATTGATCTTCGACATCATGGGCACTCCTAATGAGTCCCTATGGCCCAGTGTAACAAAGTTACCCAAATACAACCCAAATATCCAGCAACGACCACCAAGAGACCTACGTCAAGTATTGCAACCACACACCAAAGAACCGCTAGACGGGAATCTCATGGATTTCTTACACGGACTCTTGCAACTTAATCCGGATATGAGGCTGAGCGCCAAGCAGGCTCTGCAT-CACCCTTGGTTTGCAGAGTACTA")
+        self.assertEqual(alignment[1], "GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGACCTGGCCAAGGTCAAAGAGTAGTCGCATTGAAGAAAATAAGACTAGAGAGTGAAGACGAGGGTGTTCCCAGTACAGCCATCAGAGAAATCTCATTATTGAAGGAATTAAAAGACGATAATATTGTCAGATTATACGATATTGTTCACTCTGATGCACACAAGCTATATCTTGTTTTTGAGTTCCTCGATTTGGACCTGAAAAGATATATGGA---GGGTATTCCAAAGG-ACCA-ACCGTTAGGAGCT-GA--TA---TTG-TTAAGAAGTTTATGATGCAACT-TTGTAAGGGTATTGCATACTGCCACTCACACCGTATTCTGCATCGTGATTTAAAACCGCAGAACTTATTGATTAACAA-AGATGGGAATCTAAAACTAGGTGATTTTGGCTTAGCGCGTGCTTTTGGTGTTCCGTTGAGAGCTTACACACATGAAATTGTTACTCTATGGTATAGAGCTCCGGAGGTATTACTGGGTGGAAAACAATATAGTACAGGTGTCGATACATGGTCCATCGGCTGTATATTTGCCGAAATGTGTAACAGG-AAACCAATCTTCAGTGGCGATAGTGAGATCGATCAGATTTTCAAGATATTCAGAGTATTGGGAACGCCGAATGAAGCTATATGGCCAGATATTGTCTACTTGCCTGATTTCAAGCCAAGCTTTCCTCAATGGCGCAGAAAAGACCTATCACAAG---TGGTACCA-AGTC--TAGATCCAC--G-CGGTA------TTGATTTGTTGGACAAACTCCTCGCGTATGACCCTATTAACCGGATTAGCGCC-AGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 651)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({34: 'AGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGAC...TCT'}, length=721)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({267809: 'AGAAAGTTGGTGAGGGTACTTATGCGGTTGTTTACTTGGGTTGTCAACACTCTA...CCT', 300684: 'AACAAACCGAGATAGAATGGCCAGATATTCTCT'}, length=300717)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[267809, 267843, 267843, 267851, 267851, 267852,
+                              267852, 267859, 267863, 267867, 267867, 267870,
+                              267870, 267880, 267880, 267908, 267908, 267942,
+                              267942, 267948, 267950, 267960, 267961, 267975,
+                              267976, 267991, 267991, 268003, 268003, 268004,
+                              268004, 268007, 268007, 268035, 268035, 268038,
+                              268038, 268059, 268059, 268066, 268070, 268072,
+                              268074, 268080, 268083, 268096, 268098, 268102,
+                              268103, 268114, 268114, 268120, 268120, 268132,
+                              268133, 268185, 268185, 268192, 268193, 268248,
+                              268249, 268256, 268256, 268269, 268271, 268371,
+                              268372, 268378, 268378, 268418, 268418, 268424,
+                              268426, 268448, 300686, 300698, 300699, 300717],
+                             [    34,     68,     69,     77,     78,     79,
+                                  81,     88,     88,     92,     94,     97,
+                                 100,    110,    113,    141,    142,    176,
+                                 177,    183,    183,    193,    193,    207,
+                                 207,    222,    223,    235,    236,    237,
+                                 238,    241,    244,    272,    280,    283,
+                                 285,    306,    308,    315,    315,    317,
+                                 317,    323,    323,    336,    336,    340,
+                                 340,    351,    356,    362,    364,    376,
+                                 376,    428,    429,    436,    436,    491,
+                                 491,    498,    501,    514,    514,    614,
+                                 614,    620,    621,    661,    663,    669,
+                                 669,    691,    691,    703,    703,    721]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "||||  |  || | || |||  |  ||  | || ||  | ",
-            hsp[0].aln_annotation["similarity"][:40],
+        self.assertEqual(alignment.query.annotations["splicesites"], (745,))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 651)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({34: 'AGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGAC...TCT'}, length=721)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({267809: 'AGAAAGTTGGTGAGGGTACTTATGCGGTTGTTTACTTGGGTTGTCAACACTCTA...CCT', 300684: 'AACAAACCGAGATAGAATGGCCAGATATTCTCT'}, length=300717)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[267809, 267843, 267843, 267851, 267851, 267852,
+                              267852, 267859, 267863, 267867, 267867, 267870,
+                              267870, 267880, 267880, 267908, 267908, 267942,
+                              267942, 267948, 267950, 267960, 267961, 267975,
+                              267976, 267991, 267991, 268003, 268003, 268004,
+                              268004, 268007, 268007, 268035, 268035, 268038,
+                              268038, 268059, 268059, 268066, 268070, 268072,
+                              268074, 268080, 268083, 268096, 268098, 268102,
+                              268103, 268114, 268114, 268120, 268120, 268132,
+                              268133, 268185, 268185, 268192, 268193, 268248,
+                              268249, 268256, 268256, 268269, 268271, 268371,
+                              268372, 268378, 268378, 268418, 268418, 268424,
+                              268426, 268448, 300686, 300698, 300699, 300717],
+                             [    34,     68,     69,     77,     78,     79,
+                                  81,     88,     88,     92,     94,     97,
+                                 100,    110,    113,    141,    142,    176,
+                                 177,    183,    183,    193,    193,    207,
+                                 207,    222,    223,    235,    236,    237,
+                                 238,    241,    244,    272,    280,    283,
+                                 285,    306,    308,    315,    315,    317,
+                                 317,    323,    323,    336,    336,    340,
+                                 340,    351,    356,    362,    364,    376,
+                                 376,    428,    429,    436,    436,    491,
+                                 491,    498,    501,    514,    514,    614,
+                                 614,    620,    621,    661,    663,    669,
+                                 669,    691,    691,    703,    703,    721]])
+                # fmt: off
+# flake8: noqa
+            )
         )
-        self.assertEqual(
-            "GAGC--TCTATGAACAGATTTAAGCAG-TTAGAAAAGCTT", hsp.hit_all[0].seq[:40]
+        self.assertEqual(alignment.query.annotations["splicesites"], (745,))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cdc28p (CDC28) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 651)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({34: 'AGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGCGTTAGACTTAAGAC...TCT'}, length=721)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({267809: 'AGAAAGTTGGTGAGGGTACTTATGCGGTTGTTTACTTGGGTTGTCAACACTCTA...CCT', 300684: 'AACAAACCGAGATAGAATGGCCAGATATTCTCT'}, length=300717)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[267809, 267843, 267843, 267851, 267851, 267852,
+                              267852, 267859, 267863, 267867, 267867, 267870,
+                              267870, 267880, 267880, 267908, 267908, 267942,
+                              267942, 267948, 267950, 267960, 267961, 267975,
+                              267976, 267991, 267991, 268003, 268003, 268004,
+                              268004, 268007, 268007, 268035, 268035, 268038,
+                              268038, 268059, 268059, 268066, 268070, 268072,
+                              268074, 268080, 268083, 268096, 268098, 268102,
+                              268103, 268114, 268114, 268120, 268120, 268132,
+                              268133, 268185, 268185, 268192, 268193, 268248,
+                              268249, 268256, 268256, 268269, 268271, 268371,
+                              268372, 268378, 268378, 268418, 268418, 268424,
+                              268426, 268448, 300686, 300698, 300699, 300717],
+                             [    34,     68,     69,     77,     78,     79,
+                                  81,     88,     88,     92,     94,     97,
+                                 100,    110,    113,    141,    142,    176,
+                                 177,    183,    183,    193,    193,    207,
+                                 207,    222,    223,    235,    236,    237,
+                                 238,    241,    244,    272,    280,    283,
+                                 285,    306,    308,    315,    315,    317,
+                                 317,    323,    323,    336,    336,    340,
+                                 340,    351,    356,    362,    364,    376,
+                                 376,    428,    429,    436,    436,    491,
+                                 491,    498,    501,    514,    514,    614,
+                                 614,    620,    621,    661,    663,    669,
+                                 669,    691,    691,    703,    703,    721]])
+                # fmt: off
+# flake8: noqa
+            )
         )
-        self.assertEqual(
-            "C-AGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATA", hsp.query_all[0].seq[-40:]
+        self.assertEqual(alignment.query.annotations["splicesites"], (745,))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 6150)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            )
         )
-        self.assertEqual(
-            "| || ||      ||| ||||| |  ||   ||| |  ||",
-            hsp[0].aln_annotation["similarity"][-40:],
+        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 6150)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            )
         )
-        self.assertEqual(
-            "CAAGCAGGCTCTGCAT-CACCCTTGGTTTGCAGAGTACTA", hsp.hit_all[0].seq[-40:]
+        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 6150)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            )
         )
-
-        # first qresult, third hit
-        hit = qresult[2]
-        self.assertEqual("gi|330443520|ref|NC_001136.10|", hit.id)
-        self.assertEqual(1, len(hit.hsps))
-        # first qresult, third hit, first hsp
-        # third hit, first hsp
-        hsp = qresult[2].hsps[0]
-        self.assertEqual(651, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(1, hsp[0].hit_strand)
-        self.assertEqual(34, hsp.query_start)
-        self.assertEqual(267809, hsp.hit_start)
-        self.assertEqual(721, hsp.query_end)
-        self.assertEqual(300717, hsp.hit_end)
-        self.assertEqual([(34, 691), (691, 721)], hsp.query_range_all)
-        self.assertEqual([(267809, 268448), (300686, 300717)], hsp.hit_range_all)
-        self.assertEqual([(691, 691)], hsp.query_inter_ranges)
-        self.assertEqual([(268448, 300686)], hsp.hit_inter_ranges)
-        self.assertEqual(2, len(hsp.query_all))
-        self.assertEqual(2, len(hsp.hit_all))
-        # first block
-        self.assertEqual(
-            "AGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGC", hsp.query_all[0].seq[:40]
+        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 439)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({85010: 'ATGGTGAACCTCTTCAAGACGGTCAGAATAATCAACAGGATGAAGAAGCAAAAGATGT', 253972: 'TGGCGAGGATAGCGAGCAACCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCA...ACA', 350957: 'TGGGGTGATTATATCATTTCTGGATGAGGAATACCTGAAGACCACTCTTCATTA...GTT', 473168: 'AGATGGAAGAATTCTGATAATGCTGTAAAAGAA'}, length=473201)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                               85040,  85041,  85041,  85049,  85049,  85066,
+                              253974, 253978, 253979, 253987, 253987, 253990,
+                              253990, 254023, 254024, 254031, 254033, 254135,
+                              350959, 350973, 350975, 350985, 350985, 350990,
+                              350992, 351002, 351002, 351006, 351007, 351027,
+                              351027, 351042, 351043, 351048, 351048, 351052,
+                              473170, 473190, 473195, 473201],
+                             [     0,     11,     12,     27,     29,     33,
+                                  34,     35,     36,     44,     48,     65,
+                                  65,     69,     69,     77,     78,     81,
+                                  83,    116,    116,    123,    123,    225,
+                                 225,    239,    239,    249,    251,    256,
+                                 256,    266,    268,    272,    272,    292,
+                                 293,    308,    308,    313,    316,    320,
+                                 320,    340,    340,    346]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "||||||| ||||| ||||| || |  ||||||||    | ",
-            hsp[0].aln_annotation["similarity"][:40],
+        self.assertEqual(alignment.query.annotations["splicesites"], (448, 448, 448))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 439)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({85010: 'ATGGTGAACCTCTTCAAGACGGTCAGAATAATCAACAGGATGAAGAAGCAAAAGATGT', 253972: 'TGGCGAGGATAGCGAGCAACCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCA...ACA', 350957: 'TGGGGTGATTATATCATTTCTGGATGAGGAATACCTGAAGACCACTCTTCATTA...GTT', 473168: 'AGATGGAAGAATTCTGATAATGCTGTAAAAGAA'}, length=473201)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                               85040,  85041,  85041,  85049,  85049,  85066,
+                              253974, 253978, 253979, 253987, 253987, 253990,
+                              253990, 254023, 254024, 254031, 254033, 254135,
+                              350959, 350973, 350975, 350985, 350985, 350990,
+                              350992, 351002, 351002, 351006, 351007, 351027,
+                              351027, 351042, 351043, 351048, 351048, 351052,
+                              473170, 473190, 473195, 473201],
+                             [     0,     11,     12,     27,     29,     33,
+                                  34,     35,     36,     44,     48,     65,
+                                  65,     69,     69,     77,     78,     81,
+                                  83,    116,    116,    123,    123,    225,
+                                 225,    239,    239,    249,    251,    256,
+                                 256,    266,    268,    272,    272,    292,
+                                 293,    308,    308,    313,    316,    320,
+                                 320,    340,    340,    346]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "AGAAAGTTGGTGAGGGTACTTATGCGGTTGTTTA-CTTGG", hsp.hit_all[0].seq[:40]
+        self.assertEqual(alignment.query.annotations["splicesites"], (448, 448, 448))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 439)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAA")
+        self.assertEqual(repr(alignment.target.seq), "Seq({85010: 'ATGGTGAACCTCTTCAAGACGGTCAGAATAATCAACAGGATGAAGAAGCAAAAGATGT', 253972: 'TGGCGAGGATAGCGAGCAACCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCA...ACA', 350957: 'TGGGGTGATTATATCATTTCTGGATGAGGAATACCTGAAGACCACTCTTCATTA...GTT', 473168: 'AGATGGAAGAATTCTGATAATGCTGTAAAAGAA'}, length=473201)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                               85040,  85041,  85041,  85049,  85049,  85066,
+                              253974, 253978, 253979, 253987, 253987, 253990,
+                              253990, 254023, 254024, 254031, 254033, 254135,
+                              350959, 350973, 350975, 350985, 350985, 350990,
+                              350992, 351002, 351002, 351006, 351007, 351027,
+                              351027, 351042, 351043, 351048, 351048, 351052,
+                              473170, 473190, 473195, 473201],
+                             [     0,     11,     12,     27,     29,     33,
+                                  34,     35,     36,     44,     48,     65,
+                                  65,     69,     69,     77,     78,     81,
+                                  83,    116,    116,    123,    123,    225,
+                                 225,    239,    239,    249,    251,    256,
+                                 256,    266,    268,    272,    272,    292,
+                                 293,    308,    308,    313,    316,    320,
+                                 320,    340,    340,    346]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "CGATCAGATTTTCAAG--ATATTCAGAGTATTGGGAACGC", hsp.query_all[0].seq[-40:]
+        self.assertEqual(alignment.query.annotations["splicesites"], (448, 448, 448))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 263)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({25: 'AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATG...CAA'}, length=406)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({11338: 'TTGTATCTACTTCGTTTTGGCTCTTATAATTTTTTAGTGGCCTAAATTTTCAAA...TGT', 120610: 'TTCTTCTTCTTCTTCTTGTTCTTCTTCTCCATCATTATCTTCTTCATCTTCTTC...CGA', 130036: 'AGTCCGAATCTTTTTGCTTGGCTCCTCTGGGGTCACTTCAACCTTATTAATTTC...GGT'}, length=130198)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                              130153, 130144, 130138, 130096, 130096, 130080,
+                              130078, 130071, 130070, 130067, 130067, 130044,
+                              130044, 130038, 120681, 120680, 120680, 120669,
+                              120668, 120656, 120656, 120647, 120646, 120636,
+                              120636, 120618, 120617, 120612,  11487,  11471,
+                               11471,  11467,  11467,  11456,  11456,  11448,
+                               11448,  11426,  11424,  11420,  11418,  11384,
+                               11383,  11380,  11379,  11338],
+                             [    25,     39,     39,     43,     45,     70,
+                                  70,     79,     79,    121,    123,    139,
+                                 139,    146,    146,    149,    151,    174,
+                                 177,    183,    183,    184,    185,    196,
+                                 196,    208,    209,    218,    218,    228,
+                                 229,    247,    247,    252,    252,    268,
+                                 272,    276,    277,    288,    293,    301,
+                                 302,    324,    324,    328,    328,    362,
+                                 362,    365,    365,    406]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "|||||| |  |  |||  |  ||||| |  || || || |",
-            hsp[0].aln_annotation["similarity"][-40:],
+        self.assertEqual(alignment.query.annotations["splicesites"], (459, 459))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 263)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({25: 'AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATG...CAA'}, length=406)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({11338: 'TTGTATCTACTTCGTTTTGGCTCTTATAATTTTTTAGTGGCCTAAATTTTCAAA...TGT', 120610: 'TTCTTCTTCTTCTTCTTGTTCTTCTTCTCCATCATTATCTTCTTCATCTTCTTC...CGA', 130036: 'AGTCCGAATCTTTTTGCTTGGCTCCTCTGGGGTCACTTCAACCTTATTAATTTC...GGT'}, length=130198)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                              130153, 130144, 130138, 130096, 130096, 130080,
+                              130078, 130071, 130070, 130067, 130067, 130044,
+                              130044, 130038, 120681, 120680, 120680, 120669,
+                              120668, 120656, 120656, 120647, 120646, 120636,
+                              120636, 120618, 120617, 120612,  11487,  11471,
+                               11471,  11467,  11467,  11456,  11456,  11448,
+                               11448,  11426,  11424,  11420,  11418,  11384,
+                               11383,  11380,  11379,  11338],
+                             [    25,     39,     39,     43,     45,     70,
+                                  70,     79,     79,    121,    123,    139,
+                                 139,    146,    146,    149,    151,    174,
+                                 177,    183,    183,    184,    185,    196,
+                                 196,    208,    209,    218,    218,    228,
+                                 229,    247,    247,    252,    252,    268,
+                                 272,    276,    277,    288,    293,    301,
+                                 302,    324,    324,    328,    328,    362,
+                                 362,    365,    365,    406]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            "CGATCAAA--TGGAAGTAACGTTCAGGGCCTTAGGGACAC", hsp.hit_all[0].seq[-40:]
+        self.assertEqual(alignment.query.annotations["splicesites"], (459, 459))
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "est2genome")
+        self.assertEqual(alignment.score, 263)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({25: 'AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATG...CAA'}, length=406)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({11338: 'TTGTATCTACTTCGTTTTGGCTCTTATAATTTTTTAGTGGCCTAAATTTTCAAA...TGT', 120610: 'TTCTTCTTCTTCTTCTTGTTCTTCTTCTCCATCATTATCTTCTTCATCTTCTTC...CGA', 130036: 'AGTCCGAATCTTTTTGCTTGGCTCCTCTGGGGTCACTTCAACCTTATTAATTTC...GGT'}, length=130198)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                              130153, 130144, 130138, 130096, 130096, 130080,
+                              130078, 130071, 130070, 130067, 130067, 130044,
+                              130044, 130038, 120681, 120680, 120680, 120669,
+                              120668, 120656, 120656, 120647, 120646, 120636,
+                              120636, 120618, 120617, 120612,  11487,  11471,
+                               11471,  11467,  11467,  11456,  11456,  11448,
+                               11448,  11426,  11424,  11420,  11418,  11384,
+                               11383,  11380,  11379,  11338],
+                             [    25,     39,     39,     43,     45,     70,
+                                  70,     79,     79,    121,    123,    139,
+                                 139,    146,    146,    149,    151,    174,
+                                 177,    183,    183,    184,    185,    196,
+                                 196,    208,    209,    218,    218,    228,
+                                 229,    247,    247,    252,    252,    268,
+                                 272,    276,    277,    288,    293,    301,
+                                 302,    324,    324,    328,    328,    362,
+                                 362,    365,    365,    406]])
+                # fmt: on
+            )
         )
-        # last block
-        self.assertEqual("CGAATGAAGCTA-TATGGCCAGATATTGTCT", hsp.query_all[-1].seq)
-        self.assertEqual(
-            "| ||   || ||  ||||||||||||| |||", hsp[-1].aln_annotation["similarity"]
-        )
-        self.assertEqual("CAAACCGAGATAGAATGGCCAGATATTCTCT", hsp.hit_all[-1].seq)
-
-        # test second qresult
-        qresult = qresults[1]
-        self.assertEqual("gi|296143771|ref|NM_001180731.1|", qresult.id)
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("est2genome", qresult.model)
-        self.assertEqual(2, len(qresult))
-        # second qresult, first hit
-        hit = qresult[0]
-        self.assertEqual("gi|330443520|ref|NC_001136.10|", hit.id)
-        self.assertEqual(1, len(hit.hsps))
-        # second qresult, first hit, first hsp
-        # first hit, first hsp
-        hsp = qresult[0].hsps[0]
-        self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(-1, hsp[0].hit_strand)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(1318045, hsp.hit_start)
-        self.assertEqual(1230, hsp.query_end)
-        self.assertEqual(1319275, hsp.hit_end)
-        self.assertEqual([(0, 1230)], hsp.query_range_all)
-        self.assertEqual([(1318045, 1319275)], hsp.hit_range_all)
-        self.assertEqual([], hsp.query_inter_ranges)
-        self.assertEqual([], hsp.hit_inter_ranges)
-        self.assertEqual(1, len(hsp.query_all))
-        self.assertEqual(1, len(hsp.hit_all))
-        self.assertEqual(
-            "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG", hsp.query_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG", hsp.hit_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG", hsp.query_all[0].seq[-40:]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][-40:],
-        )
-        self.assertEqual(
-            "TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG", hsp.hit_all[0].seq[-40:]
-        )
-
-        # second qresult, second hit
-        hit = qresult[1]
-        self.assertEqual("gi|330443688|ref|NC_001145.3|", hit.id)
-        self.assertEqual(2, len(hit.hsps))
-        # second qresult, second hit, first hsp
-        # second hit, first hsp
-        hsp = qresult[1].hsps[0]
-        self.assertEqual(439, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(1, hsp[0].hit_strand)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(85010, hsp.hit_start)
-        self.assertEqual(346, hsp.query_end)
-        self.assertEqual(473201, hsp.hit_end)
-        self.assertEqual(
-            [(0, 65), (65, 225), (225, 320), (320, 346)], hsp.query_range_all
-        )
-        self.assertEqual(
-            [(85010, 85066), (253974, 254135), (350959, 351052), (473170, 473201)],
-            hsp.hit_range_all,
-        )
-        self.assertEqual([(65, 65), (225, 225), (320, 320)], hsp.query_inter_ranges)
-        self.assertEqual(
-            [(85066, 253974), (254135, 350959), (351052, 473170)], hsp.hit_inter_ranges
-        )
-        self.assertEqual(4, len(hsp.query_all))
-        self.assertEqual(4, len(hsp.hit_all))
-        # first block
-        self.assertEqual(
-            "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG", hsp.query_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "||||  ||  | ||||   | ||||||  |||| | | | ",
-            hsp[0].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "ATGGTGAACCT-CTTCAAGACGGTCAG--AATA-A-TCAA", hsp.hit_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTT", hsp.query_all[0].seq[-40:]
-        )
-        self.assertEqual(
-            "||  |||| | | | ||||    ||||||||||||| | |",
-            hsp[0].aln_annotation["similarity"][-40:],
-        )
-        self.assertEqual(
-            "AG--AATA-A-TCAACAGG----ATGAAGAAGCAAAAGAT", hsp.hit_all[0].seq[-40:]
-        )
-        # last block
-        self.assertEqual("AGCTAAGAATTCTGATGATG-----AAAGAA", hsp.query_all[-1].seq)
-        self.assertEqual(
-            "|   |||||||||||| |||     ||||||", hsp[-1].aln_annotation["similarity"]
-        )
-        self.assertEqual("ATGGAAGAATTCTGATAATGCTGTAAAAGAA", hsp.hit_all[-1].seq)
-
-        # second qresult, second hit, second hsp
-        # second hit, second hsp
-        hsp = qresult[1].hsps[1]
-        self.assertEqual(263, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(-1, hsp[0].hit_strand)
-        self.assertEqual(25, hsp.query_start)
-        self.assertEqual(11338, hsp.hit_start)
-        self.assertEqual(406, hsp.query_end)
-        self.assertEqual(130198, hsp.hit_end)
-        self.assertEqual([(25, 183), (183, 252), (252, 406)], hsp.query_range_all)
-        self.assertEqual(
-            [(130038, 130198), (120612, 120681), (11338, 11487)], hsp.hit_range_all
-        )
-        self.assertEqual([(183, 183), (252, 252)], hsp.query_inter_ranges)
-        self.assertEqual([(120681, 130038), (11487, 120612)], hsp.hit_inter_ranges)
-        self.assertEqual(3, len(hsp.query_all))
-        self.assertEqual(3, len(hsp.hit_all))
-        # first block
-        self.assertEqual(
-            "AGCAAATATATTTA-GCAGGTGACATGAAGAAGCAAATGT", hsp.query_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "| |||| |||   | ||||   | | || |||| | |  |",
-            hsp[0].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "ACCAAAGATAACAAGGCAG--AAAAAGAGGAAGAAGAAAT", hsp.hit_all[0].seq[:40]
-        )
-        self.assertEqual(
-            "AG-GACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGA", hsp.query_all[0].seq[-40:]
-        )
-        self.assertEqual(
-            "|| |||  ||||||  ||   |||  || ||   ||| ||",
-            hsp[0].aln_annotation["similarity"][-40:],
-        )
-        self.assertEqual(
-            "AGTGAC--CCCAGAGGAGCCAAGCAAAAAGA---TTCGGA", hsp.hit_all[0].seq[-40:]
-        )
-        # last block
-        self.assertEqual(
-            "AATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAA", hsp.query_all[-1].seq[:40]
-        )
-        self.assertEqual(
-            "|||||||  | ||| |    |||| | |  | | ||    ",
-            hsp[-1].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "AATAAGAGCAACACAG----TTTA-TCTTATATGTA----", hsp.hit_all[-1].seq[:40]
-        )
-        self.assertEqual(
-            "CTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAA", hsp.query_all[-1].seq[-40:]
-        )
-        self.assertEqual(
-            "|  | | || |  | || ||  ||||||||  ||  ||||",
-            hsp[-1].aln_annotation["similarity"][-40:],
-        )
-        self.assertEqual(
-            "CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA", hsp.hit_all[-1].seq[-40:]
-        )
+        self.assertEqual(alignment.query.annotations["splicesites"], (459, 459))
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_exn_22_m_coding2coding_fshifts(self):
         """Test parsing exonerate output (exn_22_m_coding2coding_fshifts.exn)."""
