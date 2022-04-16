@@ -1549,7 +1549,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 367)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({330: HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL})", length=409)
+        self.assertEqual(repr(alignment.query.seq), "Seq({330: 'HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL'})", length=409)
         self.assertEqual(repr(alignment.target.seq), "Seq({216: 'CATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCC...CTG'}, length=455)")
         self.assertTrue(
             numpy.array_equal(
@@ -1578,93 +1578,61 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_m_protein2genome(self):
         """Test parsing exonerate output (exn_22_m_protein2genome.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
-
-        # check common attributes
-        for hit in qresult:
-            self.assertEqual(qresult.id, hit.query_id)
-            for hsp in hit:
-                self.assertEqual(hit.id, hsp.hit_id)
-                self.assertEqual(qresult.id, hsp.query_id)
-
-        self.assertEqual("sp|P24813|YAP2_YEAST", qresult.id)
-        self.assertEqual(
-            "AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain"
-            " ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2",
-            qresult.description,
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.hostname, "blackbriar")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
+        self.assertEqual(alignment.query.description, "AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2")
+        self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
+        self.assertEqual(alignment.score, 2105)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "Seq('MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQEQQKRENEKGTSTAVSKAAKELPSPNSDENMTVNTSIEVQPHTQENEKVMWNIGSWNAPSLTNSWDSPPGNRTGAVTIGDESINGSEMPDFSLDLVSNDRQTGLEALDYDIHNYFPQHSERLTAEKIDTSACQCEIDQKYLPYETEDDTLFPSVLPLAVGSQCNNICNRKCIGTKPCSNKEIKCDLITSHLLNQKSLASVLPVAASHTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL')", length=409)
+        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[1319275, 1318048], [0, 409]])
+            )
         )
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("protein2genome:local", qresult.model)
-        self.assertEqual(3, len(qresult))
-        # first hit
-        hit = qresult[0]
-        self.assertEqual("gi|330443520|ref|NC_001136.10|", hit.id)
-        self.assertEqual(
-            "Saccharomyces cerevisiae S288c chromosome IV, complete sequence",
-            hit.description,
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
+        self.assertEqual(alignment.query.description, "AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2")
+        self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence")
+        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
+        self.assertEqual(alignment.score, 205)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({28: 'PKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKD...AFL'}, length=120)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({253991: 'CCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCAAGATTTGGATCCTGAAACT...TTA'}, length=254270)")
+        self.assertTrue(
+            numpy.array_equal( alignment.coordinates, numpy.array([[28, 120],[253991, 254270]])
+            )
         )
-        self.assertEqual(1, len(hit))
-        # first hit, first hsp
-        hsp = qresult[0][0]
-        self.assertEqual(2105, hsp.score)
-        self.assertEqual(0, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(1318048, hsp.hit_start)
-        self.assertEqual(409, hsp.query_end)
-        self.assertEqual(1319275, hsp.hit_end)
-        self.assertEqual(
-            "MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKR", hsp[0].query.seq[:40]
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
+        self.assertEqual(alignment.query.description, "AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2")
+        self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome VIII, complete sequence:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
+        self.assertEqual(alignment.score, 122)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({37: 'RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDF...LQE'}, length=125)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({68450: 'ATAAACAAGATACTGAACAGGGACCCCCAGTTCATGTCGAATTCCAGCTTTCAT...GAA', 84531: 'AATGAGAATGTTCCAGATGACTCTAAGGCAAAGAAAAAGGCTCAAAACAGAGCC...TGT'}, length=84646)")
+        self.assertTrue(
+            numpy.array_equal( alignment.coordinates,
+            numpy.array([[   37,    75,    75,    75,   125],
+                         [84646, 84533, 68601, 68600, 68450]])
+            )
         )
-        self.assertEqual(
-            "MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKR", hsp[0].hit.seq[:40]
-        )
-        self.assertEqual(
-            "SSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL", hsp[0].query.seq[-40:]
-        )
-        self.assertEqual(
-            "SSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL", hsp[0].hit.seq[-40:]
-        )
-
-        # last hit
-        hit = qresult[-1]
-        self.assertEqual("gi|330443590|ref|NC_001140.6|", hit.id)
-        self.assertEqual(
-            "Saccharomyces cerevisiae S288c chromosome VIII, complete sequence",
-            hit.description,
-        )
-        self.assertEqual(1, len(hit))
-        # last hit, first hsp
-        hsp = qresult[-1][0]
-        self.assertEqual(122, hsp.score)
-        self.assertEqual([0, 0], hsp.query_strand_all)
-        self.assertEqual([-1, -1], hsp.hit_strand_all)
-        self.assertEqual("RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERX", hsp[0].query.seq)
-        self.assertEqual("NENVPDDSKAKKKAQNRAAQKAFRERKEARMKELQDKX", hsp[0].hit.seq)
-        self.assertEqual("!.!", hsp.aln_annotation_all[0]["similarity"][0])
-        self.assertEqual(":!", hsp.aln_annotation_all[0]["similarity"][-1])
-        self.assertEqual("AAT", hsp.aln_annotation_all[0]["hit_annotation"][0])
-        self.assertEqual("TT", hsp.aln_annotation_all[0]["hit_annotation"][-1])
-        self.assertEqual(
-            "XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE", hsp[-1].query.seq
-        )
-        self.assertEqual(
-            "XNKILNRDPQFMSNSSFHQCVSLDSINTIEKDEEKNSDDDAGLQAATDARE", hsp[-1].hit.seq
-        )
-        self.assertEqual("!", hsp.aln_annotation_all[-1]["similarity"][0])
-        self.assertEqual("|||", hsp.aln_annotation_all[-1]["similarity"][-1])
-        self.assertEqual("A", hsp.aln_annotation_all[-1]["hit_annotation"][0])
-        self.assertEqual("GAA", hsp.aln_annotation_all[-1]["hit_annotation"][-1])
-
-        self.assertEqual([(37, 74), (75, 125)], hsp.query_range_all)
-        self.assertEqual([(84533, 84646), (68450, 68601)], hsp.hit_range_all)
-        self.assertEqual([(74, 75)], hsp.query_inter_ranges)
-        self.assertEqual([(68601, 84533)], hsp.hit_inter_ranges)
-        self.assertEqual([0, 0], hsp.query_frame_all)
-        self.assertEqual([-3, -3], hsp.hit_frame_all)
-        self.assertEqual(2, len(hsp.query_all))
-        self.assertEqual(2, len(hsp.hit_all))
-        self.assertEqual(2, len(hsp.aln_annotation_all))
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_exn_24_m_protein2genome_revcomp_fshifts(self):
         """Test parsing exonerate output (exn_24_m_protein2genome_revcomp_fshifts.exn)."""
