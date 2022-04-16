@@ -1480,119 +1480,58 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_m_coding2coding_fshifts(self):
         """Test parsing exonerate output (exn_22_m_coding2coding_fshifts.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding_fshifts.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
-
-        # check common attributes
-        for hit in qresult:
-            self.assertEqual(qresult.id, hit.query_id)
-            for hsp in hit:
-                self.assertEqual(hit.id, hsp.hit_id)
-                self.assertEqual(qresult.id, hsp.query_id)
-
-        self.assertEqual("gi|296143771|ref|NM_001180731.1|", qresult.id)
-        self.assertEqual(
-            "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds",
-            qresult.description,
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar no --showalignment yes --bestn 3")
+        self.assertEqual(alignments.hostname, "blackbriar")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.annotations["model"], "coding2coding")
+        self.assertEqual(alignment.score, 213)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAAATTCGTGGGATACTCCCCCCGGAAATCGAACATGCCGTTACCATGACGAAAGTATTAATGGTAGT")
+        self.assertEqual(repr(alignment.target.seq), "Seq({465: 'ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTT...AGT'}, length=630)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[465, 558, 558, 591, 593, 605, 609, 630],
+                             [  0,  93,  94, 127, 127, 139, 139, 160]])
+                # fmt: on
+            )
         )
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("coding2coding", qresult.model)
-        self.assertEqual(1, len(qresult))
-        # first hit
-        hit = qresult[0]
-        self.assertEqual("gi|296143771|ref|NM_001180731.1|", hit.id)
-        self.assertEqual(
-            "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds",
-            hit.description,
+        self.assertEqual(alignment[0], "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC-AATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGT")
+        self.assertEqual(alignment[1], "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAAATTCGTGGGATACTCCCCCCGGAAATCGAACA--TGCCGTTACCAT----GACGAAAGTATTAATGGTAGT")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]")
+        self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "coding2coding")
+        self.assertEqual(alignment.score, 201)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({1: 'CTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTA...GTA'}, length=158)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({466: 'CTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTA...GTA'}, length=628)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[628, 604, 598, 559, 559, 466],
+                             [158, 134, 134,  95,  94,   1]])
+                # fmt: on
+            )
         )
-        self.assertEqual(2, len(hit))
-        # first hit, first hsp
-        hsp = qresult[0][0]
-        self.assertEqual(213, hsp.score)
-        self.assertEqual([1, 1, 1, 1], hsp.query_strand_all)
-        self.assertEqual([1, 1, 1, 1], hsp.hit_strand_all)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(465, hsp.hit_start)
-        self.assertEqual(160, hsp.query_end)
-        self.assertEqual(630, hsp.hit_end)
-        self.assertEqual(
-            [(0, 93), (94, 127), (127, 139), (139, 160)], hsp.query_range_all
-        )
-        self.assertEqual(
-            [(465, 558), (558, 591), (593, 605), (609, 630)], hsp.hit_range_all
-        )
-        self.assertEqual([(93, 94), (127, 127), (139, 139)], hsp.query_inter_ranges)
-        self.assertEqual([(558, 558), (591, 593), (605, 609)], hsp.hit_inter_ranges)
-        self.assertEqual([1, 2, 2, 2], hsp.query_frame_all)
-        self.assertEqual([1, 1, 3, 1], hsp.hit_frame_all)
-        self.assertEqual(4, len(hsp.query_all))
-        self.assertEqual(4, len(hsp.hit_all))
-        self.assertEqual(4, len(hsp.aln_annotation_all))
-        # first block
-        self.assertEqual(
-            "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG", hsp[0].query.seq[:40]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG", hsp[0].hit.seq[:40]
-        )
-        self.assertEqual(
-            "TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC", hsp[0].query.seq[-40:]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[0].aln_annotation["similarity"][-40:],
-        )
-        self.assertEqual(
-            "TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC", hsp[0].hit.seq[-40:]
-        )
-        # last block
-        self.assertEqual("GACGAAAGTATTAATGGTAGT", hsp[-1].query.seq)
-        self.assertEqual("|||||||||||||||||||||", hsp[-1].aln_annotation["similarity"])
-        self.assertEqual("GACGAAAGTATTAATGGTAGT", hsp[-1].hit.seq)
-
-        # first hit, second hsp
-        hsp = qresult[0][1]
-        self.assertEqual(201, hsp.score)
-        self.assertEqual([-1, -1], hsp.query_strand_all)
-        self.assertEqual([-1, -1], hsp.hit_strand_all)
-        self.assertEqual(1, hsp.query_start)
-        self.assertEqual(466, hsp.hit_start)
-        self.assertEqual(158, hsp.query_end)
-        self.assertEqual(628, hsp.hit_end)
-        self.assertEqual([(95, 158), (1, 94)], hsp.query_range_all)
-        self.assertEqual([(559, 628), (466, 559)], hsp.hit_range_all)
-        self.assertEqual([(94, 95)], hsp.query_inter_ranges)
-        self.assertEqual([(559, 559)], hsp.hit_inter_ranges)
-        self.assertEqual([-3, -2], hsp.query_frame_all)
-        self.assertEqual([-2, -2], hsp.hit_frame_all)
-        self.assertEqual(2, len(hsp.query_all))
-        self.assertEqual(2, len(hsp.hit_all))
-        self.assertEqual(2, len(hsp.aln_annotation_all))
-        # first block
-        self.assertEqual(
-            "TACCATTAATACTTTCGTCATGGT<-><->AACGGCATGT", hsp[0].query.seq[:40]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||+ !       ...  !:!!|",
-            hsp[0].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGT", hsp[0].hit.seq[:40]
-        )
-        # last block
-        self.assertEqual(
-            "TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT", hsp[-1].query.seq[:40]
-        )
-        self.assertEqual(
-            "||||||||||||||||||||||||||||||||||||||||",
-            hsp[-1].aln_annotation["similarity"][:40],
-        )
-        self.assertEqual(
-            "TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT", hsp[-1].hit.seq[:40]
-        )
+        self.assertEqual(alignment[0], "TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAAT-TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG")
+        self.assertEqual(alignment[1], "TACCATTAATACTTTCGTCATGGT------AACGGCATGTTCGATTTCCGGGGGGAGTATCCCACGAATTTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG")
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_exn_22_m_protein2dna_fshifts(self):
         """Test parsing exonerate output (exn_22_m_protein2dna_fshifts.exn)."""
