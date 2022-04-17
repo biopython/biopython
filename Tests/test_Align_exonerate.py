@@ -1666,67 +1666,31 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_24_protein2genome_met_intron(self):
         """Test parsing exonerate output (exn_24_m_protein2genome_met_intron.exn)."""
         exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_met_intron.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
-
-        # check common attributes
-        for hit in qresult:
-            self.assertEqual(qresult.id, hit.query_id)
-            for hsp in hit:
-                self.assertEqual(hit.id, hsp.hit_id)
-                self.assertEqual(qresult.id, hsp.query_id)
-
-        self.assertEqual("Morus-gene001", qresult.id)
-        self.assertEqual("", qresult.description)
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("protein2genome:local", qresult.model)
-        self.assertEqual(1, len(qresult))
-        # first hit
-        hit = qresult[0]
-        self.assertEqual("NODE_1_length_2817_cov_100.387732", hit.id)
-        self.assertEqual("SPAdes contig NODE_1", hit.description)
-        self.assertEqual(1, len(hit))
-        # first hit, first hsp
-        self.assertEqual(1958, hsp.score)
-        self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_strand_all)
-        self.assertEqual([-1, -1, -1, -1, -1, -1], hsp.hit_strand_all)
-        self.assertEqual(48, hsp.query_start)
-        self.assertEqual(388, hsp.hit_start)
-        self.assertEqual(482, hsp.query_end)
-        self.assertEqual(2392, hsp.hit_end)
-        self.assertEqual(
-            [(48, 85), (85, 118), (118, 155), (155, 256), (257, 303), (303, 482)],
-            hsp.query_range_all,
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showcigar no --showvulgar no --bestn 1 --refine full")
+        self.assertEqual(alignments.hostname, "RBGs-MacBook-Air.local")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "Morus-gene001")
+        self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
+        self.assertEqual(alignment.target.description, "SPAdes contig NODE_1:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
+        self.assertEqual(alignment.score, 1958)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({48: 'MVQTPLHVSAGNNRADIVKFLLEFPGPEKVELEAKNMYGETPLHMAAKNGCNDA...SQ*'}, length=482)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({388: 'TCATTGCGTCAAAAGCTGAATTCCTGCTTCTAAATCCTCTAGGGTAATTGTACA...TCT', 1056: 'ACCTTCCTCCTAGTTTTTGGTCCAGTATGACCAACAAATTCCCCAACCAAATCA...CCT', 1418: 'ACCTGTTCCAGGGTTGCCAAGGAAGGCCATATGAGGCGGTCTTCGGGTACCAAC...CCT', 1808: 'ACATTGTCCTCTGCACTGCAATCAGCATTGTACTCGAGCAATGTCTTTACAGTT...TCT', 2028: 'ACATTTGCTTTGGCTTCAATAAAAGCACCATGAGCAAGAAGCACCCGAGCAGCA...ACT', 2279: 'ACCATGTTCTTGGCTTCCAACTCAACCTTCTCTGGCCCTGGAAACTCAAGAAGA...CAT'}, length=2392)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1420, 1198,
+                        1196, 1058,  925,  388],
+                       [  48,   85,   85,  118,  118,  155,  155,  257,  257,
+                         257,  303,  303,  482]])
+            )
         )
-        self.assertEqual(
-            [
-                (2281, 2392),
-                (2030, 2129),
-                (1810, 1921),
-                (1420, 1724),
-                (1058, 1198),
-                (388, 925),
-            ],
-            hsp.hit_range_all,
-        )
-        self.assertEqual(
-            [(2129, 2281), (1921, 2030), (1724, 1810), (1198, 1420), (925, 1058)],
-            hsp.hit_inter_ranges,
-        )
-        self.assertEqual(
-            [(85, 85), (118, 118), (155, 155), (256, 257), (303, 303)],
-            hsp.query_inter_ranges,
-        )
-        self.assertEqual("MVQTPLHVSAGNNRADIVKF", hsp[0].query.seq[:20])
-        self.assertEqual("VKFLLEFPGPEKVELEAKNM", hsp[0].query.seq[-20:])
-        self.assertEqual("|||", hsp[0].aln_annotation["similarity"][0])
-        self.assertEqual("|||", hsp[0].aln_annotation["similarity"][-1])
-        self.assertEqual("ATG", hsp[0].aln_annotation["hit_annotation"][0])
-        self.assertEqual("ATG", hsp[0].aln_annotation["hit_annotation"][-1])
-        self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_frame_all)
-        self.assertEqual([-2, -3, -2, -2, -3, -2], hsp.hit_frame_all)
-        self.assertEqual(6, len(hsp.query_all))
-        self.assertEqual(6, len(hsp.hit_all))
-        self.assertEqual(6, len(hsp.aln_annotation_all))
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
