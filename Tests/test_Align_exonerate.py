@@ -1637,59 +1637,31 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_24_m_protein2genome_revcomp_fshifts(self):
         """Test parsing exonerate output (exn_24_m_protein2genome_revcomp_fshifts.exn)."""
         exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_revcomp_fshifts.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
-
-        # check common attributes
-        for hit in qresult:
-            self.assertEqual(qresult.id, hit.query_id)
-            for hsp in hit:
-                self.assertEqual(hit.id, hsp.hit_id)
-                self.assertEqual(qresult.id, hsp.query_id)
-
-        self.assertEqual("Morus-gene026", qresult.id)
-        self.assertEqual("", qresult.description)
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual("protein2genome:local", qresult.model)
-        self.assertEqual(1, len(qresult))
-        # first (only) hit
-        hit = qresult[0]
-        self.assertEqual("NODE_2_length_1708_cov_48.590765", hit.id)
-        self.assertEqual("SPAdes NODE_2 contig", hit.description)
-        self.assertEqual(1, len(hit))
-        # first hit, first hsp
-        hsp = qresult[0][0]
-        self.assertEqual(1308, hsp.score)
-        self.assertEqual([0, 0], hsp.query_strand_all)
-        self.assertEqual([-1, -1], hsp.hit_strand_all)
-        self.assertEqual(69, hsp.query_start)
-        self.assertEqual(331, hsp.hit_start)
-        self.assertEqual(441, hsp.query_end)
-        self.assertEqual(1416, hsp.hit_end)
-        self.assertEqual([(69, 402), (402, 441)], hsp.query_range_all)
-        self.assertEqual([(450, 1416), (331, 448)], hsp.hit_range_all)
-        self.assertEqual([(402, 402)], hsp.query_inter_ranges)
-        self.assertEqual([(448, 450)], hsp.hit_inter_ranges)
-        self.assertEqual([0, 0], hsp.query_frame_all)
-        self.assertEqual([-1, -2], hsp.hit_frame_all)
-        self.assertEqual(2, len(hsp.query_all))
-        self.assertEqual(2, len(hsp.hit_all))
-        self.assertEqual(2, len(hsp.aln_annotation_all))
-        # first block
-        self.assertEqual(
-            "PESPWTCSPLQT--PSPSLLYHCIASLHRHDGTIHSIAVS", hsp[0].query.seq[:40]
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showcigar no --showvulgar no --bestn 2 --refine full")
+        self.assertEqual(alignments.hostname, "RBGs-MacBook-Air.local")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "Morus-gene026")
+        self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
+        self.assertEqual(alignment.target.description, "SPAdes NODE_2 contig:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
+        self.assertEqual(alignment.score, 1308)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({69: 'PESPWTCSPLQTPSPSLLYHCIASLHRHDGTIHSIAVSNGVVFTGSDSRRIRAW...DEE'}, length=441)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({331: 'TTCTTGATCAGGCAAGATTTTGACTCTCCAGACCTTCAAAGTCTGGTCCAAGCT...TGG'}, length=1416)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,  744,
+                         450,  450, 448,  331],
+                       [  69,   81,   81,  164,  169,  195,  196,  297,  300,
+                         398,  402, 402,  441]])
+            )
         )
-        self.assertEqual(
-            "PESPWTSSPLQTLSHSPSLLYHCIASLRRHDGTIYSIATS", hsp[0].hit.seq[:40]
-        )
-        self.assertEqual(
-            "VEKMVFSGSEDTTIRIWRREEGSCLHECLAVLDGHRGPVK", hsp[0].query.seq[-40:]
-        )
-        self.assertEqual(
-            "VEKMVFGGSEDTTIRIWRREEGGCFHKCLAVLDGHRXXXX", hsp[0].hit.seq[-40:]
-        )
-        # last block
-        self.assertEqual("CLAACLEVEKVVMMGFLVYSASLDQTFKVWRVKVLPDEE", hsp[-1].query.seq)
-        self.assertEqual("CLAAC*QVEKMVMMGFLIYSVSLDQTLKVWRVKILPDQE", hsp[-1].hit.seq)
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_exn_24_protein2genome_met_intron(self):
         """Test parsing exonerate output (exn_24_m_protein2genome_met_intron.exn)."""
