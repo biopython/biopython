@@ -711,9 +711,17 @@ class IC_Chain:
                 if last_ord_res != last_res:
                     reason = f"disordered residues after {last_ord_res.pretty_str()}"
                 else:
+                    """
+                    # this code not working with doctest
                     reason = cast(
                         str, self._peptide_check(last_ord_res[0].residue, res)
                     )
+                    """
+                    r = self._peptide_check(last_ord_res[0].residue, res)
+                    if r is not None:
+                        reason = r
+                    else:
+                        reason = "unknown"  # obviously this should not happen!
                 print(f"chain break at {ric.pretty_str()} due to {reason}")
 
             iNCaC = ric.split_akl(
