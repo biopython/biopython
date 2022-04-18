@@ -955,11 +955,6 @@ We start with the simple case of computing internal coordinates for a structure:
 >>> parser = PDBParser()
 >>> myProtein = parser.get_structure("1a8o", "1A8O.pdb")
 >>> myChain = myProtein[0]["A"]
-\end{minted}
-
-% print(chain break message) from subroutine not seen in linux doctest
-%cont-doctest
-\begin{minted}{pycon}
 >>> # compute bond lengths, angles, dihedral angles
 >>> myChain.atom_to_internal_coordinates(verbose=True)
 chain break at THR  186  due to MaxPeptideBond (1.4 angstroms) exceeded
