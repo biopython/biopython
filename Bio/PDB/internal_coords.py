@@ -709,7 +709,7 @@ class IC_Chain:
             # chain break, save coords for restart
             if verbose and len(last_res) != 0:  # not first residue
                 if last_ord_res != last_res:
-                    reason = "disordered residues after {last_ord_res.pretty_str()}"
+                    reason = f"disordered residues after {last_ord_res.pretty_str()}"
                 else:
                     reason = cast(
                         str, self._peptide_check(last_ord_res[0].residue, res)
