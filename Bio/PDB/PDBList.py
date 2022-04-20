@@ -340,7 +340,7 @@ class PDBList:
             urlcleanup()
             urlretrieve(url, filename)
         except OSError:
-            print("Desired structure doesn't exists")
+            print("Desired structure doesn't exist")
         else:
             with gzip.open(filename, "rb") as gz:
                 with open(final_file, "wb") as out:
@@ -455,10 +455,15 @@ class PDBList:
         assemblies_to_fetch = []
 
         if isinstance(pdb_codes, str):
-            print(f"Fetching assemblies associated with PDB ID(s) '{pdb_codes}'...")
+            pdb_codes = [pdb_codes.lower()]
+        
+        print(f"Fetching assemblies associated with PDB ID(s) '{', '.join(pdb_codes).lower()}'...")
+
+        for code in pdb_codes:
+            code = code.lower()
             ftp = ftplib.FTP("ftp.wwpdb.org")
             ftp.login()  # anonymous
-            division = pdb_codes[1:3]
+            division = code[1:3]
             if file_format.lower() == 'pdb':
                 ftp.cwd(f"pub/pdb/data/biounit/PDB/divided/{division}")
             else:
@@ -467,81 +472,59 @@ class PDBList:
             #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/divided/{division}") # For May
             entries = []
             ftp.retrlines("NLST", callback=entries.append)
-            assemblies_to_fetch += [e for e in entries if pdb_codes in e]
-            if len(assemblies_to_fetch) == 0 and file_format.lower() == 'mmcif':
-                print(f"The assembly for '{code}' doesn't exist in mmCIF format.")
-
-        else:
-            print(f"Fetching assemblies associated with PDB ID(s) '{', '.join(pdb_codes)}'")
-            for code in pdb_codes:
-                ftp = ftplib.FTP("ftp.wwpdb.org")
-                ftp.login()  # anonymous
-                division = code[1:3]
-                if file_format.lower() == 'pdb':
-                    ftp.cwd(f"pub/pdb/data/biounit/PDB/divided/{division}")
-                else:
-                    ftp.cwd(f"pub/pdb/data/biounit/mmCIF/divided/{division}")
-                # else:
-                #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/divided/{division}") # For May
-                entries = []
-                ftp.retrlines("NLST", callback=entries.append)
-                assemblies_tmp = [e for e in entries if code in e]
-                if len(assemblies_tmp) == 0 and file_format.lower() == 'mmcif':
-                    print(f"The assembly for '{code}' doesn't exist in mmCIF format.")
-                else:
-                    assemblies_to_fetch += [e for e in entries if code in e]
+            assemblies_tmp = [e for e in entries if code in e]
+            if len(assemblies_tmp) == 0 and file_format.lower() == 'mmcif':
+                print(f"No assembly for '{code}' in mmCIF format")
+            else:
+                assemblies_to_fetch += assemblies_tmp
 
         return assemblies_to_fetch
 
     def retrieve_assembly(
-        self, input_list, pdir=None, file_format=None, overwrite=False
+        self, assembly_in, pdir=None, file_format=None, overwrite=False
     ):
         """
         Fetch assembly for specified PDB code.
 
         Rest of docstring todo.
         """
-        # if file_format != 'pdb':
-        #     print("Sorry, only PDB assemblies are currently supported.")
+        code = assembly_in[:4]
+        number = assembly_in[8]
 
-        # else:    
-        pdb_ids = {re.findall(r"(\S{4}).pdb", assembly)[0] for assembly in input_list}
+        if pdir is None:
+            path = self.local_pdb
+            if not self.flat_tree:  # Put in PDB-style directory tree
+                path = os.path.join(path, code[1:3])
+        else:  # Put in specified directory
+            path = pdir
+        if not os.access(path, os.F_OK):
+            os.makedirs(path)
 
-        for code in pdb_ids:
-            if self._verbose:
-                print(f"Downloading assemblies associated with PDB ID '{code}'...")
-            for assembly in input_list:
-                if code in assembly:
-                    if pdir is None:
-                        path = self.local_pdb
-                        if not self.flat_tree:  # Put in PDB-style directory tree
-                            path = os.path.join(path, code[1:3])
-                    else:  # Put in specified directory
-                        path = pdir
-                    if not os.access(path, os.F_OK):
-                        os.makedirs(path)
+        assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/PDB/all/{assembly_in}"
+        assembly_filename = os.path.join(path, assembly_in)
+        # try:
+        urlcleanup()
+        urlretrieve(assembly_url, assembly_filename)
+        # except OSError:
+        #     print("Desired assembly doesn't exist")  # I don't think we need this try/except since I take care of that in the fetch
+        # else:
+        final_assembly_file = os.path.join(path, assembly_in[:-3])
 
-                    assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/PDB/all/{assembly}"
-                    assembly_filename = os.path.join(path, assembly)
-                    try:
-                        urlcleanup()
-                        urlretrieve(assembly_url, assembly_filename)
-                    except OSError:
-                        print("Desired assembly doesn't exists")
-                    else:
-                        final_assembly_file = os.path.join(path, assembly[:-3])
+        # Skip download if the file already exists
+        if not overwrite:
+            if os.path.exists(final_assembly_file):
+                if self._verbose:
+                    print(f"Assembly exists: '{final_assembly_file}' ")
+                return final_assembly_file
 
-                    # Skip download if the file already exists
-                    if not overwrite:
-                        if os.path.exists(final_assembly_file):
-                            if self._verbose:
-                                print(f"Assembly exists: '{final_assembly_file}' ")
-                            return final_assembly_file
+        if self._verbose:
+            print(f"Downloading assembly '{code}' {number}...")
 
-                    with gzip.open(assembly_filename, "rb") as gz:
-                        with open(final_assembly_file, "wb") as out:
-                            out.writelines(gz)
-                    os.remove(assembly_filename)
+        with gzip.open(assembly_filename, "rb") as gz:
+            with open(final_assembly_file, "wb") as out:
+                out.writelines(gz)
+        os.remove(assembly_filename)
+        return final_assembly_file
 
     def download_entire_pdb(self, listfile=None, file_format=None):
         """Retrieve all PDB entries not present in the local PDB copy.
@@ -680,10 +663,10 @@ if __name__ == "__main__":
                 fetch_output = pl.fetch_assembly_list(sys.argv[1], file_format=file_format
             )
             if assemblies_only:
-                    pl.retrieve_assembly(input_list=fetch_output, pdir=pdb_path, file_format=file_format, overwrite=overwrite)
+                    pl.retrieve_assembly(fetch_output[0], pdir=pdb_path, file_format=file_format, overwrite=overwrite)
             else:
                 if assemblies:
-                    pl.retrieve_assembly(input_list=fetch_output, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                    pl.retrieve_assembly(fetch_output[0], pdir=pdb_path, file_format=file_format, overwrite=overwrite
                 )
                 pl.retrieve_pdb_file(
                     sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite
@@ -696,13 +679,15 @@ if __name__ == "__main__":
                     fetch_output = pl.fetch_assembly_list(pdb_ids, file_format=file_format
                 )
             if assemblies_only:
-                pl.retrieve_assembly(input_list=fetch_output, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                )
+                for assembly in fetch_output:
+                    pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                    )
             else:
                 if assemblies:
-                    pl.retrieve_assembly(input_list=fetch_output, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                    )
-                for pdb_id in pdb_ids:
-                    pl.retrieve_pdb_file(
-                        pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                    )
+                    for assembly in fetch_output:
+                        pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                        )
+                    for pdb_id in pdb_ids:
+                        pl.retrieve_pdb_file(
+                            pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                        )
