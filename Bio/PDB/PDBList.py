@@ -454,9 +454,8 @@ class PDBList:
         """
         assemblies_to_fetch = []
 
-        print(f"Fetching assemblies associated with PDB ID(s) '{pdb_codes}'")
-
         if isinstance(pdb_codes, str):
+            print(f"Fetching assemblies associated with PDB ID(s) '{pdb_codes}'...")
             ftp = ftplib.FTP("ftp.wwpdb.org")
             ftp.login()  # anonymous
             division = pdb_codes[1:3]
@@ -465,14 +464,15 @@ class PDBList:
             else:
                 ftp.cwd(f"pub/pdb/data/biounit/mmCIF/divided/{division}")
             # else:
-            #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/all/")
+            #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/divided/{division}") # For May
             entries = []
             ftp.retrlines("NLST", callback=entries.append)
             assemblies_to_fetch += [e for e in entries if pdb_codes in e]
             if len(assemblies_to_fetch) == 0 and file_format.lower() == 'mmcif':
-                print(f"The desired assembly doesn't exist in mmCIF format.")
+                print(f"The assembly for '{code}' doesn't exist in mmCIF format.")
 
         else:
+            print(f"Fetching assemblies associated with PDB ID(s) '{', '.join(pdb_codes)}'")
             for code in pdb_codes:
                 ftp = ftplib.FTP("ftp.wwpdb.org")
                 ftp.login()  # anonymous
@@ -482,12 +482,12 @@ class PDBList:
                 else:
                     ftp.cwd(f"pub/pdb/data/biounit/mmCIF/divided/{division}")
                 # else:
-                #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/all/")
+                #     ftp.cwd("pub/pdb/data/assemblies/mmCIF/divided/{division}") # For May
                 entries = []
                 ftp.retrlines("NLST", callback=entries.append)
                 assemblies_tmp = [e for e in entries if code in e]
                 if len(assemblies_tmp) == 0 and file_format.lower() == 'mmcif':
-                    print(f"The desired assembly doesn't exist in mmCIF format.")
+                    print(f"The assembly for '{code}' doesn't exist in mmCIF format.")
                 else:
                     assemblies_to_fetch += [e for e in entries if code in e]
 
