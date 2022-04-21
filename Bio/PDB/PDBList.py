@@ -458,7 +458,6 @@ class PDBList:
             pdb_codes = [pdb_codes.lower()]
         
         print(f"Fetching assemblies associated with PDB ID(s) '{', '.join(pdb_codes).lower()}'...")
-
         for code in pdb_codes:
             code = code.lower()
             ftp = ftplib.FTP("ftp.wwpdb.org")
@@ -473,11 +472,11 @@ class PDBList:
             entries = []
             ftp.retrlines("NLST", callback=entries.append)
             assemblies_tmp = [e for e in entries if code in e]
-            if len(assemblies_tmp) == 0 and file_format.lower() == 'mmcif':
-                print(f"No assembly for '{code}' in mmCIF format")
+            if len(assemblies_tmp) == 0:
+                raise OSError(f"No assembly for '{code}' in the desired format")
             else:
                 assemblies_to_fetch += assemblies_tmp
-
+            
         return assemblies_to_fetch
 
     def retrieve_assembly(
@@ -489,7 +488,6 @@ class PDBList:
         Rest of docstring todo.
         """
         code = assembly_in[:4]
-        number = assembly_in[8]
 
         if pdir is None:
             path = self.local_pdb
@@ -499,9 +497,14 @@ class PDBList:
             path = pdir
         if not os.access(path, os.F_OK):
             os.makedirs(path)
-
-        assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/PDB/all/{assembly_in}"
-        assembly_filename = os.path.join(path, assembly_in)
+        if file_format=='pdb':
+            number = assembly_in[8]
+            assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/PDB/all/{assembly_in}"
+            assembly_filename = os.path.join(path, assembly_in)
+        else:
+            number = assembly_in[-8]
+            assembly_url = f"http://ftp.wwpdb.org/pub/pdb/data/biounit/mmCIF/all/{assembly_in}"
+            assembly_filename = os.path.join(path, assembly_in)
         # try:
         urlcleanup()
         urlretrieve(assembly_url, assembly_filename)
@@ -518,7 +521,7 @@ class PDBList:
                 return final_assembly_file
 
         if self._verbose:
-            print(f"Downloading assembly '{code}' {number}...")
+            print(f"Downloading '{code}' assembly {number}...")
 
         with gzip.open(assembly_filename, "rb") as gz:
             with open(final_assembly_file, "wb") as out:
@@ -663,31 +666,34 @@ if __name__ == "__main__":
                 fetch_output = pl.fetch_assembly_list(sys.argv[1], file_format=file_format
             )
             if assemblies_only:
-                    pl.retrieve_assembly(fetch_output[0], pdir=pdb_path, file_format=file_format, overwrite=overwrite)
+                for assembly in fetch_output:
+                        pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+            )
             else:
                 if assemblies:
-                    pl.retrieve_assembly(fetch_output[0], pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                )
+                    for assembly in fetch_output:
+                        pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+            )
                 pl.retrieve_pdb_file(
                     sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                )
+            )
 
         elif sys.argv[1][0] == "(":
             # get a set of PDB entries
             pdb_ids = re.findall("[0-9A-Za-z]{4}", sys.argv[1])
             if assemblies or assemblies_only:
                     fetch_output = pl.fetch_assembly_list(pdb_ids, file_format=file_format
-                )
+            )
             if assemblies_only:
                 for assembly in fetch_output:
                     pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                    )
+            )
             else:
                 if assemblies:
                     for assembly in fetch_output:
                         pl.retrieve_assembly(assembly, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                        )
+            )
                     for pdb_id in pdb_ids:
                         pl.retrieve_pdb_file(
                             pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                        )
+            )
