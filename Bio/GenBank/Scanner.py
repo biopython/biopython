@@ -163,6 +163,7 @@ class InsdcScanner:
             self.line = self.handle.readline()
 
         features = []
+        lines = []  # For errant line break handling later
         line = self.line
         while True:
             if not line:
@@ -217,7 +218,31 @@ class InsdcScanner:
                 else:
                     feature_key = line[2 : self.FEATURE_QUALIFIER_INDENT].strip()
                     feature_lines = [line[self.FEATURE_QUALIFIER_INDENT :]]
-                line = self.handle.readline()
+
+                # Handle possibility of errant line breaks
+                if len(lines) % 2 == 0:
+                    # lines is either empty or the last
+                    # operation concatenated two lines
+                    line = self.handle.readline()
+                else:
+                    # Previous line was fine, so this single
+                    # item in lines array is next line
+                    line = lines.pop()
+                # read second line
+                line2 = self.handle.readline()
+                lines = [line2, line]
+                # Check if first position of line2 is alphanumeric. If it
+                # is, it's probably an errant line break.
+                if line2[0].isalnum():
+                    # Put the lines together with a space and warn user
+                    line = f"{line} {line2}"
+                    warnings.warn(
+                        f"Replaced stray line break with space in {self.handle.name}",
+                        BiopythonParserWarning
+                    )
+                else:
+                    # 2nd line is well-formed so we need to keep it for later
+                    line = lines.pop()
                 while line[
                     : self.FEATURE_QUALIFIER_INDENT
                 ] == self.FEATURE_QUALIFIER_SPACER or (
