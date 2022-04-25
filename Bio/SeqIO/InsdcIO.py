@@ -29,6 +29,7 @@ http://imgt.cines.fr/download/LIGM-DB/ftable_doc.html
 http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
+from typing import Iterable
 import warnings
 
 from datetime import datetime
@@ -1116,7 +1117,18 @@ class GenBankWriter(_InsdcWriter):
 
         handle.write("FEATURES             Location/Qualifiers\n")
         rec_length = len(record)
-        for feature in record.features:
+        for index, feature in enumerate(record.features):
+            # Handle any stray line breaks in the feature
+            for k in feature.qualifiers.keys():
+                if (
+                    isinstance(feature.qualifiers[k], Iterable)
+                    and "\n" in feature.qualifiers[k]
+                ):
+                    feature.qualifiers[k] = feature.qualifiers[k].replace("\n", " ")
+                    warnings.warn(
+                        f"Replacing stray line break with space. Annotation: {k}. Record ID: {record.id}. Feature index: {index}",
+                        BiopythonWarning,
+                    )
             self._write_feature(feature, rec_length)
         self._write_sequence(record)
         handle.write("//\n")

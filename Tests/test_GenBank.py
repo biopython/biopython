@@ -22,6 +22,7 @@ from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
 
 from Bio import SeqIO
+from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UndefinedSequenceError
 
@@ -7769,6 +7770,24 @@ KEYWORDS    """,
         with open("GenBank/DS830848.gb") as fh:
             orig_first_line = fh.readline().strip()
         self.assertEqual(first_line, orig_first_line)
+
+    def test_line_break_in_features(self):
+        """Handling line breaks."""
+        record = SeqRecord(
+            Seq("AAAA"),
+            annotations={"molecule_type": "DNA"},
+            features=[
+                SeqFeature(
+                    FeatureLocation(1, 2),
+                    type="misc_feature",
+                    qualifiers={"label": "line\nbreak"},
+                )
+            ],
+        )
+        out_handle = StringIO()
+        SeqIO.write([record], out_handle, "genbank")
+        generated_label = out_handle.getvalue().split("/label=")[1].split("\n")[0]
+        self.assertEqual(generated_label, '"line break"')
 
     def test_qualifier_order(self):
         """Check the qualifier order is preserved."""
