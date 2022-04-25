@@ -34,6 +34,14 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+The ``Bio.PDB`` module now includes a structural alignment module, using the
+combinatorial extension algorithm of Shindyalov and Bourne, commonly known as
+CEAlign. The module allows for two structures to be aligned based solely on
+their 3D conformation, ie. in a sequence-independent manner. The method is
+particularly powerful when the structures shared a very low degree of sequence
+similarity. The new module is available in ``Bio.PDB.CEAligner`` with an
+interface similar to other 3D superimposition modules.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -47,6 +55,7 @@ possible, especially the following contributors:
 - Erik  Whiting
 - Fabian Egli
 - Manuel Lera Ramirez
+- João Rodrigues
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
