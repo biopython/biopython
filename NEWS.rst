@@ -34,6 +34,12 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+A new module Bio.PDB.qcprot implements the QCP superposition algorithm in
+pure Python, deprecating the existing C implementation. This leads to a slight
+performance improvement and to much better maintainability. The refactored
+QCPSuperimposer class has small changes to its API, to better mirror that of
+Bio.PDB.Superimposer.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -47,6 +53,7 @@ possible, especially the following contributors:
 - Erik  Whiting
 - Fabian Egli
 - Manuel Lera Ramirez
+- Joao Rodrigues
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
