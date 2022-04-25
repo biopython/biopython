@@ -42,6 +42,12 @@ particularly powerful when the structures shared a very low degree of sequence
 similarity. The new module is available in ``Bio.PDB.CEAligner`` with an
 interface similar to other 3D superimposition modules.
 
+A new module ``Bio.PDB.qcprot`` implements the QCP superposition algorithm in
+pure Python, deprecating the existing C implementation. This leads to a slight
+performance improvement and to much better maintainability. The refactored
+``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
+that of ``Bio.PDB.Superimposer``.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
