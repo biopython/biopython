@@ -10,7 +10,7 @@ import unittest
 
 from io import BytesIO
 
-from Bio import SeqIO
+from Bio import SeqIO, BiopythonWarning
 from Bio.SeqFeature import CompoundLocation
 
 
@@ -130,6 +130,26 @@ class TestSnapGene(unittest.TestCase):
                 },
             ],
         },
+        "sample-g": {
+            "file": "SnapGene/sample-g.dna",
+            "name": "Sample",
+            "id": "Sample",
+            "description": "Sample Sequence G",
+            "length": 41,
+            "date": datetime.datetime(2022, 4, 28, 0, 0),
+            "topology": "linear",
+            "features": [
+                {
+                    "type": "misc_feature",
+                    "start": 10,
+                    "end": 28,
+                    "strand": 1,
+                    "label": ["Test feature"],
+                    "note": ["A qualifier with a line break."],
+                }
+            ],
+            "transformation_warning": True,
+        },
         "pFA-KanMX4": {
             "file": "SnapGene/pFA-KanMX4.dna",
             "name": "<unknown name>",
@@ -228,7 +248,13 @@ class TestSnapGene(unittest.TestCase):
     def test_read(self):
         """Read sample files."""
         for sample in self.sample_data.values():
-            record = SeqIO.read(sample["file"], "snapgene")
+            if sample.get("transformation_warning", False):
+                with self.assertWarnsRegex(
+                    BiopythonWarning, "Some text values have been transformed"
+                ):
+                    record = SeqIO.read(sample["file"], "snapgene")
+            else:
+                record = SeqIO.read(sample["file"], "snapgene")
             self.assertEqual(sample["name"], record.name)
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
