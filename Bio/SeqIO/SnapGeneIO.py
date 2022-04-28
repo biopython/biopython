@@ -250,13 +250,16 @@ class XmlHelper:
     """A helper class to process the XML data in some of the segments."""
 
     def __init__(self):
+        """Create a new instance."""
         self._count = 0
 
     @property
     def transformed(self):
+        """Indicate whether a data transformation occured."""
         return self._count > 0
 
     def decode(self, text):
+        """Decode a XML value into a normal text value."""
         # Remove standard HTML tags
         # We don't emit any warnings for those as they occur
         # very frequently in SnapGene files
@@ -274,6 +277,7 @@ class XmlHelper:
         return decoded
 
     def get_attribute_value(self, node, name, default=None, error=None):
+        """Extract the value of a XML attribute."""
         if node.hasAttribute(name):
             return self.decode(node.attributes[name].value)
         elif error:
@@ -282,6 +286,7 @@ class XmlHelper:
             return default
 
     def get_child_value(self, node, name, default=None, error=None):
+        """Extract the value of a XML tag."""
         children = node.getElementsByTagName(name)
         if (
             children
