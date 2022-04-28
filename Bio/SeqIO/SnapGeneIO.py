@@ -9,11 +9,14 @@
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
+import warnings
+
 from datetime import datetime
 from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
+from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import SeqFeature
@@ -51,7 +54,7 @@ def _iterate(handle):
         yield (packet_type, length, data)
 
 
-def _parse_dna_packet(length, data, record):
+def _parse_dna_packet(length, data, record, _):
     """Parse a DNA sequence packet.
 
     A DNA sequence packet contains a single byte flag followed by the
@@ -69,28 +72,28 @@ def _parse_dna_packet(length, data, record):
         record.annotations["topology"] = "linear"
 
 
-def _parse_notes_packet(length, data, record):
+def _parse_notes_packet(length, data, record, helper):
     """Parse a 'Notes' packet.
 
     This type of packet contains some metadata about the sequence. They
     are stored as a XML string with a 'Notes' root node.
     """
     xml = parseString(data.decode("UTF-8"))
-    type = _get_child_value(xml, "Type")
+    type = helper.get_child_value(xml, "Type")
     if type == "Synthetic":
         record.annotations["data_file_division"] = "SYN"
     else:
         record.annotations["data_file_division"] = "UNC"
 
-    date = _get_child_value(xml, "LastModified")
+    date = helper.get_child_value(xml, "LastModified")
     if date:
         record.annotations["date"] = datetime.strptime(date, "%Y.%m.%d")
 
-    acc = _get_child_value(xml, "AccessionNumber")
+    acc = helper.get_child_value(xml, "AccessionNumber")
     if acc:
         record.id = acc
 
-    comment = _get_child_value(xml, "Comments")
+    comment = helper.get_child_value(xml, "Comments")
     if comment:
         record.name = comment.split(" ", 1)[0]
         record.description = comment
@@ -123,7 +126,7 @@ def _parse_location(rangespec, strand, record):
     return location
 
 
-def _parse_features_packet(length, data, record):
+def _parse_features_packet(length, data, record, helper):
     """Parse a sequence features packet.
 
     This packet stores sequence features (except primer binding sites,
@@ -134,11 +137,11 @@ def _parse_features_packet(length, data, record):
     for feature in xml.getElementsByTagName("Feature"):
         quals = {}
 
-        type = _get_attribute_value(feature, "type", default="misc_feature")
+        type = helper.get_attribute_value(feature, "type", default="misc_feature")
 
         strand = +1
         directionality = int(
-            _get_attribute_value(feature, "directionality", default="1")
+            helper.get_attribute_value(feature, "directionality", default="1")
         )
         if directionality == 2:
             strand = -1
@@ -147,9 +150,9 @@ def _parse_features_packet(length, data, record):
         subparts = []
         n_parts = 0
         for segment in feature.getElementsByTagName("Segment"):
-            if _get_attribute_value(segment, "type", "standard") == "gap":
+            if helper.get_attribute_value(segment, "type", "standard") == "gap":
                 continue
-            rng = _get_attribute_value(segment, "range")
+            rng = helper.get_attribute_value(segment, "range")
             n_parts += 1
             next_location = _parse_location(rng, strand, record)
             if not location:
@@ -160,7 +163,7 @@ def _parse_features_packet(length, data, record):
             else:
                 location = location + next_location
 
-            name = _get_attribute_value(segment, "name")
+            name = helper.get_attribute_value(segment, "name")
             if name:
                 subparts.append([n_parts, name])
 
@@ -175,20 +178,20 @@ def _parse_features_packet(length, data, record):
             raise ValueError("Missing feature location")
 
         for qualifier in feature.getElementsByTagName("Q"):
-            qname = _get_attribute_value(
+            qname = helper.get_attribute_value(
                 qualifier, "name", error="Missing qualifier name"
             )
             qvalues = []
             for value in qualifier.getElementsByTagName("V"):
                 if value.hasAttribute("text"):
-                    qvalues.append(_decode(value.attributes["text"].value))
+                    qvalues.append(helper.decode(value.attributes["text"].value))
                 elif value.hasAttribute("predef"):
-                    qvalues.append(_decode(value.attributes["predef"].value))
+                    qvalues.append(helper.decode(value.attributes["predef"].value))
                 elif value.hasAttribute("int"):
                     qvalues.append(int(value.attributes["int"].value))
             quals[qname] = qvalues
 
-        name = _get_attribute_value(feature, "name")
+        name = helper.get_attribute_value(feature, "name")
         if name:
             if "label" not in quals:
                 # No explicit label attribute, use the SnapGene name
@@ -202,7 +205,7 @@ def _parse_features_packet(length, data, record):
         record.features.append(feature)
 
 
-def _parse_primers_packet(length, data, record):
+def _parse_primers_packet(length, data, record, helper):
     """Parse a Primers packet.
 
     A Primers packet is similar to a Features packet but specifically
@@ -213,15 +216,15 @@ def _parse_primers_packet(length, data, record):
     for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
-        name = _get_attribute_value(primer, "name")
+        name = helper.get_attribute_value(primer, "name")
         if name:
             quals["label"] = [name]
 
         for site in primer.getElementsByTagName("BindingSite"):
-            rng = _get_attribute_value(
+            rng = helper.get_attribute_value(
                 site, "location", error="Missing binding site location"
             )
-            strand = int(_get_attribute_value(site, "boundStrand", default="0"))
+            strand = int(helper.get_attribute_value(site, "boundStrand", default="0"))
             if strand == 1:
                 strand = -1
             else:
@@ -242,36 +245,54 @@ _packet_handlers = {
     0x0A: _parse_features_packet,
 }
 
-# Helper functions to process the XML data in
-# some of the segments
 
+class XmlHelper:
+    """A helper class to process the XML data in some of the segments."""
 
-def _decode(text):
-    # Get rid of HTML tags in some values
-    return sub("<[^>]+>", "", text)
+    def __init__(self):
+        self._count = 0
 
+    @property
+    def transformed(self):
+        return self._count > 0
 
-def _get_attribute_value(node, name, default=None, error=None):
-    if node.hasAttribute(name):
-        return _decode(node.attributes[name].value)
-    elif error:
-        raise ValueError(error)
-    else:
-        return default
+    def decode(self, text):
+        # Remove standard HTML tags
+        # We don't emit any warnings for those as they occur
+        # very frequently in SnapGene files
+        text = sub("</?(html|body|i)>", "", text)
 
+        # Remove new lines
+        decoded = sub("(\n|<br/>)", " ", text)
 
-def _get_child_value(node, name, default=None, error=None):
-    children = node.getElementsByTagName(name)
-    if (
-        children
-        and children[0].childNodes
-        and children[0].firstChild.nodeType == node.TEXT_NODE
-    ):
-        return _decode(children[0].firstChild.data)
-    elif error:
-        raise ValueError(error)
-    else:
-        return default
+        # Remove any other HTML tag
+        decoded = sub("<[^>]+>", "", decoded)
+
+        if decoded != text:
+            self._count += 1
+
+        return decoded
+
+    def get_attribute_value(self, node, name, default=None, error=None):
+        if node.hasAttribute(name):
+            return self.decode(node.attributes[name].value)
+        elif error:
+            raise ValueError(error)
+        else:
+            return default
+
+    def get_child_value(self, node, name, default=None, error=None):
+        children = node.getElementsByTagName(name)
+        if (
+            children
+            and children[0].childNodes
+            and children[0].firstChild.nodeType == node.TEXT_NODE
+        ):
+            return self.decode(children[0].firstChild.data)
+        elif error:
+            raise ValueError(error)
+        else:
+            return default
 
 
 class SnapGeneIterator(SequenceIterator):
@@ -305,10 +326,14 @@ class SnapGeneIterator(SequenceIterator):
             raise ValueError("The file does not start with a SnapGene cookie packet")
         _parse_cookie_packet(length, data, record)
 
+        helper = XmlHelper()
         for (packet_type, length, data) in packets:
             handler = _packet_handlers.get(packet_type)
             if handler is not None:
-                handler(length, data, record)
+                handler(length, data, record, helper)
+
+        if helper.transformed:
+            warnings.warn("Some text values have been transformed", BiopythonWarning)
 
         if not record.seq:
             raise ValueError("No DNA packet in file")
