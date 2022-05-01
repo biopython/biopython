@@ -62,6 +62,7 @@ possible, especially the following contributors:
 - Fabian Egli
 - Manuel Lera Ramirez
 - João Rodrigues
+- Jarrod Millman
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
