@@ -299,6 +299,9 @@ class TestSeqIO(SeqIOTestBaseClass):
             debug = False
         unequal_length = len({len(_) for _ in records}) != 1
         for fmt in test_write_read_alignment_formats:
+            if fmt == 'leon':
+                # LeonIO only supports string filepaths at this time
+                continue
             if fmt not in possible_unknown_seq_formats and len(records[0].seq) > 100:
                 try:
                     bytes(records[0].seq)
@@ -5717,6 +5720,9 @@ class TestSeqIO(SeqIOTestBaseClass):
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
+            if t_format == 'leon':
+                # LeonIO only supports string filepaths at this time
+                continue
             mode = self.get_mode(t_format)
             if mode == "t":
                 handle = StringIO()

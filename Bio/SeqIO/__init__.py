@@ -379,6 +379,7 @@ from Bio.SeqIO import FastaIO
 from Bio.SeqIO import GckIO
 from Bio.SeqIO import IgIO  # IntelliGenetics or MASE format
 from Bio.SeqIO import InsdcIO  # EMBL and GenBank
+from Bio.SeqIO import LeonIO
 from Bio.SeqIO import NibIO
 from Bio.SeqIO import PdbIO
 from Bio.SeqIO import PhdIO
@@ -428,6 +429,7 @@ _FormatToIterator = {
     "fastq-sanger": QualityIO.FastqPhredIterator,
     "fastq-solexa": QualityIO.FastqSolexaIterator,
     "fastq-illumina": QualityIO.FastqIlluminaIterator,
+    "leon": LeonIO.LeonIterator,
     "qual": QualityIO.QualPhredIterator,
     "seqxml": SeqXmlIO.SeqXmlIterator,
     "sff": SffIO.SffIterator,
@@ -460,6 +462,7 @@ _FormatToWriter = {
     "genbank": InsdcIO.GenBankWriter,
     "embl": InsdcIO.EmblWriter,
     "imgt": InsdcIO.ImgtWriter,
+    "leon": LeonIO.LeonWriter,
     "nib": NibIO.NibWriter,
     "phd": PhdIO.PhdWriter,
     "pir": PirIO.PirWriter,

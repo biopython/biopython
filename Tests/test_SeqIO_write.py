@@ -236,6 +236,9 @@ class WriterTests(SeqIOTestBaseClass):
             self.check_write_fails(
                 records, fmt, descr, ValueError, "Missing SFF flow information"
             )
+        elif fmt == 'leon':
+            # LeonIO only supports string filepaths at this time
+            pass
         else:
             self.check_simple(records, fmt, descr)
 

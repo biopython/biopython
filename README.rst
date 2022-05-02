@@ -130,6 +130,10 @@ other optional Python dependencies, which can be installed later if needed:
   This is a fork of the older MySQLdb and is used by ``BioSQL`` to access a
   MySQL database. It is supported by PyPy.
 
+- pyleon, see https://github.com/jdvne/pyleon (optional)
+  This is a Python wrapper around LEON (https://github.com/GATB/leon), a fasta /
+  fastq file compression scheme.
+
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
