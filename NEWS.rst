@@ -57,6 +57,7 @@ possible, especially the following contributors:
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
+- Christian Brueffer
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
