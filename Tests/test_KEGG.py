@@ -134,7 +134,7 @@ class CompoundTests(unittest.TestCase):
             records = list(Compound.parse(handle))
         self.assertEqual(len(records), 8)
         self.assertEqual(records[1].entry, "C00017")
-        self.assertEqual(records[1].mass, "55.9349")
+        self.assertEqual(records[1].mass, "")
         self.assertEqual(records[1].formula, "C2H4NO2R(C2H2NOR)n")
         self.assertEqual(records[1].name, ["Protein"])
         self.assertEqual(
@@ -166,6 +166,17 @@ class CompoundTests(unittest.TestCase):
             records = list(Compound.parse(handle))
         self.assertEqual(len(records), 2)
         self.assertEqual(records[0].entry, "C01454")
+
+    def test_mass(self):
+        """record.mass tests."""
+        with open("KEGG/compound.sample") as handle:
+            records = list(Compound.parse(handle))
+        self.assertEqual(records[0].entry, "C00023")
+        self.assertEqual(records[0].mass, "55.9349")
+        self.assertEqual(records[2].entry, "C00099")
+        self.assertEqual(records[2].mass, "89.0477")
+        self.assertEqual(records[3].entry, "C00294")
+        self.assertEqual(records[3].mass, "268.0808")
 
 
 class MapTests(unittest.TestCase):
