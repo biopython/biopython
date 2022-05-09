@@ -134,7 +134,7 @@ class CompoundTests(unittest.TestCase):
             records = list(Compound.parse(handle))
         self.assertEqual(len(records), 8)
         self.assertEqual(records[1].entry, "C00017")
-        self.assertEqual(records[1].mass, "")  # Why?
+        self.assertEqual(records[1].mass, "55.9349")
         self.assertEqual(records[1].formula, "C2H4NO2R(C2H2NOR)n")
         self.assertEqual(records[1].name, ["Protein"])
         self.assertEqual(
