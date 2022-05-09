@@ -376,6 +376,10 @@ class _InsdcWriter(SequenceWriter):
     )
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
+        if key == "translation":
+            MAX_WIDTH = 80
+        else:
+            MAX_WIDTH=10000000000000
         if value is None:
             # Value-less entry like /pseudo
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
@@ -398,23 +402,23 @@ class _InsdcWriter(SequenceWriter):
             line = f'{self.QUALIFIER_INDENT_STR}/{key}="{value}"'
         else:
             line = f"{self.QUALIFIER_INDENT_STR}/{key}={value}"
-        if len(line) <= self.MAX_WIDTH:
+        if len(line) <= MAX_WIDTH:
             self.handle.write(line + "\n")
             return
         while line.lstrip():
-            if len(line) <= self.MAX_WIDTH:
+            if len(line) <= MAX_WIDTH:
                 self.handle.write(line + "\n")
                 return
             # Insert line break...
             for index in range(
-                min(len(line) - 1, self.MAX_WIDTH), self.QUALIFIER_INDENT + 1, -1
+                min(len(line) - 1, MAX_WIDTH), self.QUALIFIER_INDENT + 1, -1
             ):
                 if line[index] == " ":
                     break
             if line[index] != " ":
                 # No nice place to break...
-                index = self.MAX_WIDTH
-            assert index <= self.MAX_WIDTH
+                index = MAX_WIDTH
+            assert index <= MAX_WIDTH
             self.handle.write(line[:index] + "\n")
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
@@ -725,12 +729,13 @@ class GenBankWriter(_InsdcWriter):
                 # the Locus identifier can be any length, and a space
                 # is added after the identifier to keep the identifier
                 # and length fields separated
-                warnings.warn(
-                    "Increasing length of locus line to allow "
-                    "long name. This will result in fields that "
-                    "are not in usual positions.",
-                    BiopythonWarning,
-                )
+                # warnings.warn(
+                #     "Increasing length of locus line to allow "
+                #     "long name. This will result in fields that "
+                #     "are not in usual positions.",
+                #     BiopythonWarning,
+                # )
+                pass
 
         if len(locus.split()) > 1:
             raise ValueError(f"Invalid whitespace in {locus!r} for LOCUS line")
@@ -738,12 +743,13 @@ class GenBankWriter(_InsdcWriter):
             # As of the GenBank release notes 229.0, the locus line can be
             # any length. However, long locus lines may not be compatible
             # with all software.
-            warnings.warn(
-                "The sequence length is very long. The LOCUS "
-                "line will be increased in length to compensate. "
-                "This may cause unexpected behavior.",
-                BiopythonWarning,
-            )
+            # warnings.warn(
+            #     "The sequence length is very long. The LOCUS "
+            #     "line will be increased in length to compensate. "
+            #     "This may cause unexpected behavior.",
+            #     BiopythonWarning,
+            # )
+            pass
 
         # Get the molecule type
         mol_type = self._get_annotation_str(record, "molecule_type", None)
