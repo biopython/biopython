@@ -94,7 +94,8 @@ def _retrieve_seq_len(adaptor, primary_id):
     )
     if not seqs:
         return None
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     (given_length,) = seqs[0]
     return int(given_length)
 
@@ -112,23 +113,30 @@ def _retrieve_seq(adaptor, primary_id):
     )
     if not seqs:
         return
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     moltype, given_length, length = seqs[0]
 
     try:
         length = int(length)
         given_length = int(given_length)
-        assert length == given_length
+        if length != given_length:
+            raise ValueError(
+                f"'length' differs from sequence length, {given_length}, {length}"
+            )
         have_seq = True
     except TypeError:
-        assert length is None
+        if length is not None:
+            raise ValueError(f"Expected 'length' to be 'None', got {length}.")
         seqs = adaptor.execute_and_fetchall(
             "SELECT alphabet, length, seq FROM biosequence WHERE bioentry_id = %s",
             (primary_id,),
         )
-        assert len(seqs) == 1
+        if len(seqs) != 1:
+            raise ValueError(f"Expected 1 response, got {len(seqs)}.")
         moltype, given_length, seq = seqs[0]
-        assert seq is None or seq == ""
+        if seq:
+            raise ValueError(f"Expected 'seq' to have a falsy value, got {seq}.")
         length = int(given_length)
         have_seq = False
         del seq
@@ -323,9 +331,11 @@ def _retrieve_alphabet(adaptor, primary_id):
     results = adaptor.execute_and_fetchall(
         "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,)
     )
-    assert len(results) == 1
+    if len(results) != 1:
+        raise ValueError(f"Expected 1 response, got {len(results)}.")
     alphabets = results[0]
-    assert len(alphabets) == 1
+    if len(alphabets) != 1:
+        raise ValueError(f"Expected 1 alphabet in response, got {len(alphabets)}.")
     alphabet = alphabets[0]
     if alphabet == "dna":
         molecule_type = "DNA"

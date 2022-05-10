@@ -536,7 +536,8 @@ class Adaptor:
         """Execute sql that returns 1 record, and return the record."""
         self.execute(sql, args or ())
         rv = self.cursor.fetchall()
-        assert len(rv) == 1, "Expected 1 response, got %d" % len(rv)
+        if len(rv) != 1:
+            raise ValueError(f"Expected 1 response, got {len(rv)}.")
         return rv[0]
 
     def execute(self, sql, args=None):
