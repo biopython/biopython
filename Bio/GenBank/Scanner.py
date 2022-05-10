@@ -1225,7 +1225,7 @@ class GenBankScanner(InsdcScanner):
             #     warnings.warn("Blank line in sequence data", BiopythonParserWarning)
             #     line = self.handle.readline()
             #     continue
-            if line.startswith("//"):
+            if line == "//":
                 break
             # if line.startswith("CONTIG"):
             #     break
