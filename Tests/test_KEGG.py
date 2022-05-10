@@ -145,12 +145,13 @@ class CompoundTests(unittest.TestCase):
         self.assertEqual(records[1].structures, [])
         self.assertEqual(records[1].dblinks[0], ("PubChem", ["3319"]))
         self.assertEqual(
-            str(records[-1]).replace(" ", "").split("\n")[:10],
+            str(records[-1]).replace(" ", "").split("\n")[:11],
             [
                 "ENTRYC01386",
                 "NAMENH2Mec",
                 "7-Amino-4-methylcoumarin",
                 "FORMULAC10H9NO2",
+                "MASS175.0633",
                 "DBLINKSCAS:26093-31-2",
                 "PubChem:4580",
                 "ChEBI:51771",

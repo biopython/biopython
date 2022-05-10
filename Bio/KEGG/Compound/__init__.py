@@ -153,7 +153,7 @@ def parse(handle):
             record.pathway.append(pathway)
         elif keyword == "FORMULA     ":
             record.formula = data
-        elif keyword == "EXACT_MASS  ":
+        elif keyword in ("MASS        ", "EXACT_MASS  "):
             record.mass = data
         elif keyword == "DBLINKS     ":
             if ":" in data:
