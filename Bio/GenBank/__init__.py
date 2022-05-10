@@ -1285,16 +1285,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             return
 
         # Remove enclosing quotation marks
-        value = re.sub('^"|"$', "", value)
+        if (value[0] == '"') and (value[-1] == '"'):
+            value = value[1:-1]
+        #re.sub('^"|"$', "", value)
 
         # Handle NCBI escaping
         # Warn if escaping is not according to standard
-        if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
-            warnings.warn(
-                'The NCBI states double-quote characters like " should be escaped as "" '
-                "(two double - quotes), but here it was not: %r" % value,
-                BiopythonParserWarning,
-            )
+        # if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
+        #     warnings.warn(
+        #         'The NCBI states double-quote characters like " should be escaped as "" '
+        #         "(two double - quotes), but here it was not: %r" % value,
+        #         BiopythonParserWarning,
+        #     )
         # Undo escaping, repeated double quotes -> one double quote
         value = value.replace('""', '"')
 
