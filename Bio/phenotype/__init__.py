@@ -83,6 +83,8 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
+from difflib import get_close_matches
+
 from Bio.File import as_handle
 from . import phen_micro
 
@@ -109,30 +111,37 @@ def write(plates, handle, format):
 
     Returns the number of records written (as an integer).
     """
-    # Try and give helpful error messages:
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in _FormatToWriter:
+        close_formats = get_close_matches(format.lower(), _FormatToWriter)
+        if close_formats:
+            raise ValueError(
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the available formats "
+                f"({list(_FormatToWriter)}) is available via help(phenotype) "
+                "or https://biopython.org/docs/latest/api/Bio.phenotype.html."
+            )
+        raise ValueError(
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(_FormatToWriter)}) is available via help(phenotype) or "
+            "https://biopython.org/docs/latest/api/Bio.phenotype.html."
+        )
 
     if isinstance(plates, phen_micro.PlateRecord):
         plates = [plates]
 
     with as_handle(handle, "w") as fp:
         # Map the file format to a writer class
-        if format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
-            count = writer_class(plates).write(fp)
-        else:
-            raise ValueError(f"Unknown format '{format}'")
+        writer_class = _FormatToWriter[format]
+        count = writer_class(plates).write(fp)
 
-        if not isinstance(count, int):
-            raise TypeError(
-                "Internal error - the underlying %s "
-                "writer should have returned the record count, not %r" % (format, count)
-            )
+    if not isinstance(count, int):
+        raise TypeError(
+            "Internal error - the underlying %s "
+            "writer should have returned the record count, not %r" % (format, count)
+        )
 
     return count
 
@@ -160,22 +169,27 @@ def parse(handle, format):
     Use the Bio.phenotype.read(...) function when you expect a single record
     only.
     """
-    # Try and give helpful error messages:
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in _FormatToIterator:
+        close_formats = get_close_matches(format.lower(), _FormatToIterator)
+        if close_formats:
+            raise ValueError(
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the available formats "
+                f"({list(_FormatToIterator)}) is available via help(phenotype) "
+                "or https://biopython.org/docs/latest/api/Bio.phenotype.html."
+            )
+        raise ValueError(
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(_FormatToIterator)}) is available via help(phenotype) or "
+            "https://biopython.org/docs/latest/api/Bio.phenotype.html."
+        )
 
     with as_handle(handle) as fp:
-        # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
-            i = iterator_generator(fp)
-        else:
-            raise ValueError(f"Unknown format '{format}'")
-        yield from i
+        iterator_generator = _FormatToIterator[format]
+        yield from iterator_generator(fp)
 
 
 def read(handle, format):
