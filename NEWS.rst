@@ -54,6 +54,7 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
