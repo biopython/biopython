@@ -696,11 +696,11 @@ def _read_kw(record, value):
     # KW   Monooxygenase {ECO:0000313|EMBL:AEX14553.1};
     # KW   Oxidoreductase {ECO:0000313|EMBL:AEX14553.1}.
     # For now to match the XML parser, drop the evidence codes.
-    for value in value.rstrip(";.").split("; "):
-        if value.endswith("}"):
+    for val in value.rstrip(";.").split("; "):
+        if val.endswith("}"):
             # Discard the evidence code
-            value = value.rsplit("{", 1)[0]
-        record.keywords.append(value.strip())
+            val = val.rsplit("{", 1)[0]
+        record.keywords.append(val.strip())
 
 
 def _read_ft(record, line):

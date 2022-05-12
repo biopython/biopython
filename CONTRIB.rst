@@ -145,6 +145,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jared Lumpe <https://github.com/jlumpe>
+- Jarrod Millman <https://github.com/jarrodmillman>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
