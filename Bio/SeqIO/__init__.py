@@ -514,14 +514,15 @@ def write(sequences, handle, format):
         close_formats = get_close_matches(format.lower(), writable_formats)
         if close_formats:
             raise ValueError(
-                f"The supplied format {format} does not exist. The following are "
-                f"supported close matches: {' '.join(close_formats)}. "
-                "More information on formats is available via help(SeqIO), "
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the supported formats "
+                f"({list(writable_formats)}) is available via help(SeqIO), "
                 "SeqIO.writable_formats or https://biopython.org/wiki/SeqIO."
             )
         raise ValueError(
-            f"The supplied format {format} does not exist. More information on formats "
-            "is available via help(SeqIO), SeqIO.writable_formats or "
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(writable_formats)}) is available via help(SeqIO) or "
             "https://biopython.org/wiki/SeqIO."
         )
 
@@ -623,16 +624,18 @@ def parse(handle, format, alphabet=None):
         close_formats = get_close_matches(format.lower(), readable_formats)
         if close_formats:
             raise ValueError(
-                f"The supplied format {format} does not exist. The following are "
-                f"supported close matches: {' '.join(close_formats)}. "
-                "More information on formats is available via help(SeqIO), "
-                "SeqIO.readable_formats or https://biopython.org/wiki/SeqIO."
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the supported formats "
+                f"({list(readable_formats)}) is available via help(SeqIO) "
+                "or https://biopython.org/wiki/SeqIO."
             )
         raise ValueError(
-            f"The supplied format {format} does not exist. More information on formats "
-            "is available via help(SeqIO), SeqIO.readable_formats or "
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(readable_formats)}) is available via help(SeqIO) or "
             "https://biopython.org/wiki/SeqIO."
         )
+
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
