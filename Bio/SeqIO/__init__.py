@@ -446,7 +446,9 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-readable_formats = set(_FormatToIterator.keys()) + set(_alignio_FormatToIterator.keys())
+readable_formats = set(_FormatToIterator.keys()).union(
+    set(_alignio_FormatToIterator.keys())
+)
 
 _FormatToString = {
     "fasta": FastaIO.as_fasta,
@@ -484,7 +486,9 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
-writable_formats = set(_FormatToWriter.keys()) + set(_alignio_FormatToWriter.keys())
+writable_formats = set(_FormatToWriter.keys()).union(
+    set(_alignio_FormatToWriter.keys())
+)
 
 
 def write(sequences, handle, format):
