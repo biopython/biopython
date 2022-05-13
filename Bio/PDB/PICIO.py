@@ -268,7 +268,7 @@ def read_PIC(
         if verbose:
             print(f" default for {ek}")
 
-    def hedra_check(dk: str, ric: IC_Residue) -> None:
+    def hedra_check(dk: Tuple, ric: IC_Residue) -> None:
         """Confirm both hedra present for dihedron key, use default if set."""
         if dk[0:3] not in sbcic.hedra and dk[2::-1] not in sbcic.hedra:
             if defaults:
@@ -534,7 +534,7 @@ def read_PIC(
                 pass  # ignore missing combinatoric of altloc atoms
                 # need more here?
 
-    def ak_add(ek: set, ric: IC_Residue) -> None:
+    def ak_add(ek: Tuple, ric: IC_Residue) -> None:
         """Allocate edron key AtomKeys to current residue as appropriate.
 
         A hedron or dihedron may span a backbone amide bond, this routine
@@ -772,7 +772,7 @@ def read_PIC(
                             m["a2"],
                             m["a3"],
                             m["a4"],
-                            float(m["dihedral"]),
+                            m["dihedral"],
                             sb_res.internal_coord,
                         )
 
