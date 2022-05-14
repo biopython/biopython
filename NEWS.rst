@@ -72,6 +72,7 @@ possible, especially the following contributors:
 - Sebastian Bassi
 - Sean Aubin
 - Tim Burke
+- Valentin Vareškić (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================
