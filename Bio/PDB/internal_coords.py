@@ -1251,11 +1251,9 @@ class IC_Chain:
                 ric.residue.child_list = []
                 continue
 
-            ric.atom_coords = cast(
-                Dict[AtomKey, np.array], ric.assemble(verbose=verbose)
-            )
-            if ric.atom_coords:
-                ric.ak_set = set(ric.atom_coords.keys())
+            atom_coords = ric.assemble(verbose=verbose)
+            if atom_coords:
+                ric.ak_set = set(atom_coords.keys())
 
     def init_edra(self, verbose: bool = False) -> None:
         """Create chain and residue di/hedra structures, arrays, atomArray.
@@ -1994,9 +1992,7 @@ class IC_Chain:
             for NCaCKey in sorted(ric.NCaCKey):  # type: ignore
                 mtr = None
                 if 0 < len(ric.rprev):
-                    # for rpr in ric.rprev:
                     acl = [self.atomArray[self.atomArrayIndex[ak]] for ak in NCaCKey]
-                    # acl = [rpr.atom_coords[ak] for ak in NCaCKey]
                     mt, mtr = coord_space(acl[0], acl[1], acl[2], True)
                 else:
                     mtr = np.identity(4, dtype=np.float64)
@@ -2273,7 +2269,8 @@ class IC_Residue:
         References to adjacent (bonded, not missing, possibly disordered)
         residues in chain
     atom_coords: AtomKey indexed dict of numpy [4] arrays
-        View into IC_Chain's atomArray of homogeneous coordinates
+        **removed**
+        Use AtomKeys and atomArrayIndex to build if needed
     alt_ids: list of char
         AltLoc IDs from PDB file
     bfactors: dict
@@ -2614,7 +2611,7 @@ class IC_Residue:
                 self.akc[atmName] = ak
 
     def _add_atom(self, atm: Atom) -> None:
-        """Filter Biopython Atom with accept_atoms; set atom_coords, ak_set.
+        """Filter Biopython Atom with accept_atoms; set ak_set.
 
         Arbitrarily renames O' and O'' to O and OXT
         """
@@ -2717,31 +2714,13 @@ class IC_Residue:
         """Find N-Ca-C coordinates to build this residue from."""
         # only used by assemble()
         startPos = {}
-        if 0 < len(self.rprev) and hasattr(self.rprev[0], "atom_coords"):
-            # if there is a previous residue, build on from it
-            # nb akl for this res n-ca-c in rp (prev res) dihedra
-            akl: List[AtomKey] = []
-            for tpl in self.NCaCKey:
-                akl.extend(tpl)
-            if self.rak("O").missing:
-                # alternate CB path - only use if O is missing
-                # else have problems modifying phi angle
-                akl.append(AtomKey(self, "CB"))
-            for ak in akl:
-                for rp in self.rprev:
-                    rpak = rp.atom_coords.get(ak, None)
-                    if rpak is not None:
-                        startPos[ak] = rpak
-            if 3 > len(startPos):  # if don't have all 3, reset to have none
-                startPos = {}
-        else:
-            cic = self.cic
-            for ncac in self.NCaCKey:
-                if np.all(cic.atomArrayValid[[cic.atomArrayIndex[ak] for ak in ncac]]):
-                    for ak in ncac:
-                        startPos[ak] = cic.atomArray[cic.atomArrayIndex[ak]]
-            if startPos == {}:
-                startPos = self._default_startpos()
+        cic = self.cic
+        for ncac in self.NCaCKey:
+            if np.all(cic.atomArrayValid[[cic.atomArrayIndex[ak] for ak in ncac]]):
+                for ak in ncac:
+                    startPos[ak] = cic.atomArray[cic.atomArrayIndex[ak]]
+        if startPos == {}:
+            startPos = self._default_startpos()
         return startPos
 
     def clear_transforms(self):
@@ -3193,7 +3172,7 @@ class IC_Residue:
                         self._gen_edra(r_edra)
 
         # create di/hedra for gly Cbeta if needed, populate values later
-        if self.gly_Cbeta and "G" == self.lc:  # and self.atom_coords[sCB] is None:
+        if self.gly_Cbeta and "G" == self.lc:
             # add C-beta for Gly
             self.ak_set.add(AtomKey(self, "CB"))
             sCB = self.rak("CB")
@@ -3797,7 +3776,7 @@ class IC_Residue:
         aselect = [aai.get(k) for k in aai.keys() if k.akl[rpndx] == rp]
         aas = aa[aselect]
         # numpy will broadcast the transform matrix over all points if dot()
-        # in this order
+        # applied in this order
         aa[aselect] = aas.dot(mtx.transpose())
         """
         # slower way, one at a time
