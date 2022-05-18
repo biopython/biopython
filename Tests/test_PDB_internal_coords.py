@@ -549,6 +549,11 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(chi1 > psi, msg=m)
         self.assertTrue(chi1 >= psi, msg=m)
 
+        self.assertTrue(
+            chi1.crdh_class == ("Nsb", "Csb", "Csb", "Csb"),
+            msg="covalent radii assignment error for chi1",
+        )
+
         tau = rt.pick_angle("tau")
         self.assertEqual(
             tau.__repr__(),

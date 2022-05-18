@@ -3933,16 +3933,7 @@ class Edron:
             self.dh_class += akl[atmNdx]
             self.rdh_class += akl[resNdx] + akl[atmNdx]
             rset.add(akl[resPos] + (akl[icode] or ""))
-            try:
-                crdh_class.append(residue_atom_bond_state["X"][akl[atmNdx]])
-            except KeyError:
-                try:
-                    crdh_class.append(residue_atom_bond_state[akl[resNdx]][akl[atmNdx]])
-                except KeyError:
-                    if akl[atmNdx][0] == "H":
-                        crdh_class.append("Hsb")
-                    else:
-                        raise KeyError
+            crdh_class.append(ak.cr_class())
 
         self.crdh_class = tuple(crdh_class)
         self.rc = len(rset)
@@ -4504,6 +4495,8 @@ class AtomKey:
         Returns True if atom is N, CA, C, O or H
     atm()
         Returns atom name, e.g. N, CA, CB, etc.
+    cr_class()
+        Returns covalent radii class e.g. Csb
 
     """
 
@@ -4693,6 +4686,19 @@ class AtomKey:
     def atm(self) -> str:
         """Return atom name : N, CA, CB, O etc."""
         return self.akl[self.fields.atm]
+
+    def cr_class(self) -> Union[str, None]:
+        """Return covalent radii class for atom or None."""
+        akl = self.akl
+        atmNdx = self.fields.atm
+        try:
+            return residue_atom_bond_state["X"][akl[atmNdx]]
+        except KeyError:
+            try:
+                resNdx = self.fields.resname
+                return residue_atom_bond_state[akl[resNdx]][akl[atmNdx]]
+            except KeyError:
+                return "Hsb" if akl[atmNdx][0] == "H" else None
 
     # @profile
     def _cmp(self, other: "AtomKey") -> Tuple[int, int]:
