@@ -2271,6 +2271,8 @@ class IC_Residue:
     atom_coords: AtomKey indexed dict of numpy [4] arrays
         **removed**
         Use AtomKeys and atomArrayIndex to build if needed
+    ak_set: set of AtomKeys in dihedra
+        AtomKeys in all dihedra overlapping this residue (see __contains__())
     alt_ids: list of char
         AltLoc IDs from PDB file
     bfactors: dict
@@ -2586,6 +2588,18 @@ class IC_Residue:
         dup.residue = memo[id(self.residue)]
         # still need to update: rnext, rprev, akc, ak_set, di/hedra
         return dup
+
+    def __contains__(self, ak: "AtomKey") -> bool:
+        """Return True if atomkey is in this residue."""
+        if ak in self.ak_set:
+            akl = ak.akl
+            if (
+                int(akl[0]) == self.rbase[0]
+                and akl[1] == self.rbase[1]
+                and akl[2] == self.rbase[2]
+            ):
+                return True
+        return False
 
     def rak(self, atm: Union[str, Atom]) -> "AtomKey":
         """Cache calls to AtomKey for this residue."""
@@ -3928,6 +3942,10 @@ class Edron:
         dup.cic = memo[id(self.cic)]
         dup.atomkeys = copy.deepcopy(self.atomkeys, memo)
         return dup
+
+    def __contains__(self, ak: "AtomKey") -> bool:
+        """Return True if atomkey is in this edron."""
+        return ak in self.atomkeys
 
     def is_backbone(self) -> bool:
         """Report True for contains only N, C, CA, O, H atoms."""

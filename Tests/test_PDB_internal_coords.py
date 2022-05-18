@@ -554,6 +554,8 @@ class Rebuild(unittest.TestCase):
             msg="covalent radii assignment error for chi1",
         )
 
+        self.assertTrue(all(ak in rt for ak in chi1.atomkeys))
+        self.assertFalse(all(ak in rt for ak in psi.atomkeys))
         tau = rt.pick_angle("tau")
         self.assertEqual(
             tau.__repr__(),
