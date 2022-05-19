@@ -212,7 +212,7 @@ def read_PIC(
         return ek
 
     def default_hedron(ek: Tuple, ric: IC_Residue) -> None:
-        """Create Hedron based on same rdh_class hedra in ref database.
+        """Create Hedron based on same re_class hedra in ref database.
 
         Adds Hedron to current Chain.internal_coord, see ic_data for default
         values and reference database source.
