@@ -1966,7 +1966,7 @@ class IC_Chain:
                 + '", '
                 + akl[AtomKey.fields.respos]
                 + ', "'
-                + hed.dh_class
+                + hed.e_class
                 + '"'
             )
             fp.write(" ], // " + str(hk) + "\n")
@@ -2020,7 +2020,7 @@ class IC_Chain:
                 for k in atomArrayIndex.keys()
                 if k.akl[atmNameNdx] == "CA"
             ]
-            plot = distance_plot(CaSelect)
+            plot = cic.distance_plot(CaSelect)
 
         Alternatively, this will select all backbone atoms::
 
@@ -2361,8 +2361,8 @@ class IC_Residue:
         (case when f.rslt > 0 then f.rslt-360.0 else f.rslt end) as rslt
         from (select d1.angle as d1d, d2.angle as d2d,
         (d2.angle - d1.angle) as rslt from dihedron d1,
-        dihedron d2 where d1.rdh_class='AOACACAACB' and
-        d2.rdh_class='ANACAACAO' and d1.pdb=d2.pdb and d1.chn=d2.chn
+        dihedron d2 where d1.re_class='AOACACAACB' and
+        d2.re_class='ANACAACAO' and d1.pdb=d2.pdb and d1.chn=d2.chn
         and d1.res=d2.res) as f) as g
 
     results::
@@ -2686,14 +2686,14 @@ class IC_Residue:
         See :func:`.SCADIO.write_SCAD`
         """
         for h in self.hedra.values():
-            if h.dh_class == "NCAC":
+            if h.e_class == "NCAC":
                 h.flex_female_1 = True
                 h.flex_female_2 = True
-            elif h.dh_class.endswith("NCA"):
+            elif h.e_class.endswith("NCA"):
                 h.flex_male_2 = True
-            elif h.dh_class.startswith("CAC") and h.atomkeys[1].akl[3] == "C":
+            elif h.e_class.startswith("CAC") and h.atomkeys[1].akl[3] == "C":
                 h.flex_male_1 = True
-            elif h.dh_class == "CBCAC":
+            elif h.e_class == "CBCAC":
                 h.skinny_1 = True  # CA-CB bond interferes with flex join
 
     def set_hbond(self) -> None:
@@ -2702,9 +2702,9 @@ class IC_Residue:
         See :func:`.SCADIO.write_SCAD`
         """
         for h in self.hedra.values():
-            if h.dh_class == "HNCA":
+            if h.e_class == "HNCA":
                 h.hbond_1 = True
-            elif h.dh_class == "CACO":
+            elif h.e_class == "CACO":
                 h.hbond_2 = True
 
     def _default_startpos(self) -> Dict["AtomKey", np.array]:
@@ -3441,11 +3441,11 @@ class IC_Residue:
                 if (
                     not picFlags & icr.pic_flags.hedra  # not all hedra
                     and picFlags & icr.pic_flags.tau  # but yes tau hedron
-                    and h.dh_class != "NCAC"  # and is not tau
+                    and h.e_class != "NCAC"  # and is not tau
                 ):
                     continue
                 if hCut is not None:
-                    hc = h.xrh_class if hasattr(h, "xrh_class") else h.dh_class
+                    hc = h.xrh_class if hasattr(h, "xrh_class") else h.e_class
                     if hc in hedra_defaults and hedra_defaults[hc][1] <= hCut:
                         continue
                 hndx = h.ndx
@@ -3814,12 +3814,12 @@ class Edron:
     needs_update: bool
         indicates di/hedron local atom_coords do NOT reflect current di/hedron
         angle and length values in hedron local coordinate space
-    dh_class: str
+    e_class: str
         sequence of atoms (no position or residue) comprising di/hedron
         for statistics
-    rdh_class: str
+    re_class: str
         sequence of residue, atoms comprising di/hedron for statistics
-    crdh_class: tuple
+    cre_class: tuple
         tuple of covalent radii classses comprising di/hedron for statistics
     edron_re: compiled regex (Class Attribute)
         A compiled regular expression matching string IDs for Hedron
@@ -3910,10 +3910,10 @@ class Edron:
         self.cic: IC_Chain  # set in :meth:`IC_Residue._link_dihedra`
 
         # no residue or position, just atoms
-        self.dh_class = ""
+        self.e_class = ""
         # same but residue specific
-        self.rdh_class = ""
-        crdh_class = []
+        self.re_class = ""
+        cre_class = []
         rset = set()  # what residues this involves
 
         atmNdx = AtomKey.fields.atm
@@ -3923,12 +3923,12 @@ class Edron:
 
         for ak in atomkeys:
             akl = ak.akl
-            self.dh_class += akl[atmNdx]
-            self.rdh_class += akl[resNdx] + akl[atmNdx]
+            self.e_class += akl[atmNdx]
+            self.re_class += akl[resNdx] + akl[atmNdx]
             rset.add(akl[resPos] + (akl[icode] or ""))
-            crdh_class.append(ak.cr_class())
+            cre_class.append(ak.cr_class())
 
-        self.crdh_class = tuple(crdh_class)
+        self.cre_class = tuple(cre_class)
         self.rc = len(rset)
 
     def __deepcopy__(self, memo):
@@ -4068,7 +4068,7 @@ class Hedron(Edron):
             atmNdx = AtomKey.fields.atm
             akl0, akl1 = self.atomkeys[0].akl, self.atomkeys[1].akl
             if akl0[resPos] != akl1[resPos] or akl0[icode] != akl1[icode]:
-                self.xrh_class = "X" + self.rdh_class[1:]
+                self.xrh_class = "X" + self.re_class[1:]
             else:
                 xrhc = ""
                 for i in range(2):
@@ -4080,7 +4080,7 @@ class Hedron(Edron):
     def __repr__(self) -> str:
         """Print string for Hedron object."""
         return (
-            f"3-{self.id} {self.rdh_class} {str(self.len12)} "
+            f"3-{self.id} {self.re_class} {str(self.len12)} "
             f"{str(self.angle)} {str(self.len23)}"
         )
 
@@ -4188,7 +4188,7 @@ class Dihedron(Edron):
     primary: bool
         True if this is psi, phi, omega or a sidechain chi angle
     pclass: string (primary angle class)
-        rdh_class with X for adjacent residue according to nomenclature
+        re_class with X for adjacent residue according to nomenclature
         (psi, omega, phi)
     cst, rcst: numpy [4][4] arrays
         transformations to (cst) and from (rcst) Dihedron coordinate space
@@ -4234,7 +4234,7 @@ class Dihedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Dihedron object."""
-        return f"4-{str(self.id)} {self.rdh_class} {str(self.angle)} {str(self.ric)}"
+        return f"4-{str(self.id)} {self.re_class} {str(self.angle)} {str(self.ric)}"
 
     @staticmethod
     def _get_hedron(ic_res: IC_Residue, id3: HKT) -> Optional[Hedron]:
@@ -4255,22 +4255,22 @@ class Dihedron(Edron):
     def _setPrimary(self) -> bool:
         """Mark dihedra required for psi, phi, omega, chi and other angles."""
         # http://www.mlb.co.jp/linux/science/garlic/doc/commands/dihedrals.html
-        dhc = self.dh_class
+        dhc = self.e_class
         if dhc == "NCACN":  # psi
-            self.pclass = self.rdh_class[0:7] + "XN"
+            self.pclass = self.re_class[0:7] + "XN"
             self.primary = True
         elif dhc == "CACNCA":  # omg
-            self.pclass = "XCAXC" + self.rdh_class[5:]
+            self.pclass = "XCAXC" + self.re_class[5:]
             self.primary = True
         elif dhc == "CNCAC":  # phi
-            self.pclass = "XC" + self.rdh_class[2:]
+            self.pclass = "XC" + self.re_class[2:]
             self.primary = True
         elif dhc == "CNCACB":  # alternate Cbeta locator
-            self.altCB_class = "XC" + self.rdh_class[2:]
+            self.altCB_class = "XC" + self.re_class[2:]
             self.primary = False
         elif dhc in primary_angles:
             self.primary = True
-            self.pclass = self.rdh_class
+            self.pclass = self.re_class
         else:
             self.primary = False
 
@@ -4397,16 +4397,16 @@ class Dihedron(Edron):
     def bits(self) -> int:
         """Get :data:`IC_Residue.pic_flags` bitmasks for self is psi, omg, phi, pomg, chiX."""
         icr = IC_Residue
-        if self.dh_class == "NCACN":
+        if self.e_class == "NCACN":
             # i psi
             return icr.pic_flags.psi
         elif hasattr(self, "pclass") and self.pclass == "XCAXCPNPCA":
             # i+1 is pro so i+1 omg
             return icr.pic_flags.omg | icr.pic_flags.pomg
-        elif self.dh_class == "CACNCA":
+        elif self.e_class == "CACNCA":
             # i+1 omg
             return icr.pic_flags.omg
-        elif self.dh_class == "CNCAC":
+        elif self.e_class == "CNCAC":
             # i+1 phi
             return icr.pic_flags.phi
         else:
