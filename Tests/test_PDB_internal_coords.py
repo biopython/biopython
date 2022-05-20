@@ -550,7 +550,7 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(chi1 >= psi, msg=m)
 
         self.assertTrue(
-            chi1.cre_class == ("Nsb", "Csb", "Csb", "Csb"),
+            chi1.cre_class == "NsbCsbCsbCsb",
             msg="covalent radii assignment error for chi1",
         )
 
