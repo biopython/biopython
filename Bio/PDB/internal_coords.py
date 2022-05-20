@@ -2253,11 +2253,21 @@ class IC_Residue:
         :meth:`IC_Chain.atom_to_internal_coordinates`.
 
     gly_Cbeta: bool default False
-        **Class** variable !data:`gly_Cbeta`, override to True to generate
+        **Class** variable :data:`gly_Cbeta`, override to True to generate
         internal coordinates for glycine CB atoms in
         :meth:`IC_Chain.atom_to_internal_coordinates` ::
 
             IC_Residue.gly_Cbeta = True
+
+    pic_accuracy: str default "17.13f"
+        **Class** variable :data:`pic_accuracy` sets accuracy for numeric values
+        (angles, lengths) in .pic files.  Default set high to support mmCIF file
+        accuracy in rebuild tests.  If you find rebuild tests fail with
+        'ERROR -COORDINATES-' and verbose=True shows only small discrepancies,
+        try raising this value (or lower it to 9.5 if only working with PDB
+        format files).  ::
+
+            IC_Residue.pic_accuracy = "9.5f"
 
     residue: Biopython Residue object reference
         The :class:`.Residue` object this extends
@@ -2370,6 +2380,9 @@ class IC_Residue:
         | avg_rslt          | sd_rslt          | count   |
         | -122.682194862932 | 5.04403040513919 | 14098   |
 """
+    pic_accuracy: str = (
+        "17.13f"  # output accuracy for angle and len values in .pic files
+    )
 
     accept_backbone = (
         "N",
@@ -3232,7 +3245,7 @@ class IC_Residue:
     atom_chain = None
 
     @staticmethod
-    def _pdb_atom_string(atm: Atom) -> str:
+    def _pdb_atom_string(atm: Atom, cif_extend: bool = False) -> str:
         """Generate PDB ATOM record.
 
         :param Atom atm: Biopython Atom object reference
@@ -3244,15 +3257,15 @@ class IC_Residue:
         if 2 == atm.is_disordered():
             s = ""
             for a in atm.child_dict.values():
-                s += IC_Residue._pdb_atom_string(a)
+                s += IC_Residue._pdb_atom_string(a, cif_extend)
             return s
         else:
             res = atm.parent
             chn = res.parent
-            s = (
-                "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:8.3f}{:8.3f}{:8.3f}"
-                "{:6.2f}{:6.2f}        {:>4}\n"
-            ).format(
+            fmt = "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:8.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}        {:>4}\n"
+            if cif_extend:
+                fmt = "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:10.5f}{:10.5f}{:10.5f}{:7.3f}{:6.2f}        {:>4}\n"
+            s = (fmt).format(
                 "ATOM",
                 IC_Residue.atom_sernum
                 if IC_Residue.atom_sernum is not None
@@ -3408,6 +3421,7 @@ class IC_Residue:
         :param float pCut: only write primary dihedra with ref db angle
             std dev > this value; default None
         """
+        pAcc = IC_Residue.pic_accuracy
         if pdbid is None:
             pdbid = "0PDB"
         if chainid is None:
@@ -3426,9 +3440,13 @@ class IC_Residue:
             NCaChedron = self.pick_angle(self.NCaCKey[0])  # first tau
             if NCaChedron is not None:
                 try:
-                    ts = IC_Residue._pdb_atom_string(self.residue["N"])
-                    ts += IC_Residue._pdb_atom_string(self.residue["CA"])
-                    ts += IC_Residue._pdb_atom_string(self.residue["C"])
+                    ts = IC_Residue._pdb_atom_string(self.residue["N"], cif_extend=True)
+                    ts += IC_Residue._pdb_atom_string(
+                        self.residue["CA"], cif_extend=True
+                    )
+                    ts += IC_Residue._pdb_atom_string(
+                        self.residue["C"], cif_extend=True
+                    )
                     s += ts  # only if no exception: have all 3 atoms
                 except KeyError:
                     pass
@@ -3454,11 +3472,7 @@ class IC_Residue:
                         base
                         + h.id
                         + " "
-                        + "{:9.5f} {:9.5f} {:9.5f}".format(
-                            set_accuracy_95(cic.hedraL12[hndx]),
-                            set_accuracy_95(cic.hedraAngle[hndx]),
-                            set_accuracy_95(cic.hedraL23[hndx]),
-                        )
+                        + f"{cic.hedraL12[hndx]:{pAcc}} {cic.hedraAngle[hndx]:{pAcc}} {cic.hedraL23[hndx]:{pAcc}}"
                         + "\n"
                     )
                 except KeyError:
@@ -3481,13 +3495,7 @@ class IC_Residue:
                 ):
                     continue
             try:
-                s += (
-                    base
-                    + d.id
-                    + " "
-                    + f"{set_accuracy_95(cic.dihedraAngle[d.ndx]):9.5f}"
-                    + "\n"
-                )
+                s += base + d.id + " " + f"{cic.dihedraAngle[d.ndx]:{pAcc}}" + "\n"
             except KeyError:
                 pass
 
@@ -4499,7 +4507,7 @@ class AtomKey:
     atom_re = re.compile(
         r"^(?P<respos>-?\d+)(?P<icode>[A-Za-z])?"
         r"_(?P<resname>[a-zA-Z]+)_(?P<atm>[A-Za-z0-9]+)"
-        r"(?:_(?P<altloc>\w))?(?:_(?P<occ>-?\d\.\d?\d?))?$"
+        r"(?:_(?P<altloc>\w))?(?:_(?P<occ>-?\d\.\d+?))?$"
     )
     """Pre-compiled regular expression to match an AtomKey string."""
 
@@ -4841,7 +4849,7 @@ class AtomKey:
 def set_accuracy_95(num: float) -> float:
     """Reduce floating point accuracy to 9.5 (xxxx.xxxxx).
 
-    Used by :class:`Hedron` and :class:`Dihedron` classes writing PIC and SCAD
+    Used by :class:`IC_Residue` class writing PIC and SCAD
     files.
 
     :param float num: input number
