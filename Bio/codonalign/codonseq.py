@@ -779,9 +779,7 @@ def _yn00(seq1, seq2, k, codon_table):
             S_sites + N_sites
         )
         w = dSdN[1] / dSdN[0]
-        if all(
-            map(lambda x: x < tolerance, (abs(i - j) for i, j in zip(dSdN, dSdN_pre)))
-        ):
+        if all(abs(i - j) < tolerance for i, j in zip(dSdN, dSdN_pre)):
             return dSdN[1], dSdN[0]  # dN, dS
         dSdN_pre = dSdN
 
