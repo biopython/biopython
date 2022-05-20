@@ -3819,8 +3819,8 @@ class Edron:
         for statistics
     re_class: str
         sequence of residue, atoms comprising di/hedron for statistics
-    cre_class: tuple
-        tuple of covalent radii classses comprising di/hedron for statistics
+    cre_class: str
+        sequence of covalent radii classses comprising di/hedron for statistics
     edron_re: compiled regex (Class Attribute)
         A compiled regular expression matching string IDs for Hedron
         and Dihedron objects
@@ -3913,7 +3913,7 @@ class Edron:
         self.e_class = ""
         # same but residue specific
         self.re_class = ""
-        cre_class = []
+        self.cre_class = ""
         rset = set()  # what residues this involves
 
         atmNdx = AtomKey.fields.atm
@@ -3926,9 +3926,8 @@ class Edron:
             self.e_class += akl[atmNdx]
             self.re_class += akl[resNdx] + akl[atmNdx]
             rset.add(akl[resPos] + (akl[icode] or ""))
-            cre_class.append(ak.cr_class())
+            self.cre_class += ak.cr_class()
 
-        self.cre_class = tuple(cre_class)
         self.rc = len(rset)
 
     def __deepcopy__(self, memo):
