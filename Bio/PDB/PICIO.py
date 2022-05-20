@@ -125,6 +125,16 @@ def read_PIC(
         r"(?P<segid>[a-zA-z\s]{4})(?P<elm>.{2})"
         r"(?P<chg>.{2})?\s*$"
     )
+    pdbx_atm_re = re.compile(
+        r"^ATOM\s\s(?:\s*(?P<ser>\d+))\s(?P<atm>[\w\s]{4})"
+        r"(?P<alc>\w|\s)(?P<res>[\w]{3})\s(?P<chn>.)"
+        r"(?P<pos>[\s\-\d]{4})(?P<icode>[A-Za-z\s])\s\s\s"
+        r"(?P<x>[\s\-\d\.]{10})(?P<y>[\s\-\d\.]{10})"
+        r"(?P<z>[\s\-\d\.]{10})(?P<occ>[\s\d\.]{7})"
+        r"(?P<tfac>[\s\d\.]{6})\s{6}"
+        r"(?P<segid>[a-zA-z\s]{4})(?P<elm>.{2})"
+        r"(?P<chg>.{2})?\s*$"
+    )
     bfac_re = re.compile(
         r"^BFAC:\s([^\s]+\s+[\-\d\.]+)"
         r"\s*([^\s]+\s+[\-\d\.]+)?"
@@ -696,6 +706,8 @@ def read_PIC(
                     return None
             elif line.startswith("ATOM "):
                 m = pdb_atm_re.match(line)
+                if not m:
+                    m = pdbx_atm_re.match(line)
                 if m:
                     if sb_res is None:
                         # ATOM without res spec already loaded, not a pic file
@@ -939,6 +951,7 @@ def write_PIC(
     """Write Protein Internal Coordinates (PIC) to file.
 
     See :func:`read_PIC` for file format.
+    See :data:`IC_Residue.pic_accuracy` to vary numeric accuracy.
     Recurses to lower entity levels (M, C, R).
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R

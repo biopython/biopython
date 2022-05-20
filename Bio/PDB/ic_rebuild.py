@@ -39,6 +39,10 @@ from Bio.PDB.Chain import Chain
 def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> Dict:
     """Test rebuild PDB structure from internal coordinates.
 
+    Writes intermediate data to .pic file in memory, see :data:`IC_Residue.pic_accuracy`
+    to vary numeric accuracy of this intermediate file if you have small errors in
+    coordinates.
+
     :param Entity entity: Biopython Structure, Model or Chain.
         Structure to test
     :param bool verbose: default False.
