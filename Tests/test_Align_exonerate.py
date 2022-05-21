@@ -32,8 +32,8 @@ class ExonerateSpcCases(unittest.TestCase):
         vfile = os.path.join("Exonerate", vulgar)
         tfile = os.path.join("Exonerate", text)
 
-        valignments = exonerate.AlignmentIterator(vfile, "exonerate-vulgar")
-        talignments = exonerate.AlignmentIterator(tfile, "exonerate-text")
+        valignments = exonerate.AlignmentIterator(vfile)
+        talignments = exonerate.AlignmentIterator(tfile)
 
         # compare coordinates of vulgar and text formats
         # should be the same since the files are results of the same query
@@ -67,7 +67,7 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_m_affine_local(self):
         """Test parsing exonerate output (exn_22_m_affine_local.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_affine_local.exn")
-        alignments = exonerate.AlignmentIterator(exn_file, self.fmt)
+        alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(alignments.commandline, "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
@@ -134,7 +134,7 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_m_cdna2genome(self):
         """Test parsing exonerate output (exn_22_m_cdna2genome.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome.exn")
-        alignments = exonerate.AlignmentIterator(exn_file, self.fmt)
+        alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(alignments.commandline, "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
@@ -222,7 +222,7 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_m_coding2coding(self):
         """Test parsing exonerate output (exn_22_m_coding2coding.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding.exn")
-        alignments = exonerate.AlignmentIterator(exn_file, self.fmt)
+        alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(alignments.commandline, "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
@@ -1695,11 +1695,11 @@ class ExonerateTextCases(unittest.TestCase):
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_q_none.exn")
-        alignments = exonerate.AlignmentIterator(exn_file, self.fmt)
+        alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(alignments.commandline, "exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes")
         self.assertEqual(alignments.hostname, "blackbriar")
-        self.assertRaises(StopIteration, next, qresults)
+        self.assertRaises(StopIteration, next, alignments)
 
 
 class ExonerateVulgarCases(unittest.TestCase):
@@ -1709,7 +1709,7 @@ class ExonerateVulgarCases(unittest.TestCase):
     def test_exn_22_o_vulgar(self):
         """Test parsing exonerate output (exn_22_o_vulgar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
+        qresult = exonerate.AlignmentIterator(exn_file)
 
         # check common attributes
         for hit in qresult:
@@ -1838,58 +1838,58 @@ class ExonerateVulgarCases(unittest.TestCase):
     def test_exn_22_o_vulgar_fshifts(self):
         """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
-
-        # check common attributes
-        for hit in qresult:
-            self.assertEqual(qresult.id, hit.query_id)
-            for hsp in hit:
-                self.assertEqual(hit.id, hsp.hit_id)
-                self.assertEqual(qresult.id, hsp.query_id)
-
-        self.assertEqual("gi|296143771|ref|NM_001180731.1|", qresult.id)
-        self.assertEqual("<unknown description>", qresult.description)
-        self.assertEqual("exonerate", qresult.program)
-        self.assertEqual(1, len(qresult))
-        # first hit
-        hit = qresult[0]
-        self.assertEqual("gi|296143771|ref|NM_001180731.1|", hit.id)
-        self.assertEqual("<unknown description>", hit.description)
-        self.assertEqual(2, len(hit))
-        # first hit, first hsp
-        hsp = qresult[0][0]
-        self.assertEqual(213, hsp.score)
-        self.assertEqual(1, hsp[0].query_strand)
-        self.assertEqual(1, hsp[0].hit_strand)
-        self.assertEqual(0, hsp.query_start)
-        self.assertEqual(465, hsp.hit_start)
-        self.assertEqual(160, hsp.query_end)
-        self.assertEqual(630, hsp.hit_end)
-        self.assertEqual(
-            [(0, 93), (94, 127), (127, 139), (139, 160)], hsp.query_range_all[:5]
+        alignments = exonerate.AlignmentIterator(exn_file)
+        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.commandline, "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar yes --showalignment no --bestn 3")
+        self.assertEqual(alignments.hostname, "blackbriar")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
+        self.assertEqual(alignment.annotations["model"], "coding2coding")
+        self.assertEqual(alignment.score, 213)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.query.seq, "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAAATTCGTGGGATACTCCCCCCGGAAATCGAACATGCCGTTACCATGACGAAAGTATTAATGGTAGT")
+        self.assertEqual(repr(alignment.target.seq), "Seq({465: 'ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTT...AGT'}, length=630)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[465, 558, 558, 591, 593, 605, 609, 630],
+                             [  0,  93,  94, 127, 127, 139, 139, 160]])
+                # fmt: on
+            )
         )
-        self.assertEqual(
-            [(465, 558), (558, 591), (593, 605), (609, 630)], hsp.hit_range_all[:5]
+        self.assertEqual(alignment[0], "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC-AATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGT")
+        self.assertEqual(alignment[1], "ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAAATTCGTGGGATACTCCCCCCGGAAATCGAACA--TGCCGTTACCAT----GACGAAAGTATTAATGGTAGT")
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]")
+        self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
+        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]")
+        self.assertEqual(alignment.annotations["model"], "coding2coding")
+        self.assertEqual(alignment.score, 201)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(repr(alignment.query.seq), "Seq({1: 'CTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTA...GTA'}, length=158)")
+        self.assertEqual(repr(alignment.target.seq), "Seq({466: 'CTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTA...GTA'}, length=628)")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[628, 604, 598, 559, 559, 466],
+                             [158, 134, 134,  95,  94,   1]])
+                # fmt: on
+            )
         )
-        self.assertEqual([], hsp.query_split_codons)
-        self.assertEqual([], hsp.hit_split_codons)
-        self.assertEqual(
-            " C 93 93 F 1 0 C 33 33 F 0 2 C 12 12 F 0 4 C 21 21", hsp.vulgar_comp
-        )
-        # first hit, second hsp
-        hsp = qresult[0][1]
-        self.assertEqual(201, hsp.score)
-        self.assertEqual(-1, hsp[0].query_strand)
-        self.assertEqual(-1, hsp[0].hit_strand)
-        self.assertEqual(1, hsp.query_start)
-        self.assertEqual(466, hsp.hit_start)
-        self.assertEqual(158, hsp.query_end)
-        self.assertEqual(628, hsp.hit_end)
-        self.assertEqual([(95, 158), (1, 94)], hsp.query_range_all[:5])
-        self.assertEqual([(559, 628), (466, 559)], hsp.hit_range_all[:5])
-        self.assertEqual([], hsp.query_split_codons)
-        self.assertEqual([], hsp.hit_split_codons)
-        self.assertEqual(" C 24 24 G 0 6 C 39 39 F 1 0 C 93 93", hsp.vulgar_comp)
+        self.assertEqual(alignment[0], "TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCACGAAT-TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG")
+        self.assertEqual(alignment[1], "TACCATTAATACTTTCGTCATGGT------AACGGCATGTTCGATTTCCGGGGGGAGTATCCCACGAATTTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTGAGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG")
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
 
 class ExonerateCigarCases(unittest.TestCase):
@@ -1899,7 +1899,7 @@ class ExonerateCigarCases(unittest.TestCase):
     def test_exn_22_o_vulgar_cigar(self):
         """Test parsing exonerate output (exn_22_o_vulgar_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_cigar.exn")
-        qresult = exonerate.AlignmentIterator(exn_file, self.fmt)
+        qresult = exonerate.AlignmentIterator(exn_file)
 
         # check common attributes
         for hit in qresult:

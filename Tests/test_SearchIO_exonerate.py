@@ -57,7 +57,7 @@ class ExonerateSpcCases(unittest.TestCase):
     def test_vulgar_text_similar_c2c(self):
         """Compares vulgar-text coordinate parsing for the coding2coding model."""
         self.check_vulgar_text(
-            "exn_22_o_vulgar_fshifts.exn", "exn_22_m_coding2coding_fshifts.exn"
+            "exn_22_m_vulgar_fshifts.exn", "exn_22_m_coding2coding_fshifts.exn"
         )
 
     def test_vulgar_text_similar_p2d(self):
@@ -2346,7 +2346,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual("SPAdes contig NODE_1", hit.description)
         self.assertEqual(1, len(hit))
         # first hit, first hsp
-        self.assertEqual(1958, hsp.score)
+        self.assertEqual(1978, hsp.score)
         self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_strand_all)
         self.assertEqual([-1, -1, -1, -1, -1, -1], hsp.hit_strand_all)
         self.assertEqual(48, hsp.query_start)
@@ -2529,8 +2529,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         )
 
     def test_exn_22_o_vulgar_fshifts(self):
-        """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)."""
-        exn_file = get_file("exn_22_o_vulgar_fshifts.exn")
+        """Test parsing exonerate output (exn_22_m_vulgar_fshifts.exn)."""
+        exn_file = get_file("exn_22_m_vulgar_fshifts.exn")
         qresult = read(exn_file, self.fmt)
 
         # check common attributes
