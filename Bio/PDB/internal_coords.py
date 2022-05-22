@@ -131,9 +131,9 @@ internal coordinate data files.
     ## copy just the first N-Ca-C coords so structures will superimpose:
     cic2.copy_initNCaCs(myChain.internal_coord)
     ## copy distances to chain arrays:
-    cic2.distplot_to_dh_arrays(distances)
+    cic2.distplot_to_dh_arrays(distances, chirality)
     ## compute angles and dihedral angles from distances:
-    cic2.distance_to_internal_coordinates(chirality)
+    cic2.distance_to_internal_coordinates()
     ## generate XYZ coordinates from internal coordinates:
     myChain2.internal_to_atom_coordinates()
     ## confirm result atomArray matches original structure:
@@ -2053,20 +2053,22 @@ class IC_Chain:
         """
         return np.sign(self.dihedraAngle)
 
-    def distplot_to_dh_arrays(self, distplot: np.ndarray) -> None:
+    def distplot_to_dh_arrays(
+        self, distplot: np.ndarray, dihedra_signs: np.ndarray
+    ) -> None:
         """Load di/hedra distance arays from distplot.
 
         Fill :class:`IC_Chain` arrays hedraL12, L23, L13 and dihedraL14
-        distance value arrays from input distplot.  Distplot and di/hedra
-        distance arrays must index according to AtomKey mappings in
-        :class:`IC_Chain` .hedraNdx and .dihedraNdx (created in
-        :meth:`IC_Chain.init_edra`)
+        distance value arrays from input distplot, dihedra_signs array from
+        input dihedra_signs.  Distplot and di/hedra distance arrays must index
+        according to AtomKey mappings in :class:`IC_Chain` .hedraNdx and .dihedraNdx
+        (created in :meth:`IC_Chain.init_edra`)
 
         Call :meth:`atom_to_internal_coordinates` (or at least :meth:`init_edra`)
         to generate a2ha_map and d2a_map before running this.
 
         Explcitly removed from :meth:`.distance_to_internal_coordinates` so
-        user may populate these chain di/hedra distance arrays by other
+        user may populate these chain di/hedra arrays by other
         methods.
         """
         ha = self.a2ha_map.reshape(-1, 3)
@@ -2075,8 +2077,9 @@ class IC_Chain:
         self.hedraL13 = distplot[ha[:, 0], ha[:, 2]]
         da = self.d2a_map
         self.dihedraL14 = distplot[da[:, 0], da[:, 3]]
+        self.dihedra_signs = dihedra_signs
 
-    def distance_to_internal_coordinates(self, dihedra_signs: np.ndarray) -> None:
+    def distance_to_internal_coordinates(self) -> None:
         """Compute chain di/hedra from from distance and chirality data.
 
         Distance properties on hedra L12, L23, L13 and dihedra L14 configured
@@ -2158,7 +2161,7 @@ class IC_Chain:
         cosOA[cosOA > 1.0] = 1.0
         # without np.longdouble here a few OCCACB angles lose last digit match
         np.arccos(cosOA, out=self.dihedraAngleRads, dtype=np.longdouble)
-        self.dihedraAngleRads *= dihedra_signs
+        self.dihedraAngleRads *= self.dihedra_signs
         np.rad2deg(self.dihedraAngleRads, out=self.dihedraAngle)
         # OB = np.rad2deg(np.arccos(cosOB))
         # OC = np.rad2deg(np.arccos(cosOC))
