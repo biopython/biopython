@@ -1349,9 +1349,9 @@ write these data to the arrays in the \texttt{Chain.internal\_coords} object.
 %cont-doctest
 \begin{minted}{pycon}
 >>> ## copy distances to chain arrays:
->>> cic2.distplot_to_dh_arrays(distances)
+>>> cic2.distplot_to_dh_arrays(distances, chirality)
 >>> ## compute angles and dihedral angles from distances:
->>> cic2.distance_to_internal_coordinates(chirality)
+>>> cic2.distance_to_internal_coordinates()
 \end{minted}
 
 The steps below generate the atom coordinates from the newly generated `myChain2' internal
