@@ -83,8 +83,8 @@ class Rebuild(unittest.TestCase):
         cic2.hedraL12[:] = 0.0
         cic2.hedraL23[:] = 0.0
         cic2.copy_initNCaCs(cic)
-        cic2.distplot_to_dh_arrays(distances)
-        cic2.distance_to_internal_coordinates(chirality)
+        cic2.distplot_to_dh_arrays(distances, chirality)
+        cic2.distance_to_internal_coordinates()
         c2.internal_to_atom_coordinates()
         np.allclose(cic2.atomArray, cic.atomArray)
 
@@ -490,9 +490,9 @@ class Rebuild(unittest.TestCase):
         cic2 = _chn2.internal_coord = IC_Chain(_chn2)
         cic2.init_edra()
         # load relevant interatomic distances from chn1 distance plot
-        cic2.distplot_to_dh_arrays(dplot1)
+        cic2.distplot_to_dh_arrays(dplot1, dsigns)
         # compute di/hedra angles from dh_arrays
-        cic2.distance_to_internal_coordinates(dsigns)
+        cic2.distance_to_internal_coordinates()
 
         # clear chn2 atom coordinates
         cic2.atomArrayValid[:] = False
