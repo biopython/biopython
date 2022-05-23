@@ -188,8 +188,7 @@ def parse(handle, format):
         )
 
     with as_handle(handle) as fp:
-        iterator_generator = _FormatToIterator[format]
-        yield from iterator_generator(fp)
+        yield from _FormatToIterator[format](fp)
 
 
 def read(handle, format):

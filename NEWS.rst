@@ -54,6 +54,7 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
@@ -61,6 +62,7 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - João Rodrigues
 - Jarrod Millman
@@ -71,6 +73,7 @@ possible, especially the following contributors:
 - Sebastian Bassi
 - Sean Aubin
 - Tim Burke
+- Valentin Vareškić (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================
