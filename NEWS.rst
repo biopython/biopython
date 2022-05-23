@@ -62,6 +62,7 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - João Rodrigues
 - Jarrod Millman
