@@ -123,5 +123,11 @@ Doc/api/*.rst
 #Ignore mypy cache directory
 .mypy_cache
 
-#Ignore virtual environment file
+#Ignore virtual environments
 .env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
