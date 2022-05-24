@@ -161,7 +161,7 @@ at compile time:
 Then either download and decompress our source code, or fetch it using git.
 Now change directory to the Biopython source code folder and run::
 
-    python setup.py build_ext --inplace
+    pip install -e .
     python setup.py test
     sudo python setup.py install
 
@@ -184,7 +184,7 @@ Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
 directory and type::
 
-    python setup.py build_ext --inplace
+    pip install -e .
     python setup.py test
 
 If you want to skip the online tests (which is recommended when doing repeated
