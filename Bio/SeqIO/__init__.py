@@ -375,8 +375,8 @@ making up each alignment as SeqRecords.
 from difflib import get_close_matches
 
 # from Bio import AlignIO
-from Bio.AlignIO import _FormatToIterator as _alignio_FormatToIterator
-from Bio.AlignIO import _FormatToWriter as _alignio_FormatToWriter
+from Bio.AlignIO import readable_formats as _alignio_readable_formats
+from Bio.AlignIO import writable_formats as _alignio_writable_formats
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
@@ -446,9 +446,7 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-readable_formats = set(_FormatToIterator.keys()).union(
-    set(_alignio_FormatToIterator.keys())
-)
+readable_formats = set(_FormatToIterator).union(_alignio_readable_formats)
 
 _FormatToString = {
     "fasta": FastaIO.as_fasta,
@@ -461,7 +459,7 @@ _FormatToString = {
     "qual": QualityIO.as_qual,
 }
 
-stringable_formats = set(_FormatToString.keys())
+stringable_formats = set(_FormatToString)
 
 # This could exclude file formats covered by _FormatToString?
 # Right now used in the unit tests as proxy for all supported outputs...
@@ -486,9 +484,7 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
-writable_formats = set(_FormatToWriter.keys()).union(
-    set(_alignio_FormatToWriter.keys())
-)
+writable_formats = set(_FormatToWriter.keys()).union(_alignio_writable_formats)
 
 
 def write(sequences, handle, format):
