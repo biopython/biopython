@@ -18,14 +18,14 @@ exn_24_m_protein2genome_met_intron_vulgar.exn
 Exonerate 2.2
 -------------
 exn_22_m_affine_local.exn           affine:local model alignment
-exn_22_m_affine_local_cigar.exn
-exn_22_m_affine_local_vulgar.exn
+exn_22_m_affine_local_cigar.exn     affine:local model alignment, cigar lines
+exn_22_m_affine_local_vulgar.exn    affine:local model alignmen, vulgar lines
 exn_22_m_cdna2genome.exn            cdna2genome model alignment
 exn_22_m_cdna2genome_cigar.exn      cdna2genome model alignment, cigar lines
 exn_22_m_cdna2genome_vulgar.exn     cdna2genome model alignment, vulgar lines
 exn_22_m_coding2coding.exn          coding2coding model alignment
 exn_22_m_coding2coding_cigar.exn    coding2coding model alignment, cigar lines
-exn_22_m_coding2coding_vulgar.ex    coding2coding model alignment, vulgar lines
+exn_22_m_coding2coding_vulgar.exn   coding2coding model alignment, vulgar lines
 exn_22_m_coding2coding_fshifts.exn  coding2coding model alignment, with frameshifts
 exn_22_m_cigar_fshifts.exn          coding2coding alignment with cigar lines only, frameshifts
 exn_22_o_vulgar_fshifts.exn         coding2coding alignment with vulgar lines only, frameshifts
@@ -48,6 +48,7 @@ exn_22_m_protein2dna.exn            protein2dna model alignment
 exn_22_m_protein2dna_cigar.exn      protein2dna model alignment, cigar lines
 exn_22_m_protein2dna_vulgar.exn     protein2dna model alignment, vulgar lines
 exn_22_m_protein2dna_fshifts.exn    protein2dna model alignment, with frameshifts
+exn_22_o_cigar_fshifts2.exn         protein2dna alignment with cigar lines only, frameshifts
 exn_22_o_vulgar_fshifts2.exn        protein2dna alignment with vulgar lines only, frameshifts
 exn_22_m_protein2genome.exn         protein2genome model alignment
 exn_22_m_protein2genome_cigar.exn   protein2genome model alignment, cigar lines
@@ -59,5 +60,6 @@ exn_22_m_ungapped_trans.exn         ungapped:translated model alignment
 exn_22_m_ungapped_trans_cigar.exn   ungapped:translated model alignment, cigar
 exn_22_m_ungapped_trans_vulgar.exn   ungapped:translated model alignment, vulgar
 exn_22_q_multiple.exn               est2genome, multiple queries, multiple hits and hsps
+exn_22_q_multiple_cigar.exn         est2genome, multiple queries, multiple hits and hsps, cigar lines only
 exn_22_q_multiple_vulgar.exn        est2genome, multiple queries, multiple hits and hsps, vulgar lines only
-exn_22_q_empty.exn                  est2genome, single query, no results
+exn_22_q_none.exn                   est2genome, single query, no results

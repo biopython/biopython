@@ -57,7 +57,7 @@ class ExonerateSpcCases(unittest.TestCase):
     def test_vulgar_text_similar_c2c(self):
         """Compares vulgar-text coordinate parsing for the coding2coding model."""
         self.check_vulgar_text(
-            "exn_22_m_vulgar_fshifts.exn", "exn_22_m_coding2coding_fshifts.exn"
+            "exn_22_o_vulgar_fshifts.exn", "exn_22_m_coding2coding_fshifts.exn"
         )
 
     def test_vulgar_text_similar_p2d(self):
@@ -2529,8 +2529,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         )
 
     def test_exn_22_o_vulgar_fshifts(self):
-        """Test parsing exonerate output (exn_22_m_vulgar_fshifts.exn)."""
-        exn_file = get_file("exn_22_m_vulgar_fshifts.exn")
+        """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)."""
+        exn_file = get_file("exn_22_o_vulgar_fshifts.exn")
         qresult = read(exn_file, self.fmt)
 
         # check common attributes
