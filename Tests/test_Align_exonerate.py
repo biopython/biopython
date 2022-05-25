@@ -161,7 +161,7 @@ class ExonerateTextCases(unittest.TestCase):
         with self.assertRaises(StopIteration):
             next(alignments)
 
-    def test_exn_22_m_cdna2genome)cigar(self):
+    def test_exn_22_m_cdna2genome_cigar(self):
         """Test parsing exn_22_m_cdna2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
