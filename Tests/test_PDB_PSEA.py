@@ -5,7 +5,25 @@
 
 """Tests for PDB PSEA."""
 
+import unittest
+from ftplib import FTP
+from Bio.PDB.PSEA import run_psea
+
+
+# ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
+def setup():
+    with FTP("ftp.lmcp.jussieu.fr") as ftp:
+        ftp.login()
+        ftp.dir()
+
+
 # TODO Create unittest for run_psea(fname)
+def test_run_psea():
+    pass
+
+
+if __name__ == "__main__":
+    setup()
 # TODO Create unittest psea(pname)
 # TODO Create unittest psea2HEC(pseq)
 # TODO Create unittest annotate(m, ss_seq)
