@@ -660,7 +660,7 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -762,37 +762,25 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
-        self.assertEqual(alignment.annotations["model"], "est2genome")
         self.assertEqual(alignment.score, 6150)
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence")
-        self.assertEqual(alignment.annotations["model"], "est2genome")
         self.assertEqual(alignment.score, 439)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAA")
-        self.assertEqual(repr(alignment.target.seq), "Seq({85010: 'ATGGTGAACCTCTTCAAGACGGTCAGAATAATCAACAGGATGAAGAAGCAAAAGATGT', 253972: 'TGGCGAGGATAGCGAGCAACCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCA...ACA', 350957: 'TGGGGTGATTATATCATTTCTGGATGAGGAATACCTGAAGACCACTCTTCATTA...GTT', 473168: 'AGATGGAAGAATTCTGATAATGCTGTAAAAGAA'}, length=473201)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -800,35 +788,31 @@ class ExonerateTextCases(unittest.TestCase):
 # flake8: noqa
                 numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
-                              253974, 253978, 253979, 253987, 253987, 253990,
-                              253990, 254023, 254024, 254031, 254033, 254135,
-                              350959, 350973, 350975, 350985, 350985, 350990,
-                              350992, 351002, 351002, 351006, 351007, 351027,
-                              351027, 351042, 351043, 351048, 351048, 351052,
+                               85068, 253972, 253974, 253978, 253979, 253987,
+                              253987, 253990, 253990, 254023, 254024, 254031,
+                              254033, 254135, 254137, 350957, 350959, 350973,
+                              350975, 350985, 350985, 350990, 350992, 351002,
+                              351002, 351006, 351007, 351027, 351027, 351042,
+                              351043, 351048, 351048, 351052, 351054, 473168,
                               473170, 473190, 473195, 473201],
                              [     0,     11,     12,     27,     29,     33,
                                   34,     35,     36,     44,     48,     65,
-                                  65,     69,     69,     77,     78,     81,
-                                  83,    116,    116,    123,    123,    225,
-                                 225,    239,    239,    249,    251,    256,
-                                 256,    266,    268,    272,    272,    292,
-                                 293,    308,    308,    313,    316,    320,
+                                  65,     65,     65,     69,     69,     77,
+                                  78,     81,     83,    116,    116,    123,
+                                 123,    225,    225,    225,    225,    239,
+                                 239,    249,    251,    256,    256,    266,
+                                 268,    272,    272,    292,    293,    308,
+                                 308,    313,    316,    320,    320,    320,
                                  320,    340,    340,    346]])
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.query.annotations["splicesites"], (65, 229, 330))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XIII, complete sequence:[revcomp]")
-        self.assertEqual(alignment.annotations["model"], "est2genome")
         self.assertEqual(alignment.score, 263)
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({25: 'AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATG...CAA'}, length=406)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({11338: 'TTGTATCTACTTCGTTTTGGCTCTTATAATTTTTTAGTGGCCTAAATTTTCAAA...TGT', 120610: 'TTCTTCTTCTTCTTCTTGTTCTTCTTCTCCATCATTATCTTCTTCATCTTCTTC...CGA', 130036: 'AGTCCGAATCTTTTTGCTTGGCTCCTCTGGGGTCACTTCAACCTTATTAATTTC...GGT'}, length=130198)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -837,25 +821,26 @@ class ExonerateTextCases(unittest.TestCase):
                 numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
                               130153, 130144, 130138, 130096, 130096, 130080,
                               130078, 130071, 130070, 130067, 130067, 130044,
-                              130044, 130038, 120681, 120680, 120680, 120669,
-                              120668, 120656, 120656, 120647, 120646, 120636,
-                              120636, 120618, 120617, 120612,  11487,  11471,
-                               11471,  11467,  11467,  11456,  11456,  11448,
-                               11448,  11426,  11424,  11420,  11418,  11384,
-                               11383,  11380,  11379,  11338],
+                              130044, 130038, 130036, 120683, 120681, 120680,
+                              120680, 120669, 120668, 120656, 120656, 120647,
+                              120646, 120636, 120636, 120618, 120617, 120612,
+                              120610,  11489,  11487,  11471,  11471,  11467,
+                               11467,  11456,  11456,  11448,  11448,  11426,
+                               11424,  11420,  11418,  11384,  11383,  11380,
+                               11379,  11338],
                              [    25,     39,     39,     43,     45,     70,
                                   70,     79,     79,    121,    123,    139,
                                  139,    146,    146,    149,    151,    174,
-                                 177,    183,    183,    184,    185,    196,
-                                 196,    208,    209,    218,    218,    228,
-                                 229,    247,    247,    252,    252,    268,
-                                 272,    276,    277,    288,    293,    301,
-                                 302,    324,    324,    328,    328,    362,
-                                 362,    365,    365,    406]])
+                                 177,    183,    183,    183,    183,    184,
+                                 185,    196,    196,    208,    209,    218,
+                                 218,    228,    229,    247,    247,    252,
+                                 252,    252,    252,    268,    272,    276,
+                                 277,    288,    293,    301,    302,    324,
+                                 324,    328,    328,    362,    362,    365,
+                                 365,    406]])
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.query.annotations["splicesites"], (169, 241))
         with self.assertRaises(StopIteration):
             next(alignments)
 
