@@ -51,6 +51,9 @@ from . import Selection
 # Superimpose atom sets
 from .Superimposer import Superimposer
 
+# CEAlign structural alignment
+from .cealign import CEAligner
+
 # 3D vector class
 from .vectors import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
 from .vectors import vector_to_axis, m2rotaxis, rotaxis2m

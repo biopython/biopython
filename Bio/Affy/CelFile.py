@@ -174,10 +174,10 @@ def _read_v4(f):
 
     char = f.read(preHeadersMap["headerLen"])
     header = char.decode("ascii", "ignore")
-    for header in header.split("\n"):
-        if "=" in header:
-            header = header.split("=")
-            headersMap[header[0]] = "=".join(header[1:])
+    for line in header.split("\n"):
+        if "=" in line:
+            headline = line.split("=")
+            headersMap[headline[0]] = "=".join(headline[1:])
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
@@ -336,32 +336,45 @@ def _read_v3(handle):
                     record.DatHeader["filename"] = filename
                     index += 1
                     field = line[index : index + 9]
-                    assert field[:4] == "CLS="
-                    assert field[8] == " "
+                    if field[:4] != "CLS=" or field[8] != " ":
+                        raise ValueError(
+                            "Field does not start with 'CLS=' or have a blank space at position 8"
+                        )
                     record.DatHeader["CLS"] = int(field[4:8])
                     index += 9
                     field = line[index : index + 9]
-                    assert field[:4] == "RWS="
-                    assert field[8] == " "
+                    if field[:4] != "RWS=" or field[8] != " ":
+                        raise ValueError(
+                            "Field does not start with 'RWS=' or have a blank space at position 8"
+                        )
                     record.DatHeader["RWS"] = int(field[4:8])
                     index += 9
                     field = line[index : index + 7]
-                    assert field[:4] == "XIN="
-                    assert field[6] == " "
+                    if field[:4] != "XIN=" or field[6] != " ":
+                        raise ValueError(
+                            "Field does not start with 'XIN=' or have a blank space at position 6"
+                        )
                     record.DatHeader["XIN"] = int(field[4:6])
                     index += 7
                     field = line[index : index + 7]
-                    assert field[:4] == "YIN="
-                    assert field[6] == " "
+                    if field[:4] != "YIN=" or field[6] != " ":
+                        raise ValueError(
+                            "Field does not start with 'YIN=' or have a blank space at poition 6"
+                        )
                     record.DatHeader["YIN"] = int(field[4:6])
                     index += 7
                     field = line[index : index + 6]
-                    assert field[:3] == "VE="
-                    assert field[5] == " "
+                    if field[:3] != "VE=" or field[5] != " ":
+                        raise ValueError(
+                            "Field does not start with 'VE=' or have a blank space at position 5"
+                        )
                     record.DatHeader["VE"] = int(field[3:5])
                     index += 6
                     field = line[index : index + 7]
-                    assert field[6] == " "
+                    if field[6] != " ":
+                        raise ValueError(
+                            "Field value for position 6 isn't a blank space"
+                        )
                     temperature = field[:6].strip()
                     if temperature:
                         record.DatHeader["temperature"] = int(temperature)
@@ -369,18 +382,27 @@ def _read_v3(handle):
                         record.DatHeader["temperature"] = None
                     index += 7
                     field = line[index : index + 4]
-                    assert field.endswith(" ")
+                    if not field.endswith(" "):
+                        raise ValueError("Field doesn't end with a blank space")
                     record.DatHeader["laser-power"] = float(field)
                     index += 4
                     field = line[index : index + 18]
-                    assert field[8] == " "
+                    if field[8] != " ":
+                        raise ValueError(
+                            "Field value for position 8 isn't a blank space"
+                        )
                     record.DatHeader["scan-date"] = field[:8]
-                    assert field[17] == " "
+                    if field[17] != " ":
+                        raise ValueError(
+                            "Field value for position 17 isn't a blank space"
+                        )
+                    record.DatHeader["scan-date"] = field[:8]
                     record.DatHeader["scan-time"] = field[9:17]
                     index += 18
                     field = line[index:]
                     subfields = field.split(" \x14 ")
-                    assert len(subfields) == 12
+                    if len(subfields) != 12:
+                        ValueError("Subfields length isn't 12")
                     subfield = subfields[0]
                     try:
                         scanner_id, scanner_type = subfield.split()

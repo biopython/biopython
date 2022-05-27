@@ -34,19 +34,38 @@ Biopython 1.67).
 Sequences now have a ``defined`` attribute that returns a boolean indicating
 if the underlying data is defined or not.
 
+The ``Bio.PDB`` module now includes a structural alignment module, using the
+combinatorial extension algorithm of Shindyalov and Bourne, commonly known as
+CEAlign. The module allows for two structures to be aligned based solely on
+their 3D conformation, ie. in a sequence-independent manner. The method is
+particularly powerful when the structures shared a very low degree of sequence
+similarity. The new module is available in ``Bio.PDB.CEAligner`` with an
+interface similar to other 3D superimposition modules.
+
+A new module ``Bio.PDB.qcprot`` implements the QCP superposition algorithm in
+pure Python, deprecating the existing C implementation. This leads to a slight
+performance improvement and to much better maintainability. The refactored
+``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
+that of ``Bio.PDB.Superimposer``.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
+- Christian Brueffer
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Hussein Faara (first contribution)
 - Manuel Lera Ramirez
+- João Rodrigues
+- Jarrod Millman
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
@@ -54,6 +73,7 @@ possible, especially the following contributors:
 - Sebastian Bassi
 - Sean Aubin
 - Tim Burke
+- Valentin Vareškić (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================

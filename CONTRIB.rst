@@ -34,6 +34,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrew Guy <https://github.com/andrewguy>
 - Andrew Sczesnak <https://github.com/polyatail>
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
+- Andrius Merkys <https://github.com/merkys>
 - Anne Pajon <ap one two at sanger ac uk>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
@@ -131,6 +132,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hector Martinez <https://github.com/hmarlo>
 - Hielke Walinga <https://github.com/hwalinga>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
+- Hussein Faara <https://github.com/hfaara18>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
 - Ilya Flyamer <https://github.com/Phlya>
@@ -144,6 +146,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jared Lumpe <https://github.com/jlumpe>
+- Jarrod Millman <https://github.com/jarrodmillman>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
@@ -296,6 +299,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
+- Valentin Vareškić <https://github.com/valentin994>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>

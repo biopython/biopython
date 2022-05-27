@@ -260,7 +260,8 @@ class SummaryInfo:
         """
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
-        assert all_letters
+        if not all_letters:
+            raise ValueError("_get_all_letters returned empty string")
 
         if chars_to_ignore is None:
             chars_to_ignore = []
@@ -275,7 +276,10 @@ class SummaryInfo:
 
         if axis_seq:
             left_seq = axis_seq
-            assert len(axis_seq) == self.alignment.get_alignment_length()
+            if len(axis_seq) != self.alignment.get_alignment_length():
+                raise ValueError(
+                    "Axis sequence length does not equal the get_alignment_length"
+                )
         else:
             left_seq = self.dumb_consensus()
 
@@ -445,7 +449,8 @@ class SummaryInfo:
         if total_count == 0:
             # This column must be entirely ignored characters
             for letter in freq_info:
-                assert freq_info[letter] == 0
+                if freq_info[letter] != 0:
+                    raise ValueError("freq_info[letter] is not 0")
                 # TODO - Map this to NA or NaN?
         else:
             # now convert the counts into frequencies

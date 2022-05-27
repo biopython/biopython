@@ -5536,6 +5536,38 @@ class TestSeqIO(SeqIOTestBaseClass):
             messages,
         )
 
+    def test_pdb_seqres3(self):
+        sequences = [
+            "STIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEEN...DWSPYAD",
+            "RVQPTESIVRFPNITNLCPFGEVFNATTFASVYAWNRKRI...PATVCGP",
+        ]
+        ids = ["7DDO:A", "7DDO:C"]
+        names = ["7DDO:A", "7DDO:C"]
+        lengths = [597, 209]
+        alignment = None
+        messages = {
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+        }
+        self.perform_test(
+            "pdb-seqres",
+            False,
+            "PDB/7DDO.pdb",
+            2,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+        )
+
     def test_cif_atom1(self):
         sequences = ["MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"]
         ids = ["1A8O:A"]
