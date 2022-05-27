@@ -1040,7 +1040,7 @@ class Alignment:
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
-                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                "self.target is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
             )
         return self.sequences[0]
@@ -1051,7 +1051,7 @@ class Alignment:
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
-                "self.target is defined for pairwise alignments only (found alignment of % sequences)"
+                "self.target is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
             )
         self.sequences[0] = value
@@ -1062,7 +1062,7 @@ class Alignment:
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
-                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                "self.query is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
             )
         return self.sequences[1]
@@ -1073,7 +1073,7 @@ class Alignment:
         n = len(self.sequences)
         if n != 2:
             raise ValueError(
-                "self.query is defined for pairwise alignments only (found alignment of % sequences)"
+                "self.query is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
             )
         self.sequences[1] = value
