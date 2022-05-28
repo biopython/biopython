@@ -31,13 +31,15 @@ def prettyprint(coordinates):
         for value in row:
             n = max(n, len(str(value)))
     print()
-    fmt = "%%%dd" % n
+    fmt = "%%%dd, " % n
     for row in coordinates:
-        words = []
+        line = None
         for value in row:
             word = fmt % value
-            words.append(word)
-        line = ", ".join(words)
+            if line is None or len(line + word) > 78:
+                if line is not None: print(line.rstrip())
+                line = "                              "
+            line += word
         print(line)
     
 
@@ -1246,143 +1248,142 @@ class Exonerate_ungapped_trans(unittest.TestCase):
             next(alignments)
 
 
-class ExonerateTextCases(unittest.TestCase):
+class Exonerate_ner(unittest.TestCase):
 
     def test_exn_22_m_ner_cigar(self):
         """Test parsing exonerate output (exn_22_m_ner_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 6150)
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XII, complete sequence")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 502)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({110: 'CAGAAAA', 148: 'CTGCCCAGAAT', 169: 'AACGAGCGTTCCG', 184: 'ATAGGAAAGAAGC', 227: 'GTTACTAGAACAGAAAG', 255: 'AAGACT', 266: 'GGACTTTTTACTATGTTC', 296: 'ACTGTCGGAAAT', 309: 'ACAAAATATAGAGCTAAGAATTCTGATGAT', 708: 'AACTACTT', 728: 'TGAACG', 744: 'GAAAAAATAGATACGTCAGCATG', 778: 'TTGACCAAAAGTATCTTCCATACGAG', 816: 'ACTTT', 832: 'TGCTTCCCCTTGC', 889: 'GGACCAA', 915: 'ATCAAATGCGACTTAA', 940: 'ACCTGT', 953: 'GAAATC', 960: 'CTAGCTTC', 979: 'TGGCTGCTTCTCAT', 1006: 'GAACCCAAT', 1016: 'TGAAGC', 1024: 'TTGAACACATTAGCAG', 1047: 'TCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAA', 1092: 'TCCCT', 1099: 'CAAAATATTCATCGTTGGA', 1121: 'AGATGATTT', 1133: 'CAGCGA', 1156: 'AATGTACAG', 1167: 'GACTGCAAAA', 1187: 'AGCTCGCGACTTA', 1210: 'TGGTTAGACAGCTCCTGTAG'}, length=1230)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({297910: 'CTGAAAA', 297946: 'CCGCCCAAAGT', 297970: 'AACTGGAGTTCCG', 297992: 'ATTGGAAGATGC', 298019: 'GTTATCAAGAACAATAAAG', 298049: 'AAGACT', 298065: 'GCACTATTCACTGTCCTC', 298095: 'ACATTCTCAAAT', 298117: 'ACAAAAAAACAGCTGATTGATTATTTGATGAA', 318437: 'AGCTTCTT', 318454: 'TGAAAG', 318476: 'GAATAAATACATGGCACCTTG', 318503: 'TTGACATTCAATGCCTTCTAAAGAG', 318565: 'ACTTT', 318611: 'TTCCTCCCCTTCC', 318630: 'GGACGAA', 318639: 'ATCAAATCAACCAAA', 318659: 'ACCTGT', 318681: 'GAAATC', 318691: 'CTAGTTTC', 318708: 'TGTCTCATCTCAT', 318725: 'GAATCCAGT', 318742: 'TGTAGC', 318755: 'TTGACCACATTCACCAG', 318787: 'TCGAATGCAAAGAAGCTAGCTGAACATTATCGAA', 318834: 'TCCCT', 318851: 'CAAAATTTTCTTCATAGAA', 318889: 'AGATATTT', 318913: 'CAGCTA', 318924: 'ACTGTACCG', 318944: 'GACTTCAAAA', 318959: 'AGCTATAGACTCA', 318974: 'TGATAGGACAGCTCCTGTAG'}, length=318994)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[297910, 297917, 297917, 297946, 297957, 297957,
-                              297970, 297983, 297983, 297992, 297997, 297997,
-                              298004, 298004, 298019, 298023, 298024, 298031,
-                              298032, 298038, 298038, 298049, 298055, 298055,
-                              298065, 298083, 298083, 298095, 298107, 298107,
+                numpy.array([[297910, 297918, 297946, 297946, 297958, 297970,
+                              297970, 297984, 297992, 297992, 297997, 297997,
+                              298005, 298016, 298016, 298019, 298023, 298024,
+                              298031, 298032, 298039, 298049, 298049, 298056,
+                              298065, 298065, 298084, 298095, 298095, 298108,
                               298117, 298123, 298123, 298133, 298135, 298139,
-                              298140, 298149, 298149, 318437, 318445, 318445,
-                              318454, 318460, 318460, 318476, 318488, 318488,
-                              318497, 318497, 318503, 318523, 318523, 318528,
-                              318528, 318565, 318570, 318570, 318611, 318624,
-                              318624, 318630, 318637, 318637, 318639, 318646,
-                              318646, 318654, 318654, 318659, 318665, 318665,
-                              318681, 318687, 318687, 318691, 318699, 318699,
-                              318708, 318713, 318713, 318721, 318721, 318725,
-                              318734, 318734, 318742, 318748, 318748, 318755,
-                              318766, 318767, 318772, 318772, 318787, 318793,
-                              318793, 318808, 318808, 318821, 318821, 318834,
-                              318839, 318839, 318851, 318870, 318870, 318889,
-                              318893, 318893, 318897, 318897, 318913, 318919,
-                              318919, 318924, 318933, 318933, 318944, 318954,
-                              318954, 318959, 318972, 318972, 318974, 318994],
-                             [   110,    117,    148,    148,    159,    169,
-                                 169,    182,    184,    184,    189,    190,
-                                 197,    227,    227,    231,    231,    238,
-                                 238,    244,    255,    255,    261,    266,
-                                 266,    284,    296,    296,    308,    309,
+                              298140, 298150, 298150, 318437, 318446, 318452,
+                              318452, 318454, 318461, 318476, 318476, 318488,
+                              318488, 318498, 318503, 318503, 318523, 318523,
+                              318529, 318532, 318532, 318551, 318551, 318558,
+                              318558, 318559, 318559, 318560, 318560, 318562,
+                              318562, 318563, 318563, 318564, 318564, 318565,
+                              318565, 318571, 318611, 318611, 318625, 318630,
+                              318630, 318638, 318639, 318639, 318646, 318646,
+                              318655, 318659, 318659, 318666, 318681, 318681,
+                              318688, 318691, 318700, 318708, 318708, 318713,
+                              318713, 318722, 318725, 318725, 318735, 318742,
+                              318749, 318755, 318755, 318766, 318767, 318773,
+                              318787, 318787, 318793, 318793, 318808, 318808,
+                              318822, 318834, 318834, 318840, 318851, 318851,
+                              318871, 318889, 318889, 318893, 318893, 318898,
+                              318913, 318913, 318920, 318922, 318922, 318924,
+                              318934, 318944, 318944, 318955, 318959, 318959,
+                              318973, 318974, 318974, 318994],
+                             [   110,    118,    118,    148,    160,    160,
+                                 169,    183,    183,    184,    189,    190,
+                                 198,    198,    227,    227,    231,    231,
+                                 238,    238,    245,    245,    255,    262,
+                                 262,    266,    285,    285,    296,    309,
                                  309,    315,    316,    326,    326,    330,
-                                 330,    339,    708,    708,    716,    728,
-                                 728,    734,    744,    744,    756,    758,
-                                 767,    778,    778,    798,    799,    804,
-                                 816,    816,    821,    832,    832,    845,
-                                 889,    889,    896,    915,    915,    922,
-                                 923,    931,    940,    940,    946,    953,
-                                 953,    959,    960,    960,    968,    979,
-                                 979,    984,    985,    993,   1006,   1006,
-                                1015,   1016,   1016,   1022,   1024,   1024,
-                                1035,   1035,   1040,   1047,   1047,   1053,
-                                1054,   1069,   1070,   1083,   1092,   1092,
-                                1097,   1099,   1099,   1118,   1121,   1121,
-                                1125,   1126,   1130,   1133,   1133,   1139,
-                                1156,   1156,   1165,   1167,   1167,   1177,
-                                1187,   1187,   1200,   1210,   1210,   1230]])
+                                 330,    340,    708,    708,    717,    717,
+                                 728,    728,    735,    735,    744,    756,
+                                 758,    768,    768,    778,    798,    799,
+                                 805,    805,    806,    806,    807,    807,
+                                 808,    808,    809,    809,    812,    812,
+                                 813,    813,    814,    814,    815,    815,
+                                 816,    822,    822,    832,    846,    846,
+                                 889,    897,    897,    915,    922,    923,
+                                 932,    932,    940,    947,    947,    953,
+                                 960,    960,    969,    969,    979,    984,
+                                 985,    994,    994,   1006,   1016,   1016,
+                                1023,   1023,   1024,   1035,   1035,   1041,
+                                1041,   1047,   1053,   1054,   1069,   1070,
+                                1084,   1084,   1092,   1098,   1098,   1099,
+                                1119,   1119,   1121,   1125,   1126,   1131,
+                                1131,   1133,   1140,   1140,   1156,   1156,
+                                1166,   1166,   1167,   1178,   1178,   1187,
+                                1201,   1201,   1210,   1230]])
                 # fmt: on
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 440)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({509: 'TGAGA', 537: 'TGGAACGCTC', 567: 'GATTCTCCCCCCGGAAATCGAACAGGTG', 607: 'GTGACGAAAG', 636: 'CCAGATTTCAGTCT', 667: 'ATAGACAGACTGGTC', 683: 'AGAAGCTTTAGATTACGACATTCATAACTACTTTC', 737: 'GACCGCTGA', 748: 'AAATAGATACGTCAGCAT', 777: 'ATTGACCAAAAGTA', 797: 'ATACGAGACAGA', 815: 'TACTTTATTCCCCAGCGT', 843: 'GCTGT', 861: 'AATAATATTTGCAACCGCAAG', 902: 'TTCAAATAAGGAGATCAA', 927: 'TTAATAACAAG', 957: 'TCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATAC', 1010: 'CCAATCTGAA', 1022: 'AATTGAACA', 1050: 'AATGGAAAAGCGTCTTGCTACCACATTCT', 1099: 'CAAAATATT', 1122: 'GATGATTTATGCAGCGAA', 1147: 'TCAAGGC', 1167: 'GACTGCAAAATAGTAGTCAAAGCTC'}, length=1192)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({183946: 'TGAGA', 183977: 'TGAAACTGTC', 184002: 'GAAGCTCTTTCAGAAAAGCCAACTCGTG', 184044: 'GTGAAGACAG', 184066: 'CCGGATTACAATCT', 184092: 'AGAGAAAGGCAAGTC', 184111: 'AGAAACTGGCAGATCTTGGACTTGAAAAGGAGTTTC', 184169: 'GGCCGCTGA', 184190: 'AAATGCAGATCATCAGCAT', 184211: 'ATTACGAAAACTA', 184239: 'AAACCAGAAAGA', 184271: 'TACTAGGTTACCAGCTT', 184299: 'GCTGT', 184315: 'AAGAAGACATGGAAACCCAGG', 184346: 'TTCAAAGAAGAAGAAGAA', 184366: 'TTAAAAAGAAG', 184393: 'TGTCTACTAGAGAACTTGCCGGCAAGGTTGGGTCTATAC', 184439: 'CAAATCTGGA', 184463: 'AATTGGAAA', 184485: 'ATTGGCAAAGGTGCCGAAACCACATTTT', 184515: 'CAAGATGTT', 184542: 'GATGATGCATCCTCAGCGGA', 184565: 'TCTAGGC', 184578: 'GACGGTAAAATAGTAGTCACACCTC'}, length=184603)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183946, 183951, 183951, 183977, 183987, 183987,
-                              184002, 184030, 184030, 184044, 184054, 184054,
-                              184066, 184080, 184080, 184092, 184107, 184107,
-                              184111, 184118, 184119, 184125, 184126, 184132,
-                              184132, 184147, 184147, 184169, 184178, 184178,
-                              184190, 184194, 184196, 184200, 184200, 184209,
-                              184209, 184211, 184214, 184214, 184224, 184224,
-                              184239, 184251, 184251, 184271, 184280, 184280,
-                              184288, 184288, 184299, 184304, 184304, 184315,
-                              184336, 184336, 184346, 184364, 184364, 184366,
-                              184377, 184377, 184393, 184399, 184399, 184410,
-                              184411, 184415, 184417, 184428, 184428, 184432,
-                              184432, 184439, 184449, 184449, 184463, 184472,
-                              184472, 184485, 184495, 184495, 184513, 184513,
-                              184515, 184524, 184524, 184542, 184552, 184554,
-                              184562, 184562, 184565, 184572, 184572, 184578,
+                numpy.array([[183946, 183952, 183960, 183960, 183977, 183988,
+                              183995, 183995, 184002, 184031, 184039, 184039,
+                              184044, 184055, 184059, 184059, 184060, 184060,
+                              184063, 184063, 184064, 184064, 184066, 184066,
+                              184081, 184083, 184083, 184092, 184108, 184111,
+                              184118, 184119, 184125, 184126, 184132, 184132,
+                              184148, 184169, 184169, 184179, 184190, 184190,
+                              184194, 184196, 184200, 184200, 184210, 184211,
+                              184211, 184214, 184214, 184225, 184239, 184239,
+                              184252, 184271, 184271, 184280, 184280, 184289,
+                              184299, 184299, 184305, 184311, 184311, 184314,
+                              184314, 184315, 184315, 184337, 184339, 184339,
+                              184346, 184365, 184366, 184366, 184378, 184390,
+                              184390, 184393, 184399, 184399, 184410, 184411,
+                              184415, 184417, 184428, 184428, 184433, 184439,
+                              184439, 184450, 184463, 184463, 184473, 184480,
+                              184480, 184481, 184481, 184483, 184483, 184484,
+                              184484, 184485, 184485, 184495, 184495, 184514,
+                              184515, 184515, 184525, 184539, 184539, 184541,
+                              184541, 184542, 184542, 184552, 184554, 184563,
+                              184565, 184565, 184573, 184576, 184576, 184578,
                               184603],
-                             [   509,    514,    537,    537,    547,    567,
-                                 567,    595,    607,    607,    617,    636,
-                                 636,    650,    667,    667,    682,    683,
-                                 683,    690,    690,    696,    696,    702,
-                                 703,    718,    737,    737,    746,    748,
-                                 748,    752,    752,    756,    757,    766,
-                                 777,    777,    780,    781,    791,    797,
-                                 797,    809,    815,    815,    824,    825,
-                                 833,    843,    843,    848,    861,    861,
-                                 882,    902,    902,    920,    927,    927,
-                                 938,    957,    957,    963,    964,    975,
-                                 975,    979,    979,    990,    991,    995,
-                                1010,   1010,   1020,   1022,   1022,   1031,
-                                1050,   1050,   1060,   1061,   1079,   1099,
-                                1099,   1108,   1122,   1122,   1132,   1132,
-                                1140,   1147,   1147,   1154,   1167,   1167,
+                             [   509,    515,    515,    537,    537,    548,
+                                 548,    567,    567,    596,    596,    607,
+                                 607,    618,    618,    619,    619,    621,
+                                 621,    623,    623,    626,    626,    636,
+                                 651,    651,    667,    667,    683,    683,
+                                 690,    690,    696,    696,    702,    703,
+                                 719,    719,    737,    747,    747,    748,
+                                 752,    752,    756,    757,    767,    767,
+                                 777,    780,    781,    792,    792,    797,
+                                 810,    810,    815,    824,    825,    834,
+                                 834,    843,    849,    849,    852,    852,
+                                 853,    853,    861,    883,    883,    902,
+                                 902,    921,    921,    927,    939,    939,
+                                 957,    957,    963,    964,    975,    975,
+                                 979,    979,    990,    991,    996,    996,
+                                1010,   1021,   1021,   1022,   1032,   1032,
+                                1034,   1034,   1035,   1035,   1037,   1037,
+                                1039,   1039,   1050,   1060,   1061,   1080,
+                                1080,   1099,   1109,   1109,   1110,   1110,
+                                1112,   1112,   1122,   1132,   1132,   1141,
+                                1141,   1147,   1155,   1155,   1167,   1167,
                                 1192]])
                 # fmt: on
             )
@@ -1395,142 +1396,110 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 6150)
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment[0], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
-        self.assertEqual(alignment[1], "ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGATGATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTAATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAATTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGACAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTCTGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACCAAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCCCTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAAACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATCAGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome XII, complete sequence")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 502)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({110: 'CAGAAAA', 148: 'CTGCCCAGAAT', 169: 'AACGAGCGTTCCG', 184: 'ATAGGAAAGAAGC', 227: 'GTTACTAGAACAGAAAG', 255: 'AAGACT', 266: 'GGACTTTTTACTATGTTC', 296: 'ACTGTCGGAAAT', 309: 'ACAAAATATAGAGCTAAGAATTCTGATGAT', 708: 'AACTACTT', 728: 'TGAACG', 744: 'GAAAAAATAGATACGTCAGCATG', 778: 'TTGACCAAAAGTATCTTCCATACGAG', 816: 'ACTTT', 832: 'TGCTTCCCCTTGC', 889: 'GGACCAA', 915: 'ATCAAATGCGACTTAA', 940: 'ACCTGT', 953: 'GAAATC', 960: 'CTAGCTTC', 979: 'TGGCTGCTTCTCAT', 1006: 'GAACCCAAT', 1016: 'TGAAGC', 1024: 'TTGAACACATTAGCAG', 1047: 'TCGAATGGAAAAGCGTCTTGCTACCACATTCTCGAA', 1092: 'TCCCT', 1099: 'CAAAATATTCATCGTTGGA', 1121: 'AGATGATTT', 1133: 'CAGCGA', 1156: 'AATGTACAG', 1167: 'GACTGCAAAA', 1187: 'AGCTCGCGACTTA', 1210: 'TGGTTAGACAGCTCCTGTAG'}, length=1230)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({297910: 'CTGAAAA', 297946: 'CCGCCCAAAGT', 297970: 'AACTGGAGTTCCG', 297992: 'ATTGGAAGATGC', 298019: 'GTTATCAAGAACAATAAAG', 298049: 'AAGACT', 298065: 'GCACTATTCACTGTCCTC', 298095: 'ACATTCTCAAAT', 298117: 'ACAAAAAAACAGCTGATTGATTATTTGATGAA', 318437: 'AGCTTCTT', 318454: 'TGAAAG', 318476: 'GAATAAATACATGGCACCTTG', 318503: 'TTGACATTCAATGCCTTCTAAAGAG', 318565: 'ACTTT', 318611: 'TTCCTCCCCTTCC', 318630: 'GGACGAA', 318639: 'ATCAAATCAACCAAA', 318659: 'ACCTGT', 318681: 'GAAATC', 318691: 'CTAGTTTC', 318708: 'TGTCTCATCTCAT', 318725: 'GAATCCAGT', 318742: 'TGTAGC', 318755: 'TTGACCACATTCACCAG', 318787: 'TCGAATGCAAAGAAGCTAGCTGAACATTATCGAA', 318834: 'TCCCT', 318851: 'CAAAATTTTCTTCATAGAA', 318889: 'AGATATTT', 318913: 'CAGCTA', 318924: 'ACTGTACCG', 318944: 'GACTTCAAAA', 318959: 'AGCTATAGACTCA', 318974: 'TGATAGGACAGCTCCTGTAG'}, length=318994)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[297910, 297917, 297917, 297946, 297957, 297957,
-                              297970, 297983, 297983, 297992, 297997, 297997,
-                              298004, 298004, 298019, 298023, 298024, 298031,
-                              298032, 298038, 298038, 298049, 298055, 298055,
-                              298065, 298083, 298083, 298095, 298107, 298107,
-                              298117, 298123, 298123, 298133, 298135, 298139,
-                              298140, 298149, 298149, 318437, 318445, 318445,
-                              318454, 318460, 318460, 318476, 318488, 318488,
-                              318497, 318497, 318503, 318523, 318523, 318528,
-                              318528, 318565, 318570, 318570, 318611, 318624,
-                              318624, 318630, 318637, 318637, 318639, 318646,
-                              318646, 318654, 318654, 318659, 318665, 318665,
-                              318681, 318687, 318687, 318691, 318699, 318699,
-                              318708, 318713, 318713, 318721, 318721, 318725,
-                              318734, 318734, 318742, 318748, 318748, 318755,
-                              318766, 318767, 318772, 318772, 318787, 318793,
-                              318793, 318808, 318808, 318821, 318821, 318834,
-                              318839, 318839, 318851, 318870, 318870, 318889,
-                              318893, 318893, 318897, 318897, 318913, 318919,
-                              318919, 318924, 318933, 318933, 318944, 318954,
-                              318954, 318959, 318972, 318972, 318974, 318994],
-                             [   110,    117,    148,    148,    159,    169,
-                                 169,    182,    184,    184,    189,    190,
-                                 197,    227,    227,    231,    231,    238,
-                                 238,    244,    255,    255,    261,    266,
-                                 266,    284,    296,    296,    308,    309,
-                                 309,    315,    316,    326,    326,    330,
-                                 330,    339,    708,    708,    716,    728,
-                                 728,    734,    744,    744,    756,    758,
-                                 767,    778,    778,    798,    799,    804,
-                                 816,    816,    821,    832,    832,    845,
-                                 889,    889,    896,    915,    915,    922,
-                                 923,    931,    940,    940,    946,    953,
-                                 953,    959,    960,    960,    968,    979,
-                                 979,    984,    985,    993,   1006,   1006,
-                                1015,   1016,   1016,   1022,   1024,   1024,
-                                1035,   1035,   1040,   1047,   1047,   1053,
-                                1054,   1069,   1070,   1083,   1092,   1092,
-                                1097,   1099,   1099,   1118,   1121,   1121,
-                                1125,   1126,   1130,   1133,   1133,   1139,
-                                1156,   1156,   1165,   1167,   1167,   1177,
-                                1187,   1187,   1200,   1210,   1210,   1230]])
+                numpy.array([[297910, 297917, 297946, 297957, 297970, 297983,
+                              297992, 297997, 297997, 298004, 298019, 298023,
+                              298024, 298031, 298032, 298038, 298049, 298055,
+                              298065, 298083, 298095, 298107, 298117, 298123,
+                              298123, 298133, 298135, 298139, 298140, 298149,
+                              318437, 318445, 318454, 318460, 318476, 318488,
+                              318488, 318497, 318503, 318523, 318523, 318528,
+                              318565, 318570, 318611, 318624, 318630, 318637,
+                              318639, 318646, 318646, 318654, 318659, 318665,
+                              318681, 318687, 318691, 318699, 318708, 318713,
+                              318713, 318721, 318725, 318734, 318742, 318748,
+                              318755, 318766, 318767, 318772, 318787, 318793,
+                              318793, 318808, 318808, 318821, 318834, 318839,
+                              318851, 318870, 318889, 318893, 318893, 318897,
+                              318913, 318919, 318924, 318933, 318944, 318954,
+                              318959, 318972, 318974, 318994],
+                             [   110,    117,    148,    159,    169,    182,
+                                 184,    189,    190,    197,    227,    231,
+                                 231,    238,    238,    244,    255,    261,
+                                 266,    284,    296,    308,    309,    315,
+                                 316,    326,    326,    330,    330,    339,
+                                 708,    716,    728,    734,    744,    756,
+                                 758,    767,    778,    798,    799,    804,
+                                 816,    821,    832,    845,    889,    896,
+                                 915,    922,    923,    931,    940,    946,
+                                 953,    959,    960,    968,    979,    984,
+                                 985,    993,   1006,   1015,   1016,   1022,
+                                1024,   1035,   1035,   1040,   1047,   1053,
+                                1054,   1069,   1070,   1083,   1092,   1097,
+                                1099,   1118,   1121,   1125,   1126,   1130,
+                                1133,   1139,   1156,   1165,   1167,   1177,
+                                1187,   1200,   1210,   1230]])
                 # fmt: on
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.target.description, "Saccharomyces cerevisiae S288c chromosome IV, complete sequence")
-        self.assertEqual(alignment.annotations["model"], "NER:affine:local:dna2dna")
         self.assertEqual(alignment.score, 440)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({509: 'TGAGA', 537: 'TGGAACGCTC', 567: 'GATTCTCCCCCCGGAAATCGAACAGGTG', 607: 'GTGACGAAAG', 636: 'CCAGATTTCAGTCT', 667: 'ATAGACAGACTGGTC', 683: 'AGAAGCTTTAGATTACGACATTCATAACTACTTTC', 737: 'GACCGCTGA', 748: 'AAATAGATACGTCAGCAT', 777: 'ATTGACCAAAAGTA', 797: 'ATACGAGACAGA', 815: 'TACTTTATTCCCCAGCGT', 843: 'GCTGT', 861: 'AATAATATTTGCAACCGCAAG', 902: 'TTCAAATAAGGAGATCAA', 927: 'TTAATAACAAG', 957: 'TCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATAC', 1010: 'CCAATCTGAA', 1022: 'AATTGAACA', 1050: 'AATGGAAAAGCGTCTTGCTACCACATTCT', 1099: 'CAAAATATT', 1122: 'GATGATTTATGCAGCGAA', 1147: 'TCAAGGC', 1167: 'GACTGCAAAATAGTAGTCAAAGCTC'}, length=1192)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({183946: 'TGAGA', 183977: 'TGAAACTGTC', 184002: 'GAAGCTCTTTCAGAAAAGCCAACTCGTG', 184044: 'GTGAAGACAG', 184066: 'CCGGATTACAATCT', 184092: 'AGAGAAAGGCAAGTC', 184111: 'AGAAACTGGCAGATCTTGGACTTGAAAAGGAGTTTC', 184169: 'GGCCGCTGA', 184190: 'AAATGCAGATCATCAGCAT', 184211: 'ATTACGAAAACTA', 184239: 'AAACCAGAAAGA', 184271: 'TACTAGGTTACCAGCTT', 184299: 'GCTGT', 184315: 'AAGAAGACATGGAAACCCAGG', 184346: 'TTCAAAGAAGAAGAAGAA', 184366: 'TTAAAAAGAAG', 184393: 'TGTCTACTAGAGAACTTGCCGGCAAGGTTGGGTCTATAC', 184439: 'CAAATCTGGA', 184463: 'AATTGGAAA', 184485: 'ATTGGCAAAGGTGCCGAAACCACATTTT', 184515: 'CAAGATGTT', 184542: 'GATGATGCATCCTCAGCGGA', 184565: 'TCTAGGC', 184578: 'GACGGTAAAATAGTAGTCACACCTC'}, length=184603)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183946, 183951, 183951, 183977, 183987, 183987,
-                              184002, 184030, 184030, 184044, 184054, 184054,
-                              184066, 184080, 184080, 184092, 184107, 184107,
+                numpy.array([[183946, 183951, 183977, 183987, 184002, 184030,
+                              184044, 184054, 184066, 184080, 184092, 184107,
                               184111, 184118, 184119, 184125, 184126, 184132,
-                              184132, 184147, 184147, 184169, 184178, 184178,
-                              184190, 184194, 184196, 184200, 184200, 184209,
-                              184209, 184211, 184214, 184214, 184224, 184224,
-                              184239, 184251, 184251, 184271, 184280, 184280,
-                              184288, 184288, 184299, 184304, 184304, 184315,
-                              184336, 184336, 184346, 184364, 184364, 184366,
-                              184377, 184377, 184393, 184399, 184399, 184410,
-                              184411, 184415, 184417, 184428, 184428, 184432,
-                              184432, 184439, 184449, 184449, 184463, 184472,
-                              184472, 184485, 184495, 184495, 184513, 184513,
-                              184515, 184524, 184524, 184542, 184552, 184554,
-                              184562, 184562, 184565, 184572, 184572, 184578,
-                              184603],
-                             [   509,    514,    537,    537,    547,    567,
-                                 567,    595,    607,    607,    617,    636,
-                                 636,    650,    667,    667,    682,    683,
+                              184132, 184147, 184169, 184178, 184190, 184194,
+                              184196, 184200, 184200, 184209, 184211, 184214,
+                              184214, 184224, 184239, 184251, 184271, 184280,
+                              184280, 184288, 184299, 184304, 184315, 184336,
+                              184346, 184364, 184366, 184377, 184393, 184399,
+                              184399, 184410, 184411, 184415, 184417, 184428,
+                              184428, 184432, 184439, 184449, 184463, 184472,
+                              184485, 184495, 184495, 184513, 184515, 184524,
+                              184542, 184552, 184554, 184562, 184565, 184572,
+                              184578, 184603],
+                             [   509,    514,    537,    547,    567,    595,
+                                 607,    617,    636,    650,    667,    682,
                                  683,    690,    690,    696,    696,    702,
-                                 703,    718,    737,    737,    746,    748,
-                                 748,    752,    752,    756,    757,    766,
-                                 777,    777,    780,    781,    791,    797,
-                                 797,    809,    815,    815,    824,    825,
-                                 833,    843,    843,    848,    861,    861,
-                                 882,    902,    902,    920,    927,    927,
-                                 938,    957,    957,    963,    964,    975,
-                                 975,    979,    979,    990,    991,    995,
-                                1010,   1010,   1020,   1022,   1022,   1031,
-                                1050,   1050,   1060,   1061,   1079,   1099,
-                                1099,   1108,   1122,   1122,   1132,   1132,
-                                1140,   1147,   1147,   1154,   1167,   1167,
-                                1192]])
+                                 703,    718,    737,    746,    748,    752,
+                                 752,    756,    757,    766,    777,    780,
+                                 781,    791,    797,    809,    815,    824,
+                                 825,    833,    843,    848,    861,    882,
+                                 902,    920,    927,    938,    957,    963,
+                                 964,    975,    975,    979,    979,    990,
+                                 991,    995,   1010,   1020,   1022,   1031,
+                                1050,   1060,   1061,   1079,   1099,   1108,
+                                1122,   1132,   1132,   1140,   1147,   1154,
+                                1167,   1192]])
                 # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class ExonerateTextCases(unittest.TestCase):
 
     def test_exn_22_q_multiple_cigar(self):
         """Test parsing exn_22_q_multiple_cigar.exn."""
