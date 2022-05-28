@@ -2038,14 +2038,14 @@ class Exonerate_protein2dna(unittest.TestCase):
             next(alignments)
 
 
-class ExonerateTextCases(unittest.TestCase):
+class Exonerate_protein2dna_fshifts(unittest.TestCase):
 
     def test_exn_22_m_protein2dna_fshifts_cigar(self):
         """Test parsing exonerate output (exn_22_o_cigar_fshifts2.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_cigar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar no --bestn 3")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showcigar yes --showvulgar no --showalignment no --bestn 3")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2056,7 +2056,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[330, 373, 373, 409], [216, 345, 347, 455]])
+                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]])
             )
         )
         alignment = next(alignments)
@@ -2066,7 +2066,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[6, 70], [16, 208]])
+            numpy.array_equal( alignment.coordinates, numpy.array([[16, 208], [6, 70]])
             )
         )
         with self.assertRaises(StopIteration):
@@ -2077,7 +2077,7 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar no --bestn 3")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar yes --showalignment no --bestn 3")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2088,7 +2088,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[330, 373, 373, 409], [216, 345, 347, 455]])
+                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]])
             )
         )
         alignment = next(alignments)
@@ -2098,11 +2098,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[6, 70], [16, 208]])
+            numpy.array_equal( alignment.coordinates, numpy.array([[16, 208], [6, 70]])
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class ExonerateTextCases(unittest.TestCase):
 
     def test_exn_22_m_protein2genome_cigar(self):
         """Test parsing exn_22_m_protein2genome_cigar.exn."""
