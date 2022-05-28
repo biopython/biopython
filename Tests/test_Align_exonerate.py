@@ -1939,48 +1939,51 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
             next(alignments)
 
 
-class ExonerateTextCases(unittest.TestCase):
+class Exonerate_protein2dna(unittest.TestCase):
 
     def test_exn_22_m_protein2dna_cigar(self):
         """Test parsing exonerate output (exn_22_m_protein2dna_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 2105)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 409], [1319275, 1318048]])
+                numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[0, 0], [0, 0]])
+            numpy.array_equal( alignment.coordinates,
+                numpy.array([[253991, 254027, 254030, 254270],
+                             [    28,     40,     40,    120]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 116)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[0, 0], [0, 0]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[255638, 255743, 255743, 255794],
+                             [   355,    390,    390,    407]])
             )
         )
         with self.assertRaises(StopIteration):
@@ -1991,45 +1994,51 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 2105)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 409], [1319275, 1318048]])
+                numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[0, 0], [0, 0]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[253991, 254027, 254030, 254270],
+                             [    28,     40,     40,    120]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 116)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[0, 0], [0, 0]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[255638, 255743, 255743, 255794],
+                             [   355,    390,    391,    408]])
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class ExonerateTextCases(unittest.TestCase):
 
     def test_exn_22_m_protein2dna_fshifts_cigar(self):
         """Test parsing exonerate output (exn_22_o_cigar_fshifts2.exn)."""
@@ -2041,7 +2050,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 367)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2054,7 +2062,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 322)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2075,7 +2082,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 367)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2088,7 +2094,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
-        self.assertEqual(alignment.annotations["model"], "protein2dna:local")
         self.assertEqual(alignment.score, 322)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2109,7 +2114,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 2105)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2124,7 +2128,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2137,7 +2140,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 122)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2162,7 +2164,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 2105)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2177,7 +2178,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2190,7 +2190,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 122)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2215,7 +2214,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 1308)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2243,7 +2241,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 1308)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2271,7 +2268,6 @@ class ExonerateTextCases(unittest.TestCase):
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
         self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
-        self.assertEqual(alignment.annotations["model"], "protein2genome:local")
         self.assertEqual(alignment.score, 1958)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
