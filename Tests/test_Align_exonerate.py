@@ -360,11 +360,12 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
-
+                # fmt: off
+# flake8: noqa
                 alignment.coordinates,
                 numpy.array([[1319275, 1319274, 1319271, 1318045],
-                             [      0,       1,       4,    1230]]
-                )
+                             [      0,       1,       4,    1230]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -376,8 +377,11 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1318045, 1318174, 1318177, 1319275],
                              [   1230,    1101,    1098,       0]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -435,8 +439,11 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1319275, 1319274, 1319271, 1318045],
                              [      0,       1,       4,    1230]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -448,8 +455,11 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1318045, 1318174, 1318177, 1319275],
                              [   1230,    1101,    1098,       0]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -536,8 +546,11 @@ class Exonerate_coding2coding(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -581,8 +594,11 @@ class Exonerate_coding2coding(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -606,6 +622,8 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
+                # fmt: off
+# flake8: noqa
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
@@ -630,8 +648,11 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -652,6 +673,8 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
+                # fmt: off
+# flake8: noqa
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
@@ -676,8 +699,11 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -747,8 +773,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -760,8 +789,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -773,8 +805,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                 numpy.array([[1319468, 1319558, 1319561, 1319997],
-                              [      0,      90,      93,     529]])
+                # fmt: off
+# flake8: noqa
+                numpy.array([[1319468, 1319558, 1319561, 1319997],
+                             [      0,      90,      93,     529]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -786,8 +821,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                 numpy.array([[1319468, 1319558, 1319561, 1319997],
-                              [      0,      90,      93,     529]])
+                # fmt: off
+# flake8: noqa
+                numpy.array([[1319468, 1319558, 1319561, 1319997],
+                             [      0,      90,      93,     529]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
