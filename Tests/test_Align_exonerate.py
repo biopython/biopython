@@ -25,24 +25,6 @@ except ImportError:
     ) from None
 
 
-def prettyprint(coordinates):
-    n = 0
-    for row in coordinates:
-        for value in row:
-            n = max(n, len(str(value)))
-    print()
-    fmt = "%%%dd, " % n
-    for row in coordinates:
-        line = "                numpy.array([["
-        for value in row:
-            word = fmt % value
-            if len(line + word) > 78:
-                print(line.rstrip())
-                line = "                              "
-            line += word
-        print(line)
-    
-
 class Exonerate_est2genome(unittest.TestCase):
 
     def test_exn_22_m_est2genome_cigar(self):
@@ -1978,12 +1960,11 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertEqual(alignment.score, 116)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 numpy.array([[255638, 255743, 255743, 255794],
-                             [   355,    390,    390,    407]])
+                             [   355,    390,    391,    408]])
             )
         )
         with self.assertRaises(StopIteration):
@@ -2205,28 +2186,28 @@ class Exonerate_protein2genome(unittest.TestCase):
             next(alignments)
 
 
-class ExonerateTextCases(unittest.TestCase):
+class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
 
     def test_exn_24_m_protein2genome_revcomp_fshifts_cigar(self):
         """Test parsing exn_24_m_protein2genome_revcomp_fshifts_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showcigar no --showvulgar no --bestn 2 --refine full")
-        self.assertEqual(alignments.hostname, "RBGs-MacBook-Air.local")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 2 --refine full")
+        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
         self.assertEqual(alignment.score, 1308)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,  744,
-                         450,  450, 448,  331],
-                       [  69,   81,   81,  164,  169,  195,  196,  297,  300,
-                         398,  402, 402,  441]])
+                numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
+                               744,  450,  450,  448,  331],
+                             [  69,   81,   81,  164,  169,  195,  196,  297,
+                               300,  398,  402,  402,  441]])
             )
         )
         with self.assertRaises(StopIteration):
@@ -2237,46 +2218,50 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showcigar no --showvulgar no --bestn 2 --refine full")
-        self.assertEqual(alignments.hostname, "RBGs-MacBook-Air.local")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 2 --refine full")
+        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
         self.assertEqual(alignment.score, 1308)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,  744,
-                         450,  450, 448,  331],
-                       [  69,   81,   81,  164,  169,  195,  196,  297,  300,
-                         398,  402, 402,  441]])
+                numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
+                               744,  450,  450, 448,  331],
+                             [  69,   81,   81,  164,  169,  195,  196,  297,
+                               300,  398,  402, 402,  441]])
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class Exonerate_protein2genome_met_intron(unittest.TestCase):
 
     def test_exn_24_protein2genome_met_intron_cigar(self):
         """Test parsing exn_24_m_protein2genome_met_intron_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_met_intron_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showcigar no --showvulgar no --bestn 1 --refine full")
-        self.assertEqual(alignments.hostname, "RBGs-MacBook-Air.local")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 1 --refine full")
+        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
         self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
-        self.assertEqual(alignment.score, 1958)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.score, 1978)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1420, 1198,
-                        1196, 1058,  925,  388],
-                       [  48,   85,   85,  118,  118,  155,  155,  257,  257,
-                         257,  303,  303,  482]])
+                numpy.array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1421,
+                              1198, 1058,  925,  388],
+                             [  48,   85,   85,  118,  118,  155,  155,  256,
+                               256,  303,  303,  482]])
+
             )
         )
         with self.assertRaises(StopIteration):
@@ -2293,19 +2278,24 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.query.id, "Morus-gene001")
         self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
         self.assertEqual(alignment.score, 1978)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1420, 1198,
-                        1196, 1058,  925,  388],
-                       [  48,   85,   85,  118,  118,  155,  155,  257,  257,
-                         257,  303,  303,  482]])
+                numpy.array([[2392, 2281, 2279, 2131, 2129, 2030, 2028, 1923,
+                              1921, 1810, 1808, 1726, 1724, 1421, 1420, 1418,
+                              1200, 1198, 1196, 1058, 1056,  927,  925,  388],
+                             [  48,   85,   85,   85,   85,  118,  118,  118,
+                               118,  155,  155,  155,  155,  256,  256,  256,
+                               256,  256,  257,  303,  303,  303,  303,  482]])
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class Exonerate_none(unittest.TestCase):
 
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
