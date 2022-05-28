@@ -2105,23 +2105,21 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
             next(alignments)
 
 
-class ExonerateTextCases(unittest.TestCase):
+class Exonerate_protein2genome(unittest.TestCase):
 
     def test_exn_22_m_protein2genome_cigar(self):
         """Test parsing exn_22_m_protein2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
         self.assertEqual(alignment.score, 2105)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "Seq('MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQEQQKRENEKGTSTAVSKAAKELPSPNSDENMTVNTSIEVQPHTQENEKVMWNIGSWNAPSLTNSWDSPPGNRTGAVTIGDESINGSEMPDFSLDLVSNDRQTGLEALDYDIHNYFPQHSERLTAEKIDTSACQCEIDQKYLPYETEDDTLFPSVLPLAVGSQCNNICNRKCIGTKPCSNKEIKCDLITSHLLNQKSLASVLPVAASHTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL')", length=409)
-        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2134,24 +2132,23 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({28: 'PKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKD...AFL'}, length=120)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({253991: 'CCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCAAGATTTGGATCCTGAAACT...TTA'}, length=254270)")
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[28, 120],[253991, 254270]])
+            numpy.array_equal( alignment.coordinates,
+                numpy.array([[253991, 254027, 254030, 254270],
+                             [    28,     40,     40,    120]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
         self.assertEqual(alignment.score, 122)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({37: 'RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDF...LQE'}, length=125)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({68450: 'ATAAACAAGATACTGAACAGGGACCCCCAGTTCATGTCGAATTCCAGCTTTCAT...GAA', 84531: 'AATGAGAATGTTCCAGATGACTCTAAGGCAAAGAAAAAGGCTCAAAACAGAGCC...TGT'}, length=84646)")
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates,
-            numpy.array([[   37,    75,    75,    75,   125],
-                         [84646, 84533, 68601, 68600, 68450]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[84646, 84535, 68601, 68450],
+                             [   37,    74,    74,   125]])
             )
         )
         with self.assertRaises(StopIteration):
@@ -2162,16 +2159,14 @@ class ExonerateTextCases(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no")
+        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
         self.assertEqual(alignment.score, 2105)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(alignment.query.seq, "Seq('MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQEQQKRENEKGTSTAVSKAAKELPSPNSDENMTVNTSIEVQPHTQENEKVMWNIGSWNAPSLTNSWDSPPGNRTGAVTIGDESINGSEMPDFSLDLVSNDRQTGLEALDYDIHNYFPQHSERLTAEKIDTSACQCEIDQKYLPYETEDDTLFPSVLPLAVGSQCNNICNRKCIGTKPCSNKEIKCDLITSHLLNQKSLASVLPVAASHTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL')", length=409)
-        self.assertEqual(repr(alignment.target.seq), "Seq({1318045: 'CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGCTTTGACTACTAT...CAT'}, length=1319275)")
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2184,28 +2179,33 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 205)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({28: 'PKRKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKD...AFL'}, length=120)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({253991: 'CCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCAAGATTTGGATCCTGAAACT...TTA'}, length=254270)")
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[28, 120],[253991, 254270]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[253991, 254027, 254030, 254270],
+                             [    28,     40,     40,    120]])
             )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
         self.assertEqual(alignment.score, 122)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({37: 'RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERVELLEQKDAQNKTTTDF...LQE'}, length=125)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({68450: 'ATAAACAAGATACTGAACAGGGACCCCCAGTTCATGTCGAATTCCAGCTTTCAT...GAA', 84531: 'AATGAGAATGTTCCAGATGACTCTAAGGCAAAGAAAAAGGCTCAAAACAGAGCC...TGT'}, length=84646)")
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates,
-            numpy.array([[   37,    75,    75,    75,   125],
-                         [84646, 84533, 68601, 68600, 68450]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[84646, 84535, 84533, 84531, 68603, 68601,
+                              68600, 68450],
+                             [   37,    74,    74,    74,    74,    74,
+                                 75,   125]])
             )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+
+class ExonerateTextCases(unittest.TestCase):
 
     def test_exn_24_m_protein2genome_revcomp_fshifts_cigar(self):
         """Test parsing exn_24_m_protein2genome_revcomp_fshifts_cigar.exn."""
@@ -2220,8 +2220,6 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 1308)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({69: 'PESPWTCSPLQTPSPSLLYHCIASLHRHDGTIHSIAVSNGVVFTGSDSRRIRAW...DEE'}, length=441)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({331: 'TTCTTGATCAGGCAAGATTTTGACTCTCCAGACCTTCAAAGTCTGGTCCAAGCT...TGG'}, length=1416)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2247,8 +2245,6 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 1308)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({69: 'PESPWTCSPLQTPSPSLLYHCIASLHRHDGTIHSIAVSNGVVFTGSDSRRIRAW...DEE'}, length=441)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({331: 'TTCTTGATCAGGCAAGATTTTGACTCTCCAGACCTTCAAAGTCTGGTCCAAGCT...TGG'}, length=1416)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2274,8 +2270,6 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 1958)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({48: 'MVQTPLHVSAGNNRADIVKFLLEFPGPEKVELEAKNMYGETPLHMAAKNGCNDA...SQ*'}, length=482)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({388: 'TCATTGCGTCAAAAGCTGAATTCCTGCTTCTAAATCCTCTAGGGTAATTGTACA...TCT', 1056: 'ACCTTCCTCCTAGTTTTTGGTCCAGTATGACCAACAAATTCCCCAACCAAATCA...CCT', 1418: 'ACCTGTTCCAGGGTTGCCAAGGAAGGCCATATGAGGCGGTCTTCGGGTACCAAC...CCT', 1808: 'ACATTGTCCTCTGCACTGCAATCAGCATTGTACTCGAGCAATGTCTTTACAGTT...TCT', 2028: 'ACATTTGCTTTGGCTTCAATAAAAGCACCATGAGCAAGAAGCACCCGAGCAGCA...ACT', 2279: 'ACCATGTTCTTGGCTTCCAACTCAACCTTCTCTGGCCCTGGAAACTCAAGAAGA...CAT'}, length=2392)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2301,8 +2295,6 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(alignment.score, 1978)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(repr(alignment.query.seq), "Seq({48: 'MVQTPLHVSAGNNRADIVKFLLEFPGPEKVELEAKNMYGETPLHMAAKNGCNDA...SQ*'}, length=482)")
-        self.assertEqual(repr(alignment.target.seq), "Seq({388: 'TCATTGCGTCAAAAGCTGAATTCCTGCTTCTAAATCCTCTAGGGTAATTGTACA...TCT', 1056: 'ACCTTCCTCCTAGTTTTTGGTCCAGTATGACCAACAAATTCCCCAACCAAATCA...CCT', 1418: 'ACCTGTTCCAGGGTTGCCAAGGAAGGCCATATGAGGCGGTCTTCGGGTACCAAC...CCT', 1808: 'ACATTGTCCTCTGCACTGCAATCAGCATTGTACTCGAGCAATGTCTTTACAGTT...TCT', 2028: 'ACATTTGCTTTGGCTTCAATAAAAGCACCATGAGCAAGAAGCACCCGAGCAGCA...ACT', 2279: 'ACCATGTTCTTGGCTTCCAACTCAACCTTCTCTGGCCCTGGAAACTCAAGAAGA...CAT'}, length=2392)")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
