@@ -26,13 +26,15 @@ except ImportError:
 
 
 class Exonerate_est2genome(unittest.TestCase):
-
     def test_exn_22_m_est2genome_cigar(self):
         """Test parsing exn_22_m_est2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -115,7 +117,10 @@ class Exonerate_est2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -199,13 +204,15 @@ class Exonerate_est2genome(unittest.TestCase):
 
 
 class Exonerate_affine_local(unittest.TestCase):
-
     def test_exn_22_m_affine_local_cigar(self):
         """Test parsing exn_22_m_affine_local_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_affine_local_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -290,7 +297,10 @@ class Exonerate_affine_local(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_affine_local_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -344,13 +354,15 @@ class Exonerate_affine_local(unittest.TestCase):
 
 
 class Exonerate_cdna2genome(unittest.TestCase):
-
     def test_exn_22_m_cdna2genome_cigar(self):
         """Test parsing exn_22_m_cdna2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -428,7 +440,10 @@ class Exonerate_cdna2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -507,13 +522,15 @@ class Exonerate_cdna2genome(unittest.TestCase):
 
 
 class Exonerate_coding2coding(unittest.TestCase):
-
     def test_exn_22_m_coding2coding_cigar(self):
         """Test parsing exn_22_m_coding2coding_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -561,7 +578,10 @@ class Exonerate_coding2coding(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -606,13 +626,15 @@ class Exonerate_coding2coding(unittest.TestCase):
 
 
 class Exonerate_coding2genome(unittest.TestCase):
-
     def test_exn_22_m_coding2genome_cigar(self):
         """Test parsing exn_22_m_coding2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -663,7 +685,10 @@ class Exonerate_coding2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -711,13 +736,15 @@ class Exonerate_coding2genome(unittest.TestCase):
 
 
 class Exonerate_dna2protein(unittest.TestCase):
-
     def test_exn_22_m_dna2protein_cigar(self):
         """Test parsing exn_22_m_dna2protein_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_dna2protein_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate --showcigar yes --showvulgar no --showalignment no nuc2.fa pro.fa")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate --showcigar yes --showvulgar no --showalignment no nuc2.fa pro.fa",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "dna")
@@ -726,9 +753,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[313, 344], [0, 93]])
-            )
+            numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -738,7 +763,10 @@ class Exonerate_dna2protein(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_dna2protein_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate --showcigar no --showvulgar yes --showalignment no nuc2.fa pro.fa")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate --showcigar no --showvulgar yes --showalignment no nuc2.fa pro.fa",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "dna")
@@ -747,22 +775,22 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[313, 344], [0, 93]])
-            )
+            numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
         )
         with self.assertRaises(StopIteration):
             next(alignments)
 
 
 class Exonerate_genome2genome(unittest.TestCase):
-
     def test_exn_22_m_genome2genome_cigar(self):
         """Test parsing exn_22_o_vulgar_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
@@ -982,7 +1010,10 @@ class Exonerate_genome2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
@@ -1009,8 +1040,7 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                 numpy.array([[1319468, 1319558, 1319561, 1319997],
-                              [      0,      90,      93,     529]])
+                numpy.array([[1319468, 1319558, 1319561, 1319997], [0, 90, 93, 529]]),
             )
         )
         alignment = next(alignments)
@@ -1094,13 +1124,15 @@ class Exonerate_genome2genome(unittest.TestCase):
 
 
 class Exonerate_ungapped(unittest.TestCase):
-
     def test_exn_22_m_ungapped_cigar(self):
         """Test parsing exn_22_m_ungapped_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1143,7 +1175,10 @@ class Exonerate_ungapped(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1183,13 +1218,15 @@ class Exonerate_ungapped(unittest.TestCase):
 
 
 class Exonerate_ungapped_trans(unittest.TestCase):
-
     def test_exn_22_m_ungapped_trans_cigar(self):
         """Test parsing exn_22_m_ungapped_trans_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_trans_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1232,7 +1269,10 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_trans_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1272,13 +1312,15 @@ class Exonerate_ungapped_trans(unittest.TestCase):
 
 
 class Exonerate_ner(unittest.TestCase):
-
     def test_exn_22_m_ner_cigar(self):
         """Test parsing exonerate output (exn_22_m_ner_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1419,7 +1461,10 @@ class Exonerate_ner(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1523,13 +1568,15 @@ class Exonerate_ner(unittest.TestCase):
 
 
 class Exonerate_multiple(unittest.TestCase):
-
     def test_exn_22_q_multiple_cigar(self):
         """Test parsing exn_22_q_multiple_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_q_multiple_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
@@ -1701,7 +1748,10 @@ class Exonerate_multiple(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_q_multiple_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
@@ -1876,13 +1926,15 @@ class Exonerate_multiple(unittest.TestCase):
 
 
 class Exonerate_coding2coding_fshifts(unittest.TestCase):
-
     def test_exn_22_m_coding2coding_fshifts_cigar(self):
         """Test parsing exn_22_m_cigar_fshifts.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_cigar_fshifts.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showcigar yes --showvulgar no --showalignment no --bestn 3")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showcigar yes --showvulgar no --showalignment no --bestn 3",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1924,7 +1976,10 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar yes --showalignment no --bestn 3")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar yes --showalignment no --bestn 3",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
@@ -1963,13 +2018,15 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
 
 
 class Exonerate_protein2dna(unittest.TestCase):
-
     def test_exn_22_m_protein2dna_cigar(self):
         """Test parsing exonerate output (exn_22_m_protein2dna_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -1979,8 +2036,7 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[1319275, 1318048], [0, 409]])
+                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
@@ -1990,9 +2046,9 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates,
-                numpy.array([[253991, 254027, 254030, 254270],
-                             [    28,     40,     40,    120]])
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[253991, 254027, 254030, 254270], [28, 40, 40, 120]]),
             )
         )
         alignment = next(alignments)
@@ -2004,8 +2060,7 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[255638, 255743, 255743, 255794],
-                             [   355,    390,    391,    408]])
+                numpy.array([[255638, 255743, 255743, 255794], [355, 390, 391, 408]]),
             )
         )
         with self.assertRaises(StopIteration):
@@ -2016,7 +2071,10 @@ class Exonerate_protein2dna(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2026,8 +2084,7 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[1319275, 1318048], [0, 409]])
+                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
@@ -2067,13 +2124,15 @@ class Exonerate_protein2dna(unittest.TestCase):
 
 
 class Exonerate_protein2dna_fshifts(unittest.TestCase):
-
     def test_exn_22_m_protein2dna_fshifts_cigar(self):
         """Test parsing exonerate output (exn_22_o_cigar_fshifts2.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_cigar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showcigar yes --showvulgar no --showalignment no --bestn 3")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showcigar yes --showvulgar no --showalignment no --bestn 3",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2084,7 +2143,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]])
+                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
         alignment = next(alignments)
@@ -2094,8 +2153,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[16, 208], [6, 70]])
-            )
+            numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -2105,7 +2163,10 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar yes --showalignment no --bestn 3")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar yes --showalignment no --bestn 3",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2116,7 +2177,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]])
+                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
         alignment = next(alignments)
@@ -2126,21 +2187,22 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates, numpy.array([[16, 208], [6, 70]])
-            )
+            numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
         )
         with self.assertRaises(StopIteration):
             next(alignments)
 
 
 class Exonerate_protein2genome(unittest.TestCase):
-
     def test_exn_22_m_protein2genome_cigar(self):
         """Test parsing exn_22_m_protein2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2150,8 +2212,7 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[1319275, 1318048], [0, 409]])
+                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
@@ -2161,7 +2222,8 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal( alignment.coordinates,
+            numpy.array_equal(
+                alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[253991, 254027, 254030, 254270],
@@ -2193,7 +2255,10 @@ class Exonerate_protein2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
@@ -2203,8 +2268,7 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates,
-                numpy.array([[1319275, 1318048], [0, 409]])
+                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
         alignment = next(alignments)
@@ -2246,13 +2310,17 @@ class Exonerate_protein2genome(unittest.TestCase):
 
 
 class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
-
     def test_exn_24_m_protein2genome_revcomp_fshifts_cigar(self):
         """Test parsing exn_24_m_protein2genome_revcomp_fshifts_cigar.exn."""
-        exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_cigar.exn")
+        exn_file = os.path.join(
+            "Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_cigar.exn"
+        )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 2 --refine full")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 2 --refine full",
+        )
         self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
@@ -2277,10 +2345,15 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
 
     def test_exn_24_m_protein2genome_revcomp_fshifts_vulgar(self):
         """Test parsing exn_24_m_protein2genome_revcomp_fshifts_vulgar.exn."""
-        exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_vulgar.exn")
+        exn_file = os.path.join(
+            "Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_vulgar.exn"
+        )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 2 --refine full")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 2 --refine full",
+        )
         self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
@@ -2305,13 +2378,17 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
 
 
 class Exonerate_protein2genome_met_intron(unittest.TestCase):
-
     def test_exn_24_protein2genome_met_intron_cigar(self):
         """Test parsing exn_24_m_protein2genome_met_intron_cigar.exn."""
-        exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_met_intron_cigar.exn")
+        exn_file = os.path.join(
+            "Exonerate", "exn_24_m_protein2genome_met_intron_cigar.exn"
+        )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 1 --refine full")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 1 --refine full",
+        )
         self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
@@ -2336,10 +2413,15 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
 
     def test_exn_24_protein2genome_met_intron_vulgar(self):
         """Test parsing exn_24_m_protein2genome_met_intron_vulgar.exn."""
-        exn_file = os.path.join("Exonerate", "exn_24_m_protein2genome_met_intron_vulgar.exn")
+        exn_file = os.path.join(
+            "Exonerate", "exn_24_m_protein2genome_met_intron_vulgar.exn"
+        )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 1 --refine full")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 1 --refine full",
+        )
         self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
@@ -2366,13 +2448,15 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
 
 
 class Exonerate_none(unittest.TestCase):
-
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_q_none.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.assertEqual(alignments.program, "exonerate")
-        self.assertEqual(alignments.commandline, "exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes")
+        self.assertEqual(
+            alignments.commandline,
+            "exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes",
+        )
         self.assertEqual(alignments.hostname, "blackbriar")
         self.assertRaises(StopIteration, next, alignments)
 
