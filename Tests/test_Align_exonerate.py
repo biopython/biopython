@@ -993,8 +993,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2036,8 +2039,11 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2049,8 +2055,11 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[255638, 255743, 255743, 255794],
                              [   355,    390,    391,    408]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2153,8 +2162,11 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
             numpy.array_equal( alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2166,8 +2178,11 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[84646, 84535, 68601, 68450],
                              [   37,    74,    74,   125]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2201,8 +2216,11 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2214,10 +2232,13 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[84646, 84535, 84533, 84531, 68603, 68601,
                               68600, 68450],
                              [   37,    74,    74,    74,    74,    74,
                                  75,   125]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2242,10 +2263,13 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                                744,  450,  450,  448,  331],
                              [  69,   81,   81,  164,  169,  195,  196,  297,
                                300,  398,  402,  402,  441]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2267,10 +2291,13 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                                744,  450,  450, 448,  331],
                              [  69,   81,   81,  164,  169,  195,  196,  297,
                                300,  398,  402, 402,  441]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2295,11 +2322,13 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1421,
                               1198, 1058,  925,  388],
                              [  48,   85,   85,  118,  118,  155,  155,  256,
                                256,  303,  303,  482]])
-
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
@@ -2321,12 +2350,15 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array([[2392, 2281, 2279, 2131, 2129, 2030, 2028, 1923,
                               1921, 1810, 1808, 1726, 1724, 1421, 1420, 1418,
                               1200, 1198, 1196, 1058, 1056,  927,  925,  388],
                              [  48,   85,   85,   85,   85,  118,  118,  118,
                                118,  155,  155,  155,  155,  256,  256,  256,
                                256,  256,  257,  303,  303,  303,  303,  482]])
+                # fmt: on
             )
         )
         with self.assertRaises(StopIteration):
