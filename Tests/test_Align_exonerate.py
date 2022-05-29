@@ -133,6 +133,7 @@ class Exonerate_est2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -165,6 +166,7 @@ class Exonerate_est2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGM5N3MGMGMGMGMGM5N3MGMGMGMGMGMGMGMGM5N3MGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -199,6 +201,7 @@ class Exonerate_est2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGMGMGMGMGM3N5MGMGMGMGMGMGM3N5MGMGMGMGMGMGMGMGM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -311,6 +314,7 @@ class Exonerate_affine_local(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -345,10 +349,40 @@ class Exonerate_affine_local(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
         self.assertEqual(alignment.score, 219)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[454073, 454087, 454087, 454094, 454094, 454097,
+                              454097, 454109, 454110, 454133, 454134, 454150,
+                              454150, 454167, 454169, 454175, 454176, 454183,
+                              454184, 454192, 454192, 454204, 454205, 454208,
+                              454209, 454223, 454224, 454234, 454235, 454255,
+                              454256, 454275, 454277, 454286, 454286, 454294,
+                              454294, 454335, 454335, 454377, 454378, 454386,
+                              454389, 454390, 454391, 454417, 454417, 454428,
+                              454428, 454440, 454441, 454459, 454460, 454478,
+                              454479, 454493, 454494, 454524, 454524, 454531],
+                             [    60,     74,     75,     82,     83,     86,
+                                  87,     99,     99,    122,    122,    138,
+                                 140,    157,    157,    163,    163,    170,
+                                 170,    178,    179,    191,    191,    194,
+                                 194,    208,    208,    218,    218,    238,
+                                 238,    257,    257,    266,    271,    279,
+                                 280,    321,    324,    366,    366,    374,
+                                 374,    375,    375,    401,    403,    414,
+                                 417,    429,    429,    447,    447,    465,
+                                 465,    479,    479,    509,    510,    517]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(alignment.operations, bytearray(b"MGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -461,6 +495,7 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -477,6 +512,7 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -517,6 +553,7 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGM5N3MGMGMGMGMGM5N3MGMGMGMGMGMGMGMGM5N3MGM5N3MGMGMGMGMCMGMGMGMGM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -594,6 +631,7 @@ class Exonerate_coding2coding(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -605,6 +643,7 @@ class Exonerate_coding2coding(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -621,6 +660,7 @@ class Exonerate_coding2coding(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"CGC"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -704,6 +744,7 @@ class Exonerate_coding2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -715,6 +756,7 @@ class Exonerate_coding2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -731,6 +773,7 @@ class Exonerate_coding2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"CGC"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -777,6 +820,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -824,6 +868,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -856,6 +901,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -918,6 +964,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'M5N3MGMGM5N3MGMGMGMGMS5N3SCMGM5N3MGMGMGMGMGMGMGMGMGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1002,6 +1049,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGM5NNN3MGMGMGMGMGM5NN3MGMGMGMGMCS5N3SCMGM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MGM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1031,6 +1079,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1043,6 +1092,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 numpy.array([[1319468, 1319558, 1319561, 1319997], [0, 90, 93, 529]]),
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1075,6 +1125,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'M5N3MGMGM5N3MGMGMGMGMS5N3SCMGM5N3MGMGMGMGMGMGMGMGMGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1119,6 +1170,7 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGM5NNN3MGMGMGMGMGM5NN3MGMGMGMGMCS5N3SCMGM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MGM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1191,6 +1243,7 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1202,6 +1255,7 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[254031, 254146], [121, 236]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1213,6 +1267,7 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[255671, 255739], [1098, 1166]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1285,6 +1340,7 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1296,6 +1352,7 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1307,6 +1364,7 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318045, 1319275], [1230, 0]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"C"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1477,6 +1535,7 @@ class Exonerate_ner(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -1523,6 +1582,7 @@ class Exonerate_ner(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MRMRMRMGMRMGMGMRMRMRMRMGMGMGMRMRMRMGMRMGMRMRMRMRMGMRMRMRMRMGMRMRMRMGMRMGMGMRMRMRMGMRMRMRMRMRM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1563,6 +1623,7 @@ class Exonerate_ner(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MRMRMRMRMRMRMGMGMGMRMRMGMGMRMGMRMRMGMRMRMRMRMRMGMGMGMGMRMRMRMGMRMRMGMRMRM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1764,6 +1825,7 @@ class Exonerate_multiple(unittest.TestCase):
                 alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -1802,6 +1864,7 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1844,6 +1907,7 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGMGM3N5MGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1855,6 +1919,7 @@ class Exonerate_multiple(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1887,6 +1952,7 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGM5N3MGMGMGMGMGM5N3MGMGMGMGMGMGMGMGM5N3MGM'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1921,6 +1987,7 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MGMGMGMGMGMGMGMGMGM3N5MGMGMGMGMGMGM3N5MGMGMGMGMGMGMGMGM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1997,6 +2064,7 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'CFCFCFC'))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2013,6 +2081,7 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'CGCFC'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2087,6 +2156,7 @@ class Exonerate_protein2dna(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2103,6 +2173,7 @@ class Exonerate_protein2dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MGM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2119,6 +2190,7 @@ class Exonerate_protein2dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MGM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2180,6 +2252,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
                 numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MFM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2189,6 +2262,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2271,6 +2345,7 @@ class Exonerate_protein2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2287,6 +2362,7 @@ class Exonerate_protein2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MGM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -2305,6 +2381,7 @@ class Exonerate_protein2genome(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b'MS5N3SM'))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2373,6 +2450,7 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"MGMGMGMGMGFM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2443,6 +2521,7 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(alignment.operations, bytearray(b"M5N3M5N3M5N3MS5N3SM5N3M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
