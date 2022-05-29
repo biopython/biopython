@@ -430,12 +430,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif operation == "5":  # 5' splice site
                 pass
             elif operation == "I":  # Intron
-                operation = "N"  # use SAM/BAM definitions of operations
+                # use SAM/BAM definitions of operations:
+                operation = "N"
             elif operation == "3":  # 3' splice site
                 pass
             elif operation == "C":  # Codon
                 pass
             elif operation == "G":  # Gap
+                # use SAM/BAM definitions of operations:
                 if query_step == 0:
                     operation = "D"  # Deletion
                 elif target_step == 0:
