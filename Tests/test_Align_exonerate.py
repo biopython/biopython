@@ -6,6 +6,7 @@
 """Tests for Bio.Align Exonerate parsers."""
 
 import os
+import io
 import unittest
 import warnings
 
@@ -30,6 +31,14 @@ class Exonerate_est2genome(unittest.TestCase):
         """Test parsing exn_22_m_est2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
@@ -119,6 +128,14 @@ class Exonerate_est2genome(unittest.TestCase):
         """Test parsing exn_22_m_est2genome_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -224,6 +241,14 @@ class Exonerate_affine_local(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_affine_local_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -314,6 +339,14 @@ class Exonerate_affine_local(unittest.TestCase):
         """Test parsing exn_22_m_affine_local_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_affine_local_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -419,6 +452,14 @@ class Exonerate_cdna2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -502,6 +543,14 @@ class Exonerate_cdna2genome(unittest.TestCase):
         """Test parsing exn_22_m_cdna2genome_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_cdna2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -601,6 +650,14 @@ class Exonerate_coding2coding(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -654,6 +711,14 @@ class Exonerate_coding2coding(unittest.TestCase):
         """Test parsing exn_22_m_coding2coding_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2coding_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -714,6 +779,14 @@ class Exonerate_coding2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -770,6 +843,14 @@ class Exonerate_coding2genome(unittest.TestCase):
         """Test parsing exn_22_m_coding2genome_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_coding2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -833,6 +914,14 @@ class Exonerate_dna2protein(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_dna2protein_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -857,6 +946,14 @@ class Exonerate_dna2protein(unittest.TestCase):
         """Test parsing exn_22_m_dna2protein_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_dna2protein_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -885,6 +982,14 @@ class Exonerate_genome2genome(unittest.TestCase):
         """Test parsing exn_22_o_vulgar_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
@@ -1124,6 +1229,14 @@ class Exonerate_genome2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -1258,6 +1371,14 @@ class Exonerate_ungapped(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -1306,6 +1427,14 @@ class Exonerate_ungapped(unittest.TestCase):
         """Test parsing exn_22_m_ungapped_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -1361,6 +1490,14 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_trans_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -1409,6 +1546,14 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         """Test parsing exn_22_m_ungapped_trans_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ungapped_trans_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -1463,6 +1608,14 @@ class Exonerate_ner(unittest.TestCase):
         """Test parsing exonerate output (exn_22_m_ner_cigar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
@@ -1611,6 +1764,14 @@ class Exonerate_ner(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_ner_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -1738,6 +1899,14 @@ class Exonerate_multiple(unittest.TestCase):
         """Test parsing exn_22_q_multiple_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_q_multiple_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
@@ -1916,6 +2085,14 @@ class Exonerate_multiple(unittest.TestCase):
         """Test parsing exn_22_q_multiple_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_q_multiple_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2125,6 +2302,14 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_cigar_fshifts.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -2172,6 +2357,14 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         """Test parsing exn_22_o_vulgar_fshifts.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2225,6 +2418,14 @@ class Exonerate_protein2dna(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -2275,6 +2476,14 @@ class Exonerate_protein2dna(unittest.TestCase):
         """Test parsing exonerate output (exn_22_m_protein2dna_vulgar.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2dna_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2340,6 +2549,14 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_o_cigar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -2376,6 +2593,14 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         """Test parsing exonerate output (exn_22_o_vulgar_fshifts2.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_o_vulgar_fshifts2.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2417,6 +2642,14 @@ class Exonerate_protein2genome(unittest.TestCase):
         """Test parsing exn_22_m_protein2genome_cigar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_cigar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
@@ -2476,6 +2709,14 @@ class Exonerate_protein2genome(unittest.TestCase):
         """Test parsing exn_22_m_protein2genome_vulgar.exn."""
         exn_file = os.path.join("Exonerate", "exn_22_m_protein2genome_vulgar.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2545,6 +2786,14 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -2580,6 +2829,14 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
             "Exonerate", "exn_24_m_protein2genome_revcomp_fshifts_vulgar.exn"
         )
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
@@ -2620,6 +2877,14 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         )
         alignments = exonerate.AlignmentIterator(exn_file)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -2655,6 +2920,14 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
             "Exonerate", "exn_24_m_protein2genome_met_intron_vulgar.exn"
         )
         alignments = exonerate.AlignmentIterator(exn_file)
+        self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments):
