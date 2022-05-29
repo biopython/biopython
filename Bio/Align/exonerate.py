@@ -436,7 +436,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif operation == "C":  # Codon
                 pass
             elif operation == "G":  # Gap
-                pass
+                if query_step == 0:
+                    operation = "D"  # Deletion
+                elif target_step == 0:
+                    operation = "I"  # Insertion
+                else:
+                    raise ValueError("Unexpected gap operation with steps %d, %d in vulgar line" % (query_step, target_step))
             elif operation == "N":  # Non-equivalenced region
                 operation = "R"  # 'N' is alread used for introns in SAM/BAM
             elif operation == "S":  # Split codon
