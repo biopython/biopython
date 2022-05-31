@@ -109,10 +109,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             target_id = "target"
         try:
-            molecule_type = target.annotations["molecule_type"]
+            target_molecule_type = target.annotations["molecule_type"]
         except (AttributeError, KeyError):
-            molecule_type = None
-        if molecule_type == "protein":
+            target_molecule_type = None
+        if target_molecule_type == "protein":
             target_strand = "."
         elif target_start <= target_end:
             target_strand = "+"
@@ -120,10 +120,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target_strand = "-"
             steps[0, :] = - steps[0, :]
         try:
-            molecule_type = query.annotations["molecule_type"]
+            query_molecule_type = query.annotations["molecule_type"]
         except (AttributeError, KeyError):
-            molecule_type = None
-        if molecule_type == "protein":
+            query_molecule_type = None
+        if query_molecule_type == "protein":
             query_strand = "."
         elif query_start <= query_end:
             query_strand = "+"
@@ -150,6 +150,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 if target_step == query_step:
                     operation = "M"
                     step = target_step
+                elif target_step == 3 * query_step:
+                    operation = "M"
+                    step = target_step
+                    assert target_molecule_type != "protein"
+                    assert query_molecule_type == "protein"
+                elif query_step == 3 * target_step:
+                    operation = "M"
+                    step = query_step
+                    assert target_molecule_type == "protein"
+                    assert query_molecule_type != "protein"
                 elif query_step == 0:
                     operation = "D"  # Deletion
                     step = target_step
@@ -157,27 +167,56 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     operation = "I"  # Insertion
                     step = query_step
                 else:
-                    raise ValueError("Unknown operation %s" % operation)
+                    raise ValueError("Unexpected step target %d, query %d for molecule type %s" % (target_step, query_step, target_molecule_type))
                 words.append(operation)
                 words.append(str(step))
         else:
             for step, operation in zip(steps.transpose(), operations.decode()):
                 target_step, query_step = step
                 if operation == "M":
-                    assert target_step == query_step
-                    step = target_step
+                    if target_step == query_step:
+                        step = target_step
+                    elif target_step == 3 * query_step:
+                        step = target_step
+                        assert query_molecule_type == "protein"
+                        assert target_molecule_type != "protein"
+                    elif query_step == 3 * target_step:
+                        step = query_step
+                        assert query_molecule_type != "protein"
+                        assert target_molecule_type == "protein"
+                    else:
+                        raise ValueError("Unexpected steps target %d, query %s for operation 'M'")
                 elif operation == "5":  # 5' splice site
-                    assert query_step == 0
-                    step = target_step
-                    operation = "D"
+                    if query_step == 0:
+                        step = target_step
+                        operation = "D"
+                    elif target_step == 0:
+                        step = query_step
+                        operation = "I"
+                    else:
+                        assert query_step == target_step
+                        step = target_step
+                        operation = "M"
                 elif operation == "N":  # Intron
-                    assert query_step == 0
-                    step = target_step
-                    operation = "D"
+                    if query_step == 0:
+                        step = target_step
+                        operation = "D"
+                    elif target_step == 0:
+                        step = query_step
+                        operation = "I"
+                    else:
+                        raise ValueError("Unexpected intron with steps target %d, query %d" % (target_step, query_step))
                 elif operation == "3":  # 3' splice site
-                    assert query_step == 0
-                    step = target_step
-                    operation = "D"
+                    if query_step == 0:
+                        step = target_step
+                        operation = "D"
+                    elif target_step == 0:
+                        step = query_step
+                        operation = "I"
+                    else:
+                        assert query_step == target_step
+                        step = target_step
+                        operation = "M"
                 elif operation == "C":  # Codon
                     assert target_step == query_step
                     step = target_step
@@ -190,14 +229,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     assert target_step == 0
                     step = query_step
                 elif operation == "U":  # Non-equivalenced (unaligned) region
-                    if target_step == 0:
-                        step = query_step
-                    elif query_step == 0:
-                        step = target_step
-                    else:
-                        raise ValueError("Non-equivalenced region with non-zero target and query step")
-                    assert step > 0
-                    operation = "M"
+                    if target_step > 0:
+                        operation = "D"
+                        words.append(operation)
+                        words.append(str(target_step))
+                    if query_step > 0:
+                        operation = "I"
+                        words.append(operation)
+                        words.append(str(query_step))
+                    continue
                 elif operation == "S":  # Split codon
                     assert target_step == query_step
                     step = target_step
@@ -234,10 +274,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             target_id = "target"
         try:
-            molecule_type = target.annotations["molecule_type"]
+            target_molecule_type = target.annotations["molecule_type"]
         except (AttributeError, KeyError):
-            molecule_type = None
-        if molecule_type == "protein":
+            target_molecule_type = None
+        if target_molecule_type == "protein":
             target_strand = "."
         elif target_start <= target_end:
             target_strand = "+"
@@ -245,10 +285,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target_strand = "-"
             steps[0, :] = - steps[0, :]
         try:
-            molecule_type = query.annotations["molecule_type"]
+            query_molecule_type = query.annotations["molecule_type"]
         except (AttributeError, KeyError):
-            molecule_type = None
-        if molecule_type == "protein":
+            query_molecule_type = None
+        if query_molecule_type == "protein":
             query_strand = "."
         elif query_start <= query_end:
             query_strand = "+"
@@ -274,28 +314,47 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 target_step, query_step = step
                 if target_step == query_step:
                     operation = "M"
+                elif target_step == 3 * query_step:
+                    assert query_molecule_type == "protein"
+                    operation = "M"
+                elif query_step == 3 * target_step:
+                    assert target_molecule_type == "protein"
+                    operation = "M"
                 elif query_step == 0:
                     operation = "G"  # Gap; exonerate definition
                 elif target_step == 0:
-                    operation = "I"  # Gap; exonerate definition
+                    operation = "G"  # Gap; exonerate definition
                 else:
                     raise ValueError("Both target and query step are zero")
-                    raise ValueError("Unknown operation %s" % operation)
                 words.append(operation)
                 words.append(str(query_step))
                 words.append(str(target_step))
         else:
-            for step, operation in zip(steps.transpose(), operations.decode()):
-                target_step, query_step = step
+            steps = steps.transpose()
+            operations = operations.decode()
+            n = len(operations)
+            i = 0
+            while i < n:
+                target_step, query_step = steps[i]
+                operation = operations[i]
                 if operation == "M":
-                    assert target_step == query_step
+                    if target_step == query_step:
+                        pass
+                    elif target_step == 3 * query_step:
+                        assert query_molecule_type == "protein"
+                        assert target_molecule_type != "protein"
+                    elif query_step == 3 * target_step:
+                        assert query_molecule_type != "protein"
+                        assert target_molecule_type == "protein"
+                    else:
+                        raise ValueError("Unexpected steps target %d, query %s for operation 'M'")
                 elif operation == "5":  # 5' splice site
-                    assert query_step == 0
+                    assert target_step == 2 or query_step == 2
                 elif operation == "N":  # Intron
-                    assert query_step == 0
                     operation = "I"  # Intron; exonerate definition
+                    assert query_step == 0 or target_step == 0
                 elif operation == "3":  # 3' splice site
-                    assert query_step == 0
+                    assert target_step == 2 or query_step == 2
                 elif operation == "C":  # Codon
                     assert target_step == query_step
                 elif operation == "D":  # Deletion
@@ -305,8 +364,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     assert target_step == 0
                     operation = "G"  # Gap; exonerate definition
                 elif operation == "U":  # Non-equivalenced (unaligned) region
-                    assert target_step > 0
-                    assert query_step > 0
+                    if target_step == 0:
+                        assert query_step > 0
+                        i += 1
+                        target_step, dummy = steps[i]
+                        assert dummy == 0
+                    if query_step == 0:
+                        assert target_step > 0
+                        i += 1
+                        dummy, query_step = steps[i]
+                        assert dummy == 0
+                    operation = operations[i]
+                    assert operation == "U"
+                    operation = "N"  # Non-equivalenced region; exonerate definition
                 elif operation == "S":  # Split codon
                     step = target_step
                 elif operation == "F":  # Frame shift
@@ -316,6 +386,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 words.append(operation)
                 words.append(str(query_step))
                 words.append(str(target_step))
+                i += 1
         line = " ".join(words) + "\n"
         return line
 
@@ -368,10 +439,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_seq = Seq(None, length=query_end)
         target = SeqRecord(target_seq, id=target_id)
         query = SeqRecord(query_seq, id=query_id)
-        if target_strand == ".":
-            target.annotations["molecule_type"] = "protein"
-        if query_strand == ".":
-            query.annotations["molecule_type"] = "protein"
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
@@ -406,6 +473,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # dna to protein alignment; integer division, but round up:
                 coordinates[0, :] = (coordinates[0, :] + 2 ) // 3
             coordinates[0, :] += target_start
+            target.annotations["molecule_type"] = "protein"
         if query_strand == "+":
             coordinates[1, :] += query_start
         elif query_strand == "-":
@@ -415,6 +483,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # protein to dna alignment; integer division, but round up:
                 coordinates[1, :] = (coordinates[1, :] + 2 ) // 3
             coordinates[1, :] += query_start
+            query.annotations["molecule_type"] = "protein"
         alignment = Alignment([target, query], coordinates)
         alignment.score = score
         return alignment
@@ -434,29 +503,30 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_seq = Seq(None, length=query_end)
         target = SeqRecord(target_seq, id=target_id)
         query = SeqRecord(query_seq, id=query_id)
+        ops = words[9::3]
         qs = 0
         ts = 0
-        n = (len(words) - 8) // 3
+        n = (len(words) - 8) // 3 + ops.count("N")
         coordinates =  numpy.empty((2, n+1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)
-        for i, (operation, query_step, target_step) in enumerate(zip(words[9::3], words[10::3], words[11::3])):
+        i = 0
+        for (operation, query_step, target_step) in zip(ops, words[10::3], words[11::3]):
             query_step = int(query_step)
             target_step = int(target_step)
-            ts += target_step
-            qs += query_step
             if operation == "M":  # Match
                 pass
             elif operation == "5":  # 5' splice site
-                assert query_step == 0
+                assert target_step == 2 or query_step == 2
             elif operation == "I":  # Intron
                 # use SAM/BAM definitions of operations:
                 operation = "N"
             elif operation == "3":  # 3' splice site
-                assert query_step == 0
+                assert target_step == 2 or query_step == 2
             elif operation == "C":  # Codon
-                pass
+                assert target_step % 3 == 0
+                assert query_step % 3 == 0
             elif operation == "G":  # Gap
                 # use SAM/BAM definitions of operations:
                 if query_step == 0:
@@ -467,27 +537,45 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     raise ValueError("Unexpected gap operation with steps %d, %d in vulgar line" % (query_step, target_step))
             elif operation == "N":  # Non-equivalenced (unaligned) region
                 operation = "U"  # 'N' is alread used for introns in SAM/BAM
+                if target_step > 0:
+                    ts += target_step
+                    coordinates[0, i+1] = ts
+                    coordinates[1, i+1] = qs
+                    operations[i] = ord(operation)
+                    i += 1
+                if query_step > 0:
+                    qs += query_step
+                    coordinates[0, i+1] = ts
+                    coordinates[1, i+1] = qs
+                    operations[i] = ord(operation)
+                    i += 1
+                continue
             elif operation == "S":  # Split codon
                 pass
             elif operation == "F":  # Frame shift
                 pass
             else:
                 raise ValueError("Unknown operation %s in vulgar string" % operation)
+            ts += target_step
+            qs += query_step
             coordinates[0, i+1] = ts
             coordinates[1, i+1] = qs
             operations[i] = ord(operation)
+            i += 1
         if target_strand == "+":
             coordinates[0, :] += target_start
         elif target_strand == "-":
             coordinates[0, :] = target_start - coordinates[0, :]
         elif target_strand == ".":  # protein
             coordinates[0, :] += target_start
+            target.annotations["molecule_type"] = "protein"
         if query_strand == "+":
             coordinates[1, :] += query_start
         elif query_strand == "-":
             coordinates[1, :] = query_start - coordinates[1, :]
         elif query_strand == ".":  # protein
             coordinates[1, :] += query_start
+            query.annotations["molecule_type"] = "protein"
         alignment = Alignment([target, query], coordinates)
         alignment.operations = operations
         alignment.score = score

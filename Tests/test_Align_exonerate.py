@@ -1013,7 +1013,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "cigar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 1)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
@@ -1021,7 +1021,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "vulgar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 1)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
@@ -1042,6 +1042,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
         )
+        self.assertEqual(alignment.target.annotations["molecule_type"], "protein")
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1054,7 +1055,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "vulgar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 1)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
@@ -1062,7 +1063,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "cigar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 1)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
@@ -1099,20 +1100,20 @@ class Exonerate_genome2genome(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "cigar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 8)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
-        self.check_cigar(alignments)
+        self.check_cigar(alignments, check_operations=False)
         alignments = exonerate.AlignmentIterator(exn_file)
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "vulgar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 8)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
 
-    def check_cigar(self, alignments):
+    def check_cigar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1357,7 +1358,7 @@ class Exonerate_genome2genome(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "vulgar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 4)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
@@ -1365,7 +1366,7 @@ class Exonerate_genome2genome(unittest.TestCase):
         stream = io.StringIO()
         writer = exonerate.AlignmentWriter(stream, "cigar")
         n = writer.write_file(alignments)
-        self.assertEqual(n, 3)
+        self.assertEqual(n, 4)
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
@@ -1994,38 +1995,48 @@ class Exonerate_ner(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[297910, 297917, 297946, 297957, 297970, 297983,
-                              297992, 297997, 297997, 298004, 298019, 298023,
-                              298024, 298031, 298032, 298038, 298049, 298055,
-                              298065, 298083, 298095, 298107, 298117, 298123,
-                              298123, 298133, 298135, 298139, 298140, 298149,
-                              318437, 318445, 318454, 318460, 318476, 318488,
-                              318488, 318497, 318503, 318523, 318523, 318528,
-                              318565, 318570, 318611, 318624, 318630, 318637,
-                              318639, 318646, 318646, 318654, 318659, 318665,
-                              318681, 318687, 318691, 318699, 318708, 318713,
-                              318713, 318721, 318725, 318734, 318742, 318748,
-                              318755, 318766, 318767, 318772, 318787, 318793,
-                              318793, 318808, 318808, 318821, 318834, 318839,
-                              318851, 318870, 318889, 318893, 318893, 318897,
-                              318913, 318919, 318924, 318933, 318944, 318954,
-                              318959, 318972, 318974, 318994],
-                             [   110,    117,    148,    159,    169,    182,
-                                 184,    189,    190,    197,    227,    231,
-                                 231,    238,    238,    244,    255,    261,
-                                 266,    284,    296,    308,    309,    315,
-                                 316,    326,    326,    330,    330,    339,
-                                 708,    716,    728,    734,    744,    756,
-                                 758,    767,    778,    798,    799,    804,
-                                 816,    821,    832,    845,    889,    896,
-                                 915,    922,    923,    931,    940,    946,
-                                 953,    959,    960,    968,    979,    984,
-                                 985,    993,   1006,   1015,   1016,   1022,
-                                1024,   1035,   1035,   1040,   1047,   1053,
-                                1054,   1069,   1070,   1083,   1092,   1097,
-                                1099,   1118,   1121,   1125,   1126,   1130,
-                                1133,   1139,   1156,   1165,   1167,   1177,
-                                1187,   1200,   1210,   1230]])
+                numpy.array([[297910, 297917, 297946, 297946, 297957, 297970,
+                              297970, 297983, 297992, 297992, 297997, 297997,
+                              298004, 298019, 298019, 298023, 298024, 298031,
+                              298032, 298038, 298049, 298049, 298055, 298065,
+                              298065, 298083, 298095, 298095, 298107, 298117,
+                              298117, 298123, 298123, 298133, 298135, 298139,
+                              298140, 298149, 318437, 318437, 318445, 318454,
+                              318454, 318460, 318476, 318476, 318488, 318488,
+                              318497, 318503, 318503, 318523, 318523, 318528,
+                              318565, 318565, 318570, 318611, 318611, 318624,
+                              318630, 318630, 318637, 318639, 318639, 318646,
+                              318646, 318654, 318659, 318659, 318665, 318681,
+                              318681, 318687, 318691, 318691, 318699, 318708,
+                              318708, 318713, 318713, 318721, 318725, 318725,
+                              318734, 318742, 318742, 318748, 318755, 318755,
+                              318766, 318767, 318772, 318787, 318787, 318793,
+                              318793, 318808, 318808, 318821, 318834, 318834,
+                              318839, 318851, 318851, 318870, 318889, 318889,
+                              318893, 318893, 318897, 318913, 318913, 318919,
+                              318924, 318924, 318933, 318944, 318944, 318954,
+                              318959, 318959, 318972, 318974, 318974, 318994],
+                             [   110,    117,    117,    148,    159,    159,
+                                 169,    182,    182,    184,    189,    190,
+                                 197,    197,    227,    231,    231,    238,
+                                 238,    244,    244,    255,    261,    261,
+                                 266,    284,    284,    296,    308,    308,
+                                 309,    315,    316,    326,    326,    330,
+                                 330,    339,    339,    708,    716,    716,
+                                 728,    734,    734,    744,    756,    758,
+                                 767,    767,    778,    798,    799,    804,
+                                 804,    816,    821,    821,    832,    845,
+                                 845,    889,    896,    896,    915,    922,
+                                 923,    931,    931,    940,    946,    946,
+                                 953,    959,    959,    960,    968,    968,
+                                 979,    984,    985,    993,    993,   1006,
+                                1015,   1015,   1016,   1022,   1022,   1024,
+                                1035,   1035,   1040,   1040,   1047,   1053,
+                                1054,   1069,   1070,   1083,   1083,   1092,
+                                1097,   1097,   1099,   1118,   1118,   1121,
+                                1125,   1126,   1130,   1130,   1133,   1139,
+                                1139,   1156,   1165,   1165,   1167,   1177,
+                                1177,   1187,   1200,   1200,   1210,   1230]])
                 # fmt: on
             )
         )
@@ -2033,7 +2044,7 @@ class Exonerate_ner(unittest.TestCase):
             self.assertEqual(
                 alignment.operations,
                 bytearray(
-                    b"MRMRMRMIMRMDMDMRMRMRMRMIMDMDMRMRMRMIMRMIMRMRMRMRMIMRMRMRMRMIMRMRMRMDMRMIMIMRMRMRMIMRMRMRMRMRM"
+                    b'MUUMUUMUUMIMUUMDMDMUUMUUMUUMUUMIMDMDMUUMUUMUUMIMUUMIMUUMUUMUUMUUMIMUUMUUMUUMUUMIMUUMUUMUUMDMUUMIMIMUUMUUMUUMIMUUMUUMUUMUUMUUM',
                 ),
             )
         alignment = next(alignments)
@@ -2047,32 +2058,40 @@ class Exonerate_ner(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183946, 183951, 183977, 183987, 184002, 184030,
-                              184044, 184054, 184066, 184080, 184092, 184107,
+                numpy.array([[183946, 183951, 183977, 183977, 183987, 184002,
+                              184002, 184030, 184044, 184044, 184054, 184066,
+                              184066, 184080, 184092, 184092, 184107, 184111,
                               184111, 184118, 184119, 184125, 184126, 184132,
-                              184132, 184147, 184169, 184178, 184190, 184194,
-                              184196, 184200, 184200, 184209, 184211, 184214,
-                              184214, 184224, 184239, 184251, 184271, 184280,
-                              184280, 184288, 184299, 184304, 184315, 184336,
-                              184346, 184364, 184366, 184377, 184393, 184399,
-                              184399, 184410, 184411, 184415, 184417, 184428,
-                              184428, 184432, 184439, 184449, 184463, 184472,
-                              184485, 184495, 184495, 184513, 184515, 184524,
-                              184542, 184552, 184554, 184562, 184565, 184572,
-                              184578, 184603],
-                             [   509,    514,    537,    547,    567,    595,
-                                 607,    617,    636,    650,    667,    682,
+                              184132, 184147, 184169, 184169, 184178, 184190,
+                              184190, 184194, 184196, 184200, 184200, 184209,
+                              184211, 184211, 184214, 184214, 184224, 184239,
+                              184239, 184251, 184271, 184271, 184280, 184280,
+                              184288, 184299, 184299, 184304, 184315, 184315,
+                              184336, 184346, 184346, 184364, 184366, 184366,
+                              184377, 184393, 184393, 184399, 184399, 184410,
+                              184411, 184415, 184417, 184428, 184428, 184432,
+                              184439, 184439, 184449, 184463, 184463, 184472,
+                              184485, 184485, 184495, 184495, 184513, 184515,
+                              184515, 184524, 184542, 184542, 184552, 184554,
+                              184562, 184565, 184565, 184572, 184578, 184578,
+                              184603],
+                             [   509,    514,    514,    537,    547,    547,
+                                 567,    595,    595,    607,    617,    617,
+                                 636,    650,    650,    667,    682,    682,
                                  683,    690,    690,    696,    696,    702,
-                                 703,    718,    737,    746,    748,    752,
-                                 752,    756,    757,    766,    777,    780,
-                                 781,    791,    797,    809,    815,    824,
-                                 825,    833,    843,    848,    861,    882,
-                                 902,    920,    927,    938,    957,    963,
-                                 964,    975,    975,    979,    979,    990,
-                                 991,    995,   1010,   1020,   1022,   1031,
-                                1050,   1060,   1061,   1079,   1099,   1108,
-                                1122,   1132,   1132,   1140,   1147,   1154,
-                                1167,   1192]])
+                                 703,    718,    718,    737,    746,    746,
+                                 748,    752,    752,    756,    757,    766,
+                                 766,    777,    780,    781,    791,    791,
+                                 797,    809,    809,    815,    824,    825,
+                                 833,    833,    843,    848,    848,    861,
+                                 882,    882,    902,    920,    920,    927,
+                                 938,    938,    957,    963,    964,    975,
+                                 975,    979,    979,    990,    991,    995,
+                                 995,   1010,   1020,   1020,   1022,   1031,
+                                1031,   1050,   1060,   1061,   1079,   1079,
+                                1099,   1108,   1108,   1122,   1132,   1132,
+                                1140,   1140,   1147,   1154,   1154,   1167,
+                                1192]])
                 # fmt: on
             )
         )
@@ -2080,7 +2099,7 @@ class Exonerate_ner(unittest.TestCase):
             self.assertEqual(
                 alignment.operations,
                 bytearray(
-                    b"MRMRMRMRMRMRMDMDMIMRMRMDMIMRMIMRMRMIMRMRMRMRMRMIMDMDMIMRMRMRMIMRMRMDMRMRM"
+                    b"MUUMUUMUUMUUMUUMUUMDMDMIMUUMUUMDMIMUUMIMUUMUUMIMUUMUUMUUMUUMUUMIMDMDMIMUUMUUMUUMIMUUMUUMDMUUMUUM"
                 ),
             )
         with self.assertRaises(StopIteration):
