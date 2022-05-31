@@ -243,6 +243,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """Return a string with a single alignment formatted as one vulgar line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
+        coordinates = alignment.coordinates
+        target_start = coordinates[0, 0]
+        target_end = coordinates[0, -1]
+        query_start = coordinates[1, 0]
+        query_end = coordinates[1, -1]
+        steps = coordinates[:, 1:] - coordinates[:, :-1]
         query = alignment.query
         target = alignment.target
         try:
@@ -263,6 +269,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target_strand = "+"
         elif target_start > target_end:
             target_strand = "-"
+            steps[0, :] = - steps[0, :]
         try:
             molecule_type = query.annotations["molecule_type"]
         except (AttributeError, KeyError):
@@ -273,10 +280,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query_strand = "+"
         elif query_start > query_end:
             query_strand = "-"
-        target_start = coordinates[0, 0]
-        target_end = coordinates[0, -1]
-        query_start = coordinates[1, 0]
-        query_end = coordinates[1, -1]
+            steps[1, :] = - steps[1, :]
+        score = alignment.score
         words = ["vulgar:",
                  query_id,
                  str(query_start),
@@ -288,6 +293,58 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                  target_strand,
                  str(score),
                 ]
+        try:
+            operations = alignment.operations
+        except AttributeError:
+            for step in steps.transpose():
+                target_step, query_step = step
+                if target_step == query_step:
+                    operation = "M"
+                    step = target_step
+                elif query_step == 0:
+                    operation = "D"  # Deletion
+                    step = target_step
+                elif target_step == 0:
+                    operation = "I"  # Insertion
+                    step = query_step
+                else:
+                    raise ValueError("Both target and query step are zero")
+                    raise ValueError("Unknown operation %s" % operation)
+                words.append(operation)
+                words.append(str(step))
+        else:
+            for step, operation in zip(steps.transpose(), operations.decode()):
+                target_step, query_step = step
+                if operation == "M":
+                    assert target_step == query_step
+                elif operation == "5":  # 5' splice site
+                    assert query_step == 0
+                elif operation == "N":  # Intron
+                    assert query_step == 0
+                    operation = "I"  # Intron; exonerate definition
+                elif operation == "3":  # 3' splice site
+                    assert query_step == 0
+                elif operation == "C":  # Codon
+                    assert target_step == query_step
+                elif operation == "D":  # Deletion
+                    assert query_step == 0
+                    operation = "G"  # Gap; exonerate definition
+                elif operation == "I":  # Insertion
+                    assert target_step == 0
+                    operation = "G"  # Gap; exonerate definition
+                elif operation == "U":  # Non-equivalenced (unaligned) region
+                    assert target_step > 0
+                    assert query_step > 0
+                elif operation == "S":  # Split codon
+                    step = target_step
+                elif operation == "F":  # Frame shift
+                    step = target_step
+                else:
+                    raise ValueError("Unknown operation %s" % operation)
+                words.append(operation)
+                words.append(str(query_step))
+                words.append(str(target_step))
+        line = " ".join(words) + "\n"
         return line
 
 
