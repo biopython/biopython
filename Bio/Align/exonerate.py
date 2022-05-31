@@ -51,255 +51,243 @@ warnings.warn(
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
 
-    def __init__(self, target, header=True, mask=None, wildcard="N"):
+    def __init__(self, target, fmt="vulgar"):
         """Create an AlignmentWriter object.
 
         Arguments:
          - target    - output stream or file name
-         - header    - If True (default), write the PSL header consisting of
-                       five lines containing the PSL format version and a
-                       header for each column.
-                       If False, suppress the PSL header, resulting in a simple
-                       tab-delimited file.
-         - mask      - Specify if repeat regions in the target sequence are
-                       masked and should be reported in the `repMatches` field
-                       of the PSL file instead of in the `matches` field.
-                       Acceptable values are
-                       None   : no masking (default);
-                       "lower": masking by lower-case characters;
-                       "upper": masking by upper-case characters.
-         - wildcard  - Report alignments to the wildcard character in the
-                       target or query sequence in the `nCount` field of the
-                       PSL file instead of in the `matches`, `misMatches`, or
-                       `repMatches` fields.
-                       Default value is 'N'.
+         - fmt       - write alignments in the vulgar (Verbose Useful Labelled
+                       Gapped Alignment Report) format (fmt="vulgar") or in
+                       the cigar (Compact Idiosyncratic Gapped Alignment Report)
+                       format (fmt="cigar").
+                       Default value is 'vulgar'.
 
         """
         super().__init__(target, mode="w")
-        self.header = header
-        if wildcard is not None:
-            if mask == "upper":
-                wildcard = ord(wildcard.lower())
-            else:
-                wildcard = ord(wildcard.upper())
-        self.wildcard = wildcard
-        self.mask = mask
+        if fmt == "vulgar":
+            self.format_alignment = self._format_alignment_vulgar
+        elif fmt == "cigar":
+            self.format_alignment = self._format_alignment_cigar
+        else:
+            raise ValueError("argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt)
 
     def write_header(self, alignments):
-        """Write the PSL header."""
-        if not self.header:
-            return
+        """Write the header."""
         try:
-            metadata = alignments.metadata
+            commandline = alignments.commandline
         except AttributeError:
-            version = "3"
-        else:
-            version = metadata.get("version", "3")
-        # fmt: off
-        self.stream.write(
-            f"""\
-psLayout version {version}
+            commandline = ""
+        try:
+            hostname = alignments.hostname
+        except AttributeError:
+            hostname = ""
+        self.stream.write(f"Command line: [{commandline}]\n")
+        self.stream.write(f"Hostname: [{hostname}]\n")
 
-match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
-     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-"""  # noqa: W191, E101
-        )
-        # fmt: on
+    def write_footer(self):
+        """Write the footer."""
+        self.stream.write("-- completed exonerate analysis\n")
 
-    def format_alignment(self, alignment):
-        """Return a string with a single alignment formatted as one PSL line."""
+    def _format_alignment_cigar(self, alignment):
+        """Return a string with a single alignment formatted as a cigar line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
         coordinates = alignment.coordinates
-        if not coordinates.size:  # alignment consists of gaps only
-            return ""
-        target, query = alignment.sequences
+        target_start = coordinates[0, 0]
+        target_end = coordinates[0, -1]
+        query_start = coordinates[1, 0]
+        query_end = coordinates[1, -1]
+        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        query = alignment.query
+        target = alignment.target
         try:
-            qName = query.id
+            query_id = query.id
         except AttributeError:
-            qName = "query"
+            query_id = "query"
         try:
-            query = query.seq
+            target_id = target.id
         except AttributeError:
-            pass
+            target_id = "target"
         try:
-            tName = target.id
-        except AttributeError:
-            tName = "target"
+            molecule_type = target.annotations["molecule_type"]
+        except (AttributeError, KeyError):
+            molecule_type = None
+        if molecule_type == "protein":
+            target_strand = "."
+        elif target_start <= target_end:
+            target_strand = "+"
+        elif target_start > target_end:
+            target_strand = "-"
+            steps[0, :] = - steps[0, :]
         try:
-            target = target.seq
+            molecule_type = query.annotations["molecule_type"]
+        except (AttributeError, KeyError):
+            molecule_type = None
+        if molecule_type == "protein":
+            query_strand = "."
+        elif query_start <= query_end:
+            query_strand = "+"
+        elif query_start > query_end:
+            query_strand = "-"
+            steps[1, :] = - steps[1, :]
+        score = alignment.score
+        words = ["cigar:",
+                 query_id,
+                 str(query_start),
+                 str(query_end),
+                 query_strand,
+                 target_id,
+                 str(target_start),
+                 str(target_end),
+                 target_strand,
+                 str(score),
+                ]
+        try:
+            operations = alignment.operations
         except AttributeError:
-            pass
-        tSize = len(target)
-        qSize = len(query)
-        # fmt: off
-        dnax = None  # set to True for translated DNA aligned to protein,
-                     # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
-        if coordinates[1, 0] > coordinates[1, -1]:
-            # DNA/RNA mapped to reverse strand of DNA/RNA
-            strand = "-"
-            query = reverse_complement(query, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[1, :] = qSize - coordinates[1, :]
-        elif coordinates[0, 0] > coordinates[0, -1]:
-            # protein mapped to reverse strand of DNA
-            strand = "-"
-            target = reverse_complement(target, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[0, :] = tSize - coordinates[0, :]
-            dnax = True
+            for step in steps.transpose():
+                target_step, query_step = step
+                if target_step == query_step:
+                    operation = "M"
+                    step = target_step
+                elif query_step == 0:
+                    operation = "D"  # Deletion
+                    step = target_step
+                elif target_step == 0:
+                    operation = "I"  # Insertion
+                    step = query_step
+                else:
+                    raise ValueError("Both target and query step are zero")
+                    raise ValueError("Unknown operation %s" % operation)
+                words.append(operation)
+                words.append(str(step))
         else:
-            # mapped to forward strand
-            strand = "+"
-        # fmt: on
-        wildcard = self.wildcard
-        mask = self.mask
-        # variable names follow those in the PSL file format specification
-        matches = 0
-        misMatches = 0
-        repMatches = 0
-        nCount = 0
-        qNumInsert = 0
-        qBaseInsert = 0
-        tNumInsert = 0
-        tBaseInsert = 0
-        blockSizes = []
-        qStarts = []
-        tStarts = []
-        tStart, qStart = coordinates[:, 0]
-        for tEnd, qEnd in coordinates[:, 1:].transpose():
-            if tStart == tEnd:
-                if qStart > 0 and qEnd < qSize:
-                    qNumInsert += 1
-                    qBaseInsert += qEnd - qStart
-                qStart = qEnd
-            elif qStart == qEnd:
-                if tStart > 0 and tEnd < tSize:
-                    tNumInsert += 1
-                    tBaseInsert += tEnd - tStart
-                tStart = tEnd
-            else:
-                tCount = tEnd - tStart
-                qCount = qEnd - qStart
-                tStarts.append(tStart)
-                qStarts.append(qStart)
-                blockSizes.append(qCount)
-                if tCount == qCount:
-                    assert dnax is not True
-                    dnax = False
-                else:
-                    # translated DNA aligned to protein, typically generated by
-                    # blat -t=dnax -q=prot
-                    assert tCount == 3 * qCount
-                    assert dnax is not False
-                    dnax = True
-                tSeq = target[tStart:tEnd]
-                qSeq = query[qStart:qEnd]
-                try:
-                    tSeq = bytes(tSeq)
-                except TypeError:  # string
-                    tSeq = bytes(tSeq, "ASCII")
-                except UndefinedSequenceError:  # sequence contents is unknown
-                    tSeq = None
-                try:
-                    qSeq = bytes(qSeq)
-                except TypeError:  # string
-                    qSeq = bytes(qSeq, "ASCII")
-                except UndefinedSequenceError:  # sequence contents is unknown
-                    qSeq = None
-                if tSeq is None or qSeq is None:
-                    # contents of at least one sequence is unknown;
-                    # count all aligned letters as matches:
-                    matches += qCount
-                else:
-                    if mask == "lower":
-                        for u1, u2, c1 in zip(tSeq.upper(), qSeq.upper(), tSeq):
-                            if u1 == wildcard or u2 == wildcard:
-                                nCount += 1
-                            elif u1 == u2:
-                                if u1 == c1:
-                                    matches += 1
-                                else:
-                                    repMatches += 1
-                            else:
-                                misMatches += 1
-                    elif mask == "upper":
-                        for u1, u2, c1 in zip(tSeq.lower(), qSeq.lower(), tSeq):
-                            if u1 == wildcard or u2 == wildcard:
-                                nCount += 1
-                            elif u1 == u2:
-                                if u1 == c1:
-                                    matches += 1
-                                else:
-                                    repMatches += 1
-                            else:
-                                misMatches += 1
+            for step, operation in zip(steps.transpose(), operations):
+                target_step, query_step = step
+                if operation == "M":
+                    assert target_step == query_step
+                    step = target_step
+                elif operation == "5":  # 5' splice site
+                    assert target_step == query_step
+                    step = target_step
+                elif operation == "I":  # Intron
+                    assert query_step == 0
+                    step = target_step
+                elif operation == "3":  # 3' splice site
+                    assert target_step == query_step
+                    step = target_step
+                elif operation == "C":  # Codon
+                    assert target_step == query_step
+                    step = target_step
+                elif operation == "D":  # Deletion
+                    assert query_step == 0
+                    step = target_step
+                elif operation == "I":  # Insertion
+                    assert target_step == 0
+                    step = query_step
+                elif operation == "U":  # Non-equivalenced (unaligned) region
+                    if target_step == 0:
+                        step = query_step
+                    elif query_step == 0:
+                        step = target_step
                     else:
-                        for u1, u2 in zip(tSeq.upper(), qSeq.upper()):
-                            if u1 == wildcard or u2 == wildcard:
-                                nCount += 1
-                            elif u1 == u2:
-                                matches += 1
-                            else:
-                                misMatches += 1
-                tStart = tEnd
-                qStart = qEnd
+                        raise ValueError("Non-equivalenced region with non-zero target and query step")
+                    assert step > 0
+                elif operation == "S":  # Split codon
+                    assert target_step == query_step
+                    step = target_step
+                elif operation == "F":  # Frame shift
+                    assert target_step == query_step
+                    step = target_step
+                else:
+                    raise ValueError("Unknown operation %s" % operation)
+                words.append(chr(operation))
+                words.append(str(step))
+        steps = coordinates[:, 1:] - coordinates[:, :-1]
         try:
-            matches = alignment.matches
+            operations = alignment.operations
         except AttributeError:
             pass
+        else:
+            for step, operation in zip(steps.transpose(), operations):
+                target_step, query_step = step
+                if operation == "M":
+                    assert target_step == query_step
+                elif operation == "5":  # 5' splice site
+                    assert target_step == query_step
+                elif operation == "I":  # Intron
+                    assert query_step == 0
+                elif operation == "3":  # 3' splice site
+                    assert target_step == query_step
+                elif operation == "C":  # Codon
+                    assert target_step == query_step
+                elif operation == "D":  # Deletion
+                    assert query_step == 0
+                elif operation == "I":  # Insertion
+                    assert target_step == 0
+                elif operation == "U":  # Non-equivalenced (unaligned) region
+                    assert target_step > 0
+                    assert query_step > 0
+                    assert target_step != query_step
+                elif operation == "S":  # Split codon
+                    assert target_step == query_step
+                elif operation == "F":  # Frame shift
+                    assert target_step == query_step
+                else:
+                    raise ValueError("Unknown operation %s" % operation)
+                words.append(chr(operation))
+        line = " ".join(words) + "\n"
+        return line
+
+    def _format_alignment_vulgar(self, alignment):
+        """Return a string with a single alignment formatted as one vulgar line."""
+        if not isinstance(alignment, Alignment):
+            raise TypeError("Expected an Alignment object")
+        query = alignment.query
+        target = alignment.target
         try:
-            misMatches = alignment.misMatches
+            query_id = query.id
         except AttributeError:
-            pass
+            query_id = "query"
         try:
-            repMatches = alignment.repMatches
+            target_id = target.id
         except AttributeError:
-            pass
+            target_id = "target"
         try:
-            nCount = alignment.nCount
-        except AttributeError:
-            pass
-        tStart = tStarts[0]  # start of alignment in target
-        qStart = qStarts[0]  # start of alignment in query
-        tEnd = tStarts[-1] + tCount  # end of alignment in target
-        qEnd = qStarts[-1] + qCount  # end of alignment in query
-        if strand == "-":
-            if dnax is True:
-                tStart, tEnd = tSize - tEnd, tSize - tStart
-            else:
-                qStart, qEnd = qSize - qEnd, qSize - qStart
-        blockCount = len(blockSizes)
-        blockSizes = ",".join(map(str, blockSizes)) + ","
-        qStarts = ",".join(map(str, qStarts)) + ","
-        tStarts = ",".join(map(str, tStarts)) + ","
-        if dnax:
-            strand = "+" + strand
-        words = [
-            str(matches),
-            str(misMatches),
-            str(repMatches),
-            str(nCount),
-            str(qNumInsert),
-            str(qBaseInsert),
-            str(tNumInsert),
-            str(tBaseInsert),
-            strand,
-            qName,
-            str(qSize),
-            str(qStart),
-            str(qEnd),
-            tName,
-            str(tSize),
-            str(tStart),
-            str(tEnd),
-            str(blockCount),
-            blockSizes,
-            qStarts,
-            tStarts,
-        ]
-        line = "\t".join(words) + "\n"
+            molecule_type = target.annotations["molecule_type"]
+        except (AttributeError, KeyError):
+            molecule_type = None
+        if molecule_type == "protein":
+            target_strand = "."
+        elif target_start <= target_end:
+            target_strand = "+"
+        elif target_start > target_end:
+            target_strand = "-"
+        try:
+            molecule_type = query.annotations["molecule_type"]
+        except (AttributeError, KeyError):
+            molecule_type = None
+        if molecule_type == "protein":
+            query_strand = "."
+        elif query_start <= query_end:
+            query_strand = "+"
+        elif query_start > query_end:
+            query_strand = "-"
+        target_start = coordinates[0, 0]
+        target_end = coordinates[0, -1]
+        query_start = coordinates[1, 0]
+        query_end = coordinates[1, -1]
+        words = ["vulgar:",
+                 query_id,
+                 str(query_start),
+                 str(query_end),
+                 query_strand,
+                 target_id,
+                 str(target_start),
+                 str(target_end),
+                 target_strand,
+                 str(score),
+                ]
         return line
 
 
@@ -351,6 +339,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_seq = Seq(None, length=query_end)
         target = SeqRecord(target_seq, id=target_id)
         query = SeqRecord(query_seq, id=query_id)
+        if target_strand == ".":
+            target.annotations["molecule_type"] = "protein"
+        if query_strand == ".":
+            query.annotations["molecule_type"] = "protein"
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
@@ -444,8 +436,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     operation = "I"  # Insertion
                 else:
                     raise ValueError("Unexpected gap operation with steps %d, %d in vulgar line" % (query_step, target_step))
-            elif operation == "N":  # Non-equivalenced region
-                operation = "R"  # 'N' is alread used for introns in SAM/BAM
+            elif operation == "N":  # Non-equivalenced (unaligned) region
+                operation = "U"  # 'N' is alread used for introns in SAM/BAM
             elif operation == "S":  # Split codon
                 pass
             elif operation == "F":  # Frame shift
