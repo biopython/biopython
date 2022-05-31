@@ -40,6 +40,14 @@ class Exonerate_est2genome(unittest.TestCase):
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_cigar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "vulgar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.program, "exonerate")
@@ -137,8 +145,18 @@ class Exonerate_est2genome(unittest.TestCase):
         stream.seek(0)
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments)
+        alignments = exonerate.AlignmentIterator(exn_file)
+        stream = io.StringIO()
+        writer = exonerate.AlignmentWriter(stream, "cigar")
+        n = writer.write_file(alignments)
+        self.assertEqual(n, 3)
+        stream.seek(0)
+        stream.seek(0)
+        alignments = exonerate.AlignmentIterator(stream)
+        self.check_vulgar(alignments, full=False)
+        # full=False: don't check information that is not stored in cigar format
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, full=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -156,7 +174,8 @@ class Exonerate_est2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if full:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -189,10 +208,11 @@ class Exonerate_est2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM"),
-        )
+        if full:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM"),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -227,10 +247,11 @@ class Exonerate_est2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"MDMIMDMDMIMDMDMIMIM3N5MIMDMIMDMIMDM3N5MIMIMIMIMDMDMDMDM"),
-        )
+        if full:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"MDMIMDMDMIMDMDMIMIM3N5MIMDMIMDMIMDM3N5MIMIMIMIMDMDMDMDM"),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 

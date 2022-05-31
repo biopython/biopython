@@ -157,31 +157,35 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     operation = "I"  # Insertion
                     step = query_step
                 else:
-                    raise ValueError("Both target and query step are zero")
                     raise ValueError("Unknown operation %s" % operation)
                 words.append(operation)
                 words.append(str(step))
         else:
-            for step, operation in zip(steps.transpose(), operations):
+            for step, operation in zip(steps.transpose(), operations.decode()):
                 target_step, query_step = step
                 if operation == "M":
                     assert target_step == query_step
                     step = target_step
                 elif operation == "5":  # 5' splice site
-                    assert target_step == query_step
-                    step = target_step
-                elif operation == "I":  # Intron
                     assert query_step == 0
                     step = target_step
-                elif operation == "3":  # 3' splice site
-                    assert target_step == query_step
+                    operation = "D"
+                elif operation == "N":  # Intron
+                    assert query_step == 0
                     step = target_step
+                    operation = "D"
+                elif operation == "3":  # 3' splice site
+                    assert query_step == 0
+                    step = target_step
+                    operation = "D"
                 elif operation == "C":  # Codon
                     assert target_step == query_step
                     step = target_step
+                    operation = "M"
                 elif operation == "D":  # Deletion
                     assert query_step == 0
                     step = target_step
+                    operation = "D"
                 elif operation == "I":  # Insertion
                     assert target_step == 0
                     step = query_step
@@ -193,49 +197,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     else:
                         raise ValueError("Non-equivalenced region with non-zero target and query step")
                     assert step > 0
+                    operation = "M"
                 elif operation == "S":  # Split codon
                     assert target_step == query_step
                     step = target_step
+                    operation = "M"
                 elif operation == "F":  # Frame shift
                     assert target_step == query_step
                     step = target_step
+                    operation = "M"
                 else:
                     raise ValueError("Unknown operation %s" % operation)
-                words.append(chr(operation))
+                words.append(operation)
                 words.append(str(step))
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
-        try:
-            operations = alignment.operations
-        except AttributeError:
-            pass
-        else:
-            for step, operation in zip(steps.transpose(), operations):
-                target_step, query_step = step
-                if operation == "M":
-                    assert target_step == query_step
-                elif operation == "5":  # 5' splice site
-                    assert target_step == query_step
-                elif operation == "I":  # Intron
-                    assert query_step == 0
-                elif operation == "3":  # 3' splice site
-                    assert target_step == query_step
-                elif operation == "C":  # Codon
-                    assert target_step == query_step
-                elif operation == "D":  # Deletion
-                    assert query_step == 0
-                elif operation == "I":  # Insertion
-                    assert target_step == 0
-                elif operation == "U":  # Non-equivalenced (unaligned) region
-                    assert target_step > 0
-                    assert query_step > 0
-                    assert target_step != query_step
-                elif operation == "S":  # Split codon
-                    assert target_step == query_step
-                elif operation == "F":  # Frame shift
-                    assert target_step == query_step
-                else:
-                    raise ValueError("Unknown operation %s" % operation)
-                words.append(chr(operation))
         line = " ".join(words) + "\n"
         return line
 
@@ -300,18 +274,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 target_step, query_step = step
                 if target_step == query_step:
                     operation = "M"
-                    step = target_step
                 elif query_step == 0:
-                    operation = "D"  # Deletion
-                    step = target_step
+                    operation = "G"  # Gap; exonerate definition
                 elif target_step == 0:
-                    operation = "I"  # Insertion
-                    step = query_step
+                    operation = "I"  # Gap; exonerate definition
                 else:
                     raise ValueError("Both target and query step are zero")
                     raise ValueError("Unknown operation %s" % operation)
                 words.append(operation)
-                words.append(str(step))
+                words.append(str(query_step))
+                words.append(str(target_step))
         else:
             for step, operation in zip(steps.transpose(), operations.decode()):
                 target_step, query_step = step
@@ -477,12 +449,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if operation == "M":  # Match
                 pass
             elif operation == "5":  # 5' splice site
-                pass
+                assert query_step == 0
             elif operation == "I":  # Intron
                 # use SAM/BAM definitions of operations:
                 operation = "N"
             elif operation == "3":  # 3' splice site
-                pass
+                assert query_step == 0
             elif operation == "C":  # Codon
                 pass
             elif operation == "G":  # Gap
