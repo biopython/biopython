@@ -384,7 +384,7 @@ class Exonerate_affine_local(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -400,7 +400,8 @@ class Exonerate_affine_local(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -435,12 +436,13 @@ class Exonerate_affine_local(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MDMDMDMIMIMDMIMDMDMDMDMDMDMDMDMDMDMDMDMIMIMDMDMIMIMDMIMDMIMIMDM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MDMDMDMIMIMDMIMDMDMDMDMDMDMDMDMDMDMDMDMIMIMDMDMIMIMDMIMDMIMIMDM"
+                ),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
@@ -473,10 +475,11 @@ class Exonerate_affine_local(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"MIMIMIMDMDMIMDMDMDMIMDMDMDMDMDMDMIMIMIMDMDMDMIMIMDMDMDMDMIM"),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"MIMIMIMDMDMIMDMDMDMIMDMDMDMDMDMDMIMIMIMDMDMDMIMIMDMDMDMDMIM"),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -604,7 +607,7 @@ class Exonerate_cdna2genome(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -627,7 +630,8 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -644,7 +648,8 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -685,12 +690,13 @@ class Exonerate_cdna2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM5N3MDMIMDMDMCMIMDMDMDM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM5N3MDMIMDMDMCMIMDMDMDM"
+                ),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -788,7 +794,7 @@ class Exonerate_coding2coding(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -806,7 +812,8 @@ class Exonerate_coding2coding(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -818,7 +825,8 @@ class Exonerate_coding2coding(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -835,7 +843,8 @@ class Exonerate_coding2coding(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"CIC"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"CIC"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -936,7 +945,7 @@ class Exonerate_coding2genome(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -957,7 +966,8 @@ class Exonerate_coding2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -969,7 +979,8 @@ class Exonerate_coding2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -986,7 +997,8 @@ class Exonerate_coding2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"CIC"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"CIC"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1055,7 +1067,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1071,7 +1083,8 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1138,7 +1151,8 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1171,7 +1185,8 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1234,10 +1249,11 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"M5N3MDMDM5N3MIMDMDMDMS5N3SCMIM5N3MDMIMDMDMDMDMIMDMDM"),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"M5N3MDMDM5N3MIMDMDMDMS5N3SCMIM5N3MDMIMDMDMDMDMIMDMDM"),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1322,12 +1338,13 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MIMIMDMDMIM5NNN3MIMIMIMIMDM5NN3MDMIMIMIMCS5N3SCMDM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MIM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MIMIMDMDMIM5NNN3MIMIMIMIMDM5NN3MDMIMIMIMCS5N3SCMDM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MIM"
+                ),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1353,7 +1370,7 @@ class Exonerate_genome2genome(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1376,7 +1393,8 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1389,7 +1407,8 @@ class Exonerate_genome2genome(unittest.TestCase):
                 numpy.array([[1319468, 1319558, 1319561, 1319997], [0, 90, 93, 529]]),
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MCM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MCM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1422,10 +1441,11 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"M5N3MDMDM5N3MIMDMDMDMS5N3SCMIM5N3MDMIMDMDMDMDMIMDMDM"),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"M5N3MDMDM5N3MIMDMDMDMS5N3SCMIM5N3MDMIMDMDMDMDMIMDMDM"),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1470,12 +1490,13 @@ class Exonerate_genome2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MIMIMDMDMIM5NNN3MIMIMIMIMDM5NN3MDMIMIMIMCS5N3SCMDM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MIM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MIMIMDMDMIM5NNN3MIMIMIMIMDM5NN3MDMIMIMIMCS5N3SCMDM5NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3MIM"
+                ),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1568,7 +1589,7 @@ class Exonerate_ungapped(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1586,7 +1607,8 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1598,7 +1620,8 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[254031, 254146], [121, 236]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1610,7 +1633,8 @@ class Exonerate_ungapped(unittest.TestCase):
                 alignment.coordinates, numpy.array([[255671, 255739], [1098, 1166]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1703,7 +1727,7 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1721,7 +1745,8 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1733,7 +1758,8 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1745,7 +1771,8 @@ class Exonerate_ungapped_trans(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1318045, 1319275], [1230, 0]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"C"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"C"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1936,7 +1963,7 @@ class Exonerate_ner(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -1954,7 +1981,8 @@ class Exonerate_ner(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -2001,12 +2029,13 @@ class Exonerate_ner(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MRMRMRMIMRMDMDMRMRMRMRMIMDMDMRMRMRMIMRMIMRMRMRMRMIMRMRMRMRMIMRMRMRMDMRMIMIMRMRMRMIMRMRMRMRMRM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MRMRMRMIMRMDMDMRMRMRMRMIMDMDMRMRMRMIMRMIMRMRMRMRMIMRMRMRMRMIMRMRMRMDMRMIMIMRMRMRMIMRMRMRMRMRM"
+                ),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2047,12 +2076,13 @@ class Exonerate_ner(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MRMRMRMRMRMRMDMDMIMRMRMDMIMRMIMRMRMIMRMRMRMRMRMIMDMDMIMRMRMRMIMRMRMDMRMRM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MRMRMRMRMRMRMDMDMIMRMRMDMIMRMIMRMRMIMRMRMRMRMRMIMDMDMIMRMRMRMIMRMRMDMRMRM"
+                ),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2274,7 +2304,7 @@ class Exonerate_multiple(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -2292,7 +2322,8 @@ class Exonerate_multiple(unittest.TestCase):
                 alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -2331,12 +2362,13 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MIMIMIMIMIMIMIMIMIMIMDMIMDMDMIMDMDMDMDMDMIMDMIMIMDMDMDMDMDMDMDMDMIM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MIMIMIMIMIMIMIMIMIMIMDMIMDMDMIMDMDMDMDMDMIMDMIMIMDMDMDMDMDMDMDMDMIM"
+                ),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2379,12 +2411,13 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(
-                b"MIMIMIMDMIMIMIMIMIMDMDMDMIMIMIMIMIMIMIMDMDMDMDMDMIMIMDMIMDMDMIMDMDMIMIMDM3N5MDM"
-            ),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(
+                    b"MIMIMIMDMIMIMIMIMIMDMDMDMIMIMIMIMIMIMIMDMDMDMDMDMIMIMDMIMDMDMIMDMDMIMIMDM3N5MDM"
+                ),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2396,7 +2429,8 @@ class Exonerate_multiple(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2429,10 +2463,11 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM"),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"MIMIMIMIMIM5N3MDMIMIMDMDM5N3MDMIMDMIMDMIMDMIM5N3MDM"),
+            )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2467,10 +2502,11 @@ class Exonerate_multiple(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(
-            alignment.operations,
-            bytearray(b"MDMIMDMDMIMDMDMIMIM3N5MIMDMIMDMIMDM3N5MIMIMIMIMDMDMDMDM"),
-        )
+        if check_operations:
+            self.assertEqual(
+                alignment.operations,
+                bytearray(b"MDMIMDMDMIMDMDMIMIM3N5MIMDMIMDMIMDM3N5MIMIMIMIMDMDMDMDM"),
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2562,7 +2598,7 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -2585,7 +2621,8 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"CFCFCFC"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"CFCFCFC"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2602,7 +2639,8 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"CDCFC"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"CDCFC"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2697,7 +2735,7 @@ class Exonerate_protein2dna(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -2715,7 +2753,8 @@ class Exonerate_protein2dna(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2732,7 +2771,8 @@ class Exonerate_protein2dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MDM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MDM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2749,7 +2789,8 @@ class Exonerate_protein2dna(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MIM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MIM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2830,7 +2871,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -2849,7 +2890,8 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
                 numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MFM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MFM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2859,7 +2901,8 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2962,7 +3005,7 @@ class Exonerate_protein2genome(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -2980,7 +3023,8 @@ class Exonerate_protein2genome(unittest.TestCase):
                 alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2997,7 +3041,8 @@ class Exonerate_protein2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MDM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MDM"))
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -3016,7 +3061,8 @@ class Exonerate_protein2genome(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MS5N3SM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MS5N3SM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3098,7 +3144,7 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -3123,7 +3169,8 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"MDMIMIMIMIFM"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"MDMIMIMIMIFM"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3205,7 +3252,7 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         alignments = exonerate.AlignmentIterator(stream)
         self.check_vulgar(alignments, check_operations=False)
 
-    def check_vulgar(self, alignments):
+    def check_vulgar(self, alignments, check_operations=True):
         self.assertEqual(alignments.program, "exonerate")
         self.assertEqual(
             alignments.commandline,
@@ -3232,7 +3279,8 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertEqual(alignment.operations, bytearray(b"M5N3M5N3M5N3MS5N3SM5N3M"))
+        if check_operations:
+            self.assertEqual(alignment.operations, bytearray(b"M5N3M5N3M5N3MS5N3SM5N3M"))
         with self.assertRaises(StopIteration):
             next(alignments)
 
