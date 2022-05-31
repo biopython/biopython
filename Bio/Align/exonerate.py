@@ -150,24 +150,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 if target_step == query_step:
                     operation = "M"
                     step = target_step
-                elif target_step == 3 * query_step:
-                    operation = "M"
-                    step = target_step
-                    assert target_molecule_type != "protein"
-                    assert query_molecule_type == "protein"
-                elif query_step == 3 * target_step:
-                    operation = "M"
-                    step = query_step
-                    assert target_molecule_type == "protein"
-                    assert query_molecule_type != "protein"
                 elif query_step == 0:
                     operation = "D"  # Deletion
                     step = target_step
                 elif target_step == 0:
                     operation = "I"  # Insertion
                     step = query_step
+                elif (target_molecule_type != "protein" and query_molecule_type == "protein"):
+                    operation = "M"
+                    step = target_step
+                elif (target_molecule_type == "protein" and query_molecule_type != "protein"):
+                    operation = "M"
+                    step = query_step
                 else:
-                    raise ValueError("Unexpected step target %d, query %d for molecule type %s" % (target_step, query_step, target_molecule_type))
+                    raise ValueError("Unexpected step target %d, query %d for molecule type %s, %s" % (target_step, query_step, target_molecule_type, query_molecule_type))
                 words.append(operation)
                 words.append(str(step))
         else:
@@ -239,13 +235,24 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         words.append(str(query_step))
                     continue
                 elif operation == "S":  # Split codon
-                    assert target_step == query_step
-                    step = target_step
-                    operation = "M"
+                    if target_step > 0:
+                        operation = "D"
+                        words.append(operation)
+                        words.append(str(target_step))
+                    if query_step > 0:
+                        operation = "I"
+                        words.append(operation)
+                        words.append(str(query_step))
+                    continue
                 elif operation == "F":  # Frame shift
-                    assert target_step == query_step
-                    step = target_step
-                    operation = "M"
+                    if target_step == 0:
+                        step = query_step
+                        operation = "I"
+                    elif query_step == 0:
+                        step = target_step
+                        operation = "D"
+                    else:
+                        raise valueError("Expected target step or query step to be 0")
                 else:
                     raise ValueError("Unknown operation %s" % operation)
                 words.append(operation)
@@ -314,16 +321,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 target_step, query_step = step
                 if target_step == query_step:
                     operation = "M"
-                elif target_step == 3 * query_step:
-                    assert query_molecule_type == "protein"
-                    operation = "M"
-                elif query_step == 3 * target_step:
-                    assert target_molecule_type == "protein"
-                    operation = "M"
                 elif query_step == 0:
                     operation = "G"  # Gap; exonerate definition
                 elif target_step == 0:
                     operation = "G"  # Gap; exonerate definition
+                elif query_molecule_type == "protein" and target_molecule_type != "protein":
+                    operation = "M"
+                elif query_molecule_type != "protein" and target_molecule_type == "protein":
+                    operation = "M"
                 else:
                     raise ValueError("Both target and query step are zero")
                 words.append(operation)
