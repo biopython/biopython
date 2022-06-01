@@ -140,8 +140,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                  str(target_start),
                  str(target_end),
                  target_strand,
-                 str(score),
-                ]
+                 str(score)]
         try:
             operations = alignment.operations
         except AttributeError:
@@ -252,7 +251,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         step = target_step
                         operation = "D"
                     else:
-                        raise valueError("Expected target step or query step to be 0")
+                        raise ValueError("Expected target step or query step to be 0")
                 else:
                     raise ValueError("Unknown operation %s" % operation)
                 words.append(operation)
@@ -312,8 +311,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                  str(target_start),
                  str(target_end),
                  target_strand,
-                 str(score),
-                ]
+                 str(score)]
         try:
             operations = alignment.operations
         except AttributeError:
@@ -447,7 +445,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates =  numpy.empty((2, n+1), int)
+        coordinates = numpy.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -467,8 +465,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     ts += step
             else:
                 raise ValueError("Unknown operation %s in cigar string" % operation)
-            coordinates[0, i+1] = ts
-            coordinates[1, i+1] = qs
+            coordinates[0, i + 1] = ts
+            coordinates[1, i + 1] = qs
         if target_strand == "+":
             coordinates[0, :] += target_start
         elif target_strand == "-":
@@ -476,7 +474,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif target_strand == ".":  # protein
             if query_strand != ".":
                 # dna to protein alignment; integer division, but round up:
-                coordinates[0, :] = (coordinates[0, :] + 2 ) // 3
+                coordinates[0, :] = (coordinates[0, :] + 2) // 3
             coordinates[0, :] += target_start
             target.annotations["molecule_type"] = "protein"
         if query_strand == "+":
@@ -486,7 +484,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif query_strand == ".":  # protein
             if target_strand != ".":
                 # protein to dna alignment; integer division, but round up:
-                coordinates[1, :] = (coordinates[1, :] + 2 ) // 3
+                coordinates[1, :] = (coordinates[1, :] + 2) // 3
             coordinates[1, :] += query_start
             query.annotations["molecule_type"] = "protein"
         alignment = Alignment([target, query], coordinates)
@@ -512,7 +510,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates =  numpy.empty((2, n+1), int)
+        coordinates = numpy.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)
@@ -544,14 +542,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 operation = "U"  # 'N' is alread used for introns in SAM/BAM
                 if target_step > 0:
                     ts += target_step
-                    coordinates[0, i+1] = ts
-                    coordinates[1, i+1] = qs
+                    coordinates[0, i + 1] = ts
+                    coordinates[1, i + 1] = qs
                     operations[i] = ord(operation)
                     i += 1
                 if query_step > 0:
                     qs += query_step
-                    coordinates[0, i+1] = ts
-                    coordinates[1, i+1] = qs
+                    coordinates[0, i + 1] = ts
+                    coordinates[1, i + 1] = qs
                     operations[i] = ord(operation)
                     i += 1
                 continue
@@ -563,8 +561,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError("Unknown operation %s in vulgar string" % operation)
             ts += target_step
             qs += query_step
-            coordinates[0, i+1] = ts
-            coordinates[1, i+1] = qs
+            coordinates[0, i + 1] = ts
+            coordinates[1, i + 1] = qs
             operations[i] = ord(operation)
             i += 1
         if target_strand == "+":
