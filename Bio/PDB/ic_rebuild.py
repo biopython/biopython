@@ -39,17 +39,24 @@ from Bio.PDB.Chain import Chain
 def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> Dict:
     """Test rebuild PDB structure from internal coordinates.
 
-    Writes intermediate data to .pic file in memory, see :data:`IC_Residue.pic_accuracy`
-    to vary numeric accuracy of this intermediate file if you have small errors in
-    coordinates.
+    Generates internal coordinates for entity and writes to a .pic file in
+    memory, then generates XYZ coordinates from the .pic file and compares the
+    resulting entity against the original.
+
+    See :data:`IC_Residue.pic_accuracy` to vary numeric accuracy of the
+    intermediate .pic file if the only issue is small differences in coordinates.
+
+    Note that with default settings, deuterated initial structures will fail
+    the comparison, as will structures loaded with alternate `IC_Residue.accept_atoms`
+    settings.  Use `quick=True` and/or variations on `AtomKey.d2h` and
+    `IC_Residue.accept_atoms` settings.
 
     :param Entity entity: Biopython Structure, Model or Chain.
         Structure to test
     :param bool verbose: default False.
         print extra messages
     :param bool quick: default False.
-        only check atomArrays are identical
-        in internal_to_atom_coords computation
+        only check the internal coords atomArrays are identical
     :returns: dict
         comparison dict from :func:`.compare_residues`
     """
@@ -390,6 +397,7 @@ def compare_residues(
                 rtol=1e-03 if rtol is None else rtol,
                 atol=1e-03 if atol is None else atol,
             ):
+                cmpdict["aCount"] += numpy.size(e0.internal_coord.atomArray, 0)
                 cmpdict["aCoordMatchCount"] = numpy.size(e0.internal_coord.atomArray, 0)
                 if cmpdict["aCoordMatchCount"] > 0:
                     cmpdict["pass"] = True

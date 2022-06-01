@@ -2243,6 +2243,11 @@ class IC_Residue:
 
             IC_Residue.accept_atoms = accept_backbone + ('CB',)
 
+        Changing accept_atoms will cause the default `structure_rebuild_test` in
+        :mod:`.ic_rebuild` to fail if some atoms are filtered (obviously).  Use
+        the `quick=True` option to test only the coordinates of filtered atoms
+        to avoid this.
+
         There is currently no option to output internal coordinates with D
         instead of H.
 
