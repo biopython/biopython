@@ -478,7 +478,9 @@ class Exonerate_affine_local(unittest.TestCase):
         if check_operations:
             self.assertEqual(
                 alignment.operations,
-                bytearray(b"MIMIMIMDMDMIMDMDMDMIMDMDMDMDMDMDMIMIMIMDMDMDMIMIMDMDMDMDMIM"),
+                bytearray(
+                    b"MIMIMIMDMDMIMDMDMDMIMDMDMDMDMDMDMIMIMIMDMDMDMIMIMDMDMDMDMIM"
+                ),
             )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -2036,7 +2038,7 @@ class Exonerate_ner(unittest.TestCase):
             self.assertEqual(
                 alignment.operations,
                 bytearray(
-                    b'MUUMUUMUUMIMUUMDMDMUUMUUMUUMUUMIMDMDMUUMUUMUUMIMUUMIMUUMUUMUUMUUMIMUUMUUMUUMUUMIMUUMUUMUUMDMUUMIMIMUUMUUMUUMIMUUMUUMUUMUUMUUM',
+                    b"MUUMUUMUUMIMUUMDMDMUUMUUMUUMUUMIMDMDMUUMUUMUUMIMUUMIMUUMUUMUUMUUMIMUUMUUMUUMUUMIMUUMUUMUUMDMUUMIMIMUUMUUMUUMIMUUMUUMUUMUUMUUM",
                 ),
             )
         alignment = next(alignments)
@@ -3283,7 +3285,9 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
             )
         )
         if check_operations:
-            self.assertEqual(alignment.operations, bytearray(b"M5N3M5N3M5N3MS5N3SM5N3M"))
+            self.assertEqual(
+                alignment.operations, bytearray(b"M5N3M5N3M5N3MS5N3SM5N3M")
+            )
         with self.assertRaises(StopIteration):
             next(alignments)
 
