@@ -69,7 +69,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif fmt == "cigar":
             self.format_alignment = self._format_alignment_cigar
         else:
-            raise ValueError("argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt)
+            raise ValueError(
+                "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
+            )
 
     def write_header(self, alignments):
         """Write the header."""
@@ -118,7 +120,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target_strand = "+"
         elif target_start > target_end:
             target_strand = "-"
-            steps[0, :] = - steps[0, :]
+            steps[0, :] = -steps[0, :]
         try:
             query_molecule_type = query.annotations["molecule_type"]
         except (AttributeError, KeyError):
@@ -129,18 +131,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query_strand = "+"
         elif query_start > query_end:
             query_strand = "-"
-            steps[1, :] = - steps[1, :]
+            steps[1, :] = -steps[1, :]
         score = alignment.score
-        words = ["cigar:",
-                 query_id,
-                 str(query_start),
-                 str(query_end),
-                 query_strand,
-                 target_id,
-                 str(target_start),
-                 str(target_end),
-                 target_strand,
-                 str(score)]
+        words = [
+            "cigar:",
+            query_id,
+            str(query_start),
+            str(query_end),
+            query_strand,
+            target_id,
+            str(target_start),
+            str(target_end),
+            target_strand,
+            str(score),
+        ]
         try:
             operations = alignment.operations
         except AttributeError:
@@ -155,14 +159,28 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif target_step == 0:
                     operation = "I"  # Insertion
                     step = query_step
-                elif (target_molecule_type != "protein" and query_molecule_type == "protein"):
+                elif (
+                    target_molecule_type != "protein"
+                    and query_molecule_type == "protein"
+                ):
                     operation = "M"
                     step = target_step
-                elif (target_molecule_type == "protein" and query_molecule_type != "protein"):
+                elif (
+                    target_molecule_type == "protein"
+                    and query_molecule_type != "protein"
+                ):
                     operation = "M"
                     step = query_step
                 else:
-                    raise ValueError("Unexpected step target %d, query %d for molecule type %s, %s" % (target_step, query_step, target_molecule_type, query_molecule_type))
+                    raise ValueError(
+                        "Unexpected step target %d, query %d for molecule type %s, %s"
+                        % (
+                            target_step,
+                            query_step,
+                            target_molecule_type,
+                            query_molecule_type,
+                        )
+                    )
                 words.append(operation)
                 words.append(str(step))
         else:
@@ -180,7 +198,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         assert query_molecule_type != "protein"
                         assert target_molecule_type == "protein"
                     else:
-                        raise ValueError("Unexpected steps target %d, query %s for operation 'M'")
+                        raise ValueError(
+                            "Unexpected steps target %d, query %s for operation 'M'"
+                        )
                 elif operation == "5":  # 5' splice site
                     if query_step == 0:
                         step = target_step
@@ -200,7 +220,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         step = query_step
                         operation = "I"
                     else:
-                        raise ValueError("Unexpected intron with steps target %d, query %d" % (target_step, query_step))
+                        raise ValueError(
+                            "Unexpected intron with steps target %d, query %d"
+                            % (target_step, query_step)
+                        )
                 elif operation == "3":  # 3' splice site
                     if query_step == 0:
                         step = target_step
@@ -289,7 +312,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             target_strand = "+"
         elif target_start > target_end:
             target_strand = "-"
-            steps[0, :] = - steps[0, :]
+            steps[0, :] = -steps[0, :]
         try:
             query_molecule_type = query.annotations["molecule_type"]
         except (AttributeError, KeyError):
@@ -300,18 +323,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query_strand = "+"
         elif query_start > query_end:
             query_strand = "-"
-            steps[1, :] = - steps[1, :]
+            steps[1, :] = -steps[1, :]
         score = alignment.score
-        words = ["vulgar:",
-                 query_id,
-                 str(query_start),
-                 str(query_end),
-                 query_strand,
-                 target_id,
-                 str(target_start),
-                 str(target_end),
-                 target_strand,
-                 str(score)]
+        words = [
+            "vulgar:",
+            query_id,
+            str(query_start),
+            str(query_end),
+            query_strand,
+            target_id,
+            str(target_start),
+            str(target_end),
+            target_strand,
+            str(score),
+        ]
         try:
             operations = alignment.operations
         except AttributeError:
@@ -323,9 +348,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     operation = "G"  # Gap; exonerate definition
                 elif target_step == 0:
                     operation = "G"  # Gap; exonerate definition
-                elif query_molecule_type == "protein" and target_molecule_type != "protein":
+                elif (
+                    query_molecule_type == "protein"
+                    and target_molecule_type != "protein"
+                ):
                     operation = "M"
-                elif query_molecule_type != "protein" and target_molecule_type == "protein":
+                elif (
+                    query_molecule_type != "protein"
+                    and target_molecule_type == "protein"
+                ):
                     operation = "M"
                 else:
                     raise ValueError("Both target and query step are zero")
@@ -350,7 +381,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         assert query_molecule_type != "protein"
                         assert target_molecule_type == "protein"
                     else:
-                        raise ValueError("Unexpected steps target %d, query %s for operation 'M'")
+                        raise ValueError(
+                            "Unexpected steps target %d, query %s for operation 'M'"
+                        )
                 elif operation == "5":  # 5' splice site
                     assert target_step == 2 or query_step == 2
                 elif operation == "N":  # Intron
@@ -415,14 +448,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         line = next(stream)
         prefix = "Command line: "
         assert line.startswith(prefix)
-        commandline = line[len(prefix):].strip()
+        commandline = line[len(prefix) :].strip()
         assert commandline.startswith("[")
         assert commandline.endswith("]")
         self.commandline = commandline[1:-1]
         line = next(stream)
         prefix = "Hostname: "
         assert line.startswith(prefix)
-        hostname = line[len(prefix):].strip()
+        hostname = line[len(prefix) :].strip()
         assert hostname.startswith("[")
         assert hostname.endswith("]")
         self.hostname = hostname[1:-1]
@@ -515,7 +548,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates[1, 0] = qs
         operations = bytearray(n)
         i = 0
-        for (operation, query_step, target_step) in zip(ops, words[10::3], words[11::3]):
+        for (operation, query_step, target_step) in zip(
+            ops, words[10::3], words[11::3]
+        ):
             query_step = int(query_step)
             target_step = int(target_step)
             if operation == "M":  # Match
@@ -537,7 +572,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif target_step == 0:
                     operation = "I"  # Insertion
                 else:
-                    raise ValueError("Unexpected gap operation with steps %d, %d in vulgar line" % (query_step, target_step))
+                    raise ValueError(
+                        "Unexpected gap operation with steps %d, %d in vulgar line"
+                        % (query_step, target_step)
+                    )
             elif operation == "N":  # Non-equivalenced (unaligned) region
                 operation = "U"  # 'N' is alread used for introns in SAM/BAM
                 if target_step > 0:
@@ -596,7 +634,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     next(stream)
                 except StopIteration:
                     return
-                raise ValueError("Found additional data after 'completed exonerate analysis'; corrupt file?")
+                raise ValueError(
+                    "Found additional data after 'completed exonerate analysis'; corrupt file?"
+                )
             elif line.startswith("vulgar: "):
                 words = line[8:].split()
                 alignment = self._parse_vulgar(words)
@@ -605,4 +645,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 words = line[7:].split()
                 alignment = self._parse_cigar(words)
                 yield alignment
-        raise ValueError("Failed to find 'completed exonerate analysis'; truncated file?")
+        raise ValueError(
+            "Failed to find 'completed exonerate analysis'; truncated file?"
+        )
