@@ -358,6 +358,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.annotations["NM"], 0)
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
+        self.assertEqual(alignment.operations, bytearray(b"MNMNM"))
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -407,6 +408,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.annotations["NM"], 0)
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertNotIn("hard_clip_right", alignment.query.annotations)
+        self.assertEqual(alignment.operations, bytearray(b"MNMNM"))
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -455,6 +457,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.annotations["NM"], 5)
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
+        self.assertEqual(alignment.operations, bytearray(b"MDMNMIMNM"))
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -503,6 +506,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.annotations["NM"], 6)
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertNotIn("hard_clip_right", alignment.query.annotations)
+        self.assertEqual(alignment.operations, bytearray(b"MIMNMDMNM"))
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):
