@@ -7,6 +7,7 @@
 """Convert XYZ Structure to internal coordinates and back, test result."""
 
 import re
+import numpy as np
 
 from itertools import zip_longest
 
@@ -391,19 +392,25 @@ def compare_residues(
 
     if quick:
         if isinstance(e0, Chain):
-            if e0.internal_coord.atomArray is not None and numpy.allclose(
-                e0.internal_coord.atomArray,
-                e1.internal_coord.atomArray,
-                rtol=1e-03 if rtol is None else rtol,
-                atol=1e-03 if atol is None else atol,
+            if (
+                e0.internal_coord.atomArray is not None
+                and np.shape(e0.internal_coord.atomArray)
+                == np.shape(e1.internal_coord.atomArray)
+                and numpy.allclose(
+                    e0.internal_coord.atomArray,
+                    e1.internal_coord.atomArray,
+                    rtol=1e-03 if rtol is None else rtol,
+                    atol=1e-03 if atol is None else atol,
+                )
             ):
-                cmpdict["aCount"] += numpy.size(e0.internal_coord.atomArray, 0)
+                cmpdict["aCount"] = numpy.size(e0.internal_coord.atomArray, 0)
                 cmpdict["aCoordMatchCount"] = numpy.size(e0.internal_coord.atomArray, 0)
                 if cmpdict["aCoordMatchCount"] > 0:
                     cmpdict["pass"] = True
                 else:
                     cmpdict["pass"] = False
             else:
+                cmpdict["aCount"] = numpy.size(e0.internal_coord.atomArray, 0)
                 cmpdict["pass"] = False
         else:
             cmpdict["pass"] = True
