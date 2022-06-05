@@ -1788,7 +1788,7 @@ class Alignment:
         if coordinates[0, 0] > coordinates[0, -1]:  # mapped to reverse strand
             coordinates = coordinates.copy()
             coordinates[0, :] = n1 - coordinates[0, :]
-            seq2 = reverse_complement(seq2, inplace=False)
+            seq1 = reverse_complement(seq1, inplace=False)
         if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
             coordinates = coordinates.copy()
             coordinates[1, :] = n2 - coordinates[1, :]
