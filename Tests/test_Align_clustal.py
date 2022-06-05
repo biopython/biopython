@@ -4,11 +4,16 @@
 # as part of this package.
 """Tests for Bio.Align.clustal module."""
 import unittest
+import warnings
 
 from io import StringIO
 
-from Bio.Align.clustal import AlignmentIterator
-from Bio.Align.clustal import AlignmentWriter
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.clustal import AlignmentIterator
+    from Bio.Align.clustal import AlignmentWriter
 
 
 class TestClustalReadingWriting(unittest.TestCase):

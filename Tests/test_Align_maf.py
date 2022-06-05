@@ -4,10 +4,15 @@
 # as part of this package.
 """Tests for Align.maf module."""
 import unittest
+import warnings
 from io import StringIO
 
 
-from Bio.Align import maf
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import maf
 
 
 try:

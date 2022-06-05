@@ -7,6 +7,7 @@
 """Tests Bio.SeqFeature."""
 import unittest
 
+from copy import deepcopy
 from os import path
 
 from Bio import Seq
@@ -171,6 +172,17 @@ class TestCompoundLocation(unittest.TestCase):
 
 class TestSeqFeature(unittest.TestCase):
     """Tests for the SeqFeature.SeqFeature class."""
+
+    def test_eq_identical(self):
+        f1 = SeqFeature(
+            type="CDS",
+            location=FeatureLocation(0, 182, 1),
+            qualifiers={
+                "product": ["interferon beta, fibroblast"],
+            },
+        )
+        f2 = deepcopy(f1)
+        self.assertEqual(f1, f2)
 
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""

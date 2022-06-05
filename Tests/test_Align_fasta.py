@@ -5,11 +5,17 @@
 # as part of this package.
 """Tests for Bio.Align.fasta module."""
 import unittest
+import warnings
 import os
 
 from Bio.Seq import Seq
 from Bio import SeqIO
-from Bio.Align.fasta_m8 import AlignmentIterator
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align.fasta_m8 import AlignmentIterator
+
 
 try:
     import numpy

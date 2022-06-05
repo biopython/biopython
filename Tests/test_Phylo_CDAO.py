@@ -25,7 +25,7 @@ except ImportError:
 cdao_files = ("test.cdao",)
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.mktemp()
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------

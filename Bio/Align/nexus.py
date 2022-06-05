@@ -21,6 +21,15 @@ from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+
+warnings.warn(
+    "Bio.Align.nexus is an experimental module which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):

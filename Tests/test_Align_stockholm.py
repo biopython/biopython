@@ -4,10 +4,14 @@
 # as part of this package.
 """Tests for Align.stockholm module."""
 import unittest
+import warnings
 from io import StringIO
 
+from Bio import BiopythonExperimentalWarning
 
-from Bio.Align import stockholm
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import stockholm
 
 
 try:

@@ -4,13 +4,19 @@
 # as part of this package.
 """Tests for Align.psl module."""
 import unittest
+import warnings
 from io import StringIO
 
 
-from Bio.Align import Alignment, psl
+from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import psl
 
 
 try:

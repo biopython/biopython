@@ -20,6 +20,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
+- Alex Morehead <https://github.com/amorehead>
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
 - Alona Levy-Jurgenson <https://github.com/alonalj>
@@ -33,6 +34,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrew Guy <https://github.com/andrewguy>
 - Andrew Sczesnak <https://github.com/polyatail>
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
+- Andrius Merkys <https://github.com/merkys>
 - Anne Pajon <ap one two at sanger ac uk>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
@@ -130,6 +132,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hector Martinez <https://github.com/hmarlo>
 - Hielke Walinga <https://github.com/hwalinga>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
+- Hussein Faara <https://github.com/hfaara18>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
 - Ilya Flyamer <https://github.com/Phlya>
@@ -143,6 +146,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jared Lumpe <https://github.com/jlumpe>
+- Jarrod Millman <https://github.com/jarrodmillman>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
@@ -196,6 +200,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
 - Lukasz Walejko <https://github.com/lwalejko>
+- Manuel Lera Ramirez <https://github.com/manulera>
 - Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
@@ -258,6 +263,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
+- Sean Aubin <https://github.com/seanny123>
 - Sean Davis <https://github.com/seandavi>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
@@ -293,6 +299,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
+- Valentin Vareškić <https://github.com/valentin994>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>

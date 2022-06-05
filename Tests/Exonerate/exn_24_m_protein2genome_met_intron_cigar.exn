@@ -1,0 +1,4 @@
+Command line: [exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 1 --refine full]
+Hostname: [Michiels-MacBook-Pro.local]
+cigar: Morus-gene001 48 482 . NODE_1_length_2817_cov_100.387732 2392 388 - 1978  M 111 D 152 M 99 D 109 M 111 D 86 M 303 D 223 M 140 D 133 M 537
+-- completed exonerate analysis

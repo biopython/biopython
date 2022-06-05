@@ -273,6 +273,7 @@ from collections import namedtuple
 
 from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
+from Bio.Align import substitution_matrices
 
 warnings.warn(
     "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
@@ -1282,6 +1283,8 @@ class dictionary_match:
 
     def __init__(self, score_dict, symmetric=1):
         """Initialize the class."""
+        if isinstance(score_dict, substitution_matrices.Array):
+            score_dict = dict(score_dict)  # Access to dict is much faster
         self.score_dict = score_dict
         self.symmetric = symmetric
 
