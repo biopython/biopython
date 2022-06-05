@@ -29,13 +29,12 @@ www.ebi.ac.uk/~guy/exonerate/
 
 You are expected to use this module via the Bio.Align functions.
 """
-from itertools import chain
 import numpy
 
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
 
@@ -483,7 +482,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
             step = int(step)
-            if operation == "M":  # match
+            if operation == "M":  # match or mismatch
                 ts += step
                 qs += step
             elif operation == "I":  # insertion
