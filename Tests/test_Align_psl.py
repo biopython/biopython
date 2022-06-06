@@ -165,8 +165,8 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 164)
-        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.matches, 162)
+        self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 39)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5409))
@@ -202,7 +202,7 @@ class TestAlign_dna_rna(unittest.TestCase):
 # flake8: noqa
             numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
                          [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -223,8 +223,8 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 173)
-        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.matches, 172)
+        self.assertEqual(alignment.misMatches, 1)
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1714))
@@ -258,7 +258,7 @@ class TestAlign_dna_rna(unittest.TestCase):
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[35.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],

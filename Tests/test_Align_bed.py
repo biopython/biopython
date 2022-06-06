@@ -138,7 +138,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 992)
+        self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -162,7 +162,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         # The modified RNAs have gaps in their sequence. As this information is
         # not stored in a BED file, we cannot calculate the substitution matrix.
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 990)
+        self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])

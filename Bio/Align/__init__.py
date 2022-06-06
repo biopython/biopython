@@ -1025,13 +1025,14 @@ class Alignment:
         """
         self.sequences = sequences
         if coordinates is None:
-            lengths = {len(sequence) for sequence in sequences}
-            if len(lengths) != 1:
-                raise ValueError(
-                    "sequences must have the same length if coordinates is None"
-                )
-            length = lengths.pop()
-            coordinates = numpy.array([[0, length]] * len(sequences))
+            if sequences[0] is not None:  # None means unmapped
+                lengths = {len(sequence) for sequence in sequences}
+                if len(lengths) != 1:
+                    raise ValueError(
+                        "sequences must have the same length if coordinates is None"
+                    )
+                length = lengths.pop()
+                coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
     @property
@@ -1933,91 +1934,10 @@ class Alignment:
 
         Helper for self.format() .
         """
-        target, query = self.sequences
-        try:
-            qName = query.id
-        except AttributeError:
-            qName = "query"
-        else:
-            query = query.seq
-        try:
-            rName = target.id
-        except AttributeError:
-            rName = "target"
-        else:
-            target = target.seq
-        n1 = len(target)
-        n2 = len(query)
-        pos = None
-        tSize = n1
-        cigar = []
-        coordinates = self.coordinates
-        if coordinates[1, 0] < coordinates[1, -1]:  # mapped to forward strand
-            flag = 0
-            seq = query
-        else:  # mapped to reverse strand
-            flag = 16
-            seq = reverse_complement(query, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
-        try:
-            seq = bytes(seq)
-        except TypeError:  # string
-            pass
-        else:
-            seq = str(seq, "ASCII")
-        tStart, qStart = coordinates[:, 0]
-        for tEnd, qEnd in coordinates[:, 1:].transpose():
-            tCount = tEnd - tStart
-            qCount = qEnd - qStart
-            if tCount == 0:
-                length = qCount
-                if pos is None or tEnd == tSize:
-                    operation = "S"
-                else:
-                    operation = "I"
-                qStart = qEnd
-            elif qCount == 0:
-                if tStart > 0 and tEnd < tSize:
-                    length = tCount
-                    operation = "D"
-                else:
-                    operation = None
-                tStart = tEnd
-            else:
-                if tCount != qCount:
-                    raise ValueError("Unequal step sizes in alignment")
-                if pos is None:
-                    pos = tStart
-                tStart = tEnd
-                qStart = qEnd
-                operation = "M"
-                length = tCount
-            if operation is not None:
-                cigar.append(str(length) + operation)
-        mapQ = 255  # not available
-        rNext = "*"
-        pNext = 0
-        tLen = 0
-        qual = "*"
-        cigar = "".join(cigar)
-        tag = "AS:i:%d" % int(round(self.score))
-        words = [
-            qName,
-            str(flag),
-            rName,
-            str(pos + 1),  # 1-based coordinates
-            str(mapQ),
-            cigar,
-            rNext,
-            str(pNext),
-            str(tLen),
-            seq,
-            qual,
-            tag,
-        ]
-        line = "\t".join(words) + "\n"
-        return line
+        from . import sam
+
+        writer = sam.AlignmentWriter(None)
+        return writer.format_alignment(self)
 
     def __str__(self):
         """Return a string representation of the Alignment object.
@@ -2111,7 +2031,7 @@ class Alignment:
         >>> alignment.shape
         (2, 7)
         """
-        coordinates = self.coordinates.copy()
+        coordinates = numpy.array(self.coordinates)
         n = len(coordinates)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
