@@ -53,6 +53,7 @@ class Rebuild(unittest.TestCase):
     pdb_2XHE2 = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
     pdb_1A8O = PDB_parser.get_structure("1A8O", "PDB/1A8O.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
+    cif_3JQH2 = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
     cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4CUP2 = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4ZHL = CIF_parser.get_structure("4ZHL", "PDB/4ZHL.cif")
@@ -105,6 +106,7 @@ class Rebuild(unittest.TestCase):
         """Convert disordered protein to internal coordinates and back."""
         # 3jqh has both disordered residues
         # and disordered atoms in ordered residues
+
         with warnings.catch_warnings(record=True):
             warnings.simplefilter("always", PDBConstructionWarning)
             r = structure_rebuild_test(self.cif_3JQH, False)
@@ -117,6 +119,14 @@ class Rebuild(unittest.TestCase):
         self.assertEqual(r["aCoordMatchCount"], 217)
         self.assertEqual(len(r["chains"]), 1)
         self.assertTrue(r["pass"])
+
+        IC_Residue.no_altloc = True
+        with warnings.catch_warnings(record=True):
+            warnings.simplefilter("always", PDBConstructionWarning)
+            r = structure_rebuild_test(self.cif_3JQH2, verbose=False, quick=True)
+        self.assertEqual(r["aCoordMatchCount"], 167, msg="no_altloc fail")
+        self.assertTrue(r["pass"], msg="no_altloc fail")
+        IC_Residue.no_altloc = False
 
     def test_no_crosstalk(self):
         """Deep copy, change few internal coords, test nothing else changes."""

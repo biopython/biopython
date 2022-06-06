@@ -555,6 +555,7 @@ class IC_Chain:
 
         def setResAtmVws(res):
             for atm in res.get_atoms():
+                # copy not filter so ignore no_altloc
                 if atm.is_disordered():
                     for altAtom in atm.child_dict.values():
                         setAtomVw(res, altAtom)
@@ -641,7 +642,15 @@ class IC_Chain:
         if pNatom is None or pCAatom is None:
             return "previous residue missing N or Ca"
 
-        if not Natom.is_disordered() and not pCatom.is_disordered():
+        if IC_Residue.no_altloc:
+            if Natom.is_disordered():
+                Natom = Natom.selected_child
+            if pCatom.is_disordered():
+                pCatom = pCatom.selected_child
+
+        if IC_Residue.no_altloc or (
+            not Natom.is_disordered() and not pCatom.is_disordered()
+        ):
             dc = self._atm_dist_chk(
                 Natom, pCatom, IC_Chain.MaxPeptideBond, self.sqMaxPeptideBond
             )
@@ -747,7 +756,7 @@ class IC_Chain:
             # select only not hetero or accepted hetero
             if res.id[0] == " " or res.id[0] in IC_Residue.accept_resnames:
                 this_res: List["IC_Residue"] = []
-                if 2 == res.is_disordered():
+                if 2 == res.is_disordered() and not IC_Residue.no_altloc:
                     # print('disordered res:', res.is_disordered(), res)
                     for r in res.child_dict.values():
                         if self._add_residue(r, last_res, last_ord_res, verbose):
@@ -807,8 +816,11 @@ class IC_Chain:
         def setResAtms(res):
             for atm in res.get_atoms():
                 if atm.is_disordered():
-                    for altAtom in atm.child_dict.values():
-                        setAtom(res, altAtom)
+                    if IC_Residue.no_altloc:
+                        setAtom(res, atm.selected_child)
+                    else:
+                        for altAtom in atm.child_dict.values():
+                            setAtom(res, altAtom)
                 else:
                     setAtom(res, atm)
 
@@ -1018,9 +1030,12 @@ class IC_Chain:
             initNCaC = []
             for atm in ric.residue.get_atoms():  # n.b. only few PIC spec atoms
                 if 2 == atm.is_disordered():
-                    for altAtom in atm.child_dict.values():
-                        if altAtom.coord is not None:
-                            initNCaC.append(AtomKey(ric, altAtom))
+                    if IC_Residue.no_altloc:
+                        initNCaC.append(AtomKey(ric, atm.selected_child))
+                    else:
+                        for altAtom in atm.child_dict.values():
+                            if altAtom.coord is not None:
+                                initNCaC.append(AtomKey(ric, altAtom))
                 elif atm.coord is not None:
                     initNCaC.append(AtomKey(ric, atm))
             if initNCaC != []:
@@ -3263,6 +3278,8 @@ class IC_Residue:
             override atom chain id if not None
         """
         if 2 == atm.is_disordered():
+            if IC_Residue.no_altloc:
+                return IC_Residue._pdb_atom_string(atm.selected_child, cif_extend)
             s = ""
             for a in atm.child_dict.values():
                 s += IC_Residue._pdb_atom_string(a, cif_extend)
@@ -3511,7 +3528,7 @@ class IC_Residue:
             col = 0
             for a in sorted(self.residue.get_atoms()):
                 if 2 == a.is_disordered():
-                    if self.alt_ids is None:
+                    if IC_Residue.no_altloc or self.alt_ids is None:
                         s, col = self._write_pic_bfac(a.selected_child, s, col)
                     else:
                         for atm in a.child_dict.values():
