@@ -14,7 +14,7 @@ from Bio import BiopythonExperimentalWarning
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.fasta_m8 import AlignmentIterator
+    from Bio.Align.tabular import AlignmentIterator
 
 
 try:

@@ -22,7 +22,7 @@ from Bio import BiopythonExperimentalWarning
 import warnings
 
 warnings.warn(
-    "Bio.Align.fasta_m8 is an experimental module which may undergo "
+    "Bio.Align.tabular is an experimental module which may undergo "
     "significant changes prior to its future official release.",
     BiopythonExperimentalWarning,
 )
