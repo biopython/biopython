@@ -57,9 +57,50 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = next(stream)
         except StopIteration:
             raise ValueError("Empty file.") from None
-
         assert line.startswith("# ")
-        self.commandline = line[2:].strip()
+        line = line.rstrip()
+        self._parse_header(stream, line)
+
+    def _parse_header(self, stream, line):
+        if line[2:].startswith("TBLASTN "):
+            self.program, self.version = line[2:].split(None, 1)
+            self.final_prefix = "# BLAST processed "
+        else:
+            self.commandline = line[2:]
+            line = next(stream)
+            assert line.startswith("# ")
+            self.program, self.version = line[2:].rstrip().split(None, 1)
+            self.final_prefix = "# FASTA processed "
+        line = next(stream)
+        line = line.strip()
+        prefix = "# Query: "
+        assert line.startswith(prefix)
+        if self.program == 'FASTA':
+            query_line, query_size = line[len(prefix) :].strip().rsplit(" - ", 1)
+            query_size, unit = query_size.split()
+            self._query_size = int(query_size)
+            assert unit in ("nt", "aa")
+        else:
+            query_line = line[len(prefix) :].strip()
+        try:
+            self._query_id, self._query_description = query_line.split(None, 1)
+        except ValueError:
+            self._query_id = query_line.strip()
+            self._query_description = None
+        line = next(stream)
+        prefix = "# Database: "
+        assert line.startswith(prefix)
+        self._database = line[len(prefix) :].strip()
+        line = next(stream)
+        prefix = "# Fields: "
+        if line.startswith(prefix):
+            self.fields = line[len(prefix) :].strip().split(", ")
+            line = next(stream)
+        line = line.strip()
+        assert line.startswith("# ")
+        suffix = " hits found"
+        assert line.endswith(suffix)
+        hits = int(line[2 : -len(suffix)])
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -67,103 +108,156 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             raise StopIteration
 
         for line in stream:
+            line = line.rstrip()
             if line.startswith("# "):
-                line = line.strip()
-                if line.startswith("# FASTA processed ") and line.endswith(" queries"):
+                if line.startswith(self.final_prefix) and line.endswith(" queries"):
                     return
-                self._program = line[2:]
-                line = next(stream)
-                prefix = "# Query: "
-                assert line.startswith(prefix)
-                query_line, query_size = line[len(prefix) :].strip().rsplit(" - ", 1)
-                query_size, unit = query_size.split()
-                self._query_size = int(query_size)
-                assert unit in ("nt", "aa")
-                try:
-                    self._query_id, self._query_description = query_line.split(None, 1)
-                except ValueError:
-                    self._query_id = query_line.strip()
-                    self._query_description = None
-                line = next(stream)
-                prefix = "# Database: "
-                assert line.startswith(prefix)
-                self._database = line[len(prefix) :].strip()
-                line = next(stream)
-                prefix = "# Fields: "
-                assert line.startswith(prefix)
-                fields = line[len(prefix) :].strip().split(", ")
-                assert fields[0] == "query id"
-                assert fields[1] == "subject id"
-                assert fields[2] == "% identity"
-                assert fields[3] == "alignment length"
-                assert fields[4] == "mismatches"
-                assert fields[5] == "gap opens"
-                assert fields[6] == "q. start"
-                assert fields[7] == "q. end"
-                assert fields[8] == "s. start"
-                assert fields[9] == "s. end"
-                assert fields[10] == "evalue"
-                assert fields[11] == "bit score"
-                if fields[12] == "BTOP":
-                    self._alignment_representation = "BTOP"
-                elif fields[12] == "aln_code":
-                    self._alignment_representation = "CIGAR"
-                else:
-                    raise ValueError("Unexpected field '%s'" % fields[12])
-                line = next(stream)
-                line = line.strip()
-                assert line.startswith("# ")
-                suffix = " hits found"
-                assert line.endswith(suffix)
-                hits = int(line[2 : -len(suffix)])
+                self._parse_header(stream, line)
             else:
                 yield self.create_alignment(line)
 
     def create_alignment(self, line):
-        """Parse one line of FASTA output and return an Alignment object."""
+        """Parse one line of output and return an Alignment object."""
+        percentage_identity = None
+        alignment_length = None
+        identical = None
+        gaps = None
+        mismatches = None
+        btop = None
+        cigar = None
+        score = None
+        query_sequence = None
+        target_sequence = None
+        target_length = None
+        try:
+            query_size = self._query_size
+        except AttributeError:
+            query_size = None
         columns = line.split()
-        assert len(columns) == 13
+        assert len(columns) == len(self.fields)
         annotations = {}
-        annotations["program"] = self._program
         annotations["database"] = self._database
-        if self._query_id is not None:
-            assert columns[0] == self._query_id
-        query_id = columns[0]
-        target_id = columns[1]
-        percentage_identity = float(columns[2])
-        alignment_length = int(columns[3])
-        mismatches = int(columns[4])
-        matches = alignment_length - mismatches
-        difference = abs(100 * matches / alignment_length - percentage_identity)
-        assert difference < 0.015
-        gap_opens = int(columns[5])
-        query_start = int(columns[6]) - 1
-        query_end = int(columns[7])
-        target_start = int(columns[8]) - 1
-        target_end = int(columns[9])
-        annotations["mismatches"] = mismatches
-        annotations["evalue"] = float(columns[10])
-        annotations["bit_score"] = float(columns[11])
-        if self._alignment_representation == "BTOP":
-            coordinates = self.parse_btop(columns[12])
-        elif self._alignment_representation == "CIGAR":
-            coordinates = self.parse_cigar(columns[12])
+        for column, field in zip(columns, self.fields):
+            if field == "query id":
+                query_id = columns[0]
+                if self._query_id is not None:
+                    assert query_id == self._query_id
+            elif field == "subject id":
+                target_id = columns[1]
+            elif field == "% identity":
+                percentage_identity = float(column)
+            elif field == "alignment length":
+                alignment_length = int(column)
+            elif field == "mismatches":
+                mismatches = int(column)
+                annotations[field] = mismatches
+            elif field == "gap opens":
+                gap_opens = int(column)
+            elif field == "q. start":
+                query_start = int(column) - 1
+            elif field == "q. end":
+                query_end = int(column)
+            elif field == "s. start":
+                target_start = int(column) - 1
+            elif field == "s. end":
+                target_end = int(column)
+            elif field == "evalue":
+                annotations["evalue"] = float(column)
+            elif field == "bit score":
+                annotations["bit_score"] = float(column)
+            elif field == "BTOP":
+                coordinates = self.parse_btop(column)
+            elif field == "aln_code":
+                coordinates = self.parse_cigar(column)
+            elif field == "query gi":
+                annotations[field] = column
+            elif field == "query acc.":
+                annotations[field] = column
+            elif field == "query acc.ver":
+                annotations[field] = column
+            elif field == "query length":
+                if query_size is None:
+                    query_size = int(column)
+                else:
+                    assert query_size == int(column)
+            elif field == "subject ids":
+                annotations[field] = column
+            elif field == "subject gi":
+                annotations[field] = column
+            elif field == "subject gis":
+                annotations[field] = column
+            elif field == "subject acc.":
+                annotations[field] = column
+            elif field == "subject acc.ver":
+                annotations[field] = column
+            elif field == "subject length":
+                target_length = int(column)
+            elif field == "query seq":
+                query_sequence = column
+            elif field == "subject seq":
+                target_sequence = column
+            elif field == "score":
+                score = int(column)
+            elif field == "identical":
+                identical = int(column)
+                annotations[field] = identical
+            elif field == "positives":
+                annotations[field] = int(column)
+            elif field == "gaps":
+                gaps = int(column)
+                annotations[field] = gaps
+            elif field == "% positives":
+                annotations[field] = float(column)
+            elif field == "query/sbjct frames":
+                annotations[field] = column
+            elif field == "query frame":
+                annotations[field] = column
+            elif field == "sbjct frame":
+                annotations[field] = column
+            else:
+                raise ValueError("Unexpected field '%s'" % field)
+        if alignment_length is not None and percentage_identity is not None:
+            if identical is None:
+                if mismatches is not None and gaps is not None:
+                    identical = alignment_length - mismatches - gaps
+            if identical is not None:
+                difference = abs(100 * identical / alignment_length - percentage_identity)
+                assert difference < 0.015
         coordinates[0, :] += target_start
         if query_start < query_end:
             coordinates[1, :] += query_start
         else:
             # mapped to reverse strand
             coordinates[1, :] = query_start - coordinates[1, :] + 1
-        query_size = self._query_size
-        query_sequence = Seq(None, length=query_size)
-        query = SeqRecord(query_sequence, id=query_id)
+        if query_sequence is None:
+            query_seq = Seq(None, length=query_size)
+        else:
+            query_sequence = query_sequence.replace("-", "")
+            assert len(query_sequence) == query_end - query_start
+            query_seq = Seq({query_start: query_sequence}, length=query_size)
+        query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
-        target_sequence = Seq(None, length=target_end)
-        target = SeqRecord(target_sequence, id=target_id)
+        if target_sequence is None:
+            if target_length is None:
+                target_seq = Seq(None, length=target_end)
+            else:
+                target_seq = Seq(None, length=target_length)
+        else:
+            target_sequence = target_sequence.replace("-", "")
+            if target_start is not None and target_end is not None:
+                if self.program == "TBLASTN":
+                    target_length = (target_end - target_start) // 3
+                else:
+                    target_length = target_end - target_start
+                assert len(target_sequence) == target_length
+            target_seq = Seq({target_start: target_sequence}, length=target_end)
+        target = SeqRecord(target_seq, id=target_id)
         records = [target, query]
         alignment = Alignment(records, coordinates)
         alignment.annotations = annotations
+        if score is not None:
+            alignment.score = score
         return alignment
 
     def parse_btop(self, btop):
