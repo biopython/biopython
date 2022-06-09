@@ -104,46 +104,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            5,
-                            33,
-                            33,
-                            46,
-                            48,
-                            58,
-                            59,
-                            62,
-                            62,
-                            101,
-                            102,
-                            125,
-                            127,
-                            142,
-                            144,
-                            218,
-                        ],
-                        [
-                            3,
-                            31,
-                            40,
-                            53,
-                            53,
-                            63,
-                            63,
-                            66,
-                            67,
-                            106,
-                            106,
-                            129,
-                            129,
-                            144,
-                            144,
-                            218,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
+                              62, 101, 102, 125, 127, 142, 144, 218],
+                             [ 3,  31,  40,  53,  53,  63,  63,  66,
+                              67, 106, 106, 129, 129, 144, 144, 218]])
+                # fmt: on
             )
         )
         query = self.query
