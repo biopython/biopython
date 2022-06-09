@@ -1425,7 +1425,7 @@ class TestFastaNucleotide(unittest.TestCase):
                               473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
                              [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
                               418, 431, 431, 444, 444, 474, 474, 480, 482, 594]])
-		# fmt: on
+                # fmt: on
             )
         )
         query = self.query
@@ -1742,7 +1742,6 @@ class TestFastaBasic(unittest.TestCase):
 
 
 class TestBlast(unittest.TestCase):
-
     def test_tblastn_011(self):
         path = "Blast/tab_2226_tblastn_011.txt"
         with open(path) as stream:
@@ -1752,25 +1751,42 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.query.annotations["gi"], "0")
-            self.assertEqual(alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(
+                alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
+            )
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|"
+            )
             self.assertEqual(len(alignment.query.seq), 102)
             self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|145479850|ref|XM_001425911.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|145479850|ref|XM_001425911.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|145479850|ref|XM_001425911.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|145479850|ref|XM_001425911.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|145479850|ref|XM_001425911.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|145479850|ref|XM_001425911.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 4632)
             self.assertTrue(
                 numpy.array_equal(
-                    alignment.coordinates, numpy.array([[0, 43], [30, 73]]),
+                    alignment.coordinates,
+                    numpy.array([[0, 43], [30, 73]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1743)
             self.assertEqual(alignment.target.annotations["end"], 1872)
-            self.assertEqual(alignment.target.seq, "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID")
-            self.assertEqual(alignment.query.seq[30:73], "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD")
+            self.assertEqual(
+                alignment.target.seq, "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID"
+            )
+            self.assertEqual(
+                alignment.query.seq[30:73],
+                "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.7)
             self.assertAlmostEqual(alignment.score, 78)
@@ -1788,30 +1804,46 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.query.annotations["gi"], "0")
-            self.assertEqual(alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(
+                alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
+            )
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|"
+            )
             self.assertEqual(len(alignment.query.seq), 102)
             self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|72012412|ref|XM_777959.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|72012412|ref|XM_777959.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|72012412|ref|XM_777959.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|72012412|ref|XM_777959.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|72012412|ref|XM_777959.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"], "gi|72012412|ref|XM_777959.1|"
+            )
             self.assertEqual(alignment.target.annotations["length"], 1593)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 35, 43, 59],
                                  [43, 78, 78, 94]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1056)
             self.assertEqual(alignment.target.annotations["end"], 1233)
-            self.assertEqual(alignment.target.seq, "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL")
-            self.assertEqual(alignment.query.seq[43:94], "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLL")
+            self.assertEqual(
+                alignment.target.seq,
+                "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL",
+            )
+            self.assertEqual(
+                alignment.query.seq[43:94],
+                "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
             self.assertAlmostEqual(alignment.score, 70)
@@ -1829,30 +1861,47 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.query.annotations["gi"], "0")
-            self.assertEqual(alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(
+                alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
+            )
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|16080617|ref|NP_391444.1|"
+            )
             self.assertEqual(len(alignment.query.seq), 102)
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|115975252|ref|XM_001180111.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|115975252|ref|XM_001180111.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|115975252|ref|XM_001180111.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|115975252|ref|XM_001180111.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|115975252|ref|XM_001180111.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|115975252|ref|XM_001180111.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1593)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 35, 43, 59],
                                  [43, 78, 78, 94]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1056)
             self.assertEqual(alignment.target.annotations["end"], 1233)
-            self.assertEqual(alignment.target.seq, "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL")
-            self.assertEqual(alignment.query.seq[43:94], "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLL")
+            self.assertEqual(
+                alignment.target.seq,
+                "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL",
+            )
+            self.assertEqual(
+                alignment.query.seq[43:94],
+                "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
             self.assertAlmostEqual(alignment.score, 70)
@@ -1871,14 +1920,23 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350596019|ref|XM_003360601.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350596019|ref|XM_003360601.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|350596019|ref|XM_003360601.2|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|350596019|ref|XM_003360601.2|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|350596019|ref|XM_003360601.2|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|350596019|ref|XM_003360601.2|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 772)
             self.assertTrue(
                 numpy.array_equal(
@@ -1887,8 +1945,14 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
-            self.assertEqual(alignment.target.seq, "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK")
-            self.assertEqual(alignment.query.seq[0:98], "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
+            )
+            self.assertEqual(
+                alignment.query.seq[0:98],
+                "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.score, 506)
@@ -1907,29 +1971,44 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350596019|ref|XM_003360601.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350596019|ref|XM_003360601.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|350596019|ref|XM_003360601.2|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|350596019|ref|XM_003360601.2|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|350596019|ref|XM_003360601.2|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|350596019|ref|XM_003360601.2|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 772)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 25, 26, 39, 42, 71],
                                  [29, 54, 54, 67, 67, 96]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 541)
             self.assertEqual(alignment.target.annotations["end"], 754)
-            self.assertEqual(alignment.target.seq, "LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA")
-            self.assertEqual(alignment.query.seq[29:96], "IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA")
+            self.assertEqual(
+                alignment.target.seq,
+                "LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA",
+            )
+            self.assertEqual(
+                alignment.query.seq[29:96],
+                "IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 32.7)
             self.assertAlmostEqual(alignment.score, 73)
@@ -1948,24 +2027,40 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|301779869|ref|XM_002925302.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|301779869|ref|XM_002925302.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|301779869|ref|XM_002925302.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|301779869|ref|XM_002925302.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|301779869|ref|XM_002925302.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|301779869|ref|XM_002925302.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1144)
             self.assertTrue(
                 numpy.array_equal(
-                    alignment.coordinates, numpy.array([[0, 98], [0, 98]]),
+                    alignment.coordinates,
+                    numpy.array([[0, 98], [0, 98]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
-            self.assertEqual(alignment.target.seq, "KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
-            self.assertEqual(alignment.query.seq[0:98], "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
+            self.assertEqual(
+                alignment.query.seq[0:98],
+                "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
@@ -1984,30 +2079,44 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|301779869|ref|XM_002925302.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|301779869|ref|XM_002925302.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|301779869|ref|XM_002925302.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|301779869|ref|XM_002925302.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|301779869|ref|XM_002925302.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|301779869|ref|XM_002925302.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1144)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
-                # fmt: on
-
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 803)
             self.assertEqual(alignment.target.annotations["end"], 1103)
-            self.assertEqual(alignment.target.seq, "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNPDVRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA")
-            self.assertEqual(alignment.query.seq[2:96], "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA")
+            self.assertEqual(
+                alignment.target.seq,
+                "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNPDVRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA",
+            )
+            self.assertEqual(
+                alignment.query.seq[2:96],
+                "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 105)
@@ -2026,14 +2135,23 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296223671|ref|XM_002757683.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|296223671|ref|XM_002757683.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|296223671|ref|XM_002757683.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|296223671|ref|XM_002757683.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|296223671|ref|XM_002757683.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|296223671|ref|XM_002757683.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1183)
             self.assertTrue(
                 numpy.array_equal(
@@ -2043,8 +2161,14 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
-            self.assertEqual(alignment.target.seq, "KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
-            self.assertEqual(alignment.query.seq[0:98], "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
+            self.assertEqual(
+                alignment.query.seq[0:98],
+                "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
@@ -2063,29 +2187,44 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296223671|ref|XM_002757683.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|296223671|ref|XM_002757683.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|296223671|ref|XM_002757683.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|296223671|ref|XM_002757683.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|296223671|ref|XM_002757683.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|296223671|ref|XM_002757683.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1183)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[0, 27, 29, 64, 68, 100],
                                  [2, 29, 29, 64, 64,  96]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 865)
             self.assertEqual(alignment.target.annotations["end"], 1165)
-            self.assertEqual(alignment.target.seq, "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNSDGRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA")
-            self.assertEqual(alignment.query.seq[2:96], "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA")
+            self.assertEqual(
+                alignment.target.seq,
+                "IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNSDGRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA",
+            )
+            self.assertEqual(
+                alignment.query.seq[2:96],
+                "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 105)
@@ -2104,14 +2243,23 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|338714227|ref|XM_001492113.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|338714227|ref|XM_001492113.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|338714227|ref|XM_001492113.3|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|338714227|ref|XM_001492113.3|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|338714227|ref|XM_001492113.3|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|338714227|ref|XM_001492113.3|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1390)
             self.assertTrue(
                 numpy.array_equal(
@@ -2121,8 +2269,14 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
-            self.assertEqual(alignment.target.seq, "KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
-            self.assertEqual(alignment.query.seq[0:98], "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
+            self.assertEqual(
+                alignment.query.seq[0:98],
+                "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
@@ -2141,29 +2295,44 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|338714227|ref|XM_001492113.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|338714227|ref|XM_001492113.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|338714227|ref|XM_001492113.3|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|338714227|ref|XM_001492113.3|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|338714227|ref|XM_001492113.3|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|338714227|ref|XM_001492113.3|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 1390)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 898)
             self.assertEqual(alignment.target.annotations["end"], 1198)
-            self.assertEqual(alignment.target.seq, "IKQGCLLKQGHRRKNWKVRKFVLREDPAYVHYYDPAGGEEPLGAIHLRGCVVTSVEGNPDGKKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA")
-            self.assertEqual(alignment.query.seq[2:96], "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA")
+            self.assertEqual(
+                alignment.target.seq,
+                "IKQGCLLKQGHRRKNWKVRKFVLREDPAYVHYYDPAGGEEPLGAIHLRGCVVTSVEGNPDGKKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA",
+            )
+            self.assertEqual(
+                alignment.query.seq[2:96],
+                "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
             self.assertAlmostEqual(alignment.score, 109)
@@ -2182,29 +2351,44 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|11464971:4-101")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|11464971:4-101")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|11464971:4-101"
+            )
             self.assertEqual(len(alignment.query.seq), 98)
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "0")
             self.assertEqual(alignment.target.annotations["gis"], "0")
-            self.assertEqual(alignment.target.annotations["acc."], "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["acc.ver"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["acc."], "gi|365982352|ref|XM_003667962.1|"
+            )
+            self.assertEqual(
+                alignment.target.annotations["acc.ver"],
+                "gi|365982352|ref|XM_003667962.1|",
+            )
             self.assertEqual(alignment.target.annotations["length"], 4932)
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                # fmt: off
+                    # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 15, 24, 52],
                                  [11, 26, 26, 54]])
-                # fmt: on
+                    # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 3180)
             self.assertEqual(alignment.target.annotations["end"], 3336)
-            self.assertEqual(alignment.target.seq, "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS")
-            self.assertEqual(alignment.query.seq[11:54], "GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTS")
+            self.assertEqual(
+                alignment.target.seq,
+                "GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS",
+            )
+            self.assertEqual(
+                alignment.query.seq[11:54],
+                "GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTS",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 19.6)
             self.assertAlmostEqual(alignment.score, 39)
