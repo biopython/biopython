@@ -207,9 +207,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "query/sbjct frames":
                 annotations[field] = column
             elif field == "query frame":
-                annotations[field] = column
+                query_annotations["frame"] = column
             elif field == "sbjct frame":
-                annotations[field] = column
+                target_annotations["frame"] = column
             else:
                 raise ValueError("Unexpected field '%s'" % field)
         if query_start < query_end:
