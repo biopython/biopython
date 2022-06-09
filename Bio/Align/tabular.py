@@ -90,7 +90,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         line = next(stream)
         prefix = "# Database: "
         assert line.startswith(prefix)
-        self._database = line[len(prefix) :].strip()
+        self.database = line[len(prefix) :].strip()
         line = next(stream)
         prefix = "# Fields: "
         if line.startswith(prefix):
@@ -118,11 +118,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def create_alignment(self, line):
         """Parse one line of output and return an Alignment object."""
-        percentage_identity = None
         alignment_length = None
         identical = None
-        gaps = None
-        mismatches = None
         btop = None
         cigar = None
         score = None
@@ -136,23 +133,23 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         columns = line.split()
         assert len(columns) == len(self.fields)
         annotations = {}
-        annotations["database"] = self._database
+        query_annotations = {}
+        target_annotations = {}
         for column, field in zip(columns, self.fields):
             if field == "query id":
-                query_id = columns[0]
+                query_id = column
                 if self._query_id is not None:
                     assert query_id == self._query_id
             elif field == "subject id":
-                target_id = columns[1]
+                target_id = column
             elif field == "% identity":
-                percentage_identity = float(column)
+                annotations[field] = float(column)
             elif field == "alignment length":
                 alignment_length = int(column)
             elif field == "mismatches":
-                mismatches = int(column)
-                annotations[field] = mismatches
+                annotations[field] = int(column)
             elif field == "gap opens":
-                gap_opens = int(column)
+                annotations[field] = int(column)
             elif field == "q. start":
                 query_start = int(column) - 1
             elif field == "q. end":
@@ -164,32 +161,32 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "evalue":
                 annotations["evalue"] = float(column)
             elif field == "bit score":
-                annotations["bit_score"] = float(column)
+                annotations["bit score"] = float(column)
             elif field == "BTOP":
                 coordinates = self.parse_btop(column)
             elif field == "aln_code":
                 coordinates = self.parse_cigar(column)
             elif field == "query gi":
-                annotations[field] = column
+                query_annotations["gi"] = column
             elif field == "query acc.":
-                annotations[field] = column
+                query_annotations["acc."] = column
             elif field == "query acc.ver":
-                annotations[field] = column
+                query_annotations["acc.ver"] = column
             elif field == "query length":
                 if query_size is None:
                     query_size = int(column)
                 else:
                     assert query_size == int(column)
             elif field == "subject ids":
-                annotations[field] = column
+                target_annotations["ids"] = column
             elif field == "subject gi":
-                annotations[field] = column
+                target_annotations["gi"] = column
             elif field == "subject gis":
-                annotations[field] = column
+                target_annotations["gis"] = column
             elif field == "subject acc.":
-                annotations[field] = column
+                target_annotations["acc."] = column
             elif field == "subject acc.ver":
-                annotations[field] = column
+                target_annotations["acc.ver"] = column
             elif field == "subject length":
                 target_length = int(column)
             elif field == "query seq":
@@ -204,8 +201,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "positives":
                 annotations[field] = int(column)
             elif field == "gaps":
-                gaps = int(column)
-                annotations[field] = gaps
+                annotations[field] = int(column)
             elif field == "% positives":
                 annotations[field] = float(column)
             elif field == "query/sbjct frames":
@@ -216,14 +212,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 annotations[field] = column
             else:
                 raise ValueError("Unexpected field '%s'" % field)
-        if alignment_length is not None and percentage_identity is not None:
-            if identical is None:
-                if mismatches is not None and gaps is not None:
-                    identical = alignment_length - mismatches - gaps
-            if identical is not None:
-                difference = abs(100 * identical / alignment_length - percentage_identity)
-                assert difference < 0.015
-        coordinates[0, :] += target_start
         if query_start < query_end:
             coordinates[1, :] += query_start
         else:
@@ -238,21 +226,28 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
+        if query_annotations:
+            query.annotations = query_annotations
         if target_sequence is None:
-            if target_length is None:
-                target_seq = Seq(None, length=target_end)
-            else:
-                target_seq = Seq(None, length=target_length)
+            target_seq = Seq(None, length=target_end)
         else:
             target_sequence = target_sequence.replace("-", "")
+        if self.program == "TBLASTN":
+            target_annotations["start"] = target_start
+            target_annotations["end"] = target_end
+            target_annotations["length"] = target_length
+            target_seq = Seq(target_sequence)
+        else:
+            coordinates[0, :] += target_start
             if target_start is not None and target_end is not None:
-                if self.program == "TBLASTN":
-                    target_length = (target_end - target_start) // 3
+                if target_sequence is None:
+                    target_seq = Seq(None, length=target_end)
                 else:
-                    target_length = target_end - target_start
-                assert len(target_sequence) == target_length
-            target_seq = Seq({target_start: target_sequence}, length=target_end)
+                    assert len(target_sequence) == target_end - target_start
+                    target_seq = Seq({target_start: target_sequence}, length=target_end)
         target = SeqRecord(target_seq, id=target_id)
+        if target_annotations:
+            target.annotations = target_annotations
         records = [target, query]
         alignment = Alignment(records, coordinates)
         alignment.annotations = annotations
@@ -271,7 +266,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_coordinates.append(0)
         query_coordinates.append(0)
         state = State.NONE
-        tokens = re.findall("([A-Z-]{2}|\\d+)", btop)
+        tokens = re.findall("([A-Z-*]{2}|\\d+)", btop)
         # each token is now
         # - an integer
         # - a pair of characters, which may include dashes
