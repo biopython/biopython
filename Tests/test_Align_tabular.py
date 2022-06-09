@@ -144,7 +144,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 35,  48,  48,  58,  59,  73],
+                             [176, 189, 190, 200, 200, 214]]),
+                # fmt: on
             )
         )
         query = self.query
@@ -172,7 +176,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[228, 274, 276, 300], [136, 182, 182, 206]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[228, 274, 276, 300],
+                             [136, 182, 182, 206]])
+                # fmt: on
             )
         )
         query = self.query
@@ -231,12 +239,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
-                        [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190],
-                    ],
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 15,  29,  32,  40,  43,  47,
+                               49,  51,  51,  58,  59,  64],
+                             [149, 163, 163, 171, 171, 175,
+                              175, 177, 178, 185, 185, 190]])
+                # fmt: on
             )
         )
         query = self.query
@@ -268,12 +277,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
-                        [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193],
-                    ],
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 27,  47,  50,  58,  58,  68,
+                               68,  73,  73,  82,  82,  88],
+                             [128, 148, 148, 156, 157, 167,
+                              168, 173, 175, 184, 187, 193]])
+                # fmt: on
             )
         )
         query = self.query
@@ -307,9 +317,12 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                 numpy.array(
-                    [[12, 26, 26, 36, 38, 49, 52, 62], [43, 57, 61, 71, 71, 82, 82, 92]]
-                ),
+                    [[12, 26, 26, 36, 38, 49, 52, 62],
+                     [43, 57, 61, 71, 71, 82, 82, 92]])
+                # fmt: on
             )
         )
         query = self.query
@@ -341,7 +354,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[85, 86, 86, 89, 89, 94], [114, 115, 116, 119, 120, 125]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 85,  86,  86,  89,  89,  94],
+                             [114, 115, 116, 119, 120, 125]])
+                # fmt: on
             )
         )
         query = self.query
@@ -425,7 +442,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[11, 25, 27, 67, 69, 82], [57, 71, 71, 111, 111, 124]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11, 25, 27,  67,  69,  82],
+                             [57, 71, 71, 111, 111, 124]])
+                # fmt: on
             )
         )
         query = self.query
@@ -510,46 +531,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            5,
-                            33,
-                            33,
-                            46,
-                            48,
-                            58,
-                            59,
-                            62,
-                            62,
-                            101,
-                            102,
-                            125,
-                            127,
-                            142,
-                            144,
-                            218,
-                        ],
-                        [
-                            3,
-                            31,
-                            40,
-                            53,
-                            53,
-                            63,
-                            63,
-                            66,
-                            67,
-                            106,
-                            106,
-                            129,
-                            129,
-                            144,
-                            144,
-                            218,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
+                              62, 101, 102, 125, 127, 142, 144, 218],
+                             [ 3,  31,  40,  53,  53,  63,  63,  66,
+                              67, 106, 106, 129, 129, 144, 144, 218]])
+                # fmt: on
             )
         )
         query = self.query
@@ -583,7 +571,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[35, 48, 48, 58, 59, 73], [176, 189, 190, 200, 200, 214]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 35,  48,  48,  58,  59,  73],
+                             [176, 189, 190, 200, 200, 214]])
+                # fmt: on
             )
         )
         query = self.query
@@ -611,7 +603,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[228, 274, 276, 300], [136, 182, 182, 206]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[228, 274, 276, 300],
+                             [136, 182, 182, 206]]),
+                # fmt: on
             )
         )
         query = self.query
@@ -670,12 +666,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [15, 29, 32, 40, 43, 47, 49, 51, 51, 58, 59, 64],
-                        [149, 163, 163, 171, 171, 175, 175, 177, 178, 185, 185, 190],
-                    ],
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[15,  29,  32,  40,  43,  47,
+                              49,  51,  51,  58,  59,  64],
+                            [149, 163, 163, 171, 171, 175,
+                             175, 177, 178, 185, 185, 190]])
+                # fmt: on
             )
         )
         query = self.query
@@ -707,12 +704,13 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [27, 47, 50, 58, 58, 68, 68, 73, 73, 82, 82, 88],
-                        [128, 148, 148, 156, 157, 167, 168, 173, 175, 184, 187, 193],
-                    ],
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 27,  47,  50,  58,  58,  68,
+                               68,  73,  73,  82,  82,  88],
+                             [128, 148, 148, 156, 157, 167,
+                              168, 173, 175, 184, 187, 193]])
+                # fmt: on
             )
         )
         query = self.query
@@ -746,9 +744,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [[12, 26, 26, 36, 38, 49, 52, 62], [43, 57, 61, 71, 71, 82, 82, 92]]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[12, 26, 26, 36, 38, 49, 52, 62],
+                             [43, 57, 61, 71, 71, 82, 82, 92]])
+                # fmt: on
             )
         )
         query = self.query
@@ -780,7 +780,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[85, 86, 86, 89, 89, 94], [114, 115, 116, 119, 120, 125]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 85,  86,  86,  89,  89,  94],
+                             [114, 115, 116, 119, 120, 125]]),
+                # fmt: on
             )
         )
         query = self.query
@@ -808,7 +812,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[398, 408, 409, 437], [73, 83, 83, 111]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[398, 408, 409, 437],
+                             [ 73,  83,  83, 111]])
+                # fmt: on
             )
         )
         query = self.query
@@ -864,7 +872,11 @@ class TestFastaProtein(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[11, 25, 27, 67, 69, 82], [57, 71, 71, 111, 111, 124]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11, 25, 27,  67,  69,  82],
+                             [57, 71, 71, 111, 111, 124]])
+                # fmt: on
             )
         )
         query = self.query
@@ -994,54 +1006,13 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            227,
-                            376,
-                            376,
-                            383,
-                            384,
-                            401,
-                            401,
-                            461,
-                            466,
-                            472,
-                            473,
-                            486,
-                            488,
-                            501,
-                            505,
-                            535,
-                            537,
-                            543,
-                            543,
-                            655,
-                        ],
-                        [
-                            175,
-                            324,
-                            325,
-                            332,
-                            332,
-                            349,
-                            352,
-                            412,
-                            412,
-                            418,
-                            418,
-                            431,
-                            431,
-                            444,
-                            444,
-                            474,
-                            474,
-                            480,
-                            482,
-                            594,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
+                              473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
+                             [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
+                              418, 431, 431, 444, 444, 474, 474, 480, 482, 594]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1075,42 +1046,13 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            156,
-                            171,
-                            173,
-                            190,
-                            190,
-                            201,
-                            202,
-                            260,
-                            261,
-                            272,
-                            272,
-                            279,
-                            279,
-                            287,
-                        ],
-                        [
-                            158,
-                            173,
-                            173,
-                            190,
-                            192,
-                            203,
-                            203,
-                            261,
-                            261,
-                            272,
-                            273,
-                            280,
-                            281,
-                            289,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[156, 171, 173, 190, 190, 201, 202,
+                              260, 261, 272, 272, 279, 279, 287],
+                             [158, 173, 173, 190, 192, 203, 203,
+                              261, 261, 272, 273, 280, 281, 289]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1144,7 +1086,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[2302, 2319, 2319, 2325], [265, 282, 283, 289]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[2302, 2319, 2319, 2325],
+                             [ 265,  282,  283,  289]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1172,12 +1118,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
-                        [240, 254, 256, 259, 260, 272, 272, 285],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
+                             [ 240,  254,  256,  259,  260,  272,  272,  285]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1351,9 +1296,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[280, 304, 304, 312, 312, 351],
+                             [378, 354, 353, 345, 343, 304]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1472,54 +1419,13 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            227,
-                            376,
-                            376,
-                            383,
-                            384,
-                            401,
-                            401,
-                            461,
-                            466,
-                            472,
-                            473,
-                            486,
-                            488,
-                            501,
-                            505,
-                            535,
-                            537,
-                            543,
-                            543,
-                            655,
-                        ],
-                        [
-                            175,
-                            324,
-                            325,
-                            332,
-                            332,
-                            349,
-                            352,
-                            412,
-                            412,
-                            418,
-                            418,
-                            431,
-                            431,
-                            444,
-                            444,
-                            474,
-                            474,
-                            480,
-                            482,
-                            594,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
+                              473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
+                             [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
+                              418, 431, 431, 444, 444, 474, 474, 480, 482, 594]])
+		# fmt: on
             )
         )
         query = self.query
@@ -1553,42 +1459,13 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [
-                            156,
-                            171,
-                            173,
-                            190,
-                            190,
-                            201,
-                            202,
-                            260,
-                            261,
-                            272,
-                            272,
-                            279,
-                            279,
-                            287,
-                        ],
-                        [
-                            158,
-                            173,
-                            173,
-                            190,
-                            192,
-                            203,
-                            203,
-                            261,
-                            261,
-                            272,
-                            273,
-                            280,
-                            281,
-                            289,
-                        ],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[156, 171, 173, 190, 190, 201, 202,
+                              260, 261, 272, 272, 279, 279, 287],
+                             [158, 173, 173, 190, 192, 203, 203,
+                              261, 261, 272, 273, 280, 281, 289]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1622,7 +1499,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array([[2302, 2319, 2319, 2325], [265, 282, 283, 289]]),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[2302, 2319, 2319, 2325],
+                              [265,  282,  283,  289]]),
+                # fmt: on
             )
         )
         query = self.query
@@ -1650,12 +1531,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [
-                        [4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
-                        [240, 254, 256, 259, 260, 272, 272, 285],
-                    ]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
+                             [ 240,  254,  256,  259,  260,  272,  272,  285]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1829,9 +1709,11 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
-                numpy.array(
-                    [[280, 304, 304, 312, 312, 351], [378, 354, 353, 345, 343, 304]]
-                ),
+                # fmt: off
+# flake8: noqa
+                numpy.array([[280, 304, 304, 312, 312, 351],
+                             [378, 354, 353, 345, 343, 304]])
+                # fmt: on
             )
         )
         query = self.query
@@ -1919,7 +1801,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                    numpy.array([[ 0, 35, 43, 59], [43, 78, 78, 94]])
+                # fmt: off
+# flake8: noqa
+                    numpy.array([[ 0, 35, 43, 59],
+                                 [43, 78, 78, 94]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1056)
@@ -1956,7 +1842,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 35, 43, 59], [43, 78, 78, 94]])
+                # fmt: off
+# flake8: noqa
+                    numpy.array([[ 0, 35, 43, 59],
+                                 [43, 78, 78, 94]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1056)
@@ -2029,8 +1919,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                     numpy.array([[ 0, 25, 26, 39, 42, 71],
                                  [29, 54, 54, 67, 67, 96]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 541)
@@ -2103,8 +1996,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                     numpy.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
+                # fmt: on
 
                 )
             )
@@ -2179,8 +2075,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                     numpy.array([[0, 27, 29, 64, 68, 100],
                                  [2, 29, 29, 64, 64,  96]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 865)
@@ -2254,8 +2153,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                     numpy.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 898)
@@ -2292,8 +2194,11 @@ class TestBlast(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
+                # fmt: off
+# flake8: noqa
                     numpy.array([[ 0, 15, 24, 52],
                                  [11, 26, 26, 54]])
+                # fmt: on
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 3180)
