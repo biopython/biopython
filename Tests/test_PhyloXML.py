@@ -276,7 +276,7 @@ class TreeTests(unittest.TestCase):
             (
                 "Hirschweg, Winterthur, Switzerland",
                 "Nagoya, Aichi, Japan",
-                "ETH Zürich",
+                "ETH Z\u00fcrich",  # Windows CI issue
                 "San Diego",
             ),
             (47.481277, 35.155904, 47.376334, 32.880933),
