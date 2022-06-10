@@ -51,13 +51,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
          - source   - input data or file name
 
         """
-        super().__init__(source, mode="t", fmt="FASTA")
+        super().__init__(source, mode="t", fmt="Tabular")
         stream = self.stream
         try:
             line = next(stream)
         except StopIteration:
             raise ValueError("Empty file.") from None
-        assert line.startswith("# ")
+        if not line.startswith("# "):
+            raise ValueError("Missing header.")
         line = line.rstrip()
         self._parse_header(stream, line)
 

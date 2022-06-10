@@ -1742,6 +1742,30 @@ class TestFastaBasic(unittest.TestCase):
 
 
 class TestBlast(unittest.TestCase):
+    def test_2226_tblastn_001(self):
+        path = "Blast/tab_2226_tblastn_001.txt"
+        with open(path) as stream:
+            with self.assertRaisesRegex(ValueError, "Missing header."):
+                AlignmentIterator(stream)
+
+    def test_2226_tblastn_002(self):
+        path = "Blast/tab_2226_tblastn_002.txt"
+        with open(path) as stream:
+            with self.assertRaisesRegex(ValueError, "Empty file."):
+                AlignmentIterator(stream)
+
+    def test_2226_tblastn_003(self):
+        path = "Blast/tab_2226_tblastn_003.txt"
+        with open(path) as stream:
+            with self.assertRaisesRegex(ValueError, "Missing header."):
+                AlignmentIterator(stream)
+
+    def test_2226_tblastn_004(self):
+        path = "Blast/tab_2226_tblastn_004.txt"
+        with open(path) as stream:
+            with self.assertRaisesRegex(ValueError, "Missing header."):
+                AlignmentIterator(stream)
+
     def test_2226_tblastn_005(self):
         path = "Blast/tab_2226_tblastn_005.txt"
         with open(path) as stream:
@@ -2105,6 +2129,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["gap opens"], 1)
             with self.assertRaises(StopIteration):
                 next(alignments)
+
+    def test_2226_tblastn_009(self):
+        path = "Blast/tab_2226_tblastn_009.txt"
+        with open(path) as stream:
+            with self.assertRaisesRegex(ValueError, "Missing header."):
+                AlignmentIterator(stream)
 
     def test_2226_tblastn_010(self):
         path = "Blast/tab_2226_tblastn_010.txt"
