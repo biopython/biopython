@@ -62,7 +62,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self._parse_header(stream, line)
 
     def _parse_header(self, stream, line):
-        if line[2:].startswith("TBLASTN "):
+        if line[2:].startswith("TBLASTN ") or line[2:].startswith("TBLASTX "):
             self.program, self.version = line[2:].split(None, 1)
             self.final_prefix = "# BLAST processed "
         else:
@@ -71,36 +71,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             assert line.startswith("# ")
             self.program, self.version = line[2:].rstrip().split(None, 1)
             self.final_prefix = "# FASTA processed "
-        line = next(stream)
-        line = line.strip()
-        prefix = "# Query: "
-        assert line.startswith(prefix)
-        if self.program == 'FASTA':
-            query_line, query_size = line[len(prefix) :].strip().rsplit(" - ", 1)
-            query_size, unit = query_size.split()
-            self._query_size = int(query_size)
-            assert unit in ("nt", "aa")
-        else:
-            query_line = line[len(prefix) :].strip()
-        try:
-            self._query_id, self._query_description = query_line.split(None, 1)
-        except ValueError:
-            self._query_id = query_line.strip()
-            self._query_description = None
-        line = next(stream)
-        prefix = "# Database: "
-        assert line.startswith(prefix)
-        self.database = line[len(prefix) :].strip()
-        line = next(stream)
-        prefix = "# Fields: "
-        if line.startswith(prefix):
-            self.fields = line[len(prefix) :].strip().split(", ")
-            line = next(stream)
-        line = line.strip()
-        assert line.startswith("# ")
-        suffix = " hits found"
-        assert line.endswith(suffix)
-        hits = int(line[2 : -len(suffix)])
+        for line in stream:
+            line = line.strip()
+            assert line.startswith("# ")
+            try:
+                prefix, value = line[2:].split(": ")
+            except ValueError:
+                suffix = " hits found"
+                assert line.endswith(suffix)
+                hits = int(line[2 : -len(suffix)])
+                return
+            if prefix == "Query":
+                if self.program == "FASTA":
+                    query_line, query_size = value.rsplit(" - ", 1)
+                    query_size, unit = query_size.split()
+                    self._query_size = int(query_size)
+                    assert unit in ("nt", "aa")
+                else:
+                    query_line = value
+                try:
+                    self._query_id, self._query_description = query_line.split(None, 1)
+                except ValueError:
+                    self._query_id = query_line.strip()
+                    self._query_description = None
+            elif prefix == "Database":
+                self.database = value
+            elif prefix == "Fields":
+                self.fields = value.split(", ")
+            elif prefix == "RID":
+                self.rid = "P06P5RN0015"
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -130,7 +129,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query_size = self._query_size
         except AttributeError:
             query_size = None
-        columns = line.split()
+        columns = line.split("\t")
         assert len(columns) == len(self.fields)
         annotations = {}
         query_annotations = {}
@@ -185,6 +184,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_annotations["gis"] = column
             elif field == "subject acc.":
                 target_annotations["acc."] = column
+            elif field == "subject accs.":
+                target_annotations["accs."] = column
+            elif field == "subject tax ids":
+                target_annotations["tax ids"] = column
+            elif field == "subject sci names":
+                target_annotations["sci names"] = column
+            elif field == "subject com names":
+                target_annotations["com names"] = column
+            elif field == "subject blast names":
+                target_annotations["blast names"] = column
+            elif field == "subject super kingdoms":
+                target_annotations["super kingdoms"] = column
+            elif field == "subject title":
+                target_annotations["title"] = column
+            elif field == "subject titles":
+                target_annotations["titles"] = column
+            elif field == "subject strand":
+                target_annotations["strand"] = column
+            elif field == "% subject coverage":
+                target_annotations["% coverage"] = float(column)
             elif field == "subject acc.ver":
                 target_annotations["acc.ver"] = column
             elif field == "subject length":
@@ -204,6 +223,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 annotations[field] = int(column)
             elif field == "% positives":
                 annotations[field] = float(column)
+            elif field == "% hsp coverage":
+                annotations[field] = float(column)
             elif field == "query/sbjct frames":
                 annotations[field] = column
             elif field == "query frame":
@@ -221,8 +242,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query_seq = Seq(None, length=query_size)
         else:
             query_sequence = query_sequence.replace("-", "")
-            assert len(query_sequence) == query_end - query_start
-            query_seq = Seq({query_start: query_sequence}, length=query_size)
+            if self.program == "TBLASTN":
+                assert len(query_sequence) == query_end - query_start
+                query_seq = Seq({query_start: query_sequence}, length=query_size)
+            elif self.program == "TBLASTX":
+                query_annotations["start"] = query_start
+                query_annotations["end"] = query_end
+                query_seq = Seq(query_sequence)
+            else:
+                raise Exception("Unknown program %s" % self.program)
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
@@ -232,7 +260,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             target_seq = Seq(None, length=target_end)
         else:
             target_sequence = target_sequence.replace("-", "")
-        if self.program == "TBLASTN":
+        if self.program in ("TBLASTN", "TBLASTX"):
             target_annotations["start"] = target_start
             target_annotations["end"] = target_end
             target_annotations["length"] = target_length
