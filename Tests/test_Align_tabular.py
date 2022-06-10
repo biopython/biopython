@@ -1821,7 +1821,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  199)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
@@ -1849,7 +1849,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -1877,7 +1877,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -1905,7 +1905,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -1951,7 +1951,10 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["start"], 30)
             self.assertEqual(alignment.query.annotations["end"], 73)
             self.assertEqual(alignment.target.annotations["start"], 1743)
@@ -1965,7 +1968,10 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["start"], 43)
             self.assertEqual(alignment.query.annotations["end"], 94)
             self.assertEqual(alignment.target.annotations["start"], 1056)
@@ -1979,7 +1985,10 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["start"], 43)
             self.assertEqual(alignment.query.annotations["end"], 94)
             self.assertEqual(alignment.target.annotations["start"], 1056)
@@ -2010,7 +2019,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  199)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
@@ -2038,7 +2047,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -2066,7 +2075,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -2094,7 +2103,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -2163,7 +2172,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  199)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -2173,7 +2182,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -2183,7 +2192,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
@@ -2193,7 +2202,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -2216,7 +2225,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -2270,7 +2282,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["frame"], "1")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -2328,7 +2343,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["frame"], "1")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
-            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
+            self.assertEqual(
+                alignment.query.description,
+                "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -2941,7 +2959,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 75)
             self.assertEqual(alignment.target.annotations["end"], 369)
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-63)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  205)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 205)
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 0)
@@ -2969,7 +2987,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-62)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  199)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
@@ -2997,7 +3015,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-62)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -3025,7 +3043,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -3053,7 +3071,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  202)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
@@ -3073,52 +3091,73 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|148227873|ref|NM_001095167.1|;gi|55250552|gb|BC086280.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|148227873|ref|NM_001095167.1|;gi|55250552|gb|BC086280.1|",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|512812550|ref|XM_002935781.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|512812550|ref|XM_002935781.2|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|512812554|ref|XM_004910718.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|512812554|ref|XM_004910718.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|327289356|ref|XM_003229343.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|327289356|ref|XM_003229343.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|602661018|ref|XM_007436108.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|602661018|ref|XM_007436108.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|564242014|ref|XM_006277753.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|564242014|ref|XM_006277753.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|591387858|ref|XM_007068281.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|591387858|ref|XM_007068281.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-180)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|558185265|ref|XM_006128143.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|558185265|ref|XM_006128143.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-180)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|573878747|ref|XM_006627536.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|573878747|ref|XM_006627536.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-173)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410910671|ref|XM_003968765.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410910671|ref|XM_003968765.1|"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-173)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -3143,26 +3182,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 1)
             self.assertEqual(alignment.query.annotations["end"], 349)
             self.assertEqual(alignment.target.annotations["start"], 1)
             self.assertEqual(alignment.target.annotations["end"], 349)
-            self.assertEqual(alignment.target.seq, "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K")
-            self.assertEqual(alignment.query.seq, "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K")
+            self.assertEqual(
+                alignment.target.seq,
+                "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-76)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  289)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 289)
             self.assertAlmostEqual(alignment.score, 626)
             self.assertEqual(alignment.shape, (2, 116))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3180,8 +3235,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -3197,26 +3258,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 348)
             self.assertEqual(alignment.query.annotations["end"], 2)
             self.assertEqual(alignment.target.annotations["start"], 348)
             self.assertEqual(alignment.target.annotations["end"], 2)
-            self.assertEqual(alignment.target.seq, "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP")
-            self.assertEqual(alignment.query.seq, "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP")
+            self.assertEqual(
+                alignment.target.seq,
+                "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-73)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  278)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 278)
             self.assertAlmostEqual(alignment.score, 602)
             self.assertEqual(alignment.shape, (2, 116))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3234,8 +3311,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -3251,26 +3334,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 347)
             self.assertEqual(alignment.query.annotations["end"], 1)
             self.assertEqual(alignment.target.annotations["start"], 347)
             self.assertEqual(alignment.target.annotations["end"], 1)
-            self.assertEqual(alignment.target.seq, "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH")
-            self.assertEqual(alignment.query.seq, "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH")
+            self.assertEqual(
+                alignment.target.seq,
+                "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-72)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  274)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 274)
             self.assertAlmostEqual(alignment.score, 593)
             self.assertEqual(alignment.shape, (2, 116))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3288,8 +3387,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -3305,26 +3410,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 2)
             self.assertEqual(alignment.query.annotations["end"], 350)
             self.assertEqual(alignment.target.annotations["start"], 2)
             self.assertEqual(alignment.target.annotations["end"], 350)
-            self.assertEqual(alignment.target.seq, "GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS")
-            self.assertEqual(alignment.query.seq, "GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS")
+            self.assertEqual(
+                alignment.target.seq,
+                "GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-70)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  270)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 270)
             self.assertAlmostEqual(alignment.score, 583)
             self.assertEqual(alignment.shape, (2, 116))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3342,8 +3463,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -3359,26 +3486,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 349)
             self.assertEqual(alignment.query.annotations["end"], 3)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 3)
-            self.assertEqual(alignment.target.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-58)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  229)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 229)
             self.assertAlmostEqual(alignment.score, 495)
             self.assertEqual(alignment.shape, (2, 116))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3396,8 +3539,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -3413,26 +3562,42 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 93)
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
-            self.assertEqual(alignment.query.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-53)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  197)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 197)
             self.assertAlmostEqual(alignment.score, 425)
             self.assertEqual(alignment.shape, (2, 85))
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3450,8 +3615,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
@@ -3467,16 +3638,26 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296147483|ref|NM_001183135.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|296147483|ref|NM_001183135.1|;gi|116616412|gb|EF059095.1|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296147483")
             self.assertEqual(alignment.target.annotations["gis"], "296147483;116616412")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001183135")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_001183135;EF059095")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_001183135;EF059095"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
             self.assertEqual(alignment.query.annotations["start"], 0)
@@ -3504,8 +3685,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A;N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA<>Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
@@ -3521,12 +3708,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3537,10 +3731,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 87)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRNAKLTSIAMQCLQGLASVPSIPESRIPEVLDGFIEATQLAMEIQLK")
-            self.assertEqual(alignment.query.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRNAKLTSIAMQCLQGLASVPSIPESRIPEVLDGFIEATQLAMEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-37)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  152)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 152)
             self.assertAlmostEqual(alignment.score, 327)
             self.assertEqual(alignment.shape, (2, 85))
             self.assertAlmostEqual(alignment.annotations["% identity"], 72.94)
@@ -3558,8 +3758,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
@@ -3575,12 +3781,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3612,8 +3825,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
@@ -3629,12 +3848,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3645,8 +3871,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 186)
             self.assertEqual(alignment.target.annotations["start"], 343)
             self.assertEqual(alignment.target.annotations["end"], 180)
-            self.assertEqual(alignment.target.seq, "TFNCISIAS*VASMNPSRTSGILDSGIEGTDANPCRHCMAIEVNLAFLDEQARTK")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFNCISIAS*VASMNPSRTSGILDSGIEGTDANPCRHCMAIEVNLAFLDEQARTK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.0)
             self.assertAlmostEqual(alignment.score, 142)
@@ -3666,8 +3898,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -3683,12 +3921,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3699,8 +3944,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 21)
             self.assertEqual(alignment.target.annotations["start"], 130)
             self.assertEqual(alignment.target.annotations["end"], 15)
-            self.assertEqual(alignment.target.seq, "VFRISIDLSLACLMVEFLLLDSEERECNSWSNCFRKEVN")
-            self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN")
+            self.assertEqual(
+                alignment.target.seq, "VFRISIDLSLACLMVEFLLLDSEERECNSWSNCFRKEVN"
+            )
+            self.assertEqual(
+                alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20)
             self.assertAlmostEqual(alignment.annotations["bit score"], 52.8)
             self.assertAlmostEqual(alignment.score, 109)
@@ -3720,8 +3969,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
@@ -3737,12 +3992,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3753,8 +4015,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 349)
             self.assertEqual(alignment.target.annotations["start"], 34)
             self.assertEqual(alignment.target.annotations["end"], 343)
-            self.assertEqual(alignment.target.seq, "NWTRNYTPFLQNLKEEIQPLNMLATNQSIF*RLFKI*KNL*GTLILLHLWSWPVHREMPN*LQLPCNAYKDWRPYLQYQSQESQKF*TDSLKPLS*RWRYN*K")
-            self.assertEqual(alignment.query.seq, "NLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K")
+            self.assertEqual(
+                alignment.target.seq,
+                "NWTRNYTPFLQNLKEEIQPLNMLATNQSIF*RLFKI*KNL*GTLILLHLWSWPVHREMPN*LQLPCNAYKDWRPYLQYQSQESQKF*TDSLKPLS*RWRYN*K",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "NLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 9e-08)
             self.assertAlmostEqual(alignment.annotations["bit score"], 61.1)
             self.assertAlmostEqual(alignment.score, 127)
@@ -3774,8 +4042,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 88)
@@ -3791,12 +4065,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|365982352|ref|XM_003667962.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "365982352")
             self.assertEqual(alignment.target.annotations["gis"], "365982352")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003667962")
@@ -3807,8 +4088,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 67)
             self.assertEqual(alignment.target.annotations["start"], 254)
             self.assertEqual(alignment.target.annotations["end"], 61)
-            self.assertEqual(alignment.target.seq, "GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISSFRF*R")
-            self.assertEqual(alignment.query.seq, "G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR")
+            self.assertEqual(
+                alignment.target.seq,
+                "GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISSFRF*R",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.029)
             self.assertAlmostEqual(alignment.annotations["bit score"], 42.8)
             self.assertAlmostEqual(alignment.score, 87)
@@ -3828,8 +4115,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -3845,12 +4138,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366988334|ref|XM_003673886.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366988334")
             self.assertEqual(alignment.target.annotations["gis"], "366988334")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003673886")
@@ -3861,10 +4161,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "SIKHASDKSIEILKTIQNIEDLASHPDFVTPLVESCLSRNAKLTSIAMQCLQGLASAPSIPESRLSGVLDGFIEATHLAIEIQLK")
-            self.assertEqual(alignment.query.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "SIKHASDKSIEILKTIQNIEDLASHPDFVTPLVESCLSRNAKLTSIAMQCLQGLASAPSIPESRLSGVLDGFIEATHLAIEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-32)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  143)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 143)
             self.assertAlmostEqual(alignment.score, 306)
             self.assertEqual(alignment.shape, (2, 85))
             self.assertAlmostEqual(alignment.annotations["% identity"], 68.24)
@@ -3882,8 +4188,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
@@ -3899,12 +4211,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366988334|ref|XM_003673886.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366988334")
             self.assertEqual(alignment.target.annotations["gis"], "366988334")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003673886")
@@ -3915,8 +4234,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 189)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 189)
-            self.assertEqual(alignment.target.seq, "TFSCISIARCVASINPSRTPDSLLSGMDGADAKPCKHCIAIEVNLAFLDRHDST")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFSCISIARCVASINPSRTPDSLLSGMDGADAKPCKHCIAIEVNLAFLDRHDST",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16)
             self.assertAlmostEqual(alignment.annotations["bit score"], 62.5)
             self.assertAlmostEqual(alignment.score, 130)
@@ -3936,8 +4261,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
@@ -3953,12 +4284,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366988334|ref|XM_003673886.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366988334")
             self.assertEqual(alignment.target.annotations["gis"], "366988334")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003673886")
@@ -3990,8 +4328,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
@@ -4007,12 +4351,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366988334|ref|XM_003673886.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366988334|ref|XM_003673886.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366988334")
             self.assertEqual(alignment.target.annotations["gis"], "366988334")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003673886")
@@ -4023,8 +4374,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 1)
             self.assertEqual(alignment.target.annotations["start"], 344)
             self.assertEqual(alignment.target.annotations["end"], 1)
-            self.assertEqual(alignment.target.seq, "*LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRMACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH")
-            self.assertEqual(alignment.query.seq, "*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH")
+            self.assertEqual(
+                alignment.target.seq,
+                "*LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRMACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 54.2)
             self.assertAlmostEqual(alignment.score, 112)
@@ -4044,8 +4401,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -4061,12 +4424,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|255710474|ref|XM_002551475.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|255710474|ref|XM_002551475.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|255710474|ref|XM_002551475.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "255710474")
             self.assertEqual(alignment.target.annotations["gis"], "255710474")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002551475")
@@ -4077,10 +4447,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "VRHASDKSIEILKTVHEFEDLPRHPDFVTPFVLSCASKNAKLTSVSVQCLQKMSSVNCIPEDRIEDVLDAFIDSTHLAAEIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VRHASDKSIEILKTVHEFEDLPRHPDFVTPFVLSCASKNAKLTSVSVQCLQKMSSVNCIPEDRIEDVLDAFIDSTHLAAEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-32)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  141)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 141)
             self.assertAlmostEqual(alignment.score, 303)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 65.48)
@@ -4098,8 +4474,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -4115,12 +4497,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|255710474|ref|XM_002551475.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|255710474|ref|XM_002551475.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|255710474|ref|XM_002551475.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "255710474")
             self.assertEqual(alignment.target.annotations["gis"], "255710474")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002551475")
@@ -4131,8 +4520,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 186)
             self.assertEqual(alignment.target.annotations["start"], 346)
             self.assertEqual(alignment.target.annotations["end"], 183)
-            self.assertEqual(alignment.target.seq, "TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -4152,8 +4547,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -4169,12 +4570,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|254579534|ref|XM_002495708.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "254579534")
             self.assertEqual(alignment.target.annotations["gis"], "254579534")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002495708")
@@ -4185,10 +4593,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 96)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6e-32)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  141)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 141)
             self.assertAlmostEqual(alignment.score, 302)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 67.86)
@@ -4206,8 +4620,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -4223,12 +4643,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|254579534|ref|XM_002495708.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "254579534")
             self.assertEqual(alignment.target.annotations["gis"], "254579534")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002495708")
@@ -4239,8 +4666,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 204)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 204)
-            self.assertEqual(alignment.target.seq, "TFSFISIASWLASINASSTSESLSTGIHGTVANFWKHCIDIVVNLAFLD")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFSFISIASWLASINASSTSESLSTGIHGTVANFWKHCIDIVVNLAFLD",
+            )
+            self.assertEqual(
+                alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 51.0)
             self.assertAlmostEqual(alignment.score, 105)
@@ -4260,8 +4692,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
@@ -4277,12 +4715,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|254579534|ref|XM_002495708.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "254579534")
             self.assertEqual(alignment.target.annotations["gis"], "254579534")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002495708")
@@ -4293,8 +4738,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 15)
             self.assertEqual(alignment.target.annotations["start"], 139)
             self.assertEqual(alignment.target.annotations["end"], 15)
-            self.assertEqual(alignment.target.seq, "TTFKISIDLSLAFLIAVFLFFDSDESECNSELSSFQKLPNSP")
-            self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP")
+            self.assertEqual(
+                alignment.target.seq, "TTFKISIDLSLAFLIAVFLFFDSDESECNSELSSFQKLPNSP"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 41.8)
             self.assertAlmostEqual(alignment.score, 85)
@@ -4314,8 +4763,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
@@ -4331,12 +4786,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|254579534|ref|XM_002495708.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|254579534|ref|XM_002495708.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "254579534")
             self.assertEqual(alignment.target.annotations["gis"], "254579534")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002495708")
@@ -4347,8 +4809,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 347)
             self.assertEqual(alignment.target.annotations["start"], 50)
             self.assertEqual(alignment.target.annotations["end"], 347)
-            self.assertEqual(alignment.target.seq, "RVAFTFIRVEEKEYCY*EC*R*IN*NFESSSQL*GIIKTSRFYSTASDVMCIQECQIDYYINAMFPKIGHSAMYTGR*TLRRT*CVYRGQPAGNGYKTK")
-            self.assertEqual(alignment.query.seq, "RIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK")
+            self.assertEqual(
+                alignment.target.seq,
+                "RVAFTFIRVEEKEYCY*EC*R*IN*NFESSSQL*GIIKTSRFYSTASDVMCIQECQIDYYINAMFPKIGHSAMYTGR*TLRRT*CVYRGQPAGNGYKTK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "RIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -4368,8 +4836,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 85)
@@ -4385,12 +4859,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4401,10 +4882,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 96)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "VKHASDKSIEILKTVTNINDLTRHPDFVVPFILACSSGNAKLTSISMQCIQVISTVQCIPSTRISEILDAFINATHLAVEIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKHASDKSIEILKTVTNINDLTRHPDFVVPFILACSSGNAKLTSISMQCIQVISTVQCIPSTRISEILDAFINATHLAVEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-31)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  139)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 139)
             self.assertAlmostEqual(alignment.score, 299)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 66.67)
@@ -4422,8 +4909,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -4439,12 +4932,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4455,8 +4955,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 349)
             self.assertEqual(alignment.target.annotations["start"], 1)
             self.assertEqual(alignment.target.annotations["end"], 349)
-            self.assertEqual(alignment.target.seq, "WQLNLLILQPLKSN*LQTYNLYLLNRKEKVQMLNTLVINLLKF*KL*LI*MI*QDIQIS*YHSFWHVLQEMQS*LQFLCNAFKLYQLYNVYQVLEFLKF*MLLLMLLI*RWKYN*K")
-            self.assertEqual(alignment.query.seq, "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K")
+            self.assertEqual(
+                alignment.target.seq,
+                "WQLNLLILQPLKSN*LQTYNLYLLNRKEKVQMLNTLVINLLKF*KL*LI*MI*QDIQIS*YHSFWHVLQEMQS*LQFLCNAFKLYQLYNVYQVLEFLKF*MLLLMLLI*RWKYN*K",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-14)
             self.assertAlmostEqual(alignment.annotations["bit score"], 81.3)
             self.assertAlmostEqual(alignment.score, 171)
@@ -4476,8 +4982,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -4493,12 +5005,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4509,8 +5028,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 1)
             self.assertEqual(alignment.target.annotations["start"], 347)
             self.assertEqual(alignment.target.annotations["end"], 1)
-            self.assertEqual(alignment.target.seq, "F*LYFHR*MSSINKSI*NFRNSSTWYTLYS*YNLNALHRN*S*LCIS*RTCQNEWYYEIWMSC*IIYISYSFQNFNRFITSVFNICTFSFRFRR*RL*VCSQLLFKGCKIKRFNCH")
-            self.assertEqual(alignment.query.seq, "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH")
+            self.assertEqual(
+                alignment.target.seq,
+                "F*LYFHR*MSSINKSI*NFRNSSTWYTLYS*YNLNALHRN*S*LCIS*RTCQNEWYYEIWMSC*IIYISYSFQNFNRFITSVFNICTFSFRFRR*RL*VCSQLLFKGCKIKRFNCH",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.1)
             self.assertAlmostEqual(alignment.score, 151)
@@ -4530,8 +5055,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
@@ -4547,12 +5078,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4563,8 +5101,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 210)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 210)
-            self.assertEqual(alignment.target.seq, "TFNCISTAK*VALIKASKISEILVLGIHCTVDIT*MHCIEIEVSFAF")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF")
+            self.assertEqual(
+                alignment.target.seq, "TFNCISTAK*VALIKASKISEILVLGIHCTVDIT*MHCIEIEVSFAF"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 47.3)
             self.assertAlmostEqual(alignment.score, 97)
@@ -4584,8 +5126,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 40)
@@ -4601,12 +5149,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4617,8 +5172,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 35)
             self.assertEqual(alignment.target.annotations["start"], 213)
             self.assertEqual(alignment.target.annotations["end"], 35)
-            self.assertEqual(alignment.target.seq, "HFLKNMPK*MVLRNLDVLLNHLY*LQFSKFQ*IYH*RV*HLYFFFSIQKIKIVSL*SIAF")
-            self.assertEqual(alignment.query.seq, "HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAF")
+            self.assertEqual(
+                alignment.target.seq,
+                "HFLKNMPK*MVLRNLDVLLNHLY*LQFSKFQ*IYH*RV*HLYFFFSIQKIKIVSL*SIAF",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAF",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.5)
             self.assertAlmostEqual(alignment.score, 82)
@@ -4638,8 +5199,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
@@ -4655,12 +5222,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4671,8 +5245,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 350)
             self.assertEqual(alignment.target.annotations["start"], 35)
             self.assertEqual(alignment.target.annotations["end"], 350)
-            self.assertEqual(alignment.target.seq, "KAIDYRLTIFIF*IEKKKYRC*TR***IY*NFENCN*YK*FNKTSRFRSTIHFGMFFRKCKANFNFYAMHSSYINCTMYTKY*NF*NFRCFY*CYSFSGGNTIKS")
-            self.assertEqual(alignment.query.seq, "KAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS")
+            self.assertEqual(
+                alignment.target.seq,
+                "KAIDYRLTIFIF*IEKKKYRC*TR***IY*NFENCN*YK*FNKTSRFRSTIHFGMFFRKCKANFNFYAMHSSYINCTMYTKY*NF*NFRCFY*CYSFSGGNTIKS",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-08)
             self.assertAlmostEqual(alignment.annotations["bit score"], 62.5)
             self.assertAlmostEqual(alignment.score, 130)
@@ -4692,8 +5272,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
@@ -4709,12 +5295,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156843402|ref|XM_001644719.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156843402|ref|XM_001644719.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156843402")
             self.assertEqual(alignment.target.annotations["gis"], "156843402")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001644719")
@@ -4746,8 +5339,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Vanderwaltozyma polyspora DSM 70294 hypothetical protein (Kpol_1020p19) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
@@ -4763,12 +5362,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410075642|ref|XM_003955355.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410075642|ref|XM_003955355.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410075642|ref|XM_003955355.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410075642")
             self.assertEqual(alignment.target.annotations["gis"], "410075642")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003955355")
@@ -4779,10 +5385,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 96)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "VKHASEKSLKILKTVHDSGDFLRHPDFVVPFVLACSSRSAKLTTIGLQGLQNLSSTNCIPKDRLIEVLDGFIDATHLAMEIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKHASEKSLKILKTVHDSGDFLRHPDFVVPFVLACSSRSAKLTTIGLQGLQNLSSTNCIPKDRLIEVLDGFIDATHLAMEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  129)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 129)
             self.assertAlmostEqual(alignment.score, 276)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 61.90)
@@ -4800,8 +5412,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -4817,12 +5435,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410075642|ref|XM_003955355.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410075642|ref|XM_003955355.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410075642|ref|XM_003955355.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410075642")
             self.assertEqual(alignment.target.annotations["gis"], "410075642")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003955355")
@@ -4833,8 +5458,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 36)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 36)
-            self.assertEqual(alignment.target.seq, "TFS*ISIAKCVASINPSNTSINRSLGIQLVDDKFCKP*RPIVVNLALRDEQAKTNGTTKSGCLRKSPLSCTVFKILRDFSLACLTSEFLLLASDDKE*SPVSSCL")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFS*ISIAKCVASINPSNTSINRSLGIQLVDDKFCKP*RPIVVNLALRDEQAKTNGTTKSGCLRKSPLSCTVFKILRDFSLACLTSEFLLLASDDKE*SPVSSCL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 67.5)
             self.assertAlmostEqual(alignment.score, 141)
@@ -4854,8 +5485,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Kazachstania africana CBS 2517 hypothetical protein (KAFR0A08350), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
@@ -4871,12 +5508,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|47073627|ref|NM_210010.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "47073627")
             self.assertEqual(alignment.target.annotations["gis"], "47073627")
             self.assertEqual(alignment.target.annotations["acc."], "NM_210010")
@@ -4887,10 +5531,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "VKHASDRSLQILRIVHSFEELERHPDFILPFVLSCKSGNAKFTSLSMQSLQRLAIHQSIPREQIEHVLEALIDSTQLAVEIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKHASDRSLQILRIVHSFEELERHPDFILPFVLSCKSGNAKFTSLSMQSLQRLAIHQSIPREQIEHVLEALIDSTQLAVEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  129)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 129)
             self.assertAlmostEqual(alignment.score, 276)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 61.90)
@@ -4908,8 +5558,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -4925,12 +5581,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|47073627|ref|NM_210010.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "47073627")
             self.assertEqual(alignment.target.annotations["gis"], "47073627")
             self.assertEqual(alignment.target.annotations["acc."], "NM_210010")
@@ -4941,8 +5604,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 21)
             self.assertEqual(alignment.target.annotations["start"], 346)
             self.assertEqual(alignment.target.annotations["end"], 18)
-            self.assertEqual(alignment.target.seq, "TFS*ISTASCVESISASSTCSICSRGIDWWIARRCRLCIDSEVNFAFPDLHERTNGRIKSGCRSSSSKLWTIRNICNERSLACFTSELRRLDSEARACRSCVSCLTVLVN")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFS*ISTASCVESISASSTCSICSRGIDWWIARRCRLCIDSEVNFAFPDLHERTNGRIKSGCRSSSSKLWTIRNICNERSLACFTSELRRLDSEARACRSCVSCLTVLVN",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 52.4)
             self.assertAlmostEqual(alignment.score, 108)
@@ -4962,8 +5631,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 94)
@@ -4979,12 +5654,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|47073627|ref|NM_210010.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|47073627|ref|NM_210010.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "47073627")
             self.assertEqual(alignment.target.annotations["gis"], "47073627")
             self.assertEqual(alignment.target.annotations["acc."], "NM_210010")
@@ -4995,8 +5677,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 37)
             self.assertEqual(alignment.target.annotations["start"], 344)
             self.assertEqual(alignment.target.annotations["end"], 34)
-            self.assertEqual(alignment.target.seq, "F*LNLNGQLCGINQCFEYMFYLLPWNRLVDSQTLQTLH*QRSKLRIS*LT*EDERKNKVWVSF*FFKTMDYPQYL*RAIACMFHFRITSLRFRS*GVQILCQLP")
-            self.assertEqual(alignment.query.seq, "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP")
+            self.assertEqual(
+                alignment.target.seq,
+                "F*LNLNGQLCGINQCFEYMFYLLPWNRLVDSQTLQTLH*QRSKLRIS*LT*EDERKNKVWVSF*FFKTMDYPQYL*RAIACMFHFRITSLRFRS*GVQILCQLP",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 50.1)
             self.assertAlmostEqual(alignment.score, 103)
@@ -5016,8 +5704,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ashbya gossypii ATCC 10895 AEL204Cp (AGOS_AEL204C) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 89)
@@ -5033,12 +5727,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50294190|ref|XM_449507.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50294190")
             self.assertEqual(alignment.target.annotations["gis"], "50294190")
             self.assertEqual(alignment.target.annotations["acc."], "XM_449507")
@@ -5049,10 +5750,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 183)
             self.assertEqual(alignment.target.annotations["end"], 435)
-            self.assertEqual(alignment.target.seq, "VKEASHKSIEILKTIKTINDLENHPDFVVPFALACKTKNAKMTTIAMQCLQNMASTRCIPEKRMDMILDAFIEATQLAMDIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKEASHKSIEILKTIKTINDLENHPDFVVPFALACKTKNAKMTTIAMQCLQNMASTRCIPEKRMDMILDAFIEATQLAMDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-28)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  128)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 128)
             self.assertAlmostEqual(alignment.score, 274)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 60.71)
@@ -5070,8 +5777,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -5087,12 +5800,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50294190|ref|XM_449507.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50294190")
             self.assertEqual(alignment.target.annotations["gis"], "50294190")
             self.assertEqual(alignment.target.annotations["acc."], "XM_449507")
@@ -5103,8 +5823,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 207)
             self.assertEqual(alignment.target.annotations["start"], 436)
             self.assertEqual(alignment.target.annotations["end"], 294)
-            self.assertEqual(alignment.target.seq, "TFNCISMASCVASINASNIISILFSGIHLVEAMFCRHCIAIVVILAFL")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL")
+            self.assertEqual(
+                alignment.target.seq, "TFNCISMASCVASINASNIISILFSGIHLVEAMFCRHCIAIVVILAFL"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 49.2)
             self.assertAlmostEqual(alignment.score, 101)
@@ -5124,8 +5848,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 41)
@@ -5141,12 +5871,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50294190|ref|XM_449507.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50294190|ref|XM_449507.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50294190")
             self.assertEqual(alignment.target.annotations["gis"], "50294190")
             self.assertEqual(alignment.target.annotations["acc."], "XM_449507")
@@ -5178,8 +5915,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida glabrata CBS 138 hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida glabrata CBS 138 hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
@@ -5195,12 +5938,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|444314872|ref|XM_004178046.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "444314872")
             self.assertEqual(alignment.target.annotations["gis"], "444314872")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004178046")
@@ -5211,10 +5961,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 99)
             self.assertEqual(alignment.target.annotations["end"], 351)
-            self.assertEqual(alignment.target.seq, "VKHTSDKALEILKTCHSNLDLKRHPDFIIPLIKACSSKSAKLTTIAMQCLQRMSSVDCIPDSRISQVLDSFIEATLLASDIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKHTSDKALEILKTCHSNLDLKRHPDFIIPLIKACSSKSAKLTTIAMQCLQRMSSVDCIPDSRISQVLDSFIEATLLASDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  127)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 127)
             self.assertAlmostEqual(alignment.score, 271)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 59.52)
@@ -5232,8 +5988,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -5249,12 +6011,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|444314872|ref|XM_004178046.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "444314872")
             self.assertEqual(alignment.target.annotations["gis"], "444314872")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004178046")
@@ -5265,8 +6034,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 186)
             self.assertEqual(alignment.target.annotations["start"], 352)
             self.assertEqual(alignment.target.annotations["end"], 189)
-            self.assertEqual(alignment.target.seq, "TFS*ISEANRVASMKESNT*DILESGIQSTDDILCKHCIAIVVNLALFELHAFIK")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFS*ISEANRVASMKESNT*DILESGIQSTDDILCKHCIAIVVNLALFELHAFIK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 48.7)
             self.assertAlmostEqual(alignment.score, 100)
@@ -5286,8 +6061,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -5303,12 +6084,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|444314872|ref|XM_004178046.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "444314872")
             self.assertEqual(alignment.target.annotations["gis"], "444314872")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004178046")
@@ -5340,8 +6128,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
@@ -5357,12 +6151,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|444314872|ref|XM_004178046.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|444314872|ref|XM_004178046.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "444314872")
             self.assertEqual(alignment.target.annotations["gis"], "444314872")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004178046")
@@ -5373,8 +6174,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 73)
             self.assertEqual(alignment.target.annotations["start"], 254)
             self.assertEqual(alignment.target.annotations["end"], 76)
-            self.assertEqual(alignment.target.seq, "SL*ALHCDSSQFGTLRTTCFYQRYYEIRVTF*IQIAMACLKDLQSFITCMFNF*IFSSGF")
-            self.assertEqual(alignment.query.seq, "SL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRF")
+            self.assertEqual(
+                alignment.target.seq,
+                "SL*ALHCDSSQFGTLRTTCFYQRYYEIRVTF*IQIAMACLKDLQSFITCMFNF*IFSSGF",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "SL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRF",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.075)
             self.assertAlmostEqual(alignment.annotations["bit score"], 41.4)
             self.assertAlmostEqual(alignment.score, 84)
@@ -5394,8 +6201,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora blattae CBS 6284 hypothetical protein (TBLA0A07860) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
@@ -5411,12 +6224,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5427,10 +6247,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "VKHASDKSLQILRIVHSFQELERHPDFVHPFVLSCKSGNAKFTTLSMQCLQRLAIHRSISKEQIEPVLEALIDSTQLAVEIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKHASDKSLQILRIVHSFQELERHPDFVHPFVLSCKSGNAKFTTLSMQCLQRLAIHRSISKEQIEPVLEALIDSTQLAVEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  127)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 127)
             self.assertAlmostEqual(alignment.score, 271)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 60.71)
@@ -5448,8 +6274,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -5465,12 +6297,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5481,8 +6320,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 186)
             self.assertEqual(alignment.target.annotations["start"], 346)
             self.assertEqual(alignment.target.annotations["end"], 183)
-            self.assertEqual(alignment.target.seq, "TFNWISTAN*VESINASKTGSICSLEIDLWIANRCKHCIERVVNLAFPDLHDNTK")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFNWISTAN*VESINASKTGSICSLEIDLWIANRCKHCIERVVNLAFPDLHDNTK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08)
             self.assertAlmostEqual(alignment.annotations["bit score"], 52.4)
             self.assertAlmostEqual(alignment.score, 108)
@@ -5502,8 +6347,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -5519,12 +6370,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5556,8 +6414,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
@@ -5573,12 +6437,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5589,8 +6460,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 40)
             self.assertEqual(alignment.target.annotations["start"], 251)
             self.assertEqual(alignment.target.annotations["end"], 37)
-            self.assertEqual(alignment.target.seq, "QSLQTLHRKSSKFSIS*FT**YKRVYKIGMSFQFLKTMNYS*DLKRFIRCMFNLRISSFGFRRQRIQILIQL")
-            self.assertEqual(alignment.query.seq, "QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKL")
+            self.assertEqual(
+                alignment.target.seq,
+                "QSLQTLHRKSSKFSIS*FT**YKRVYKIGMSFQFLKTMNYS*DLKRFIRCMFNLRISSFGFRRQRIQILIQL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -5610,8 +6487,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
@@ -5627,12 +6510,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5643,8 +6533,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 68)
             self.assertEqual(alignment.target.annotations["start"], 213)
             self.assertEqual(alignment.target.annotations["end"], 65)
-            self.assertEqual(alignment.target.seq, "*HFLIYMIIQKGVQNRDVVPIPENYELFLRFEAIYQMHV*PQNFFFWIQK")
-            self.assertEqual(alignment.query.seq, "*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK")
+            self.assertEqual(
+                alignment.target.seq,
+                "*HFLIYMIIQKGVQNRDVVPIPENYELFLRFEAIYQMHV*PQNFFFWIQK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.021)
             self.assertAlmostEqual(alignment.annotations["bit score"], 43.2)
             self.assertAlmostEqual(alignment.score, 88)
@@ -5664,8 +6560,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
@@ -5681,12 +6583,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363751207|ref|XM_003645773.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363751207|ref|XM_003645773.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363751207")
             self.assertEqual(alignment.target.annotations["gis"], "363751207")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003645773")
@@ -5697,8 +6606,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 272)
             self.assertEqual(alignment.target.annotations["start"], 62)
             self.assertEqual(alignment.target.annotations["end"], 269)
-            self.assertEqual(alignment.target.seq, "VF*IQKKKF*G*TCI**IASNLKNSS*FSGIGTTSRFCTPFCIIM*IRKC*IYYSFYAMFAAIGNPQIY")
-            self.assertEqual(alignment.query.seq, "IFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIY")
+            self.assertEqual(
+                alignment.target.seq,
+                "VF*IQKKKF*G*TCI**IASNLKNSS*FSGIGTTSRFCTPFCIIM*IRKC*IYYSFYAMFAAIGNPQIY",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIY",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.27)
             self.assertAlmostEqual(alignment.annotations["bit score"], 39.6)
             self.assertAlmostEqual(alignment.score, 80)
@@ -5718,8 +6633,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Eremothecium cymbalariae DBVPG#7215 hypothetical protein (Ecym_3526) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
@@ -5735,12 +6656,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366997674|ref|XM_003683526.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366997674")
             self.assertEqual(alignment.target.annotations["gis"], "366997674")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003683526")
@@ -5751,10 +6679,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 99)
             self.assertEqual(alignment.target.annotations["end"], 351)
-            self.assertEqual(alignment.target.seq, "IHQASDKSIEILKTVKSIDELRRHPDFILPFIIATSSGNAKLTSIALQCIQRFLTVEYIPKSQLGALLDSFISATHLADEIKLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "IHQASDKSIEILKTVKSIDELRRHPDFILPFIIATSSGNAKLTSIALQCIQRFLTVEYIPKSQLGALLDSFISATHLADEIKLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-26)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  123)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 123)
             self.assertAlmostEqual(alignment.score, 263)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 61.90)
@@ -5772,8 +6706,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -5789,12 +6729,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366997674|ref|XM_003683526.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366997674")
             self.assertEqual(alignment.target.annotations["gis"], "366997674")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003683526")
@@ -5805,8 +6752,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 14)
             self.assertEqual(alignment.target.annotations["start"], 177)
             self.assertEqual(alignment.target.annotations["end"], 17)
-            self.assertEqual(alignment.target.seq, "NQDVFSIHQLT*LFSKFQWTYH*LDESHCLFFLIRLIKDPSLIIVIF*KPRRLQ")
-            self.assertEqual(alignment.query.seq, "NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ")
+            self.assertEqual(
+                alignment.target.seq,
+                "NQDVFSIHQLT*LFSKFQWTYH*LDESHCLFFLIRLIKDPSLIIVIF*KPRRLQ",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.0)
             self.assertAlmostEqual(alignment.score, 81)
@@ -5826,8 +6779,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
@@ -5843,12 +6802,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366997674|ref|XM_003683526.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366997674")
             self.assertEqual(alignment.target.annotations["gis"], "366997674")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003683526")
@@ -5859,8 +6825,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 213)
             self.assertEqual(alignment.target.annotations["start"], 352)
             self.assertEqual(alignment.target.annotations["end"], 216)
-            self.assertEqual(alignment.target.seq, "TFNFISSAKWVAEIKESSKAPN*LLGIYSTVKNLCIHCKAILVNFA")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA")
+            self.assertEqual(
+                alignment.target.seq, "TFNFISSAKWVAEIKESSKAPN*LLGIYSTVKNLCIHCKAILVNFA"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.8)
             self.assertAlmostEqual(alignment.score, 74)
@@ -5880,8 +6850,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 39)
@@ -5897,12 +6873,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366997674|ref|XM_003683526.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366997674")
             self.assertEqual(alignment.target.annotations["gis"], "366997674")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003683526")
@@ -5913,8 +6896,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 55)
             self.assertEqual(alignment.target.annotations["start"], 329)
             self.assertEqual(alignment.target.annotations["end"], 58)
-            self.assertEqual(alignment.target.seq, "QMGS*NKRV*QSAQLTLRNIFNS*KSLYTLQSNTC*FCITRRGSNYKWQYKIRMSSQFIN*LNCFQNFNGLITSLMNLIVSSF*FV**KTQ")
-            self.assertEqual(alignment.query.seq, "EMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQ")
+            self.assertEqual(
+                alignment.target.seq,
+                "QMGS*NKRV*QSAQLTLRNIFNS*KSLYTLQSNTC*FCITRRGSNYKWQYKIRMSSQFIN*LNCFQNFNGLITSLMNLIVSSF*FV**KTQ",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "EMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQ",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.001)
             self.assertAlmostEqual(alignment.annotations["bit score"], 47.3)
             self.assertAlmostEqual(alignment.score, 97)
@@ -5934,8 +6923,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 78)
@@ -5951,12 +6946,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|366997674|ref|XM_003683526.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|366997674|ref|XM_003683526.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "366997674")
             self.assertEqual(alignment.target.annotations["gis"], "366997674")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003683526")
@@ -5967,8 +6969,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 175)
             self.assertEqual(alignment.target.annotations["start"], 52)
             self.assertEqual(alignment.target.annotations["end"], 178)
-            self.assertEqual(alignment.target.seq, "QTWVFYQTNQKEETMRFIKLVISPLKF*KQLSQLMN*EDILI")
-            self.assertEqual(alignment.query.seq, "QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI")
+            self.assertEqual(
+                alignment.target.seq, "QTWVFYQTNQKEETMRFIKLVISPLKF*KQLSQLMN*EDILI"
+            )
+            self.assertEqual(
+                alignment.query.seq, "QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.075)
             self.assertAlmostEqual(alignment.annotations["bit score"], 41.4)
             self.assertAlmostEqual(alignment.score, 84)
@@ -5988,8 +6994,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tetrapisispora phaffii CBS 4417 hypothetical protein (TPHA0A00550) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
@@ -6005,12 +7017,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|367014048|ref|XM_003681476.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "367014048")
             self.assertEqual(alignment.target.annotations["gis"], "367014048")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003681476")
@@ -6021,10 +7040,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 96)
             self.assertEqual(alignment.target.annotations["end"], 348)
-            self.assertEqual(alignment.target.seq, "IKQASDKSIEILRTVRNYEELSNRSEFLAPFLMSCSSKNAKLTSISMQCLQRLSSTPSLSKDKLSDVLEAFIVATQLALDMKLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "IKQASDKSIEILRTVRNYEELSNRSEFLAPFLMSCSSKNAKLTSISMQCLQRLSSTPSLSKDKLSDVLEAFIVATQLALDMKLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-24)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  115)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 115)
             self.assertAlmostEqual(alignment.score, 246)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 52.38)
@@ -6042,8 +7067,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -6059,12 +7090,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|367014048|ref|XM_003681476.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "367014048")
             self.assertEqual(alignment.target.annotations["gis"], "367014048")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003681476")
@@ -6075,8 +7113,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 198)
             self.assertEqual(alignment.target.annotations["start"], 349)
             self.assertEqual(alignment.target.annotations["end"], 198)
-            self.assertEqual(alignment.target.seq, "TFNFMSRAN*VATMNASRTSDNLSFDRDGVDDNLCKHCIDIDVNLAFFEEQ")
-            self.assertEqual(alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ")
+            self.assertEqual(
+                alignment.target.seq,
+                "TFNFMSRAN*VATMNASRTSDNLSFDRDGVDDNLCKHCIDIDVNLAFFEEQ",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 48.3)
             self.assertAlmostEqual(alignment.score, 99)
@@ -6096,8 +7140,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
@@ -6113,12 +7163,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|367014048|ref|XM_003681476.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|367014048|ref|XM_003681476.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "367014048")
             self.assertEqual(alignment.target.annotations["gis"], "367014048")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003681476")
@@ -6129,7 +7186,9 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 36)
             self.assertEqual(alignment.target.annotations["start"], 139)
             self.assertEqual(alignment.target.annotations["end"], 36)
-            self.assertEqual(alignment.target.seq, "TVLRISIDLSLACLMAELLFFASEDKSCNSEFNCL")
+            self.assertEqual(
+                alignment.target.seq, "TVLRISIDLSLACLMAELLFFASEDKSCNSEFNCL"
+            )
             self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 43.7)
@@ -6150,8 +7209,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Torulaspora delbrueckii hypothetical protein (TDEL0E00700) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
@@ -6167,12 +7232,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50302786|ref|XM_451330.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50302786|ref|XM_451330.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50302786|ref|XM_451330.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50302786")
             self.assertEqual(alignment.target.annotations["gis"], "50302786")
             self.assertEqual(alignment.target.annotations["acc."], "XM_451330")
@@ -6183,10 +7255,16 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 93)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "IKQACEKSIEILQRSHSEEELVRHPDFVDPFITACLSGNAKLTSISMQSMQRISGIRCICTSKMESLLNALLKSTELAIDIQLK")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "IKQACEKSIEILQRSHSEEELVRHPDFVDPFITACLSGNAKLTSISMQSMQRISGIRCICTSKMESLLNALLKSTELAIDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-20)
-            self.assertAlmostEqual(alignment.annotations["bit score"],  103)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 103)
             self.assertAlmostEqual(alignment.score, 219)
             self.assertEqual(alignment.shape, (2, 84))
             self.assertAlmostEqual(alignment.annotations["% identity"], 51.19)
@@ -6204,8 +7282,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Kluyveromyces lactis NRRL Y-1140 hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Kluyveromyces lactis NRRL Y-1140 hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Kluyveromyces lactis NRRL Y-1140 hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Kluyveromyces lactis NRRL Y-1140 hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 72)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
@@ -6221,12 +7305,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|367029360|ref|XM_003663916.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|367029360|ref|XM_003663916.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|367029360|ref|XM_003663916.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "367029360")
             self.assertEqual(alignment.target.annotations["gis"], "367029360")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003663916")
@@ -6237,8 +7328,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 105)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "KNLRASTEVQASEELAQRPNFVNPFIIACGTKNVKFTGIAIVCLQRLIVSRALPRARLSQVLEALQQATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KNLRASTEVQASEELAQRPNFVNPFIIACGTKNVKFTGIAIVCLQRLIVSRALPRARLSQVLEALQQATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-13)
             self.assertAlmostEqual(alignment.annotations["bit score"], 79.9)
             self.assertAlmostEqual(alignment.score, 168)
@@ -6258,8 +7355,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Myceliophthora thermophila ATCC 42464 hypothetical protein (MYCTH_2139484) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Myceliophthora thermophila ATCC 42464 hypothetical protein (MYCTH_2139484) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Myceliophthora thermophila ATCC 42464 hypothetical protein (MYCTH_2139484) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Myceliophthora thermophila ATCC 42464 hypothetical protein (MYCTH_2139484) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -6275,12 +7378,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|367039842|ref|XM_003650254.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|367039842|ref|XM_003650254.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|367039842|ref|XM_003650254.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "367039842")
             self.assertEqual(alignment.target.annotations["gis"], "367039842")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003650254")
@@ -6291,8 +7401,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 105)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "KSLRASSEPQFADELAQRPNFVNPFIIACGTKNSKFTGIAIVCLQRLIIARAFPRSKLSQILDALQQATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSLRASSEPQFADELAQRPNFVNPFIIACGTKNSKFTGIAIVCLQRLIIARAFPRSKLSQILDALQQATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-13)
             self.assertAlmostEqual(alignment.annotations["bit score"], 78.5)
             self.assertAlmostEqual(alignment.score, 165)
@@ -6312,8 +7428,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Thielavia terrestris NRRL 8126 hypothetical protein (THITE_2039383) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Thielavia terrestris NRRL 8126 hypothetical protein (THITE_2039383) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Thielavia terrestris NRRL 8126 hypothetical protein (THITE_2039383) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Thielavia terrestris NRRL 8126 hypothetical protein (THITE_2039383) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -6329,12 +7451,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302895812|ref|XM_003046741.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302895812|ref|XM_003046741.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302895812|ref|XM_003046741.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302895812")
             self.assertEqual(alignment.target.annotations["gis"], "302895812")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003046741")
@@ -6345,8 +7474,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 141)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "EELSQKVNFVNPFIIACGTKNAKFTAIAIVCLQRLIVAQALPRSKLNQVLEALMQATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "EELSQKVNFVNPFIIACGTKNAKFTAIAIVCLQRLIVAQALPRSKLNQVLEALMQATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 77.1)
             self.assertAlmostEqual(alignment.score, 162)
@@ -6366,8 +7501,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nectria haematococca mpVI 77-13-4 hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nectria haematococca mpVI 77-13-4 hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nectria haematococca mpVI 77-13-4 hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nectria haematococca mpVI 77-13-4 hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
@@ -6383,12 +7524,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302403860|ref|XM_002999723.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302403860|ref|XM_002999723.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302403860|ref|XM_002999723.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302403860")
             self.assertEqual(alignment.target.annotations["gis"], "302403860")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002999723")
@@ -6399,8 +7547,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 150)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "ELTQRPNFVNPFVIACGTKNTKFTAIAIVCLQRLILVRALPRGKLSHVLEALREATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "ELTQRPNFVNPFVIACGTKNTKFTAIAIVCLQRLILVRALPRGKLSHVLEALREATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 76.7)
             self.assertAlmostEqual(alignment.score, 161)
@@ -6420,8 +7574,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Verticillium albo-atrum VaMs.102 conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Verticillium albo-atrum VaMs.102 conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Verticillium albo-atrum VaMs.102 conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Verticillium albo-atrum VaMs.102 conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6437,12 +7597,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|154323271|ref|XM_001560900.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|154323271|ref|XM_001560900.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|154323271|ref|XM_001560900.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "154323271")
             self.assertEqual(alignment.target.annotations["gis"], "154323271")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001560900")
@@ -6453,8 +7620,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 141)
             self.assertEqual(alignment.target.annotations["end"], 336)
-            self.assertEqual(alignment.target.seq, "DLTQRPNFVTPFLIACGTRNVKFTGIAVVCLQRLVVSRALPKSRLKEVLEALREATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLTQRPNFVTPFLIACGTRNVKFTGIAVVCLQRLVVSRALPKSRLKEVLEALREATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 75.3)
             self.assertAlmostEqual(alignment.score, 158)
@@ -6474,8 +7647,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Botryotinia fuckeliana B05.10 hypothetical protein (BC1G_00035) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Botryotinia fuckeliana B05.10 hypothetical protein (BC1G_00035) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Botryotinia fuckeliana B05.10 hypothetical protein (BC1G_00035) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Botryotinia fuckeliana B05.10 hypothetical protein (BC1G_00035) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6491,12 +7670,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|389631003|ref|XM_003713107.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|389631003|ref|XM_003713107.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|389631003|ref|XM_003713107.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "389631003")
             self.assertEqual(alignment.target.annotations["gis"], "389631003")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003713107")
@@ -6507,8 +7693,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 293)
             self.assertEqual(alignment.target.annotations["end"], 527)
-            self.assertEqual(alignment.target.seq, "KSLNISSEAQLGPELTQKTNFANPFIIACGTKNAKFTGIAIVCLQRLIVSKALPRPRLNQVLEALQGATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSLNISSEAQLGPELTQKTNFANPFIIACGTKNAKFTGIAIVCLQRLIVSKALPRPRLNQVLEALQGATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 73.5)
             self.assertAlmostEqual(alignment.score, 154)
@@ -6528,8 +7720,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Magnaporthe oryzae 70-15 hypothetical protein (MGG_07913) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Magnaporthe oryzae 70-15 hypothetical protein (MGG_07913) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Magnaporthe oryzae 70-15 hypothetical protein (MGG_07913) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Magnaporthe oryzae 70-15 hypothetical protein (MGG_07913) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -6545,12 +7743,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|336276565|ref|XM_003352988.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|336276565|ref|XM_003352988.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|336276565|ref|XM_003352988.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "336276565")
             self.assertEqual(alignment.target.annotations["gis"], "336276565")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003352988")
@@ -6561,8 +7766,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 105)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQVLEALQQATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQVLEALQQATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.5)
             self.assertAlmostEqual(alignment.score, 152)
@@ -6582,8 +7793,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Sordaria macrospora k-hell hypothetical protein (SMAC_03354), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Sordaria macrospora k-hell hypothetical protein (SMAC_03354), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Sordaria macrospora k-hell hypothetical protein (SMAC_03354), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Sordaria macrospora k-hell hypothetical protein (SMAC_03354), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -6599,12 +7816,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|164425502|ref|XM_955020.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|164425502|ref|XM_955020.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|164425502|ref|XM_955020.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "164425502")
             self.assertEqual(alignment.target.annotations["gis"], "164425502")
             self.assertEqual(alignment.target.annotations["acc."], "XM_955020")
@@ -6615,8 +7839,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 105)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQVLEALQQATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQVLEALQQATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.5)
             self.assertAlmostEqual(alignment.score, 152)
@@ -6636,8 +7866,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Neurospora crassa OR74A hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Neurospora crassa OR74A hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Neurospora crassa OR74A hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Neurospora crassa OR74A hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -6653,12 +7889,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296807956|ref|XM_002844271.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296807956|ref|XM_002844271.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|296807956|ref|XM_002844271.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296807956")
             self.assertEqual(alignment.target.annotations["gis"], "296807956")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002844271")
@@ -6669,8 +7912,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLARKPQFARPFVLACQTRHTRLAAIGVANLQRLVTIGALPQERLKDVLQGLHETANLSLEIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLARKPQFARPFVLACQTRHTRLAAIGVANLQRLVTIGALPQERLKDVLQGLHETANLSLEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.6)
             self.assertAlmostEqual(alignment.score, 150)
@@ -6690,8 +7939,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Arthroderma otae CBS 113480 conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Arthroderma otae CBS 113480 conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Arthroderma otae CBS 113480 conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Arthroderma otae CBS 113480 conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6707,12 +7962,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|327295565|ref|XM_003232430.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|327295565|ref|XM_003232430.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|327295565|ref|XM_003232430.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "327295565")
             self.assertEqual(alignment.target.annotations["gis"], "327295565")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003232430")
@@ -6723,8 +7985,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLARKPQFARPFVLACQTRHTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLSLEIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLARKPQFARPFVLACQTRHTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLSLEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
@@ -6744,8 +8012,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Trichophyton rubrum CBS 118892 hypothetical protein (TERG_07323) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Trichophyton rubrum CBS 118892 hypothetical protein (TERG_07323) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Trichophyton rubrum CBS 118892 hypothetical protein (TERG_07323) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Trichophyton rubrum CBS 118892 hypothetical protein (TERG_07323) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6761,12 +8035,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|317026200|ref|XM_001389120.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|317026200|ref|XM_001389120.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|317026200|ref|XM_001389120.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "317026200")
             self.assertEqual(alignment.target.annotations["gis"], "317026200")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001389120")
@@ -6777,8 +8058,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLVRKPKFANPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLAGLKETTNMSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPKFANPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLAGLKETTNMSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
@@ -6798,8 +8085,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus niger CBS 513.88 endosomal peripheral membrane protein (Mon2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus niger CBS 513.88 endosomal peripheral membrane protein (Mon2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus niger CBS 513.88 endosomal peripheral membrane protein (Mon2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus niger CBS 513.88 endosomal peripheral membrane protein (Mon2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6815,12 +8108,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156058004|ref|XM_001594876.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156058004|ref|XM_001594876.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156058004|ref|XM_001594876.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156058004")
             self.assertEqual(alignment.target.annotations["gis"], "156058004")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001594876")
@@ -6831,8 +8131,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLTQRANFVTPFLIACGTKNVKFTGIAVVCLQRLVVSRALPRSRLREVLEALREATSAGLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLTQRANFVTPFLIACGTKNVKFTGIAVVCLQRLVVSRALPRSRLREVLEALREATSAGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
@@ -6852,8 +8158,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Sclerotinia sclerotiorum 1980 hypothetical protein (SS1G_04734) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Sclerotinia sclerotiorum 1980 hypothetical protein (SS1G_04734) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Sclerotinia sclerotiorum 1980 hypothetical protein (SS1G_04734) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Sclerotinia sclerotiorum 1980 hypothetical protein (SS1G_04734) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6869,12 +8181,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|315042717|ref|XM_003170687.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|315042717|ref|XM_003170687.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|315042717|ref|XM_003170687.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "315042717")
             self.assertEqual(alignment.target.annotations["gis"], "315042717")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003170687")
@@ -6885,8 +8204,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLARKPQFSRPFVLACQTRHARLAAIGVANLQRLVTIGALPHERLKDVVQGLHETANLSLEIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLARKPQFSRPFVLACQTRHARLAAIGVANLQRLVTIGALPHERLKDVVQGLHETANLSLEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 70.3)
             self.assertAlmostEqual(alignment.score, 147)
@@ -6906,8 +8231,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Arthroderma gypseum CBS 118893 hypothetical protein (MGYG_06723) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Arthroderma gypseum CBS 118893 hypothetical protein (MGYG_06723) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Arthroderma gypseum CBS 118893 hypothetical protein (MGYG_06723) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Arthroderma gypseum CBS 118893 hypothetical protein (MGYG_06723) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6923,12 +8254,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|255947577|ref|XM_002564510.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|255947577|ref|XM_002564510.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|255947577|ref|XM_002564510.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "255947577")
             self.assertEqual(alignment.target.annotations["gis"], "255947577")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002564510")
@@ -6939,8 +8277,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLVRKPNFVEPFIIACHTRHAKLAGIGVICLQRLIASRSLPSSRLKDVLGGLKETTSLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPNFVEPFIIACHTRHAKLAGIGVICLQRLIASRSLPSSRLKDVLGGLKETTSLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.8)
             self.assertAlmostEqual(alignment.score, 146)
@@ -6960,8 +8304,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Penicillium chrysogenum Wisconsin 54-1255 hypothetical protein (Pc22g05210) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Penicillium chrysogenum Wisconsin 54-1255 hypothetical protein (Pc22g05210) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Penicillium chrysogenum Wisconsin 54-1255 hypothetical protein (Pc22g05210) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Penicillium chrysogenum Wisconsin 54-1255 hypothetical protein (Pc22g05210) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -6977,12 +8327,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|121708212|ref|XM_001272061.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|121708212|ref|XM_001272061.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|121708212|ref|XM_001272061.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "121708212")
             self.assertEqual(alignment.target.annotations["gis"], "121708212")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001272061")
@@ -6993,8 +8350,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 150)
             self.assertEqual(alignment.target.annotations["end"], 345)
-            self.assertEqual(alignment.target.seq, "DLVRKPKFVDPFILACHSRHAKLSGIGVVCLQRLVASRSLPSSRLKDVLGGLRETTSLNLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPKFVDPFILACHSRHAKLSGIGVVCLQRLVASRSLPSSRLKDVLGGLRETTSLNLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.8)
             self.assertAlmostEqual(alignment.score, 146)
@@ -7014,8 +8377,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus clavatus NRRL 1 conserved hypothetical protein (ACLA_051080), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus clavatus NRRL 1 conserved hypothetical protein (ACLA_051080), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus clavatus NRRL 1 conserved hypothetical protein (ACLA_051080), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus clavatus NRRL 1 conserved hypothetical protein (ACLA_051080), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7031,12 +8400,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|303311206|ref|XM_003065569.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|303311206|ref|XM_003065569.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|303311206|ref|XM_003065569.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "303311206")
             self.assertEqual(alignment.target.annotations["gis"], "303311206")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003065569")
@@ -7047,8 +8423,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 289)
             self.assertEqual(alignment.target.annotations["end"], 523)
-            self.assertEqual(alignment.target.seq, "KAVPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKDVVDGLHETTNLSLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KAVPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKDVVDGLHETTNLSLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.3)
             self.assertAlmostEqual(alignment.score, 145)
@@ -7068,8 +8450,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Coccidioides posadasii C735 delta SOWgp HEAT repeat containing protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Coccidioides posadasii C735 delta SOWgp HEAT repeat containing protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Coccidioides posadasii C735 delta SOWgp HEAT repeat containing protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Coccidioides posadasii C735 delta SOWgp HEAT repeat containing protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -7085,12 +8473,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|70993553|ref|XM_746531.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|70993553|ref|XM_746531.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|70993553|ref|XM_746531.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "70993553")
             self.assertEqual(alignment.target.annotations["gis"], "70993553")
             self.assertEqual(alignment.target.annotations["acc."], "XM_746531")
@@ -7101,8 +8496,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 45)
             self.assertEqual(alignment.target.annotations["end"], 240)
-            self.assertEqual(alignment.target.seq, "DLVRKPKFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPKFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.3)
             self.assertAlmostEqual(alignment.score, 145)
@@ -7122,8 +8523,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus fumigatus Af293 endosomal peripheral membrane protein (Mon2) (AFUA_4G12070), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus fumigatus Af293 endosomal peripheral membrane protein (Mon2) (AFUA_4G12070), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus fumigatus Af293 endosomal peripheral membrane protein (Mon2) (AFUA_4G12070), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus fumigatus Af293 endosomal peripheral membrane protein (Mon2) (AFUA_4G12070), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7139,12 +8546,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|212542406|ref|XM_002151322.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|212542406|ref|XM_002151322.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|212542406|ref|XM_002151322.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "212542406")
             self.assertEqual(alignment.target.annotations["gis"], "212542406")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002151322")
@@ -7155,8 +8569,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPSRLNDTLSALGDITGLSQDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPSRLNDTLSALGDITGLSQDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
@@ -7176,8 +8596,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Penicillium marneffei ATCC 18224 endosomal peripheral membrane protein (Mon2), putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Penicillium marneffei ATCC 18224 endosomal peripheral membrane protein (Mon2), putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Penicillium marneffei ATCC 18224 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Penicillium marneffei ATCC 18224 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7193,12 +8619,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|119500139|ref|XM_001266826.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|119500139|ref|XM_001266826.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|119500139|ref|XM_001266826.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "119500139")
             self.assertEqual(alignment.target.annotations["gis"], "119500139")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001266826")
@@ -7209,8 +8642,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 45)
             self.assertEqual(alignment.target.annotations["end"], 240)
-            self.assertEqual(alignment.target.seq, "DLVRKPRFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPRFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
@@ -7230,8 +8669,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Neosartorya fischeri NRRL 181 conserved hypothetical protein (NFIA_104180) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Neosartorya fischeri NRRL 181 conserved hypothetical protein (NFIA_104180) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Neosartorya fischeri NRRL 181 conserved hypothetical protein (NFIA_104180) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Neosartorya fischeri NRRL 181 conserved hypothetical protein (NFIA_104180) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7247,12 +8692,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|119194522|ref|XM_001247864.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|119194522|ref|XM_001247864.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|119194522|ref|XM_001247864.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "119194522")
             self.assertEqual(alignment.target.annotations["gis"], "119194522")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001247864")
@@ -7263,8 +8715,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 105)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "KALPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKDVVDGLHETTNLSLDVQLK")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KALPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKDVVDGLHETTNLSLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
@@ -7284,8 +8742,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Coccidioides immitis RS hypothetical protein (CIMG_01636) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Coccidioides immitis RS hypothetical protein (CIMG_01636) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Coccidioides immitis RS hypothetical protein (CIMG_01636) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Coccidioides immitis RS hypothetical protein (CIMG_01636) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -7301,12 +8765,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|238486173|ref|XM_002374284.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|238486173|ref|XM_002374284.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|238486173|ref|XM_002374284.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "238486173")
             self.assertEqual(alignment.target.annotations["gis"], "238486173")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002374284")
@@ -7317,8 +8788,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLVRKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLVRKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.0)
             self.assertAlmostEqual(alignment.score, 142)
@@ -7338,8 +8815,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus flavus NRRL3357 endosomal peripheral membrane protein (Mon2), putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus flavus NRRL3357 endosomal peripheral membrane protein (Mon2), putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus flavus NRRL3357 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus flavus NRRL3357 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7355,12 +8838,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50547540|ref|XM_501240.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50547540|ref|XM_501240.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50547540|ref|XM_501240.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50547540")
             self.assertEqual(alignment.target.annotations["gis"], "50547540")
             self.assertEqual(alignment.target.annotations["acc."], "XM_501240")
@@ -7371,8 +8861,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 117)
             self.assertEqual(alignment.target.annotations["end"], 315)
-            self.assertEqual(alignment.target.seq, "QDLKKDEKIAQPLVLACSSRNAKLTAIAVPLIQRLLAISALSDKSIPSVLGALEEATHLGVEIQLK")
-            self.assertEqual(alignment.query.seq, "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "QDLKKDEKIAQPLVLACSSRNAKLTAIAVPLIQRLLAISALSDKSIPSVLGALEEATHLGVEIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 67.0)
             self.assertAlmostEqual(alignment.score, 140)
@@ -7392,8 +8888,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Yarrowia lipolytica YALI0B22858p (YALI0B22858g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Yarrowia lipolytica YALI0B22858p (YALI0B22858g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Yarrowia lipolytica YALI0B22858p (YALI0B22858g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Yarrowia lipolytica YALI0B22858p (YALI0B22858g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
@@ -7409,12 +8911,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|242768840|ref|XM_002341608.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|242768840|ref|XM_002341608.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|242768840|ref|XM_002341608.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "242768840")
             self.assertEqual(alignment.target.annotations["gis"], "242768840")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002341608")
@@ -7425,8 +8934,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPHRLNDTLSALRDITGLGQDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPHRLNDTLSALRDITGLGQDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 66.6)
             self.assertAlmostEqual(alignment.score, 139)
@@ -7446,8 +8961,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Talaromyces stipitatus ATCC 10500 endosomal peripheral membrane protein (Mon2), putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Talaromyces stipitatus ATCC 10500 endosomal peripheral membrane protein (Mon2), putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Talaromyces stipitatus ATCC 10500 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Talaromyces stipitatus ATCC 10500 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7463,12 +8984,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|115391062|ref|XM_001213036.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|115391062|ref|XM_001213036.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|115391062|ref|XM_001213036.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "115391062")
             self.assertEqual(alignment.target.annotations["gis"], "115391062")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001213036")
@@ -7479,8 +9007,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLARKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLAGLKETTSLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLARKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLAGLKETTSLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 66.6)
             self.assertAlmostEqual(alignment.score, 139)
@@ -7500,8 +9034,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus terreus NIH2624 conserved hypothetical protein (ATEG_03858) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus terreus NIH2624 conserved hypothetical protein (ATEG_03858) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus terreus NIH2624 conserved hypothetical protein (ATEG_03858) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus terreus NIH2624 conserved hypothetical protein (ATEG_03858) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7517,12 +9057,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|261194600|ref|XM_002623659.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|261194600|ref|XM_002623659.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|261194600|ref|XM_002623659.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "261194600")
             self.assertEqual(alignment.target.annotations["gis"], "261194600")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002623659")
@@ -7533,8 +9080,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 246)
             self.assertEqual(alignment.target.annotations["end"], 441)
-            self.assertEqual(alignment.target.seq, "DLIRKPQFVKPFVIACQTRHGRLAAIGVVCIQRLVASRALPPELLRDVLDGLHETTNLGLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLIRKPQFVKPFVIACQTRHGRLAAIGVVCIQRLVASRALPPELLRDVLDGLHETTNLGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 65.2)
             self.assertAlmostEqual(alignment.score, 136)
@@ -7554,8 +9107,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ajellomyces dermatitidis SLH14081 endosomal peripheral membrane protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Ajellomyces dermatitidis SLH14081 endosomal peripheral membrane protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ajellomyces dermatitidis SLH14081 endosomal peripheral membrane protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ajellomyces dermatitidis SLH14081 endosomal peripheral membrane protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7571,12 +9130,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|398410919|ref|XM_003856759.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|398410919|ref|XM_003856759.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|398410919|ref|XM_003856759.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "398410919")
             self.assertEqual(alignment.target.annotations["gis"], "398410919")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003856759")
@@ -7587,8 +9153,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "DLSRRPAFIEPFLVACGTRNPKFAGPGIICLQKLVIVRGLPKARLQDALEAFNACTDLGQDIQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLSRRPAFIEPFLVACGTRNPKFAGPGIICLQKLVIVRGLPKARLQDALEAFNACTDLGQDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 9e-09)
             self.assertAlmostEqual(alignment.annotations["bit score"], 64.3)
             self.assertAlmostEqual(alignment.score, 134)
@@ -7608,8 +9180,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Mycosphaerella graminicola IPO323 hypothetical protein (MYCGRDRAFT_67581) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Mycosphaerella graminicola IPO323 hypothetical protein (MYCGRDRAFT_67581) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Mycosphaerella graminicola IPO323 hypothetical protein (MYCGRDRAFT_67581) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Mycosphaerella graminicola IPO323 hypothetical protein (MYCGRDRAFT_67581) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7625,12 +9203,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|295669495|ref|XM_002795250.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|295669495|ref|XM_002795250.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|295669495|ref|XM_002795250.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "295669495")
             self.assertEqual(alignment.target.annotations["gis"], "295669495")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002795250")
@@ -7641,8 +9226,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 344)
             self.assertEqual(alignment.target.annotations["end"], 539)
-            self.assertEqual(alignment.target.seq, "DLLRKPHFVKPFVIACQTRHARLAAIGVVGVQRLVASRALPPERLRDVLNALQETTNLGLDVQLK")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLLRKPHFVKPFVIACQTRHARLAAIGVVGVQRLVASRALPPERLRDVLNALQETTNLGLDVQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-08)
             self.assertAlmostEqual(alignment.annotations["bit score"], 63.4)
             self.assertAlmostEqual(alignment.score, 132)
@@ -7662,8 +9253,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Paracoccidioides brasiliensis Pb01 conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Paracoccidioides brasiliensis Pb01 conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Paracoccidioides brasiliensis Pb01 conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Paracoccidioides brasiliensis Pb01 conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
@@ -7679,12 +9276,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|50422728|ref|XM_459941.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|50422728|ref|XM_459941.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|50422728|ref|XM_459941.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "50422728")
             self.assertEqual(alignment.target.annotations["gis"], "50422728")
             self.assertEqual(alignment.target.annotations["acc."], "XM_459941")
@@ -7695,8 +9299,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 108)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "KSYQPQEKIHDISQNEIKMDILKPFLISCNTGNAKFATISIPIIHKLIIGEIIPVECLNELLDSLKEATNLATDIQLR")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSYQPQEKIHDISQNEIKMDILKPFLISCNTGNAKFATISIPIIHKLIIGEIIPVECLNELLDSLKEATNLATDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 60.6)
             self.assertAlmostEqual(alignment.score, 126)
@@ -7716,8 +9326,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Debaryomyces hansenii CBS767 DEHA2E14608p (DEHA2E14608g) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Debaryomyces hansenii CBS767 DEHA2E14608p (DEHA2E14608g) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Debaryomyces hansenii CBS767 DEHA2E14608p (DEHA2E14608g) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Debaryomyces hansenii CBS767 DEHA2E14608p (DEHA2E14608g) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -7733,12 +9349,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|126258058|ref|XM_001387099.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|126258058|ref|XM_001387099.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|126258058|ref|XM_001387099.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "126258058")
             self.assertEqual(alignment.target.annotations["gis"], "126258058")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001387099")
@@ -7749,8 +9372,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 126)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "KSIHDITNEQHRQHIIAPFVASCRTGNAKIATIAIPTIHKLIMAGVVPLGSLGSLVDSLMEASHLAVDIQLR")
-            self.assertEqual(alignment.query.seq, "KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSIHDITNEQHRQHIIAPFVASCRTGNAKIATIAIPTIHKLIMAGVVPLGSLGSLVDSLMEASHLAVDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 59.7)
             self.assertAlmostEqual(alignment.score, 124)
@@ -7770,8 +9399,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Scheffersomyces stipitis CBS 6054 chromosome 1")
-            self.assertEqual(alignment.target.annotations["titles"], "Scheffersomyces stipitis CBS 6054 chromosome 1")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Scheffersomyces stipitis CBS 6054 chromosome 1",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Scheffersomyces stipitis CBS 6054 chromosome 1",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
@@ -7787,12 +9422,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302663055|ref|XM_003023130.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302663055|ref|XM_003023130.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302663055|ref|XM_003023130.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302663055")
             self.assertEqual(alignment.target.annotations["gis"], "302663055")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003023130")
@@ -7803,8 +9445,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 330)
             self.assertEqual(alignment.target.annotations["start"], 108)
             self.assertEqual(alignment.target.annotations["end"], 285)
-            self.assertEqual(alignment.target.seq, "DLARKPQFARPFVLACQTRQTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLS")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA")
+            self.assertEqual(
+                alignment.target.seq,
+                "DLARKPQFARPFVLACQTRQTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLS",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-07)
             self.assertAlmostEqual(alignment.annotations["bit score"], 59.3)
             self.assertAlmostEqual(alignment.score, 123)
@@ -7824,8 +9472,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Trichophyton verrucosum HKI 0517 endosomal peripheral membrane protein (Mon2), putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Trichophyton verrucosum HKI 0517 endosomal peripheral membrane protein (Mon2), putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Trichophyton verrucosum HKI 0517 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Trichophyton verrucosum HKI 0517 endosomal peripheral membrane protein (Mon2), putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
@@ -7841,12 +9495,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|255728730|ref|XM_002549245.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|255728730|ref|XM_002549245.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|255728730|ref|XM_002549245.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "255728730")
             self.assertEqual(alignment.target.annotations["gis"], "255728730")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002549245")
@@ -7857,8 +9518,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 177)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "PFILACKSGNIKLTNTATPVIYKLILAHAIPEENIPELLQALLEASNLAIDIQLR")
-            self.assertEqual(alignment.query.seq, "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "PFILACKSGNIKLTNTATPVIYKLILAHAIPEENIPELLQALLEASNLAIDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-06)
             self.assertAlmostEqual(alignment.annotations["bit score"], 57.0)
             self.assertAlmostEqual(alignment.score, 118)
@@ -7878,8 +9545,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida tropicalis MYA-3404 conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida tropicalis MYA-3404 conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida tropicalis MYA-3404 conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida tropicalis MYA-3404 conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -7895,12 +9568,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|171682617|ref|XM_001906217.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|171682617|ref|XM_001906217.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|171682617|ref|XM_001906217.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "171682617")
             self.assertEqual(alignment.target.annotations["gis"], "171682617")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001906217")
@@ -7911,7 +9591,9 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 237)
             self.assertEqual(alignment.target.annotations["start"], 10)
             self.assertEqual(alignment.target.annotations["end"], 115)
-            self.assertEqual(alignment.target.seq, "RQTYTIPELTQRPNFVNPFIIACGTKNVKFTGIAI")
+            self.assertEqual(
+                alignment.target.seq, "RQTYTIPELTQRPNFVNPFIIACGTKNVKFTGIAI"
+            )
             self.assertEqual(alignment.query.seq, "KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAM")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-06)
             self.assertAlmostEqual(alignment.annotations["bit score"], 38.6)
@@ -7932,8 +9614,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
@@ -7949,12 +9637,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|171682617|ref|XM_001906217.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|171682617|ref|XM_001906217.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|171682617|ref|XM_001906217.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "171682617")
             self.assertEqual(alignment.target.annotations["gis"], "171682617")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001906217")
@@ -7986,8 +9681,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Podospora anserina S mat+ hypothetical protein (PODANSg3280) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
@@ -8003,12 +9704,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|460402609|ref|XM_004246756.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|460402609|ref|XM_004246756.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|460402609|ref|XM_004246756.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "460402609")
             self.assertEqual(alignment.target.annotations["gis"], "460402609")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004246756")
@@ -8019,8 +9727,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 402)
             self.assertEqual(alignment.target.annotations["end"], 642)
-            self.assertEqual(alignment.target.seq, "VKDAAEHAILKLRSLSSPSEIAHNEDILNIFLMACEVRNVKMSVIGLSCLQKLISHDVVATSALKEILDTLKDHGEMADE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDAAEHAILKLRSLSSPSEIAHNEDILNIFLMACEVRNVKMSVIGLSCLQKLISHDVVATSALKEILDTLKDHGEMADE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 53.3)
             self.assertAlmostEqual(alignment.score, 110)
@@ -8040,8 +9754,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Solanum lycopersicum protein MON2 homolog (LOC101244609), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Solanum lycopersicum protein MON2 homolog (LOC101244609), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Solanum lycopersicum protein MON2 homolog (LOC101244609), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Solanum lycopersicum protein MON2 homolog (LOC101244609), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8057,12 +9777,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|68467204|ref|XM_717171.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|68467204|ref|XM_717171.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|68467204|ref|XM_717171.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "68467204")
             self.assertEqual(alignment.target.annotations["gis"], "68467204")
             self.assertEqual(alignment.target.annotations["acc."], "XM_717171")
@@ -8073,8 +9800,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 108)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQVLLCLLEASNLAVDIQLR")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQVLLCLLEASNLAVDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 53.3)
             self.assertAlmostEqual(alignment.score, 110)
@@ -8094,8 +9827,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida albicans SC5314 hypothetical protein (CaO19_12405) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida albicans SC5314 hypothetical protein (CaO19_12405) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida albicans SC5314 hypothetical protein (CaO19_12405) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida albicans SC5314 hypothetical protein (CaO19_12405) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -8111,12 +9850,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|68467433|ref|XM_717057.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|68467433|ref|XM_717057.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|68467433|ref|XM_717057.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "68467433")
             self.assertEqual(alignment.target.annotations["gis"], "68467433")
             self.assertEqual(alignment.target.annotations["acc."], "XM_717057")
@@ -8127,8 +9873,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 108)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQVLLCLLEASNLAVDIQLR")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQVLLCLLEASNLAVDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 53.3)
             self.assertAlmostEqual(alignment.score, 110)
@@ -8148,8 +9900,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida albicans SC5314 hypothetical protein (MON2) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida albicans SC5314 hypothetical protein (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida albicans SC5314 hypothetical protein (MON2) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida albicans SC5314 hypothetical protein (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -8165,12 +9923,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|317144425|ref|XM_001820059.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|317144425|ref|XM_001820059.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|317144425|ref|XM_001820059.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "317144425")
             self.assertEqual(alignment.target.annotations["gis"], "317144425")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001820059")
@@ -8181,8 +9946,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 144)
             self.assertEqual(alignment.target.annotations["end"], 297)
-            self.assertEqual(alignment.target.seq, "ACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSLDIQLK")
-            self.assertEqual(alignment.query.seq, "ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "ACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSLDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 51.5)
             self.assertAlmostEqual(alignment.score, 106)
@@ -8202,8 +9973,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aspergillus oryzae RIB40 endosomal peripheral membrane protein (Mon2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aspergillus oryzae RIB40 endosomal peripheral membrane protein (Mon2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aspergillus oryzae RIB40 endosomal peripheral membrane protein (Mon2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aspergillus oryzae RIB40 endosomal peripheral membrane protein (Mon2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 44)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
@@ -8219,12 +9996,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|241950270|ref|XM_002417813.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|241950270|ref|XM_002417813.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|241950270|ref|XM_002417813.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "241950270")
             self.assertEqual(alignment.target.annotations["gis"], "241950270")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002417813")
@@ -8235,8 +10019,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 108)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "KSYSSVVPIQEINKENHREEVLKPFILSCKSGNIKLTNISIPVIYKLILAHLIPELDISQVLLCLLEASNLAVDIQLR")
-            self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "KSYSSVVPIQEINKENHREEVLKPFILSCKSGNIKLTNISIPVIYKLILAHLIPELDISQVLLCLLEASNLAVDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 51.5)
             self.assertAlmostEqual(alignment.score, 106)
@@ -8256,8 +10046,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Candida dubliniensis CD36 SEC7-family member, endocytosis and vacuole integrity protein, putative (CD36_12180) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Candida dubliniensis CD36 SEC7-family member, endocytosis and vacuole integrity protein, putative (CD36_12180) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Candida dubliniensis CD36 SEC7-family member, endocytosis and vacuole integrity protein, putative (CD36_12180) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Candida dubliniensis CD36 SEC7-family member, endocytosis and vacuole integrity protein, putative (CD36_12180) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -8273,12 +10069,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|448082269|ref|XM_004195049.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|448082269|ref|XM_004195049.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|448082269|ref|XM_004195049.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "448082269")
             self.assertEqual(alignment.target.annotations["gis"], "448082269")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004195049")
@@ -8289,8 +10092,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 177)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR")
-            self.assertEqual(alignment.query.seq, "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -8310,8 +10119,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -8327,12 +10142,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|448082269|ref|XM_004195049.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|448082269|ref|XM_004195049.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|448082269|ref|XM_004195049.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "448082269")
             self.assertEqual(alignment.target.annotations["gis"], "448082269")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004195049")
@@ -8364,8 +10186,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
@@ -8381,12 +10209,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|359487908|ref|XM_003633625.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|359487908|ref|XM_003633625.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|359487908|ref|XM_003633625.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "359487908")
             self.assertEqual(alignment.target.annotations["gis"], "359487908")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003633625")
@@ -8397,8 +10232,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 312)
-            self.assertEqual(alignment.target.seq, "VKDGAEHGILKLRSLSSPSEIAHNEDILRIFLMACEVRNVKLSVIGLSCLQKLISHDAVAPSALKEILSTLKDHAEMADE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHGILKLRSLSSPSEIAHNEDILRIFLMACEVRNVKLSVIGLSCLQKLISHDAVAPSALKEILSTLKDHAEMADE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 49.2)
             self.assertAlmostEqual(alignment.score, 101)
@@ -8418,8 +10259,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Vitis vinifera protein MON2 homolog (LOC100264068), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Vitis vinifera protein MON2 homolog (LOC100264068), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Vitis vinifera protein MON2 homolog (LOC100264068), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Vitis vinifera protein MON2 homolog (LOC100264068), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8435,12 +10282,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302795299|ref|XM_002979367.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302795299|ref|XM_002979367.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302795299|ref|XM_002979367.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302795299")
             self.assertEqual(alignment.target.annotations["gis"], "302795299")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002979367")
@@ -8451,8 +10305,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 339)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 315)
-            self.assertEqual(alignment.target.seq, "VKDAAEHAILKLRTITDPSQISRNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVPPLAFPQILETLQEHCEINDEI")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDAAEHAILKLRTITDPSQISRNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVPPLAFPQILETLQEHCEINDEI",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 49.2)
             self.assertAlmostEqual(alignment.score, 101)
@@ -8472,8 +10332,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Selaginella moellendorffii hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Selaginella moellendorffii hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8489,12 +10355,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302792279|ref|XM_002977860.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302792279|ref|XM_002977860.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302792279|ref|XM_002977860.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302792279")
             self.assertEqual(alignment.target.annotations["gis"], "302792279")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002977860")
@@ -8505,8 +10378,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 339)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 315)
-            self.assertEqual(alignment.target.seq, "VKDAAEHAILKLRTVTDPSQIARNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVPPLAFPQILETLQEHCEINDEI")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDAAEHAILKLRTVTDPSQIARNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVPPLAFPQILETLQEHCEINDEI",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 49.2)
             self.assertAlmostEqual(alignment.score, 101)
@@ -8526,8 +10405,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Selaginella moellendorffii hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Selaginella moellendorffii hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8543,12 +10428,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|146416588|ref|XM_001484214.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|146416588|ref|XM_001484214.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|146416588|ref|XM_001484214.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "146416588")
             self.assertEqual(alignment.target.annotations["gis"], "146416588")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001484214")
@@ -8559,8 +10451,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 168)
             self.assertEqual(alignment.target.annotations["end"], 339)
-            self.assertEqual(alignment.target.seq, "AAPLVSTLASNNTKLVTISILAINRLAGTTAFSTATLGPLLDGLLEASHLAMDIQLR")
-            self.assertEqual(alignment.query.seq, "ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "AAPLVSTLASNNTKLVTISILAINRLAGTTAFSTATLGPLLDGLLEASHLAMDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 48.7)
             self.assertAlmostEqual(alignment.score, 100)
@@ -8580,8 +10478,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Meyerozyma guilliermondii ATCC 6260 hypothetical protein (PGUG_03645) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Meyerozyma guilliermondii ATCC 6260 hypothetical protein (PGUG_03645) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Meyerozyma guilliermondii ATCC 6260 hypothetical protein (PGUG_03645) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Meyerozyma guilliermondii ATCC 6260 hypothetical protein (PGUG_03645) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 49)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 49)
@@ -8597,12 +10501,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|255542393|ref|XM_002512214.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|255542393|ref|XM_002512214.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|255542393|ref|XM_002512214.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "255542393")
             self.assertEqual(alignment.target.annotations["gis"], "255542393")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002512214")
@@ -8613,8 +10524,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 312)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSLSSPNEIAHNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVAPSALKEILSTLKDHAEMADE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSLSSPNEIAHNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVAPSALKEILSTLKDHAEMADE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.002)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.9)
             self.assertAlmostEqual(alignment.score, 96)
@@ -8634,8 +10551,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ricinus communis guanine nucleotide-exchange, putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Ricinus communis guanine nucleotide-exchange, putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ricinus communis guanine nucleotide-exchange, putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ricinus communis guanine nucleotide-exchange, putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8651,12 +10574,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470133344|ref|XM_004302479.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470133344|ref|XM_004302479.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470133344|ref|XM_004302479.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470133344")
             self.assertEqual(alignment.target.annotations["gis"], "470133344")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004302479")
@@ -8667,8 +10597,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 312)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSLSSPGEIAQNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVASSALHEILSTLKDHAEMADE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSLSSPGEIAQNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVASSALHEILSTLKDHAEMADE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.002)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
             self.assertAlmostEqual(alignment.score, 95)
@@ -8688,8 +10624,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Fragaria vesca subsp. vesca protein MON2 homolog (LOC101302372), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Fragaria vesca subsp. vesca protein MON2 homolog (LOC101302372), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Fragaria vesca subsp. vesca protein MON2 homolog (LOC101302372), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Fragaria vesca subsp. vesca protein MON2 homolog (LOC101302372), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8705,12 +10647,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|356574903|ref|XM_003555535.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|356574903|ref|XM_003555535.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|356574903|ref|XM_003555535.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "356574903")
             self.assertEqual(alignment.target.annotations["gis"], "356574903")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003555535")
@@ -8721,8 +10670,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 69)
             self.assertEqual(alignment.target.annotations["end"], 276)
-            self.assertEqual(alignment.target.seq, "TVKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVSPSALREIL")
-            self.assertEqual(alignment.query.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "TVKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVSPSALREIL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.002)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
             self.assertAlmostEqual(alignment.score, 95)
@@ -8742,8 +10697,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Glycine max protein MON2 homolog (LOC100777257), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Glycine max protein MON2 homolog (LOC100777257), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Glycine max protein MON2 homolog (LOC100777257), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Glycine max protein MON2 homolog (LOC100777257), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
@@ -8759,12 +10720,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|334187990|ref|NM_001203485.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|334187990|ref|NM_001203485.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|334187990|ref|NM_001203485.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "334187990")
             self.assertEqual(alignment.target.annotations["gis"], "334187990")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001203485")
@@ -8775,8 +10743,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 312)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEILYTLKDHSEMAEE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEILYTLKDHSEMAEE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.002)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
             self.assertAlmostEqual(alignment.score, 95)
@@ -8796,8 +10770,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -8813,12 +10793,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|334187988|ref|NM_122680.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|334187988|ref|NM_122680.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|334187988|ref|NM_122680.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "334187988")
             self.assertEqual(alignment.target.annotations["gis"], "334187988")
             self.assertEqual(alignment.target.annotations["acc."], "NM_122680")
@@ -8829,8 +10816,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 330)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 306)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEILYTLKDAKQLS")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEILYTLKDAKQLS",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.002)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
             self.assertAlmostEqual(alignment.score, 95)
@@ -8850,8 +10843,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Arabidopsis thaliana armadillo/beta-catenin-like repeat-containing protein (AT5G27970) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
@@ -8867,12 +10866,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|356535140|ref|XM_003536059.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|356535140|ref|XM_003536059.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|356535140|ref|XM_003536059.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "356535140")
             self.assertEqual(alignment.target.annotations["gis"], "356535140")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003536059")
@@ -8883,8 +10889,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 318)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 294)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVSPSALTEILSTLKDA")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEA")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVSPSALTEILSTLKDA",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEA",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.003)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.0)
             self.assertAlmostEqual(alignment.score, 94)
@@ -8904,8 +10916,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Glycine max protein MON2 homolog, transcript variant 2 (LOC100818893), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Glycine max protein MON2 homolog, transcript variant 2 (LOC100818893), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Glycine max protein MON2 homolog, transcript variant 2 (LOC100818893), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Glycine max protein MON2 homolog, transcript variant 2 (LOC100818893), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 63)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 63)
@@ -8921,12 +10939,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296414539|ref|XM_002836911.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296414539|ref|XM_002836911.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|296414539|ref|XM_002836911.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296414539")
             self.assertEqual(alignment.target.annotations["gis"], "296414539")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002836911")
@@ -8937,8 +10962,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 147)
             self.assertEqual(alignment.target.annotations["end"], 294)
-            self.assertEqual(alignment.target.seq, "ELSGRPQFIHPFLIACSTRNAKFSTIGVVCLQRLIVSQGLAKVCRQDIL")
-            self.assertEqual(alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "ELSGRPQFIHPFLIACSTRNAKFSTIGVVCLQRLIVSQGLAKVCRQDIL",
+            )
+            self.assertEqual(
+                alignment.query.seq, "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.003)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.0)
             self.assertAlmostEqual(alignment.score, 94)
@@ -8958,8 +10988,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Tuber melanosporum Mel28 hypothetical protein (GSTUM_00003289001) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Tuber melanosporum Mel28 hypothetical protein (GSTUM_00003289001) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Tuber melanosporum Mel28 hypothetical protein (GSTUM_00003289001) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Tuber melanosporum Mel28 hypothetical protein (GSTUM_00003289001) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
@@ -8975,12 +11011,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|297597693|ref|NM_001050929.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|297597693|ref|NM_001050929.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|297597693|ref|NM_001050929.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "297597693")
             self.assertEqual(alignment.target.annotations["gis"], "297597693")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001050929")
@@ -8991,8 +11034,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 339)
             self.assertEqual(alignment.target.annotations["start"], 69)
             self.assertEqual(alignment.target.annotations["end"], 315)
-            self.assertEqual(alignment.target.seq, "SVKDAAEHAILKLRSLSSPMEIAQNEDILRMFLVACSVKSVKLSVIGLSCLQKLISHDAVASSALKDILTTLKDHAEMTDEI")
-            self.assertEqual(alignment.query.seq, "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
+            self.assertEqual(
+                alignment.target.seq,
+                "SVKDAAEHAILKLRSLSSPMEIAQNEDILRMFLVACSVKSVKLSVIGLSCLQKLISHDAVASSALKDILTTLKDHAEMTDEI",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.004)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.5)
             self.assertAlmostEqual(alignment.score, 93)
@@ -9012,8 +11061,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Oryza sativa Japonica Group Os01g0772700 (Os01g0772700) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Oryza sativa Japonica Group Os01g0772700 (Os01g0772700) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Oryza sativa Japonica Group Os01g0772700 (Os01g0772700) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Oryza sativa Japonica Group Os01g0772700 (Os01g0772700) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 70)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 70)
@@ -9029,12 +11084,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|448086792|ref|XM_004196143.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|448086792|ref|XM_004196143.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|448086792|ref|XM_004196143.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "448086792")
             self.assertEqual(alignment.target.annotations["gis"], "448086792")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004196143")
@@ -9045,8 +11107,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 177)
             self.assertEqual(alignment.target.annotations["end"], 342)
-            self.assertEqual(alignment.target.seq, "PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR")
-            self.assertEqual(alignment.query.seq, "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -9066,8 +11134,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Millerozyma farinosa CBS 7064 hypothetical protein (Piso0_005640) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -9083,12 +11157,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|403176154|ref|XM_003334821.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|403176154|ref|XM_003334821.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|403176154|ref|XM_003334821.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "403176154")
             self.assertEqual(alignment.target.annotations["gis"], "403176154")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003334821")
@@ -9099,8 +11180,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 186)
             self.assertEqual(alignment.target.annotations["end"], 363)
-            self.assertEqual(alignment.target.seq, "DIFRPISMACATKNAKVVVIALGSLQRLIAMDAVPSCKIPQIVNLLSTVLPLGVEIQLR")
-            self.assertEqual(alignment.query.seq, "DFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "DIFRPISMACATKNAKVVVIALGSLQRLIAMDAVPSCKIPQIVNLLSTVLPLGVEIQLR",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "DFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -9120,8 +11207,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Puccinia graminis f. sp. tritici CRL 75-36-700-3 hypothetical protein (PGTG_16037), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Puccinia graminis f. sp. tritici CRL 75-36-700-3 hypothetical protein (PGTG_16037), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Puccinia graminis f. sp. tritici CRL 75-36-700-3 hypothetical protein (PGTG_16037), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Puccinia graminis f. sp. tritici CRL 75-36-700-3 hypothetical protein (PGTG_16037), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
@@ -9137,12 +11230,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|356535138|ref|XM_003536058.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|356535138|ref|XM_003536058.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|356535138|ref|XM_003536058.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "356535138")
             self.assertEqual(alignment.target.annotations["gis"], "356535138")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003536058")
@@ -9153,8 +11253,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 336)
             self.assertEqual(alignment.target.annotations["start"], 152)
             self.assertEqual(alignment.target.annotations["end"], 392)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVSPSALTEILSTLKDHAEMVDE")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVSPSALTEILSTLKDHAEMVDE",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAME",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.006)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 92)
@@ -9174,8 +11280,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Glycine max protein MON2 homolog, transcript variant 1 (LOC100818893), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Glycine max protein MON2 homolog, transcript variant 1 (LOC100818893), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Glycine max protein MON2 homolog, transcript variant 1 (LOC100818893), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Glycine max protein MON2 homolog, transcript variant 1 (LOC100818893), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -9191,12 +11303,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|297808820|ref|XM_002872248.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|297808820|ref|XM_002872248.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|297808820|ref|XM_002872248.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "297808820")
             self.assertEqual(alignment.target.annotations["gis"], "297808820")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002872248")
@@ -9207,8 +11326,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 276)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEIL")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVEPSSLKEIL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.008)
             self.assertAlmostEqual(alignment.annotations["bit score"], 44.6)
             self.assertAlmostEqual(alignment.score, 91)
@@ -9228,8 +11353,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Arabidopsis lyrata subsp. lyrata binding protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Arabidopsis lyrata subsp. lyrata binding protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Arabidopsis lyrata subsp. lyrata binding protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Arabidopsis lyrata subsp. lyrata binding protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
@@ -9245,12 +11376,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|242054552|ref|XM_002456377.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|242054552|ref|XM_002456377.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|242054552|ref|XM_002456377.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "242054552")
             self.assertEqual(alignment.target.annotations["gis"], "242054552")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002456377")
@@ -9261,8 +11399,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 339)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 315)
-            self.assertEqual(alignment.target.seq, "VKDAAEHAVLKLRSLSGPSEIAQNEDILRMFLMACSVKSVKLSVIGLSCLQKLISHGAVASSALKEILATLKDHAEMTDEI")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDAAEHAVLKLRSLSGPSEIAQNEDILRMFLMACSVKSVKLSVIGLSCLQKLISHGAVASSALKEILATLKDHAEMTDEI",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.008)
             self.assertAlmostEqual(alignment.annotations["bit score"], 44.6)
             self.assertAlmostEqual(alignment.score, 91)
@@ -9282,8 +11426,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Sorghum bicolor hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Sorghum bicolor hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Sorghum bicolor hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Sorghum bicolor hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
@@ -9299,12 +11449,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|224125555|ref|XM_002319579.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|224125555|ref|XM_002319579.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|224125555|ref|XM_002319579.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "224125555")
             self.assertEqual(alignment.target.annotations["gis"], "224125555")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002319579")
@@ -9315,8 +11472,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 276)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRSLSSPSEIADNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVAPSALKEIL")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRSLSSPSEIADNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVAPSALKEIL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.015)
             self.assertAlmostEqual(alignment.annotations["bit score"], 43.7)
             self.assertAlmostEqual(alignment.score, 89)
@@ -9336,8 +11499,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Populus trichocarpa predicted protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Populus trichocarpa predicted protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Populus trichocarpa predicted protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Populus trichocarpa predicted protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
@@ -9353,12 +11522,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|357131062|ref|XR_138050.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|357131062|ref|XR_138050.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|357131062|ref|XR_138050.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "357131062")
             self.assertEqual(alignment.target.annotations["gis"], "357131062")
             self.assertEqual(alignment.target.annotations["acc."], "XR_138050")
@@ -9369,8 +11545,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 276)
-            self.assertEqual(alignment.target.seq, "VKDAAEHATLKLRSLSNPSEIAQNGDILRMFLMACSVKSVKLSAIGLSCLQKLISHDAVASSALKEIL")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDAAEHATLKLRSLSNPSEIAQNGDILRMFLMACSVKSVKLSAIGLSCLQKLISHDAVASSALKEIL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.054)
             self.assertAlmostEqual(alignment.annotations["bit score"], 41.8)
             self.assertAlmostEqual(alignment.score, 85)
@@ -9390,8 +11572,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Brachypodium distachyon uncharacterized LOC100838086 (LOC100838086), miscRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Brachypodium distachyon uncharacterized LOC100838086 (LOC100838086), miscRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Brachypodium distachyon uncharacterized LOC100838086 (LOC100838086), miscRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Brachypodium distachyon uncharacterized LOC100838086 (LOC100838086), miscRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
@@ -9407,12 +11595,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|403290914|ref|XM_003936502.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|403290914|ref|XM_003936502.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|403290914|ref|XM_003936502.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "403290914")
             self.assertEqual(alignment.target.annotations["gis"], "403290914")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003936502")
@@ -9423,8 +11618,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6674)
             self.assertEqual(alignment.target.annotations["end"], 6553)
-            self.assertEqual(alignment.target.seq, "TLEVSCLQGLHTSPSLEDQGVSQITNAFNMVVHLSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLEVSCLQGLHTSPSLEDQGVSQITNAFNMVVHLSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.5)
             self.assertAlmostEqual(alignment.score, 82)
@@ -9444,8 +11643,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Saimiri boliviensis boliviensis Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Saimiri boliviensis boliviensis Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Saimiri boliviensis boliviensis Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Saimiri boliviensis boliviensis Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -9461,12 +11666,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|297707079|ref|XM_002830297.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|297707079|ref|XM_002830297.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|297707079|ref|XM_002830297.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "297707079")
             self.assertEqual(alignment.target.annotations["gis"], "297707079")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002830297")
@@ -9477,8 +11689,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6176)
             self.assertEqual(alignment.target.annotations["end"], 6055)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHTLPSLEDKGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHTLPSLEDKGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.5)
             self.assertAlmostEqual(alignment.score, 82)
@@ -9498,8 +11714,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pongo abelii Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pongo abelii Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pongo abelii Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pongo abelii Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -9515,12 +11737,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|254567673|ref|XM_002490902.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|254567673|ref|XM_002490902.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|254567673|ref|XM_002490902.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "254567673")
             self.assertEqual(alignment.target.annotations["gis"], "254567673")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002490902")
@@ -9531,8 +11760,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 312)
             self.assertEqual(alignment.target.annotations["start"], 87)
             self.assertEqual(alignment.target.annotations["end"], 294)
-            self.assertEqual(alignment.target.seq, "ASIDMIRSFKQRVPIQELVKFESFVDPFLLSIQTRSLKLVNTGLACLQKLIIESAIADTKLESLVNSLL")
-            self.assertEqual(alignment.query.seq, "ASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI")
+            self.assertEqual(
+                alignment.target.seq,
+                "ASIDMIRSFKQRVPIQELVKFESFVDPFLLSIQTRSLKLVNTGLACLQKLIIESAIADTKLESLVNSLL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "ASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.19)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.0)
             self.assertAlmostEqual(alignment.score, 81)
@@ -9552,8 +11787,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pichia pastoris GS115 Peripheral membrane protein with a role in endocytosis and vacuole integrity, interacts with Arl1p a (PAS_chr2-1_0066) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Pichia pastoris GS115 Peripheral membrane protein with a role in endocytosis and vacuole integrity, interacts with Arl1p a (PAS_chr2-1_0066) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pichia pastoris GS115 Peripheral membrane protein with a role in endocytosis and vacuole integrity, interacts with Arl1p a (PAS_chr2-1_0066) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pichia pastoris GS115 Peripheral membrane protein with a role in endocytosis and vacuole integrity, interacts with Arl1p a (PAS_chr2-1_0066) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
@@ -9569,12 +11810,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|302772536|ref|XM_002969640.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|302772536|ref|XM_002969640.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|302772536|ref|XM_002969640.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "302772536")
             self.assertEqual(alignment.target.annotations["gis"], "302772536")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002969640")
@@ -9585,8 +11833,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 339)
             self.assertEqual(alignment.target.annotations["start"], 0)
             self.assertEqual(alignment.target.annotations["end"], 150)
-            self.assertEqual(alignment.target.seq, "MLTCKTRNIKLSVLGLSCLQKLLAHDAIPPLAVPQILEILQEHSEIHYEV")
-            self.assertEqual(alignment.query.seq, "VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
+            self.assertEqual(
+                alignment.target.seq,
+                "MLTCKTRNIKLSVLGLSCLQKLLAHDAIPPLAVPQILEILQEHSEIHYEV",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.27)
             self.assertAlmostEqual(alignment.annotations["bit score"], 39.6)
             self.assertAlmostEqual(alignment.score, 80)
@@ -9606,8 +11860,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Selaginella moellendorffii hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Selaginella moellendorffii hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Selaginella moellendorffii hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
@@ -9623,12 +11883,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|189235995|ref|XM_967692.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|189235995|ref|XM_967692.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|189235995|ref|XM_967692.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "189235995")
             self.assertEqual(alignment.target.annotations["gis"], "189235995")
             self.assertEqual(alignment.target.annotations["acc."], "XM_967692")
@@ -9660,8 +11927,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Tribolium castaneum similar to AGAP008906-PA (LOC661541), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Tribolium castaneum similar to AGAP008906-PA (LOC661541), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Tribolium castaneum similar to AGAP008906-PA (LOC661541), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Tribolium castaneum similar to AGAP008906-PA (LOC661541), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -9677,12 +11950,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|238586708|ref|XM_002391211.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|238586708|ref|XM_002391211.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|238586708|ref|XM_002391211.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "238586708")
             self.assertEqual(alignment.target.annotations["gis"], "238586708")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002391211")
@@ -9693,8 +11973,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 0)
             self.assertEqual(alignment.target.annotations["end"], 156)
-            self.assertEqual(alignment.target.seq, "MACATKNAKVVAISLGSLQRLIALKAVPQSDVPLIIKTMSDSMSQGVDIQLK")
-            self.assertEqual(alignment.query.seq, "LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq,
+                "MACATKNAKVVAISLGSLQRLIALKAVPQSDVPLIIKTMSDSMSQGVDIQLK",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.50)
             self.assertAlmostEqual(alignment.annotations["bit score"], 38.6)
             self.assertAlmostEqual(alignment.score, 78)
@@ -9714,8 +12000,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Moniliophthora perniciosa FA553 hypothetical protein (MPER_09344) mRNA, partial cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Moniliophthora perniciosa FA553 hypothetical protein (MPER_09344) mRNA, partial cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Moniliophthora perniciosa FA553 hypothetical protein (MPER_09344) mRNA, partial cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Moniliophthora perniciosa FA553 hypothetical protein (MPER_09344) mRNA, partial cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 45)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 45)
@@ -9731,12 +12023,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|82734234|ref|NM_020336.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|82734234|ref|NM_020336.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|82734234|ref|NM_020336.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "82734234")
             self.assertEqual(alignment.target.annotations["gis"], "82734234")
             self.assertEqual(alignment.target.annotations["acc."], "NM_020336")
@@ -9747,8 +12046,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6901)
             self.assertEqual(alignment.target.annotations["end"], 6780)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEEVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEEVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.50)
             self.assertAlmostEqual(alignment.annotations["bit score"], 38.6)
             self.assertAlmostEqual(alignment.score, 78)
@@ -9768,8 +12071,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Homo sapiens Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Homo sapiens Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Homo sapiens Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Homo sapiens Ral GTPase activating protein, beta subunit (non-catalytic) (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -9785,12 +12094,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|391342729|ref|XM_003745620.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|391342729|ref|XM_003745620.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|391342729|ref|XM_003745620.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "391342729")
             self.assertEqual(alignment.target.annotations["gis"], "391342729")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003745620")
@@ -9822,8 +12138,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Metaseiulus occidentalis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100907146), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Metaseiulus occidentalis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100907146), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Metaseiulus occidentalis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100907146), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Metaseiulus occidentalis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100907146), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -9839,12 +12161,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|291235727|ref|XM_002737750.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|291235727|ref|XM_002737750.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|291235727|ref|XM_002737750.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "291235727")
             self.assertEqual(alignment.target.annotations["gis"], "291235727")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002737750")
@@ -9876,8 +12205,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Saccoglossus kowalevskii ADP-ribosylation factor guanine nucleotide-exchange factor 1(brefeldin A-inhibited)-like (LOC100366823), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Saccoglossus kowalevskii ADP-ribosylation factor guanine nucleotide-exchange factor 1(brefeldin A-inhibited)-like (LOC100366823), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Saccoglossus kowalevskii ADP-ribosylation factor guanine nucleotide-exchange factor 1(brefeldin A-inhibited)-like (LOC100366823), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Saccoglossus kowalevskii ADP-ribosylation factor guanine nucleotide-exchange factor 1(brefeldin A-inhibited)-like (LOC100366823), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -9893,12 +12228,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|330938727|ref|XM_003305716.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|330938727|ref|XM_003305716.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|330938727|ref|XM_003305716.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "330938727")
             self.assertEqual(alignment.target.annotations["gis"], "330938727")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003305716")
@@ -9930,8 +12272,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
@@ -9947,12 +12295,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|330938727|ref|XM_003305716.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|330938727|ref|XM_003305716.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|330938727|ref|XM_003305716.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "330938727")
             self.assertEqual(alignment.target.annotations["gis"], "330938727")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003305716")
@@ -9984,8 +12339,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pyrenophora teres f. teres 0-1 hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
@@ -10001,12 +12362,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|397511126|ref|XM_003825883.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|397511126|ref|XM_003825883.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|397511126|ref|XM_003825883.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "397511126")
             self.assertEqual(alignment.target.annotations["gis"], "397511126")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003825883")
@@ -10017,8 +12385,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6170)
             self.assertEqual(alignment.target.annotations["end"], 6049)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.95)
             self.assertAlmostEqual(alignment.annotations["bit score"], 37.7)
             self.assertAlmostEqual(alignment.score, 76)
@@ -10038,8 +12410,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10055,12 +12433,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|397511124|ref|XM_003825882.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|397511124|ref|XM_003825882.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|397511124|ref|XM_003825882.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "397511124")
             self.assertEqual(alignment.target.annotations["gis"], "397511124")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003825882")
@@ -10071,8 +12456,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6945)
             self.assertEqual(alignment.target.annotations["end"], 6824)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.95)
             self.assertAlmostEqual(alignment.annotations["bit score"], 37.7)
             self.assertAlmostEqual(alignment.score, 76)
@@ -10092,8 +12481,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan paniscus Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10109,12 +12504,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|390362724|ref|XR_025702.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|390362724|ref|XR_025702.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|390362724|ref|XR_025702.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "390362724")
             self.assertEqual(alignment.target.annotations["gis"], "390362724")
             self.assertEqual(alignment.target.annotations["acc."], "XR_025702")
@@ -10146,8 +12548,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC754128), misc_RNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC754128), misc_RNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC754128), misc_RNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC754128), misc_RNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
@@ -10163,12 +12571,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|390341406|ref|XR_143615.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|390341406|ref|XR_143615.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|390341406|ref|XR_143615.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "390341406")
             self.assertEqual(alignment.target.annotations["gis"], "390341406")
             self.assertEqual(alignment.target.annotations["acc."], "XR_143615")
@@ -10200,8 +12615,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC586243), misc_RNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC586243), misc_RNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC586243), misc_RNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Strongylocentrotus purpuratus brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC586243), misc_RNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
@@ -10217,12 +12638,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332858441|ref|XM_003316935.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332858441|ref|XM_003316935.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332858441|ref|XM_003316935.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332858441")
             self.assertEqual(alignment.target.annotations["gis"], "332858441")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003316935")
@@ -10233,8 +12661,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6170)
             self.assertEqual(alignment.target.annotations["end"], 6049)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.95)
             self.assertAlmostEqual(alignment.annotations["bit score"], 37.7)
             self.assertAlmostEqual(alignment.score, 76)
@@ -10254,8 +12686,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10271,12 +12709,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332858439|ref|XM_003316934.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332858439|ref|XM_003316934.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332858439|ref|XM_003316934.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332858439")
             self.assertEqual(alignment.target.annotations["gis"], "332858439")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003316934")
@@ -10287,8 +12732,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6709)
             self.assertEqual(alignment.target.annotations["end"], 6588)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.95)
             self.assertAlmostEqual(alignment.annotations["bit score"], 37.7)
             self.assertAlmostEqual(alignment.score, 76)
@@ -10308,8 +12757,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10325,12 +12780,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332858437|ref|XM_514640.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332858437|ref|XM_514640.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332858437|ref|XM_514640.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332858437")
             self.assertEqual(alignment.target.annotations["gis"], "332858437")
             self.assertEqual(alignment.target.annotations["acc."], "XM_514640")
@@ -10341,8 +12803,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6945)
             self.assertEqual(alignment.target.annotations["end"], 6824)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.95)
             self.assertAlmostEqual(alignment.annotations["bit score"], 37.7)
             self.assertAlmostEqual(alignment.score, 76)
@@ -10362,8 +12828,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 3 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 3 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 3 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 3 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10379,12 +12851,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470302053|ref|XM_004347467.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470302053|ref|XM_004347467.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470302053|ref|XM_004347467.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470302053")
             self.assertEqual(alignment.target.annotations["gis"], "470302053")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004347467")
@@ -10416,8 +12895,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Capsaspora owczarzaki ATCC 30864 guanine nucleotide-exchange protein (CAOG_04766) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Capsaspora owczarzaki ATCC 30864 guanine nucleotide-exchange protein (CAOG_04766) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Capsaspora owczarzaki ATCC 30864 guanine nucleotide-exchange protein (CAOG_04766) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Capsaspora owczarzaki ATCC 30864 guanine nucleotide-exchange protein (CAOG_04766) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -10433,12 +12918,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|449435759|ref|XM_004135614.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|449435759|ref|XM_004135614.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|449435759|ref|XM_004135614.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "449435759")
             self.assertEqual(alignment.target.annotations["gis"], "449435759")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004135614")
@@ -10449,8 +12941,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 72)
             self.assertEqual(alignment.target.annotations["end"], 276)
-            self.assertEqual(alignment.target.seq, "VKDGAEHAILKLRTMSCPSDIAENEDILRIFLLACEAKTIKLSVIGLSSLQKLISHDAVTPSALKEIL")
-            self.assertEqual(alignment.query.seq, "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "VKDGAEHAILKLRTMSCPSDIAENEDILRIFLLACEAKTIKLSVIGLSSLQKLISHDAVTPSALKEIL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.8)
             self.assertAlmostEqual(alignment.score, 74)
@@ -10470,8 +12968,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cucumis sativus protein MON2 homolog (LOC101218514), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cucumis sativus protein MON2 homolog (LOC101218514), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cucumis sativus protein MON2 homolog (LOC101218514), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cucumis sativus protein MON2 homolog (LOC101218514), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
@@ -10487,12 +12991,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|426391663|ref|XM_004062140.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|426391663|ref|XM_004062140.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|426391663|ref|XM_004062140.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "426391663")
             self.assertEqual(alignment.target.annotations["gis"], "426391663")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004062140")
@@ -10503,8 +13014,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6171)
             self.assertEqual(alignment.target.annotations["end"], 6050)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.8)
             self.assertAlmostEqual(alignment.score, 74)
@@ -10524,8 +13039,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 2 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10541,12 +13062,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|426391661|ref|XM_004062139.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|426391661|ref|XM_004062139.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|426391661|ref|XM_004062139.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "426391661")
             self.assertEqual(alignment.target.annotations["gis"], "426391661")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004062139")
@@ -10557,8 +13085,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 348)
             self.assertEqual(alignment.target.annotations["start"], 6946)
             self.assertEqual(alignment.target.annotations["end"], 6825)
-            self.assertEqual(alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ")
-            self.assertEqual(alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK")
+            self.assertEqual(
+                alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ"
+            )
+            self.assertEqual(
+                alignment.query.seq, "TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.8)
             self.assertAlmostEqual(alignment.score, 74)
@@ -10578,8 +13110,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Gorilla gorilla gorilla Ral GTPase activating protein, beta subunit (non-catalytic), transcript variant 1 (RALGAPB), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
@@ -10595,12 +13133,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|347973012|ref|XM_319652.4|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|347973012|ref|XM_319652.4|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|347973012|ref|XM_319652.4|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "347973012")
             self.assertEqual(alignment.target.annotations["gis"], "347973012")
             self.assertEqual(alignment.target.annotations["acc."], "XM_319652")
@@ -10632,8 +13177,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Anopheles gambiae str. PEST AGAP008906-PA (AgaP_AGAP008906) mRNA, partial cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Anopheles gambiae str. PEST AGAP008906-PA (AgaP_AGAP008906) mRNA, partial cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Anopheles gambiae str. PEST AGAP008906-PA (AgaP_AGAP008906) mRNA, partial cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Anopheles gambiae str. PEST AGAP008906-PA (AgaP_AGAP008906) mRNA, partial cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -10649,12 +13200,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|339252087|ref|XM_003371219.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|339252087|ref|XM_003371219.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|339252087|ref|XM_003371219.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "339252087")
             self.assertEqual(alignment.target.annotations["gis"], "339252087")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003371219")
@@ -10686,8 +13244,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Trichinella spiralis putative Sec7 domain protein (Tsp_09497) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Trichinella spiralis putative Sec7 domain protein (Tsp_09497) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Trichinella spiralis putative Sec7 domain protein (Tsp_09497) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Trichinella spiralis putative Sec7 domain protein (Tsp_09497) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -10703,12 +13267,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|189192213|ref|XM_001932411.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|189192213|ref|XM_001932411.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|189192213|ref|XM_001932411.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "189192213")
             self.assertEqual(alignment.target.annotations["gis"], "189192213")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001932411")
@@ -10740,8 +13311,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
@@ -10757,12 +13334,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|189192213|ref|XM_001932411.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|189192213|ref|XM_001932411.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|189192213|ref|XM_001932411.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "189192213")
             self.assertEqual(alignment.target.annotations["gis"], "189192213")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001932411")
@@ -10794,8 +13378,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pyrenophora tritici-repentis Pt-1C-BFP conserved hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
@@ -10811,12 +13401,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|426242124|ref|XM_004014876.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|426242124|ref|XM_004014876.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|426242124|ref|XM_004014876.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "426242124")
             self.assertEqual(alignment.target.annotations["gis"], "426242124")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004014876")
@@ -10848,8 +13445,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Ovis aries ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Ovis aries ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Ovis aries ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Ovis aries ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -10865,12 +13468,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|329663901|ref|NM_001205652.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|329663901|ref|NM_001205652.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|329663901|ref|NM_001205652.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "329663901")
             self.assertEqual(alignment.target.annotations["gis"], "329663901")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001205652")
@@ -10902,8 +13512,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Bos taurus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Bos taurus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Bos taurus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Bos taurus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -10919,12 +13535,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|167533856|ref|XM_001748555.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|167533856|ref|XM_001748555.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|167533856|ref|XM_001748555.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "167533856")
             self.assertEqual(alignment.target.annotations["gis"], "167533856")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001748555")
@@ -10935,8 +13558,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 297)
             self.assertEqual(alignment.target.annotations["start"], 619)
             self.assertEqual(alignment.target.annotations["end"], 733)
-            self.assertEqual(alignment.target.seq, "PFRLACECKSAKVTRTALDCLQKMMAYGHINSHMMAEV")
-            self.assertEqual(alignment.query.seq, "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI")
+            self.assertEqual(
+                alignment.target.seq, "PFRLACECKSAKVTRTALDCLQKMMAYGHINSHMMAEV"
+            )
+            self.assertEqual(
+                alignment.query.seq, "PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2.5)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.3)
             self.assertAlmostEqual(alignment.score, 73)
@@ -10956,8 +13583,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Monosiga brevicollis MX1 predicted protein MONBRDRAFT_33770 mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Monosiga brevicollis MX1 predicted protein MONBRDRAFT_33770 mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Monosiga brevicollis MX1 predicted protein MONBRDRAFT_33770 mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Monosiga brevicollis MX1 predicted protein MONBRDRAFT_33770 mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
@@ -10973,12 +13606,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410970929|ref|XM_003991879.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410970929|ref|XM_003991879.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410970929|ref|XM_003991879.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410970929")
             self.assertEqual(alignment.target.annotations["gis"], "410970929")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003991879")
@@ -11010,8 +13650,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Felis catus EPH receptor B3 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Felis catus EPH receptor B3 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Felis catus EPH receptor B3 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Felis catus EPH receptor B3 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11027,12 +13673,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410929672|ref|XM_003978175.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410929672|ref|XM_003978175.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410929672|ref|XM_003978175.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410929672")
             self.assertEqual(alignment.target.annotations["gis"], "410929672")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003978175")
@@ -11064,8 +13717,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Takifugu rubripes brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC101076459), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Takifugu rubripes brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC101076459), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Takifugu rubripes brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC101076459), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Takifugu rubripes brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC101076459), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11081,12 +13740,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|402903089|ref|XM_003914364.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|402903089|ref|XM_003914364.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|402903089|ref|XM_003914364.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "402903089")
             self.assertEqual(alignment.target.annotations["gis"], "402903089")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003914364")
@@ -11097,8 +13763,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 196)
             self.assertEqual(alignment.target.annotations["start"], 2580)
             self.assertEqual(alignment.target.annotations["end"], 2468)
-            self.assertEqual(alignment.target.seq, "DSISSFEKTGARSQWRGTQDSSGDPCRGRSFQLP*LAT")
-            self.assertEqual(alignment.query.seq, "EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS")
+            self.assertEqual(
+                alignment.target.seq, "DSISSFEKTGARSQWRGTQDSSGDPCRGRSFQLP*LAT"
+            )
+            self.assertEqual(
+                alignment.query.seq, "EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 3.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.9)
             self.assertAlmostEqual(alignment.score, 72)
@@ -11118,8 +13788,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Papio anubis CBP80/20-dependent translation initiation factor-like (LOC101009629), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Papio anubis CBP80/20-dependent translation initiation factor-like (LOC101009629), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Papio anubis CBP80/20-dependent translation initiation factor-like (LOC101009629), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Papio anubis CBP80/20-dependent translation initiation factor-like (LOC101009629), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
@@ -11135,12 +13811,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|383853967|ref|XM_003702446.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|383853967|ref|XM_003702446.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|383853967|ref|XM_003702446.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "383853967")
             self.assertEqual(alignment.target.annotations["gis"], "383853967")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003702446")
@@ -11172,8 +13855,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Megachile rotundata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Megachile rotundata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Megachile rotundata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Megachile rotundata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11189,12 +13878,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|380017270|ref|XM_003692535.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|380017270|ref|XM_003692535.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|380017270|ref|XM_003692535.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "380017270")
             self.assertEqual(alignment.target.annotations["gis"], "380017270")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003692535")
@@ -11226,8 +13922,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Apis florea ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Apis florea ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Apis florea ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Apis florea ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11243,12 +13945,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|350411438|ref|XM_003489304.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350411438|ref|XM_003489304.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350411438|ref|XM_003489304.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "350411438")
             self.assertEqual(alignment.target.annotations["gis"], "350411438")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003489304")
@@ -11280,8 +13989,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Bombus impatiens brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100743555), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Bombus impatiens brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100743555), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Bombus impatiens brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100743555), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Bombus impatiens brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100743555), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11297,12 +14012,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|348539090|ref|XM_003456975.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|348539090|ref|XM_003456975.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|348539090|ref|XM_003456975.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "348539090")
             self.assertEqual(alignment.target.annotations["gis"], "348539090")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003456975")
@@ -11334,8 +14056,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Oreochromis niloticus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Oreochromis niloticus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Oreochromis niloticus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Oreochromis niloticus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11351,12 +14079,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|345796385|ref|XM_003434116.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|345796385|ref|XM_003434116.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|345796385|ref|XM_003434116.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "345796385")
             self.assertEqual(alignment.target.annotations["gis"], "345796385")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003434116")
@@ -11388,8 +14123,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11405,12 +14146,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|345796383|ref|XM_545232.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|345796383|ref|XM_545232.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|345796383|ref|XM_545232.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "345796383")
             self.assertEqual(alignment.target.annotations["gis"], "345796383")
             self.assertEqual(alignment.target.annotations["acc."], "XM_545232")
@@ -11442,8 +14190,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Canis lupus familiaris EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11459,12 +14213,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|340729748|ref|XM_003403110.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|340729748|ref|XM_003403110.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|340729748|ref|XM_003403110.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "340729748")
             self.assertEqual(alignment.target.annotations["gis"], "340729748")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003403110")
@@ -11496,8 +14257,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Bombus terrestris brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100648040), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Bombus terrestris brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100648040), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Bombus terrestris brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100648040), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Bombus terrestris brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100648040), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11513,12 +14280,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|338716130|ref|XM_001497451.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|338716130|ref|XM_001497451.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|338716130|ref|XM_001497451.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "338716130")
             self.assertEqual(alignment.target.annotations["gis"], "338716130")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001497451")
@@ -11550,8 +14324,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Equus caballus EPH receptor B3 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Equus caballus EPH receptor B3 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Equus caballus EPH receptor B3 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Equus caballus EPH receptor B3 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11567,12 +14347,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|328778548|ref|XM_003249467.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|328778548|ref|XM_003249467.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|328778548|ref|XM_003249467.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "328778548")
             self.assertEqual(alignment.target.annotations["gis"], "328778548")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003249467")
@@ -11604,8 +14391,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Apis mellifera sec71 protein (sec71), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Apis mellifera sec71 protein (sec71), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Apis mellifera sec71 protein (sec71), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Apis mellifera sec71 protein (sec71), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11621,12 +14414,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|301759744|ref|XM_002915676.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|301759744|ref|XM_002915676.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|301759744|ref|XM_002915676.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "301759744")
             self.assertEqual(alignment.target.annotations["gis"], "301759744")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002915676")
@@ -11658,8 +14458,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11675,12 +14481,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|301759742|ref|XM_002915675.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|301759742|ref|XM_002915675.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|301759742|ref|XM_002915675.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "301759742")
             self.assertEqual(alignment.target.annotations["gis"], "301759742")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002915675")
@@ -11712,8 +14525,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Ailuropoda melanoleuca EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -11729,12 +14548,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|292626951|ref|XM_002666467.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|292626951|ref|XM_002666467.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|292626951|ref|XM_002666467.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "292626951")
             self.assertEqual(alignment.target.annotations["gis"], "292626951")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002666467")
@@ -11766,8 +14592,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Danio rerio ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Danio rerio ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Danio rerio ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Danio rerio ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11783,12 +14615,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|237836078|ref|XM_002367296.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|237836078|ref|XM_002367296.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|237836078|ref|XM_002367296.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "237836078")
             self.assertEqual(alignment.target.annotations["gis"], "237836078")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002367296")
@@ -11820,8 +14659,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Toxoplasma gondii ME49 hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Toxoplasma gondii ME49 hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Toxoplasma gondii ME49 hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Toxoplasma gondii ME49 hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 25)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 25)
@@ -11837,12 +14682,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|396462349|ref|XM_003835738.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|396462349|ref|XM_003835738.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|396462349|ref|XM_003835738.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "396462349")
             self.assertEqual(alignment.target.annotations["gis"], "396462349")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003835738")
@@ -11874,8 +14726,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Leptosphaeria maculans JN3 hypothetical protein (LEMA_P051270.1) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Leptosphaeria maculans JN3 hypothetical protein (LEMA_P051270.1) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Leptosphaeria maculans JN3 hypothetical protein (LEMA_P051270.1) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Leptosphaeria maculans JN3 hypothetical protein (LEMA_P051270.1) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 22)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
@@ -11891,12 +14749,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|268570183|ref|XM_002640666.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|268570183|ref|XM_002640666.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|268570183|ref|XM_002640666.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "268570183")
             self.assertEqual(alignment.target.annotations["gis"], "268570183")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002640666")
@@ -11928,8 +14793,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Caenorhabditis briggsae C. briggsae CBR-AGEF-1 protein (Cbr-agef-1) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Caenorhabditis briggsae C. briggsae CBR-AGEF-1 protein (Cbr-agef-1) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Caenorhabditis briggsae C. briggsae CBR-AGEF-1 protein (Cbr-agef-1) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Caenorhabditis briggsae C. briggsae CBR-AGEF-1 protein (Cbr-agef-1) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11945,12 +14816,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|198473316|ref|XM_001356210.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|198473316|ref|XM_001356210.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|198473316|ref|XM_001356210.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "198473316")
             self.assertEqual(alignment.target.annotations["gis"], "198473316")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001356210")
@@ -11982,8 +14860,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -11999,12 +14883,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|196008366|ref|XM_002114013.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|196008366|ref|XM_002114013.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|196008366|ref|XM_002114013.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "196008366")
             self.assertEqual(alignment.target.annotations["gis"], "196008366")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002114013")
@@ -12036,8 +14927,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Trichoplax adhaerens hypothetical protein, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Trichoplax adhaerens hypothetical protein, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Trichoplax adhaerens hypothetical protein, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Trichoplax adhaerens hypothetical protein, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 24)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 24)
@@ -12053,12 +14950,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195579057|ref|XM_002079343.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195579057|ref|XM_002079343.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195579057|ref|XM_002079343.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195579057")
             self.assertEqual(alignment.target.annotations["gis"], "195579057")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002079343")
@@ -12090,8 +14994,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila simulans GD23923 (Dsim\GD23923), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila simulans GD23923 (Dsim\GD23923), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12107,12 +15017,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195472698|ref|XM_002088601.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195472698|ref|XM_002088601.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195472698|ref|XM_002088601.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195472698")
             self.assertEqual(alignment.target.annotations["gis"], "195472698")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002088601")
@@ -12144,8 +15061,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12161,12 +15084,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195438259|ref|XM_002067019.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195438259|ref|XM_002067019.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195438259|ref|XM_002067019.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195438259")
             self.assertEqual(alignment.target.annotations["gis"], "195438259")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002067019")
@@ -12198,8 +15128,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12215,12 +15151,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195397689|ref|XM_002057425.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195397689|ref|XM_002057425.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195397689|ref|XM_002057425.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195397689")
             self.assertEqual(alignment.target.annotations["gis"], "195397689")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002057425")
@@ -12252,8 +15195,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12269,12 +15218,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195338276|ref|XM_002035715.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195338276|ref|XM_002035715.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195338276|ref|XM_002035715.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195338276")
             self.assertEqual(alignment.target.annotations["gis"], "195338276")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002035715")
@@ -12306,8 +15262,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12323,12 +15285,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195164721|ref|XM_002023159.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195164721|ref|XM_002023159.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195164721|ref|XM_002023159.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195164721")
             self.assertEqual(alignment.target.annotations["gis"], "195164721")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002023159")
@@ -12360,8 +15329,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila persimilis GL21229 (Dper\GL21229), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila persimilis GL21229 (Dper\GL21229), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12377,12 +15352,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195119048|ref|XM_002004008.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195119048|ref|XM_002004008.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195119048|ref|XM_002004008.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195119048")
             self.assertEqual(alignment.target.annotations["gis"], "195119048")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002004008")
@@ -12414,8 +15396,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12431,12 +15419,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|195031427|ref|XM_001988304.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|195031427|ref|XM_001988304.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|195031427|ref|XM_001988304.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "195031427")
             self.assertEqual(alignment.target.annotations["gis"], "195031427")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001988304")
@@ -12468,8 +15463,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12485,12 +15486,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|194860432|ref|XM_001969546.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|194860432|ref|XM_001969546.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|194860432|ref|XM_001969546.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "194860432")
             self.assertEqual(alignment.target.annotations["gis"], "194860432")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001969546")
@@ -12522,8 +15530,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila erecta GG23880 (Dere\GG23880), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila erecta GG23880 (Dere\GG23880), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila erecta GG23880 (Dere\GG23880), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila erecta GG23880 (Dere\GG23880), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12539,12 +15553,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|194761139|ref|XM_001962754.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|194761139|ref|XM_001962754.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|194761139|ref|XM_001962754.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "194761139")
             self.assertEqual(alignment.target.annotations["gis"], "194761139")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001962754")
@@ -12576,8 +15597,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila ananassae GF14256 (Dana\GF14256), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila ananassae GF14256 (Dana\GF14256), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12593,12 +15620,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|170037186|ref|XM_001846389.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|170037186|ref|XM_001846389.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|170037186|ref|XM_001846389.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "170037186")
             self.assertEqual(alignment.target.annotations["gis"], "170037186")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001846389")
@@ -12630,8 +15664,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Culex quinquefasciatus brefeldin A-inhibited guanine nucleotide-exchange protein 1, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Culex quinquefasciatus brefeldin A-inhibited guanine nucleotide-exchange protein 1, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Culex quinquefasciatus brefeldin A-inhibited guanine nucleotide-exchange protein 1, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Culex quinquefasciatus brefeldin A-inhibited guanine nucleotide-exchange protein 1, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12647,12 +15687,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|157134230|ref|XM_001663149.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|157134230|ref|XM_001663149.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|157134230|ref|XM_001663149.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "157134230")
             self.assertEqual(alignment.target.annotations["gis"], "157134230")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001663149")
@@ -12684,8 +15731,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aedes aegypti brefeldin a-inhibited guanine nucleotide-exchange protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aedes aegypti brefeldin a-inhibited guanine nucleotide-exchange protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aedes aegypti brefeldin a-inhibited guanine nucleotide-exchange protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aedes aegypti brefeldin a-inhibited guanine nucleotide-exchange protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12701,12 +15754,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156386529|ref|XM_001633915.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156386529|ref|XM_001633915.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156386529|ref|XM_001633915.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156386529")
             self.assertEqual(alignment.target.annotations["gis"], "156386529")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001633915")
@@ -12738,8 +15798,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g102625) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g102625) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g102625) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g102625) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12755,12 +15821,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|24584188|ref|NM_165059.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|24584188|ref|NM_165059.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|24584188|ref|NM_165059.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "24584188")
             self.assertEqual(alignment.target.annotations["gis"], "24584188")
             self.assertEqual(alignment.target.annotations["acc."], "NM_165059")
@@ -12792,8 +15865,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila melanogaster sec71 (sec71), transcript variant B, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila melanogaster sec71 (sec71), transcript variant B, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila melanogaster sec71 (sec71), transcript variant B, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila melanogaster sec71 (sec71), transcript variant B, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12809,12 +15888,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|24584186|ref|NM_135831.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|24584186|ref|NM_135831.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|24584186|ref|NM_135831.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "24584186")
             self.assertEqual(alignment.target.annotations["gis"], "24584186")
             self.assertEqual(alignment.target.annotations["acc."], "NM_135831")
@@ -12846,8 +15932,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Drosophila melanogaster sec71 (sec71), transcript variant A, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Drosophila melanogaster sec71 (sec71), transcript variant A, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Drosophila melanogaster sec71 (sec71), transcript variant A, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Drosophila melanogaster sec71 (sec71), transcript variant A, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -12863,12 +15955,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|157110325|ref|XM_001651005.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|157110325|ref|XM_001651005.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|157110325|ref|XM_001651005.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "157110325")
             self.assertEqual(alignment.target.annotations["gis"], "157110325")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001651005")
@@ -12900,8 +15999,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
@@ -12917,12 +16022,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|157110325|ref|XM_001651005.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|157110325|ref|XM_001651005.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|157110325|ref|XM_001651005.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "157110325")
             self.assertEqual(alignment.target.annotations["gis"], "157110325")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001651005")
@@ -12954,8 +16066,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aedes aegypti hypothetical protein AaeL_AAEL005529 partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
@@ -12971,12 +16089,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156388828|ref|XM_001634645.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156388828|ref|XM_001634645.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156388828|ref|XM_001634645.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156388828")
             self.assertEqual(alignment.target.annotations["gis"], "156388828")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001634645")
@@ -13008,8 +16133,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
@@ -13025,12 +16156,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156388828|ref|XM_001634645.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156388828|ref|XM_001634645.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156388828|ref|XM_001634645.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156388828")
             self.assertEqual(alignment.target.annotations["gis"], "156388828")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001634645")
@@ -13062,8 +16200,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g26815) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
@@ -13079,12 +16223,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156359702|ref|XM_001624855.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156359702|ref|XM_001624855.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156359702|ref|XM_001624855.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156359702")
             self.assertEqual(alignment.target.annotations["gis"], "156359702")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001624855")
@@ -13116,8 +16267,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
@@ -13133,12 +16290,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|156359702|ref|XM_001624855.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|156359702|ref|XM_001624855.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|156359702|ref|XM_001624855.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "156359702")
             self.assertEqual(alignment.target.annotations["gis"], "156359702")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001624855")
@@ -13170,8 +16334,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Nematostella vectensis predicted protein (NEMVEDRAFT_v1g16273) partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
@@ -13187,12 +16357,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|471359494|ref|XM_004370266.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|471359494|ref|XM_004370266.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|471359494|ref|XM_004370266.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "471359494")
             self.assertEqual(alignment.target.annotations["gis"], "471359494")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004370266")
@@ -13224,8 +16401,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Trichechus manatus latirostris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Trichechus manatus latirostris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Trichechus manatus latirostris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Trichechus manatus latirostris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13241,12 +16424,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470652205|ref|XM_004329148.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470652205|ref|XM_004329148.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470652205|ref|XM_004329148.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470652205")
             self.assertEqual(alignment.target.annotations["gis"], "470652205")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004329148")
@@ -13278,8 +16468,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Tursiops truncatus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Tursiops truncatus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Tursiops truncatus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Tursiops truncatus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13295,12 +16491,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470125017|ref|XM_004298456.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470125017|ref|XM_004298456.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470125017|ref|XM_004298456.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470125017")
             self.assertEqual(alignment.target.annotations["gis"], "470125017")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004298456")
@@ -13311,8 +16514,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 294)
             self.assertEqual(alignment.target.annotations["start"], 1362)
             self.assertEqual(alignment.target.annotations["end"], 1470)
-            self.assertEqual(alignment.target.seq, "FVQSCSSPNFKFSTSSSEHSQGSSNSKSIPRLRVSD")
-            self.assertEqual(alignment.query.seq, "FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE")
+            self.assertEqual(
+                alignment.target.seq, "FVQSCSSPNFKFSTSSSEHSQGSSNSKSIPRLRVSD"
+            )
+            self.assertEqual(
+                alignment.query.seq, "FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13332,8 +16539,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Fragaria vesca subsp. vesca cleavage and polyadenylation specificity factor subunit 3-II-like (LOC101304092), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Fragaria vesca subsp. vesca cleavage and polyadenylation specificity factor subunit 3-II-like (LOC101304092), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Fragaria vesca subsp. vesca cleavage and polyadenylation specificity factor subunit 3-II-like (LOC101304092), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Fragaria vesca subsp. vesca cleavage and polyadenylation specificity factor subunit 3-II-like (LOC101304092), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 31)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 31)
@@ -13349,12 +16562,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|466073472|ref|XM_004282882.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|466073472|ref|XM_004282882.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|466073472|ref|XM_004282882.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "466073472")
             self.assertEqual(alignment.target.annotations["gis"], "466073472")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004282882")
@@ -13386,8 +16606,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Orcinus orca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Orcinus orca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Orcinus orca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Orcinus orca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13403,12 +16629,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|449492807|ref|XM_004159059.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|449492807|ref|XM_004159059.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|449492807|ref|XM_004159059.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "449492807")
             self.assertEqual(alignment.target.annotations["gis"], "449492807")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004159059")
@@ -13419,8 +16652,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 187)
             self.assertEqual(alignment.target.annotations["start"], 533)
             self.assertEqual(alignment.target.annotations["end"], 644)
-            self.assertEqual(alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL")
-            self.assertEqual(alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL")
+            self.assertEqual(
+                alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL"
+            )
+            self.assertEqual(
+                alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13440,8 +16677,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -13457,12 +16700,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|449492804|ref|XM_004159058.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|449492804|ref|XM_004159058.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|449492804|ref|XM_004159058.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "449492804")
             self.assertEqual(alignment.target.annotations["gis"], "449492804")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004159058")
@@ -13473,8 +16723,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 187)
             self.assertEqual(alignment.target.annotations["start"], 652)
             self.assertEqual(alignment.target.annotations["end"], 763)
-            self.assertEqual(alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL")
-            self.assertEqual(alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL")
+            self.assertEqual(
+                alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL"
+            )
+            self.assertEqual(
+                alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13494,8 +16748,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -13511,12 +16771,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|449443485|ref|XM_004139460.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|449443485|ref|XM_004139460.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|449443485|ref|XM_004139460.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "449443485")
             self.assertEqual(alignment.target.annotations["gis"], "449443485")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004139460")
@@ -13527,8 +16794,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 187)
             self.assertEqual(alignment.target.annotations["start"], 533)
             self.assertEqual(alignment.target.annotations["end"], 644)
-            self.assertEqual(alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL")
-            self.assertEqual(alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL")
+            self.assertEqual(
+                alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL"
+            )
+            self.assertEqual(
+                alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13548,8 +16819,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 2 (LOC101210909), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -13565,12 +16842,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|449443483|ref|XM_004139459.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|449443483|ref|XM_004139459.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|449443483|ref|XM_004139459.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "449443483")
             self.assertEqual(alignment.target.annotations["gis"], "449443483")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004139459")
@@ -13581,8 +16865,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 187)
             self.assertEqual(alignment.target.annotations["start"], 652)
             self.assertEqual(alignment.target.annotations["end"], 763)
-            self.assertEqual(alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL")
-            self.assertEqual(alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL")
+            self.assertEqual(
+                alignment.target.seq, "RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL"
+            )
+            self.assertEqual(
+                alignment.query.seq, "RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13602,8 +16890,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cucumis sativus uncharacterized LOC101210909, transcript variant 1 (LOC101210909), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -13619,12 +16913,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|432873290|ref|XM_004072130.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|432873290|ref|XM_004072130.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|432873290|ref|XM_004072130.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "432873290")
             self.assertEqual(alignment.target.annotations["gis"], "432873290")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004072130")
@@ -13635,8 +16936,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 304)
             self.assertEqual(alignment.target.annotations["start"], 4026)
             self.assertEqual(alignment.target.annotations["end"], 3914)
-            self.assertEqual(alignment.target.seq, "CWLRSQGTTERRPLQMRSSADRAPSHFQMETAYLVFQM")
-            self.assertEqual(alignment.query.seq, "CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM")
+            self.assertEqual(
+                alignment.target.seq, "CWLRSQGTTERRPLQMRSSADRAPSHFQMETAYLVFQM"
+            )
+            self.assertEqual(
+                alignment.query.seq, "CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
             self.assertAlmostEqual(alignment.annotations["bit score"], 35.0)
             self.assertAlmostEqual(alignment.score, 70)
@@ -13656,8 +16961,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Oryzias latipes zinc finger protein 462-like (LOC101161246), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Oryzias latipes zinc finger protein 462-like (LOC101161246), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Oryzias latipes zinc finger protein 462-like (LOC101161246), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Oryzias latipes zinc finger protein 462-like (LOC101161246), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
@@ -13673,12 +16984,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|426392076|ref|XM_004062338.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|426392076|ref|XM_004062338.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|426392076|ref|XM_004062338.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "426392076")
             self.assertEqual(alignment.target.annotations["gis"], "426392076")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004062338")
@@ -13710,8 +17028,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Gorilla gorilla gorilla ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Gorilla gorilla gorilla ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Gorilla gorilla gorilla ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Gorilla gorilla gorilla ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13727,12 +17051,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410953779|ref|XM_003983499.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410953779|ref|XM_003983499.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410953779|ref|XM_003983499.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410953779")
             self.assertEqual(alignment.target.annotations["gis"], "410953779")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003983499")
@@ -13764,8 +17095,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Felis catus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Felis catus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Felis catus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Felis catus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13781,12 +17118,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|403282318|ref|XM_003932550.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|403282318|ref|XM_003932550.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|403282318|ref|XM_003932550.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "403282318")
             self.assertEqual(alignment.target.annotations["gis"], "403282318")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003932550")
@@ -13818,8 +17162,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Saimiri boliviensis boliviensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Saimiri boliviensis boliviensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Saimiri boliviensis boliviensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Saimiri boliviensis boliviensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13835,12 +17185,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|402882302|ref|XM_003904638.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|402882302|ref|XM_003904638.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|402882302|ref|XM_003904638.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "402882302")
             self.assertEqual(alignment.target.annotations["gis"], "402882302")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003904638")
@@ -13872,8 +17229,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Papio anubis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Papio anubis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Papio anubis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Papio anubis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13889,12 +17252,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|397475827|ref|XM_003809272.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|397475827|ref|XM_003809272.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|397475827|ref|XM_003809272.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "397475827")
             self.assertEqual(alignment.target.annotations["gis"], "397475827")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003809272")
@@ -13926,8 +17296,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan paniscus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan paniscus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan paniscus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan paniscus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13943,12 +17319,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|395752429|ref|XM_002830404.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|395752429|ref|XM_002830404.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|395752429|ref|XM_002830404.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "395752429")
             self.assertEqual(alignment.target.annotations["gis"], "395752429")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002830404")
@@ -13980,8 +17363,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pongo abelii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pongo abelii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pongo abelii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pongo abelii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -13997,12 +17386,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|395506884|ref|XM_003757711.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|395506884|ref|XM_003757711.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|395506884|ref|XM_003757711.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "395506884")
             self.assertEqual(alignment.target.annotations["gis"], "395506884")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003757711")
@@ -14034,8 +17430,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sarcophilus harrisii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sarcophilus harrisii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sarcophilus harrisii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sarcophilus harrisii ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14051,12 +17453,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363741618|ref|XM_417388.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363741618|ref|XM_417388.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363741618|ref|XM_417388.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363741618")
             self.assertEqual(alignment.target.annotations["gis"], "363741618")
             self.assertEqual(alignment.target.annotations["acc."], "XM_417388")
@@ -14088,8 +17497,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Gallus gallus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Gallus gallus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Gallus gallus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Gallus gallus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14105,12 +17520,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|359322761|ref|XM_534448.4|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|359322761|ref|XM_534448.4|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|359322761|ref|XM_534448.4|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "359322761")
             self.assertEqual(alignment.target.annotations["gis"], "359322761")
             self.assertEqual(alignment.target.annotations["acc."], "XM_534448")
@@ -14142,8 +17564,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Canis lupus familiaris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Canis lupus familiaris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Canis lupus familiaris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Canis lupus familiaris ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14159,12 +17587,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|354476751|ref|XM_003500539.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|354476751|ref|XM_003500539.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|354476751|ref|XM_003500539.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "354476751")
             self.assertEqual(alignment.target.annotations["gis"], "354476751")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003500539")
@@ -14196,8 +17631,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cricetulus griseus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100773989), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cricetulus griseus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100773989), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cricetulus griseus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100773989), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cricetulus griseus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100773989), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14213,12 +17654,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|350595022|ref|XM_003483981.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350595022|ref|XM_003483981.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350595022|ref|XM_003483981.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "350595022")
             self.assertEqual(alignment.target.annotations["gis"], "350595022")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003483981")
@@ -14250,8 +17698,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sus scrofa ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sus scrofa ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sus scrofa ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sus scrofa ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14267,12 +17721,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|350591776|ref|XM_003132566.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350591776|ref|XM_003132566.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350591776|ref|XM_003132566.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "350591776")
             self.assertEqual(alignment.target.annotations["gis"], "350591776")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003132566")
@@ -14304,8 +17765,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sus scrofa ephrin type-B receptor 3-like (LOC100514541), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sus scrofa ephrin type-B receptor 3-like (LOC100514541), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sus scrofa ephrin type-B receptor 3-like (LOC100514541), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sus scrofa ephrin type-B receptor 3-like (LOC100514541), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -14321,12 +17788,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|350591772|ref|XM_003358733.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350591772|ref|XM_003358733.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350591772|ref|XM_003358733.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "350591772")
             self.assertEqual(alignment.target.annotations["gis"], "350591772")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003358733")
@@ -14358,8 +17832,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 2 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 2 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -14375,12 +17855,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|348563932|ref|XM_003467713.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|348563932|ref|XM_003467713.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|348563932|ref|XM_003467713.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "348563932")
             self.assertEqual(alignment.target.annotations["gis"], "348563932")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003467713")
@@ -14412,8 +17899,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Cavia porcellus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100724838), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Cavia porcellus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100724838), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Cavia porcellus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100724838), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Cavia porcellus brefeldin A-inhibited guanine nucleotide-exchange protein 2-like (LOC100724838), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14429,12 +17922,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|344280063|ref|XM_003411757.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|344280063|ref|XM_003411757.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|344280063|ref|XM_003411757.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "344280063")
             self.assertEqual(alignment.target.annotations["gis"], "344280063")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003411757")
@@ -14466,8 +17966,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Loxodonta africana ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Loxodonta africana ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Loxodonta africana ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Loxodonta africana ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14483,12 +17989,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|338719107|ref|XM_001916930.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|338719107|ref|XM_001916930.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|338719107|ref|XM_001916930.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "338719107")
             self.assertEqual(alignment.target.annotations["gis"], "338719107")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001916930")
@@ -14520,8 +18033,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Equus caballus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Equus caballus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Equus caballus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Equus caballus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14537,12 +18056,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|335300059|ref|XM_003132565.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|335300059|ref|XM_003132565.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|335300059|ref|XM_003132565.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "335300059")
             self.assertEqual(alignment.target.annotations["gis"], "335300059")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003132565")
@@ -14574,8 +18100,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 1 (EPHB3), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sus scrofa EPH receptor B3, transcript variant 1 (EPHB3), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
@@ -14591,12 +18123,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|334312365|ref|XM_001379067.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|334312365|ref|XM_001379067.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|334312365|ref|XM_001379067.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "334312365")
             self.assertEqual(alignment.target.annotations["gis"], "334312365")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001379067")
@@ -14628,8 +18167,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Monodelphis domestica ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Monodelphis domestica ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Monodelphis domestica ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Monodelphis domestica ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14645,12 +18190,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332858727|ref|XM_001165517.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332858727|ref|XM_001165517.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332858727|ref|XM_001165517.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332858727")
             self.assertEqual(alignment.target.annotations["gis"], "332858727")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001165517")
@@ -14682,8 +18234,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14699,12 +18257,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332207745|ref|XM_003252909.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332207745|ref|XM_003252909.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332207745|ref|XM_003252909.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332207745")
             self.assertEqual(alignment.target.annotations["gis"], "332207745")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003252909")
@@ -14736,8 +18301,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 2 (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 2 (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 2 (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 2 (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14753,12 +18324,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|332207743|ref|XM_003252908.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|332207743|ref|XM_003252908.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|332207743|ref|XM_003252908.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "332207743")
             self.assertEqual(alignment.target.annotations["gis"], "332207743")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003252908")
@@ -14790,8 +18368,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Nomascus leucogenys ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 1 (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14807,12 +18391,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|326931872|ref|XM_003212000.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|326931872|ref|XM_003212000.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|326931872|ref|XM_003212000.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "326931872")
             self.assertEqual(alignment.target.annotations["gis"], "326931872")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003212000")
@@ -14844,8 +18435,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Meleagris gallopavo ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Meleagris gallopavo ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Meleagris gallopavo ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Meleagris gallopavo ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14861,12 +18458,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|327271833|ref|XM_003220644.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|327271833|ref|XM_003220644.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|327271833|ref|XM_003220644.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "327271833")
             self.assertEqual(alignment.target.annotations["gis"], "327271833")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003220644")
@@ -14898,8 +18502,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Anolis carolinensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Anolis carolinensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Anolis carolinensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Anolis carolinensis ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (arfgef2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14915,12 +18525,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|301754408|ref|XM_002912990.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|301754408|ref|XM_002912990.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|301754408|ref|XM_002912990.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "301754408")
             self.assertEqual(alignment.target.annotations["gis"], "301754408")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002912990")
@@ -14952,8 +18569,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Ailuropoda melanoleuca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Ailuropoda melanoleuca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Ailuropoda melanoleuca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Ailuropoda melanoleuca ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -14969,12 +18592,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|297259620|ref|XM_002798127.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|297259620|ref|XM_002798127.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|297259620|ref|XM_002798127.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "297259620")
             self.assertEqual(alignment.target.annotations["gis"], "297259620")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002798127")
@@ -15006,8 +18636,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Macaca mulatta ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Macaca mulatta ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Macaca mulatta ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Macaca mulatta ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15023,12 +18659,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|296200663|ref|XM_002806776.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|296200663|ref|XM_002806776.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|296200663|ref|XM_002806776.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "296200663")
             self.assertEqual(alignment.target.annotations["gis"], "296200663")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002806776")
@@ -15060,8 +18703,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Callithrix jacchus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Callithrix jacchus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Callithrix jacchus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Callithrix jacchus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15077,12 +18726,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|242009078|ref|XM_002425275.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|242009078|ref|XM_002425275.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|242009078|ref|XM_002425275.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "242009078")
             self.assertEqual(alignment.target.annotations["gis"], "242009078")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002425275")
@@ -15114,8 +18770,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Pediculus humanus corporis Brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Pediculus humanus corporis Brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Pediculus humanus corporis Brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Pediculus humanus corporis Brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15131,12 +18793,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|224078727|ref|XM_002187178.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|224078727|ref|XM_002187178.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|224078727|ref|XM_002187178.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "224078727")
             self.assertEqual(alignment.target.annotations["gis"], "224078727")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002187178")
@@ -15168,8 +18837,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Taeniopygia guttata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Taeniopygia guttata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Taeniopygia guttata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Taeniopygia guttata ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15185,12 +18860,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|167736368|ref|NM_001085495.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|167736368|ref|NM_001085495.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|167736368|ref|NM_001085495.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "167736368")
             self.assertEqual(alignment.target.annotations["gis"], "167736368")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001085495")
@@ -15222,8 +18904,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Mus musculus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Mus musculus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Mus musculus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Mus musculus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15239,12 +18927,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|150417985|ref|NM_006420.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|150417985|ref|NM_006420.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|150417985|ref|NM_006420.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "150417985")
             self.assertEqual(alignment.target.annotations["gis"], "150417985")
             self.assertEqual(alignment.target.annotations["acc."], "NM_006420")
@@ -15276,8 +18971,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Homo sapiens ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Homo sapiens ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Homo sapiens ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Homo sapiens ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15293,12 +18994,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|149639802|ref|XM_001506842.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|149639802|ref|XM_001506842.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|149639802|ref|XM_001506842.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "149639802")
             self.assertEqual(alignment.target.annotations["gis"], "149639802")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001506842")
@@ -15330,8 +19038,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Ornithorhynchus anatinus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Ornithorhynchus anatinus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Ornithorhynchus anatinus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Ornithorhynchus anatinus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15347,12 +19061,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|114682530|ref|XM_001165584.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|114682530|ref|XM_001165584.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|114682530|ref|XM_001165584.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "114682530")
             self.assertEqual(alignment.target.annotations["gis"], "114682530")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001165584")
@@ -15384,8 +19105,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 3 (ARFGEF2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 3 (ARFGEF2), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 3 (ARFGEF2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited), transcript variant 3 (ARFGEF2), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15401,16 +19128,26 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|31342050|ref|NM_181083.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|31342050|ref|NM_181083.2|;gi|31126987|gb|AY255526.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"],
+                "gi|31342050|ref|NM_181083.2|;gi|31126987|gb|AY255526.2|",
+            )
             self.assertEqual(alignment.target.annotations["gi"], "31342050")
             self.assertEqual(alignment.target.annotations["gis"], "31342050;31126987")
             self.assertEqual(alignment.target.annotations["acc."], "NM_181083")
-            self.assertEqual(alignment.target.annotations["accs."], "NM_181083;AY255526")
+            self.assertEqual(
+                alignment.target.annotations["accs."], "NM_181083;AY255526"
+            )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_181083.2")
             self.assertEqual(alignment.target.annotations["length"], 5784)
             self.assertEqual(alignment.query.annotations["start"], 174)
@@ -15438,8 +19175,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Rattus norvegicus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Rattus norvegicus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA<>Rattus norvegicus Brefeldin A-inhibited guanine nucleotide-exchange factor 2 (Big2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Rattus norvegicus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Rattus norvegicus ADP-ribosylation factor guanine nucleotide-exchange factor 2 (brefeldin A-inhibited) (Arfgef2), mRNA<>Rattus norvegicus Brefeldin A-inhibited guanine nucleotide-exchange factor 2 (Big2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15455,12 +19198,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410036861|ref|XM_001150377.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410036861|ref|XM_001150377.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410036861|ref|XM_001150377.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410036861")
             self.assertEqual(alignment.target.annotations["gis"], "410036861")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001150377")
@@ -15471,8 +19221,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 660)
             self.assertEqual(alignment.target.annotations["end"], 825)
-            self.assertEqual(alignment.target.seq, "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL")
-            self.assertEqual(alignment.query.seq, "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -15492,8 +19248,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 3 (LTF), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 3 (LTF), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 3 (LTF), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 3 (LTF), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -15509,12 +19271,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|410036860|ref|XM_516417.4|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|410036860|ref|XM_516417.4|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|410036860|ref|XM_516417.4|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "410036860")
             self.assertEqual(alignment.target.annotations["gis"], "410036860")
             self.assertEqual(alignment.target.annotations["acc."], "XM_516417")
@@ -15525,8 +19294,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 765)
             self.assertEqual(alignment.target.annotations["end"], 930)
-            self.assertEqual(alignment.target.seq, "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL")
-            self.assertEqual(alignment.query.seq, "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -15546,8 +19321,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 8 (LTF), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 8 (LTF), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 8 (LTF), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan troglodytes lactotransferrin, transcript variant 8 (LTF), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -15563,12 +19344,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|397495317|ref|XM_003818457.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|397495317|ref|XM_003818457.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|397495317|ref|XM_003818457.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "397495317")
             self.assertEqual(alignment.target.annotations["gis"], "397495317")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003818457")
@@ -15579,8 +19367,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 660)
             self.assertEqual(alignment.target.annotations["end"], 825)
-            self.assertEqual(alignment.target.seq, "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL")
-            self.assertEqual(alignment.query.seq, "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -15600,8 +19394,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan paniscus lactotransferrin, transcript variant 2 (LTF), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan paniscus lactotransferrin, transcript variant 2 (LTF), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan paniscus lactotransferrin, transcript variant 2 (LTF), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan paniscus lactotransferrin, transcript variant 2 (LTF), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -15617,12 +19417,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|397495315|ref|XM_003818456.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|397495315|ref|XM_003818456.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|397495315|ref|XM_003818456.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "397495315")
             self.assertEqual(alignment.target.annotations["gis"], "397495315")
             self.assertEqual(alignment.target.annotations["acc."], "XM_003818456")
@@ -15633,8 +19440,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 300)
             self.assertEqual(alignment.target.annotations["start"], 765)
             self.assertEqual(alignment.target.annotations["end"], 930)
-            self.assertEqual(alignment.target.seq, "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL")
-            self.assertEqual(alignment.query.seq, "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL")
+            self.assertEqual(
+                alignment.target.seq,
+                "RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL",
+            )
+            self.assertEqual(
+                alignment.query.seq,
+                "RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL",
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -15654,8 +19467,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Pan paniscus lactotransferrin, transcript variant 1 (LTF), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Pan paniscus lactotransferrin, transcript variant 1 (LTF), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Pan paniscus lactotransferrin, transcript variant 1 (LTF), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Pan paniscus lactotransferrin, transcript variant 1 (LTF), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
@@ -15671,12 +19490,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|392887648|ref|NM_001026628.3|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|392887648|ref|NM_001026628.3|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|392887648|ref|NM_001026628.3|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "392887648")
             self.assertEqual(alignment.target.annotations["gis"], "392887648")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001026628")
@@ -15708,8 +19534,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Caenorhabditis elegans Protein AGEF-1, isoform b (agef-1) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Caenorhabditis elegans Protein AGEF-1, isoform b (agef-1) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Caenorhabditis elegans Protein AGEF-1, isoform b (agef-1) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Caenorhabditis elegans Protein AGEF-1, isoform b (agef-1) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15725,12 +19557,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|392887646|ref|NM_001026627.5|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|392887646|ref|NM_001026627.5|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|392887646|ref|NM_001026627.5|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "392887646")
             self.assertEqual(alignment.target.annotations["gis"], "392887646")
             self.assertEqual(alignment.target.annotations["acc."], "NM_001026627")
@@ -15762,8 +19601,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Caenorhabditis elegans Protein AGEF-1, isoform a")
-            self.assertEqual(alignment.target.annotations["titles"], "Caenorhabditis elegans Protein AGEF-1, isoform a")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Caenorhabditis elegans Protein AGEF-1, isoform a",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Caenorhabditis elegans Protein AGEF-1, isoform a",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15779,12 +19624,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|363727654|ref|XM_001235329.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|363727654|ref|XM_001235329.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|363727654|ref|XM_001235329.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "363727654")
             self.assertEqual(alignment.target.annotations["gis"], "363727654")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001235329")
@@ -15795,8 +19647,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 3)
             self.assertEqual(alignment.target.annotations["start"], 1805)
             self.assertEqual(alignment.target.annotations["end"], 1934)
-            self.assertEqual(alignment.target.seq, "NIGTMWNLQWEFKR*FSFSSRDDRRDPATSCQCMEGFLSLFCA")
-            self.assertEqual(alignment.query.seq, "NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA")
+            self.assertEqual(
+                alignment.target.seq, "NIGTMWNLQWEFKR*FSFSSRDDRRDPATSCQCMEGFLSLFCA"
+            )
+            self.assertEqual(
+                alignment.query.seq, "NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -15816,8 +19672,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Gallus gallus otogelin-like (LOC772154), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Gallus gallus otogelin-like (LOC772154), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Gallus gallus otogelin-like (LOC772154), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Gallus gallus otogelin-like (LOC772154), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 37)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 37)
@@ -15833,12 +19695,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|350583133|ref|XM_001928010.4|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|350583133|ref|XM_001928010.4|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|350583133|ref|XM_001928010.4|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "350583133")
             self.assertEqual(alignment.target.annotations["gis"], "350583133")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001928010")
@@ -15870,8 +19739,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Sus scrofa guanine nucleotide-exchange protein (LOC100156861), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Sus scrofa guanine nucleotide-exchange protein (LOC100156861), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Sus scrofa guanine nucleotide-exchange protein (LOC100156861), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Sus scrofa guanine nucleotide-exchange protein (LOC100156861), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15887,12 +19762,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|345486369|ref|XM_001605920.2|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|345486369|ref|XM_001605920.2|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|345486369|ref|XM_001605920.2|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "345486369")
             self.assertEqual(alignment.target.annotations["gis"], "345486369")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001605920")
@@ -15924,8 +19806,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Nasonia vitripennis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100122365), mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Nasonia vitripennis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100122365), mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Nasonia vitripennis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100122365), mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Nasonia vitripennis brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100122365), mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15941,12 +19829,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|344272888|ref|XR_133687.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|344272888|ref|XR_133687.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|344272888|ref|XR_133687.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "344272888")
             self.assertEqual(alignment.target.annotations["gis"], "344272888")
             self.assertEqual(alignment.target.annotations["acc."], "XR_133687")
@@ -15978,8 +19873,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "PREDICTED: Loxodonta africana brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100676028), miscRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "PREDICTED: Loxodonta africana brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100676028), miscRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "PREDICTED: Loxodonta africana brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100676028), miscRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "PREDICTED: Loxodonta africana brefeldin A-inhibited guanine nucleotide-exchange protein 1-like (LOC100676028), miscRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -15995,12 +19896,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|241632443|ref|XM_002408552.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|241632443|ref|XM_002408552.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|241632443|ref|XM_002408552.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "241632443")
             self.assertEqual(alignment.target.annotations["gis"], "241632443")
             self.assertEqual(alignment.target.annotations["acc."], "XM_002408552")
@@ -16032,8 +19940,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Ixodes scapularis brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Ixodes scapularis brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Ixodes scapularis brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Ixodes scapularis brefeldin A-inhibited guanine nucleotide-exchange protein, putative, mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
@@ -16049,12 +19963,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|157129065|ref|XM_001655210.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|157129065|ref|XM_001655210.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|157129065|ref|XM_001655210.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "157129065")
             self.assertEqual(alignment.target.annotations["gis"], "157129065")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001655210")
@@ -16065,8 +19986,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 312)
             self.assertEqual(alignment.target.annotations["start"], 1116)
             self.assertEqual(alignment.target.annotations["end"], 1227)
-            self.assertEqual(alignment.target.seq, "QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV")
-            self.assertEqual(alignment.query.seq, "QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI")
+            self.assertEqual(
+                alignment.target.seq, "QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV"
+            )
+            self.assertEqual(
+                alignment.query.seq, "QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -16086,8 +20011,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aedes aegypti hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aedes aegypti hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aedes aegypti hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aedes aegypti hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -16103,12 +20034,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|157129063|ref|XM_001655209.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|157129063|ref|XM_001655209.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|157129063|ref|XM_001655209.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "157129063")
             self.assertEqual(alignment.target.annotations["gis"], "157129063")
             self.assertEqual(alignment.target.annotations["acc."], "XM_001655209")
@@ -16119,8 +20057,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 312)
             self.assertEqual(alignment.target.annotations["start"], 1116)
             self.assertEqual(alignment.target.annotations["end"], 1227)
-            self.assertEqual(alignment.target.seq, "QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV")
-            self.assertEqual(alignment.query.seq, "QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI")
+            self.assertEqual(
+                alignment.target.seq, "QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV"
+            )
+            self.assertEqual(
+                alignment.query.seq, "QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.5)
             self.assertAlmostEqual(alignment.score, 69)
@@ -16140,8 +20082,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Aedes aegypti hypothetical protein partial mRNA")
-            self.assertEqual(alignment.target.annotations["titles"], "Aedes aegypti hypothetical protein partial mRNA")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Aedes aegypti hypothetical protein partial mRNA",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Aedes aegypti hypothetical protein partial mRNA",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
@@ -16157,12 +20105,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470250072|ref|XM_004367211.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470250072|ref|XM_004367211.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470250072|ref|XM_004367211.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470250072")
             self.assertEqual(alignment.target.annotations["gis"], "470250072")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004367211")
@@ -16194,8 +20149,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 55)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 26)
@@ -16211,12 +20172,19 @@ class TestBlast(unittest.TestCase):
                 )
             )
             self.assertEqual(alignment.query.id, "gi|296147483:1-350")
-            self.assertEqual(alignment.query.description, "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds")
+            self.assertEqual(
+                alignment.query.description,
+                "Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds",
+            )
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(alignment.query.annotations["acc."], "gi|296147483:1-350")
-            self.assertEqual(alignment.query.annotations["acc.ver"], "gi|296147483:1-350")
+            self.assertEqual(
+                alignment.query.annotations["acc.ver"], "gi|296147483:1-350"
+            )
             self.assertEqual(alignment.target.id, "gi|470250072|ref|XM_004367211.1|")
-            self.assertEqual(alignment.target.annotations["ids"], "gi|470250072|ref|XM_004367211.1|")
+            self.assertEqual(
+                alignment.target.annotations["ids"], "gi|470250072|ref|XM_004367211.1|"
+            )
             self.assertEqual(alignment.target.annotations["gi"], "470250072")
             self.assertEqual(alignment.target.annotations["gis"], "470250072")
             self.assertEqual(alignment.target.annotations["acc."], "XM_004367211")
@@ -16227,8 +20195,12 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 24)
             self.assertEqual(alignment.target.annotations["start"], 1298)
             self.assertEqual(alignment.target.annotations["end"], 1412)
-            self.assertEqual(alignment.target.seq, "LFQEKTSLS*LWKVILFTML*SPSHCTRLPTQCPCLRS")
-            self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES")
+            self.assertEqual(
+                alignment.target.seq, "LFQEKTSLS*LWKVILFTML*SPSHCTRLPTQCPCLRS"
+            )
+            self.assertEqual(
+                alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES"
+            )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8.8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 22.1)
             self.assertAlmostEqual(alignment.score, 42)
@@ -16248,8 +20220,14 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["com names"], "N/A")
             self.assertEqual(alignment.target.annotations["blast names"], "N/A")
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
-            self.assertEqual(alignment.target.annotations["title"], "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds")
-            self.assertEqual(alignment.target.annotations["titles"], "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds")
+            self.assertEqual(
+                alignment.target.annotations["title"],
+                "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds",
+            )
+            self.assertEqual(
+                alignment.target.annotations["titles"],
+                "Dictyostelium fasciculatum hypothetical protein (DFA_07408) mRNA, complete cds",
+            )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 55)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
