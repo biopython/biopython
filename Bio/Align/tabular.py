@@ -246,6 +246,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if alignment_length is not None:
                 annotations["alignment length"] = alignment_length
                 # otherwise, get it from alignment.shape
+            if query_start is not None:
+                query_annotations["start"] = query_start
+            if query_end is not None:
+                query_annotations["end"] = query_end
         else:
             if query_start < query_end:
                 coordinates[1, :] += query_start
@@ -268,11 +272,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_seq = Seq(query_sequence)
             else:
                 raise Exception("Unknown program %s" % self.program)
-        if coordinates is None:
-            if query_start is not None:
-                query_annotations["start"] = query_start
-            if query_end is not None:
-                query_annotations["end"] = query_end
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
