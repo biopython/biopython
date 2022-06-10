@@ -125,6 +125,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_sequence = None
         target_sequence = None
         target_length = None
+        coordinates = None
         try:
             query_size = self._query_size
         except AttributeError:
@@ -233,13 +234,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_annotations["frame"] = column
             else:
                 raise ValueError("Unexpected field '%s'" % field)
-        if query_start < query_end:
-            coordinates[1, :] += query_start
+        if coordinates is None:
+            if alignment_length is not None:
+                annotations["alignment length"] = alignment_length
+                # otherwise, get it from alignment.shape
         else:
-            # mapped to reverse strand
-            coordinates[1, :] = query_start - coordinates[1, :] + 1
+            if query_start < query_end:
+                coordinates[1, :] += query_start
+            else:
+                # mapped to reverse strand
+                coordinates[1, :] = query_start - coordinates[1, :] + 1
         if query_sequence is None:
-            query_seq = Seq(None, length=query_size)
+            if query_size is None:
+                query_seq = None
+            else:
+                query_seq = Seq(None, length=query_size)
         else:
             query_sequence = query_sequence.replace("-", "")
             if self.program == "TBLASTN":
@@ -251,6 +260,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_seq = Seq(query_sequence)
             else:
                 raise Exception("Unknown program %s" % self.program)
+        if coordinates is None:
+            query_annotations["start"] = query_start
+            query_annotations["end"] = query_end
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
@@ -264,9 +276,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             target_annotations["start"] = target_start
             target_annotations["end"] = target_end
             target_annotations["length"] = target_length
-            target_seq = Seq(target_sequence)
+            if target_sequence is None:
+                target_seq = None
+            else:
+                target_seq = Seq(target_sequence)
         else:
-            coordinates[0, :] += target_start
+            if coordinates is not None:
+                coordinates[0, :] += target_start
             if target_start is not None and target_end is not None:
                 if target_sequence is None:
                     target_seq = Seq(None, length=target_end)
