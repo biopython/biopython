@@ -296,10 +296,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     target_seq = Seq(None, length=target_end)
             else:
                 target_sequence = target_sequence.replace("-", "")
-            if target_start is not None and target_end is not None:
-                if target_sequence is None:
-                    target_seq = Seq(None, length=target_end)
-                else:
+                if target_start is not None and target_end is not None:
                     assert len(target_sequence) == target_end - target_start
                     target_seq = Seq({target_start: target_sequence}, length=target_end)
         target = SeqRecord(target_seq, id=target_id)
