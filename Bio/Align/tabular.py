@@ -277,13 +277,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query.description = self._query_description
         if query_annotations:
             query.annotations = query_annotations
-        if target_sequence is None:
-            if target_end is None:
-                target_seq = None
-            else:
-                target_seq = Seq(None, length=target_end)
-        else:
-            target_sequence = target_sequence.replace("-", "")
         if self.program in ("TBLASTN", "TBLASTX"):
             target_annotations["start"] = target_start
             target_annotations["end"] = target_end
@@ -291,10 +284,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if target_sequence is None:
                 target_seq = None
             else:
+                target_sequence = target_sequence.replace("-", "")
                 target_seq = Seq(target_sequence)
         else:
             if coordinates is not None:
                 coordinates[0, :] += target_start
+            if target_sequence is None:
+                if target_end is None:
+                    target_seq = None
+                else:
+                    target_seq = Seq(None, length=target_end)
+            else:
+                target_sequence = target_sequence.replace("-", "")
             if target_start is not None and target_end is not None:
                 if target_sequence is None:
                     target_seq = Seq(None, length=target_end)
