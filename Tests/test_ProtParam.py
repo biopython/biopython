@@ -139,11 +139,11 @@ class ProtParamTest(unittest.TestCase):
     def test_isoelectric_point(self):
         """Calculate the isoelectric point."""
         # Old test used a number rounded to two digits, so use the same
-        self.assertAlmostEqual(self.analysis.isoelectric_point(), 7.72, 2)
+        self.assertAlmostEqual(self.analysis.isoelectric_point(), 6.96, 2)
 
     def test_charge_at_pH(self):
         """Test charge_at_pH function."""
-        self.assertAlmostEqual(self.analysis.charge_at_pH(7.72), 0.00, 2)
+        self.assertAlmostEqual(self.analysis.charge_at_pH(6.96), 0.00, 2)
 
     def test_secondary_structure_fraction(self):
         """Calculate secondary structure fractions."""
