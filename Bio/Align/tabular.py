@@ -122,6 +122,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         btop = None
         cigar = None
         score = None
+        query_start = None
+        query_end = None
+        target_start = None
+        target_end = None
         query_sequence = None
         target_sequence = None
         target_length = None
@@ -261,15 +265,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise Exception("Unknown program %s" % self.program)
         if coordinates is None:
-            query_annotations["start"] = query_start
-            query_annotations["end"] = query_end
+            if query_start is not None:
+                query_annotations["start"] = query_start
+            if query_end is not None:
+                query_annotations["end"] = query_end
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description
         if query_annotations:
             query.annotations = query_annotations
         if target_sequence is None:
-            target_seq = Seq(None, length=target_end)
+            if target_end is None:
+                target_seq = None
+            else:
+                target_seq = Seq(None, length=target_end)
         else:
             target_sequence = target_sequence.replace("-", "")
         if self.program in ("TBLASTN", "TBLASTX"):
