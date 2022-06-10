@@ -15633,6 +15633,56 @@ class TestBlast(unittest.TestCase):
             with self.assertRaises(StopIteration):
                 next(alignments)
 
+    def test_2226_tblastn_007(self):
+        path = "Blast/tab_2226_tblastn_007.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "TBLASTN")
+            self.assertEqual(alignments.version, "2.2.26+")
+            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
+            self.assertEqual(alignment.query.annotations["start"], 30)
+            self.assertEqual(alignment.query.annotations["end"], 73)
+            self.assertEqual(alignment.target.annotations["start"], 1743)
+            self.assertEqual(alignment.target.annotations["end"], 1872)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 34.7)
+            self.assertAlmostEqual(alignment.annotations["% identity"], 34.88)
+            self.assertEqual(alignment.annotations["alignment length"], 43)
+            self.assertEqual(alignment.annotations["mismatches"], 28)
+            self.assertEqual(alignment.annotations["gap opens"], 0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
+            self.assertEqual(alignment.query.annotations["start"], 43)
+            self.assertEqual(alignment.query.annotations["end"], 94)
+            self.assertEqual(alignment.target.annotations["start"], 1056)
+            self.assertEqual(alignment.target.annotations["end"], 1233)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
+            self.assertAlmostEqual(alignment.annotations["% identity"], 33.90)
+            self.assertEqual(alignment.annotations["alignment length"], 59)
+            self.assertEqual(alignment.annotations["mismatches"], 31)
+            self.assertEqual(alignment.annotations["gap opens"], 1)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
+            self.assertEqual(alignment.query.annotations["start"], 43)
+            self.assertEqual(alignment.query.annotations["end"], 94)
+            self.assertEqual(alignment.target.annotations["start"], 1056)
+            self.assertEqual(alignment.target.annotations["end"], 1233)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
+            self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
+            self.assertAlmostEqual(alignment.annotations["% identity"], 33.90)
+            self.assertEqual(alignment.annotations["alignment length"], 59)
+            self.assertEqual(alignment.annotations["mismatches"], 31)
+            self.assertEqual(alignment.annotations["gap opens"], 1)
+            with self.assertRaises(StopIteration):
+                next(alignments)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
