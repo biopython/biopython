@@ -4,10 +4,11 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.Align support for output from William Pearson's FASTA alignment tools.
+"""Bio.Align support for tabular output from BLAST or FASTA.
 
-This module contains a parser for output from the FASTA programs generated with
-the '-m 8CB' or '-m 8CC' output formats.
+This module contains a parser for tabular output from BLAST run with the
+'-outfmt 7' argument, as well as tabular output from William Pearson's
+FASTA alignment tools using the '-m 8CB' or '-m 8CC' arguments.
 """
 import re
 import enum
