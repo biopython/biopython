@@ -63,14 +63,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self._parse_header(stream, line)
 
     def _parse_header(self, stream, line):
+        self.metadata = {}
         if line[2:].startswith("TBLASTN ") or line[2:].startswith("TBLASTX "):
-            self.program, self.version = line[2:].split(None, 1)
+            self.program, self.metadata["version"] = line[2:].split(None, 1)
             self.final_prefix = "# BLAST processed "
         else:
             self.commandline = line[2:]
             line = next(stream)
             assert line.startswith("# ")
-            self.program, self.version = line[2:].rstrip().split(None, 1)
+            self.program, self.metadata["version"] = line[2:].rstrip().split(None, 1)
             self.final_prefix = "# FASTA processed "
         for line in stream:
             line = line.strip()
@@ -96,11 +97,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     self._query_id = query_line.strip()
                     self._query_description = None
             elif prefix == "Database":
-                self.database = value
+                self.metadata["database"] = value
             elif prefix == "Fields":
-                self.fields = value.split(", ")
+                self._fields = value.split(", ")
             elif prefix == "RID":
-                self.rid = value
+                self.metadata["RID"] = value
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -138,11 +139,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         except AttributeError:
             query_size = None
         columns = line.split("\t")
-        assert len(columns) == len(self.fields)
+        assert len(columns) == len(self._fields)
         annotations = {}
         query_annotations = {}
         target_annotations = {}
-        for column, field in zip(columns, self.fields):
+        for column, field in zip(columns, self._fields):
             if field == "query id":
                 query_id = column
                 if self._query_id is not None:

@@ -49,8 +49,8 @@ class TestFastaProtein(unittest.TestCase):
                 "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg",
             )
             self.assertEqual(alignments.program, "FASTA")
-            self.assertEqual(alignments.version, "36.3.8h May, 2020")
-            self.assertEqual(alignments.database, "seq/prot_test.lseg")
+            self.assertEqual(alignments.metadata["version"], "36.3.8h May, 2020")
+            self.assertEqual(alignments.metadata["database"], "seq/prot_test.lseg")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 12)
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
@@ -476,8 +476,8 @@ class TestFastaProtein(unittest.TestCase):
                 "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg",
             )
             self.assertEqual(alignments.program, "FASTA")
-            self.assertEqual(alignments.version, "36.3.8h May, 2020")
-            self.assertEqual(alignments.database, "seq/prot_test.lseg")
+            self.assertEqual(alignments.metadata["version"], "36.3.8h May, 2020")
+            self.assertEqual(alignments.metadata["database"], "seq/prot_test.lseg")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 12)
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
@@ -917,8 +917,8 @@ class TestFastaNucleotide(unittest.TestCase):
                 "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
             )
             self.assertEqual(alignments.program, "FASTA")
-            self.assertEqual(alignments.version, "36.3.8h May, 2020")
-            self.assertEqual(alignments.database, "seq/gst.nlib")
+            self.assertEqual(alignments.metadata["version"], "36.3.8h May, 2020")
+            self.assertEqual(alignments.metadata["database"], "seq/gst.nlib")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 12)
         # pGT875   pGT875
@@ -1330,8 +1330,8 @@ class TestFastaNucleotide(unittest.TestCase):
                 "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
             )
             self.assertEqual(alignments.program, "FASTA")
-            self.assertEqual(alignments.version, "36.3.8h May, 2020")
-            self.assertEqual(alignments.database, "seq/gst.nlib")
+            self.assertEqual(alignments.metadata["version"], "36.3.8h May, 2020")
+            self.assertEqual(alignments.metadata["database"], "seq/gst.nlib")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 12)
         # pGT875   pGT875
@@ -1771,8 +1771,8 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
@@ -1946,8 +1946,8 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
@@ -1998,8 +1998,8 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
 
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
@@ -2141,8 +2141,8 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
 
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
@@ -2212,8 +2212,8 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.database, "db/minirefseq_mrna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["database"], "db/minirefseq_mrna")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
@@ -2889,9 +2889,9 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.rid, "X76FDCG9016")
-            self.assertEqual(alignments.database, "refseq_rna")
+            self.assertEqual(alignments.metadata["version"], "2.2.26+")
+            self.assertEqual(alignments.metadata["RID"], "X76FDCG9016")
+            self.assertEqual(alignments.metadata["database"], "refseq_rna")
 
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
@@ -3066,9 +3066,9 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
-            self.assertEqual(alignments.version, "2.2.28+")
-            self.assertEqual(alignments.rid, "M6BMVNA2015")
-            self.assertEqual(alignments.database, "nr")
+            self.assertEqual(alignments.metadata["version"], "2.2.28+")
+            self.assertEqual(alignments.metadata["RID"], "M6BMVNA2015")
+            self.assertEqual(alignments.metadata["database"], "nr")
 
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
@@ -3128,9 +3128,9 @@ class TestBlast(unittest.TestCase):
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTX")
-            self.assertEqual(alignments.version, "2.2.28+")
-            self.assertEqual(alignments.rid, "P06P5RN0015")
-            self.assertEqual(alignments.database, "refseq_rna")
+            self.assertEqual(alignments.metadata["version"], "2.2.28+")
+            self.assertEqual(alignments.metadata["RID"], "P06P5RN0015")
+            self.assertEqual(alignments.metadata["database"], "refseq_rna")
             alignment = next(alignments)
             self.assertTrue(
                 numpy.array_equal(
