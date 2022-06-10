@@ -99,7 +99,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif prefix == "Fields":
                 self.fields = value.split(", ")
             elif prefix == "RID":
-                self.rid = "P06P5RN0015"
+                self.rid = value
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -122,6 +122,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         btop = None
         cigar = None
         score = None
+        query_id = None
+        target_id = None
         query_start = None
         query_end = None
         target_start = None

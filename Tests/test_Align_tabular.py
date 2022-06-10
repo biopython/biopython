@@ -1751,6 +1751,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignments.database, "db/minirefseq_mrna")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -1804,6 +1805,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["frame"], "1")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -1861,6 +1863,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["frame"], "1")
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
+            self.assertEqual(alignment.query.description, "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]")
             self.assertEqual(alignment.query.annotations["gi"], "0")
             self.assertEqual(
                 alignment.query.annotations["acc."], "gi|16080617|ref|NP_391444.1|"
@@ -15555,7 +15558,7 @@ class TestBlast(unittest.TestCase):
             alignments = AlignmentIterator(stream)
             self.assertEqual(alignments.program, "TBLASTN")
             self.assertEqual(alignments.version, "2.2.26+")
-            self.assertEqual(alignments.rid, "P06P5RN0015")
+            self.assertEqual(alignments.rid, "X76FDCG9016")
             self.assertEqual(alignments.database, "refseq_rna")
 
             alignment = next(alignments)
@@ -16158,6 +16161,68 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 19.6)
+            with self.assertRaises(StopIteration):
+                next(alignments)
+
+    def test_2228_tblastn_001(self):
+        path = "Blast/tab_2228_tblastn_001.txt"
+        with open(path) as stream:
+            alignments = AlignmentIterator(stream)
+            self.assertEqual(alignments.program, "TBLASTN")
+            self.assertEqual(alignments.version, "2.2.28+")
+            self.assertEqual(alignments.rid, "M6BMVNA2015")
+            self.assertEqual(alignments.database, "nr")
+
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|148227873|ref|NM_001095167.1|;gi|55250552|gb|BC086280.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|512812550|ref|XM_002935781.2|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|512812554|ref|XM_004910718.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|327289356|ref|XM_003229343.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|602661018|ref|XM_007436108.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|564242014|ref|XM_006277753.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|591387858|ref|XM_007068281.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-180)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|558185265|ref|XM_006128143.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-180)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|573878747|ref|XM_006627536.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-173)
+            alignment = next(alignments)
+            self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
+            self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
+            self.assertEqual(alignment.target.annotations["ids"], "gi|410910671|ref|XM_003968765.1|")
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-173)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
