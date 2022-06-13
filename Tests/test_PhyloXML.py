@@ -266,7 +266,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks Point type and safe Unicode handling (?).
         """
-        tree = list(PhyloXMLIO.parse(EX_PHYLO, encoding="utf-8"))[10]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[10]
         hirschweg = tree.clade[0, 0].distributions[0]
         nagoya = tree.clade[0, 1].distributions[0]
         eth_zurich = tree.clade[0, 2].distributions[0]
