@@ -30,12 +30,12 @@ class MuscleCommandline(AbstractCommandline):
     Examples
     --------
     >>> from Bio.Align.Applications import MuscleCommandline
-    >>> muscle_exe = r"C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
+    >>> muscle_exe = r"C:\Program Files\Alignments\muscle3.8.31_i86win32.exe"
     >>> in_file = r"C:\My Documents\unaligned.fasta"
     >>> out_file = r"C:\My Documents\aligned.fasta"
     >>> muscle_cline = MuscleCommandline(muscle_exe, input=in_file, out=out_file)
     >>> print(muscle_cline)
-    "C:\Program Files\Aligments\muscle3.8.31_i86win32.exe" -in "C:\My Documents\unaligned.fasta" -out "C:\My Documents\aligned.fasta"
+    "C:\Program Files\Alignments\muscle3.8.31_i86win32.exe" -in "C:\My Documents\unaligned.fasta" -out "C:\My Documents\aligned.fasta"
 
     You would typically run the command line with muscle_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.

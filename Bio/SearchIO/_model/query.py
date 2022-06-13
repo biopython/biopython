@@ -8,7 +8,6 @@
 
 from copy import deepcopy
 from itertools import chain
-from collections import OrderedDict
 
 from Bio.SearchIO._utils import optionalcascade
 
@@ -193,7 +192,7 @@ class QueryResult(_BaseSearchObject):
         # default values
         self._id = id
         self._hit_key_function = hit_key_function or _hit_key_func
-        self._items = OrderedDict()
+        self._items = {}
         self._description = None
         self.__alt_hit_ids = {}
         self.program = "<unknown program>"
@@ -291,12 +290,12 @@ class QueryResult(_BaseSearchObject):
                     hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx > len(self.hits) - 4:
                     hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx == 30:
                     lines.append("%14s" % "~~~")
 
@@ -403,7 +402,6 @@ class QueryResult(_BaseSearchObject):
                 deleted = True
             if not deleted:
                 raise KeyError(repr(key))
-        return
 
     # properties #
     id = optionalcascade("_id", "query_id", """QueryResult ID string""")
@@ -652,19 +650,18 @@ class QueryResult(_BaseSearchObject):
             hit = self._items.pop(hit_key)
             # remove all alternative IDs of the popped hit
             for alt_id in hit.id_all[1:]:
-                try:
-                    del self.__alt_hit_ids[alt_id]
-                except KeyError:
-                    pass
-            return hit
+                self.__alt_hit_ids.pop(alt_id, None)
         except KeyError:
-            if hit_key in self.__alt_hit_ids:
-                return self.pop(self.__alt_hit_ids[hit_key], default)
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
-                raise KeyError(hit_key) from None
-        # if key doesn't exist but a default is set, return the default value
-        return default
+            try:
+                hit = self.pop(self.__alt_hit_ids[hit_key])
+            except KeyError:
+                # hit_key is not a valid id
+                # use the default if it has been set
+                if default is not self.__marker:
+                    hit = default
+                else:
+                    raise KeyError(hit_key) from None
+        return hit
 
     def index(self, hit_key):
         """Return the index of a given hit key, zero-based.
@@ -700,7 +697,7 @@ class QueryResult(_BaseSearchObject):
         :param in_place: whether to do in-place sorting or no
         :type in_place: bool
 
-        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        ``sort`` defaults to sorting in-place, to mimic Python's ``list.sort``
         method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted QueryResult object and keep the initial one
         unsorted.
@@ -718,10 +715,7 @@ class QueryResult(_BaseSearchObject):
 
         # if sorting is in-place, don't create a new QueryResult object
         if in_place:
-            new_hits = OrderedDict()
-            for hit in sorted_hits:
-                new_hits[self._hit_key_function(hit)] = hit
-            self._items = new_hits
+            self._items = {self._hit_key_function(hit): hit for hit in sorted_hits}
         # otherwise, return a new sorted QueryResult object
         else:
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)

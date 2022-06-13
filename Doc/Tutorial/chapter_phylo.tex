@@ -22,7 +22,7 @@ provided with the Biopython source code:
 (((A,B),(C,D)),(E,F,G));
 \end{minted}
 
-This tree has no branch lengths, only a topology and labelled terminals. (If you have a real
+This tree has no branch lengths, only a topology and labeled terminals. (If you have a real
 tree file available, you can follow this demo using that instead.)
 
 Launch the Python interpreter of your choice:
@@ -272,6 +272,7 @@ through each of the trees in the given file:
 >>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
 ...     print(tree)
+...
 \end{minted}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
@@ -381,7 +382,7 @@ descriptions and examples of the more advanced functionality in \verb|draw_ascii
 
 The \verb|Tree| objects produced by \verb|parse| and \verb|read| are containers for recursive
 sub-trees, attached to the \verb|Tree| object at the \verb|root| attribute (whether or not the
-phylogenic tree is actually considered rooted). A \verb|Tree| has globally applied information
+phylogenetic tree is actually considered rooted). A \verb|Tree| has globally applied information
 for the phylogeny, such as rootedness, and a reference to a single \verb|Clade|; a
 \verb|Clade| has node- and clade-specific information, such as branch length, and a list of
 its own descendent \verb|Clade| instances, attached at the \verb|clades| attribute.
@@ -676,40 +677,38 @@ descriptions and examples of using the additional annotation features provided b
 \label{sec:PhyloApps}
 
 While Bio.Phylo doesn't infer trees from alignments itself, there are third-party
-programs available that do. These are supported through the module
-\texttt{Bio.Phylo.Applications}, using the same general framework as
-\texttt{Bio.Emboss.Applications}, \texttt{Bio.Align.Applications} and others.
+programs available that do. These can be accessed from within python by using the
+\verb|subprocess| module.
 
-Biopython 1.58 introduced a wrapper for PhyML
+Below is an example on how to use a python script to interact with PhyML
 (\url{http://www.atgc-montpellier.fr/phyml/}). The program accepts an input alignment in
 \texttt{phylip-relaxed} format (that's Phylip format, but without the 10-character limit
-on taxon names) and a variety of options. A quick example:
+on taxon names) and a variety of options.
 
 \begin{minted}{pycon}
->>> from Bio import Phylo
->>> from Bio.Phylo.Applications import PhymlCommandline
->>> cmd = PhymlCommandline(input="Tests/Phylip/random.phy")
->>> out_log, err_log = cmd()
+>>> import subprocess
+>>> cmd = "phyml -i Tests/Phylip/random.phy"
+>>> results = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, text=True)
 \end{minted}
+
+The `stdout = subprocess.PIPE` argument makes the output of the program accessible through
+`results.stdout` for debugging purposes, (the same can be done for `stderr`), and
+`text=True` makes the returned information be a python string, instead of a `bytes` object.
 
 This generates a tree file and a stats file with the names
 [\textit{input~filename}]\verb|_phyml_tree.txt| and
 [\textit{input~filename}]\verb|_phyml_stats.txt|. The tree file is in Newick format:
 
 \begin{minted}{pycon}
+>>> from Bio import Phylo
 >>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
 >>> Phylo.draw_ascii(tree)
 \end{minted}
 
-A similar wrapper for RAxML (\url{https://sco.h-its.org/exelixis/software.html})
-was added in Biopython 1.60, and FastTree
-(\url{http://www.microbesonline.org/fasttree/}) in Biopython 1.62.
-
-Note that some popular Phylip programs, including \texttt{dnaml} and \texttt{protml},
-are already available through the EMBOSS wrappers in \texttt{Bio.Emboss.Applications} if
-you have the Phylip extensions to EMBOSS installed on your system.
-See Section~\ref{sec:alignment-tools} for some examples and clues on how to use
-programs like these.
+The \verb|subprocess| module can also be used  for interacting with any other programs
+that provide a command line interface such as RAxML
+(\url{https://sco.h-its.org/exelixis/software.html}), FastTree
+(\url{http://www.microbesonline.org/fasttree/}), \texttt{dnaml} and \texttt{protml}.
 
 
 \section{PAML integration}
@@ -736,16 +735,18 @@ Here is an example of typical usage of codeml:
 >>> cml.tree = "Tests/PAML/species.tree"
 >>> cml.out_file = "results.out"
 >>> cml.working_dir = "./scratch"
->>> cml.set_options(seqtype=1,
-...         verbose=0,
-...         noisy=0,
-...         RateAncestor=0,
-...         model=0,
-...         NSsites=[0, 1, 2],
-...         CodonFreq=2,
-...         cleandata=1,
-...         fix_alpha=1,
-...         kappa=4.54006)
+>>> cml.set_options(
+...     seqtype=1,
+...     verbose=0,
+...     noisy=0,
+...     RateAncestor=0,
+...     model=0,
+...     NSsites=[0, 1, 2],
+...     CodonFreq=2,
+...     cleandata=1,
+...     fix_alpha=1,
+...     kappa=4.54006,
+... )
 >>> results = cml.run()
 >>> ns_sites = results.get("NSsites")
 >>> m0 = ns_sites.get(0)
@@ -784,7 +785,7 @@ releases:
 
     Currently, Bio.Nexus contains some useful features that have not yet been ported to
     Bio.Phylo classes --- notably, calculating a consensus tree. If you find some functionality
-    lacking in Bio.Phylo, try poking throught Bio.Nexus to see if it's there instead.
+    lacking in Bio.Phylo, try poking through Bio.Nexus to see if it's there instead.
 
 \end{description}
 

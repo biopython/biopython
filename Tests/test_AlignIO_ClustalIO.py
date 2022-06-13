@@ -3,14 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.AlignIO.ClustalIO module."""
-
 import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.ClustalIO import ClustalIterator, ClustalWriter
+from Bio.AlignIO.ClustalIO import ClustalIterator
+from Bio.AlignIO.ClustalIO import ClustalWriter
 
-# This is a truncated version of the example in Tests/cw02.aln
+# This is a truncated version of the example in Tests/clustalw.aln
 # Notice the inclusion of sequence numbers (right hand side)
 aln_example1 = """\
 CLUSTAL W (1.81) multiple sequence alignment
@@ -153,6 +153,51 @@ AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 
 """
 
+aln_example5 = """\
+Biopython 1.80.dev0 multiple sequence alignment
+
+
+gi|4959044|gb|AAD34209.1|AF069      ------------MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNL
+gi|671626|emb|CAA85685.1|           MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPP
+
+gi|4959044|gb|AAD34209.1|AF069      SEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESS
+gi|671626|emb|CAA85685.1|           -EEAGAAVAAESSTGTWTTVWTDGLTS-LDRYK-GRCYHI--EPVPGEKD
+
+gi|4959044|gb|AAD34209.1|AF069      DDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSL
+gi|671626|emb|CAA85685.1|           QCICYVAYPLDLFEEGSVTNMFT-SIV-GNVFGFKALRALRLE-DLRIPV
+
+gi|4959044|gb|AAD34209.1|AF069      EINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPS
+gi|671626|emb|CAA85685.1|           AY-VKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYE
+
+gi|4959044|gb|AAD34209.1|AF069      RAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIP
+gi|671626|emb|CAA85685.1|           CL-RGGLDFTKDDENVNSQPFMRWRD---RFLFC-AEAIYKAQAETGEIK
+
+gi|4959044|gb|AAD34209.1|AF069      RRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPS
+gi|671626|emb|CAA85685.1|           GHYLNATAGTC-E-EMIKRAIFARELGVPIVMHDYLTGG-FTANTSLAHY
+
+gi|4959044|gb|AAD34209.1|AF069      QGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRS
+gi|671626|emb|CAA85685.1|           CRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGG-DHIHSGTVV
+
+gi|4959044|gb|AAD34209.1|AF069      RSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLS
+gi|671626|emb|CAA85685.1|           GKLEGERDITLGFVDLL-RDDFIEKDRSRGI-YF-TQDWVSLPGVIPVAS
+
+gi|4959044|gb|AAD34209.1|AF069      ETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSAS--VSSRN-VER-VE
+gi|671626|emb|CAA85685.1|           GGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVK
+
+gi|4959044|gb|AAD34209.1|AF069      SRN-GRGSSGGGNSSGSSSSS-SPSPSSSGESSESSSKMFEGSSEGGSSG
+gi|671626|emb|CAA85685.1|           ARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD------
+
+gi|4959044|gb|AAD34209.1|AF069      PSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNL
+gi|671626|emb|CAA85685.1|           --------------------------------------------------
+
+gi|4959044|gb|AAD34209.1|AF069      AMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENST
+gi|671626|emb|CAA85685.1|           --------------------------------------------------
+
+gi|4959044|gb|AAD34209.1|AF069      CPICRRAVLSSGNRESVV
+gi|671626|emb|CAA85685.1|           ------------------
+
+"""
+
 
 class TestClustalIO(unittest.TestCase):
     def test_one(self):
@@ -164,7 +209,7 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(alignment[0].id, "gi|4959044|gb|AAD34209.1|AF069")
         self.assertEqual(alignment[1].id, "gi|671626|emb|CAA85685.1|")
         self.assertEqual(
-            str(alignment[0].seq),
+            alignment[0].seq,
             "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN"
             "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW"
             "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT"
@@ -180,7 +225,7 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(9, len(alignment))
         self.assertEqual(alignment[-1].id, "HISJ_E_COLI")
         self.assertEqual(
-            str(alignment[-1].seq),
+            alignment[-1].seq,
             "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG"
             "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS"
             "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV",
@@ -231,8 +276,14 @@ class TestClustalIO(unittest.TestCase):
 
     def test_kalign_header(self):
         """Make sure we can parse the Kalign header."""
-        alignments = next(ClustalIterator(StringIO(aln_example4)))
-        self.assertEqual(2, len(alignments))
+        alignment = next(ClustalIterator(StringIO(aln_example4)))
+        self.assertEqual(2, len(alignment))
+
+    def test_biopython_header(self):
+        """Make sure we can parse the Biopython header."""
+        alignment = next(ClustalIterator(StringIO(aln_example5)))
+        self.assertEqual(2, len(alignment))
+        self.assertEqual(alignment._version, "1.80.dev0")
 
 
 if __name__ == "__main__":

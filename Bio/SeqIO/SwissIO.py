@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.
+# Copyright 2006-2013,2020 by Peter Cock.
 # Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
@@ -14,13 +14,10 @@ the sequences as SeqRecord objects.
 
 See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
-
-
-from Bio import Seq
-from Bio import SeqRecord
-from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 def _make_position(location_string, offset=0):
@@ -52,7 +49,7 @@ def _make_position(location_string, offset=0):
             )
         except ValueError:
             pass
-    raise NotImplementedError("Cannot parse location '%s'" % location_string)
+    raise NotImplementedError(f"Cannot parse location '{location_string}'")
 
 
 def SwissIterator(source):
@@ -78,23 +75,22 @@ def SwissIterator(source):
 
     for swiss_record in swiss_records:
         # Convert the SwissProt record to a SeqRecord
-        seq = Seq.Seq(swiss_record.sequence, Alphabet.generic_protein)
-        record = SeqRecord.SeqRecord(
-            seq,
+        record = SeqRecord(
+            Seq(swiss_record.sequence),
             id=swiss_record.accessions[0],
             name=swiss_record.entry_name,
             description=swiss_record.description,
             features=swiss_record.features,
         )
-        record.description = swiss_record.description
         for cross_reference in swiss_record.cross_references:
             if len(cross_reference) < 2:
                 continue
             database, accession = cross_reference[:2]
-            dbxref = "%s:%s" % (database, accession)
+            dbxref = f"{database}:{accession}"
             if dbxref not in record.dbxrefs:
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
+        annotations["molecule_type"] = "protein"
         annotations["accessions"] = swiss_record.accessions
         if swiss_record.protein_existence:
             annotations["protein_existence"] = swiss_record.protein_existence
@@ -136,7 +132,7 @@ def SwissIterator(source):
                     elif key == "AGRICOLA":
                         pass
                     else:
-                        raise ValueError("Unknown key %s found in references" % key)
+                        raise ValueError(f"Unknown key {key} found in references")
                 feature.authors = reference.authors
                 feature.title = reference.title
                 feature.journal = reference.location

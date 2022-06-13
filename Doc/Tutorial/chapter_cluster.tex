@@ -53,7 +53,7 @@ Kendall's $\tau$.
 \end{itemize}
 The first two are true distance functions that satisfy the triangle inequality:
 $$d\left(\underline{u},\underline{v}\right) \leq d\left(\underline{u},\underline{w}\right) + d\left(\underline{w},\underline{v}\right) \textrm{ for all } \underline{u}, \underline{v}, \underline{w},$$
-and are therefore refered to as \emph{metrics}. In everyday language, this means that the shortest distance between two points is a straight line.
+and are therefore referred to as \emph{metrics}. In everyday language, this means that the shortest distance between two points is a straight line.
 
 The remaining six distance measures are related to the correlation coefficient, where the distance $d$ is defined in terms of the correlation $r$ by $d=1-r$.  Note that these distance functions are \emph{semi-metrics} that do not satisfy the triangle inequality. For example, for
 $$\underline{u}=\left(1,0,-1\right);$$
@@ -192,8 +192,9 @@ The number of columns in each row is equal to the row number. Hence, the first r
 >>> data = array([[0, 1,  2,  3],
 ...               [4, 5,  6,  7],
 ...               [8, 9, 10, 11],
-...               [1, 2,  3,  4]])
->>> distances = distancematrix(data, dist='e')
+...               [1, 2,  3,  4]])  # fmt: skip
+...
+>>> distances = distancematrix(data, dist="e")
 \end{minted}
 yields a distance matrix
 \begin{minted}{pycon}
@@ -700,14 +701,15 @@ This two-step process gives you some flexibility in the source of the data.
 For example, you can use
 
 \begin{minted}{pycon}
->>> import gzip # Python standard library
+>>> import gzip  # Python standard library
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{minted}
 to open a gzipped file, or
 \begin{minted}{pycon}
 >>> from urllib.request import urlopen
 >>> from io import TextIOWrapper
->>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
+>>> url = "https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"
+>>> handle = TextIOWrapper(urlopen(url))
 \end{minted}
 to open a file stored on the Internet before calling \verb|read|.
 
@@ -728,7 +730,7 @@ YAL010C & 1.2 & 1   & 1.1 &  4.5 &  8.3 \\
 \end{center}
 \end{table}
 
-\noindent Each row (gene) has an identifier that always goes in the first column. In this example, we are using yeast open reading frame codes. Each column (sample) has a label in the first row. In this example, the labels describe the time at which a sample was taken. The first column of the first row contains a special field that tells the program what kind of objects are in each row. In this case, YORF stands for yeast open reading frame. This field can be any alpha-numeric value. The remaining cells in the table contain data for the appropriate gene and sample. The 5.8 in row 2 column 4 means that the observed value for gene YAL001C at 2 hours was 5.8. Missing values are acceptable and are designated by empty cells (e.g. YAL004C at 2 hours).
+\noindent Each row (gene) has an identifier that always goes in the first column. In this example, we are using yeast open reading frame codes. Each column (sample) has a label in the first row. In this example, the labels describe the time at which a sample was taken. The first column of the first row contains a special field that tells the program what kind of objects are in each row. In this case, YORF stands for yeast open reading frame. This field can be any alphanumeric value. The remaining cells in the table contain data for the appropriate gene and sample. The 5.8 in row 2 column 4 means that the observed value for gene YAL001C at 2 hours was 5.8. Missing values are acceptable and are designated by empty cells (e.g. YAL004C at 2 hours).
 
 The input file may contain additional information. A maximal input file would look like this:
 
@@ -951,7 +953,7 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%all cyano_result* files created here during the run of test_Tutorial.py are 
+%all cyano_result* files created here during the run of test_Tutorial.py are
 %after automatically deleted at the end of the test run.
 
 %doctest ../Tests/Cluster lib:numpy

@@ -97,7 +97,7 @@ class ColorSpiral:
                 log(n + (k * offset)) - log((1 + offset) * k * self._a)
             )
             # Put 0 <= h <= 2*pi, where h is the angular part of the polar
-            # co-ordinates for this point on the spiral
+            # coordinates for this point on the spiral
             h = t
             while h < 0:
                 h += 2 * pi

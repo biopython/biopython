@@ -1,7 +1,9 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """PhyloXML reader/parser, writer, and associated functions.
 
@@ -98,7 +100,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
             either an open handle or a file name.
 
     """
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def fix_single(tree):
         if isinstance(tree, PX.Phylogeny):
             return tree
@@ -146,7 +148,7 @@ def _split_namespace(tag):
 
 def _ns(tag, namespace=NAMESPACES["phy"]):
     """Format an XML tag with the given namespace (PRIVATE)."""
-    return "{%s}%s" % (namespace, tag)
+    return f"{{{namespace}}}{tag}"
 
 
 def _get_child_as(parent, tag, construct):
@@ -510,12 +512,12 @@ class Parser:
             confidence=_get_child_as(elem, "confidence", self.confidence),
             properties=_get_children_as(elem, "property", self.property),
             uri=_get_child_as(elem, "uri", self.uri),
-            **elem.attrib
+            **elem.attrib,
         )
 
     def binary_characters(self, elem):
         """Create binary characters object."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def bc_getter(elem):
             """Get binary characters from subnodes."""
             return _get_children_text(elem, "bc")
@@ -665,7 +667,7 @@ class Parser:
 
 
 def _serialize(value):
-    """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
+    """Convert a Python primitive to a phyloXML-compatible string (PRIVATE)."""
     if isinstance(value, float):
         return str(value).upper()
     elif isinstance(value, bool):
@@ -685,7 +687,7 @@ def _clean_attrib(obj, attrs):
 
 def _handle_complex(tag, attribs, subnodes, has_text=False):
     """Handle to serialize nodes with subnodes (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def wrapped(self, obj):
         """Wrap nodes and subnodes as elements."""
         elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
@@ -703,20 +705,20 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
             elem.text = _serialize(obj.value)
         return elem
 
-    wrapped.__doc__ = "Serialize a %s and its subnodes, in order." % tag
+    wrapped.__doc__ = f"Serialize a {tag} and its subnodes, in order."
     return wrapped
 
 
 def _handle_simple(tag):
     """Handle to serialize simple nodes (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def wrapped(self, obj):
         """Wrap node as element."""
         elem = ElementTree.Element(tag)
         elem.text = _serialize(obj)
         return elem
 
-    wrapped.__doc__ = "Serialize a simple %s node." % tag
+    wrapped.__doc__ = f"Serialize a simple {tag} node."
     return wrapped
 
 

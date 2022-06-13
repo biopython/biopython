@@ -32,13 +32,15 @@ if sys.platform == "win32":
     # a Muscle directory with the muscle.exe file plus a readme etc,
     # which the user could put anywhere.  We'll try a few sensible
     # locations under Program Files... and then the full path.
-    likely_dirs = ["",  # Current dir
-                   prog_files,
-                   os.path.join(prog_files, "Muscle3.6"),
-                   os.path.join(prog_files, "Muscle3.7"),
-                   os.path.join(prog_files, "Muscle3.8"),
-                   os.path.join(prog_files, "Muscle3.9"),
-                   os.path.join(prog_files, "Muscle")] + sys.path
+    likely_dirs = [
+        "",  # Current dir
+        prog_files,
+        os.path.join(prog_files, "Muscle3.6"),
+        os.path.join(prog_files, "Muscle3.7"),
+        os.path.join(prog_files, "Muscle3.8"),
+        os.path.join(prog_files, "Muscle3.9"),
+        os.path.join(prog_files, "Muscle"),
+    ] + sys.path
     for folder in likely_dirs:
         if os.path.isdir(folder):
             if os.path.isfile(os.path.join(folder, "muscle.exe")):
@@ -48,6 +50,7 @@ if sys.platform == "win32":
             break
 else:
     from subprocess import getoutput
+
     output = getoutput("muscle -version")
     # Since "not found" may be in another language, try and be sure this is
     # really the MUSCLE tool's output
@@ -57,13 +60,13 @@ else:
 
 if not muscle_exe:
     raise MissingExternalDependencyError(
-        "Install MUSCLE if you want to use the Bio.Align.Applications wrapper.")
+        "Install MUSCLE if you want to use the Bio.Align.Applications wrapper."
+    )
 
 #################################################################
 
 
 class MuscleApplication(unittest.TestCase):
-
     def setUp(self):
         self.infile1 = "Fasta/f002"
         self.infile2 = "Fasta/fa01"
@@ -85,11 +88,12 @@ class MuscleApplication(unittest.TestCase):
 
     def test_Muscle_simple(self):
         """Simple round-trip through app just infile and outfile."""
-        cmdline = MuscleCommandline(muscle_exe,
-                                    input=self.infile1,
-                                    out=self.outfile1)
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
-                         ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
+        cmdline = MuscleCommandline(muscle_exe, input=self.infile1, out=self.outfile1)
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(muscle_exe)
+            + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"',
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
@@ -103,10 +107,11 @@ class MuscleApplication(unittest.TestCase):
         # Use property:
         cmdline.objscore = "sp"
         cmdline.noanchors = True
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
-                         " -in Fasta/f002" +
-                         " -out Fasta/temp_align_out2.fa" +
-                         " -objscore sp -noanchors")
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(muscle_exe)
+            + " -in Fasta/f002 -out Fasta/temp_align_out2.fa -objscore sp -noanchors",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
@@ -120,9 +125,11 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("profile", True)
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
-                         " -out Fasta/temp_align_out3.fa" +
-                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(muscle_exe)
+            + " -out Fasta/temp_align_out3.fa -profile -in1 Fasta/fa01 -in2 Fasta/f001",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
@@ -132,14 +139,21 @@ class MuscleApplication(unittest.TestCase):
     def test_Muscle_profile_with_options(self):
         """Profile alignment, and switch and valued options."""
         # Using some keyword arguments, note -stable isn't supported in v3.8
-        cmdline = MuscleCommandline(muscle_exe, out=self.outfile4,
-                                    in1=self.infile2, in2=self.infile3,
-                                    profile=True, stable=True,
-                                    cluster1="neighborjoining")
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
-                         " -out Fasta/temp_align_out4.fa" +
-                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" +
-                         " -cluster1 neighborjoining -stable")
+        cmdline = MuscleCommandline(
+            muscle_exe,
+            out=self.outfile4,
+            in1=self.infile2,
+            in2=self.infile3,
+            profile=True,
+            stable=True,
+            cluster1="neighborjoining",
+        )
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(muscle_exe)
+            + " -out Fasta/temp_align_out4.fa -profile -in1 Fasta/fa01 -in2 Fasta/f001"
+            + " -cluster1 neighborjoining -stable",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
@@ -178,7 +192,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-",""), old.seq)
     """
 
     def test_simple_msf(self):
@@ -188,14 +202,17 @@ class SimpleAlignTest(unittest.TestCase):
         records = list(SeqIO.parse(input_file, "fasta"))
         records.sort(key=lambda rec: rec.id)  # noqa: E731
         cmdline = MuscleCommandline(muscle_exe, input=input_file, msf=True)
-        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
-                         " -in Fasta/f002 -msf")
+        self.assertEqual(
+            str(cmdline).rstrip(), _escape_filename(muscle_exe) + " -in Fasta/f002 -msf"
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cmdline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "msf")
         align.sort()  # by record.id
@@ -208,7 +225,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
 
     def test_simple_clustal(self):
         """Simple muscle call using Clustal output with a MUSCLE header."""
@@ -218,14 +235,17 @@ class SimpleAlignTest(unittest.TestCase):
         records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file, clw=True)
-        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
-                         " -in Fasta/f002 -clw")
+        self.assertEqual(
+            str(cmdline).rstrip(), _escape_filename(muscle_exe) + " -in Fasta/f002 -clw"
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cmdline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()  # by record.id
@@ -238,7 +258,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
 
     def test_simple_clustal_strict(self):
         """Simple muscle call using strict Clustal output."""
@@ -251,14 +271,18 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("in", input_file)
         # Use clustal output (with a CLUSTAL header)
         cmdline.set_parameter("clwstrict", True)  # Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
-                         " -in Fasta/f002 -clwstrict")
+        self.assertEqual(
+            str(cmdline).rstrip(),
+            _escape_filename(muscle_exe) + " -in Fasta/f002 -clwstrict",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cmdline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
@@ -266,7 +290,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         return_code = child.wait()
         self.assertEqual(return_code, 0)
         child.stdout.close()
@@ -287,26 +311,31 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("diags", True)  # Default None treated as False!
         # Use clustal output
         cmdline.set_parameter("clwstrict", True)  # Default None treated as False!
-        # Shoudn't need this, but just to make sure it is accepted
+        # Shouldn't need this, but just to make sure it is accepted
         cmdline.set_parameter("maxhours", 0.1)
         # No progress reports to stderr
         cmdline.set_parameter("quiet", True)  # Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
-                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" +
-                         " -maxiters 1 -clwstrict -quiet")
+        self.assertEqual(
+            str(cmdline).rstrip(),
+            _escape_filename(muscle_exe)
+            + " -in temp_cw_prot.fasta -diags -maxhours 0.1"
+            + " -maxiters 1 -clwstrict -quiet",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cmdline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
         records.sort(key=lambda rec: rec.id)  # noqa: E731
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         # See if quiet worked:
         self.assertEqual("", child.stderr.read().strip())
         return_code = child.wait()
@@ -323,15 +352,16 @@ class SimpleAlignTest(unittest.TestCase):
         records = list(SeqIO.parse(input_file, "fasta"))
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cline = MuscleCommandline(muscle_exe, clw=True)
-        self.assertEqual(str(cline).rstrip(),
-                         _escape_filename(muscle_exe) + " -clw")
+        self.assertEqual(str(cline).rstrip(), _escape_filename(muscle_exe) + " -clw")
         self.assertEqual(str(eval(repr(cline))), str(cline))
-        child = subprocess.Popen(str(cline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cline),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         SeqIO.write(records, child.stdin, "fasta")
         child.stdin.close()
         # Alignment will now run...
@@ -341,7 +371,7 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+            self.assertEqual(str(new.seq).replace("-", ""), old.seq)
         self.assertEqual(0, child.wait())
         child.stdout.close()
         child.stderr.close()
@@ -356,18 +386,27 @@ class SimpleAlignTest(unittest.TestCase):
         records = list(SeqIO.parse(input_file, "fasta"))
         records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
-        cmdline = MuscleCommandline(muscle_exe, input=input_file,
-                                    clw=True, htmlout=output_html,
-                                    clwstrictout=output_clwstrict)
-        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
-                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +
-                         " -clwstrictout temp_f002.clw")
+        cmdline = MuscleCommandline(
+            muscle_exe,
+            input=input_file,
+            clw=True,
+            htmlout=output_html,
+            clwstrictout=output_clwstrict,
+        )
+        self.assertEqual(
+            str(cmdline).rstrip(),
+            _escape_filename(muscle_exe)
+            + " -in Fasta/f002 -clw -htmlout temp_f002.html"
+            + " -clwstrictout temp_f002.clw",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cmdline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         # Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()

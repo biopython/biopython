@@ -8,7 +8,7 @@ BioWish. This is the start of a pure python re-implementation of xbbtools with
 biopython.
 Usage: xbbtools test.fas
 
-Whats available:
+What's available:
       * open FASTA file
       * display 1 or 6 frame translations ala DNA Strider
       * all operations work on selection or complete sequence

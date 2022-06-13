@@ -12,12 +12,10 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
-
-
+from Bio.Align import MultipleSeqAlignment
+from Bio.AlignIO.Interfaces import AlignmentIterator
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class EmbossIterator(AlignmentIterator):
@@ -52,7 +50,6 @@ class EmbossIterator(AlignmentIterator):
         length_of_seqs = None
         number_of_seqs = None
         ids = []
-        seqs = []
         header_dict = {}
 
         while line[0] == "#":
@@ -101,7 +98,7 @@ class EmbossIterator(AlignmentIterator):
                 % (number_of_seqs, self.records_per_alignment)
             )
 
-        seqs = ["" for id in ids]
+        seqs = [""] * len(ids)
         seq_starts = []
         index = 0
 
@@ -146,12 +143,12 @@ class EmbossIterator(AlignmentIterator):
                         assert seq.replace("-", "") == "", line
                     elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r), line says start %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 start,
                                 line,
                             )
@@ -161,12 +158,12 @@ class EmbossIterator(AlignmentIterator):
                     # Check the end ...
                     if end != seq_starts[index] + len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r, start=%i), file says end %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 seq_starts[index],
                                 end,
                                 line,
@@ -178,13 +175,13 @@ class EmbossIterator(AlignmentIterator):
                         index = 0
                 else:
                     # just a start value, this is just alignment annotation (?)
-                    # print "Skipping: " + line.rstrip()
+                    # print("Skipping: " + line.rstrip())
                     pass
             elif line.strip() == "":
                 # Just a spacer?
                 pass
             else:
-                raise ValueError("Unrecognised EMBOSS pairwise line: %r\n" % line)
+                raise ValueError(f"Unrecognised EMBOSS pairwise line: {line!r}\n")
 
             line = handle.readline()
             if (
@@ -218,5 +215,5 @@ class EmbossIterator(AlignmentIterator):
                     "different length? You could be using an "
                     "old version of EMBOSS."
                 )
-            records.append(SeqRecord(Seq(seq, self.alphabet), id=id, description=id))
-        return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)
+            records.append(SeqRecord(Seq(seq), id=id, description=id))
+        return MultipleSeqAlignment(records, annotations=header_dict)

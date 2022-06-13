@@ -256,7 +256,7 @@ class MafftCommandline(AbstractCommandline):
                 equate=False,
             ),
             # Offset value, which works like gap extension penalty, for group-to-
-            # group alignment. Deafult: 0.123
+            # group alignment. Default: 0.123
             _Option(
                 ["--ep", "ep"],
                 "Offset value, which works like gap extension penalty, "
@@ -394,12 +394,12 @@ class MafftCommandline(AbstractCommandline):
                 "Do not report progress (True) or not (False, default).",
             ),
             # **** Input ****
-            # Assume the sequences are nucleotide. Deafult: auto
+            # Assume the sequences are nucleotide. Default: auto
             _Switch(
                 ["--nuc", "nuc"],
                 "Assume the sequences are nucleotide (True/False). Default: auto",
             ),
-            # Assume the sequences are amino acid. Deafult: auto
+            # Assume the sequences are amino acid. Default: auto
             _Switch(
                 ["--amino", "amino"],
                 "Assume the sequences are amino acid (True/False). Default: auto",

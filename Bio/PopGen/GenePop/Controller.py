@@ -1,7 +1,9 @@
 # Copyright 2009 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Module to control GenePop."""
 
@@ -160,11 +162,7 @@ class _FileIterator:
 
     def __del__(self):
         self.stream.close()
-        try:
-            os.remove(self.fname)
-        except OSError:
-            # Jython seems to call the iterator twice
-            pass
+        os.remove(self.fname)
 
 
 class _GenePopCommandline(AbstractCommandline):
@@ -173,7 +171,7 @@ class _GenePopCommandline(AbstractCommandline):
     def __init__(self, genepop_dir=None, cmd="Genepop", **kwargs):
         self.parameters = [
             _Argument(["command"], "GenePop option to be called", is_required=True),
-            _Argument(["mode"], "Should allways be batch", is_required=True),
+            _Argument(["mode"], "Should always be batch", is_required=True),
             _Argument(["input"], "Input file", is_required=True),
             _Argument(["Dememorization"], "Dememorization step"),
             _Argument(["BatchNumber"], "Number of MCMC batches"),
@@ -240,7 +238,6 @@ class GenePopController:
         self.controller()  # checks error level is zero
         os.chdir(cwd)
         shutil.rmtree(temp_dir)
-        return
 
     def _test_pop_hz_both(
         self,

@@ -23,19 +23,14 @@ def lcc_mult(seq, wsize):
     version is optimized for speed. The optimization works by using the
     value of previous window as a base to compute the next one.
     """
-    l2 = math.log(2)
+    l4 = math.log(4)
     tamseq = len(seq)
-    try:
-        # Assume its a string
-        upper = seq.upper()
-    except AttributeError:
-        # Should be a Seq object then
-        upper = str(seq).upper()
+    upper = str(seq).upper()
     compone = [0]
-    lccsal = [0]
+    lccsal = []
     for i in range(wsize):
         compone.append(
-            ((i + 1) / float(wsize)) * ((math.log((i + 1) / float(wsize))) / l2)
+            ((i + 1) / float(wsize)) * ((math.log((i + 1) / float(wsize))) / l4)
         )
     window = seq[0:wsize]
     cant_a = window.count("A")
@@ -137,36 +132,31 @@ def lcc_simp(seq):
     https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
-    try:
-        # Assume its a string
-        upper = seq.upper()
-    except AttributeError:
-        # Should be a Seq object then
-        upper = str(seq).upper()
-    l2 = math.log(2)
+    upper = str(seq).upper()
+    l4 = math.log(4)
+    # Check to avoid calculating the log of 0.
     if "A" not in seq:
         term_a = 0
-        # Check to avoid calculating the log of 0.
     else:
         term_a = ((upper.count("A")) / float(wsize)) * (
-            (math.log((upper.count("A")) / float(wsize))) / l2
+            (math.log((upper.count("A")) / float(wsize))) / l4
         )
     if "C" not in seq:
         term_c = 0
     else:
         term_c = ((upper.count("C")) / float(wsize)) * (
-            (math.log((upper.count("C")) / float(wsize))) / l2
+            (math.log((upper.count("C")) / float(wsize))) / l4
         )
     if "T" not in seq:
         term_t = 0
     else:
         term_t = ((upper.count("T")) / float(wsize)) * (
-            (math.log((upper.count("T")) / float(wsize))) / l2
+            (math.log((upper.count("T")) / float(wsize))) / l4
         )
     if "G" not in seq:
         term_g = 0
     else:
         term_g = ((upper.count("G")) / float(wsize)) * (
-            (math.log((upper.count("G")) / float(wsize))) / l2
+            (math.log((upper.count("G")) / float(wsize))) / l4
         )
     return -(term_a + term_c + term_t + term_g)

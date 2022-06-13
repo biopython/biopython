@@ -75,44 +75,29 @@ Gene pair & Intergene distance ($x_1$) & Gene expression score ($x_2$) & Class\\
 Table \ref{table:training} lists some of the \textit{Bacillus subtilis} gene pairs for which the operon structure is known.
 Let's calculate the logistic regression model from these data:
 
-%NOTE - can't use this as a doctest in case NumPy is missing (Jython).
-%Also the ... are missing but that means the user can copy/paste the example.
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import LogisticRegression
->>> xs = [[-53, -200.78],
-          [117, -267.14],
-          [57, -163.47],
-          [16, -190.30],
-          [11, -220.94],
-          [85, -193.94],
-          [16, -182.71],
-          [15, -180.41],
-          [-26, -181.73],
-          [58, -259.87],
-          [126, -414.53],
-          [191, -249.57],
-          [113, -265.28],
-          [145, -312.99],
-          [154, -213.83],
-          [147, -380.85],
-          [93, -291.13]]
->>> ys = [1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0]
+>>> xs = [
+...     [-53, -200.78],
+...     [117, -267.14],
+...     [57, -163.47],
+...     [16, -190.30],
+...     [11, -220.94],
+...     [85, -193.94],
+...     [16, -182.71],
+...     [15, -180.41],
+...     [-26, -181.73],
+...     [58, -259.87],
+...     [126, -414.53],
+...     [191, -249.57],
+...     [113, -265.28],
+...     [145, -312.99],
+...     [154, -213.83],
+...     [147, -380.85],
+...     [93, -291.13],
+... ]
+>>> ys = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 >>> model = LogisticRegression.train(xs, ys)
 \end{minted}
 
@@ -130,7 +115,8 @@ The function \verb+train+ has two optional arguments: \verb+update_fn+ and \verb
 
 \begin{minted}{pycon}
 >>> def show_progress(iteration, loglikelihood):
-        print("Iteration:", iteration, "Log-likelihood function:", loglikelihood)
+...     print(f"Iteration: {iteration} Log-likelihood function: {loglikelihood}")
+...
 >>>
 >>> model = LogisticRegression.train(xs, ys, update_fn=show_progress)
 Iteration: 0 Log-likelihood function: -11.7835020695
@@ -224,7 +210,8 @@ class OP: probability = 0.000321211251817 class NOP: probability = 0.99967878874
 To get some idea of the prediction accuracy of the logistic regression model, we can apply it to the training data:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+...     print(f"True: {ys[i]} Predicted: {LogisticRegression.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -246,8 +233,9 @@ True: 0 Predicted: 0
 showing that the prediction is correct for all but one of the gene pairs. A more reliable estimate of the prediction accuracy can be found from a leave-one-out analysis, in which the model is recalculated from the training data after removing the gene to be predicted:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-        print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+...     model = LogisticRegression.train(xs[:i] + xs[i + 1 :], ys[:i] + ys[i + 1 :])
+...     print(f"True: {ys[i]} Predicted: {LogisticRegression.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -315,13 +303,13 @@ The \verb+classify+ function lets us specify both a distance function and a weig
 
 \begin{minted}{pycon}
 >>> def cityblock(x1, x2):
-...    assert len(x1)==2
-...    assert len(x2)==2
-...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
-...    return distance
+...     assert len(x1) == 2
+...     assert len(x2) == 2
+...     distance = abs(x1[0] - x2[0]) + abs(x1[1] - x2[1])
+...     return distance
 ...
 >>> x = [6, -173.143442352]
->>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock))
+>>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn=cityblock))
 yxcE, yxcD: 1
 \end{minted}
 
@@ -329,12 +317,12 @@ The weight function can be used for weighted voting. For example, we may want to
 
 \begin{minted}{pycon}
 >>> def weight(x1, x2):
-...    assert len(x1)==2
-...    assert len(x2)==2
-...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
+...     assert len(x1) == 2
+...     assert len(x2) == 2
+...     return exp(-abs(x1[0] - x2[0]) - abs(x1[1] - x2[1]))
 ...
 >>> x = [6, -173.143442352]
->>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight))
+>>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn=weight))
 yxcE, yxcD: 1
 \end{minted}
 By default, all neighbors are given an equal weight.
@@ -359,7 +347,8 @@ which means that two neighbors are operon pairs and one neighbor is a non-operon
 To get some idea of the prediction accuracy of the $k$-nearest neighbors approach, we can apply it to the training data:
 \begin{minted}{pycon}
 >>> for i in range(len(ys)):
-        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+...     print(f"True: {ys[i]} Predicted: {kNN.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -382,8 +371,9 @@ showing that the prediction is correct for all but two of the gene pairs. A more
 \begin{minted}{pycon}
 >>> k = 3
 >>> for i in range(len(ys)):
-        model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
-        print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+...     model = kNN.train(xs[:i] + xs[i + 1 :], ys[:i] + ys[i + 1 :], k)
+...     print(f"True: {ys[i]} Predicted: {kNN.classify(model, xs[i])}")
+...
 True: 1 Predicted: 1
 True: 1 Predicted: 0
 True: 1 Predicted: 1
@@ -410,7 +400,7 @@ This section will describe the \verb|Bio.NaiveBayes| module.
 
 \section{Maximum Entropy}
 
-This section will describe the \verb|Bio.MaximumEntropy| module.
+This section will describe the \verb|Bio.MaxEntropy| module.
 
 \section{Markov Models}
 

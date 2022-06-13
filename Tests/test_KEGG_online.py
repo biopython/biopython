@@ -8,6 +8,7 @@
 """Tests for online functionality of the KEGG module."""
 
 # Builtins
+import io
 import unittest
 
 from Bio.KEGG.KGML import KGML_parser
@@ -17,6 +18,7 @@ from Bio.KEGG.REST import kegg_info, kegg_link, kegg_list
 from Bio import SeqIO
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -101,26 +103,33 @@ class KEGGTests(unittest.TestCase):
     def test_find_compound_C7H10O5_formula(self):
         with kegg_find("compound", "C7H10O5", "formula") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/C7H10O5/formula")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/C7H10O5/formula"
+        )
 
     def test_find_compound_O5C7_formula(self):
         with kegg_find("compound", "O5C7", "formula") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/O5C7/formula")
+        self.assertEqual(handle.url, "http://rest.kegg.jp/find/compound/O5C7/formula")
 
     def test_find_compound_exact_mass(self):
         with kegg_find("compound", "174.05", "exact_mass") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/174.05/exact_mass")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/174.05/exact_mass"
+        )
 
     def test_find_compound_weight(self):
         with kegg_find("compound", "300-310", "mol_weight") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/300-310/mol_weight")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/300-310/mol_weight"
+        )
+
+    def test_get_br_ko00002(self):
+        with kegg_get("br:ko00002", "json") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "http://rest.kegg.jp/get/br:ko00002/json")
 
     def test_get_cpd_C01290_plus_gl_G00092(self):
         with kegg_get("cpd:C01290+gl:G00092") as handle:
@@ -156,29 +165,33 @@ class KEGGTests(unittest.TestCase):
         with kegg_get("hsa:10458+ece:Z5100", "aaseq") as handle:
             data = SeqIO.parse(handle, "fasta")
             self.assertEqual(len(list(data)), 2)
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
+        )
 
     def test_get_hsa_10458_list_ece_Z5100_as_aaseq(self):
         with kegg_get(["hsa:10458", "ece:Z5100"], "aaseq") as handle:
             data = SeqIO.parse(handle, "fasta")
             self.assertEqual(len(list(data)), 2)
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
+        )
 
     def test_get_hsa_10458_plus_ece_Z5100_as_ntseq(self):
         with kegg_get("hsa:10458+ece:Z5100", "ntseq") as handle:
             data = SeqIO.parse(handle, "fasta")
             self.assertEqual(len(list(data)), 2)
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
+        )
 
     def test_get_hsa_10458_list_ece_Z5100_as_ntseq(self):
         with kegg_get(["hsa:10458", "ece:Z5100"], "ntseq") as handle:
             data = SeqIO.parse(handle, "fasta")
             self.assertEqual(len(list(data)), 2)
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
+        )
 
     def test_get_hsa05130_image(self):
         with kegg_get("hsa05130", "image") as handle:
@@ -199,14 +212,16 @@ class KEGGTests(unittest.TestCase):
     def test_conv_ncbi_gi_hsa_10458_plus_ece_Z5100(self):
         with kegg_conv("ncbi-gi", "hsa:10458+ece:Z5100") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+        )
 
     def test_conv_ncbi_gi_hsa_10458_list_ece_Z5100(self):
         with kegg_conv("ncbi-gi", ["hsa:10458", "ece:Z5100"]) as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+        )
 
     def test_link_pathway_hsa(self):
         with kegg_link("pathway", "hsa") as handle:
@@ -221,14 +236,16 @@ class KEGGTests(unittest.TestCase):
     def test_pathway_hsa_10458_plus_ece_Z5100(self):
         with kegg_link("pathway", "hsa:10458+ece:Z5100") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100"
+        )
 
     def test_pathway_hsa_10458_list_ece_Z5100(self):
         with kegg_link("pathway", ["hsa:10458", "ece:Z5100"]) as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100"
+        )
 
 
 class KGMLPathwayTests(unittest.TestCase):
@@ -239,6 +256,17 @@ class KGMLPathwayTests(unittest.TestCase):
         with kegg_get("ko03070", "kgml") as handle:
             pathway = KGML_parser.read(handle)
         self.assertEqual(pathway.name, "path:ko03070")
+
+    def test_parser_roundtrip(self):
+        """Download a KEGG pathway, write local KGML and check roundtrip."""
+        with kegg_get("ko00680", "kgml") as remote_handle:
+            pathway = KGML_parser.read(remote_handle)
+
+        with io.StringIO(pathway.get_KGML()) as local_handle:
+            roundtrip = KGML_parser.read(local_handle)
+
+        self.assertEqual(pathway.name, roundtrip.name)
+        self.assertEqual(len(pathway.relations), len(roundtrip.relations))
 
 
 if __name__ == "__main__":

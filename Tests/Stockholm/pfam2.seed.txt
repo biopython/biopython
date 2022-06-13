@@ -1,0 +1,43 @@
+# STOCKHOLM 1.0
+#=GF ID   7kD_DNA_binding
+#=GF AC   PF02294.20
+#=GF DE   7kD DNA-binding domain
+#=GF AU   Mian N;0000-0003-4284-4749
+#=GF AU   Bateman A;0000-0002-6982-4660
+#=GF SE   Pfam-B_8148 (release 5.2)
+#=GF GA   25.00 25.00;
+#=GF TC   26.60 46.20;
+#=GF NC   23.20 19.20;
+#=GF BM   hmmbuild HMM.ann SEED.ann
+#=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+#=GF TP   Domain
+#=GF CL   CL0049
+#=GF RN   [1]
+#=GF RM   3130377
+#=GF RT   Microsequence analysis of DNA-binding proteins 7a, 7b, and 7e
+#=GF RT   from the archaebacterium Sulfolobus acidocaldarius. 
+#=GF RA   Choli T, Wittmann-Liebold B, Reinhardt R; 
+#=GF RL   J Biol Chem 1988;263:7087-7093.
+#=GF DR   INTERPRO; IPR003212;
+#=GF DR   SCOP; 1sso; fa;
+#=GF DR   SO; 0000417; polypeptide_domain;
+#=GF CC   This family contains members of the hyper-thermophilic
+#=GF CC   archaebacterium  7kD DNA-binding/endoribonuclease P2 family.
+#=GF CC   There are five 7kD DNA-binding proteins, 7a-7e, found as
+#=GF CC   monomers in the cell. Protein 7e shows the  tightest DNA-binding
+#=GF CC   ability.
+#=GF SQ   3
+#=GS DN7_METS5/4-61   AC A4YEA2.1
+#=GS DN7A_SACS2/3-61  AC P61991.2
+#=GS DN7A_SACS2/3-61  DR PDB; 1SSO A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1JIC A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 2CVR A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1B4O A; 2-60;
+#=GS DN7E_SULAC/3-60  AC P13125.2
+DN7_METS5/4-61              KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLNMIGK
+DN7A_SACS2/3-61             TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+#=GR DN7A_SACS2/3-61  SS    EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+DN7E_SULAC/3-60             KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELMDMLAR
+#=GC SS_cons                EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+#=GC seq_cons               KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK
+//

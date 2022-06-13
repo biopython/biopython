@@ -68,14 +68,14 @@ is a named tuple consisting of the two aligned sequences, the score and the
 start and end positions of the alignment:
 
    >>> print(alignments)
-   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3, start=0, end=5), ...
+   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3.0, start=0, end=5), ...
 
-You can access each element of an aligment by index or name:
+You can access each element of an alignment by index or name:
 
    >>> alignments[0][2]
-   3
+   3.0
    >>> alignments[0].score
-   3
+   3.0
 
 For a nice printout of an alignment, use the ``format_alignment`` method of
 the module:
@@ -232,10 +232,10 @@ Some examples:
     <BLANKLINE>
 
 - The alignment function can also use known matrices already included in
-  Biopython (``MatrixInfo`` from ``Bio.SubsMat``):
+  Biopython (in ``Bio.Align.substitution_matrices``):
 
-    >>> from Bio.SubsMat import MatrixInfo as matlist
-    >>> matrix = matlist.blosum62
+    >>> from Bio.Align import substitution_matrices
+    >>> matrix = substitution_matrices.load("BLOSUM62")
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
     ...     print(format_alignment(*a))
     KEVLA
@@ -272,9 +272,21 @@ import warnings
 from collections import namedtuple
 
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+from Bio.Align import substitution_matrices
+
+warnings.warn(
+    "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
+    "future release of Biopython. As an alternative, please consider using "
+    "Bio.Align.PairwiseAligner as a replacement, and contact the "
+    "Biopython developers if you still need the Bio.pairwise2 module.",
+    BiopythonDeprecationWarning,
+)
 
 
 MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
+
+Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
 
 
 class align:
@@ -363,11 +375,11 @@ class align:
             try:
                 match_args, match_doc = self.match2args[match_type]
             except KeyError:
-                raise AttributeError("unknown match type %r" % match_type)
+                raise AttributeError(f"unknown match type {match_type!r}")
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
             except KeyError:
-                raise AttributeError("unknown penalty type %r" % penalty_type)
+                raise AttributeError(f"unknown penalty type {penalty_type!r}")
 
             # Now get the names of the parameters to this function.
             param_names = ["sequenceA", "sequenceB"]
@@ -379,10 +391,7 @@ class align:
 
             self.__name__ = self.function_name
             # Set the doc string.
-            doc = "%s(%s) -> alignments\n" % (
-                self.__name__,
-                ", ".join(self.param_names),
-            )
+            doc = f"{self.__name__}({', '.join(self.param_names)}) -> alignments\n"
             doc += """\
 \nThe following parameters can also be used with optional
 keywords of the same name.\n\n
@@ -390,9 +399,9 @@ sequenceA and sequenceB must be of the same type, either
 strings, lists or Biopython sequence objects.\n
 """
             if match_doc:
-                doc += "\n%s\n" % match_doc
+                doc += f"\n{match_doc}\n"
             if penalty_doc:
-                doc += "\n%s\n" % penalty_doc
+                doc += f"\n{penalty_doc}\n"
             doc += """\
 \nalignments is a list of named tuples (seqA, seqB, score,
 begin, end). seqA and seqB are strings showing the alignment
@@ -459,7 +468,7 @@ where the alignment occurs.
                     keywds["gap_B_fn"] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError("unknown parameter %r" % self.param_names[i])
+                    raise ValueError(f"unknown parameter {self.param_names[i]!r}")
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
@@ -662,13 +671,13 @@ def _make_score_matrix_generic(
         if penalize_end_gaps[1]:  # [1]:gap in sequence B
             score = gap_B_fn(0, i)
         else:
-            score = 0
+            score = 0.0
         score_matrix[i][0] = score
     for i in range(lenB + 1):
         if penalize_end_gaps[0]:  # [0]:gap in sequence A
             score = gap_A_fn(0, i)
         else:
-            score = 0
+            score = 0.0
         score_matrix[0][i] = score
 
     # Fill in the score matrix.  Each position in the matrix
@@ -717,7 +726,7 @@ def _make_score_matrix_generic(
             best_score = max(nogap_score, row_open, row_extend, col_open, col_extend)
             local_max_score = max(local_max_score, best_score)
             if not align_globally and best_score < 0:
-                score_matrix[row][col] = 0
+                score_matrix[row][col] = 0.0
             else:
                 score_matrix[row][col] = best_score
 
@@ -973,7 +982,7 @@ def _recover_alignments(
         # and stop the backtrace (dead_end) if a gap in seqB follows.
         #
         # Attention: This may fail, if the gap-penalties for both strands are
-        # different. In this case the second aligment may be the only optimal
+        # different. In this case the second alignment may be the only optimal
         # alignment. Thus it can happen that no alignment is returned. For
         # this case a workaround was implemented, which reverses the input and
         # the matrices (this happens in _reverse_matrices) and repeats the
@@ -985,7 +994,7 @@ def _recover_alignments(
             cache = (ali_seqA[:], ali_seqB[:], end, row, col, col_gap)
 
             # If trace is empty we have reached at least one border of the
-            # matrix or the end of a local aligment. Just add the rest of
+            # matrix or the end of a local alignment. Just add the rest of
             # the sequence(s) and fill with gaps if necessary.
             if not trace:
                 if col and col_gap:
@@ -1145,7 +1154,6 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
-    Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
@@ -1276,6 +1284,8 @@ class dictionary_match:
 
     def __init__(self, score_dict, symmetric=1):
         """Initialize the class."""
+        if isinstance(score_dict, substitution_matrices.Array):
+            score_dict = dict(score_dict)  # Access to dict is much faster
         self.score_dict = score_dict
         self.symmetric = symmetric
 
@@ -1311,9 +1321,9 @@ class affine_penalty:
 
 
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
-    """Calculate a penality score for the gap function."""
+    """Calculate a penalty score for the gap function."""
     if length <= 0:
-        return 0
+        return 0.0
     penalty = open + extend * length
     if not penalize_extend_when_opening:
         penalty -= extend
@@ -1403,7 +1413,7 @@ def format_alignment(align1, align2, score, begin, end, full_sequences=False):
         else:
             m_line.append("{:^{width}}".format(".", width=m_len))  # mismatch
 
-    s2_line.append("\n  Score=%g\n" % score)
+    s2_line.append(f"\n  Score={score:g}\n")
     return "\n".join(["".join(s1_line), "".join(m_line), "".join(s2_line)])
 
 

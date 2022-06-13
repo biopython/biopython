@@ -5,18 +5,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests Bio.SeqFeature."""
-
 import unittest
 
+from copy import deepcopy
 from os import path
 
-from Bio import Seq, SeqIO
-from Bio.Alphabet import generic_dna
+from Bio import Seq
+from Bio import SeqIO
+from Bio import SeqRecord
 from Bio.Data.CodonTable import TranslationError
-from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
-from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
-from Bio.SeqFeature import ExactPosition, WithinPosition, BetweenPosition
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import BetweenPosition
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqFeature import WithinPosition
 
 
 class TestReference(unittest.TestCase):
@@ -166,9 +173,20 @@ class TestCompoundLocation(unittest.TestCase):
 class TestSeqFeature(unittest.TestCase):
     """Tests for the SeqFeature.SeqFeature class."""
 
+    def test_eq_identical(self):
+        f1 = SeqFeature(
+            type="CDS",
+            location=FeatureLocation(0, 182, 1),
+            qualifiers={
+                "product": ["interferon beta, fibroblast"],
+            },
+        )
+        f2 = deepcopy(f1)
+        self.assertEqual(f1, f2)
+
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""
-        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):
@@ -243,6 +261,74 @@ class TestPositions(unittest.TestCase):
         self.assertEqual(between_pos._left, between_pos2._left)
         self.assertEqual(between_pos._right, between_pos2._right)
         self.assertEqual(oneof_pos.position_choices, oneof_pos2.position_choices)
+
+
+class TestExtract(unittest.TestCase):
+    def test_reference_in_location_record(self):
+        """Test location with reference to another record."""
+        parent_record = SeqRecord.SeqRecord(seq=Seq.Seq("actg"))
+        another_record = SeqRecord.SeqRecord(seq=Seq.Seq("gtcagctac"))
+        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
+            location.extract(parent_record)
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
+            location.extract(parent_record, references={"SOMEOTHER.2": another_record})
+        self.assertEqual(
+            location.extract(parent_record, references={"ANOTHER.7": another_record}),
+            "cta",
+        )
+
+    def test_reference_in_location_sequence(self):
+        """Test location with reference to another sequence."""
+        parent_sequence = Seq.Seq("actg")
+        another_sequence = Seq.Seq("gtcagctac")
+        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "cta",
+        )
+
+    def test_reference_in_compound_location_record(self):
+        """Test compound location with reference to another record."""
+        parent_record = SeqRecord.SeqRecord(Seq.Seq("aaccaaccaaccaaccaa"))
+        another_record = SeqRecord.SeqRecord(Seq.Seq("ttggttggttggttggtt"))
+        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
+            location.extract(parent_record)
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
+            location.extract(parent_record, references={"SOMEOTHER.2": another_record})
+        self.assertEqual(
+            location.extract(
+                parent_record, references={"ANOTHER.7": another_record}
+            ).seq,
+            "ccaatgg",
+        )
+
+    def test_reference_in_compound_location_sequence(self):
+        """Test compound location with reference to another sequence."""
+        parent_sequence = Seq.Seq("aaccaaccaaccaaccaa")
+        another_sequence = Seq.Seq("ttggttggttggttggtt")
+        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "ccaatgg",
+        )
 
 
 if __name__ == "__main__":

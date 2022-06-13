@@ -148,7 +148,6 @@ file for other options.
 \begin{minted}{pycon}
 >>> import Bio
 >>> print(Bio.__version__)
-...
 \end{minted}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
   Note that those are double underscores before and after version.
@@ -161,7 +160,7 @@ file for other options.
 
   If the version string ends with ``\verb|.dev<number>|'' like
   ``\verb|1.68.dev0|'', again you don't have an official release,
-  but instead a snapshot of the in developement code \emph{before}
+  but instead a snapshot of the in development code \emph{before}
   that version was released.
 
   \item \emph{Where is the latest version of this document?}\\
@@ -176,8 +175,7 @@ file for other options.
   \item \emph{What is wrong with my sequence comparisons?} \\
   There was a major change in Biopython 1.65 making the \verb|Seq| and
   \verb|MutableSeq| classes (and subclasses) use simple string-based
-  comparison (ignoring the alphabet other than if giving a warning),
-  which you can do explicitly with \verb|str(seq1) == str(seq2)|.
+  comparison which you can do explicitly with \verb|str(seq1) == str(seq2)|.
 
   Older versions of Biopython would use instance-based comparison
   for \verb|Seq| objects which you can do explicitly with
@@ -185,10 +183,6 @@ file for other options.
 
   If you still need to support old versions of Biopython, use these
   explicit forms to avoid problems. See Section~\ref{sec:seq-comparison}.
-
-  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
-  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
-  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
 
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
@@ -229,7 +223,7 @@ file for other options.
   You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
 
   \item \emph{Why can't I run command line tools directly from the application wrappers?} \\
-  You need Biopython 1.55 or later. Alternatively, use the Python \verb|subprocess| module directly.
+  You need Biopython 1.55 or later, but these were deprecated in Biopython 1.78. Consider using the Python \verb|subprocess| module directly.
 
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.

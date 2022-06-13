@@ -9,13 +9,16 @@
 It is a simple container class, with list and dictionary like properties.
 """
 
+from collections import deque
 from copy import copy
+
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
 class Entity:
-    """Basic container object for PDB heirachy.
+    """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
@@ -211,7 +214,7 @@ class Entity:
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException("%s defined twice" % entity_id)
+            raise PDBConstructionException(f"{entity_id} defined twice")
         entity.set_parent(self)
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
@@ -220,7 +223,7 @@ class Entity:
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException("%s defined twice" % entity_id)
+            raise PDBConstructionException(f"{entity_id} defined twice")
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]
         self.child_dict[entity_id] = entity
@@ -266,7 +269,7 @@ class Entity:
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            self._reset_full_id()
+            self.full_id = self._generate_full_id()
         return self.full_id
 
     def transform(self, rot, tran):
@@ -291,6 +294,39 @@ class Entity:
         """
         for o in self.get_list():
             o.transform(rot, tran)
+
+    def center_of_mass(self, geometric=False):
+        """Return the center of mass of the Entity as a numpy array.
+
+        If geometric is True, returns the center of geometry instead.
+        """
+        # Recursively iterate through children until we get all atom coordinates
+
+        if not len(self):
+            raise ValueError(f"{self} does not have children")
+
+        maybe_disordered = {"R", "C"}  # to know when to use get_unpacked_list
+        only_atom_level = {"A"}
+
+        entities = deque([self])  # start with [self] to avoid auto-unpacking
+        while True:
+            e = entities.popleft()
+            if e.level in maybe_disordered:
+                entities += e.get_unpacked_list()
+            else:
+                entities += e.child_list
+
+            elevels = {e.level for e in entities}
+            if elevels == only_atom_level:
+                break  # nothing else to unpack
+
+        coords = np.asarray([a.coord for a in entities], dtype=np.float32)
+        if geometric:
+            masses = None
+        else:
+            masses = np.asarray([a.mass for a in entities], dtype=np.float32)
+
+        return np.average(coords, axis=0, weights=masses)
 
     def copy(self):
         """Copy entity recursively."""
@@ -384,6 +420,16 @@ class DisorderedEntityWrapper:
         return self.selected_child <= other
 
     # Public methods
+    def copy(self):
+        """Copy disorderd entity recursively."""
+        shallow = copy(self)
+        shallow.child_dict = {}
+        shallow.detach_parent()
+
+        for child in self.disordered_get_list():
+            shallow.disordered_add(child.copy())
+
+        return shallow
 
     def get_id(self):
         """Return the id."""
@@ -418,6 +464,13 @@ class DisorderedEntityWrapper:
 
     def disordered_add(self, child):
         """Add disordered entry.
+
+        This is implemented by DisorderedAtom and DisorderedResidue.
+        """
+        raise NotImplementedError
+
+    def disordered_remove(self, child):
+        """Remove disordered entry.
 
         This is implemented by DisorderedAtom and DisorderedResidue.
         """

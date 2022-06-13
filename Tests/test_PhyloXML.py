@@ -10,7 +10,6 @@ import tempfile
 import unittest
 from itertools import chain
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -24,7 +23,7 @@ EX_PHYLO = "PhyloXML/phyloxml_examples.xml"
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.mktemp()
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------
@@ -46,7 +45,7 @@ def _test_read_factory(source, count):
         self.assertEqual(len(phx), count[0])
         self.assertEqual(len(phx.other), count[1])
 
-    test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
+    test_read.__doc__ = f"Read {fname} to produce a phyloXML object."
     return test_read
 
 
@@ -62,7 +61,7 @@ def _test_parse_factory(source, count):
         trees = PhyloXMLIO.parse(source)
         self.assertEqual(len(list(trees)), count)
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % fname
+    test_parse.__doc__ = f"Parse the phylogenies in {fname}."
     return test_parse
 
 
@@ -83,7 +82,7 @@ def _test_shape_factory(source, shapes):
                 for subclade, len_expect in zip(clade, sub_expect[1]):
                     self.assertEqual(len(subclade), len_expect)
 
-    test_shape.__doc__ = "Check the branching structure of %s." % fname
+    test_shape.__doc__ = f"Check the branching structure of {fname}."
     return test_shape
 
 
@@ -103,27 +102,27 @@ class ParseTests(unittest.TestCase):
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
     # lvl-2 clades, sub-clade counts, lvl-3 clades
-    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2)),),),)
-    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2))),))
+    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2))),))
     test_shape_phylo = _test_shape_factory(
         EX_PHYLO,
         (
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((0, ()), (2, (0, 0)),),
-            ((3, (0, 0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((0, ()), (2, (0, 0))),
+            ((3, (0, 0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
         ),
     )
-    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2))),))
 
 
 class TreeTests(unittest.TestCase):
@@ -167,12 +166,12 @@ class TreeTests(unittest.TestCase):
         # Monitor lizards
         self.assertEqual(trees[9].name, "monitor lizards")
         self.assertEqual(trees[9].description, "a pylogeny of some monitor lizards")
-        self.assertEqual(trees[9].rooted, True)
+        self.assertTrue(trees[9].rooted)
         # Network (unrooted)
         self.assertEqual(
             trees[6].name, "network, node B is connected to TWO nodes: AB and C"
         )
-        self.assertEqual(trees[6].rooted, False)
+        self.assertFalse(trees[6].rooted)
 
     def test_Clade(self):
         """Instantiation of Clade objects."""
@@ -393,7 +392,7 @@ class TreeTests(unittest.TestCase):
         reference = tree.clade[0, 0, 0, 0, 0, 0].references[0]
         self.assertIsInstance(reference, PX.Reference)
         self.assertEqual(reference.doi, "10.1038/nature06614")
-        self.assertEqual(reference.desc, None)
+        self.assertIsNone(reference.desc)
 
     def test_Sequence(self):
         """Instantiation of Sequence objects.
@@ -675,7 +674,7 @@ class MethodTests(unittest.TestCase):
         )
         srec = pseq.to_seqrecord()
         # TODO: check seqrec-specific traits (see args)
-        #   Seq(letters, alphabet), id, name, description, features
+        #   Seq(letters), id, name, description, features
         pseq2 = PX.Sequence.from_seqrecord(srec)
         # TODO: check the round-tripped attributes again
 
@@ -685,11 +684,10 @@ class MethodTests(unittest.TestCase):
         self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(len(aln), 0)
         # Add sequences to the terminals
-        alphabet = Alphabet.Gapped(Alphabet.generic_dna)
         for tip, seqstr in zip(tree.get_terminals(), ("AA--TTA", "AA--TTG", "AACCTTC")):
             tip.sequences.append(
                 PX.Sequence.from_seqrecord(
-                    SeqRecord(Seq(seqstr, alphabet), id=str(tip))
+                    SeqRecord(Seq(seqstr), id=str(tip)), is_aligned=True
                 )
             )
         # Check the alignment
@@ -711,8 +709,8 @@ class MethodTests(unittest.TestCase):
 
     def test_phyloxml_getitem(self):
         """Phyloxml.__getitem__: get phylogenies by name or index."""
-        self.assertTrue(self.phyloxml.phylogenies[9] is self.phyloxml[9])
-        self.assertTrue(self.phyloxml["monitor lizards"] is self.phyloxml[9])
+        self.assertIs(self.phyloxml.phylogenies[9], self.phyloxml[9])
+        self.assertIs(self.phyloxml["monitor lizards"], self.phyloxml[9])
         self.assertEqual(len(self.phyloxml[:]), len(self.phyloxml))
 
     def test_events(self):
@@ -720,8 +718,8 @@ class MethodTests(unittest.TestCase):
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
         self.assertEqual(len(evts), 1)
-        self.assertEqual("speciations" in evts, True)
-        self.assertEqual("duplications" in evts, False)
+        self.assertIn("speciations", evts)
+        self.assertNotIn("duplications", evts)
         # Attribute access: __get/set/delitem__
         self.assertEqual(evts["speciations"], 1)
         self.assertRaises(KeyError, lambda k: evts[k], "duplications")  # noqa: E731
@@ -729,7 +727,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(evts.duplications, 3)
         self.assertEqual(len(evts), 2)
         del evts["speciations"]
-        self.assertEqual(evts.speciations, None)
+        self.assertIsNone(evts.speciations)
         self.assertEqual(len(evts), 1)
         # Iteration: __iter__, keys, values, items
         self.assertEqual(list(iter(evts)), ["duplications"])
@@ -752,16 +750,16 @@ class MethodTests(unittest.TestCase):
         self.assertRaises(AttributeError, getattr, clade, "taxonomy")
         # None if []
         clade.confidences = []
-        self.assertEqual(clade.confidence, None)
+        self.assertIsNone(clade.confidence)
         clade.taxonomies = []
-        self.assertEqual(clade.taxonomy, None)
+        self.assertIsNone(clade.taxonomy)
         # Phylogeny.confidence
         tree = PX.Phylogeny(True, confidences=[conf])
         self.assertEqual(tree.confidence.type, "bootstrap")
         tree.confidences.append(conf)
         self.assertRaises(AttributeError, getattr, tree, "confidence")
         tree.confidences = []
-        self.assertEqual(tree.confidence, None)
+        self.assertIsNone(tree.confidence)
 
     # Other methods
 

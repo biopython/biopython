@@ -1,58 +1,35 @@
-# Copyright 2007-2016 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016,2020 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO module."""
-
-
+import copy
 import gzip
 import sys
 import unittest
 import warnings
 
-from io import StringIO
 from io import BytesIO
+from io import StringIO
 
-from Bio import BiopythonWarning, BiopythonParserWarning
-from Bio import SeqIO
 from Bio import AlignIO
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
+from Bio import StreamModeError
+from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UnknownSeq
-from Bio import Alphabet
-from Bio.Align import MultipleSeqAlignment
-from Bio import StreamModeError
 
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing
 # warnings to stdout and verifying via the print-and-compare check. However,
 # there was some frustrating cross-platform inconsistency I couldn't resolve.
 
-protein_alphas = [Alphabet.generic_protein]
-dna_alphas = [Alphabet.generic_dna]
-rna_alphas = [Alphabet.generic_rna]
-nucleotide_alphas = [
-    Alphabet.generic_nucleotide,
-    Alphabet.Gapped(Alphabet.generic_nucleotide),
-]
-no_alpha_formats = {
-    "clustal",
-    "emboss",
-    "fasta",
-    "fasta-2line",
-    "fastq",
-    "fastq-illumina",
-    "fastq-solexa",
-    "ig",
-    "phylip",
-    "phylip-relaxed",
-    "phylip-sequential",
-    "qual",
-    "stockholm",
-    "tab",
-}
 possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual"}
 
 # List of formats including alignment only file formats we can read AND write.
@@ -95,7 +72,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
                 pass
             cls.modes[fmt] = mode
             return mode
-        raise RuntimeError("Failed to find file mode for %s" % fmt)
+        raise RuntimeError(f"Failed to find file mode for {fmt}")
 
     def compare_record(self, old, new, *args, msg=None, **kwargs):
         """Compare old SeqRecord to new SeqRecord."""
@@ -104,18 +81,28 @@ class SeqIOTestBaseClass(unittest.TestCase):
             old.description == new.description
             or (old.id + " " + old.description).strip() == new.description
             or new.description == "<unknown description>"
-            or new.description == "", msg="'%s' vs '%s' " % (old.description, new.description))
+            or new.description == "",
+            msg=f"'{old.description}' vs '{new.description}' ",
+        )
         self.assertEqual(len(old.seq), len(new.seq))
         if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
             pass
+        elif len(old.seq) == 0:
+            pass
         else:
-            if len(old.seq) < 200:
-                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            try:
+                bytes(old.seq)
+                bytes(new.seq)
+            except UndefinedSequenceError:
+                pass
             else:
-                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
-            if msg is not None:
-                err_msg = "%s: %s" % (msg, err_msg)
-            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
+                if len(old.seq) < 200:
+                    err_msg = f"'{old.seq}' vs '{new.seq}'"
+                else:
+                    err_msg = f"'{old.seq[:100]}...' vs '{new.seq[:100]}...'"
+                if msg is not None:
+                    err_msg = f"{msg}: {err_msg}"
+                self.assertEqual(old.seq, new.seq, msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
@@ -127,42 +114,48 @@ class SeqIOTestBaseClass(unittest.TestCase):
 class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
     """Base class for testing SeqIO.convert."""
 
-    def check_conversion(self, filename, in_format, out_format, alphabet):
+    formats = tuple(SeqIO._converter.keys())
+
+    def check_conversion(self, filename, in_format, out_format):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
-        msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
-        records = list(SeqIO.parse(filename, in_format, alphabet))
+        msg = f"Convert {filename} from {in_format} to {out_format}"
+        records = list(SeqIO.parse(filename, in_format))
         # Write it out...
         handle = StringIO()
         with warnings.catch_warnings():
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
         # Now load it back and check it agrees,
-        records2 = list(SeqIO.parse(handle, out_format, alphabet))
+        records2 = list(SeqIO.parse(handle, out_format))
         self.assertEqual(len(records), len(records2), msg=msg)
         for record1, record2 in zip(records, records2):
             self.compare_record(record1, record2, msg=msg)
         # Finally, use the convert function, and check that agrees:
         handle2 = StringIO()
         with warnings.catch_warnings():
-            SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle2, out_format)
         # We could re-parse this, but it is simpler and stricter:
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
 
-    def failure_check(self, filename, in_format, out_format, alphabet):
+    def failure_check(self, filename, in_format, out_format):
         """Test if SeqIO.convert raises the correct ValueError on broken files."""
-        msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
+        msg = "Confirm failure detection converting %s from %s to %s" % (
+            filename,
+            in_format,
+            out_format,
+        )
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
-            records = list(SeqIO.parse(filename, in_format, alphabet))
+            records = list(SeqIO.parse(filename, in_format))
             self.write_records(records, out_format)
         err1 = str(cm.exception)
         # Now do the conversion...
         with self.assertRaises(ValueError, msg=msg) as cm:
             handle = StringIO()
-            SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle, out_format)
         err2 = str(cm.exception)
         # Verify that parse/write and convert give the same failure
-        err_msg = "%s: parse/write and convert gave different failures" % msg
+        err_msg = f"{msg}: parse/write and convert gave different failures"
         self.assertEqual(err1, err2, msg=err_msg)
 
 
@@ -170,7 +163,7 @@ class ForwardOnlyHandle:
     """Mimic a network handle without seek and tell methods etc."""
 
     def __init__(self, handle):
-        """Initialize."""
+        """Initialize the class."""
         self._handle = handle
 
     def __iter__(self):
@@ -267,25 +260,37 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(record_one.name, record_two.name, msg=msg)
         self.assertEqual(record_one.description, record_two.description, msg=msg)
         self.assertEqual(len(record_one), len(record_two), msg=msg)
-        if isinstance(record_one.seq, UnknownSeq) and isinstance(
-            record_two.seq, UnknownSeq
-        ):
-            # Jython didn't like us comparing the string of very long UnknownSeq
-            # object (out of heap memory error)
-            self.assertEqual(record_one.seq._character, record_two.seq._character, msg=msg)
-        else:
-            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+        seq_one = record_one.seq
+        try:
+            bytes(seq_one)
+        except UndefinedSequenceError:
+            seq_one = None
+        seq_two = record_two.seq
+        try:
+            bytes(seq_two)
+        except UndefinedSequenceError:
+            seq_two = None
+        self.assertEqual(seq_one, seq_two, msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
         ):
-            self.assertEqual(record_one.letter_annotations[key], record_two.letter_annotations[key], msg=msg)
+            self.assertEqual(
+                record_one.letter_annotations[key],
+                record_two.letter_annotations[key],
+                msg=msg,
+            )
 
-    def check_simple_write_read(self, records, t_format, t_count, messages):
+    def check_simple_write_read(
+        self, records, t_format, t_count, messages, molecule_types
+    ):
         """Check can write/read given records.
 
         messages is dictionary of error messages keyed by output format.
         Set this to a non-dictionary to see the suggested value.
+
+        molecule_types is a dictionary of molecule types keyed by output
+        format, e.g. {"seqxml": "DNA"}
         """
         if not isinstance(messages, dict):
             debug = True
@@ -293,26 +298,34 @@ class TestSeqIO(SeqIOTestBaseClass):
         else:
             debug = False
         unequal_length = len({len(_) for _ in records}) != 1
-        for format in test_write_read_alignment_formats:
-            if (
-                format not in possible_unknown_seq_formats
-                and isinstance(records[0].seq, UnknownSeq)
-                and len(records[0].seq) > 100
-            ):
-                # Skipping for speed.  Some of the unknown sequences are
-                # rather long, and it seems a bit pointless to record them.
-                continue
+        for fmt in test_write_read_alignment_formats:
+            if fmt not in possible_unknown_seq_formats and len(records[0].seq) > 100:
+                try:
+                    bytes(records[0].seq)
+                except UndefinedSequenceError:
+                    # Skipping for speed.  Some of the unknown sequences are
+                    # rather long, and it seems a bit pointless to record them.
+                    continue
+            # Set the molecule type if the source format does not define it
+            # while the destination format does require it, or if the molecule
+            # type defined by the source format is not compatible with the
+            # molecule type required by the destination format.
+            records1 = copy.deepcopy(records)
+            molecule_type = molecule_types.get(fmt)
+            if molecule_type is not None:
+                for record in records1:
+                    record.annotations["molecule_type"] = molecule_type
             # Going to write to a handle...
-            mode = self.get_mode(format)
+            mode = self.get_mode(fmt)
             if mode == "t":
                 handle = StringIO()
             elif mode == "b":
                 handle = BytesIO()
 
-            if unequal_length and format in AlignIO._FormatToWriter:
+            if unequal_length and fmt in AlignIO._FormatToWriter:
                 msg = "Sequences must all be the same length"
-            elif format in messages:
-                msg = messages[format]
+            elif fmt in messages:
+                msg = messages[fmt]
             elif debug:
                 msg = True
             else:
@@ -320,32 +333,23 @@ class TestSeqIO(SeqIOTestBaseClass):
 
             if msg:
                 # Should fail.
-                # Can't use assertRaisesRegex with some of our msg strings
-                try:
-                    with warnings.catch_warnings():
-                        # e.g. data loss
-                        warnings.simplefilter("ignore", BiopythonWarning)
-                        SeqIO.write(sequences=records, handle=handle, format=format)
-                except (ValueError, TypeError) as e:
-                    if debug:
-                        messages[format] = str(e)
-                    else:
-                        self.assertEqual(
-                            str(e), msg, "Wrong error on %s -> %s" % (t_format, format)
-                        )
+                if debug:
+                    try:
+                        SeqIO.write(sequences=records1, handle=handle, format=fmt)
+                    except (ValueError, TypeError) as e:
+                        messages[fmt] = str(e)
                 else:
-                    if not debug:
-                        raise ValueError(
-                            "Expected following error writing to %s:\n%s"
-                            % (format, msg)
-                        )
-
-                if records[0].seq.alphabet.letters is not None:
-                    self.assertNotEqual(
-                        format,
-                        t_format,
-                        "Should be able to re-write in the original format!",
+                    message = f"{t_format} -> {fmt}"
+                    with self.assertRaises(Exception, msg=message) as cm:
+                        with warnings.catch_warnings():
+                            # e.g. data loss
+                            warnings.simplefilter("ignore", BiopythonWarning)
+                            SeqIO.write(sequences=records1, handle=handle, format=fmt)
+                    self.assertTrue(
+                        isinstance(cm.exception, (ValueError, TypeError)), msg=message
                     )
+                    self.assertEqual(str(cm.exception), msg, msg=message)
+
                 # Carry on to the next format:
                 continue
 
@@ -353,66 +357,61 @@ class TestSeqIO(SeqIOTestBaseClass):
             with warnings.catch_warnings():
                 # e.g. data loss
                 warnings.simplefilter("ignore", BiopythonWarning)
-                c = SeqIO.write(sequences=records, handle=handle, format=format)
-            self.assertEqual(c, len(records))
+                c = SeqIO.write(sequences=records1, handle=handle, format=fmt)
+            self.assertEqual(c, len(records1))
 
             handle.flush()
             handle.seek(0)
             # Now ready to read back from the handle...
             try:
-                records2 = list(SeqIO.parse(handle=handle, format=format))
+                records2 = list(SeqIO.parse(handle=handle, format=fmt))
             except ValueError as e:
                 # This is BAD.  We can't read our own output.
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError(
-                    "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-                ) from None
+                message = f"{str(e)}\n\n{handle.read()!r}\n\n{records1!r}"
+                self.fail(message)
 
             self.assertEqual(len(records2), t_count)
-            for r1, r2 in zip(records, records2):
+            for r1, r2 in zip(records1, records2):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 self.assertEqual(len(r1), len(r2))
-
                 # Check the sequence
-                if format in ["gb", "genbank", "embl", "imgt"]:
-                    # The GenBank/EMBL parsers will convert to upper case.
-                    if isinstance(r1.seq, UnknownSeq) and isinstance(
-                        r2.seq, UnknownSeq
-                    ):
-                        # Jython didn't like us comparing the string of very long
-                        # UnknownSeq object (out of heap memory error)
-                        self.assertEqual(r1.seq._character.upper(), r2.seq._character)
-                    else:
-                        self.assertEqual(str(r1.seq).upper(), str(r2.seq))
-                elif format == "qual":
-                    self.assertIsInstance(r2.seq, UnknownSeq)
-                    self.assertEqual(len(r2), len(r1))
+                try:
+                    bytes(r1.seq)
+                except UndefinedSequenceError:
+                    self.assertRaises(UndefinedSequenceError, bytes, r2.seq)
                 else:
-                    self.assertEqual(str(r1.seq), str(r2.seq))
+                    if fmt in ["gb", "genbank", "embl", "imgt"]:
+                        # The GenBank/EMBL parsers will convert to upper case.
+                        self.assertEqual(r1.seq.upper(), r2.seq)
+                    elif fmt == "qual":
+                        self.assertRaises(UndefinedSequenceError, bytes, r2.seq)
+                    else:
+                        self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
-                if format in ["phylip", "phylip-sequential"]:
+                if fmt in ["phylip", "phylip-sequential"]:
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id, 10),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
-                elif format == "phylip-relaxed":
+                elif fmt == "phylip-relaxed":
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
-                elif format == "clustal":
+                elif fmt == "clustal":
                     self.assertEqual(
                         r1.id.replace(" ", "_")[:30],
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
-                elif format == "stockholm":
+                elif fmt == "stockholm":
                     r1_id = r1.id.replace(" ", "_")
                     if "start" in r1.annotations and "end" in r1.annotations:
                         suffix = "/%d-%d" % (
@@ -422,19 +421,19 @@ class TestSeqIO(SeqIOTestBaseClass):
                         if not r1_id.endswith(suffix):
                             r1_id += suffix
 
-                    self.assertEqual(r1_id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
-                elif format == "maf":
+                    self.assertEqual(r1_id, r2.id, f"'{r1.id}' vs '{r2.id}'")
+                elif fmt == "maf":
                     self.assertEqual(
-                        r1.id.replace(" ", "_"), r2.id, "'%s' vs '%s'" % (r1.id, r2.id)
+                        r1.id.replace(" ", "_"), r2.id, f"'{r1.id}' vs '{r2.id}'"
                     )
-                elif format in ["fasta", "fasta-2line"]:
+                elif fmt in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
-                elif format == "nib":
+                elif fmt == "nib":
                     self.assertEqual(r2.id, "<unknown id>")
                 else:
-                    self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                    self.assertEqual(r1.id, r2.id, f"'{r1.id}' vs '{r2.id}'")
 
-            if len(records) > 1:
+            if len(records1) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
                 if mode == "t":
                     handle = StringIO()
@@ -442,12 +441,12 @@ class TestSeqIO(SeqIOTestBaseClass):
                     handle = BytesIO()
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
-                    SeqIO.write(records[0], handle, format)
+                    SeqIO.write(records1[0], handle, fmt)
                     if mode == "t":
-                        self.assertEqual(handle.getvalue(), records[0].format(format))
+                        self.assertEqual(handle.getvalue(), records1[0].format(fmt))
         if debug:
             self.fail(
-                "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
+                f"Update {t_format} test to use this dict:\nmessages = {messages!r}"
             )
 
     def perform_test(
@@ -462,6 +461,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         expected_lengths,
         expected_alignment,
         expected_messages,
+        molecule_types=None,
     ):
         mode = "r" + self.get_mode(t_format)
         with warnings.catch_warnings():
@@ -544,9 +544,8 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check returned expected object type
                 self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
-                    if (not isinstance(record.seq, Seq)) and (
-                        not isinstance(record.seq, UnknownSeq)
-                    ):
+                    if not isinstance(record.seq, Seq):
+                        # UnknownSeq is a subclass of Seq
                         self.failureException("Expected a Seq or UnknownSeq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
@@ -559,32 +558,24 @@ class TestSeqIO(SeqIOTestBaseClass):
                     accs = record.annotations["accessions"]
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
-                        self.assertTrue(
-                            acc, "Bad accession in annotations: %s" % repr(acc)
-                        )
+                        self.assertTrue(acc, f"Bad accession in annotations: {acc!r}")
                         self.assertEqual(
-                            acc,
-                            acc.strip(),
-                            "Bad accession in annotations: %s" % repr(acc),
+                            acc, acc.strip(), f"Bad accession in annotations: {acc!r}"
                         )
                     self.assertEqual(
                         len(set(accs)),
                         len(accs),
-                        "Repeated accession in annotations: %s" % repr(accs),
+                        f"Repeated accession in annotations: {accs!r}",
                     )
                 for ref in record.dbxrefs:
-                    self.assertTrue(
-                        ref, "Bad cross reference in dbxrefs: %s" % repr(ref)
-                    )
+                    self.assertTrue(ref, f"Bad cross reference in dbxrefs: {ref!r}")
                     self.assertEqual(
-                        ref,
-                        ref.strip(),
-                        "Bad cross reference in dbxrefs: %s" % repr(ref),
+                        ref, ref.strip(), f"Bad cross reference in dbxrefs: {ref!r}"
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
                     len(record.dbxrefs),
-                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs),
+                    f"Repeated cross reference in dbxrefs: {record.dbxrefs!r}",
                 )
 
                 # Check the lists obtained by the different methods agree
@@ -598,15 +589,14 @@ class TestSeqIO(SeqIOTestBaseClass):
                 if i < 3:
                     self.assertEqual(record.id, expected_ids[i])
                     self.assertEqual(record.name, expected_names[i])
-                    if record.seq is None:
-                        length = None
-                        seq = record.seq
+                    seq = record.seq
+                    length = len(seq)
+                    if expected_sequences[i] is None:
+                        self.assertRaises(UndefinedSequenceError, bytes, seq)
                     else:
-                        seq = str(record.seq)
-                        length = len(seq)
                         if length > 50:
                             seq = str(seq[:40]) + "..." + str(seq[-7:])
-                    self.assertEqual(seq, expected_sequences[i])
+                        self.assertEqual(seq, expected_sequences[i])
                     self.assertEqual(length, expected_lengths[i])
 
             # Check Bio.SeqIO.read(...)
@@ -615,64 +605,6 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIsInstance(record, SeqRecord)
             else:
                 self.assertRaises(ValueError, SeqIO.read, t_filename, t_format)
-
-            # Check alphabets
-            for record in records:
-                base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
-                    if t_format in no_alpha_formats:
-                        # Too harsh?
-                        self.assertIs(base_alpha, Alphabet.single_letter_alphabet)
-                else:
-                    base_alpha = None
-            if base_alpha is None:
-                good = []
-                bad = []
-                given_alpha = None
-            elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
-                good = protein_alphas
-                bad = dna_alphas + rna_alphas + nucleotide_alphas
-            elif isinstance(base_alpha, Alphabet.RNAAlphabet):
-                good = nucleotide_alphas + rna_alphas
-                bad = protein_alphas + dna_alphas
-            elif isinstance(base_alpha, Alphabet.DNAAlphabet):
-                good = nucleotide_alphas + dna_alphas
-                bad = protein_alphas + rna_alphas
-            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
-                good = nucleotide_alphas
-                bad = protein_alphas
-            else:
-                self.assertIn(
-                    t_format,
-                    no_alpha_formats,
-                    "Got %s from %s file" % (repr(base_alpha), t_format),
-                )
-                good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
-                bad = []
-            for given_alpha in good:
-                # These should all work...
-                given_base = Alphabet._get_base_alphabet(given_alpha)
-                for record in SeqIO.parse(t_filename, t_format, given_alpha):
-                    base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                    self.assertIsInstance(base_alpha, given_base.__class__)
-                    self.assertEqual(base_alpha, given_base)
-                if t_count == 1:
-                    with open(t_filename, mode) as h:
-                        record = SeqIO.read(h, t_format, given_alpha)
-                    self.assertIsInstance(base_alpha, given_base.__class__)
-                    self.assertEqual(base_alpha, given_base)
-            for given_alpha in bad:
-                # These should all fail...
-                with open(t_filename, mode) as h:
-                    records6 = SeqIO.parse(h, t_format, given_alpha)
-                    self.assertRaises(
-                        ValueError,
-                        next,
-                        records6,
-                        "Forcing wrong alphabet, %s, should fail (%s)"
-                        % (repr(given_alpha), t_filename),
-                    )
-            del good, bad, given_alpha, base_alpha
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(
@@ -694,7 +626,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         # They should all have been converted by the parser, but if
         # not reversing the record order might expose an error.  Maybe.
         records.reverse()
-        self.check_simple_write_read(records, t_format, t_count, expected_messages)
+        if molecule_types is None:
+            molecule_types = {}
+        self.check_simple_write_read(
+            records, t_format, t_count, expected_messages, molecule_types
+        )
 
     def test_sff1(self):
         sequences = [
@@ -740,25 +676,27 @@ class TestSeqIO(SeqIOTestBaseClass):
  D- alignment column 4
  || ...
  V- alignment column 600"""
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "clustal",
             True,
-            "Clustalw/cw02.aln",
+            "Clustalw/clustalw.aln",
             2,
             ids,
             names,
@@ -766,6 +704,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_clustal2(self):
@@ -791,20 +730,22 @@ class TestSeqIO(SeqIOTestBaseClass):
  CCCCCCC alignment column 4
  ||||||| ...
  AAAAAAA alignment column 155"""
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "clustal",
@@ -817,6 +758,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_clustal3(self):
@@ -842,20 +784,22 @@ class TestSeqIO(SeqIOTestBaseClass):
  V---- alignment column 4
  ||||| ...
  ---SS alignment column 446"""
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "clustal",
@@ -868,6 +812,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_clustal4(self):
@@ -886,21 +831,23 @@ class TestSeqIO(SeqIOTestBaseClass):
  -A alignment column 4
  || ...
  GG alignment column 686"""
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
             "phylip": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
         }
         self.perform_test(
@@ -914,6 +861,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta1(self):
@@ -922,18 +870,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|5049839|gb|AI730987.1|AI730987"]
         lengths = [655]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -946,6 +896,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta2(self):
@@ -954,18 +905,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|4218935|gb|AF074388.1|AF074388"]
         lengths = [2050]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -978,6 +931,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta3(self):
@@ -986,18 +940,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|5052071|gb|AF067555.1|AF067555"]
         lengths = [623]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1010,6 +966,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta4(self):
@@ -1018,18 +975,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|4104054|gb|AH007193.1|SEG_CVIGS"]
         lengths = [1002]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1042,6 +1001,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta5(self):
@@ -1050,18 +1010,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|5817701|gb|AF142731.1|AF142731"]
         lengths = [2551]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1074,6 +1036,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta6(self):
@@ -1082,18 +1045,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|3176602|gb|U78617.1|LOU78617"]
         lengths = [309]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1106,6 +1071,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta7(self):
@@ -1114,18 +1080,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|5690369|gb|AF158246.1|AF158246"]
         lengths = [550]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1138,6 +1106,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta8(self):
@@ -1146,19 +1115,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|3298468|dbj|BAA31520.1|"]
         lengths = [107]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1171,6 +1142,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta9(self):
@@ -1179,19 +1151,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|3298468|dbj|BAA31520.1|"]
         lengths = [107]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1204,6 +1178,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta_2line1(self):
@@ -1212,19 +1187,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|3298468|dbj|BAA31520.1|"]
         lengths = [107]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta-2line",
@@ -1237,6 +1214,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta10(self):
@@ -1245,19 +1223,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|2781234|pdb|1JLY|B"]
         lengths = [304]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1270,6 +1250,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta11(self):
@@ -1278,19 +1259,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|4959044|gb|AAD34209.1|AF069992_1"]
         lengths = [600]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1303,6 +1286,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta12(self):
@@ -1311,19 +1295,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|671626|emb|CAA85685.1|"]
         lengths = [473]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1336,6 +1322,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta13(self):
@@ -1345,19 +1332,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|3318709|pdb|1A91|"]
         lengths = [79]
         alignment = None
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1370,6 +1359,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta14(self):
@@ -1390,18 +1380,21 @@ class TestSeqIO(SeqIOTestBaseClass):
             "gi|1592936|gb|G29385|G29385",
         ]
         lengths = [633, 413, 471]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1416,6 +1409,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta15(self):
@@ -1427,18 +1421,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["AK1H_ECOLI/1-378", "AKH_HAEIN/1-382"]
         names = ["AK1H_ECOLI/1-378", "AKH_HAEIN/1-382"]
         lengths = [378, 382]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1453,6 +1449,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta16(self):
@@ -1462,18 +1459,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|45478711|ref|NC_005816.1|"]
         lengths = [9609]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1486,6 +1485,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta17(self):
@@ -1508,18 +1508,21 @@ class TestSeqIO(SeqIOTestBaseClass):
             "ref|NC_005816.1|:c8360-8088",
         ]
         lengths = [1023, 783, 195, 273]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1534,6 +1537,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta18(self):
@@ -1543,6 +1547,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCER...AESETGT",
             "MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGR...LNTLESK",
         ]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         ids = [
             "gi|45478712|ref|NP_995567.1|",
             "gi|45478713|ref|NP_995568.1|",
@@ -1558,16 +1569,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1582,6 +1589,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta19(self):
@@ -1591,6 +1599,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "MDKFQGYLEFDGARQQSFLYPLFFREYIYVLAYDHGLNRL...NDLVNHE",
             "MAIHLYKTSTPSTRNGAVDSQVKSNPRNNLICGQHHCGKG...ILRRRSK",
         ]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         ids = [
             "gi|7525080|ref|NP_051037.1|",
             "gi|7525013|ref|NP_051039.1|",
@@ -1606,16 +1621,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [123, 353, 504, 274]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1630,6 +1641,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_tab1(self):
@@ -1639,6 +1651,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCER...AESETGT",
             "MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGR...LNTLESK",
         ]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         ids = [
             "gi|45478712|ref|NP_995567.1|",
             "gi|45478713|ref|NP_995568.1|",
@@ -1654,16 +1673,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1678,6 +1693,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta20(self):
@@ -1686,19 +1702,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["gi|9629357|ref|NC_001802.1|"]
         names = ["gi|9629357|ref|NC_001802.1|"]
         lengths = [9181]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1711,6 +1729,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta21(self):
@@ -1720,18 +1739,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["gi|9629357|ref|nc_001802.1|"]
         lengths = [9181]
         alignment = None
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1744,6 +1765,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta22(self):
@@ -1752,6 +1774,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["test1", "test2", "test3"]
         names = ["test1", "test2", "test3"]
         lengths = [8, 8, 8]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  AGA alignment column 0
  CGA alignment column 1
@@ -1761,19 +1790,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  GCC alignment column 7"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "fasta",
@@ -1786,6 +1810,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fasta23(self):
@@ -1799,16 +1824,16 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [285, 222]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -2191,7 +2216,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
-            "seqxml": "ncbiTaxID should be of type string or int",
+            "seqxml": "Multiple entries for record.annotations['ncbi_taxid'], ['82077', '82078']",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2586,6 +2611,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
+            "nexus": "NM_006141.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "sff": "Missing SFF flow information",
@@ -2647,6 +2673,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
+            "nexus": "AL109817.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "sff": "Missing SFF flow information",
@@ -2830,7 +2857,7 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_genbank10(self):
         # contig, no sequence
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["NT_019265.6"]
         names = ["NT_019265"]
         lengths = [1250660]
@@ -3143,7 +3170,7 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_genbank21(self):
         # This and the next one are a pair, and should be roughly equivalent.
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["DS830848.1"]
         names = ["DS830848"]
         lengths = [1311]
@@ -3164,8 +3191,20 @@ class TestSeqIO(SeqIOTestBaseClass):
             messages,
         )
 
+    def test_genbank22(self):
+        """Test that genbank format write doesn't destroy db_source in annotations."""
+        record = SeqIO.read("GenBank/protein_refseq.gb", "genbank")
+        db_source = record.annotations.get("db_source")
+        handle = StringIO()
+        SeqIO.write(record, handle, "genbank")
+        handle.seek(0)
+        read_record = SeqIO.read(handle, "genbank")
+        read_db_source = read_record.annotations.get("db_source")
+
+        self.assertEqual(db_source, read_db_source)
+
     def test_embl1(self):
-        sequences = ["NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"]
+        sequences = [None]
         ids = ["DS830848.1"]
         names = ["DS830848"]
         lengths = [1311]
@@ -3221,25 +3260,24 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_embl3(self):
-        sequences = [
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXX",
-        ]
+        sequences = [None, None, None, None]
         ids = ["NRP00000001", "NRP00000002", "NRP00210944", "NRP00210945"]
         names = ["NRP00000001", "NRP00000002", "NRP00210944", "NRP00210945"]
         lengths = [358, 65, 25, 25]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "fasta": "Sequence content is undefined",
+            "fasta-2line": "Sequence content is undefined",
+            "fastq": "Sequence content is undefined",
+            "fastq-illumina": "Sequence content is undefined",
+            "fastq-solexa": "Sequence content is undefined",
+            "nib": "Sequence content is undefined",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
+            "pir": "Sequence content is undefined",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
+            "seqxml": "Sequence content is undefined",
             "sff": "Missing SFF flow information",
+            "tab": "Sequence content is undefined",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -3265,6 +3303,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
+            "nexus": "X56734.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "sff": "Missing SFF flow information",
@@ -3314,19 +3353,21 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["DD231055.1"]
         names = ["DD231055"]
         lengths = [315]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
 
         self.perform_test(
@@ -3340,6 +3381,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_embl7(self):
@@ -3451,10 +3493,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_embl11(self):
-        sequences = [
-            "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN",
-            "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN",
-        ]
+        sequences = [None, None]
         ids = ["AJ229040.1", "AL954800.2"]
         names = ["AJ229040", "AL954800"]
         lengths = [958952, 87191216]
@@ -3487,16 +3526,16 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [111, 27, 7, 754]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3521,17 +3560,16 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [120]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "failed to understand molecule_type 'unspecified'",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "failed to understand molecule_type 'unspecified'",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "seqxml": "unknown molecule_type 'unspecified'",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "embl",
@@ -3557,6 +3595,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",
@@ -3585,6 +3624,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",
@@ -3644,6 +3684,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["AP001509.1", "AE007476.1"]
         names = ["AP001509.1", "AE007476.1"]
         lengths = [104, 104]
+        molecule_types = {
+            "embl": "RNA",
+            "genbank": "RNA",
+            "imgt": "RNA",
+            "seqxml": "RNA",
+            "nexus": "RNA",
+        }
         alignment = """\
  UA alignment column 0
  UA alignment column 1
@@ -3653,19 +3700,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  UU alignment column 103"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "stockholm",
@@ -3678,6 +3720,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_stockholm2(self):
@@ -3700,6 +3743,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00",
         ]
         lengths = [43, 43, 43, 43]
+        molecule_types = {"seqxml": "protein", "nexus": "protein"}
         alignment = """\
  MMMEEE alignment column 0
  TQIVVV alignment column 1
@@ -3709,19 +3753,17 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||| ...
  SYSEEE alignment column 42"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "stockholm",
@@ -3734,6 +3776,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip1(self):
@@ -3741,6 +3784,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Archaeopt", "Hesperorni", "Baluchithe", "B.subtilis"]
         names = ["Archaeopt", "Hesperorni", "Baluchithe", "B.subtilis"]
         lengths = [13, 13, 13, 13]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CCTTCG alignment column 0
  GGAAAG alignment column 1
@@ -3750,20 +3800,18 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||| ...
  CTTTTC alignment column 12"""
         messages = {
+            "embl": "Cannot have spaces in EMBL accession, 'B. virgini'",
+            "genbank": "Invalid whitespace in 'B. virgini' for LOCUS line",
+            "imgt": "Cannot have spaces in EMBL accession, 'B. virgini'",
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -3776,6 +3824,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip2(self):
@@ -3788,6 +3837,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Archaeopt", "Hesperorni", "Baluchithe", "B.subtilis"]
         names = ["Archaeopt", "Hesperorni", "Baluchithe", "B.subtilis"]
         lengths = [39, 39, 39, 39]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CCTTCG alignment column 0
  GGAAAG alignment column 1
@@ -3797,20 +3853,18 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||| ...
  CTTTTC alignment column 38"""
         messages = {
+            "embl": "Cannot have spaces in EMBL accession, 'B. virgini'",
+            "genbank": "Invalid whitespace in 'B. virgini' for LOCUS line",
+            "imgt": "Cannot have spaces in EMBL accession, 'B. virgini'",
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -3823,6 +3877,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip3(self):
@@ -3835,6 +3890,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["A", "B", "C", "J"]
         names = ["A", "B", "C", "J"]
         lengths = [40, 40, 40, 40]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CCCCCAAAAA alignment column 0
  AAAAACCCCC alignment column 1
@@ -3844,19 +3906,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -3869,6 +3926,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip4(self):
@@ -3881,6 +3939,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Mesohippus", "Hypohippus", "Archaeohip", "Pliohippus"]
         names = ["Mesohippus", "Hypohippus", "Archaeohip", "Pliohippus"]
         lengths = [40, 40, 40, 40]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  AACCCCCCCC alignment column 0
  AAAACCCCCC alignment column 1
@@ -3890,20 +3955,18 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
+            "embl": "Cannot have spaces in EMBL accession, 'M. secundu'",
+            "genbank": "Invalid whitespace in 'M. secundu' for LOCUS line",
+            "imgt": "Cannot have spaces in EMBL accession, 'M. secundu'",
             "phylip-relaxed": "Whitespace not allowed in identifier: M. secundu",
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -3916,6 +3979,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip5(self):
@@ -3928,6 +3992,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["A", "B", "C", "J"]
         names = ["A", "B", "C", "J"]
         lengths = [40, 40, 40, 40]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CAAAACAAAC alignment column 0
  AACAACCACC alignment column 1
@@ -3937,19 +4008,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -3962,6 +4028,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip6(self):
@@ -3973,6 +4040,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["CYS1_DICDI", "ALEU_HORVU", "CATH_HUMAN"]
         names = ["CYS1_DICDI", "ALEU_HORVU", "CATH_HUMAN"]
         lengths = [384, 384, 384]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         alignment = """\
  -M- alignment column 0
  -A- alignment column 1
@@ -3982,19 +4056,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  -AV alignment column 383"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -4007,6 +4076,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phylip7(self):
@@ -4019,6 +4089,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
         names = ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
         lengths = [131, 131, 131, 131]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         alignment = """\
  TTTT alignment column 0
  SSSS alignment column 1
@@ -4028,19 +4105,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "phylip",
@@ -4053,6 +4125,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_emboss1(self):
@@ -4065,6 +4138,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
         names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
         lengths = [131, 131, 131, 131]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         alignment = """\
  TTTT alignment column 0
  SSSS alignment column 1
@@ -4074,19 +4154,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "emboss",
@@ -4099,6 +4174,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_emboss2(self):
@@ -4111,18 +4187,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["ref_rec", "gi|94968718|receiver", "ref_rec", "gi|94970041|receiver"]
         names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
         lengths = [124, 124, 119, 125]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4137,6 +4215,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_emboss3(self):
@@ -4147,6 +4226,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["IXI_234", "IXI_235"]
         names = ["<unknown name>", "<unknown name>"]
         lengths = [131, 131]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         alignment = """\
  TT alignment column 0
  SS alignment column 1
@@ -4156,19 +4242,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  EE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "emboss",
@@ -4181,6 +4262,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_phd1(self):
@@ -4274,9 +4356,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["EBE03TV04IHLTF.77-243"]
         lengths = [30]
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "phd",
             False,
@@ -4304,6 +4384,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4315,6 +4401,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ace2(self):
@@ -4327,6 +4414,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "sff": "Missing SFF flow information",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "nexus": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4338,6 +4432,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ace3(self):
@@ -4350,6 +4445,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "sff": "Missing SFF flow information",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "nexus": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4361,6 +4463,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ig1(self):
@@ -4373,18 +4476,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["A_U455", "B_HXB2R", "C_UG268A", "SYK_SYK"]
         names = ["A_U455", "B_HXB2R", "C_UG268A", "SYK_SYK"]
         lengths = [303, 306, 267, 330]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4399,6 +4504,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ig2(self):
@@ -4411,6 +4517,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["most-likely", "U455", "HXB2R", "SYK"]
         names = ["most-likely", "U455", "HXB2R", "SYK"]
         lengths = [298, 298, 298, 298]
+        molecule_types = {
+            "embl": "mRNA",
+            "genbank": "mRNA",
+            "imgt": "mRNA",
+            "seqxml": "protein",
+            "nexus": "protein",
+        }
         alignment = """\
  MMMMMMMMMMMMMMMM alignment column 0
  EEEEEEETEEEENEEE alignment column 1
@@ -4420,19 +4533,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||||||||| ...
  HHHHHHH-AAAAL-R- alignment column 297"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
             "ig",
@@ -4445,6 +4553,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ig3(self):
@@ -4458,18 +4567,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["VPU_CONSENSUS", "A_U455", "B_SF2", "CPZANT"]
         names = ["VPU_CONSENSUS", "A_U455", "B_SF2", "CPZANT"]
         lengths = [294, 294, 294, 294]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+        }
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4484,6 +4595,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_pir1(self):
@@ -4678,6 +4790,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "EAS54_6_R1_2_1_443_348",
         ]
         lengths = [25, 25, 25]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CTG alignment column 0
  CTT alignment column 1
@@ -4688,19 +4807,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4714,14 +4828,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_qual1(self):
-        sequences = [
-            "?????????????????????????",
-            "?????????????????????????",
-            "?????????????????????????",
-        ]
+        sequences = [None, None, None]
         ids = [
             "EAS54_6_R1_2_1_413_324",
             "EAS54_6_R1_2_1_540_792",
@@ -4735,16 +4846,29 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [25, 25, 25]
         alignment = None
         messages = {
-            "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
-            "sff": "Missing SFF flow information",
-            "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "fasta": "Sequence content is undefined",
+            "fasta-2line": "Sequence content is undefined",
+            "fastq": "Sequence content is undefined",
+            "fastq-illumina": "Sequence content is undefined",
+            "fastq-solexa": "Sequence content is undefined",
+            "clustal": "Sequence content is undefined",
+            "phylip": "Sequence content is undefined",
+            "phylip-relaxed": "Sequence content is undefined",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
+            "stockholm": "Sequence content is undefined",
+            "embl": "missing molecule_type in annotations",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "maf": "Sequence content is undefined",
+            "mauve": "Sequence content is undefined",
+            "nib": "Sequence content is undefined",
+            "phd": "Sequence content is undefined",
+            "pir": "Sequence content is undefined",
+            "seqxml": "Sequence content is undefined",
+            "sff": "Missing SFF flow information",
+            "tab": "Sequence content is undefined",
+            "xdna": "More than one sequence found",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "qual",
@@ -4776,6 +4900,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "EAS54_6_R1_2_1_443_348",
         ]
         lengths = [25, 25, 25]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CTG alignment column 0
  CTT alignment column 1
@@ -4786,14 +4917,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4807,6 +4933,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq2(self):
@@ -4826,6 +4953,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "EAS54_6_R1_2_1_443_348",
         ]
         lengths = [25, 25, 25]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  CTG alignment column 0
  CTT alignment column 1
@@ -4836,14 +4970,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4857,6 +4986,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq3(self):
@@ -4879,6 +5009,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "071113_EAS56_0053:1:3:990:501",
         ]
         lengths = [36, 36, 36, 36]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  TATT alignment column 0
  TCGG alignment column 1
@@ -4889,14 +5026,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  AGTA alignment column 35"""
         messages = {
             "phylip": "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
         }
         self.perform_test(
@@ -4910,6 +5042,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq4(self):
@@ -4917,15 +5050,15 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Test"]
         names = ["Test"]
         lengths = [41]
-        alignment = None
-        messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
-            "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
         }
+        alignment = None
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq",
             False,
@@ -4937,6 +5070,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq5(self):
@@ -4944,15 +5078,15 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Test"]
         names = ["Test"]
         lengths = [94]
-        alignment = None
-        messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
-            "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
         }
+        alignment = None
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq",
             False,
@@ -4964,6 +5098,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq_illumina1(self):
@@ -4971,15 +5106,15 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["Test"]
         names = ["Test"]
         lengths = [41]
-        alignment = None
-        messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
-            "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
         }
+        alignment = None
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq-illumina",
             False,
@@ -4991,6 +5126,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq_solexa1(self):
@@ -4998,15 +5134,15 @@ class TestSeqIO(SeqIOTestBaseClass):
         ids = ["slxa_0001_1_0001_01"]
         names = ["slxa_0001_1_0001_01"]
         lengths = [46]
-        alignment = None
-        messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
-            "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
         }
+        alignment = None
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "fastq-solexa",
             False,
@@ -5018,6 +5154,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_fastq_solexa2(self):
@@ -5040,6 +5177,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "SLXA-B3_649_FC8437_R1_1_1_183_714",
         ]
         lengths = [25, 25, 25, 25]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
         alignment = """\
  GGGGG alignment column 0
  AGAGT alignment column 1
@@ -5050,14 +5194,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  AAGGA alignment column 24"""
         messages = {
             "phylip": "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
-            "genbank": "Need a Nucleotide or Protein alphabet",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
             "nib": "More than one sequence found",
-            "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
         }
         self.perform_test(
@@ -5071,6 +5210,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_seqxml1(self):
@@ -5204,9 +5344,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         names = ["3100"]
         lengths = [795]
         alignment = None
-        messages = {
-            "sff": "Missing SFF flow information",
-        }
+        messages = {"sff": "Missing SFF flow information"}
         self.perform_test(
             "abi",
             False,
@@ -5390,6 +5528,38 @@ class TestSeqIO(SeqIOTestBaseClass):
             False,
             "PDB/2BEG.pdb",
             5,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+        )
+
+    def test_pdb_seqres3(self):
+        sequences = [
+            "STIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEEN...DWSPYAD",
+            "RVQPTESIVRFPNITNLCPFGEVFNATTFASVYAWNRKRI...PATVCGP",
+        ]
+        ids = ["7DDO:A", "7DDO:C"]
+        names = ["7DDO:A", "7DDO:C"]
+        lengths = [597, 209]
+        alignment = None
+        messages = {
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+        }
+        self.perform_test(
+            "pdb-seqres",
+            False,
+            "PDB/7DDO.pdb",
+            2,
             ids,
             names,
             sequences,
@@ -5598,6 +5768,46 @@ class TestSeqIO(SeqIOTestBaseClass):
                 handle = BytesIO()
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
+
+    def test_fasta_to_seqxml_without_mol_type(self):
+        """Convert FASTA to SeqXML without molecule type."""
+        handle = BytesIO()
+        self.assertRaises(
+            ValueError, SeqIO.convert, "Fasta/rosemary.pro", "fasta", handle, "seqxml"
+        )
+
+    def test_fasta_to_seqxml_with_mol_type(self):
+        """Convert FASTA to SeqXML with molecule type."""
+        handle = BytesIO()
+        self.assertEqual(
+            1, SeqIO.convert("Fasta/rosemary.pro", "fasta", handle, "seqxml", "protein")
+        )
+        self.assertIn(
+            b'<property name="molecule_type" value="protein">', handle.getvalue()
+        )
+
+    def test_clustal_to_nexus_without_mol_type(self):
+        """Convert Clustal to NEXUS without molecule type."""
+        handle = StringIO()
+        self.assertRaises(
+            ValueError,
+            SeqIO.convert,
+            "Clustalw/protein.aln",
+            "clustal",
+            handle,
+            "nexus",
+        )
+
+    def test_clustal_to_nexus_with_mol_type(self):
+        """Convert Clustal to NEXUS with molecule type."""
+        handle = StringIO()
+        self.assertEqual(
+            20,
+            SeqIO.convert(
+                "Clustalw/protein.aln", "clustal", handle, "nexus", "protein"
+            ),
+        )
+        self.assertIn(" datatype=protein ", handle.getvalue())
 
 
 if __name__ == "__main__":

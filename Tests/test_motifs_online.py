@@ -16,37 +16,39 @@ from Bio import motifs
 from Bio.Seq import Seq
 
 import requires_internet
+
 requires_internet.check()
 
 
-class TestotifWeblogo(unittest.TestCase):
+class TestMotifWeblogo(unittest.TestCase):
     """Tests Bio.motifs online code."""
 
     def check(self, seqs_as_strs, alpha):
-        # Using Seq objects and passing exactly the same alphabet:
-        m = motifs.create([Seq(s, alpha) for s in seqs_as_strs], alpha)
+        # Using Seq objects:
+        m = motifs.create([Seq(s) for s in seqs_as_strs], alpha)
         m.weblogo(os.devnull)
-        # Using Seq objects but not passing alphabet:
-        m = motifs.create([Seq(s, alpha) for s in seqs_as_strs])
-        m.weblogo(os.devnull)
-        # Using strings and passing alphabet:
+        # Using strings:
         m = motifs.create(seqs_as_strs, alpha)
         m.weblogo(os.devnull)
 
     def test_dna(self):
         """Test Bio.motifs.weblogo with a DNA sequence."""
-        self.check(["TACAA", "TACGC", "TACAC", "TACCC",
-                    "AACCC", "AATGC", "AATGC"], "GATCBDSW")
+        self.check(
+            ["TACAA", "TACGC", "TACAC", "TACCC", "AACCC", "AATGC", "AATGC"], "GATCBDSW"
+        )
 
     def test_rna(self):
         """Test Bio.motifs.weblogo with an RNA sequence."""
-        self.check(["UACAA", "UACGC", "UACAC", "UACCC",
-                    "AACCC", "AAUGC", "AAUGC"], "GAUC")
+        self.check(
+            ["UACAA", "UACGC", "UACAC", "UACCC", "AACCC", "AAUGC", "AAUGC"], "GAUC"
+        )
 
     def test_protein(self):
         """Test Bio.motifs.weblogo with a protein sequence."""
-        self.check(["ACDEG", "AYCRN", "HYLID", "AYHEL",
-                    "ACDEH", "AYYRN", "HYIID"], "ACDEFGHIKLMNPQRSTVWYBXZJUO")
+        self.check(
+            ["ACDEG", "AYCRN", "HYLID", "AYHEL", "ACDEH", "AYYRN", "HYIID"],
+            "ACDEFGHIKLMNPQRSTVWYBXZJUO",
+        )
 
 
 if __name__ == "__main__":

@@ -70,7 +70,7 @@ class ParserTest(unittest.TestCase):
                     "136257636\n"
                     "Pop\n"
                 ),
-                "Did not expect this:\n%s" % rec,
+                f"Did not expect this:\n{rec}",
             )
             self.assertIsInstance(rec, GenePop.Record)
             self.assertEqual(len(rec.loci_list), self.num_loci[index])
@@ -83,11 +83,7 @@ class ParserTest(unittest.TestCase):
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files."""
         with open(os.path.join("PopGen", "README")) as f:
-            try:
-                rec = GenePop.read(f)
-                raise Exception("Should have raised exception")
-            except ValueError:
-                pass
+            self.assertRaises(ValueError, GenePop.read, f)
 
 
 class FileParserTest(unittest.TestCase):
@@ -129,14 +125,14 @@ class FileParserTest(unittest.TestCase):
                     "136257636\n"
                     "Pop\n"
                 ),
-                "Did not expect this:\n%s" % rec,
+                f"Did not expect this:\n{rec}",
             )
             self.assertEqual(len(rec.loci_list), self.num_loci[index])
             for skip in range(self.pops_indivs[index][0]):
-                if rec.skip_population() is False:
-                    raise Exception("Not enough populations")
-            if rec.skip_population() is True:
-                raise Exception("Too much populations")
+                self.assertIn(
+                    rec.skip_population(), (True, None), msg="Not enough populations"
+                )
+            self.assertFalse(rec.skip_population(), msg="Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
             rec._handle.close()  # TODO - Needs a proper fix
@@ -144,11 +140,7 @@ class FileParserTest(unittest.TestCase):
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files."""
         with open(os.path.join("PopGen", "README")) as f:
-            try:
-                rec = GenePop.read(f)
-                raise Exception("Should have raised exception")
-            except ValueError:
-                pass
+            self.assertRaises(ValueError, GenePop.read, f)
 
     def test_remove_features(self):
         """Testing the ability to remove population/loci via class methods."""

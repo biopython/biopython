@@ -5,12 +5,13 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO SnapGene module."""
-
 import datetime
-from io import BytesIO
 import unittest
 
+from io import BytesIO
+
 from Bio import SeqIO
+from Bio.SeqFeature import CompoundLocation
 
 
 class TestSnapGene(unittest.TestCase):
@@ -23,25 +24,49 @@ class TestSnapGene(unittest.TestCase):
             "description": "Sample Sequence D",
             "length": 1000,
             "topology": "linear",
-            "date": datetime.datetime(2019, 8, 3, 0, 0),
+            "date": datetime.datetime(2021, 7, 7, 0, 0),
             "features": [
                 {
                     "type": "misc_binding",
                     "start": 499,
                     "end": 700,
                     "strand": 1,
-                    "label": "FeatureB",
+                    "label": ["FeatureB"],
+                    "note": ["Sample feature B"],
                 },
                 {
                     "type": "promoter",
                     "start": 49,
                     "end": 150,
                     "strand": 1,
-                    "label": "FeatureA",
+                    "label": ["FeatureA"],
+                    "note": ["Sample feature A"],
+                },
+                {
+                    "type": "misc_feature",
+                    "start": 700,
+                    "end": 720,
+                    "strand": 1,
+                    "label": ["FeatureC"],
+                    "note": [
+                        "Sample feature C, with explicit label",
+                        "Another note for sample feature C",
+                    ],
+                },
+                {
+                    "type": "misc_feature",
+                    "start": 720,
+                    "end": 740,
+                    "strand": 1,
+                    "label": ["SampleFeatureD"],
+                    "note": [
+                        "Sample feature D, with a label different from the feature name"
+                    ],
+                    "name": "FeatureD",
                 },
             ],
         },
-        "sample-b": {
+        "sample-e": {
             "file": "SnapGene/sample-e.dna",
             "name": "Sample",
             "id": "Sample",
@@ -55,18 +80,150 @@ class TestSnapGene(unittest.TestCase):
                     "start": 399,
                     "end": 750,
                     "strand": -1,
-                    "label": "FeatureB",
+                    "label": ["FeatureB"],
                 },
                 {
                     "type": "rep_origin",
                     "start": 160,
                     "end": 241,
                     "strand": 1,
-                    "label": "FeatureA",
+                    "label": ["FeatureA"],
+                },
+            ],
+        },
+        "sample-f": {
+            "file": "SnapGene/sample-f.dna",
+            "name": "Sample",
+            "id": "Sample",
+            "description": "Sample Sequence F",
+            "length": 1000,
+            "date": datetime.datetime(2021, 7, 26, 0, 0),
+            "topology": "circular",
+            "features": [
+                {
+                    "type": "terminator",
+                    "start": 399,
+                    "end": 724,
+                    "strand": -1,
+                    "label": ["FeatureB"],
+                    "note": ["An example of a reverse-strand split feature"],
+                    "parts": ["1:subfeature1;3:subfeature3"],
+                    "segments": [
+                        {"start": 634, "end": 724},
+                        {"start": 516, "end": 634},
+                        {"start": 399, "end": 499},
+                    ],
+                },
+                {
+                    "type": "rep_origin",
+                    "start": 160,
+                    "end": 241,
+                    "strand": 1,
+                    "label": ["FeatureA"],
+                    "note": ["An example of a split feature"],
+                    "parts": ["2:subfeature2"],
+                    "segments": [
+                        {"start": 160, "end": 180},
+                        {"start": 187, "end": 207},
+                        {"start": 214, "end": 241},
+                    ],
+                },
+            ],
+        },
+        "pFA-KanMX4": {
+            "file": "SnapGene/pFA-KanMX4.dna",
+            "name": "<unknown name>",
+            "id": "<unknown id>",
+            "description": "<unknown description>",
+            "length": 3941,
+            "date": datetime.datetime(2020, 7, 30, 0, 0),
+            "topology": "circular",
+            "features": [
+                {
+                    "type": "promoter",
+                    "start": 0,
+                    "end": 3941,
+                    "strand": 1,
+                    "label": ["SP6 promoter"],
+                },
+                {
+                    "type": "promoter",
+                    "start": 1578,
+                    "end": 1597,
+                    "strand": -1,
+                    "label": ["T7 promoter"],
+                },
+                {
+                    "type": "promoter",
+                    "start": 3474,
+                    "end": 3579,
+                    "strand": -1,
+                    "label": ["AmpR promoter"],
+                },
+                {
+                    "type": "terminator",
+                    "start": 1273,
+                    "end": 1471,
+                    "strand": 1,
+                    "label": ["TEF terminator"],
+                },
+                {
+                    "type": "promoter",
+                    "start": 114,
+                    "end": 458,
+                    "strand": 1,
+                    "label": ["TEF promoter"],
+                },
+                {
+                    "type": "rep_origin",
+                    "start": 1854,
+                    "end": 2443,
+                    "strand": -1,
+                    "label": ["ori"],
+                },
+                {
+                    "type": "CDS",
+                    "start": 458,
+                    "end": 1268,
+                    "strand": 1,
+                    "label": ["KanR"],
+                },
+                {
+                    "type": "CDS",
+                    "start": 2613,
+                    "end": 3474,
+                    "strand": -1,
+                    "label": ["AmpR"],
+                    "parts": ["1:signal sequence"],
+                    "segments": [
+                        {"start": 3405, "end": 3474},
+                        {"start": 2613, "end": 3405},
+                    ],
+                },
+                {
+                    "type": "gene",
+                    "start": 114,
+                    "end": 1471,
+                    "strand": 1,
+                    "label": ["kanMX"],
                 },
             ],
         },
     }
+
+    def _check_multivalued_qualifier(self, qualifier, expected, actual):
+        if qualifier in expected:
+            for value in expected[qualifier]:
+                self.assertIn(value, actual.qualifiers[qualifier])
+
+    def _check_feature_segments(self, segments, feature):
+        self.assertIsInstance(feature.location, CompoundLocation)
+        self.assertEqual(len(segments), len(feature.location.parts))
+        for i in range(len(segments)):
+            segment = segments[i]
+            location = feature.location.parts[i]
+            self.assertEqual(segment["start"], location.start)
+            self.assertEqual(segment["end"], location.end)
 
     def test_read(self):
         """Read sample files."""
@@ -87,7 +244,15 @@ class TestSnapGene(unittest.TestCase):
                 self.assertEqual(exp_feat["start"], read_feat.location.start)
                 self.assertEqual(exp_feat["end"], read_feat.location.end)
                 self.assertEqual(exp_feat["strand"], read_feat.location.strand)
-                self.assertEqual(exp_feat["label"], read_feat.qualifiers["label"][0])
+                self._check_multivalued_qualifier("label", exp_feat, read_feat)
+                self._check_multivalued_qualifier("note", exp_feat, read_feat)
+                self._check_multivalued_qualifier("parts", exp_feat, read_feat)
+                if "name" in exp_feat:
+                    self.assertEqual(exp_feat["name"], read_feat.qualifiers["name"][0])
+                else:
+                    self.assertTrue("name" not in read_feat.qualifiers)
+                if "segments" in exp_feat:
+                    self._check_feature_segments(exp_feat["segments"], read_feat)
 
 
 class TestCorruptedSnapGene(unittest.TestCase):

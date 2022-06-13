@@ -27,35 +27,41 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.description, "34_222_(80-A03-19).b.ab1")
         self.assertTrue(record.seq.startswith("ctccgtcggaacatcatcggatcctatcaca"))
         self.assertTrue(record.seq.endswith("ctctcctctccctccctccgactccaaagcgtg"))
-        self.assertEqual(record.letter_annotations["phred_quality"][:10],
-                         [9, 9, 10, 19, 22, 37, 28, 28, 24, 22])
-        self.assertEqual(record[:10].format("fasta"),
-                         ">34_222_(80-A03-19).b.ab1\nctccgtcgga\n")
-        self.assertEqual(record[:10].format("qual"),
-                         ">34_222_(80-A03-19).b.ab1\n"
-                         "9 9 10 19 22 37 28 28 24 22\n")
-        self.assertEqual(record[:10].format("fastq"),
-                         "@34_222_(80-A03-19).b.ab1\n"
-                         "ctccgtcgga\n"
-                         "+\n"
-                         "**+47F==97\n")
-        self.assertEqual(record[:10].format("fastq-illumina"),
-                         "@34_222_(80-A03-19).b.ab1\n"
-                         "ctccgtcgga\n"
-                         "+\n"
-                         "IIJSVe\\\\XV\n")
+        self.assertEqual(
+            record.letter_annotations["phred_quality"][:10],
+            [9, 9, 10, 19, 22, 37, 28, 28, 24, 22],
+        )
+        self.assertEqual(
+            record[:10].format("fasta"), ">34_222_(80-A03-19).b.ab1\nctccgtcgga\n"
+        )
+        self.assertEqual(
+            record[:10].format("qual"),
+            ">34_222_(80-A03-19).b.ab1\n9 9 10 19 22 37 28 28 24 22\n",
+        )
+        self.assertEqual(
+            record[:10].format("fastq"),
+            "@34_222_(80-A03-19).b.ab1\nctccgtcgga\n+\n**+47F==97\n",
+        )
+        self.assertEqual(
+            record[:10].format("fastq-illumina"),
+            "@34_222_(80-A03-19).b.ab1\nctccgtcgga\n+\nIIJSVe\\\\XV\n",
+        )
         # Contig 2
         record = next(records)
         self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.name, "425_103_(81-A03-19).g.ab1")
-        self.assertEqual(record.letter_annotations["phred_quality"][:10],
-                         [14, 17, 22, 10, 10, 10, 15, 8, 8, 9])
+        self.assertEqual(
+            record.letter_annotations["phred_quality"][:10],
+            [14, 17, 22, 10, 10, 10, 15, 8, 8, 9],
+        )
         # Contig 3
         record = next(records)
         self.assertEqual(record.id, "425_7_(71-A03-19).b.ab1")
         self.assertEqual(record.name, "425_7_(71-A03-19).b.ab1")
-        self.assertEqual(record.letter_annotations["phred_quality"][:10],
-                         [10, 10, 10, 10, 8, 8, 6, 6, 6, 6])
+        self.assertEqual(
+            record.letter_annotations["phred_quality"][:10],
+            [10, 10, 10, 10, 8, 8, 6, 6, 6, 6],
+        )
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
@@ -110,10 +116,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("g", "11", "10840"))
         self.assertEqual(record.sites[-2], ("t", "11", "10855"))
         self.assertEqual(record.sites[-1], ("g", "11", "10864"))
-        self.assertEqual(str(record.seq)[:10], "ctccgtcgga")
-        self.assertEqual(str(record.seq)[-10:], "ccaaagcgtg")
-        self.assertEqual(str(record.seq_trimmed)[:10], "cgtcggaaca")
-        self.assertEqual(str(record.seq_trimmed)[-10:], "tatttcggag")
+        self.assertEqual(record.seq[:10], "ctccgtcgga")
+        self.assertEqual(record.seq[-10:], "ccaaagcgtg")
+        self.assertEqual(record.seq_trimmed[:10], "cgtcggaaca")
+        self.assertEqual(record.seq_trimmed[-10:], "tatttcggag")
         # Record 2
         record = next(records)
         center = len(record.sites) // 2
@@ -162,10 +168,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("a", "8", "10574"))
         self.assertEqual(record.sites[-2], ("a", "7", "10584"))
         self.assertEqual(record.sites[-1], ("g", "7", "10599"))
-        self.assertEqual(str(record.seq)[:10], "cgggatccca")
-        self.assertEqual(str(record.seq)[-10:], "cccagccaag")
-        self.assertEqual(str(record.seq_trimmed)[:10], "cctgatccga")
-        self.assertEqual(str(record.seq_trimmed)[-10:], "ggggccgcca")
+        self.assertEqual(record.seq[:10], "cgggatccca")
+        self.assertEqual(record.seq[-10:], "cccagccaag")
+        self.assertEqual(record.seq_trimmed[:10], "cctgatccga")
+        self.assertEqual(record.seq_trimmed[-10:], "ggggccgcca")
         # Record 3
         record = next(records)
         center = len(record.sites) // 2
@@ -214,8 +220,8 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("t", "8", "9495"))
         self.assertEqual(record.sites[-2], ("t", "3", "9504"))
         self.assertEqual(record.sites[-1], ("n", "0", "9511"))
-        self.assertEqual(str(record.seq)[:10], "acataaatca")
-        self.assertEqual(str(record.seq)[-10:], "atctgctttn")
+        self.assertEqual(record.seq[:10], "acataaatca")
+        self.assertEqual(record.seq[-10:], "atctgctttn")
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
@@ -237,16 +243,21 @@ class PhdTestTwo(unittest.TestCase):
         self.assertEqual(record.description, "ML4924R")
         self.assertTrue(record.seq.startswith("actttggtcgcctgcaggtaccggtccgnga"))
         self.assertTrue(record.seq.endswith("agaagctcgttctcaacatctccgttggtgaga"))
-        self.assertEqual(record.letter_annotations["phred_quality"][:10],
-                         [6, 6, 6, 8, 8, 12, 18, 16, 14, 11])
-        self.assertEqual(record[:10].format("fasta"),
-                         ">ML4924R\nactttggtcg\n")
-        self.assertEqual(record[:10].format("qual"),
-                         ">ML4924R\n6 6 6 8 8 12 18 16 14 11\n")
-        self.assertEqual(record[:10].format("fastq"),
-                         "@ML4924R\nactttggtcg\n+\n'''))-31/,\n")
-        self.assertEqual(record[:10].format("fastq-illumina"),
-                         "@ML4924R\nactttggtcg\n+\nFFFHHLRPNK\n")
+        self.assertEqual(
+            record.letter_annotations["phred_quality"][:10],
+            [6, 6, 6, 8, 8, 12, 18, 16, 14, 11],
+        )
+        self.assertEqual(record[:10].format("fasta"), ">ML4924R\nactttggtcg\n")
+        self.assertEqual(
+            record[:10].format("qual"), ">ML4924R\n6 6 6 8 8 12 18 16 14 11\n"
+        )
+        self.assertEqual(
+            record[:10].format("fastq"), "@ML4924R\nactttggtcg\n+\n'''))-31/,\n"
+        )
+        self.assertEqual(
+            record[:10].format("fastq-illumina"),
+            "@ML4924R\nactttggtcg\n+\nFFFHHLRPNK\n",
+        )
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
@@ -266,27 +277,33 @@ class PhdTest454(unittest.TestCase):
         self.assertEqual(record.id, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.name, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.description, "EBE03TV04IHLTF.77-243 1")
-        self.assertEqual(str(record.seq), "ggggatgaaagggatctcggtggtaggtga")
-        self.assertEqual(record.letter_annotations["phred_quality"][:10],
-                         [37, 37, 37, 37, 37, 37, 37, 37, 37, 37])
-        self.assertEqual(record.format("fasta"),
-                         ">EBE03TV04IHLTF.77-243 1\n"
-                         "ggggatgaaagggatctcggtggtaggtga\n")
-        self.assertEqual(record.format("qual"),
-                         ">EBE03TV04IHLTF.77-243 1\n"
-                         "37 37 37 37 37 37 37 37 37 37 "
-                         "37 37 37 26 26 26 30 33 33 33\n"
-                         "33 33 36 36 33 33 33 36 26 22\n")
-        self.assertEqual(record.format("fastq"),
-                         "@EBE03TV04IHLTF.77-243 1\n"
-                         "ggggatgaaagggatctcggtggtaggtga\n"
-                         "+\n"
-                         "FFFFFFFFFFFFF;;;?BBBBBEEBBBE;7\n")
-        self.assertEqual(record[:10].format("fastq-illumina"),
-                         "@EBE03TV04IHLTF.77-243 1\n"
-                         "ggggatgaaa\n"
-                         "+\n"
-                         "eeeeeeeeee\n")
+        self.assertEqual(record.seq, "ggggatgaaagggatctcggtggtaggtga")
+        self.assertEqual(
+            record.letter_annotations["phred_quality"][:10],
+            [37, 37, 37, 37, 37, 37, 37, 37, 37, 37],
+        )
+        self.assertEqual(
+            record.format("fasta"),
+            ">EBE03TV04IHLTF.77-243 1\nggggatgaaagggatctcggtggtaggtga\n",
+        )
+        self.assertEqual(
+            record.format("qual"),
+            ">EBE03TV04IHLTF.77-243 1\n"
+            "37 37 37 37 37 37 37 37 37 37 "
+            "37 37 37 26 26 26 30 33 33 33\n"
+            "33 33 36 36 33 33 33 36 26 22\n",
+        )
+        self.assertEqual(
+            record.format("fastq"),
+            "@EBE03TV04IHLTF.77-243 1\n"
+            "ggggatgaaagggatctcggtggtaggtga\n"
+            "+\n"
+            "FFFFFFFFFFFFF;;;?BBBBBEEBBBE;7\n",
+        )
+        self.assertEqual(
+            record[:10].format("fastq-illumina"),
+            "@EBE03TV04IHLTF.77-243 1\nggggatgaaa\n+\neeeeeeeeee\n",
+        )
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
@@ -306,63 +323,155 @@ class PhdTestSolexa(unittest.TestCase):
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_537_446 1")
-        self.assertEqual(str(record.seq),
-                         "gccaatcaggtttctctgcaagcccctttagcagctgagc")
-        self.assertEqual(record.letter_annotations["phred_quality"],
-                         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-                          30, 30, 30, 30, 30, 30, 30, 30, 30, 28, 23,
-                          30, 30, 30, 30, 30, 30, 28, 22, 8, 22, 7, 15,
-                          15, 15, 10, 10, 11, 15])
-        self.assertEqual(record.format("fasta"),
-                         ">HWI-EAS94_4_1_1_537_446 1\n"
-                         "gccaatcaggtttctctgcaagcccctttagcagctgagc\n")
-        self.assertEqual(record.format("qual"),
-                         ">HWI-EAS94_4_1_1_537_446 1\n"
-                         "30 30 30 30 30 30 30 30 30 30 "
-                         "30 30 30 30 30 30 30 30 30 30\n"
-                         "28 23 30 30 30 30 30 30 28 22 "
-                         "8 22 7 15 15 15 10 10 11 15\n")
-        self.assertEqual(record.format("fastq"),
-                         "@HWI-EAS94_4_1_1_537_446 1\n"
-                         "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
-                         "+\n"
-                         "????????????????????=8??????=7)7(000++,0\n")
-        self.assertEqual(record.format("fastq-illumina"),
-                         "@HWI-EAS94_4_1_1_537_446 1\n"
-                         "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
-                         "+\n"
-                         "^^^^^^^^^^^^^^^^^^^^\\W^^^^^^\\VHVGOOOJJKO\n")
+        self.assertEqual(record.seq, "gccaatcaggtttctctgcaagcccctttagcagctgagc")
+        self.assertEqual(
+            record.letter_annotations["phred_quality"],
+            [
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                28,
+                23,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                28,
+                22,
+                8,
+                22,
+                7,
+                15,
+                15,
+                15,
+                10,
+                10,
+                11,
+                15,
+            ],
+        )
+        self.assertEqual(
+            record.format("fasta"),
+            ">HWI-EAS94_4_1_1_537_446 1\ngccaatcaggtttctctgcaagcccctttagcagctgagc\n",
+        )
+        self.assertEqual(
+            record.format("qual"),
+            ">HWI-EAS94_4_1_1_537_446 1\n"
+            "30 30 30 30 30 30 30 30 30 30 "
+            "30 30 30 30 30 30 30 30 30 30\n"
+            "28 23 30 30 30 30 30 30 28 22 "
+            "8 22 7 15 15 15 10 10 11 15\n",
+        )
+        self.assertEqual(
+            record.format("fastq"),
+            "@HWI-EAS94_4_1_1_537_446 1\n"
+            "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
+            "+\n"
+            "????????????????????=8??????=7)7(000++,0\n",
+        )
+        self.assertEqual(
+            record.format("fastq-illumina"),
+            "@HWI-EAS94_4_1_1_537_446 1\n"
+            "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
+            "+\n"
+            "^^^^^^^^^^^^^^^^^^^^\\W^^^^^^\\VHVGOOOJJKO\n",
+        )
         # Contig 2
         record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_602_99 1")
-        self.assertEqual(str(record.seq),
-                         "gccatggcacatatatgaaggtcagaggacaacttgctgt")
-        self.assertEqual(record.letter_annotations["phred_quality"],
-                         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-                          30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-                          30, 30, 16, 30, 28, 22, 22, 22, 14, 15, 15, 5,
-                          10, 15, 10, 5])
-        self.assertEqual(record.format("fasta"),
-                         ">HWI-EAS94_4_1_1_602_99 1\n"
-                         "gccatggcacatatatgaaggtcagaggacaacttgctgt\n")
-        self.assertEqual(record.format("qual"),
-                         ">HWI-EAS94_4_1_1_602_99 1\n"
-                         "30 30 30 30 30 30 30 30 30 30 "
-                         "30 30 30 30 30 30 30 30 30 30\n"
-                         "30 30 30 30 30 30 16 30 28 22 "
-                         "22 22 14 15 15 5 10 15 10 5\n")
-        self.assertEqual(record.format("fastq"),
-                         "@HWI-EAS94_4_1_1_602_99 1\n"
-                         "gccatggcacatatatgaaggtcagaggacaacttgctgt\n"
-                         "+\n"
-                         "??????????????????????????1?=777/00&+0+&\n")
-        self.assertEqual(record.format("fastq-illumina"),
-                         "@HWI-EAS94_4_1_1_602_99 1\n"
-                         "gccatggcacatatatgaaggtcagaggacaacttgctgt\n"
-                         "+\n"
-                         "^^^^^^^^^^^^^^^^^^^^^^^^^^P^\\VVVNOOEJOJE\n")
+        self.assertEqual(record.seq, "gccatggcacatatatgaaggtcagaggacaacttgctgt")
+        self.assertEqual(
+            record.letter_annotations["phred_quality"],
+            [
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                16,
+                30,
+                28,
+                22,
+                22,
+                22,
+                14,
+                15,
+                15,
+                5,
+                10,
+                15,
+                10,
+                5,
+            ],
+        )
+        self.assertEqual(
+            record.format("fasta"),
+            ">HWI-EAS94_4_1_1_602_99 1\ngccatggcacatatatgaaggtcagaggacaacttgctgt\n",
+        )
+        self.assertEqual(
+            record.format("qual"),
+            ">HWI-EAS94_4_1_1_602_99 1\n"
+            "30 30 30 30 30 30 30 30 30 30 "
+            "30 30 30 30 30 30 30 30 30 30\n"
+            "30 30 30 30 30 30 16 30 28 22 "
+            "22 22 14 15 15 5 10 15 10 5\n",
+        )
+        self.assertEqual(
+            record.format("fastq"),
+            "@HWI-EAS94_4_1_1_602_99 1\n"
+            "gccatggcacatatatgaaggtcagaggacaacttgctgt\n"
+            "+\n"
+            "??????????????????????????1?=777/00&+0+&\n",
+        )
+        self.assertEqual(
+            record.format("fastq-illumina"),
+            "@HWI-EAS94_4_1_1_602_99 1\n"
+            "gccatggcacatatatgaaggtcagaggacaacttgctgt\n"
+            "+\n"
+            "^^^^^^^^^^^^^^^^^^^^^^^^^^P^\\VVVNOOEJOJE\n",
+        )
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 

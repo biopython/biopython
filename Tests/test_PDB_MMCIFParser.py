@@ -23,12 +23,17 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 
 from Bio.Seq import Seq
-from Bio.Alphabet import generic_protein
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import (
+    PDBConstructionException,
+    PDBConstructionWarning,
+    PDBIOException,
+)
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
@@ -79,13 +84,12 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(s, f_s)  # enough to test this
 
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
 
             # Here non-standard MSE are shown as M
             self.assertEqual(
                 "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                 "NANPDCKTILKALGPGATLEEMMTACQG",
-                str(s),
+                s,
             )
 
             # ==========================================================
@@ -101,8 +105,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
+            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", s)
 
             # Second fragment
             pp = polypeptides[1]
@@ -110,8 +113,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
+            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", s)
 
             # Third fragment
             pp = polypeptides[2]
@@ -119,8 +121,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TACQG", str(s))
+            self.assertEqual("TACQG", s)
 
         s_atoms = list(structure.get_atoms())
         f_atoms = list(f_structure.get_atoms())
@@ -128,10 +129,10 @@ class ParseReal(unittest.TestCase):
         for atoms in [s_atoms, f_atoms]:
             self.assertEqual(len(atoms), 644)
             atom_names = ["N", "CA", "C", "O", "CB"]
-            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual(
+            self.assertEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
@@ -159,10 +160,10 @@ class ParseReal(unittest.TestCase):
 
         for atoms in [s_atoms, f_atoms]:
             atom_names = ["N", "CA", "C", "O", "CB"]
-            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual(
+            self.assertEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
@@ -208,11 +209,8 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
-            )
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
             # ==========================================================
             # Now try strict version with only standard amino acids
             polypeptides = ppbuild.build_peptides(structure[0], True)
@@ -224,10 +222,7 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
-            )
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
 
         # This structure contains several models with multiple lengths.
         # The tests were failing.
@@ -257,8 +252,7 @@ class ParseReal(unittest.TestCase):
             )
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual(refseq, str(s))
+            self.assertEqual(refseq, s)
 
     def test_filehandle(self):
         """Test if the parser can handle file handle as well as filename."""
@@ -292,18 +286,18 @@ class ParseReal(unittest.TestCase):
         self.assertTrue(res_15.is_disordered(), "Residue 15 is disordered")
 
         # Check a non-mutated residue just to be sure we didn't break the
-        # parser and cause everyhing to be disordered.
+        # parser and cause everything to be disordered.
         self.assertFalse(
             structure[0]["A"][13].is_disordered(), "Residue 13 is not disordered"
         )
 
         # Check that the residue types were parsed correctly.
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_1.disordered_get_id_list()),
             {"PRO", "SER"},
             "Residue 1 is proline/serine",
         )
-        self.assertSetEqual(
+        self.assertEqual(
             set(res_15.disordered_get_id_list()),
             {"ARG", "GLN", "GLU"},
             "Residue 15 is arginine/glutamine/glutamic acid",
@@ -323,15 +317,17 @@ class ParseReal(unittest.TestCase):
 
     def test_header(self):
         """Test if the parser populates header data."""
-        parser = MMCIFParser()
+        parser = MMCIFParser(QUIET=1)
 
+        # test default values
         structure = parser.get_structure("example", "PDB/a_structure.cif")
         self.assertEqual("", structure.header["idcode"])
         self.assertEqual("", structure.header["head"])
         self.assertEqual("", structure.header["deposition_date"])
         self.assertEqual("", structure.header["structure_method"])
-        self.assertEqual(0.0, structure.header["resolution"])
+        self.assertIsNone(structure.header["resolution"])
 
+        # test extracting fields
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual("1A8O", structure.header["idcode"])
         self.assertEqual("Viral protein", structure.header["head"])
@@ -339,12 +335,16 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("X-RAY DIFFRACTION", structure.header["structure_method"])
         self.assertEqual(1.7, structure.header["resolution"])
 
+        # test not confused by '.'
+        structure = parser.get_structure("example", "PDB/1SSU_mod.cif")
+        self.assertIsNone(structure.header["resolution"])
+
 
 class CIFtoPDB(unittest.TestCase):
     """Testing conversion between formats: CIF to PDB."""
 
     def test_conversion(self):
-        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
+        """Parse 1LCD.cif, write 1LCD.pdb, parse again and compare."""
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 
@@ -361,12 +361,34 @@ class CIFtoPDB(unittest.TestCase):
 
         pdb_atom_names = [a.name for a in pdb_struct.get_atoms()]
         cif_atom_names = [a.name for a in cif_struct.get_atoms()]
-        self.assertEqual(len(pdb_atom_names), len(cif_atom_names))
-        self.assertSequenceEqual(pdb_atom_names, cif_atom_names)
+        self.assertEqual(pdb_atom_names, cif_atom_names)
 
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
         cif_atom_elems = [a.element for a in cif_struct.get_atoms()]
-        self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
+        self.assertEqual(pdb_atom_elems, cif_atom_elems)
+
+    def test_conversion_not_preserve_numbering(self):
+        """Convert mmCIF to PDB and renumber atom serials."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        pdb_writer.save(filename, preserve_atom_numbering=False)
+
+    def test_conversion_preserve_numbering(self):
+        """Convert mmCIF to PDB and preserve original serial numbering."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        with self.assertRaises(PDBIOException):
+            pdb_writer.save(filename, preserve_atom_numbering=True)
 
 
 if __name__ == "__main__":

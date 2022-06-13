@@ -15,7 +15,6 @@ from xml.etree import ElementTree
 from xml.sax.saxutils import XMLGenerator, escape
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -347,7 +346,7 @@ class BlastXmlParser:
                             )
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
-                            hit.description = "%s %s" % (hit.id, hit.description)
+                            hit.description = f"{hit.id} {hit.description}"
                             hit.id = hit.blast_id
                             # and change the hit_id of the HSPs contained
                             for hsp in hit:
@@ -530,12 +529,12 @@ class BlastXmlParser:
                     setattr(frag, start_type, min(start, end) - 1)
                     setattr(frag, end_type, max(start, end))
 
-            # set alphabet, based on program
+            # set molecule type, based on program
             prog = self._meta.get("program")
             if prog == "blastn":
-                frag.alphabet = generic_dna
+                frag.molecule_type = "DNA"
             elif prog in ["blastp", "blastx", "tblastn", "tblastx"]:
-                frag.alphabet = generic_protein
+                frag.molecule_type = "protein"
 
             hsp = HSP([frag])
             for key, val_info in _ELEM_HSP.items():
@@ -575,7 +574,7 @@ class BlastXmlIndexer(SearchIndexer):
         handle.seek(0)
         re_desc = re.compile(
             b"<Iteration_query-ID>(.*?)"
-            br"</Iteration_query-ID>\s+?"
+            rb"</Iteration_query-ID>\s+?"
             b"<Iteration_query-def>"
             b"(.*?)</Iteration_query-def>"
         )
@@ -804,9 +803,7 @@ class BlastXmlWriter:
             except AttributeError:
                 # ensure attrs that is not present is optional
                 if elem not in _DTD_OPT:
-                    raise ValueError(
-                        "Element %r (attribute %r) not found" % (elem, attr)
-                    )
+                    raise ValueError(f"Element {elem!r} (attribute {attr!r}) not found")
             else:
                 # custom element-attribute mapping, for fallback values
                 if elem in opt_dict:
@@ -828,12 +825,10 @@ class BlastXmlWriter:
                 content = str(getattr(qresult, attr))
             except AttributeError:
                 if elem not in _DTD_OPT:
-                    raise ValueError(
-                        "Element %s (attribute %s) not found" % (elem, attr)
-                    )
+                    raise ValueError(f"Element {elem} (attribute {attr}) not found")
             else:
                 if elem == "BlastOutput_version":
-                    content = "%s %s" % (qresult.program.upper(), qresult.version)
+                    content = f"{qresult.program.upper()} {qresult.version}"
                 elif qresult.blast_id:
                     if elem == "BlastOutput_query-ID":
                         content = qresult.blast_id
@@ -900,16 +895,13 @@ class BlastXmlWriter:
             if self._use_raw_hit_ids:
                 hit_id = hit.blast_id
                 hit_desc = " >".join(
-                    [
-                        "{} {}".format(x, y)
-                        for x, y in zip(hit.id_all, hit.description_all)
-                    ]
+                    [f"{x} {y}" for x, y in zip(hit.id_all, hit.description_all)]
                 )
             else:
                 hit_id = hit.id
                 hit_desc = hit.description + " >".join(
                     [
-                        "{} {}".format(x, y)
+                        f"{x} {y}"
                         for x, y in zip(hit.id_all[1:], hit.description_all[1:])
                     ]
                 )
@@ -935,9 +927,7 @@ class BlastXmlWriter:
                 # in the DTD
                 except AttributeError:
                     if elem not in _DTD_OPT:
-                        raise ValueError(
-                            "Element %s (attribute %s) not found" % (elem, attr)
-                        )
+                        raise ValueError(f"Element {elem} (attribute {attr}) not found")
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1

@@ -65,10 +65,10 @@ class Record(dict):
     - AN: Alternative names (if any)
     - CA: Catalytic activity
     - CF: Cofactors (if any)
-    - PR: Pointers to the Prosite documentation entrie(s) that
-      correspond to the enzyme (if any)
-    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-      that correspond to the enzyme (if any)
+    - PR: Pointers to any Prosite documentation entries that correspond to the
+      enzyme
+    - DR: Pointers to any Swiss-Prot protein sequence entries that correspond
+      to the enzyme
     - CC: Comments
 
     """
@@ -86,15 +86,17 @@ class Record(dict):
         self["DR"] = []
 
     def __repr__(self):
+        """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["DE"]:
-                return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["DE"])
+                return f"{self.__class__.__name__} ({self['ID']}, {self['DE']})"
             else:
-                return "%s (%s)" % (self.__class__.__name__, self["ID"])
+                return f"{self.__class__.__name__} ({self['ID']})"
         else:
-            return "%s ( )" % (self.__class__.__name__)
+            return f"{self.__class__.__name__} ( )"
 
     def __str__(self):
+        """Return a readable string representation of the Record object."""
         output = [
             "ID: " + self["ID"],
             "DE: " + self["DE"],

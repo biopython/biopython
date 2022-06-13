@@ -35,7 +35,7 @@ class MultiGraph:
         s = "<MultiGraph: "
         for key in sorted(self._adjacency_list):
             values = sorted(self._adjacency_list[key])
-            s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
+            s += f"({key!r}: {','.join(repr(v) for v in values)})"
         return s + ">"
 
     def __str__(self):

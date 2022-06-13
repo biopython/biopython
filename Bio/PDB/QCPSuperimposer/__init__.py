@@ -17,6 +17,16 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 from numpy import dot, sqrt, array, inner
 from .qcprotmodule import FastCalcRMSDAndRotation
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "The QCPSuperimposer module will be removed soon in favor of qcprot. The "
+    "API will remain largely the same.",
+    BiopythonDeprecationWarning,
+)
+
 
 class QCPSuperimposer:
     """Quaternion Characteristic Polynomial (QCP) Superimposer.
@@ -96,7 +106,6 @@ class QCPSuperimposer:
         return (rmsd, rot.T, [q1, q2, q3, q4])
 
     # Public methods
-
     def set(self, reference_coords, coords):
         """Set the coordinates to be superimposed.
 
@@ -110,7 +119,7 @@ class QCPSuperimposer:
         """
         # clear everything from previous runs
         self._clear()
-        # store cordinates
+        # store coordinates
         self.reference_coords = reference_coords
         self.coords = coords
         n = reference_coords.shape

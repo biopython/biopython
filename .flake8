@@ -5,6 +5,7 @@
 # pydocstyle: D1## - Missing Docstrings
 #             D2## - Whitespace Issues
 #             D4## - Docstring Content issues
+# flake8-blind-except: B###
 # flake8-bugbear: B###
 # flake8-quotes: Q###
 # flake8-black : BLK###
@@ -15,8 +16,17 @@
 
 [flake8]
 doctests = True
+rst-roles =
+    class,
+    func,
+    meth,
+    mod,
+    data,
+rst-directives =
+    seealso,
+    todo,
 # Exclude some file types and folders that shouldn't be checked:
-exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build,
+exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build
 ignore =
     # =============================================================
     # Biopython's 'standard' ignores we can agree to always accept:
@@ -33,6 +43,8 @@ ignore =
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
+    E741, # ambiguous variable name 'l' (lots of these)
+    B902, # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
     # =========================================
@@ -44,16 +56,15 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
+    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
-# =============================
-# per-file-ignores error codes:
-# =============================
+#Explanation of the codes being ignored in Bio/ and Tests/:
+#
 #Bio/*:F401 module imported but unused TODO? (107 occurrences)
 #      F841 local variable is assigned to but never used TODO? (55 occurrences)
 #      D105 missing docstring magic method (121 occurrences)
@@ -65,22 +76,21 @@ per-file-ignores =
 #           instead callers should raise AssertionError().
 #      C812 missing trailing comma
 #      C815 missing trailing comma in Python 3.5+
-#Tests/*:E123 closing bracket does not match indentation of opening bracket's line
-#             (41 occurences, may be removed by Black)
-#        F401 module imported but unused TODO? (88 occurrences)
+#Tests/*:F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
 #        D102 missing docstring in public method (956 occurrences)
 #        D103 missing docstring in public functions (52 occurrences)
-#        W504 line break after binary operator (97 occurences, may be removed by black)
+#        W504 line break after binary operator (97 occurrences, may be removed by black)
 #        B009 do not call getattr with a constant attribute value,
 #             it is not any safer than normal property access
 #        B010 do not call setattr with a constant attribute value,
 #             it is not any safer than normal property access
 #        B011 do not call assert False since python -O removes these calls;
 #             instead callers should raise AssertionError()
+#        B015 Pointless comparison. This comparison does nothing ...
+#             (Intended to trigger exceptions in our tests)
 #        C812 missing trailing comma
-#        BLK100 Black would make changes
 
 # =======================
 # flake8-quotes settings:

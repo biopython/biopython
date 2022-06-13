@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-# Copyright 2013, 2016 by Iddo Friedberg idoerg@gmail.com
-# All rights reserved.
+# Copyright 2013, 2016 by Iddo Friedberg idoerg@gmail.com. All rights reserved.
+# Copyright 2020 by Sergio Valqui. All rights reserved.
+#
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -10,15 +11,19 @@
 Uniprot-GOA README + GAF format description:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
 
-GAF formats:
+Gene Association File, GAF formats:
+http://geneontology.org/docs/go-annotation-file-gaf-format-2.2/
 http://geneontology.org/docs/go-annotation-file-gaf-format-2.1/
 http://geneontology.org/docs/go-annotation-file-gaf-format-2.0/
 
-gp_association (GPA format) README:
+Gene Product Association Data  (GPA format) README:
 http://geneontology.org/docs/gene-product-association-data-gpad-format/
 
-gp_information (GPI format) README:
+Gene Product Information (GPI format) README:
 http://geneontology.org/docs/gene-product-information-gpi-format/
+
+Go Annotation files are located here:
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
 """
 
 
@@ -127,6 +132,20 @@ GPI11FIELDS = [
     "Gene_Product_Properties",
 ]
 
+# GPI version 1.2
+GPI12FIELDS = [
+    "DB",
+    "DB_Object_ID",
+    "DB_Object_Symbol",
+    "DB_Object_Name",
+    "DB_Object_Synonym",
+    "DB_Object_Type",
+    "Taxon",
+    "Parent_Object_ID",
+    "DB_Xref",
+    "Gene_Product_Properties",
+]
+
 
 def _gpi10iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
@@ -146,10 +165,10 @@ def _gpi10iterator(handle):
 
 
 def _gpi11iterator(handle):
-    """Read GPI 1.0 format files (PRIVATE).
+    """Read GPI 1.1 format files (PRIVATE).
 
     This iterator is used to read a gp_information.goa_uniprot
-    file which is in the GPI 1.0 format.
+    file which is in the GPI 1.1 format.
     """
     for inline in handle:
         if inline[0] == "!":
@@ -164,6 +183,25 @@ def _gpi11iterator(handle):
         yield dict(zip(GPI11FIELDS, inrec))
 
 
+def _gpi12iterator(handle):
+    """Read GPI 1.2 format files (PRIVATE).
+
+    This iterator is used to read a gp_information.goa_uniprot
+    file which is in the GPI 1.2 format.
+    """
+    for inline in handle:
+        if inline[0] == "!":
+            continue
+        inrec = inline.rstrip("\n").split("\t")
+        if len(inrec) == 1:
+            continue
+        inrec[3] = inrec[3].split("|")  # DB_Object_Name
+        inrec[4] = inrec[4].split("|")  # DB_Object_Synonym(s)
+        inrec[8] = inrec[8].split("|")  # DB_Xref(s)
+        inrec[9] = inrec[9].split("|")  # Properties
+        yield dict(zip(GPI12FIELDS, inrec))
+
+
 def gpi_iterator(handle):
     """Read GPI format files.
 
@@ -173,7 +211,9 @@ def gpi_iterator(handle):
     this function is a placeholder a future wrapper.
     """
     inline = handle.readline()
-    if inline.strip() == "!gpi-version: 1.1":
+    if inline.strip() == "!gpi-version: 1.2":
+        return _gpi12iterator(handle)
+    elif inline.strip() == "!gpi-version: 1.1":
         # sys.stderr.write("gpi 1.1\n")
         return _gpi11iterator(handle)
     elif inline.strip() == "!gpi-version: 1.0":
@@ -346,20 +386,26 @@ def gafbyproteiniterator(handle):
         # Handle GAF 2.1 as GAF 2.0 for now TODO: fix
         # sys.stderr.write("gaf 2.1\n")
         return _gaf20byproteiniterator(handle)
+    elif inline.strip() == "!gaf-version: 2.2":
+        # Handle GAF 2.2 as GAF 2.0 for now. Change from
+        # 2.1 to 2.2 is that Qualifier field is no longer optional.
+        # As this type of checks has not been done before, we can
+        # continue to use the gaf2.0 parser
+        return _gaf20byproteiniterator(handle)
     else:
         raise ValueError(f"Unknown GAF version {inline}\n")
 
 
 def gafiterator(handle):
-    """Iterate over a GAF 1.0 or 2.0 file.
+    """Iterate over a GAF 1.0 or 2.x file.
 
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
-    returns a gaf 2.0 or a gaf 1.0 iterator as needed
+    returns a gaf 2.x or a gaf 1.0 iterator as needed
 
     Example: open, read, interat and filter results.
 
-    Original data file has been trimed to ~600 rows.
+    Original data file has been trimmed to ~600 rows.
 
     Original source ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/YEAST/goa_yeast.gaf.gz
 
@@ -394,6 +440,12 @@ def gafiterator(handle):
     elif inline.strip() == "!gaf-version: 2.1":
         # sys.stderr.write("gaf 2.1\n")
         # Handle GAF 2.1 as GAF 2.0 for now. TODO: fix
+        return _gaf20iterator(handle)
+    elif inline.strip() == "!gaf-version: 2.2":
+        # Handle GAF 2.2 as GAF 2.0 for now. Change from
+        # 2.1 to 2.2 is that Qualifier field is no longer optional.
+        # As this type of checks has not been done before, we can
+        # continue to use the gaf2.0 parser
         return _gaf20iterator(handle)
     elif inline.strip() == "!gaf-version: 1.0":
         # sys.stderr.write("gaf 1.0\n")

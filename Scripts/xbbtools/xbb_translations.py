@@ -22,7 +22,7 @@ class xbb_translations:
     """A class for doing translations."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         pass
 
     def frame1(self, seq, translation_table=1):
@@ -42,7 +42,7 @@ class xbb_translations:
         return reverse_complement(seq)
 
     def frame(self, seq, frame, translation_table=1):
-        """Translate DNA sequence in a choosen frame."""
+        """Translate DNA sequence in a chosen frame."""
         if frame < 0:
             seq = reverse_complement(seq)
         seq = seq[(abs(frame) - 1) :]
@@ -96,7 +96,7 @@ class xbb_translations:
         return GC(seq)
 
     def gcframe(self, seq, translation_table=1, direction="both"):
-        """Print a pretty print tranlation in several frames."""
+        """Print a pretty print translation in several frames."""
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
         anti = self.reverse(comp)

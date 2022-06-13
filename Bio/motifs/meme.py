@@ -6,7 +6,6 @@
 # as part of this package.
 """Module for the support of MEME motif format."""
 
-from __future__ import print_function
 import xml.etree.ElementTree as ET
 
 from Bio import Seq
@@ -110,7 +109,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.version = ""
         self.datafile = ""
         self.command = ""
@@ -163,7 +162,7 @@ def __read_motifs(record, xml_tree, sequence_id_name_map):
                 for letter_ref in site_tree.find("site").findall("letter_ref")
             ]
             sequence = "".join(letters)
-            instance = Instance(sequence, record.alphabet)
+            instance = Instance(sequence)
             instance.motif_name = motif_tree.get("name")
             instance.sequence_id = site_tree.get("sequence_id")
             instance.sequence_name = sequence_id_name_map[instance.sequence_id]

@@ -12,6 +12,7 @@ and position-specific scoring matrices.
 """
 
 import math
+import numbers
 
 try:
     import numpy as np
@@ -25,19 +26,6 @@ except ImportError:
 from Bio.Seq import Seq
 
 from . import _pwm
-
-
-def _calculate(score_dict, sequence, m):
-    """Calculate scores using C code (PRIVATE)."""
-    n = len(sequence)
-    # Create the numpy arrays here; the C module then does not rely on numpy
-    # Use a float32 for the scores array to save space
-    scores = np.empty(n - m + 1, np.float32)
-    logodds = np.array(
-        [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)], float
-    )
-    _pwm.calculate(sequence, logodds, scores)
-    return scores
 
 
 class GenericPositionMatrix(dict):
@@ -76,7 +64,7 @@ class GenericPositionMatrix(dict):
                     indices1 = range(start1, stop1, stride1)
                     letters1 = [self.alphabet[i] for i in indices1]
                     dim1 = 2
-                elif isinstance(key1, int):
+                elif isinstance(key1, numbers.Integral):
                     letter1 = self.alphabet[key1]
                     dim1 = 1
                 elif isinstance(key1, tuple):
@@ -89,16 +77,16 @@ class GenericPositionMatrix(dict):
                     else:
                         raise KeyError(key1)
                 else:
-                    raise KeyError("Cannot understand key %s", str(key1))
+                    raise KeyError("Cannot understand key %s" % key1)
                 if isinstance(key2, slice):
                     start2, stop2, stride2 = key2.indices(self.length)
                     indices2 = range(start2, stop2, stride2)
                     dim2 = 2
-                elif isinstance(key2, int):
+                elif isinstance(key2, numbers.Integral):
                     index2 = key2
                     dim2 = 1
                 else:
-                    raise KeyError("Cannot understand key %s", str(key2))
+                    raise KeyError("Cannot understand key %s" % key2)
                 if dim1 == 1 and dim2 == 1:
                     return dict.__getitem__(self, letter1)[index2]
                 elif dim1 == 1 and dim2 == 2:
@@ -127,7 +115,7 @@ class GenericPositionMatrix(dict):
             indices = range(start, stop, stride)
             letters = [self.alphabet[i] for i in indices]
             dim = 2
-        elif isinstance(key, int):
+        elif isinstance(key, numbers.Integral):
             letter = self.alphabet[key]
             dim = 1
         elif isinstance(key, tuple):
@@ -140,7 +128,7 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError(key)
         else:
-            raise KeyError("Cannot understand key %s", str(key))
+            raise KeyError("Cannot understand key %s" % key)
         if dim == 1:
             return dict.__getitem__(self, letter)
         elif dim == 2:
@@ -347,7 +335,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
          - the search is performed only on one strand
          - if the sequence and the motif have the same length, a single
            number is returned
-         - otherwise, the result is a one-dimensional list or numpy array
+         - otherwise, the result is a one-dimensional numpy array
 
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
@@ -359,16 +347,40 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
         # case would impose an overhead to allocate the extra memory.
-        sequence = str(sequence)
+        try:
+            sequence = bytes(sequence)
+        except TypeError:  # str
+            try:
+                sequence = bytes(sequence, "ASCII")
+            except TypeError:
+                raise ValueError(
+                    "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+                ) from None
+            except UnicodeEncodeError:
+                raise ValueError(
+                    "sequence should contain ASCII characters only"
+                ) from None
+        except Exception:
+            raise ValueError(
+                "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+            ) from None
+
+        n = len(sequence)
         m = self.length
-        scores = _calculate(self, sequence, m)
+        # Create the numpy arrays here; the C module then does not rely on numpy
+        # Use a float32 for the scores array to save space
+        scores = np.empty(n - m + 1, np.float32)
+        logodds = np.array(
+            [[self[letter][i] for letter in "ACGT"] for i in range(m)], float
+        )
+        _pwm.calculate(sequence, logodds, scores)
 
         if len(scores) == 1:
             return scores[0]
         else:
             return scores
 
-    def search(self, sequence, threshold=0.0, both=True, chunksize=10 ** 6):
+    def search(self, sequence, threshold=0.0, both=True, chunksize=10**6):
         """Find hits with PWM score above given threshold.
 
         A generator function, returning found hits in the given sequence
@@ -525,7 +537,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         denominator = math.sqrt((sxx - sx * sx) * (syy - sy * sy))
         return numerator / denominator
 
-    def distribution(self, background=None, precision=10 ** 3):
+    def distribution(self, background=None, precision=10**3):
         """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
 

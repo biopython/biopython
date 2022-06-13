@@ -9,9 +9,9 @@
 #
 # %doctest
 # \begin{minted}{pycon}
-# >>> from Bio.Alphabet import generic_dna
 # >>> from Bio.Seq import Seq
-# >>> len("ACGT")
+# >>> s = Seq("ACGT")
+# >>> len(s)
 # 4
 # \end{minted}
 #
@@ -20,7 +20,7 @@
 #
 # %cont-doctest
 # \begin{minted}{pycon}
-# >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+# >>> s == "ACGT"
 # True
 # \end{minted}
 #
@@ -56,8 +56,6 @@ import os
 import sys
 import warnings
 
-from lib2to3 import refactor
-from lib2to3.pgen2.tokenize import TokenError
 
 from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
@@ -75,17 +73,6 @@ if "--offline" in sys.argv:
     online = False
 
 warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-
-fixers = refactor.get_fixers_from_package("lib2to3.fixes")
-fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
-rt = refactor.RefactoringTool(fixers)
-assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == ">>> print(2+2)\n4\n"
-assert (
-    rt.refactor_docstring(
-        '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n', "example2"
-    )
-    == '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
-)
 
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
@@ -119,9 +106,10 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 def _extract(handle):
     line = handle.readline()
     if line != "\\begin{minted}{pycon}\n":
-        raise ValueError(
-            "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'"
-        )
+        if not (line.startswith("\\begin{minted}[") and line.endswith("]{pycon}\n")):
+            raise ValueError(
+                "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}' or '\\begin{minted}[options]{pycon}'"
+            )
     lines = []
     while True:
         line = handle.readline()
@@ -163,7 +151,7 @@ def extract_doctests(latex_filename):
             elif line.startswith("%doctest"):
                 if lines:
                     if not lines[0].startswith(">>> "):
-                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                        raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
                     yield name, "".join(lines), folder, deps
                     lines = []
                 deps = [x.strip() for x in line.split()[1:]]
@@ -178,7 +166,7 @@ def extract_doctests(latex_filename):
                 line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
-            raise ValueError("Should start '>>> ' not %r" % lines[0])
+            raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
         yield name, "".join(lines), folder, deps
     # yield "dummy", ">>> 2 + 2\n5\n"
 
@@ -217,11 +205,6 @@ for latex in files:
             missing_deps.update(missing)
             continue
 
-        try:
-            example = rt.refactor_docstring(example, name)
-        except TokenError:
-            raise ValueError("Problem with %s:\n%s" % (name, example)) from None
-
         def funct(n, d, f):
             global tutorial_base
             method = lambda x: None  # noqa: E731
@@ -229,13 +212,13 @@ for latex in files:
                 p = os.path.join(tutorial_base, f)
                 method.__doc__ = f"{n}\n\n>>> import os\n>>> os.chdir({p!r})\n{d}\n"
             else:
-                method.__doc__ = "%s\n\n%s\n" % (n, d)
+                method.__doc__ = f"{n}\n\n{d}\n"
             method._folder = f
             return method
 
         setattr(
             TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ", "_"),
+            f"doctest_{name.replace(' ', '_')}",
             funct(name, example, folder),
         )
         del funct
@@ -291,7 +274,7 @@ if __name__ == "__main__":
     if missing_deps:
         print("Skipping tests needing the following:")
         for dep in sorted(missing_deps):
-            print(" - %s" % dep)
+            print(f" - {dep}")
     print("Running Tutorial doctests...")
     tests = doctest.testmod()
     if tests.failed:

@@ -155,7 +155,7 @@ class DistanceCalculatorTest(unittest.TestCase):
 
         calculator = DistanceCalculator("trans")
         dm = calculator.get_distance(aln)
-        self.assertEqual(dm["Alpha", "Beta"], 1 - (49 * 1.0 / 78))
+        self.assertEqual(dm["Alpha", "Beta"], 1 - (54 * 1.0 / 65))
 
         calculator = DistanceCalculator("blosum62")
         dm = calculator.get_distance(aln)

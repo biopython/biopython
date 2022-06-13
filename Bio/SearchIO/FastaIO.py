@@ -107,7 +107,6 @@ The following object attributes are provided:
 
 import re
 
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -207,8 +206,8 @@ def _set_hsp_seqs(hsp, parsed, program):
     # query and hit sequence types must be the same
     assert parsed["query"]["_type"] == parsed["hit"]["_type"]
     type_val = parsed["query"]["_type"]  # hit works fine too
-    alphabet = generic_dna if type_val == "D" else generic_protein
-    setattr(hsp.fragment, "alphabet", alphabet)
+    molecule_type = "DNA" if type_val == "D" else "protein"
+    setattr(hsp.fragment, "molecule_type", molecule_type)
 
     for seq_type in ("hit", "query"):
         # get and set start and end coordinates
@@ -217,10 +216,10 @@ def _set_hsp_seqs(hsp, parsed, program):
 
         setattr(hsp.fragment, seq_type + "_start", min(start, end) - 1)
         setattr(hsp.fragment, seq_type + "_end", max(start, end))
-        # set seq and alphabet
+        # set seq and molecule type
         setattr(hsp.fragment, seq_type, parsed[seq_type]["seq"])
 
-        if alphabet is not generic_protein:
+        if molecule_type != "protein":
             # get strand from coordinate; start <= end is plus
             # start > end is minus
             if start <= end:
@@ -242,7 +241,7 @@ def _get_aln_slice_coords(parsed_hsp):
     following code should also cope with that.
 
     Note that this code seems to work fine even when the "sq_offset"
-    entries are prsent as a result of using the -X command line option.
+    entries are present as a result of using the -X command line option.
     """
     seq = parsed_hsp["seq"]
     seq_stripped = seq.strip("-")
@@ -469,7 +468,7 @@ class FastaM10Parser:
                 if state == _STATE_NONE:
                     # make sure it's the correct query
                     if not query_id.startswith(line[1:].split(" ")[0]):
-                        raise ValueError("%r vs %r" % (query_id, line))
+                        raise ValueError(f"{query_id!r} vs {line!r}")
                     state = _STATE_QUERY_BLOCK
                     parsed_hsp["query"]["seq"] = ""
                 elif state == _STATE_QUERY_BLOCK:
@@ -533,7 +532,6 @@ class FastaM10Indexer(SearchIndexer):
     def __init__(self, filename):
         """Initialize the class."""
         SearchIndexer.__init__(self, filename)
-        self._handle = self._handle
 
     def __iter__(self):
         """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""

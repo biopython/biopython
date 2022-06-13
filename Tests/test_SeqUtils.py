@@ -3,21 +3,25 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-
 """Tests for SeqUtils module."""
-
 import os
 import unittest
 
 from Bio import SeqIO
-from Bio.Alphabet import single_letter_alphabet
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC, seq1, seq3, GC_skew
-from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
-from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
+from Bio.SeqUtils import GC
+from Bio.SeqUtils import GC_skew
+from Bio.SeqUtils import seq1
+from Bio.SeqUtils import seq3
+from Bio.SeqUtils.CheckSum import crc32
+from Bio.SeqUtils.CheckSum import crc64
+from Bio.SeqUtils.CheckSum import gcg
+from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+from Bio.SeqUtils.lcc import lcc_mult
+from Bio.SeqUtils.lcc import lcc_simp
 
 
 class SeqUtilsTests(unittest.TestCase):
@@ -63,9 +67,9 @@ class SeqUtilsTests(unittest.TestCase):
                     seq = record.seq[start:end]
                 # Double check we have the CDS sequence expected
                 # TODO - Use any cds_start option if/when added to deal with the met
-                a = "M" + str(seq[3:].translate(table))
+                a = "M" + seq[3:].translate(table)
                 b = feature.qualifiers["translation"][0] + "*"
-                self.assertEqual(a, b, "%r vs %r" % (a, b))
+                self.assertEqual(a, b)
                 records.append(
                     SeqRecord(
                         seq,
@@ -115,18 +119,14 @@ class SeqUtilsTests(unittest.TestCase):
         exp_simple_LCC,
         exp_window_LCC,
     ):
-        for s in [
-            seq_str,
-            Seq(seq_str, single_letter_alphabet),
-            MutableSeq(seq_str, single_letter_alphabet),
-        ]:
+        for s in [seq_str, Seq(seq_str), MutableSeq(seq_str)]:
             self.assertEqual(exp_crc32, crc32(s))
             self.assertEqual(exp_crc64, crc64(s))
             self.assertEqual(exp_gcg, gcg(s))
             self.assertEqual(exp_seguid, seguid(s))
-            self.assertAlmostEqual(exp_simple_LCC, lcc_simp(s), places=2)
+            self.assertAlmostEqual(exp_simple_LCC, lcc_simp(s), places=4)
             values = lcc_mult(s, 20)
-            self.assertEqual(len(exp_window_LCC), len(values))
+            self.assertEqual(len(exp_window_LCC), len(values), values)
             for value1, value2 in zip(exp_window_LCC, values):
                 self.assertAlmostEqual(value1, value2, places=2)
 
@@ -137,22 +137,21 @@ class SeqUtilsTests(unittest.TestCase):
             "CRC-44CAAD88706CC153",
             9729,
             "BpBeDdcNUYNsdk46JoJdw7Pd3BI",
-            1.03,
+            0.5160,
             (
-                0.00,
-                1.00,
-                0.96,
-                0.96,
-                0.96,
-                0.65,
-                0.43,
-                0.35,
-                0.35,
-                0.35,
-                0.35,
-                0.53,
-                0.59,
-                0.26,
+                0.4982,
+                0.4794,
+                0.4794,
+                0.4794,
+                0.3241,
+                0.2160,
+                0.1764,
+                0.1764,
+                0.1764,
+                0.1764,
+                0.2657,
+                0.2948,
+                0.1287,
             ),
         )
 
@@ -163,22 +162,21 @@ class SeqUtilsTests(unittest.TestCase):
             "CRC-44CAAD88706CC153",
             9647,
             "X5XEaayob1nZLOc7eVT9qyczarY",
-            1.07,
+            0.5343,
             (
-                0.00,
-                1.00,
-                0.96,
-                0.96,
-                0.96,
-                0.65,
-                0.43,
-                0.35,
-                0.35,
-                0.35,
-                0.35,
-                0.53,
-                0.59,
-                0.26,
+                0.4982,
+                0.4794,
+                0.4794,
+                0.4794,
+                0.3241,
+                0.2160,
+                0.1764,
+                0.1764,
+                0.1764,
+                0.1764,
+                0.2657,
+                0.2948,
+                0.1287,
             ),
         )
 
@@ -189,22 +187,21 @@ class SeqUtilsTests(unittest.TestCase):
             "CRC-6234FF451DC6DFC6",
             7959,
             "8WCUbVjBgiRmM10gfR7XJNjbwnE",
-            1.98,
+            0.9886,
             (
-                0.00,
-                2.00,
-                1.99,
-                1.99,
-                2.00,
-                1.99,
-                1.97,
-                1.99,
-                1.99,
-                1.99,
-                1.96,
-                1.96,
-                1.96,
-                1.96,
+                1.00,
+                0.9927,
+                0.9927,
+                1.00,
+                0.9927,
+                0.9854,
+                0.9927,
+                0.9927,
+                0.9927,
+                0.9794,
+                0.9794,
+                0.9794,
+                0.9794,
             ),
         )
 
@@ -298,6 +295,16 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertAlmostEqual(X.index["TTC"], 1.000, places=3)
         self.assertAlmostEqual(X.index["TTG"], 0.072, places=3)
         self.assertAlmostEqual(X.index["TTT"], 0.457, places=3)
+
+    def test_lcc_simp(self):
+        s1 = "ACGATAGC"
+        self.assertAlmostEqual(lcc_simp(s1), 0.9528, places=4)
+
+    def test_lcc_mult(self):
+        s1 = "ACGATAGC"
+        llc_lst = lcc_mult(s1, len(s1))
+        self.assertEqual(len(llc_lst), 1)
+        self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
 
 
 if __name__ == "__main__":

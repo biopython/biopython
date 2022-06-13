@@ -16,6 +16,7 @@ class Record(list):
     """
 
     def __str__(self):
+        """Return a string representation of the motifs in the Record object."""
         return "\n".join(str(motif) for motif in self)
 
 
@@ -72,9 +73,7 @@ def write(motifs):
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
-            lines.append(
-                "{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts)
-            )
+            lines.append("{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts))
 
     # Finished; glue the lines together.
     text = "".join(lines)

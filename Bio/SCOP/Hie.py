@@ -26,7 +26,7 @@ class Record:
     Attributes:
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
-     - children - Sequence of childrens sunids
+     - children - Sequence of children sunids
 
     """
 
@@ -52,7 +52,7 @@ class Record:
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 3:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         sunid, parent, children = columns
 

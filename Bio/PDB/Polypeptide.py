@@ -52,7 +52,6 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio.Alphabet import generic_protein
 from Bio.Data import SCOPData
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
@@ -271,7 +270,7 @@ class Polypeptide(list):
         tau_list = []
         for i in range(0, len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
-            v1, v2, v3, v4 = [a.get_vector() for a in atom_list]
+            v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
             tau_list.append(tau)
             # Put tau in xtra dict of residue
@@ -285,7 +284,7 @@ class Polypeptide(list):
         ca_list = self.get_ca_list()
         for i in range(0, len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
-            v1, v2, v3 = [a.get_vector() for a in atom_list]
+            v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)
             theta_list.append(theta)
             # Put tau in xtra dict of residue
@@ -299,11 +298,10 @@ class Polypeptide(list):
         :return: polypeptide sequence
         :rtype: L{Seq}
         """
-        s = ""
-        for res in self:
-            s += SCOPData.protein_letters_3to1.get(res.get_resname(), "X")
-        seq = Seq(s, generic_protein)
-        return seq
+        s = "".join(
+            SCOPData.protein_letters_3to1.get(res.get_resname(), "X") for res in self
+        )
+        return Seq(s)
 
     def __repr__(self):
         """Return string representation of the polypeptide.
@@ -313,8 +311,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
-        return s
+        return f"<Polypeptide start={start} end={end}>"
 
 
 class _PPBuilder:

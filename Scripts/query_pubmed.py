@@ -55,7 +55,7 @@ if __name__ == "__main__":
         print_usage()
         sys.exit(0)
 
-    print("Doing a PubMed search for %s..." % repr(query))
+    print("Doing a PubMed search for %r..." % query)
 
     if count_only:
         handle = Entrez.esearch(db="pubmed", term=query)

@@ -70,7 +70,7 @@ id_file = "short_list.txt"
 output_file = "short_list.fastq"
 
 with open(id_file) as id_handle:
-    # Taking first word on each line as an identifer
+    # Taking first word on each line as an identifier
     wanted = set(line.rstrip("\n").split(None, 1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
 
@@ -87,12 +87,12 @@ if count < len(wanted):
     print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
 \end{minted}
 
-\subsection{Producing randomised genomes}
+\subsection{Producing randomized genomes}
 
 Let's suppose you are looking at genome sequence, hunting for some sequence
 feature -- maybe extreme local GC\% bias, or possible restriction digest sites.
 Once you've got your Python code working on the real genome it may be sensible
-to try running the same search on randomised versions of the same genome for
+to try running the same search on randomized versions of the same genome for
 statistical analysis (after all, any ``features'' you've found could just be
 there just by chance).
 
@@ -132,9 +132,9 @@ this is with the string object's join method.
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
->>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
-...                          id="Shuffled", description="Based on %s" % original_rec.id)
-...
+>>> shuffled_rec = SeqRecord(
+...     Seq("".join(nuc_list)), id="Shuffled", description="Based on %s" % original_rec.id
+... )
 \end{minted}
 
 Let's put all these pieces together to make a complete Python script which
@@ -158,11 +158,11 @@ with open("shuffled.fasta", "w") as output_handle:
         nuc_list = list(original_rec.seq)
         random.shuffle(nuc_list)
         shuffled_rec = SeqRecord(
-            Seq("".join(nuc_list), original_rec.seq.alphabet),
+            Seq("".join(nuc_list)),
             id="Shuffled%i" % (i + 1),
             description="Based on %s" % original_rec.id,
         )
-        out_handle.write(shuffled_rec.format("fasta"))
+        output_handle.write(shuffled_rec.format("fasta"))
 \end{minted}
 
 Personally I prefer the following version using a function to shuffle the record
@@ -179,7 +179,7 @@ def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(
-        Seq("".join(nuc_list), record.seq.alphabet),
+        Seq("".join(nuc_list)),
         id=new_id,
         description="Based on %s" % original_rec.id,
     )
@@ -189,6 +189,7 @@ original_rec = SeqIO.read("NC_005816.gb", "genbank")
 shuffled_recs = (
     make_shuffle_record(original_rec, "Shuffled%i" % (i + 1)) for i in range(30)
 )
+
 SeqIO.write(shuffled_recs, "shuffled.fasta", "fasta")
 \end{minted}
 
@@ -353,7 +354,7 @@ with open("sorted.fasta", "wb") as out_handle:
 \end{minted}
 
 Note with Python 3 onwards, we have to open the file for writing in
-binary mode because the \verb|get_raw()| method returns bytes strings.
+binary mode because the \verb|get_raw()| method returns \verb|bytes| objects.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
 a second time it should be faster. If you only want to use this with FASTA
@@ -712,7 +713,7 @@ SeqIO.convert("illumina.fastq", "fastq-illumina", "standard.fastq", "fastq")
 
 Note that using \verb|Bio.SeqIO.convert()| like this is \emph{much} faster
 than combining \verb|Bio.SeqIO.parse()| and \verb|Bio.SeqIO.write()|
-because optimised code is used for converting between FASTQ variants
+because optimized code is used for converting between FASTQ variants
 (and also for FASTQ to FASTA conversion).
 
 For good quality reads, PHRED and Solexa scores are approximately equal,
@@ -724,12 +725,11 @@ deliberate design choice by Illumina, meaning applications expecting the old
 very different from the original FASTQ standard as used by Sanger,
 the NCBI, and elsewhere (format name \texttt{fastq} or \texttt{fastq-sanger}).
 
-For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
+For more details, see the built in help (also \href{http://www.biopython.org/docs/\bpversion/api/Bio.SeqIO.QualityIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio.SeqIO import QualityIO
 >>> help(QualityIO)
-...
 \end{minted}
 
 \subsection{Converting FASTA and QUAL files into FASTQ files}
@@ -809,10 +809,10 @@ although this is actually quite a small FASTQ file with less than $50,000$ reads
 >>> fq_dict = SeqIO.index("SRR020192.fastq", "fastq")
 >>> len(fq_dict)
 41892
->>> fq_dict.keys()[:4]
+>>> list(fq_dict.keys())[:4]
 ['SRR020192.38240', 'SRR020192.23181', 'SRR020192.40568', 'SRR020192.23186']
 >>> fq_dict["SRR020192.23186"].seq
-Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetterAlphabet())
+Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG')
 \end{minted}
 
 When testing this on a FASTQ file with seven million reads,
@@ -884,7 +884,6 @@ For more information on the Biopython SFF support, consult the built in help:
 \begin{minted}{pycon}
 >>> from Bio.SeqIO import SffIO
 >>> help(SffIO)
-...
 \end{minted}
 
 \subsection{Identifying open reading frames}
@@ -920,11 +919,14 @@ get a list of all the possible ORF translations in the six reading frames:
 \begin{minted}{pycon}
 >>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
 ...     for frame in range(3):
-...         length = 3 * ((len(record)-frame) // 3) #Multiple of three
-...         for pro in nuc[frame:frame+length].translate(table).split("*"):
+...         length = 3 * ((len(record) - frame) // 3)  # Multiple of three
+...         for pro in nuc[frame : frame + length].translate(table).split("*"):
 ...             if len(pro) >= min_pro_len:
-...                 print("%s...%s - length %i, strand %i, frame %i" \
-...                       % (pro[:30], pro[-3:], len(pro), strand, frame))
+...                 print(
+...                     "%s...%s - length %i, strand %i, frame %i"
+...                     % (pro[:30], pro[-3:], len(pro), strand, frame)
+...                 )
+...
 GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
 GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
@@ -967,7 +969,7 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length):
     seq_len = len(seq)
     for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())]:
         for frame in range(3):
-            trans = str(nuc[frame:].translate(trans_table))
+            trans = nuc[frame:].translate(trans_table)
             trans_len = len(trans)
             aa_start = 0
             aa_end = 0
@@ -1018,7 +1020,7 @@ QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, 9264:9609
 If you comment out the sort statement, then the protein sequences will be
 shown in the same order as before, so you can check this is doing the same
 thing.  Here we have sorted them by location to make it easier to compare
-to the actual annotation in the GenBank file (as visualised in
+to the actual annotation in the GenBank file (as visualized in
 Section~\ref{sec:gd_nice_example}).
 
 If however all you want to find are the locations of the open reading frames,
@@ -1045,7 +1047,7 @@ parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
-There are lots of times when you might want to visualise the distribution of sequence
+There are lots of times when you might want to visualize the distribution of sequence
 lengths in a dataset -- for example the range of contig sizes in a genome assembly
 project.  In this example we'll reuse our orchid FASTA file
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta}
@@ -1181,7 +1183,7 @@ smoother plot than this.
 \subsection{Nucleotide dot plots}
 A dot plot is a way of visually comparing two nucleotide sequences for similarity to
 each other.  A sliding window is used to compare short sub-sequences to each other,
-often with a mis-match threshold.  Here for simplicity we'll only look for perfect
+often with a mismatch threshold.  Here for simplicity we'll only look for perfect
 matches (shown in black
 \begin{latexonly}
 in Figure~\ref{fig:nuc-dot-plot}).
@@ -1223,8 +1225,8 @@ comprehension:
 
 \begin{minted}{python}
 window = 7
-seq_one = str(rec_one.seq).upper()
-seq_two = str(rec_two.seq).upper()
+seq_one = rec_one.seq.upper()
+seq_two = rec_two.seq.upper()
 data = [
     [
         (seq_one[i : i + window] != seq_two[j : j + window])
@@ -1288,8 +1290,8 @@ window = 7
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [
-    (str(rec_one.seq).upper(), dict_one),
-    (str(rec_two.seq).upper(), dict_two),
+    (rec_one.seq.upper(), dict_one),
+    (rec_two.seq.upper(), dict_two),
 ]:
     for i in range(len(seq) - window):
         section = seq[i : i + window]
@@ -1301,9 +1303,9 @@ for (seq, section_dict) in [
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}
-\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
+\noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ coordinates:
 \begin{minted}{python}
-# Create lists of x and y co-ordinates for scatter plot
+# Create lists of x and y coordinates for scatter plot
 x = []
 y = []
 for section in matches:
@@ -1326,8 +1328,8 @@ pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
 pylab.show()
 \end{minted}
-%pylab.savefig("dot_plot.png", dpi=75)
-%pylab.savefig("dot_plot.pdf")
+%pylab.savefig("dot_plot_scatter.png", dpi=75)
+%pylab.savefig("dot_plot_scatter.pdf")
 %
 % Have a HTML version and a PDF version to display nicely...
 %
@@ -1444,12 +1446,7 @@ The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, prov
 consensus = summary_align.dumb_consensus()
 \end{minted}
 
-As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
-
-\begin{minted}{text}
-consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT
-...', IUPACAmbiguousDNA())
-\end{minted}
+As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is a \verb|Seq| object.
 
 You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
@@ -1458,13 +1455,12 @@ You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
 \item[the ambiguous character] This is the ambiguity character to use. The default is 'N'.
 
-\item[the consensus alphabet] This is the alphabet to use for the consensus sequence. If an alphabet is not specified than we will try to guess the alphabet based on the alphabets of the sequences in the alignment.
 \end{description}
 
 \subsection{Position Specific Score Matrices}
 \label{sec:pssm}
 
-Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consesus sequence, but can also be any sequence in the alignment. For instance for the alignment,
+Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consensus sequence, but can also be any sequence in the alignment. For instance for the alignment,
 
 \begin{minted}{text}
 GTATC
@@ -1541,7 +1537,7 @@ The structure of the PSSM class hopefully makes it easy both to access elements 
 
 A potentially useful measure of evolutionary conservation is the information content of a sequence.
 
-A useful introduction to information theory targeted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
+A useful introduction to information theory targeted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consensus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
 
 \begin{displaymath}
 IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
@@ -1552,12 +1548,12 @@ IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
 \begin{itemize}
   \item $IC_{j}$ -- The information content for the $j$-th column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
-  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occurred 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occurred 3 out of 6 times in an alignment column, this would be 0.5)
   \item $Q_{i}$ --  The expected frequency of a letter $i$. This is an
   optional argument, usage of which is left at the user's
   discretion. By default, it is automatically assigned to $0.05 = 1/20$ for a
   protein alphabet, and $0.25 = 1/4$ for a nucleic acid alphabet. This is for
-  geting the information content without any assumption of prior
+  getting the information content without any assumption of prior
   distributions. When assuming priors, or when using a non-standard
   alphabet, you should supply the values for $Q_{i}$.
 \end{itemize}
@@ -1572,26 +1568,10 @@ info_content = summary_align.information_content(5, 30, chars_to_ignore=["N"])
 
 Wow, that was much easier then the formula above made it look! The variable \verb|info_content| now contains a float value specifying the information content over the specified region (from 5 to 30 of the alignment). We specifically ignore the ambiguity residue 'N' when calculating the information content, since this value is not included in our alphabet (so we shouldn't be interested in looking at it!).
 
-As mentioned above, we can also calculate relative information content by supplying the expected frequencies:
+As mentioned above, we can also calculate relative information content by supplying a dictionary with the expected frequencies:
 
 \begin{minted}{python}
 expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
-\end{minted}
-
-The expected should not be passed as a raw dictionary, but instead by passed as a \verb|SubsMat.FreqTable| object (see section~\ref{sec:freq_table} for more information about FreqTables). The FreqTable object provides a standard for associating the dictionary with an Alphabet, similar to how the Biopython Seq class works.
-
-To create a FreqTable object, from the frequency dictionary you just need to do:
-
-\begin{minted}{python}
-from Bio.Alphabet import IUPAC
-from Bio.SubsMat import FreqTable
-
-e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ, IUPAC.unambiguous_dna)
-\end{minted}
-
-Now that we've got that, calculating the relative information content for our region of the alignment is as simple as:
-
-\begin{minted}{python}
 info_content = summary_align.information_content(
     5, 30, e_freq_table=e_freq_table, chars_to_ignore=["N"]
 )
@@ -1640,140 +1620,120 @@ Biopython provides a ton of common substitution matrices, and also provides func
 
 \subsection{Using common substitution matrices}
 
-\subsection{Creating your own substitution matrix from an alignment}
+\subsection{Calculating a substitution matrix from a multiple sequence alignment}
 \label{sec:subs_mat_ex}
 
-A very cool thing that you can do easily with the substitution matrix
-classes is to create your own substitution matrix from an
-alignment. In practice, this is normally done with protein
-alignments. In this example, we'll first get a Biopython alignment
-object and then get a summary object to calculate info about the
-alignment. The file containing \href{examples/protein.aln}{protein.aln}
-(also available online
+You can create your own substitution matrix from an alignment.  In this
+example, we'll first read a protein sequence alignment from the Clustalw file
+\href{examples/protein.aln}{protein.aln} (also available online
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
-contains the Clustalw alignment output.
 
-%doctest examples
+%doctest ../Tests/Clustalw
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
->>> from Bio import Alphabet
->>> from Bio.Alphabet import IUPAC
->>> from Bio.Align import AlignInfo
 >>> filename = "protein.aln"
->>> alpha = Alphabet.Gapped(IUPAC.protein)
->>> c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
->>> summary_align = AlignInfo.SummaryInfo(c_align)
+>>> alignment = AlignIO.read(filename, "clustal")
 \end{minted}
 
-Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain
-more information on doing this.
+Section~\ref{sec:align_clustal} contains more information on doing this.
 
-Now that we've got our \verb|summary_align| object, we want to use it
-to find out the number of times different residues substitute for each
-other. To make the example more readable, we'll focus on only amino
-acids with polar charged side chains. Luckily, this can be done easily
-when generating a replacement dictionary, by passing in all of the
-characters that should be ignored. Thus we'll create a dictionary of
-replacements for only charged polar amino acids using:
+The \verb+substitutions+ property of the alignment stores the number of times
+different residues substitute for each other:
+%cont-doctest
+\begin{minted}{pycon}
+>>> observed_frequencies = alignment.substitutions
+\end{minted}
+
+To make the example more readable, we'll select only amino acids with polar charged side chains:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
-...                                                      "M", "P", "F", "W", "S",
-...                                                      "T", "N", "Q", "Y", "C"])
+>>> observed_frequencies = observed_frequencies.select("DEHKR")
+>>> print(observed_frequencies)
+       D      E      H      K      R
+D 2360.0  255.5    7.5    0.5   25.0
+E  255.5 3305.0   16.5   27.0    2.0
+H    7.5   16.5 1235.0   16.0    8.5
+K    0.5   27.0   16.0 3218.0  116.5
+R   25.0    2.0    8.5  116.5 2079.0
+<BLANKLINE>
 \end{minted}
+Rows and columns for other amino acids were removed from the matrix.
 
-This information about amino acid replacements is represented as a
-python dictionary which will look something like (the order can vary):
-
-\begin{minted}{python}
-{
-    ("R", "R"): 2079.0,
-    ("R", "H"): 17.0,
-    ("R", "K"): 103.0,
-    ("R", "E"): 2.0,
-    ("R", "D"): 2.0,
-    ("H", "R"): 0,
-    ("D", "H"): 15.0,
-    ("K", "K"): 3218.0,
-    ("K", "H"): 24.0,
-    ("H", "K"): 8.0,
-    ("E", "H"): 15.0,
-    ("H", "H"): 1235.0,
-    ("H", "E"): 18.0,
-    ("H", "D"): 0,
-    ("K", "D"): 0,
-    ("K", "E"): 9.0,
-    ("D", "R"): 48.0,
-    ("E", "R"): 2.0,
-    ("D", "K"): 1.0,
-    ("E", "K"): 45.0,
-    ("K", "R"): 130.0,
-    ("E", "D"): 241.0,
-    ("E", "E"): 3305.0,
-    ("D", "E"): 270.0,
-    ("D", "D"): 2360.0,
-}
-\end{minted}
-
-This information gives us our accepted number of replacements, or how
-often we expect different things to substitute for each other. It
-turns out, amazingly enough, that this is all of the information we
-need to go ahead and create a substitution matrix. First, we use the
-replacement dictionary information to create an Accepted Replacement
-Matrix (ARM):
-
+Next, we normalize the matrix:
 %cont-doctest
 \begin{minted}{pycon}
->>> from Bio import SubsMat
->>> my_arm = SubsMat.SeqMat(replace_info)
+>>> import numpy
+>>> observed_frequencies /= numpy.sum(observed_frequencies)
 \end{minted}
 
-With this accepted replacement matrix, we can go right ahead and
-create our log odds matrix (i.~e.~a standard type Substitution Matrix):
-
+Summing over rows or columns gives the relative frequency of occurrence of
+each residue:
 %cont-doctest
 \begin{minted}{pycon}
->>> my_lom = SubsMat.make_log_odds_matrix(my_arm)
+>>> residue_frequencies = numpy.sum(observed_frequencies, 0)
+>>> print(residue_frequencies.format("%.4f"))
+D 0.2015
+E 0.2743
+H 0.0976
+K 0.2569
+R 0.1697
+<BLANKLINE>
+>>> numpy.sum(residue_frequencies)
+1.0
 \end{minted}
 
-The log odds matrix you create is customizable with the following
-optional arguments:
-
-\begin{itemize}
-  \item \verb|exp_freq_table| -- You can pass a table of expected
-  frequencies for each alphabet. If supplied, this will be used
-  instead of the passed accepted replacement matrix when calculate
-  expected replacments.
-
-  \item \verb|logbase| - The base of the logarithm taken to create the
-  log odd matrix. Defaults to base 10.
-
-  \item \verb|factor| - The factor to multiply each matrix entry
-  by. This defaults to 10, which normally makes the matrix numbers
-  easy to work with.
-
-  \item \verb|round_digit| - The digit to round to in the matrix. This
-  defaults to 0 (i.~e.~no digits).
-
-\end{itemize}
-
-Once you've got your log odds matrix, you can display it prettily
-using the function \verb|format|. Doing this on our created matrix
-gives:
-
+The expected frequency of residue pairs is then
 %cont-doctest
 \begin{minted}{pycon}
->>> print(my_lom.format())
-D   2
-E  -1   1
-H  -5  -4   3
-K -10  -5  -4   1
-R  -4  -8  -4  -2   2
-   D   E   H   K   R
+>>> expected_frequencies = numpy.dot(
+...     residue_frequencies[:, None], residue_frequencies[None, :]
+... )
+>>> print(expected_frequencies.format("%.4f"))
+       D      E      H      K      R
+D 0.0406 0.0553 0.0197 0.0518 0.0342
+E 0.0553 0.0752 0.0268 0.0705 0.0465
+H 0.0197 0.0268 0.0095 0.0251 0.0166
+K 0.0518 0.0705 0.0251 0.0660 0.0436
+R 0.0342 0.0465 0.0166 0.0436 0.0288
+<BLANKLINE>
+\end{minted}
+Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a single column with the values of \verb+residue_frequencies+, and \verb+residue_frequencies[None, :]+ a 2D array with these values as a single row. Taking their dot product (inner product) creates a matrix of expected frequencies where each entry consists of two \verb+residue_frequencies+ values multiplied with each other. For example, \verb+expected_frequencies['D', 'E']+ is equal to \verb+residue_frequencies['D'] * residue_frequencies['E']+.
+
+We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m = numpy.log2(observed_frequencies / expected_frequencies)
+>>> print(m)
+      D    E    H     K    R
+D   2.1 -1.5 -5.1 -10.4 -4.2
+E  -1.5  1.7 -4.4  -5.1 -8.3
+H  -5.1 -4.4  3.3  -4.4 -4.7
+K -10.4 -5.1 -4.4   1.9 -2.3
+R  -4.2 -8.3 -4.7  -2.3  2.5
+<BLANKLINE>
 \end{minted}
 
-Very nice. Now we've got our very own substitution matrix to play with!
+This matrix can be used as the substitution matrix when performing alignments. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import PairwiseAligner
+>>> aligner = PairwiseAligner()
+>>> aligner.substitution_matrix = m
+>>> aligner.gap_score = -3.0
+>>> alignments = aligner.align("DEHEK", "DHHKK")
+>>> print(alignments[0])
+DEHEK
+|.|.|
+DHHKK
+<BLANKLINE>
+>>> print("%.2f" % alignments.score)
+-2.18
+>>> score = m["D", "D"] + m["E", "H"] + m["H", "H"] + m["E", "K"] + m["K", "K"]
+>>> print("%.2f" % score)
+-2.18
+\end{minted}
+
 
 \section{BioSQL -- storing sequences in a relational database}
 \label{sec:BioSQL}

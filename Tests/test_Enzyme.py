@@ -14,7 +14,6 @@ from io import StringIO
 
 
 class TestEnzyme(unittest.TestCase):
-
     def test_parse_zero(self):
         handle = StringIO("")
         records = list(Enzyme.parse(handle))
@@ -30,9 +29,11 @@ class TestEnzyme(unittest.TestCase):
     def test_parse_many(self):
         """Check parse function with multiple records."""
         data = ""
-        for filename in ["Enzymes/lipoprotein.txt",
-                         "Enzymes/proline.txt",
-                         "Enzymes/valine.txt"]:
+        for filename in [
+            "Enzymes/lipoprotein.txt",
+            "Enzymes/proline.txt",
+            "Enzymes/valine.txt",
+        ]:
             with open(filename) as handle:
                 data += handle.read()
         handle = StringIO(data)
@@ -53,8 +54,13 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["AN"][0], "Clearing factor lipase.")
         self.assertEqual(record["AN"][1], "Diacylglycerol lipase.")
         self.assertEqual(record["AN"][2], "Diglyceride lipase.")
-        self.assertEqual(record["CA"], "Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.")
-        self.assertEqual(record["CC"][0], "Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins (VLDL).")
+        self.assertEqual(
+            record["CA"], "Triacylglycerol + H(2)O = diacylglycerol + a carboxylate."
+        )
+        self.assertEqual(
+            record["CC"][0],
+            "Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins (VLDL).",
+        )
         self.assertEqual(record["CC"][1], "Also hydrolyzes diacylglycerol.")
         self.assertEqual(record["PR"], ["PDOC00110"])
         self.assertEqual(record["DR"][0], ["P11151", "LIPL_BOVIN"])
@@ -68,8 +74,10 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][8], ["P49923", "LIPL_PIG"])
         self.assertEqual(record["DR"][9], ["Q06000", "LIPL_RAT"])
         self.assertEqual(record["DR"][10], ["Q29524", "LIPL_SHEEP"])
-        self.assertTrue(str(record).startswith("ID: 3.1.1.34\nDE: Lipoprotein lipase.\n"),
-                        "Did not expect:\n%s" % record)
+        self.assertTrue(
+            str(record).startswith("ID: 3.1.1.34\nDE: Lipoprotein lipase.\n"),
+            f"Did not expect:\n{record}",
+        )
 
     def test_proline(self):
         """Parsing ENZYME record for proline racemase (5.1.1.4)."""
@@ -89,8 +97,10 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][6], ["Q9CXA2", "PRCM_MOUSE"])
         self.assertEqual(record["DR"][7], ["Q5RC28", "PRCM_PONAB"])
         self.assertEqual(record["DR"][8], ["Q66II5", "PRCM_XENTR"])
-        self.assertTrue(str(record).startswith("ID: 5.1.1.4\nDE: Proline racemase.\n"),
-                        "Did not expect:\n%s" % record)
+        self.assertTrue(
+            str(record).startswith("ID: 5.1.1.4\nDE: Proline racemase.\n"),
+            f"Did not expect:\n{record}",
+        )
 
     def test_valine(self):
         """Parsing ENZYME record for valine decarboxylase (4.1.1.14)."""
@@ -103,8 +113,10 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["CF"], "Pyridoxal 5'-phosphate.")
         self.assertEqual(record["CC"], ["Also acts on L-leucine."])
         self.assertEqual(len(record["DR"]), 0)
-        self.assertTrue(str(record).startswith("ID: 4.1.1.14\nDE: Valine decarboxylase.\n"),
-                        "Did not expect:\n%s" % record)
+        self.assertTrue(
+            str(record).startswith("ID: 4.1.1.14\nDE: Valine decarboxylase.\n"),
+            f"Did not expect:\n{record}",
+        )
 
     def test_lactate(self):
         """Parsing ENZYME record for lactate racemase (5.1.2.1)."""
@@ -119,8 +131,10 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["AN"][2], "Lacticoracemase.")
         self.assertEqual(record["CA"], "(S)-lactate = (R)-lactate.")
         self.assertEqual(len(record["DR"]), 0)
-        self.assertTrue(str(record).startswith("ID: 5.1.2.1\nDE: Lactate racemase.\n"),
-                        "Did not expect:\n%s" % record)
+        self.assertTrue(
+            str(record).startswith("ID: 5.1.2.1\nDE: Lactate racemase.\n"),
+            f"Did not expect:\n{record}",
+        )
 
 
 if __name__ == "__main__":

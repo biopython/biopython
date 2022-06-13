@@ -38,7 +38,7 @@ class TestPBDListGetList(unittest.TestCase):
         entries = pdblist.get_all_entries()
         # As number of entries constantly grow, test checks if a certain number was
         # exceeded
-        self.assertTrue(len(entries) > 100000)
+        self.assertGreater(len(entries), 100000)
 
     def test_get_all_obsolete(self):
         """Tests the Bio.PDB.PDBList.get_all_obsolete method."""
@@ -47,7 +47,7 @@ class TestPBDListGetList(unittest.TestCase):
         entries = pdblist.get_all_obsolete()
         # As number of obsolete entries constantly grow, test checks if a certain number
         # was exceeded
-        self.assertTrue(len(entries) > 3000)
+        self.assertGreater(len(entries), 3000)
 
 
 class TestPDBListGetStructure(unittest.TestCase):
@@ -77,7 +77,7 @@ class TestPDBListGetStructure(unittest.TestCase):
         """Tests retrieving the small molecule in pdb format."""
         structure = "127d"
         self.check(
-            structure, os.path.join(structure[1:3], "pdb%s.ent" % structure), "pdb"
+            structure, os.path.join(structure[1:3], f"pdb{structure}.ent"), "pdb"
         )
 
     def test_retrieve_pdb_file_large_pdb(self):
@@ -85,7 +85,7 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "3k1q"
         self.check(
             structure,
-            os.path.join(structure[1:3], "%s-pdb-bundle.tar" % structure),
+            os.path.join(structure[1:3], f"{structure}-pdb-bundle.tar"),
             "bundle",
         )
 
@@ -94,7 +94,7 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "347d"
         self.check(
             structure,
-            os.path.join("obsolete", structure[1:3], "pdb%s.ent" % structure),
+            os.path.join("obsolete", structure[1:3], f"pdb{structure}.ent"),
             "pdb",
             obsolete=True,
         )
@@ -104,7 +104,7 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "347d"
         self.check(
             structure,
-            os.path.join("obsolete", structure[1:3], "%s.cif" % structure),
+            os.path.join("obsolete", structure[1:3], f"{structure}.cif"),
             "mmCif",
             obsolete=True,
         )
@@ -112,16 +112,14 @@ class TestPDBListGetStructure(unittest.TestCase):
     def test_retrieve_pdb_file_mmcif(self):
         """Tests retrieving the (non-obsolete) molecule in mmcif format."""
         structure = "127d"
-        self.check(
-            structure, os.path.join(structure[1:3], "%s.cif" % structure), "mmCif"
-        )
+        self.check(structure, os.path.join(structure[1:3], f"{structure}.cif"), "mmCif")
 
     def test_retrieve_pdb_file_obsolete_xml(self):
         """Tests retrieving the obsolete molecule in mmcif format."""
         structure = "347d"
         self.check(
             structure,
-            os.path.join("obsolete", structure[1:3], "%s.xml" % structure),
+            os.path.join("obsolete", structure[1:3], f"{structure}.xml"),
             "xml",
             obsolete=True,
         )
@@ -129,24 +127,18 @@ class TestPDBListGetStructure(unittest.TestCase):
     def test_retrieve_pdb_file_xml(self):
         """Tests retrieving the (non obsolete) molecule in xml format."""
         structure = "127d"
-        self.check(structure, os.path.join(structure[1:3], "%s.xml" % structure), "xml")
+        self.check(structure, os.path.join(structure[1:3], f"{structure}.xml"), "xml")
 
     def test_retrieve_pdb_file_mmtf(self):
         """Tests retrieving the molecule in mmtf format."""
         structure = "127d"
-        self.check(
-            structure, os.path.join(structure[1:3], "%s.mmtf" % structure), "mmtf"
-        )
+        self.check(structure, os.path.join(structure[1:3], f"{structure}.mmtf"), "mmtf")
 
     def test_double_retrieve(self):
         """Tests retrieving the same file to different directories."""
         structure = "127d"
-        self.check(
-            structure, os.path.join("a", "%s.cif" % structure), "mmCif", pdir="a"
-        )
-        self.check(
-            structure, os.path.join("b", "%s.cif" % structure), "mmCif", pdir="b"
-        )
+        self.check(structure, os.path.join("a", f"{structure}.cif"), "mmCif", pdir="a")
+        self.check(structure, os.path.join("b", f"{structure}.cif"), "mmCif", pdir="b")
 
 
 if __name__ == "__main__":

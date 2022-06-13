@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2001 by Brad Chapman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -11,13 +10,16 @@ import random
 import unittest
 
 from Bio import MissingExternalDependencyError
+
 try:
     # Skip the test if reportlab is not installed
     import reportlab as r
+
     del r
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.") from None
+        "Install reportlab if you want to use Bio.Graphics."
+    ) from None
 
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot
@@ -39,13 +41,10 @@ class ComparativeTest(unittest.TestCase):
         random.seed(num_two_d_lists)  # for reproducibility
         for two_d_list in range(num_two_d_lists):
             cur_list = []
-            num_points = random.randrange(self.min_num_points,
-                                          self.max_num_points)
+            num_points = random.randrange(self.min_num_points, self.max_num_points)
             for point in range(num_points):
-                x_point = random.randrange(self.min_point_num,
-                                           self.max_point_num)
-                y_point = random.randrange(self.min_point_num,
-                                           self.max_point_num)
+                x_point = random.randrange(self.min_point_num, self.max_point_num)
+                y_point = random.randrange(self.min_point_num, self.max_point_num)
 
                 cur_list.append((x_point, y_point))
 

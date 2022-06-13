@@ -70,7 +70,6 @@ MMTF library which Biopython is using internally:
 For example you can access just the X-coordinate.
 \begin{minted}{pycon}
 >>> print(decoded_data.x_coord_list)
-...
 \end{minted}
 
 \subsection{Reading a PDB file}
@@ -213,7 +212,7 @@ out glycine residues:
 \begin{minted}{pycon}
 >>> class GlySelect(Select):
 ...     def accept_residue(self, residue):
-...         if residue.get_name()=="GLY":
+...         if residue.get_name() == "GLY":
 ...             return True
 ...         else:
 ...             return False
@@ -432,9 +431,9 @@ identifier alone can be used:
 
 \begin{minted}{pycon}
 # Full id
->>> residue=chain[(" ", 100, " ")]
+>>> residue = chain[(" ", 100, " ")]
 # Shortcut id
->>> residue=chain[100]
+>>> residue = chain[100]
 \end{minted}
 The reason for the hetero-flag is that many, many PDB files use the
 same sequence identifier for an amino acid and a hetero-residue or
@@ -469,10 +468,10 @@ residues are dealt with in a special way, as described in section \ref{sec:point
 A Residue object has a number of additional methods:
 
 \begin{minted}{pycon}
->>> residue.get_resname()    # returns the residue name, e.g. "ASN"
+>>> residue.get_resname()  # returns the residue name, e.g. "ASN"
 >>> residue.is_disordered()  # returns 1 if the residue has disordered atoms
->>> residue.get_segid()      # returns the SEGID, e.g. "CHN1"
->>> residue.has_id(name)     # test if a residue has a certain atom
+>>> residue.get_segid()  # returns the SEGID, e.g. "CHN1"
+>>> residue.has_id(name)  # test if a residue has a certain atom
 \end{minted}
 
 You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino acid.
@@ -516,17 +515,17 @@ atomic coordinates directly.
 An Atom object has the following additional methods:
 
 \begin{minted}{pycon}
->>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
->>> a.get_id()         # id (equals atom name)
->>> a.get_coord()      # atomic coordinates
->>> a.get_vector()     # atomic coordinates as Vector object
->>> a.get_bfactor()    # isotropic B factor
+>>> a.get_name()  # atom name (spaces stripped, e.g. "CA")
+>>> a.get_id()  # id (equals atom name)
+>>> a.get_coord()  # atomic coordinates
+>>> a.get_vector()  # atomic coordinates as Vector object
+>>> a.get_bfactor()  # isotropic B factor
 >>> a.get_occupancy()  # occupancy
->>> a.get_altloc()     # alternative location specifier
->>> a.get_sigatm()     # standard deviation of atomic parameters
->>> a.get_siguij()     # standard deviation of anisotropic B factor
->>> a.get_anisou()     # anisotropic B factor
->>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
+>>> a.get_altloc()  # alternative location specifier
+>>> a.get_sigatm()  # standard deviation of atomic parameters
+>>> a.get_siguij()  # standard deviation of anisotropic B factor
+>>> a.get_anisou()  # anisotropic B factor
+>>> a.get_fullname()  # atom name (with spaces, e.g. ".CA.")
 \end{minted}
 
 To represent the atom coordinates, siguij, anisotropic B factor and sigatm Numpy
@@ -553,11 +552,11 @@ module:
 >>> c = c - ca
 # find rotation matrix that rotates n
 # -120 degrees along the ca-c vector
->>> rot = rotaxis(-pi * 120.0/180.0, c)
+>>> rot = rotaxis(-pi * 120.0 / 180.0, c)
 # apply rotation to ca-n vector
 >>> cb_at_origin = n.left_multiply(rot)
 # put on top of ca atom
->>> cb = cb_at_origin+ca
+>>> cb = cb_at_origin + ca
 \end{minted}
 This example shows that it's possible to do some quite nontrivial
 vector operations on atomic data, which can be quite useful. In addition
@@ -624,10 +623,10 @@ specify that a \texttt{Disordered\-Atom} object should behave like
 the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{minted}{pycon}
->>> atom.disordered_select("A") # select altloc A atom
+>>> atom.disordered_select("A")  # select altloc A atom
 >>> print(atom.get_altloc())
 "A"
->>> atom.disordered_select("B") # select altloc B atom
+>>> atom.disordered_select("B")  # select altloc B atom
 >>> print(atom.get_altloc())
 "B"
 \end{minted}
@@ -788,10 +787,10 @@ For more info, see the API documentation.
 
 \begin{minted}{pycon}
 >>> for residue in chain.get_list():
-...    residue_id = residue.get_id()
-...    hetfield = residue_id[0]
-...    if hetfield[0]=="H":
-...        print(residue_id)
+...     residue_id = residue.get_id()
+...     hetfield = residue_id[0]
+...     if hetfield[0] == "H":
+...         print(residue_id)
 ...
 \end{minted}
 
@@ -858,12 +857,12 @@ Example:
 
 \begin{minted}{pycon}
 # Using C-N
->>> ppb=PPBuilder()
+>>> ppb = PPBuilder()
 >>> for pp in ppb.build_peptides(structure):
 ...     print(pp.get_sequence())
 ...
 # Using CA-CA
->>> ppb=CaPPBuilder()
+>>> ppb = CaPPBuilder()
 >>> for pp in ppb.build_peptides(structure):
 ...     print(pp.get_sequence())
 ...
@@ -878,15 +877,14 @@ objects as well.
 The first thing to do is to extract all polypeptides from the structure
 (as above). The sequence of each polypeptide can then easily
 be obtained from the \texttt{Polypeptide} objects. The sequence is
-represented as a Biopython \texttt{Seq} object, and its alphabet is
-defined by a \texttt{ProteinAlphabet} object.
+represented as a Biopython \texttt{Seq} object.
 
 Example:
 
 \begin{minted}{pycon}
 >>> seq = polypeptide.get_sequence()
->>> print(seq)
-Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
+>>> seq
+Seq('SNDIYFNFQRFNETNLILQRDASVSSSGQLRLTNLN')
 \end{minted}
 
 \section{Analyzing structures}
@@ -898,7 +896,7 @@ The minus operator for atoms has been overloaded to return the distance between 
 >>> ca1 = residue1["CA"]
 >>> ca2 = residue2["CA"]
 # Simply subtract the atoms to get their distance
->>> distance = ca1-ca2
+>>> distance = ca1 - ca2
 \end{minted}
 
 \subsection{Measuring angles}
@@ -922,11 +920,88 @@ the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
 >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
 \end{minted}
 
+\subsection{Internal coordinates for standard residues}
+The \texttt{internal\_coords} module is provided to facilitate working with canonical bond lengths,
+angles and torsion angles for a standard protein.  \texttt{atom\_to\_internal\_coordinates()} for 
+\texttt{Structure}, \texttt{Model}, and \texttt{Chain} entities
+will extend \texttt{Chain} and \texttt{Residue} classes with \texttt{internal\_coord} attributes referencing 
+\texttt{IC\_Chain} and \texttt{IC\_Residue}
+classes respectively.  \texttt{IC\_Residue} provides \texttt{get\_angle()} and \texttt{get\_length()}
+to query the computed values with various specifiers and synonyms:
+\begin{minted}{pycon}
+>>> model.atom_to_internal_coordinates()
+>>> for r in model.get_residues():
+...     if r.internal_coord:
+...         print(
+...             r,
+...             r.internal_coord.get_angle("psi"),
+...             r.internal_coord.get_angle("phi"),
+...             r.internal_coord.get_angle("omega"),  # or "omg"
+...             r.internal_coord.get_angle("chi2"),
+...             r.internal_coord.get_angle("CB:CA:C"),
+...             (
+...                 r.internal_coord.get_length("-1C:0N")  # i-1 to i peptide bond
+...                 if r.internal_coord.rprev
+...                 else "None"
+...             ),
+...         )
+...
+\end{minted}
+Note that only angles, dihedral angles and residue configurations specified in \texttt{ic\_data.py} are computed, 
+however these data structures can be extended to add support for HETATMS as needed.
+ 
+Corresponding \texttt{set\_angle()} and \texttt{set\_length()} routines are also provided, and the atom coordinates 
+may be updated using \texttt{internal\_to\_atom\_coordinates()}.
+
+Missing atoms will cause problems for rebuilding structures from internal coordinates, however chain breaks and
+disordered residues and atoms as described above are handled correctly.  \texttt{structure\_rebuild\_test(entity)}  
+will compare a structure to a copy built from internal coordinates and return a report of success or failure as
+a dictionary.
+
+An entity specification consisting of only internal coordinates (and optional positioning information) may be exported
+as a \emph{.pic} file with \texttt{write\_PIC()}.  This format uses 3- and 4-tuples of \texttt{AtomKey}s to specify 3-atom
+hedra and 4-atom dihedra geometries.  \texttt{AtomKey}s consist of up to six fields, capturing residue position, insertion 
+code, residue name, atom name, altloc and occupancy.  A \emph{.pic} file includes sufficient information to regenerate the
+ATOM records of a \emph{.pdb} file.
+
+The \texttt{internal\_to\_atom\_coords()} assembly algorithm is also implemented in OpenSCAD (\url{http://www.openscad.org/}),
+a language for describing 3D solid CAD models.  \texttt{write\_SCAD()} can thus generate a protein model suitable for rendering 
+on a 3D printer, however the printing process is non-trivial and it is likely that you will want to modify the \emph{.scad} file 
+for your own purposes, just as you might select different rendering options for a 3D protein visualizer.  A modified example 
+is available at \url{https://www.thingiverse.com/thing:3957471}.
+
+A few control attributes are available in the \texttt{internal\_coords} classes to modify or filter data as internal coordinates are calculated.  These are listed in Table~\ref{table:ic-attribs},
+
+\begin{table}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Class&Attribute&Default&Effect\\
+		\hline
+		\hline
+		AtomKey&d2h&False&Convert D atoms to H if True\\
+		\hline
+		IC\_Chain&MaxPeptideBond&1.4&Max C-N length w/o chain break; \\
+		& & & make large to link over missing \\
+		& & & residues for 3D models \\
+		\hline
+		IC\_Residue&accept\_atoms&mainchain, hydrogen atoms&override to remove some or all H's, D's\\
+		\hline
+		&accept\_resnames&CYG, YCM, UNK&3-letter names for HETATMs to process, \\
+		& & & backbone only unless added to ic\_data.py \\
+		\hline
+		&gly\_Cbeta&False&override to generate Gly C$\beta$ atoms \\
+		& & & based on database averages \\
+		\hline
+	\end{tabular}
+	\caption{Control attributes in Bio.PDB.internal\_coords.}
+	\label{table:ic-attribs}
+\end{table}
+
 \subsection{Determining atom-atom contacts}
 
 Use \texttt{NeighborSearch} to perform neighbor lookup.
-The neighbor lookup is done using a KD tree module written in C (see \texttt{Bio.KDTree}), making it very fast.
-It  also includes a fast method to find all point pairs within a certain distance of each other.
+The neighbor lookup is done using a KD tree module written in C (see the \texttt{KDTree} class in module \texttt{Bio.PDB.kdtrees}), making it very fast.
+It also includes a fast method to find all point pairs within a certain distance of each other.
 
 \subsection{Superimposing two structures}
 
@@ -990,7 +1065,7 @@ Example:
 # Calculate HSEalpha
 >>> exp_ca = hse.calc_hs_exposure(model, option="CA3")
 # Calculate HSEbeta
->>> exp_cb=hse.calc_hs_exposure(model, option="CB")
+>>> exp_cb = hse.calc_hs_exposure(model, option="CB")
 # Calculate classical coordination number
 >>> exp_fs = hse.calc_fs_exposure(model)
 # Print HSEalpha for a residue
@@ -1062,7 +1137,7 @@ Example:
 \begin{minted}{pycon}
 >>> model = structure[0]
 >>> rd = ResidueDepth(model, pdb_file)
->>> residue_depth, ca_depth=rd[some_residue]
+>>> residue_depth, ca_depth = rd[some_residue]
 \end{minted}
 You can also get access to the molecular surface itself (via the \texttt{get\_surface}
 function), in the form of a Numeric Python array with the surface points.
@@ -1080,7 +1155,7 @@ Example:
 \begin{minted}{pycon}
 # Permissive parser
 >>> parser = PDBParser(PERMISSIVE=1)
->>> parser = PDBParser() # The same (default)
+>>> parser = PDBParser()  # The same (default)
 # Strict parser
 >>> strict_parser = PDBParser(PERMISSIVE=0)
 \end{minted}
@@ -1303,9 +1378,7 @@ day). Python based/aware molecular graphics solutions include:
 \subsection{Who's using Bio.PDB?}
 
 Bio.PDB was used in the construction of DISEMBL, a web server that
-predicts disordered regions in proteins (\url{http://dis.embl.de/}),
-and COLUMBA, a website that provides annotated protein structures
-(\url{http://www.columba-db.de/}). Bio.PDB has also been used to
+predicts disordered regions in proteins (\url{http://dis.embl.de/}). Bio.PDB has also been used to
 perform a large scale search for active sites similarities between
 protein structures in the PDB \cite[Hamelryck, 2003]{hamelryck2003b}, and to develop a new algorithm
 that identifies linear secondary structure elements \cite[Majumdar \textit{et al.}, 2005]{majumdar2005}.

@@ -36,7 +36,7 @@ class Generic_dbutils:
         """Return the last used id for a table."""
         # XXX: Unsafe without transactions isolation
         table = self.tname(table)
-        sql = "select max(%s_id) from %s" % (table, table)
+        sql = f"select max({table}_id) from {table}"
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
@@ -104,14 +104,14 @@ class _PostgreSQL_dbutils(Generic_dbutils):
 
     def next_id(self, cursor, table):
         table = self.tname(table)
-        sql = "SELECT nextval('%s_pk_seq')" % table
+        sql = f"SELECT nextval('{table}_pk_seq')"
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
 
     def last_id(self, cursor, table):
         table = self.tname(table)
-        sql = "SELECT currval('%s_pk_seq')" % table
+        sql = f"SELECT currval('{table}_pk_seq')"
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]

@@ -1,7 +1,11 @@
 # On Windows, git can be setup to convert text files to use
 # DOS/Windows newlines (\r\n) rather than Unix style (\n).
 # This should be harmless for most of our unit tests...
-#
+# Still, it's better when we try to assure unform Unix style
+# when committing:
+
+* text=auto
+
 # However, where testing indexing and get_raw (including the
 # BGZF tests comparing the uncompressed file to the compressed
 # file) it can be important to preserve the line endings in git.

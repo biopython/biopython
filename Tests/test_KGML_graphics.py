@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # Copyright 2013, 2014 by Leighton Pritchard.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -16,6 +15,7 @@ from Bio.Graphics.ColorSpiral import ColorSpiral
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
+
 try:
     # Not actually using these imports directly:
     from reportlab.pdfgen.canvas import Canvas
@@ -23,7 +23,8 @@ try:
     from reportlab.lib.colors import HexColor
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.") from None
+        "Install reportlab if you want to use Bio.Graphics."
+    ) from None
 
 try:
     c = HexColor("#8080F780")
@@ -32,7 +33,8 @@ except TypeError:
     # unsupported operand type(s) for &: 'int' and 'float'
     # ReportLab 2.7+ also offers hasAlpha=True rather than alpha=True
     raise MissingExternalDependencyError(
-        "Install at least reportlab 2.7 for transparency support.") from None
+        "Install at least reportlab 2.7 for transparency support."
+    ) from None
 
 # Do we have PIL?
 try:
@@ -40,7 +42,8 @@ try:
 except ImportError:
     raise MissingExternalDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to use bitmaps from KGML.") from None
+        "if you want to use bitmaps from KGML."
+    ) from None
 
 
 # Biopython Bio.KEGG.KGML
@@ -54,13 +57,13 @@ class PathwayData:
     """Convenience structure for testing pathway data."""
 
     def __init__(self, name, element_counts, show_pathway_image=False):
-        """Initialize."""
-        self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
-        self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
+        """Initialize the class."""
+        self.infilename = os.path.join("KEGG", f"ko{name}.xml")
+        self.outfilename = os.path.join("KEGG", f"ko{name}.kgml")
         self.element_counts = element_counts
-        self.pathway_image = os.path.join("KEGG", "map%s.png" % name)
+        self.pathway_image = os.path.join("KEGG", f"map{name}.png")
         self.show_pathway_image = show_pathway_image
-        self.output_stem = "Graphics/map%s" % name
+        self.output_stem = f"Graphics/map{name}"
 
 
 class KGMLPathwayTest(unittest.TestCase):
@@ -81,27 +84,29 @@ class KGMLPathwayTest(unittest.TestCase):
         self.data = [
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
-            ]
+        ]
         # A list of KO IDs that we're going to use to modify pathway
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
-        self.ko_ids = \
-            {"ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242",
-             "ko:K00244", "ko:K00245", "ko:K00246", "ko:K00247",
-             "ko:K00174", "ko:K00175", "ko:K00177", "ko:K00176",
-             "ko:K00382", "ko:K00164", "ko:K00164", "ko:K00658",
-             "ko:K01902", "ko:K01903", "ko:K01899", "ko:K01900",
-             "ko:K01899", "ko:K01900", "ko:K00031", "ko:K00030",
-             "ko:K00031", "ko:K01648", "ko:K00234", "ko:K00235",
-             "ko:K00236", "ko:K00237", "ko:K01676", "ko:K01677",
-             "ko:K01678", "ko:K01679", "ko:K01681", "ko:K01682",
-             "ko:K01681", "ko:K01682", "ko:K01647", "ko:K00025",
-             "ko:K00026", "ko:K00024", "ko:K01958", "ko:K01959",
-             "ko:K01960", "ko:K00163", "ko:K00161", "ko:K00162",
-             "ko:K00163", "ko:K00161", "ko:K00162", "ko:K00382",
-             "ko:K00627", "ko:K00169", "ko:K00170", "ko:K00172",
-             "ko:K00171", "ko:K01643", "ko:K01644", "ko:K01646",
-             "ko:K01610", "ko:K01596"}
+        # Turn black code style off
+        # fmt: off
+        self.ko_ids = {
+            "ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242", "ko:K00244",
+            "ko:K00245", "ko:K00246", "ko:K00247", "ko:K00174", "ko:K00175",
+            "ko:K00177", "ko:K00176", "ko:K00382", "ko:K00164", "ko:K00164",
+            "ko:K00658", "ko:K01902", "ko:K01903", "ko:K01899", "ko:K01900",
+            "ko:K01899", "ko:K01900", "ko:K00031", "ko:K00030", "ko:K00031",
+            "ko:K01648", "ko:K00234", "ko:K00235", "ko:K00236", "ko:K00237",
+            "ko:K01676", "ko:K01677", "ko:K01678", "ko:K01679", "ko:K01681",
+            "ko:K01682", "ko:K01681", "ko:K01682", "ko:K01647", "ko:K00025",
+            "ko:K00026", "ko:K00024", "ko:K01958", "ko:K01959", "ko:K01960",
+            "ko:K00163", "ko:K00161", "ko:K00162", "ko:K00163", "ko:K00161",
+            "ko:K00162", "ko:K00382", "ko:K00627", "ko:K00169", "ko:K00170",
+            "ko:K00172", "ko:K00171", "ko:K01643", "ko:K01644", "ko:K01646",
+            "ko:K01610", "ko:K01596"
+        }
+        # Turn black code style on
+        # fmt: on
 
     def test_render_KGML_basic(self):
         """Basic rendering of KGML: write to PDF without modification."""
@@ -122,8 +127,11 @@ class KGMLPathwayTest(unittest.TestCase):
         p = self.data
         with open(p[0].infilename) as f:
             pathway = read(f)
-            mod_rs = [e for e in pathway.orthologs if
-                      len(set(e.name.split()).intersection(self.ko_ids))]
+            mod_rs = [
+                e
+                for e in pathway.orthologs
+                if len(set(e.name.split()).intersection(self.ko_ids))
+            ]
             for r in mod_rs:
                 for g in r.graphics:
                     g.width = 10
@@ -135,8 +143,7 @@ class KGMLPathwayTest(unittest.TestCase):
             pathway = read(f)
             orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
-            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
-                             jitter=0.03)
+            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5, jitter=0.03)
             colors = cs.get_colors(len(orthologs))
             for o, c in zip(orthologs, colors):
                 for g in o.graphics:
@@ -153,8 +160,11 @@ class KGMLPathwayTest(unittest.TestCase):
         p = self.data
         with open(p[0].infilename) as f:
             pathway = read(f)
-            mod_rs = [e for e in pathway.orthologs if
-                      len(set(e.name.split()).intersection(self.ko_ids))]
+            mod_rs = [
+                e
+                for e in pathway.orthologs
+                if len(set(e.name.split()).intersection(self.ko_ids))
+            ]
             for r in mod_rs:
                 for g in r.graphics:
                     # Modify hex colour directly by appending alpha channel
@@ -169,12 +179,11 @@ class KGMLPathwayTest(unittest.TestCase):
             pathway = read(f)
             orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
-            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
-                             jitter=0.03)
+            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5, jitter=0.03)
             colors = cs.get_colors(len(orthologs))
             for o, c in zip(orthologs, colors):
                 # Modify color tuples to add alpha channel
-                c = c + (0.5, )
+                c = c + (0.5,)
                 for g in o.graphics:
                     g.bgcolor = c
             kgml_map = KGMLCanvas(pathway)

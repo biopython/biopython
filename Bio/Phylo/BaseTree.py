@@ -16,6 +16,9 @@ import copy
 import itertools
 import random
 import re
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 # General tree-traversal algorithms
@@ -32,7 +35,7 @@ def _level_traverse(root, get_children):
 
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -43,7 +46,7 @@ def _preorder_traverse(root, get_children):
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         for v in get_children(elem):
             yield from dfs(v)
@@ -72,7 +75,7 @@ def _sorted_attrs(elem):
 
 def _identity_matcher(target):
     """Match a node to the target object by identity (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return node is target
 
@@ -81,7 +84,7 @@ def _identity_matcher(target):
 
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return isinstance(node, target_cls)
 
@@ -111,7 +114,7 @@ def _attribute_matcher(kwargs):
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
     """
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         if "terminal" in kwargs:
             # Special case: restrict to internal/external/any nodes
@@ -136,7 +139,7 @@ def _attribute_matcher(kwargs):
                 return pattern == target
             if pattern is None:
                 return target is None
-            raise TypeError("invalid query type: %s" % type(pattern))
+            raise TypeError(f"invalid query type: {type(pattern)}")
         return True
 
     return match
@@ -144,7 +147,7 @@ def _attribute_matcher(kwargs):
 
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         try:
             return matcher_func(node)
@@ -177,9 +180,7 @@ def _object_matcher(obj):
         return _attribute_matcher(obj)
     if callable(obj):
         return _function_matcher(obj)
-    raise ValueError(
-        "%s (type %s) is not a valid type for comparison." % (obj, type(obj))
-    )
+    raise ValueError(f"{obj} (type {type(obj)}) is not a valid type for comparison.")
 
 
 def _combine_matchers(target, kwargs, require_spec):
@@ -241,12 +242,12 @@ class TreeElement:
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
                 val = val[:57] + "..." if len(val) > 60 else val
-                return "%s='%s'" % (key, val)
-            return "%s=%s" % (key, val)
+                return f"{key}='{val}'"
+            return f"{key}={val}"
 
         return "%s(%s)" % (
             self.__class__.__name__,
@@ -286,7 +287,7 @@ class TreeMixin:
             order_func = order_opts[order]
         except KeyError:
             raise ValueError(
-                "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
+                f"Invalid order '{order}'; must be one of: {tuple(order_opts)}"
             ) from None
 
         if follow_attrs:
@@ -365,7 +366,7 @@ class TreeMixin:
             depth-first (preorder) by default.
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop("clades")
             found = elem.find_any(target, **kwargs)
@@ -441,7 +442,7 @@ class TreeMixin:
         # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
             if p is None:
-                raise ValueError("target %s is not in this tree" % repr(t))
+                raise ValueError(f"target {t!r} is not in this tree")
         mrca = self.root
         for level in zip(*paths):
             ref = level[0]
@@ -471,7 +472,7 @@ class TreeMixin:
             instances in the tree, and values are the distance from the root to
             each clade (including terminals).
 
-        """
+        """  # noqa: D402
         if unit_branch_lengths:
             depth_of = lambda c: 1  # noqa: E731
         else:
@@ -772,7 +773,7 @@ class Tree(TreeElement, TreeMixin):
 
         """
         if isinstance(taxa, int):
-            taxa = ["taxon%s" % (i + 1) for i in range(taxa)]
+            taxa = [f"taxon{i + 1}" for i in range(taxa)]
         elif hasattr(taxa, "__iter__"):
             taxa = list(taxa)
         else:
@@ -906,7 +907,6 @@ class Tree(TreeElement, TreeMixin):
 
         self.root = new_root
         self.rooted = True
-        return
 
     def root_at_midpoint(self):
         """Root the tree at the midpoint of the two most distant taxa.
@@ -955,8 +955,7 @@ class Tree(TreeElement, TreeMixin):
     def __format__(self, format_spec):
         """Serialize the tree as a string in the specified file format.
 
-        This method supports the ``format`` built-in function added in Python
-        2.6/3.0.
+        This method supports Python's ``format`` built-in function.
 
         :param format_spec: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
@@ -973,12 +972,22 @@ class Tree(TreeElement, TreeMixin):
             # Follow python convention and default to using __str__
             return str(self)
 
-    def format(self, format):
+    def format(self, fmt=None, format=None):
         """Serialize the tree as a string in the specified file format.
 
-        This duplicates the __format__ magic method for pre-2.6 Pythons.
+        :param fmt: a lower-case string supported by ``Bio.Phylo.write``
+            as an output file format.
+
         """
-        return self.__format__(format)
+        if format is not None:
+            if fmt is not None:
+                raise ValueError("The ``format`` argument has been renamed to ``fmt``.")
+            warnings.warn(
+                "The ``format`` argument has been renamed to ``fmt``.",
+                BiopythonDeprecationWarning,
+            )
+            fmt = format
+        return self.__format__(fmt)
 
     # Pretty-printer for the entire tree hierarchy
 
@@ -1077,7 +1086,7 @@ class Clade(TreeElement, TreeMixin):
         return iter(self.clades)
 
     def __len__(self):
-        """Return the number of clades directy under the root."""
+        """Return the number of clades directly under the root."""
         return len(self.clades)
 
     def __bool__(self):
@@ -1110,12 +1119,12 @@ class Clade(TreeElement, TreeMixin):
                 # HTML-style hex string
                 self._color = BranchColor.from_hex(arg)
             else:
-                raise ValueError("invalid color string %s" % arg)
+                raise ValueError(f"invalid color string {arg}")
         elif hasattr(arg, "__iter__") and len(arg) == 3:
             # RGB triplet
             self._color = BranchColor(*arg)
         else:
-            raise ValueError("invalid color value %s" % arg)
+            raise ValueError(f"invalid color value {arg}")
 
     color = property(_get_color, _set_color, doc="Branch color.")
 
@@ -1191,7 +1200,7 @@ class BranchColor:
         ), "need a 24-bit hexadecimal string, e.g. #000000"
 
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
-        return cls(*[int("0x" + cc, base=16) for cc in RGB])
+        return cls(*(int("0x" + cc, base=16) for cc in RGB))
 
     @classmethod
     def from_name(cls, colorname):
@@ -1211,7 +1220,7 @@ class BranchColor:
         '#0cc864'
 
         """
-        return "#%02x%02x%02x" % (self.red, self.green, self.blue)
+        return f"#{self.red:02x}{self.green:02x}{self.blue:02x}"
 
     def to_rgb(self):
         """Return a tuple of RGB values (0 to 255) representing this color.

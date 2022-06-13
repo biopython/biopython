@@ -12,9 +12,15 @@ import os
 import unittest
 import math
 
-from Bio.Alphabet import generic_dna
-from Bio.Alphabet import Gapped
-from Bio.Alphabet import IUPAC
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingExternalDependencyError
+
+    raise MissingExternalDependencyError(
+        "Install numpy if you want to use Bio.motifs."
+    ) from None
+
 from Bio import motifs
 from Bio.Seq import Seq
 
@@ -27,6 +33,8 @@ class MotifTestsBasic(unittest.TestCase):
         self.SITESin = open("motifs/Arnt.sites")
         self.CLUSTERBUSTERin = open("motifs/clusterbuster.pfm")
         self.XMSin = open("motifs/abdb.xms")
+        self.PFMFOURCOLUMNSin = open("motifs/fourcolumns.pfm")
+        self.PFMFOURROWSin = open("motifs/fourrows.pfm")
         self.TFout = "motifs/tf.out"
         self.FAout = "motifs/fa.out"
         self.PFMout = "motifs/fa.out"
@@ -70,336 +78,362 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(len(record), 16)
         self.assertEqual(record[0].alphabet, "ACGT")
         self.assertEqual(len(record[0].instances), 11)
-        self.assertEqual(str(record[0].instances[0]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[1]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[2]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[3]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[4]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[5]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[6]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[7]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[8]), "TCTACGATTGAG")
-        self.assertEqual(str(record[0].instances[9]), "TCAAAGATAGAG")
-        self.assertEqual(str(record[0].instances[10]), "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[0], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[1], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[2], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[3], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[4], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[5], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[6], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[7], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[8], "TCTACGATTGAG")
+        self.assertEqual(record[0].instances[9], "TCAAAGATAGAG")
+        self.assertEqual(record[0].instances[10], "TCTACGATTGAG")
         self.assertEqual(record[0].mask, (1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1))
         self.assertAlmostEqual(record[0].score, 57.9079)
         self.assertEqual(record[1].alphabet, "ACGT")
         self.assertEqual(len(record[1].instances), 22)
-        self.assertEqual(str(record[1].instances[0]), "GCGAAGGAAGCAGCGCGTGTG")
-        self.assertEqual(str(record[1].instances[1]), "GGCACCGCCTCTACGATTGAG")
-        self.assertEqual(str(record[1].instances[2]), "CAGAGCTTAGCATTGAACGCG")
-        self.assertEqual(str(record[1].instances[3]), "CTAATGAAAGCAATGAGAGTG")
-        self.assertEqual(str(record[1].instances[4]), "CTTGTGCCCTCTAAGCGTCCG")
-        self.assertEqual(str(record[1].instances[5]), "GAGCACGACGCTTTGTACCTG")
-        self.assertEqual(str(record[1].instances[6]), "CGGCACTTAGCAGCGTATCGT")
-        self.assertEqual(str(record[1].instances[7]), "CTGGTTTCATCTACGATTGAG")
-        self.assertEqual(str(record[1].instances[8]), "GGGCCAATAGCGGCGCCGGAG")
-        self.assertEqual(str(record[1].instances[9]), "GTGGAGTTATCTTAGTGCGCG")
-        self.assertEqual(str(record[1].instances[10]), "GAGAGGTTATCTACGATTGAG")
-        self.assertEqual(str(record[1].instances[11]), "CTGCTCCCCGCATACAGCGCG")
-        self.assertEqual(str(record[1].instances[12]), "CAGAACCGAGGTCCGGTACGG")
-        self.assertEqual(str(record[1].instances[13]), "GTGCCCCAAGCTTACCCAGGG")
-        self.assertEqual(str(record[1].instances[14]), "CGCCTCTGATCTACGATTGAG")
-        self.assertEqual(str(record[1].instances[15]), "GTGCTCATAGGGACGTCGCGG")
-        self.assertEqual(str(record[1].instances[16]), "CTGCCCCCCGCATAGTAGGGG")
-        self.assertEqual(str(record[1].instances[17]), "GTAAAGAAATCGATGTGCCAG")
-        self.assertEqual(str(record[1].instances[18]), "CACCTGCAATTGCTGGCAGCG")
-        self.assertEqual(str(record[1].instances[19]), "GGCGGGCCATCCCTGTATGAA")
-        self.assertEqual(str(record[1].instances[20]), "CTCCAGGTCGCATGGAGAGAG")
-        self.assertEqual(str(record[1].instances[21]), "CCTCGGATCGCTTGGGAAGAG")
-        self.assertEqual(record[1].mask, (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1))
+        self.assertEqual(record[1].instances[0], "GCGAAGGAAGCAGCGCGTGTG")
+        self.assertEqual(record[1].instances[1], "GGCACCGCCTCTACGATTGAG")
+        self.assertEqual(record[1].instances[2], "CAGAGCTTAGCATTGAACGCG")
+        self.assertEqual(record[1].instances[3], "CTAATGAAAGCAATGAGAGTG")
+        self.assertEqual(record[1].instances[4], "CTTGTGCCCTCTAAGCGTCCG")
+        self.assertEqual(record[1].instances[5], "GAGCACGACGCTTTGTACCTG")
+        self.assertEqual(record[1].instances[6], "CGGCACTTAGCAGCGTATCGT")
+        self.assertEqual(record[1].instances[7], "CTGGTTTCATCTACGATTGAG")
+        self.assertEqual(record[1].instances[8], "GGGCCAATAGCGGCGCCGGAG")
+        self.assertEqual(record[1].instances[9], "GTGGAGTTATCTTAGTGCGCG")
+        self.assertEqual(record[1].instances[10], "GAGAGGTTATCTACGATTGAG")
+        self.assertEqual(record[1].instances[11], "CTGCTCCCCGCATACAGCGCG")
+        self.assertEqual(record[1].instances[12], "CAGAACCGAGGTCCGGTACGG")
+        self.assertEqual(record[1].instances[13], "GTGCCCCAAGCTTACCCAGGG")
+        self.assertEqual(record[1].instances[14], "CGCCTCTGATCTACGATTGAG")
+        self.assertEqual(record[1].instances[15], "GTGCTCATAGGGACGTCGCGG")
+        self.assertEqual(record[1].instances[16], "CTGCCCCCCGCATAGTAGGGG")
+        self.assertEqual(record[1].instances[17], "GTAAAGAAATCGATGTGCCAG")
+        self.assertEqual(record[1].instances[18], "CACCTGCAATTGCTGGCAGCG")
+        self.assertEqual(record[1].instances[19], "GGCGGGCCATCCCTGTATGAA")
+        self.assertEqual(record[1].instances[20], "CTCCAGGTCGCATGGAGAGAG")
+        self.assertEqual(record[1].instances[21], "CCTCGGATCGCTTGGGAAGAG")
+        self.assertEqual(
+            record[1].mask,
+            (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[1].score, 19.6235)
 
         self.assertEqual(record[2].alphabet, "ACGT")
         self.assertEqual(len(record[2].instances), 18)
-        self.assertEqual(str(record[2].instances[0]), "GTGCGCGAAGGAAGCAGCGCG")
-        self.assertEqual(str(record[2].instances[1]), "CAGAGCTTAGCATTGAACGCG")
-        self.assertEqual(str(record[2].instances[2]), "GTGCCCGATGACCACCCGTCG")
-        self.assertEqual(str(record[2].instances[3]), "GCCCTCTAAGCGTCCGCGGAT")
-        self.assertEqual(str(record[2].instances[4]), "GAGCACGACGCTTTGTACCTG")
-        self.assertEqual(str(record[2].instances[5]), "CGGCACTTAGCAGCGTATCGT")
-        self.assertEqual(str(record[2].instances[6]), "GGGCCAATAGCGGCGCCGGAG")
-        self.assertEqual(str(record[2].instances[7]), "GCGCACTAAGATAACTCCACG")
-        self.assertEqual(str(record[2].instances[8]), "CGGCCCGTTGTCCAGCAGACG")
-        self.assertEqual(str(record[2].instances[9]), "CTGCTCCCCGCATACAGCGCG")
-        self.assertEqual(str(record[2].instances[10]), "GTGCCCCAAGCTTACCCAGGG")
-        self.assertEqual(str(record[2].instances[11]), "GTGCTCATAGGGACGTCGCGG")
-        self.assertEqual(str(record[2].instances[12]), "CTGCCCCCCGCATAGTAGGGG")
-        self.assertEqual(str(record[2].instances[13]), "CGCCGCCATGCGACGCAGAGG")
-        self.assertEqual(str(record[2].instances[14]), "AACCTCTAAGCATACTCTACG")
-        self.assertEqual(str(record[2].instances[15]), "GACCTGGAGGCTTAGACTTGG")
-        self.assertEqual(str(record[2].instances[16]), "GCGCTCTTCCCAAGCGATCCG")
-        self.assertEqual(str(record[2].instances[17]), "GGGCCGTCAGCTCTCAAGTCT")
-        self.assertEqual(record[2].mask, (1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1))
+        self.assertEqual(record[2].instances[0], "GTGCGCGAAGGAAGCAGCGCG")
+        self.assertEqual(record[2].instances[1], "CAGAGCTTAGCATTGAACGCG")
+        self.assertEqual(record[2].instances[2], "GTGCCCGATGACCACCCGTCG")
+        self.assertEqual(record[2].instances[3], "GCCCTCTAAGCGTCCGCGGAT")
+        self.assertEqual(record[2].instances[4], "GAGCACGACGCTTTGTACCTG")
+        self.assertEqual(record[2].instances[5], "CGGCACTTAGCAGCGTATCGT")
+        self.assertEqual(record[2].instances[6], "GGGCCAATAGCGGCGCCGGAG")
+        self.assertEqual(record[2].instances[7], "GCGCACTAAGATAACTCCACG")
+        self.assertEqual(record[2].instances[8], "CGGCCCGTTGTCCAGCAGACG")
+        self.assertEqual(record[2].instances[9], "CTGCTCCCCGCATACAGCGCG")
+        self.assertEqual(record[2].instances[10], "GTGCCCCAAGCTTACCCAGGG")
+        self.assertEqual(record[2].instances[11], "GTGCTCATAGGGACGTCGCGG")
+        self.assertEqual(record[2].instances[12], "CTGCCCCCCGCATAGTAGGGG")
+        self.assertEqual(record[2].instances[13], "CGCCGCCATGCGACGCAGAGG")
+        self.assertEqual(record[2].instances[14], "AACCTCTAAGCATACTCTACG")
+        self.assertEqual(record[2].instances[15], "GACCTGGAGGCTTAGACTTGG")
+        self.assertEqual(record[2].instances[16], "GCGCTCTTCCCAAGCGATCCG")
+        self.assertEqual(record[2].instances[17], "GGGCCGTCAGCTCTCAAGTCT")
+        self.assertEqual(
+            record[2].mask,
+            (1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[2].score, 19.1804)
 
         self.assertEqual(record[3].alphabet, "ACGT")
         self.assertEqual(len(record[3].instances), 16)
-        self.assertEqual(str(record[3].instances[0]), "GCCCCAAGCTTACCCAGGGAC")
-        self.assertEqual(str(record[3].instances[1]), "GCCGTCTGCTGGACAACGGGC")
-        self.assertEqual(str(record[3].instances[2]), "GCCGACGGGTGGTCATCGGGC")
-        self.assertEqual(str(record[3].instances[3]), "GCCAATAGCGGCGCCGGAGTC")
-        self.assertEqual(str(record[3].instances[4]), "GCCCCCCGCATAGTAGGGGGA")
-        self.assertEqual(str(record[3].instances[5]), "GCCCGTACCGGACCTCGGTTC")
-        self.assertEqual(str(record[3].instances[6]), "GCCTCATGTACCGGAAGGGAC")
-        self.assertEqual(str(record[3].instances[7]), "GACACGCGCCTGGGAGGGTTC")
-        self.assertEqual(str(record[3].instances[8]), "GCCTTTGGCCTTGGATGAGAA")
-        self.assertEqual(str(record[3].instances[9]), "GGCCCTCGGATCGCTTGGGAA")
-        self.assertEqual(str(record[3].instances[10]), "GCATGTTGGGAATCCGCGGAC")
-        self.assertEqual(str(record[3].instances[11]), "GACACGCGCTGTATGCGGGGA")
-        self.assertEqual(str(record[3].instances[12]), "GCCAGGTACAAAGCGTCGTGC")
-        self.assertEqual(str(record[3].instances[13]), "GCGATCAGCTTGTGGGCGTGC")
-        self.assertEqual(str(record[3].instances[14]), "GACAAATCGGATACTGGGGCA")
-        self.assertEqual(str(record[3].instances[15]), "GCACTTAGCAGCGTATCGTTA")
-        self.assertEqual(record[3].mask, (1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1))
+        self.assertEqual(record[3].instances[0], "GCCCCAAGCTTACCCAGGGAC")
+        self.assertEqual(record[3].instances[1], "GCCGTCTGCTGGACAACGGGC")
+        self.assertEqual(record[3].instances[2], "GCCGACGGGTGGTCATCGGGC")
+        self.assertEqual(record[3].instances[3], "GCCAATAGCGGCGCCGGAGTC")
+        self.assertEqual(record[3].instances[4], "GCCCCCCGCATAGTAGGGGGA")
+        self.assertEqual(record[3].instances[5], "GCCCGTACCGGACCTCGGTTC")
+        self.assertEqual(record[3].instances[6], "GCCTCATGTACCGGAAGGGAC")
+        self.assertEqual(record[3].instances[7], "GACACGCGCCTGGGAGGGTTC")
+        self.assertEqual(record[3].instances[8], "GCCTTTGGCCTTGGATGAGAA")
+        self.assertEqual(record[3].instances[9], "GGCCCTCGGATCGCTTGGGAA")
+        self.assertEqual(record[3].instances[10], "GCATGTTGGGAATCCGCGGAC")
+        self.assertEqual(record[3].instances[11], "GACACGCGCTGTATGCGGGGA")
+        self.assertEqual(record[3].instances[12], "GCCAGGTACAAAGCGTCGTGC")
+        self.assertEqual(record[3].instances[13], "GCGATCAGCTTGTGGGCGTGC")
+        self.assertEqual(record[3].instances[14], "GACAAATCGGATACTGGGGCA")
+        self.assertEqual(record[3].instances[15], "GCACTTAGCAGCGTATCGTTA")
+        self.assertEqual(
+            record[3].mask,
+            (1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[3].score, 18.0097)
         self.assertEqual(record[4].alphabet, "ACGT")
         self.assertEqual(len(record[4].instances), 15)
-        self.assertEqual(str(record[4].instances[0]), "CGGCACAGAGCTT")
-        self.assertEqual(str(record[4].instances[1]), "ATCCGCGGACGCT")
-        self.assertEqual(str(record[4].instances[2]), "CGCCTGGGAGGGT")
-        self.assertEqual(str(record[4].instances[3]), "CGGAAGGGACGTT")
-        self.assertEqual(str(record[4].instances[4]), "ACACACAGACGGT")
-        self.assertEqual(str(record[4].instances[5]), "TGCCAGAGAGGTT")
-        self.assertEqual(str(record[4].instances[6]), "AGACTGAGACGTT")
-        self.assertEqual(str(record[4].instances[7]), "AATCGTAGAGGAT")
-        self.assertEqual(str(record[4].instances[8]), "CGTCTCGTAGGGT")
-        self.assertEqual(str(record[4].instances[9]), "CGTCGCGGAGGAT")
-        self.assertEqual(str(record[4].instances[10]), "CTTCTTAGACGCT")
-        self.assertEqual(str(record[4].instances[11]), "CGACGCAGAGGAT")
-        self.assertEqual(str(record[4].instances[12]), "ATGCTTAGAGGTT")
-        self.assertEqual(str(record[4].instances[13]), "AGACTTGGGCGAT")
-        self.assertEqual(str(record[4].instances[14]), "CGACCTGGAGGCT")
+        self.assertEqual(record[4].instances[0], "CGGCACAGAGCTT")
+        self.assertEqual(record[4].instances[1], "ATCCGCGGACGCT")
+        self.assertEqual(record[4].instances[2], "CGCCTGGGAGGGT")
+        self.assertEqual(record[4].instances[3], "CGGAAGGGACGTT")
+        self.assertEqual(record[4].instances[4], "ACACACAGACGGT")
+        self.assertEqual(record[4].instances[5], "TGCCAGAGAGGTT")
+        self.assertEqual(record[4].instances[6], "AGACTGAGACGTT")
+        self.assertEqual(record[4].instances[7], "AATCGTAGAGGAT")
+        self.assertEqual(record[4].instances[8], "CGTCTCGTAGGGT")
+        self.assertEqual(record[4].instances[9], "CGTCGCGGAGGAT")
+        self.assertEqual(record[4].instances[10], "CTTCTTAGACGCT")
+        self.assertEqual(record[4].instances[11], "CGACGCAGAGGAT")
+        self.assertEqual(record[4].instances[12], "ATGCTTAGAGGTT")
+        self.assertEqual(record[4].instances[13], "AGACTTGGGCGAT")
+        self.assertEqual(record[4].instances[14], "CGACCTGGAGGCT")
         self.assertEqual(record[4].mask, (1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1))
         self.assertAlmostEqual(record[4].score, 16.8287)
         self.assertEqual(record[5].alphabet, "ACGT")
         self.assertEqual(len(record[5].instances), 18)
-        self.assertEqual(str(record[5].instances[0]), "GTGCGCGAAGGAAGCAGCGCGTG")
-        self.assertEqual(str(record[5].instances[1]), "TTGAGCCGAGTAAAGGGCTGGTG")
-        self.assertEqual(str(record[5].instances[2]), "CAATGCTAAGCTCTGTGCCGACG")
-        self.assertEqual(str(record[5].instances[3]), "CAACTCTCTATGTAGTGCCCGAG")
-        self.assertEqual(str(record[5].instances[4]), "CGACGCTTTGTACCTGGCTTGCG")
-        self.assertEqual(str(record[5].instances[5]), "CGAGTCAATGACACGCGCCTGGG")
-        self.assertEqual(str(record[5].instances[6]), "CGATACGCTGCTAAGTGCCGTCC")
-        self.assertEqual(str(record[5].instances[7]), "CCGGGCCAATAGCGGCGCCGGAG")
-        self.assertEqual(str(record[5].instances[8]), "CCACGCTTCGACACGTGGTATAG")
-        self.assertEqual(str(record[5].instances[9]), "CCGAGCCTCATGTACCGGAAGGG")
-        self.assertEqual(str(record[5].instances[10]), "CTGCTCCCCGCATACAGCGCGTG")
-        self.assertEqual(str(record[5].instances[11]), "CCGAGGTCCGGTACGGGCAAGCC")
-        self.assertEqual(str(record[5].instances[12]), "GTGCTCATAGGGACGTCGCGGAG")
-        self.assertEqual(str(record[5].instances[13]), "CCCTACTATGCGGGGGGCAGGTC")
-        self.assertEqual(str(record[5].instances[14]), "GCCAGCAATTGCAGGTGGTCGTG")
-        self.assertEqual(str(record[5].instances[15]), "CTCTGCGTCGCATGGCGGCGTGG")
-        self.assertEqual(str(record[5].instances[16]), "GGAGGCTTAGACTTGGGCGATAC")
-        self.assertEqual(str(record[5].instances[17]), "GCATGGAGAGAGATCCGGAGGAG")
-        self.assertEqual(record[5].mask, (1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1))
+        self.assertEqual(record[5].instances[0], "GTGCGCGAAGGAAGCAGCGCGTG")
+        self.assertEqual(record[5].instances[1], "TTGAGCCGAGTAAAGGGCTGGTG")
+        self.assertEqual(record[5].instances[2], "CAATGCTAAGCTCTGTGCCGACG")
+        self.assertEqual(record[5].instances[3], "CAACTCTCTATGTAGTGCCCGAG")
+        self.assertEqual(record[5].instances[4], "CGACGCTTTGTACCTGGCTTGCG")
+        self.assertEqual(record[5].instances[5], "CGAGTCAATGACACGCGCCTGGG")
+        self.assertEqual(record[5].instances[6], "CGATACGCTGCTAAGTGCCGTCC")
+        self.assertEqual(record[5].instances[7], "CCGGGCCAATAGCGGCGCCGGAG")
+        self.assertEqual(record[5].instances[8], "CCACGCTTCGACACGTGGTATAG")
+        self.assertEqual(record[5].instances[9], "CCGAGCCTCATGTACCGGAAGGG")
+        self.assertEqual(record[5].instances[10], "CTGCTCCCCGCATACAGCGCGTG")
+        self.assertEqual(record[5].instances[11], "CCGAGGTCCGGTACGGGCAAGCC")
+        self.assertEqual(record[5].instances[12], "GTGCTCATAGGGACGTCGCGGAG")
+        self.assertEqual(record[5].instances[13], "CCCTACTATGCGGGGGGCAGGTC")
+        self.assertEqual(record[5].instances[14], "GCCAGCAATTGCAGGTGGTCGTG")
+        self.assertEqual(record[5].instances[15], "CTCTGCGTCGCATGGCGGCGTGG")
+        self.assertEqual(record[5].instances[16], "GGAGGCTTAGACTTGGGCGATAC")
+        self.assertEqual(record[5].instances[17], "GCATGGAGAGAGATCCGGAGGAG")
+        self.assertEqual(
+            record[5].mask,
+            (1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[5].score, 15.0441)
         self.assertEqual(record[6].alphabet, "ACGT")
         self.assertEqual(len(record[6].instances), 20)
-        self.assertEqual(str(record[6].instances[0]), "GCGCGTGTGTGTAAC")
-        self.assertEqual(str(record[6].instances[1]), "GCACAGAGCTTAGCA")
-        self.assertEqual(str(record[6].instances[2]), "GGTGGTCATCGGGCA")
-        self.assertEqual(str(record[6].instances[3]), "GCGCGTGTCATTGAC")
-        self.assertEqual(str(record[6].instances[4]), "GGACGGCACTTAGCA")
-        self.assertEqual(str(record[6].instances[5]), "GCGCGTCCCGGGCCA")
-        self.assertEqual(str(record[6].instances[6]), "GCTCGGCCCGTTGTC")
-        self.assertEqual(str(record[6].instances[7]), "GCGCGTGTCCTTTAA")
-        self.assertEqual(str(record[6].instances[8]), "GCTGATCGCTGCTCC")
-        self.assertEqual(str(record[6].instances[9]), "GCCCGTACCGGACCT")
-        self.assertEqual(str(record[6].instances[10]), "GGACGTCGCGGAGGA")
-        self.assertEqual(str(record[6].instances[11]), "GCGGGGGGCAGGTCA")
-        self.assertEqual(str(record[6].instances[12]), "GGACGTACTGGCACA")
-        self.assertEqual(str(record[6].instances[13]), "GCAGGTGGTCGTGCA")
-        self.assertEqual(str(record[6].instances[14]), "GCGCATACCTTAACA")
-        self.assertEqual(str(record[6].instances[15]), "GCACGGGACTTCAAC")
-        self.assertEqual(str(record[6].instances[16]), "GCACGTAGCTGGTAA")
-        self.assertEqual(str(record[6].instances[17]), "GCTCGTCTATGGTCA")
-        self.assertEqual(str(record[6].instances[18]), "GCGCATGCTGGATCC")
-        self.assertEqual(str(record[6].instances[19]), "GGCCGTCAGCTCTCA")
+        self.assertEqual(record[6].instances[0], "GCGCGTGTGTGTAAC")
+        self.assertEqual(record[6].instances[1], "GCACAGAGCTTAGCA")
+        self.assertEqual(record[6].instances[2], "GGTGGTCATCGGGCA")
+        self.assertEqual(record[6].instances[3], "GCGCGTGTCATTGAC")
+        self.assertEqual(record[6].instances[4], "GGACGGCACTTAGCA")
+        self.assertEqual(record[6].instances[5], "GCGCGTCCCGGGCCA")
+        self.assertEqual(record[6].instances[6], "GCTCGGCCCGTTGTC")
+        self.assertEqual(record[6].instances[7], "GCGCGTGTCCTTTAA")
+        self.assertEqual(record[6].instances[8], "GCTGATCGCTGCTCC")
+        self.assertEqual(record[6].instances[9], "GCCCGTACCGGACCT")
+        self.assertEqual(record[6].instances[10], "GGACGTCGCGGAGGA")
+        self.assertEqual(record[6].instances[11], "GCGGGGGGCAGGTCA")
+        self.assertEqual(record[6].instances[12], "GGACGTACTGGCACA")
+        self.assertEqual(record[6].instances[13], "GCAGGTGGTCGTGCA")
+        self.assertEqual(record[6].instances[14], "GCGCATACCTTAACA")
+        self.assertEqual(record[6].instances[15], "GCACGGGACTTCAAC")
+        self.assertEqual(record[6].instances[16], "GCACGTAGCTGGTAA")
+        self.assertEqual(record[6].instances[17], "GCTCGTCTATGGTCA")
+        self.assertEqual(record[6].instances[18], "GCGCATGCTGGATCC")
+        self.assertEqual(record[6].instances[19], "GGCCGTCAGCTCTCA")
         self.assertEqual(record[6].mask, (1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1))
         self.assertAlmostEqual(record[6].score, 13.3145)
         self.assertEqual(record[7].alphabet, "ACGT")
         self.assertEqual(len(record[7].instances), 20)
-        self.assertEqual(str(record[7].instances[0]), "GAACCGAGGTCCGGTACGGGC")
-        self.assertEqual(str(record[7].instances[1]), "GCCCCCCGCATAGTAGGGGGA")
-        self.assertEqual(str(record[7].instances[2]), "GTCCCTGGGTAAGCTTGGGGC")
-        self.assertEqual(str(record[7].instances[3]), "ACTCCACGCTTCGACACGTGG")
-        self.assertEqual(str(record[7].instances[4]), "ATCCTCTGCGTCGCATGGCGG")
-        self.assertEqual(str(record[7].instances[5]), "GTTCAATGCTAAGCTCTGTGC")
-        self.assertEqual(str(record[7].instances[6]), "GCTCATAGGGACGTCGCGGAG")
-        self.assertEqual(str(record[7].instances[7]), "GTCCCGGGCCAATAGCGGCGC")
-        self.assertEqual(str(record[7].instances[8]), "GCACTTAGCAGCGTATCGTTA")
-        self.assertEqual(str(record[7].instances[9]), "GGCCCTCGGATCGCTTGGGAA")
-        self.assertEqual(str(record[7].instances[10]), "CTGCTGGACAACGGGCCGAGC")
-        self.assertEqual(str(record[7].instances[11]), "GGGCACTACATAGAGAGTTGC")
-        self.assertEqual(str(record[7].instances[12]), "AGCCTCCAGGTCGCATGGAGA")
-        self.assertEqual(str(record[7].instances[13]), "AATCGTAGATCAGAGGCGAGA")
-        self.assertEqual(str(record[7].instances[14]), "GAACTCCACTAAGACTTGAGA")
-        self.assertEqual(str(record[7].instances[15]), "GAGCAGCGATCAGCTTGTGGG")
-        self.assertEqual(str(record[7].instances[16]), "GCCAGGTACAAAGCGTCGTGC")
-        self.assertEqual(str(record[7].instances[17]), "AGTCAATGACACGCGCCTGGG")
-        self.assertEqual(str(record[7].instances[18]), "GGTCATGGAATCTTATGTAGC")
-        self.assertEqual(str(record[7].instances[19]), "GTAGATAACAGAGGTCGGGGG")
-        self.assertEqual(record[7].mask, (1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1))
+        self.assertEqual(record[7].instances[0], "GAACCGAGGTCCGGTACGGGC")
+        self.assertEqual(record[7].instances[1], "GCCCCCCGCATAGTAGGGGGA")
+        self.assertEqual(record[7].instances[2], "GTCCCTGGGTAAGCTTGGGGC")
+        self.assertEqual(record[7].instances[3], "ACTCCACGCTTCGACACGTGG")
+        self.assertEqual(record[7].instances[4], "ATCCTCTGCGTCGCATGGCGG")
+        self.assertEqual(record[7].instances[5], "GTTCAATGCTAAGCTCTGTGC")
+        self.assertEqual(record[7].instances[6], "GCTCATAGGGACGTCGCGGAG")
+        self.assertEqual(record[7].instances[7], "GTCCCGGGCCAATAGCGGCGC")
+        self.assertEqual(record[7].instances[8], "GCACTTAGCAGCGTATCGTTA")
+        self.assertEqual(record[7].instances[9], "GGCCCTCGGATCGCTTGGGAA")
+        self.assertEqual(record[7].instances[10], "CTGCTGGACAACGGGCCGAGC")
+        self.assertEqual(record[7].instances[11], "GGGCACTACATAGAGAGTTGC")
+        self.assertEqual(record[7].instances[12], "AGCCTCCAGGTCGCATGGAGA")
+        self.assertEqual(record[7].instances[13], "AATCGTAGATCAGAGGCGAGA")
+        self.assertEqual(record[7].instances[14], "GAACTCCACTAAGACTTGAGA")
+        self.assertEqual(record[7].instances[15], "GAGCAGCGATCAGCTTGTGGG")
+        self.assertEqual(record[7].instances[16], "GCCAGGTACAAAGCGTCGTGC")
+        self.assertEqual(record[7].instances[17], "AGTCAATGACACGCGCCTGGG")
+        self.assertEqual(record[7].instances[18], "GGTCATGGAATCTTATGTAGC")
+        self.assertEqual(record[7].instances[19], "GTAGATAACAGAGGTCGGGGG")
+        self.assertEqual(
+            record[7].mask,
+            (1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[7].score, 11.6098)
         self.assertEqual(record[8].alphabet, "ACGT")
         self.assertEqual(len(record[8].instances), 14)
-        self.assertEqual(str(record[8].instances[0]), "CCGAGTAAAGGGCTG")
-        self.assertEqual(str(record[8].instances[1]), "GTGGTCATCGGGCAC")
-        self.assertEqual(str(record[8].instances[2]), "GATAACAGAGGTCGG")
-        self.assertEqual(str(record[8].instances[3]), "CGGCGCCGGAGTCTG")
-        self.assertEqual(str(record[8].instances[4]), "GCGCGTCCCGGGCCA")
-        self.assertEqual(str(record[8].instances[5]), "CTGGACAACGGGCCG")
-        self.assertEqual(str(record[8].instances[6]), "CGGATACTGGGGCAG")
-        self.assertEqual(str(record[8].instances[7]), "GGGAGCAGCGATCAG")
-        self.assertEqual(str(record[8].instances[8]), "CAGAACCGAGGTCCG")
-        self.assertEqual(str(record[8].instances[9]), "GGGTCCCTGGGTAAG")
-        self.assertEqual(str(record[8].instances[10]), "GTGCTCATAGGGACG")
-        self.assertEqual(str(record[8].instances[11]), "GAGATCCGGAGGAGG")
-        self.assertEqual(str(record[8].instances[12]), "GCGATCCGAGGGCCG")
-        self.assertEqual(str(record[8].instances[13]), "GAGTTCACATGGCTG")
+        self.assertEqual(record[8].instances[0], "CCGAGTAAAGGGCTG")
+        self.assertEqual(record[8].instances[1], "GTGGTCATCGGGCAC")
+        self.assertEqual(record[8].instances[2], "GATAACAGAGGTCGG")
+        self.assertEqual(record[8].instances[3], "CGGCGCCGGAGTCTG")
+        self.assertEqual(record[8].instances[4], "GCGCGTCCCGGGCCA")
+        self.assertEqual(record[8].instances[5], "CTGGACAACGGGCCG")
+        self.assertEqual(record[8].instances[6], "CGGATACTGGGGCAG")
+        self.assertEqual(record[8].instances[7], "GGGAGCAGCGATCAG")
+        self.assertEqual(record[8].instances[8], "CAGAACCGAGGTCCG")
+        self.assertEqual(record[8].instances[9], "GGGTCCCTGGGTAAG")
+        self.assertEqual(record[8].instances[10], "GTGCTCATAGGGACG")
+        self.assertEqual(record[8].instances[11], "GAGATCCGGAGGAGG")
+        self.assertEqual(record[8].instances[12], "GCGATCCGAGGGCCG")
+        self.assertEqual(record[8].instances[13], "GAGTTCACATGGCTG")
         self.assertEqual(record[8].mask, (1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1))
         self.assertAlmostEqual(record[8].score, 11.2943)
         self.assertEqual(record[9].alphabet, "ACGT")
         self.assertEqual(len(record[9].instances), 18)
-        self.assertEqual(str(record[9].instances[0]), "TAGAGGCGGTG")
-        self.assertEqual(str(record[9].instances[1]), "GCTAAGCTCTG")
-        self.assertEqual(str(record[9].instances[2]), "TGGAAGCAGTG")
-        self.assertEqual(str(record[9].instances[3]), "GCGAGGCTGTG")
-        self.assertEqual(str(record[9].instances[4]), "ACGACGCTTTG")
-        self.assertEqual(str(record[9].instances[5]), "GGGACGCGCAC")
-        self.assertEqual(str(record[9].instances[6]), "TCGAAGCGTGG")
-        self.assertEqual(str(record[9].instances[7]), "TGTATGCGGGG")
-        self.assertEqual(str(record[9].instances[8]), "GGTAAGCTTGG")
-        self.assertEqual(str(record[9].instances[9]), "TGTACGCTGGG")
-        self.assertEqual(str(record[9].instances[10]), "ACTATGCGGGG")
-        self.assertEqual(str(record[9].instances[11]), "GGTATGCGCTG")
-        self.assertEqual(str(record[9].instances[12]), "GGTACCCGGAG")
-        self.assertEqual(str(record[9].instances[13]), "GCGACGCAGAG")
-        self.assertEqual(str(record[9].instances[14]), "TGGCGGCGTGG")
-        self.assertEqual(str(record[9].instances[15]), "TCTAGGCGGGC")
-        self.assertEqual(str(record[9].instances[16]), "AGTATGCTTAG")
-        self.assertEqual(str(record[9].instances[17]), "TGGAGGCTTAG")
+        self.assertEqual(record[9].instances[0], "TAGAGGCGGTG")
+        self.assertEqual(record[9].instances[1], "GCTAAGCTCTG")
+        self.assertEqual(record[9].instances[2], "TGGAAGCAGTG")
+        self.assertEqual(record[9].instances[3], "GCGAGGCTGTG")
+        self.assertEqual(record[9].instances[4], "ACGACGCTTTG")
+        self.assertEqual(record[9].instances[5], "GGGACGCGCAC")
+        self.assertEqual(record[9].instances[6], "TCGAAGCGTGG")
+        self.assertEqual(record[9].instances[7], "TGTATGCGGGG")
+        self.assertEqual(record[9].instances[8], "GGTAAGCTTGG")
+        self.assertEqual(record[9].instances[9], "TGTACGCTGGG")
+        self.assertEqual(record[9].instances[10], "ACTATGCGGGG")
+        self.assertEqual(record[9].instances[11], "GGTATGCGCTG")
+        self.assertEqual(record[9].instances[12], "GGTACCCGGAG")
+        self.assertEqual(record[9].instances[13], "GCGACGCAGAG")
+        self.assertEqual(record[9].instances[14], "TGGCGGCGTGG")
+        self.assertEqual(record[9].instances[15], "TCTAGGCGGGC")
+        self.assertEqual(record[9].instances[16], "AGTATGCTTAG")
+        self.assertEqual(record[9].instances[17], "TGGAGGCTTAG")
         self.assertEqual(record[9].mask, (1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1))
         self.assertAlmostEqual(record[9].score, 9.7924)
         self.assertEqual(record[10].alphabet, "ACGT")
         self.assertEqual(len(record[10].instances), 13)
-        self.assertEqual(str(record[10].instances[0]), "GCACAGAGCTTAGCATTGAAC")
-        self.assertEqual(str(record[10].instances[1]), "GTCCGCGGATTCCCAACATGC")
-        self.assertEqual(str(record[10].instances[2]), "ATACACAGCCTCGCAAGCCAG")
-        self.assertEqual(str(record[10].instances[3]), "GGCCCGGGACGCGCACTAAGA")
-        self.assertEqual(str(record[10].instances[4]), "GCCCGTTGTCCAGCAGACGGC")
-        self.assertEqual(str(record[10].instances[5]), "GAGCAGCGATCAGCTTGTGGG")
-        self.assertEqual(str(record[10].instances[6]), "GAACCGAGGTCCGGTACGGGC")
-        self.assertEqual(str(record[10].instances[7]), "GTCCCTGGGTAAGCTTGGGGC")
-        self.assertEqual(str(record[10].instances[8]), "GACCTGCCCCCCGCATAGTAG")
-        self.assertEqual(str(record[10].instances[9]), "AACCAGCGCATACCTTAACAG")
-        self.assertEqual(str(record[10].instances[10]), "ATCCTCTGCGTCGCATGGCGG")
-        self.assertEqual(str(record[10].instances[11]), "GACCATAGACGAGCATCAAAG")
-        self.assertEqual(str(record[10].instances[12]), "GGCCCTCGGATCGCTTGGGAA")
-        self.assertEqual(record[10].mask, (1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1))
+        self.assertEqual(record[10].instances[0], "GCACAGAGCTTAGCATTGAAC")
+        self.assertEqual(record[10].instances[1], "GTCCGCGGATTCCCAACATGC")
+        self.assertEqual(record[10].instances[2], "ATACACAGCCTCGCAAGCCAG")
+        self.assertEqual(record[10].instances[3], "GGCCCGGGACGCGCACTAAGA")
+        self.assertEqual(record[10].instances[4], "GCCCGTTGTCCAGCAGACGGC")
+        self.assertEqual(record[10].instances[5], "GAGCAGCGATCAGCTTGTGGG")
+        self.assertEqual(record[10].instances[6], "GAACCGAGGTCCGGTACGGGC")
+        self.assertEqual(record[10].instances[7], "GTCCCTGGGTAAGCTTGGGGC")
+        self.assertEqual(record[10].instances[8], "GACCTGCCCCCCGCATAGTAG")
+        self.assertEqual(record[10].instances[9], "AACCAGCGCATACCTTAACAG")
+        self.assertEqual(record[10].instances[10], "ATCCTCTGCGTCGCATGGCGG")
+        self.assertEqual(record[10].instances[11], "GACCATAGACGAGCATCAAAG")
+        self.assertEqual(record[10].instances[12], "GGCCCTCGGATCGCTTGGGAA")
+        self.assertEqual(
+            record[10].mask,
+            (1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[10].score, 9.01393)
         self.assertEqual(record[11].alphabet, "ACGT")
         self.assertEqual(len(record[11].instances), 16)
-        self.assertEqual(str(record[11].instances[0]), "GCCGTCCGTC")
-        self.assertEqual(str(record[11].instances[1]), "GGCGTGCGCG")
-        self.assertEqual(str(record[11].instances[2]), "GGCGCGTGTC")
-        self.assertEqual(str(record[11].instances[3]), "AGCGCGTGTG")
-        self.assertEqual(str(record[11].instances[4]), "GCGGTGCGTG")
-        self.assertEqual(str(record[11].instances[5]), "AGCGCGTGTC")
-        self.assertEqual(str(record[11].instances[6]), "AGCGTCCGCG")
-        self.assertEqual(str(record[11].instances[7]), "ACCGTCTGTG")
-        self.assertEqual(str(record[11].instances[8]), "GCCATGCGAC")
-        self.assertEqual(str(record[11].instances[9]), "ACCACCCGTC")
-        self.assertEqual(str(record[11].instances[10]), "GGCGCCGGAG")
-        self.assertEqual(str(record[11].instances[11]), "ACCACGTGTC")
-        self.assertEqual(str(record[11].instances[12]), "GGCTTGCGAG")
-        self.assertEqual(str(record[11].instances[13]), "GCGATCCGAG")
-        self.assertEqual(str(record[11].instances[14]), "AGTGCGCGTC")
-        self.assertEqual(str(record[11].instances[15]), "AGTGCCCGAG")
+        self.assertEqual(record[11].instances[0], "GCCGTCCGTC")
+        self.assertEqual(record[11].instances[1], "GGCGTGCGCG")
+        self.assertEqual(record[11].instances[2], "GGCGCGTGTC")
+        self.assertEqual(record[11].instances[3], "AGCGCGTGTG")
+        self.assertEqual(record[11].instances[4], "GCGGTGCGTG")
+        self.assertEqual(record[11].instances[5], "AGCGCGTGTC")
+        self.assertEqual(record[11].instances[6], "AGCGTCCGCG")
+        self.assertEqual(record[11].instances[7], "ACCGTCTGTG")
+        self.assertEqual(record[11].instances[8], "GCCATGCGAC")
+        self.assertEqual(record[11].instances[9], "ACCACCCGTC")
+        self.assertEqual(record[11].instances[10], "GGCGCCGGAG")
+        self.assertEqual(record[11].instances[11], "ACCACGTGTC")
+        self.assertEqual(record[11].instances[12], "GGCTTGCGAG")
+        self.assertEqual(record[11].instances[13], "GCGATCCGAG")
+        self.assertEqual(record[11].instances[14], "AGTGCGCGTC")
+        self.assertEqual(record[11].instances[15], "AGTGCCCGAG")
         self.assertEqual(record[11].mask, (1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         self.assertAlmostEqual(record[11].score, 7.51121)
         self.assertEqual(record[12].alphabet, "ACGT")
         self.assertEqual(len(record[12].instances), 16)
-        self.assertEqual(str(record[12].instances[0]), "GCCGACGGGTGGTCATCGGG")
-        self.assertEqual(str(record[12].instances[1]), "GCACGACGCTTTGTACCTGG")
-        self.assertEqual(str(record[12].instances[2]), "CCTGGGAGGGTTCAATAACG")
-        self.assertEqual(str(record[12].instances[3]), "GCGCGTCCCGGGCCAATAGC")
-        self.assertEqual(str(record[12].instances[4]), "GCCGTCTGCTGGACAACGGG")
-        self.assertEqual(str(record[12].instances[5]), "GTCCCTTCCGGTACATGAGG")
-        self.assertEqual(str(record[12].instances[6]), "GCTGCTCCCCGCATACAGCG")
-        self.assertEqual(str(record[12].instances[7]), "GCCCCAAGCTTACCCAGGGA")
-        self.assertEqual(str(record[12].instances[8]), "ACCGGCTGACGCTAATACGG")
-        self.assertEqual(str(record[12].instances[9]), "GCGGGGGGCAGGTCATTACA")
-        self.assertEqual(str(record[12].instances[10]), "GCTGGCAGCGTCTAAGAAGG")
-        self.assertEqual(str(record[12].instances[11]), "GCAGGTGGTCGTGCAATACG")
-        self.assertEqual(str(record[12].instances[12]), "GCTGGTTGAAGTCCCGTGCG")
-        self.assertEqual(str(record[12].instances[13]), "GCACGTAGCTGGTAAATAGG")
-        self.assertEqual(str(record[12].instances[14]), "GCGGCGTGGATTTCATACAG")
-        self.assertEqual(str(record[12].instances[15]), "CCTGGAGGCTTAGACTTGGG")
-        self.assertEqual(record[12].mask, (1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(record[12].instances[0], "GCCGACGGGTGGTCATCGGG")
+        self.assertEqual(record[12].instances[1], "GCACGACGCTTTGTACCTGG")
+        self.assertEqual(record[12].instances[2], "CCTGGGAGGGTTCAATAACG")
+        self.assertEqual(record[12].instances[3], "GCGCGTCCCGGGCCAATAGC")
+        self.assertEqual(record[12].instances[4], "GCCGTCTGCTGGACAACGGG")
+        self.assertEqual(record[12].instances[5], "GTCCCTTCCGGTACATGAGG")
+        self.assertEqual(record[12].instances[6], "GCTGCTCCCCGCATACAGCG")
+        self.assertEqual(record[12].instances[7], "GCCCCAAGCTTACCCAGGGA")
+        self.assertEqual(record[12].instances[8], "ACCGGCTGACGCTAATACGG")
+        self.assertEqual(record[12].instances[9], "GCGGGGGGCAGGTCATTACA")
+        self.assertEqual(record[12].instances[10], "GCTGGCAGCGTCTAAGAAGG")
+        self.assertEqual(record[12].instances[11], "GCAGGTGGTCGTGCAATACG")
+        self.assertEqual(record[12].instances[12], "GCTGGTTGAAGTCCCGTGCG")
+        self.assertEqual(record[12].instances[13], "GCACGTAGCTGGTAAATAGG")
+        self.assertEqual(record[12].instances[14], "GCGGCGTGGATTTCATACAG")
+        self.assertEqual(record[12].instances[15], "CCTGGAGGCTTAGACTTGGG")
+        self.assertEqual(
+            record[12].mask,
+            (1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[12].score, 5.63667)
         self.assertEqual(record[13].alphabet, "ACGT")
         self.assertEqual(len(record[13].instances), 15)
-        self.assertEqual(str(record[13].instances[0]), "GCCGACGGGTGGTCATCGGG")
-        self.assertEqual(str(record[13].instances[1]), "ATCCGCGGACGCTTAGAGGG")
-        self.assertEqual(str(record[13].instances[2]), "ACGCTTTGTACCTGGCTTGC")
-        self.assertEqual(str(record[13].instances[3]), "ACGGACGGCACTTAGCAGCG")
-        self.assertEqual(str(record[13].instances[4]), "GCCGTCTGCTGGACAACGGG")
-        self.assertEqual(str(record[13].instances[5]), "ACACACAGACGGTTGAAAGG")
-        self.assertEqual(str(record[13].instances[6]), "GCCGATAGTGCTTAAGTTCG")
-        self.assertEqual(str(record[13].instances[7]), "CTTGCCCGTACCGGACCTCG")
-        self.assertEqual(str(record[13].instances[8]), "ACCGGCTGACGCTAATACGG")
-        self.assertEqual(str(record[13].instances[9]), "GCCCCCCGCATAGTAGGGGG")
-        self.assertEqual(str(record[13].instances[10]), "GCTGGCAGCGTCTAAGAAGG")
-        self.assertEqual(str(record[13].instances[11]), "GCAGGTGGTCGTGCAATACG")
-        self.assertEqual(str(record[13].instances[12]), "ACGCACGGGACTTCAACCAG")
-        self.assertEqual(str(record[13].instances[13]), "GCACGTAGCTGGTAAATAGG")
-        self.assertEqual(str(record[13].instances[14]), "ATCCTCTGCGTCGCATGGCG")
-        self.assertEqual(record[13].mask, (1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(record[13].instances[0], "GCCGACGGGTGGTCATCGGG")
+        self.assertEqual(record[13].instances[1], "ATCCGCGGACGCTTAGAGGG")
+        self.assertEqual(record[13].instances[2], "ACGCTTTGTACCTGGCTTGC")
+        self.assertEqual(record[13].instances[3], "ACGGACGGCACTTAGCAGCG")
+        self.assertEqual(record[13].instances[4], "GCCGTCTGCTGGACAACGGG")
+        self.assertEqual(record[13].instances[5], "ACACACAGACGGTTGAAAGG")
+        self.assertEqual(record[13].instances[6], "GCCGATAGTGCTTAAGTTCG")
+        self.assertEqual(record[13].instances[7], "CTTGCCCGTACCGGACCTCG")
+        self.assertEqual(record[13].instances[8], "ACCGGCTGACGCTAATACGG")
+        self.assertEqual(record[13].instances[9], "GCCCCCCGCATAGTAGGGGG")
+        self.assertEqual(record[13].instances[10], "GCTGGCAGCGTCTAAGAAGG")
+        self.assertEqual(record[13].instances[11], "GCAGGTGGTCGTGCAATACG")
+        self.assertEqual(record[13].instances[12], "ACGCACGGGACTTCAACCAG")
+        self.assertEqual(record[13].instances[13], "GCACGTAGCTGGTAAATAGG")
+        self.assertEqual(record[13].instances[14], "ATCCTCTGCGTCGCATGGCG")
+        self.assertEqual(
+            record[13].mask,
+            (1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[13].score, 3.89842)
         self.assertEqual(record[14].alphabet, "ACGT")
         self.assertEqual(len(record[14].instances), 14)
-        self.assertEqual(str(record[14].instances[0]), "GAGGCTGTGTAT")
-        self.assertEqual(str(record[14].instances[1]), "GAGGTCGGGGGT")
-        self.assertEqual(str(record[14].instances[2]), "GACGGACGGCAC")
-        self.assertEqual(str(record[14].instances[3]), "TTGGCCCGGGAC")
-        self.assertEqual(str(record[14].instances[4]), "GAGGCTCGGCCC")
-        self.assertEqual(str(record[14].instances[5]), "CACGCGCTGTAT")
-        self.assertEqual(str(record[14].instances[6]), "TAGGCCAGGTAT")
-        self.assertEqual(str(record[14].instances[7]), "GAGGTCCGGTAC")
-        self.assertEqual(str(record[14].instances[8]), "TACGCTGGGGAT")
-        self.assertEqual(str(record[14].instances[9]), "GTCGCGGAGGAT")
-        self.assertEqual(str(record[14].instances[10]), "TACGCACGGGAC")
-        self.assertEqual(str(record[14].instances[11]), "TACTCCGGGTAC")
-        self.assertEqual(str(record[14].instances[12]), "GACGCAGAGGAT")
-        self.assertEqual(str(record[14].instances[13]), "TAGGCGGGCCAT")
+        self.assertEqual(record[14].instances[0], "GAGGCTGTGTAT")
+        self.assertEqual(record[14].instances[1], "GAGGTCGGGGGT")
+        self.assertEqual(record[14].instances[2], "GACGGACGGCAC")
+        self.assertEqual(record[14].instances[3], "TTGGCCCGGGAC")
+        self.assertEqual(record[14].instances[4], "GAGGCTCGGCCC")
+        self.assertEqual(record[14].instances[5], "CACGCGCTGTAT")
+        self.assertEqual(record[14].instances[6], "TAGGCCAGGTAT")
+        self.assertEqual(record[14].instances[7], "GAGGTCCGGTAC")
+        self.assertEqual(record[14].instances[8], "TACGCTGGGGAT")
+        self.assertEqual(record[14].instances[9], "GTCGCGGAGGAT")
+        self.assertEqual(record[14].instances[10], "TACGCACGGGAC")
+        self.assertEqual(record[14].instances[11], "TACTCCGGGTAC")
+        self.assertEqual(record[14].instances[12], "GACGCAGAGGAT")
+        self.assertEqual(record[14].instances[13], "TAGGCGGGCCAT")
         self.assertEqual(record[14].mask, (1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1))
         self.assertAlmostEqual(record[14].score, 3.33444)
         self.assertEqual(record[15].alphabet, "ACGT")
         self.assertEqual(len(record[15].instances), 21)
-        self.assertEqual(str(record[15].instances[0]), "CGGCTCAATCGTAGAGGC")
-        self.assertEqual(str(record[15].instances[1]), "CGACGGGTGGTCATCGGG")
-        self.assertEqual(str(record[15].instances[2]), "CGCTTAGAGGGCACAAGC")
-        self.assertEqual(str(record[15].instances[3]), "TGACACGCGCCTGGGAGG")
-        self.assertEqual(str(record[15].instances[4]), "CGATACGCTGCTAAGTGC")
-        self.assertEqual(str(record[15].instances[5]), "CGTCCCGGGCCAATAGCG")
-        self.assertEqual(str(record[15].instances[6]), "CCACGCTTCGACACGTGG")
-        self.assertEqual(str(record[15].instances[7]), "CGTCTGCTGGACAACGGG")
-        self.assertEqual(str(record[15].instances[8]), "ACACAGACGGTTGAAAGG")
-        self.assertEqual(str(record[15].instances[9]), "TGCTCCCCGCATACAGCG")
-        self.assertEqual(str(record[15].instances[10]), "TGAGGCTTGCCCGTACCG")
-        self.assertEqual(str(record[15].instances[11]), "TGCCCCAAGCTTACCCAG")
-        self.assertEqual(str(record[15].instances[12]), "CGGCTGACGCTAATACGG")
-        self.assertEqual(str(record[15].instances[13]), "CGCGACGTCCCTATGAGC")
-        self.assertEqual(str(record[15].instances[14]), "TGCCCCCCGCATAGTAGG")
-        self.assertEqual(str(record[15].instances[15]), "CGTTGCCTTCTTAGACGC")
-        self.assertEqual(str(record[15].instances[16]), "TGACTCAATCGTAGACCC")
-        self.assertEqual(str(record[15].instances[17]), "AGTCCCGTGCGTATGTGG")
-        self.assertEqual(str(record[15].instances[18]), "AGGCTCGCACGTAGCTGG")
-        self.assertEqual(str(record[15].instances[19]), "CCACGCCGCCATGCGACG")
-        self.assertEqual(str(record[15].instances[20]), "AGCCTCCAGGTCGCATGG")
-        self.assertEqual(record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(record[15].instances[0], "CGGCTCAATCGTAGAGGC")
+        self.assertEqual(record[15].instances[1], "CGACGGGTGGTCATCGGG")
+        self.assertEqual(record[15].instances[2], "CGCTTAGAGGGCACAAGC")
+        self.assertEqual(record[15].instances[3], "TGACACGCGCCTGGGAGG")
+        self.assertEqual(record[15].instances[4], "CGATACGCTGCTAAGTGC")
+        self.assertEqual(record[15].instances[5], "CGTCCCGGGCCAATAGCG")
+        self.assertEqual(record[15].instances[6], "CCACGCTTCGACACGTGG")
+        self.assertEqual(record[15].instances[7], "CGTCTGCTGGACAACGGG")
+        self.assertEqual(record[15].instances[8], "ACACAGACGGTTGAAAGG")
+        self.assertEqual(record[15].instances[9], "TGCTCCCCGCATACAGCG")
+        self.assertEqual(record[15].instances[10], "TGAGGCTTGCCCGTACCG")
+        self.assertEqual(record[15].instances[11], "TGCCCCAAGCTTACCCAG")
+        self.assertEqual(record[15].instances[12], "CGGCTGACGCTAATACGG")
+        self.assertEqual(record[15].instances[13], "CGCGACGTCCCTATGAGC")
+        self.assertEqual(record[15].instances[14], "TGCCCCCCGCATAGTAGG")
+        self.assertEqual(record[15].instances[15], "CGTTGCCTTCTTAGACGC")
+        self.assertEqual(record[15].instances[16], "TGACTCAATCGTAGACCC")
+        self.assertEqual(record[15].instances[17], "AGTCCCGTGCGTATGTGG")
+        self.assertEqual(record[15].instances[18], "AGGCTCGCACGTAGCTGG")
+        self.assertEqual(record[15].instances[19], "CCACGCCGCCATGCGACG")
+        self.assertEqual(record[15].instances[20], "AGCCTCCAGGTCGCATGG")
+        self.assertEqual(
+            record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1)
+        )
         self.assertAlmostEqual(record[15].score, 1.0395)
 
     def test_clusterbuster_parsing_and_output(self):
@@ -414,7 +448,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
 
         self.CLUSTERBUSTERin.seek(0)
-        self.assertEqual(motifs.write(record, "clusterbuster").split(), self.CLUSTERBUSTERin.read().split())
+        self.assertEqual(
+            motifs.write(record, "clusterbuster").split(),
+            self.CLUSTERBUSTERin.read().split(),
+        )
 
     def test_xms_parsing(self):
         """Test if Bio.motifs can parse and output xms PFM files."""
@@ -428,6 +465,38 @@ class MotifTestsBasic(unittest.TestCase):
         m = motifs.read(self.PFMin, "pfm")
         self.assertEqual(m.length, 12)
 
+    def test_pfm_four_columns_parsing(self):
+        """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 columns)."""
+        record = motifs.parse(self.PFMFOURCOLUMNSin, "pfm-four-columns")
+        self.assertEqual(len(record), 8)
+        self.assertEqual(record[0].length, 8)
+        self.assertEqual(record[1].length, 20)
+        self.assertEqual(record[2].name, "M1734_0.90")
+        self.assertEqual(record[2].length, 11)
+        self.assertEqual(record[3].name, "AbdA_Cell_FBgn0000014")
+        self.assertEqual(record[3].length, 7)
+        self.assertEqual(record[4].length, 10)
+        self.assertEqual(record[5].name, "AHR_si")
+        self.assertEqual(record[5].length, 9)
+        self.assertEqual(record[6].length, 8)
+        self.assertEqual(record[7].length, 11)
+
+    def test_pfm_four_rows_parsing(self):
+        """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 rows)."""
+        record = motifs.parse(self.PFMFOURROWSin, "pfm-four-rows")
+        self.assertEqual(len(record), 8)
+        self.assertEqual(record[0].length, 6)
+        self.assertEqual(record[1].length, 15)
+        self.assertEqual(record[2].length, 15)
+        self.assertEqual(record[3].length, 6)
+        self.assertEqual(record[4].length, 6)
+        self.assertEqual(record[5].name, "abd-A")
+        self.assertEqual(record[5].length, 8)
+        self.assertEqual(record[6].name, "MA0001.1 AGL3")
+        self.assertEqual(record[6].length, 10)
+        self.assertEqual(record[7].name, "MA0001.1 AGL3")
+        self.assertEqual(record[7].length, 10)
+
     def test_sites_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style sites files."""
         m = motifs.read(self.SITESin, "sites")
@@ -436,17 +505,17 @@ class MotifTestsBasic(unittest.TestCase):
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files."""
         with open(self.TFout, "w") as output_handle:
-            output_handle.write(format(self.m, "transfac"))
+            output_handle.write(self.m.format("transfac"))
 
     def test_format(self):
         self.m.name = "Foo"
-        s1 = format(self.m, "pfm")
+        s1 = self.m.format("pfm")
         expected_pfm = """  1.00   0.00   1.00   0.00  1.00
   0.00   0.00   0.00   0.00  0.00
   0.00   0.00   0.00   0.00  0.00
   0.00   1.00   0.00   1.00  0.00
 """
-        s2 = format(self.m, "jaspar")
+        s2 = self.m.format("jaspar")
         expected_jaspar = """>None Foo
 A [  1.00   0.00   1.00   0.00   1.00]
 C [  0.00   0.00   0.00   0.00   0.00]
@@ -454,7 +523,7 @@ G [  0.00   0.00   0.00   0.00   0.00]
 T [  0.00   1.00   0.00   1.00   0.00]
 """
         self.assertEqual(s2, expected_jaspar)
-        s3 = format(self.m, "transfac")
+        s3 = self.m.format("transfac")
         expected_transfac = """P0      A      C      G      T
 01      1      0      0      0      A
 02      0      0      0      1      T
@@ -465,7 +534,7 @@ XX
 //
 """
         self.assertEqual(s3, expected_transfac)
-        self.assertRaises(ValueError, format, self.m, "foo_bar")
+        self.assertRaises(ValueError, self.m.format, "foo_bar")
 
     def test_reverse_complement(self):
         """Test if motifs can be reverse-complemented."""
@@ -474,7 +543,7 @@ XX
         m = self.m
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = format(self.m, "transfac")
+        received_forward = self.m.format("transfac")
         expected_forward = """\
 P0      A      C      G      T
 01      1      0      0      0      A
@@ -495,7 +564,7 @@ T:   0.17   0.50   0.17   0.50   0.17
 """
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
+        received_reverse = m.format("transfac")
         expected_reverse = """\
 P0      A      C      G      T
 01      0      0      0      1      T
@@ -520,17 +589,16 @@ T:   0.50   0.17   0.50   0.17   0.50
         m = motifs.Motif(counts=counts)
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = format(m, "transfac")
+        received_forward = m.format("transfac")
         self.assertEqual(received_forward, expected_forward)
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
+        received_reverse = m.format("transfac")
         self.assertEqual(received_reverse, expected_reverse)
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
 
 
 class TestMEME(unittest.TestCase):
-
     def test_meme_parser_1(self):
         """Parse motifs/meme.INO_up800.classic.oops.xml file."""
         with open("motifs/meme.INO_up800.classic.oops.xml") as handle:
@@ -546,7 +614,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[4], "sequence_4")
         self.assertEqual(record.sequences[5], "sequence_5")
         self.assertEqual(record.sequences[6], "sequence_6")
-        self.assertEqual(record.command, "meme common/INO_up800.s -oc results/meme10 -mod oops -dna -revcomp -bfile common/yeast.nc.6.freq -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/INO_up800.s -oc results/meme10 -mod oops -dna -revcomp -bfile common/yeast.nc.6.freq -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.name, "GSKGCATGTGAAA")
@@ -597,13 +668,13 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[4].start, 639)
         self.assertEqual(motif.instances[5].start, 566)
         self.assertEqual(motif.instances[6].start, 585)
-        self.assertEqual(str(motif.instances[0]), "GCGGCATGTGAAA")
-        self.assertEqual(str(motif.instances[1]), "GCGGCATGTGAAG")
-        self.assertEqual(str(motif.instances[2]), "GGGCCATGTGAAG")
-        self.assertEqual(str(motif.instances[3]), "GCGGCATGAGAAA")
-        self.assertEqual(str(motif.instances[4]), "GGTCCATGTGAAA")
-        self.assertEqual(str(motif.instances[5]), "GTAGCATGTGAAA")
-        self.assertEqual(str(motif.instances[6]), "AGTGCATGTGGAA")
+        self.assertEqual(motif.instances[0], "GCGGCATGTGAAA")
+        self.assertEqual(motif.instances[1], "GCGGCATGTGAAG")
+        self.assertEqual(motif.instances[2], "GGGCCATGTGAAG")
+        self.assertEqual(motif.instances[3], "GCGGCATGAGAAA")
+        self.assertEqual(motif.instances[4], "GGTCCATGTGAAA")
+        self.assertEqual(motif.instances[5], "GTAGCATGTGAAA")
+        self.assertEqual(motif.instances[6], "AGTGCATGTGGAA")
         motif = record[1]
         self.assertEqual(motif.name, "TTGACWCYTGCYCWG")
         self.assertEqual(record["TTGACWCYTGCYCWG"], motif)
@@ -646,13 +717,13 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[4].start, 54)
         self.assertEqual(motif.instances[5].start, 272)
         self.assertEqual(motif.instances[6].start, 214)
-        self.assertEqual(str(motif.instances[0]), "TTGACACCTGCCCAG")
-        self.assertEqual(str(motif.instances[1]), "TTGACACCTACCCTG")
-        self.assertEqual(str(motif.instances[2]), "TTGTCTCTTGCTCTG")
-        self.assertEqual(str(motif.instances[3]), "TTGACACTTGATCAG")
-        self.assertEqual(str(motif.instances[4]), "TTCACTACTCCCCTG")
-        self.assertEqual(str(motif.instances[5]), "TTGACAACGGCTGGG")
-        self.assertEqual(str(motif.instances[6]), "TTCACGCTTGCTACG")
+        self.assertEqual(motif.instances[0], "TTGACACCTGCCCAG")
+        self.assertEqual(motif.instances[1], "TTGACACCTACCCTG")
+        self.assertEqual(motif.instances[2], "TTGTCTCTTGCTCTG")
+        self.assertEqual(motif.instances[3], "TTGACACTTGATCAG")
+        self.assertEqual(motif.instances[4], "TTCACTACTCCCCTG")
+        self.assertEqual(motif.instances[5], "TTGACAACGGCTGGG")
+        self.assertEqual(motif.instances[6], "TTCACGCTTGCTACG")
 
     def test_meme_parser_2(self):
         """Parsing motifs/meme.adh.classic.oops.xml file."""
@@ -695,7 +766,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[30], "sequence_30")
         self.assertEqual(record.sequences[31], "sequence_31")
         self.assertEqual(record.sequences[32], "sequence_32")
-        self.assertEqual(record.command, "meme common/adh.s -oc results/meme4 -mod oops -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/adh.s -oc results/meme4 -mod oops -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.id, "motif_1")
@@ -904,39 +978,39 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[30].start, 6)
         self.assertEqual(motif.instances[31].start, 13)
         self.assertEqual(motif.instances[32].start, 116)
-        self.assertEqual(str(motif.instances[0]), "QKVALVTGAGQGIGKAIALRL")
-        self.assertEqual(str(motif.instances[1]), "NKVIIITGASSGIGKATALLL")
-        self.assertEqual(str(motif.instances[2]), "GKKVIVTGASKGIGREMAYHL")
-        self.assertEqual(str(motif.instances[3]), "DKVVLITGAGAGLGKEYAKWF")
-        self.assertEqual(str(motif.instances[4]), "HKTALITGGGRGIGRATALAL")
-        self.assertEqual(str(motif.instances[5]), "GKNVWVTGAGKGIGYATALAF")
-        self.assertEqual(str(motif.instances[6]), "GKCAIITGAGAGIGKEIAITF")
-        self.assertEqual(str(motif.instances[7]), "GKVAAITGAASGIGLECARTL")
-        self.assertEqual(str(motif.instances[8]), "QKAVLVTGGDCGLGHALCKYL")
-        self.assertEqual(str(motif.instances[9]), "PKVMLLTGASRGIGHATAKLF")
-        self.assertEqual(str(motif.instances[10]), "KGNVVITGASSGLGLATAKAL")
-        self.assertEqual(str(motif.instances[11]), "IHVALVTGGNKGIGLAIVRDL")
-        self.assertEqual(str(motif.instances[12]), "SKAVLVTGCDSGFGFSLAKHL")
-        self.assertEqual(str(motif.instances[13]), "GKVALVTGGASGVGLEVVKLL")
-        self.assertEqual(str(motif.instances[14]), "GKVVVITGSSTGLGKSMAIRF")
-        self.assertEqual(str(motif.instances[15]), "GKAAIVTGAAGGIGRATVEAY")
-        self.assertEqual(str(motif.instances[16]), "GAHVVVTGGSSGIGKCIAIEC")
-        self.assertEqual(str(motif.instances[17]), "DKVTIITGGTRGIGFAAAKIF")
-        self.assertEqual(str(motif.instances[18]), "GEAVLITGGASGLGRALVDRF")
-        self.assertEqual(str(motif.instances[19]), "GQWAVITGAGDGIGKAYSFEL")
-        self.assertEqual(str(motif.instances[20]), "RTVVLITGCSSGIGLHLAVRL")
-        self.assertEqual(str(motif.instances[21]), "GLRALVTGAGKGIGRDTVKAL")
-        self.assertEqual(str(motif.instances[22]), "GKTVIITGGARGLGAEAARQA")
-        self.assertEqual(str(motif.instances[23]), "GRKALVTGASGAIGGAIARVL")
-        self.assertEqual(str(motif.instances[24]), "VPVALVTGAAKRLGRSIAEGL")
-        self.assertEqual(str(motif.instances[25]), "DQVAFITGGASGAGFGQAKVF")
-        self.assertEqual(str(motif.instances[26]), "SPVILVSGSNRGVGKAIAEDL")
-        self.assertEqual(str(motif.instances[27]), "KKNILVTGGAGFIGSAVVRHI")
-        self.assertEqual(str(motif.instances[28]), "NQVAVVIGGGQTLGAFLCHGL")
-        self.assertEqual(str(motif.instances[29]), "NKNVIFVAGLGGIGLDTSKEL")
-        self.assertEqual(str(motif.instances[30]), "GKRILVTGVASKLSIAYGIAQ")
-        self.assertEqual(str(motif.instances[31]), "VDVLINNAGVSGLWCALGDVD")
-        self.assertEqual(str(motif.instances[32]), "IIDTNVTGAAATLSAVLPQMV")
+        self.assertEqual(motif.instances[0], "QKVALVTGAGQGIGKAIALRL")
+        self.assertEqual(motif.instances[1], "NKVIIITGASSGIGKATALLL")
+        self.assertEqual(motif.instances[2], "GKKVIVTGASKGIGREMAYHL")
+        self.assertEqual(motif.instances[3], "DKVVLITGAGAGLGKEYAKWF")
+        self.assertEqual(motif.instances[4], "HKTALITGGGRGIGRATALAL")
+        self.assertEqual(motif.instances[5], "GKNVWVTGAGKGIGYATALAF")
+        self.assertEqual(motif.instances[6], "GKCAIITGAGAGIGKEIAITF")
+        self.assertEqual(motif.instances[7], "GKVAAITGAASGIGLECARTL")
+        self.assertEqual(motif.instances[8], "QKAVLVTGGDCGLGHALCKYL")
+        self.assertEqual(motif.instances[9], "PKVMLLTGASRGIGHATAKLF")
+        self.assertEqual(motif.instances[10], "KGNVVITGASSGLGLATAKAL")
+        self.assertEqual(motif.instances[11], "IHVALVTGGNKGIGLAIVRDL")
+        self.assertEqual(motif.instances[12], "SKAVLVTGCDSGFGFSLAKHL")
+        self.assertEqual(motif.instances[13], "GKVALVTGGASGVGLEVVKLL")
+        self.assertEqual(motif.instances[14], "GKVVVITGSSTGLGKSMAIRF")
+        self.assertEqual(motif.instances[15], "GKAAIVTGAAGGIGRATVEAY")
+        self.assertEqual(motif.instances[16], "GAHVVVTGGSSGIGKCIAIEC")
+        self.assertEqual(motif.instances[17], "DKVTIITGGTRGIGFAAAKIF")
+        self.assertEqual(motif.instances[18], "GEAVLITGGASGLGRALVDRF")
+        self.assertEqual(motif.instances[19], "GQWAVITGAGDGIGKAYSFEL")
+        self.assertEqual(motif.instances[20], "RTVVLITGCSSGIGLHLAVRL")
+        self.assertEqual(motif.instances[21], "GLRALVTGAGKGIGRDTVKAL")
+        self.assertEqual(motif.instances[22], "GKTVIITGGARGLGAEAARQA")
+        self.assertEqual(motif.instances[23], "GRKALVTGASGAIGGAIARVL")
+        self.assertEqual(motif.instances[24], "VPVALVTGAAKRLGRSIAEGL")
+        self.assertEqual(motif.instances[25], "DQVAFITGGASGAGFGQAKVF")
+        self.assertEqual(motif.instances[26], "SPVILVSGSNRGVGKAIAEDL")
+        self.assertEqual(motif.instances[27], "KKNILVTGGAGFIGSAVVRHI")
+        self.assertEqual(motif.instances[28], "NQVAVVIGGGQTLGAFLCHGL")
+        self.assertEqual(motif.instances[29], "NKNVIFVAGLGGIGLDTSKEL")
+        self.assertEqual(motif.instances[30], "GKRILVTGVASKLSIAYGIAQ")
+        self.assertEqual(motif.instances[31], "VDVLINNAGVSGLWCALGDVD")
+        self.assertEqual(motif.instances[32], "IIDTNVTGAAATLSAVLPQMV")
         motif = record[1]
         self.assertEqual(motif.name, "VGNPGASAYSASKAAVRGLTESLALELAP")
         self.assertEqual(motif.alt_id, "MEME-2")
@@ -1077,39 +1151,39 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[30].start, 18)
         self.assertEqual(motif.instances[31].start, 177)
         self.assertEqual(motif.instances[32].start, 144)
-        self.assertEqual(str(motif.instances[0]), "VGNPELAVYSSSKFAVRGLTQTAARDLAP")
-        self.assertEqual(str(motif.instances[1]), "IGNPGQTNYCASKAGMIGFSKSLAQEIAT")
-        self.assertEqual(str(motif.instances[2]), "LGLFGFTAYSASKFAIRGLAEALQMEVKP")
-        self.assertEqual(str(motif.instances[3]), "MGLPFNDVYCASKFALEGLCESLAVLLLP")
-        self.assertEqual(str(motif.instances[4]), "FPWPLYSMYSASKAFVCAFSKALQEEYKA")
-        self.assertEqual(str(motif.instances[5]), "RGAAVTSAYSASKFAVLGLTESLMQEVRK")
-        self.assertEqual(str(motif.instances[6]), "QPLLGYTIYTMAKGALEGLTRSAALELAP")
-        self.assertEqual(str(motif.instances[7]), "YGNFGQANYSSSKAGILGLSKTMAIEGAK")
-        self.assertEqual(str(motif.instances[8]), "IPWPLFVHYAASKGGMKLMTETLALEYAP")
-        self.assertEqual(str(motif.instances[9]), "VGSKHNSGYSAAKFGGVGLTQSLALDLAE")
-        self.assertEqual(str(motif.instances[10]), "LPIEQYAGYSASKAAVSALTRAAALSCRK")
-        self.assertEqual(str(motif.instances[11]), "VAYPMVAAYSASKFALDGFFSSIRKEYSV")
-        self.assertEqual(str(motif.instances[12]), "YPNGGGPLYTAAKQAIVGLVRELAFELAP")
-        self.assertEqual(str(motif.instances[13]), "VTFPNLITYSSTKGAMTMLTKAMAMELGP")
-        self.assertEqual(str(motif.instances[14]), "MANPARSPYCITKFGVEAFSDCLRYEMYP")
-        self.assertEqual(str(motif.instances[15]), "KAYPGGAVYGATKWAVRDLMEVLRMESAQ")
-        self.assertEqual(str(motif.instances[16]), "VHPFAGSAYATSKAALASLTRELAHDYAP")
-        self.assertEqual(str(motif.instances[17]), "MGLALTSSYGASKWGVRGLSKLAAVELGT")
-        self.assertEqual(str(motif.instances[18]), "TPYAPSSPYSASKAAADHLVRAWQRTYRL")
-        self.assertEqual(str(motif.instances[19]), "FRGLPATRYSASKAFLSTFMESLRVDLRG")
-        self.assertEqual(str(motif.instances[20]), "VPVIWEPVYTASKFAVQAFVHTTRRQVAQ")
-        self.assertEqual(str(motif.instances[21]), "MAEPEAAAYVAAKGGVAMLTRAMAVDLAR")
-        self.assertEqual(str(motif.instances[22]), "APMERLASYGSSKAAVTMFSSVMRLELSK")
-        self.assertEqual(str(motif.instances[23]), "NKNINMTSYASSKAAASHLVRNMAFDLGE")
-        self.assertEqual(str(motif.instances[24]), "TPRIGMSAYGASKAALKSLALSVGLELAG")
-        self.assertEqual(str(motif.instances[25]), "MGSALAGPYSAAKAASINLMEGYRQGLEK")
-        self.assertEqual(str(motif.instances[26]), "NTDGGAYAYRMSKAALNMAVRSMSTDLRP")
-        self.assertEqual(str(motif.instances[27]), "FGSLSGVGYPASKASVIGLTHGLGREIIR")
-        self.assertEqual(str(motif.instances[28]), "NAIYQVPVYSGTKAAVVNFTSSLAKLAPI")
-        self.assertEqual(str(motif.instances[29]), "RVLNPLVGYNMTKHALGGLTKTTQHVGWD")
-        self.assertEqual(str(motif.instances[30]), "EGKIGASLKDSTLFGVSSLSDSLKGDFTS")
-        self.assertEqual(str(motif.instances[31]), "MGPEGVRVNAISAGPIRTLAASGIKDFRK")
-        self.assertEqual(str(motif.instances[32]), "RALKSCSPELQQKFRSETITEEELVGLMN")
+        self.assertEqual(motif.instances[0], "VGNPELAVYSSSKFAVRGLTQTAARDLAP")
+        self.assertEqual(motif.instances[1], "IGNPGQTNYCASKAGMIGFSKSLAQEIAT")
+        self.assertEqual(motif.instances[2], "LGLFGFTAYSASKFAIRGLAEALQMEVKP")
+        self.assertEqual(motif.instances[3], "MGLPFNDVYCASKFALEGLCESLAVLLLP")
+        self.assertEqual(motif.instances[4], "FPWPLYSMYSASKAFVCAFSKALQEEYKA")
+        self.assertEqual(motif.instances[5], "RGAAVTSAYSASKFAVLGLTESLMQEVRK")
+        self.assertEqual(motif.instances[6], "QPLLGYTIYTMAKGALEGLTRSAALELAP")
+        self.assertEqual(motif.instances[7], "YGNFGQANYSSSKAGILGLSKTMAIEGAK")
+        self.assertEqual(motif.instances[8], "IPWPLFVHYAASKGGMKLMTETLALEYAP")
+        self.assertEqual(motif.instances[9], "VGSKHNSGYSAAKFGGVGLTQSLALDLAE")
+        self.assertEqual(motif.instances[10], "LPIEQYAGYSASKAAVSALTRAAALSCRK")
+        self.assertEqual(motif.instances[11], "VAYPMVAAYSASKFALDGFFSSIRKEYSV")
+        self.assertEqual(motif.instances[12], "YPNGGGPLYTAAKQAIVGLVRELAFELAP")
+        self.assertEqual(motif.instances[13], "VTFPNLITYSSTKGAMTMLTKAMAMELGP")
+        self.assertEqual(motif.instances[14], "MANPARSPYCITKFGVEAFSDCLRYEMYP")
+        self.assertEqual(motif.instances[15], "KAYPGGAVYGATKWAVRDLMEVLRMESAQ")
+        self.assertEqual(motif.instances[16], "VHPFAGSAYATSKAALASLTRELAHDYAP")
+        self.assertEqual(motif.instances[17], "MGLALTSSYGASKWGVRGLSKLAAVELGT")
+        self.assertEqual(motif.instances[18], "TPYAPSSPYSASKAAADHLVRAWQRTYRL")
+        self.assertEqual(motif.instances[19], "FRGLPATRYSASKAFLSTFMESLRVDLRG")
+        self.assertEqual(motif.instances[20], "VPVIWEPVYTASKFAVQAFVHTTRRQVAQ")
+        self.assertEqual(motif.instances[21], "MAEPEAAAYVAAKGGVAMLTRAMAVDLAR")
+        self.assertEqual(motif.instances[22], "APMERLASYGSSKAAVTMFSSVMRLELSK")
+        self.assertEqual(motif.instances[23], "NKNINMTSYASSKAAASHLVRNMAFDLGE")
+        self.assertEqual(motif.instances[24], "TPRIGMSAYGASKAALKSLALSVGLELAG")
+        self.assertEqual(motif.instances[25], "MGSALAGPYSAAKAASINLMEGYRQGLEK")
+        self.assertEqual(motif.instances[26], "NTDGGAYAYRMSKAALNMAVRSMSTDLRP")
+        self.assertEqual(motif.instances[27], "FGSLSGVGYPASKASVIGLTHGLGREIIR")
+        self.assertEqual(motif.instances[28], "NAIYQVPVYSGTKAAVVNFTSSLAKLAPI")
+        self.assertEqual(motif.instances[29], "RVLNPLVGYNMTKHALGGLTKTTQHVGWD")
+        self.assertEqual(motif.instances[30], "EGKIGASLKDSTLFGVSSLSDSLKGDFTS")
+        self.assertEqual(motif.instances[31], "MGPEGVRVNAISAGPIRTLAASGIKDFRK")
+        self.assertEqual(motif.instances[32], "RALKSCSPELQQKFRSETITEEELVGLMN")
 
     def test_meme_parser_3(self):
         """Parse motifs/meme.farntrans5.classic.anr.xml file."""
@@ -1124,7 +1198,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[2], "sequence_2")
         self.assertEqual(record.sequences[3], "sequence_3")
         self.assertEqual(record.sequences[4], "sequence_4")
-        self.assertEqual(record.command, "meme common/farntrans5.s -oc results/meme15 -mod anr -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/farntrans5.s -oc results/meme15 -mod anr -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.name, "GGFGGRPGKEVDLCYTYCALAALAJLGSLD")
@@ -1277,30 +1354,30 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[21].start, 327)
         self.assertEqual(motif.instances[22].start, 349)
         self.assertEqual(motif.instances[23].start, 24)
-        self.assertEqual(str(motif.instances[0]), "GGLNGRPSKLPDVCYSWWVLSSLAIIGRLD")
-        self.assertEqual(str(motif.instances[1]), "GGLNGRPEKLPDVCYSWWVLASLKIIGRLH")
-        self.assertEqual(str(motif.instances[2]), "GGFQGRENKFADTCYAFWCLNSLHLLTKDW")
-        self.assertEqual(str(motif.instances[3]), "GGIGGVPGMEAHGGYTFCGLAALVILKKER")
-        self.assertEqual(str(motif.instances[4]), "GGFGGGPGQYPHLAPTYAAVNALCIIGTEE")
-        self.assertEqual(str(motif.instances[5]), "GGFGCRPGSESHAGQIYCCTGFLAITSQLH")
-        self.assertEqual(str(motif.instances[6]), "GSFAGDIWGEIDTRFSFCAVATLALLGKLD")
-        self.assertEqual(str(motif.instances[7]), "GGFGLCPNAESHAAQAFTCLGALAIANKLD")
-        self.assertEqual(str(motif.instances[8]), "GGFADRPGDMVDPFHTLFGIAGLSLLGEEQ")
-        self.assertEqual(str(motif.instances[9]), "GSFQGDRFGEVDTRFVYTALSALSILGELT")
-        self.assertEqual(str(motif.instances[10]), "GFGSCPHVDEAHGGYTFCATASLAILRSMD")
-        self.assertEqual(str(motif.instances[11]), "GGISDRPENEVDVFHTVFGVAGLSLMGYDN")
-        self.assertEqual(str(motif.instances[12]), "GPFGGGPGQLSHLASTYAAINALSLCDNID")
-        self.assertEqual(str(motif.instances[13]), "GGFQGRCNKLVDGCYSFWQAGLLPLLHRAL")
-        self.assertEqual(str(motif.instances[14]), "RGFCGRSNKLVDGCYSFWVGGSAAILEAFG")
-        self.assertEqual(str(motif.instances[15]), "GGLLDKPGKSRDFYHTCYCLSGLSIAQHFG")
-        self.assertEqual(str(motif.instances[16]), "GGVSASIGHDPHLLYTLSAVQILTLYDSIH")
-        self.assertEqual(str(motif.instances[17]), "GSFLMHVGGEVDVRSAYCAASVASLTNIIT")
-        self.assertEqual(str(motif.instances[18]), "GAFAPFPRHDAHLLTTLSAVQILATYDALD")
-        self.assertEqual(str(motif.instances[19]), "YNGAFGAHNEPHSGYTSCALSTLALLSSLE")
-        self.assertEqual(str(motif.instances[20]), "GFKTCLEVGEVDTRGIYCALSIATLLNILT")
-        self.assertEqual(str(motif.instances[21]), "GGFSKNDEEDADLYHSCLGSAALALIEGKF")
-        self.assertEqual(str(motif.instances[22]), "PGLRDKPGAHSDFYHTNYCLLGLAVAESSY")
-        self.assertEqual(str(motif.instances[23]), "HNFEYWLTEHLRLNGIYWGLTALCVLDSPE")
+        self.assertEqual(motif.instances[0], "GGLNGRPSKLPDVCYSWWVLSSLAIIGRLD")
+        self.assertEqual(motif.instances[1], "GGLNGRPEKLPDVCYSWWVLASLKIIGRLH")
+        self.assertEqual(motif.instances[2], "GGFQGRENKFADTCYAFWCLNSLHLLTKDW")
+        self.assertEqual(motif.instances[3], "GGIGGVPGMEAHGGYTFCGLAALVILKKER")
+        self.assertEqual(motif.instances[4], "GGFGGGPGQYPHLAPTYAAVNALCIIGTEE")
+        self.assertEqual(motif.instances[5], "GGFGCRPGSESHAGQIYCCTGFLAITSQLH")
+        self.assertEqual(motif.instances[6], "GSFAGDIWGEIDTRFSFCAVATLALLGKLD")
+        self.assertEqual(motif.instances[7], "GGFGLCPNAESHAAQAFTCLGALAIANKLD")
+        self.assertEqual(motif.instances[8], "GGFADRPGDMVDPFHTLFGIAGLSLLGEEQ")
+        self.assertEqual(motif.instances[9], "GSFQGDRFGEVDTRFVYTALSALSILGELT")
+        self.assertEqual(motif.instances[10], "GFGSCPHVDEAHGGYTFCATASLAILRSMD")
+        self.assertEqual(motif.instances[11], "GGISDRPENEVDVFHTVFGVAGLSLMGYDN")
+        self.assertEqual(motif.instances[12], "GPFGGGPGQLSHLASTYAAINALSLCDNID")
+        self.assertEqual(motif.instances[13], "GGFQGRCNKLVDGCYSFWQAGLLPLLHRAL")
+        self.assertEqual(motif.instances[14], "RGFCGRSNKLVDGCYSFWVGGSAAILEAFG")
+        self.assertEqual(motif.instances[15], "GGLLDKPGKSRDFYHTCYCLSGLSIAQHFG")
+        self.assertEqual(motif.instances[16], "GGVSASIGHDPHLLYTLSAVQILTLYDSIH")
+        self.assertEqual(motif.instances[17], "GSFLMHVGGEVDVRSAYCAASVASLTNIIT")
+        self.assertEqual(motif.instances[18], "GAFAPFPRHDAHLLTTLSAVQILATYDALD")
+        self.assertEqual(motif.instances[19], "YNGAFGAHNEPHSGYTSCALSTLALLSSLE")
+        self.assertEqual(motif.instances[20], "GFKTCLEVGEVDTRGIYCALSIATLLNILT")
+        self.assertEqual(motif.instances[21], "GGFSKNDEEDADLYHSCLGSAALALIEGKF")
+        self.assertEqual(motif.instances[22], "PGLRDKPGAHSDFYHTNYCLLGLAVAESSY")
+        self.assertEqual(motif.instances[23], "HNFEYWLTEHLRLNGIYWGLTALCVLDSPE")
         motif = record[1]
         self.assertEqual(motif.name, "JNKEKLLEYILSCQ")
         self.assertEqual(record["JNKEKLLEYILSCQ"], motif)
@@ -1434,27 +1511,27 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[18].start, 73)
         self.assertEqual(motif.instances[19].start, 107)
         self.assertEqual(motif.instances[20].start, 36)
-        self.assertEqual(str(motif.instances[0]), "MNKEEILVFIKSCQ")
-        self.assertEqual(str(motif.instances[1]), "INYEKLTEFILKCQ")
-        self.assertEqual(str(motif.instances[2]), "IDREKLRSFILACQ")
-        self.assertEqual(str(motif.instances[3]), "INVEKAIEFVLSCM")
-        self.assertEqual(str(motif.instances[4]), "IDTEKLLGYIMSQQ")
-        self.assertEqual(str(motif.instances[5]), "INVEKLLEWSSARQ")
-        self.assertEqual(str(motif.instances[6]), "INREKLLQYLYSLK")
-        self.assertEqual(str(motif.instances[7]), "INVDKVVAYVQSLQ")
-        self.assertEqual(str(motif.instances[8]), "LLKEKHIRYIESLD")
-        self.assertEqual(str(motif.instances[9]), "LNLKSLLQWVTSRQ")
-        self.assertEqual(str(motif.instances[10]), "ENVRKIIHYFKSNL")
-        self.assertEqual(str(motif.instances[11]), "LDKRSLARFVSKCQ")
-        self.assertEqual(str(motif.instances[12]), "DLFEGTAEWIARCQ")
-        self.assertEqual(str(motif.instances[13]), "FVKEEVISFVLSCW")
-        self.assertEqual(str(motif.instances[14]), "ELTEGVLNYLKNCQ")
-        self.assertEqual(str(motif.instances[15]), "FNKHALRDYILYCC")
-        self.assertEqual(str(motif.instances[16]), "LLLEKHADYIASYG")
-        self.assertEqual(str(motif.instances[17]), "IDRKGIYQWLISLK")
-        self.assertEqual(str(motif.instances[18]), "LQREKHFHYLKRGL")
-        self.assertEqual(str(motif.instances[19]), "DRKVRLISFIRGNQ")
-        self.assertEqual(str(motif.instances[20]), "VNRMAIIFYSISGL")
+        self.assertEqual(motif.instances[0], "MNKEEILVFIKSCQ")
+        self.assertEqual(motif.instances[1], "INYEKLTEFILKCQ")
+        self.assertEqual(motif.instances[2], "IDREKLRSFILACQ")
+        self.assertEqual(motif.instances[3], "INVEKAIEFVLSCM")
+        self.assertEqual(motif.instances[4], "IDTEKLLGYIMSQQ")
+        self.assertEqual(motif.instances[5], "INVEKLLEWSSARQ")
+        self.assertEqual(motif.instances[6], "INREKLLQYLYSLK")
+        self.assertEqual(motif.instances[7], "INVDKVVAYVQSLQ")
+        self.assertEqual(motif.instances[8], "LLKEKHIRYIESLD")
+        self.assertEqual(motif.instances[9], "LNLKSLLQWVTSRQ")
+        self.assertEqual(motif.instances[10], "ENVRKIIHYFKSNL")
+        self.assertEqual(motif.instances[11], "LDKRSLARFVSKCQ")
+        self.assertEqual(motif.instances[12], "DLFEGTAEWIARCQ")
+        self.assertEqual(motif.instances[13], "FVKEEVISFVLSCW")
+        self.assertEqual(motif.instances[14], "ELTEGVLNYLKNCQ")
+        self.assertEqual(motif.instances[15], "FNKHALRDYILYCC")
+        self.assertEqual(motif.instances[16], "LLLEKHADYIASYG")
+        self.assertEqual(motif.instances[17], "IDRKGIYQWLISLK")
+        self.assertEqual(motif.instances[18], "LQREKHFHYLKRGL")
+        self.assertEqual(motif.instances[19], "DRKVRLISFIRGNQ")
+        self.assertEqual(motif.instances[20], "VNRMAIIFYSISGL")
 
     def test_minimal_meme_parser(self):
         """Parse motifs/minimal_test.meme file."""
@@ -1470,14 +1547,14 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record["KRP"], motif)
         self.assertEqual(motif.num_occurrences, 17)
         self.assertEqual(motif.length, 19)
-        self.assertEqual(str(motif.consensus), "TGTGATCGAGGTCACACTT")
+        self.assertEqual(motif.consensus, "TGTGATCGAGGTCACACTT")
         self.assertAlmostEqual(motif.background["A"], 0.30269730269730266)
         self.assertAlmostEqual(motif.background["C"], 0.1828171828171828)
         self.assertAlmostEqual(motif.background["G"], 0.20879120879120877)
         self.assertAlmostEqual(motif.background["T"], 0.30569430569430567)
         self.assertAlmostEqual(motif.evalue, 4.1e-09)
         self.assertEqual(motif.alphabet, "ACGT")
-        self.assertEqual(motif.instances, None)
+        self.assertIsNone(motif.instances)
 
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
@@ -1755,109 +1832,257 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.sequences[110], "chr5:105994747-105995247")
         self.assertEqual(record.sequences[111], "chr17:84209565-84210065")
         self.assertEqual(record.sequences[112], "chr7:16507689-16508189")
-        self.assertEqual(record.diagrams["chr3:104843905-104844405"], "115-[-1]-209-[-2]-126")
-        self.assertEqual(record.diagrams["chr12:114390660-114391160"], "3-[+2]-[+2]-3-[+1]-173-[+1]-3-[-2]-188")
-        self.assertEqual(record.diagrams["chr12:27135944-27136444"], "275-[-1]-89-[+2]-4-[+2]-52")
-        self.assertEqual(record.diagrams["chr10:59256089-59256589"], "247-[+2]-17-[-1]-186")
-        self.assertEqual(record.diagrams["chr4:135733850-135734350"], "183-[-1]-263-[+2]-4")
-        self.assertEqual(record.diagrams["chr1:137838164-137838664"], "192-[-2]-1-[+1]-44-[-1]-193")
-        self.assertEqual(record.diagrams["chr17:47735006-47735506"], "203-[+2]-15-[+1]-97-[-1]-115")
-        self.assertEqual(record.diagrams["chr6:72223026-72223526"], "52-[-2]-7-[+2]-162-[-1]-42-[-1]-137")
-        self.assertEqual(record.diagrams["chr13:3866266-3866766"], "241-[+1]-2-[-1]-217")
-        self.assertEqual(record.diagrams["chr1:133343883-133344383"], "190-[+2]-15-[+1]-245")
-        self.assertEqual(record.diagrams["chr11:117187372-117187872"], "242-[+1]-46-[-2]-71-[+1]-71")
-        self.assertEqual(record.diagrams["chr13:76003199-76003699"], "230-[+2]-15-[+2]-60-[-1]-115")
-        self.assertEqual(record.diagrams["chr5:65202593-65203093"], "24-[-2]-36-[+2]-193-[-1]-11-[+1]-10-[+1]-106")
-        self.assertEqual(record.diagrams["chr14:79702844-79703344"], "247-[-1]-46-[-2]-157")
-        self.assertEqual(record.diagrams["chr12:112796794-112797294"], "232-[+1]-41-[+1]-187")
-        self.assertEqual(record.diagrams["chr13:112863645-112864145"], "228-[+1]-20-[-1]-212")
-        self.assertEqual(record.diagrams["chr7:111007530-111008030"], "217-[+1]-83-[+2]-150")
-        self.assertEqual(record.diagrams["chr1:43307690-43308190"], "164-[-2]-52-[-2]-224")
-        self.assertEqual(record.diagrams["chr14:47973722-47974222"], "21-[+1]-181-[+1]-20-[-2]-208")
-        self.assertEqual(record.diagrams["chr9:120025371-120025871"], "110-[-2]-58-[+1]-282")
-        self.assertEqual(record.diagrams["chr7:105490727-105491227"], "100-[-2]-111-[-1]-239")
-        self.assertEqual(record.diagrams["chr5:37127175-37127675"], "234-[-2]-24-[+1]-192")
+        self.assertEqual(
+            record.diagrams["chr3:104843905-104844405"], "115-[-1]-209-[-2]-126"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:114390660-114391160"],
+            "3-[+2]-[+2]-3-[+1]-173-[+1]-3-[-2]-188",
+        )
+        self.assertEqual(
+            record.diagrams["chr12:27135944-27136444"], "275-[-1]-89-[+2]-4-[+2]-52"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:59256089-59256589"], "247-[+2]-17-[-1]-186"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:135733850-135734350"], "183-[-1]-263-[+2]-4"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:137838164-137838664"], "192-[-2]-1-[+1]-44-[-1]-193"
+        )
+        self.assertEqual(
+            record.diagrams["chr17:47735006-47735506"], "203-[+2]-15-[+1]-97-[-1]-115"
+        )
+        self.assertEqual(
+            record.diagrams["chr6:72223026-72223526"],
+            "52-[-2]-7-[+2]-162-[-1]-42-[-1]-137",
+        )
+        self.assertEqual(
+            record.diagrams["chr13:3866266-3866766"], "241-[+1]-2-[-1]-217"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:133343883-133344383"], "190-[+2]-15-[+1]-245"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:117187372-117187872"], "242-[+1]-46-[-2]-71-[+1]-71"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:76003199-76003699"], "230-[+2]-15-[+2]-60-[-1]-115"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:65202593-65203093"],
+            "24-[-2]-36-[+2]-193-[-1]-11-[+1]-10-[+1]-106",
+        )
+        self.assertEqual(
+            record.diagrams["chr14:79702844-79703344"], "247-[-1]-46-[-2]-157"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:112796794-112797294"], "232-[+1]-41-[+1]-187"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:112863645-112864145"], "228-[+1]-20-[-1]-212"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:111007530-111008030"], "217-[+1]-83-[+2]-150"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:43307690-43308190"], "164-[-2]-52-[-2]-224"
+        )
+        self.assertEqual(
+            record.diagrams["chr14:47973722-47974222"], "21-[+1]-181-[+1]-20-[-2]-208"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:120025371-120025871"], "110-[-2]-58-[+1]-282"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:105490727-105491227"], "100-[-2]-111-[-1]-239"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:37127175-37127675"], "234-[-2]-24-[+1]-192"
+        )
         self.assertEqual(record.diagrams["chr5:45951565-45952065"], "261-[-1]-219")
         self.assertEqual(record.diagrams["chr7:91033422-91033922"], "465-[-1]-15")
-        self.assertEqual(record.diagrams["chr4:154285745-154286245"], "235-[+1]-20-[-2]-195")
-        self.assertEqual(record.diagrams["chr13:100518008-100518508"], "226-[-2]-18-[-1]-206")
-        self.assertEqual(record.diagrams["chr1:36977019-36977519"], "88-[+1]-187-[+2]-60-[-1]-95")
-        self.assertEqual(record.diagrams["chr7:151917814-151918314"], "219-[+1]-80-[+2]-151")
-        self.assertEqual(record.diagrams["chr7:110976195-110976695"], "287-[+2]-12-[+1]-151")
+        self.assertEqual(
+            record.diagrams["chr4:154285745-154286245"], "235-[+1]-20-[-2]-195"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:100518008-100518508"], "226-[-2]-18-[-1]-206"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:36977019-36977519"], "88-[+1]-187-[+2]-60-[-1]-95"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:151917814-151918314"], "219-[+1]-80-[+2]-151"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:110976195-110976695"], "287-[+2]-12-[+1]-151"
+        )
         self.assertEqual(record.diagrams["chr15:58719281-58719781"], "212-[-2]-258")
-        self.assertEqual(record.diagrams["chr11:57590460-57590960"], "56-[-1]-271-[-1]-75-[+2]-28")
-        self.assertEqual(record.diagrams["chr8:83025150-83025650"], "219-[+1]-87-[+2]-144")
-        self.assertEqual(record.diagrams["chr13:54345922-54346422"], "283-[-2]-161-[+1]-6")
-        self.assertEqual(record.diagrams["chr12:82044358-82044858"], "50-[+2]-160-[+1]-39-[+2]-171")
-        self.assertEqual(record.diagrams["chr11:105013714-105014214"], "115-[-2]-160-[+1]-26-[-1]-129")
-        self.assertEqual(record.diagrams["chr10:93585404-93585904"], "141-[+2]-48-[+1]-261")
+        self.assertEqual(
+            record.diagrams["chr11:57590460-57590960"], "56-[-1]-271-[-1]-75-[+2]-28"
+        )
+        self.assertEqual(
+            record.diagrams["chr8:83025150-83025650"], "219-[+1]-87-[+2]-144"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:54345922-54346422"], "283-[-2]-161-[+1]-6"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:82044358-82044858"], "50-[+2]-160-[+1]-39-[+2]-171"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:105013714-105014214"],
+            "115-[-2]-160-[+1]-26-[-1]-129",
+        )
+        self.assertEqual(
+            record.diagrams["chr10:93585404-93585904"], "141-[+2]-48-[+1]-261"
+        )
         self.assertEqual(record.diagrams["chr7:19832207-19832707"], "229-[-1]-251")
-        self.assertEqual(record.diagrams["chr8:97323995-97324495"], "177-[-1]-40-[-2]-139-[+1]-74")
-        self.assertEqual(record.diagrams["chr10:126642277-126642777"], "252-[-1]-92-[-2]-106")
-        self.assertEqual(record.diagrams["chr1:156887119-156887619"], "189-[-2]-78-[-1]-183")
-        self.assertEqual(record.diagrams["chr15:81700367-81700867"], "109-[-1]-99-[-1]-252")
-        self.assertEqual(record.diagrams["chr6:121187425-121187925"], "29-[+2]-313-[-1]-108")
-        self.assertEqual(record.diagrams["chr4:43977111-43977611"], "60-[+1]-148-[+1]-252")
-        self.assertEqual(record.diagrams["chr11:102236405-102236905"], "10-[+2]-145-[-1]-3-[-1]-6-[+2]-60-[+1]-156")
+        self.assertEqual(
+            record.diagrams["chr8:97323995-97324495"], "177-[-1]-40-[-2]-139-[+1]-74"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:126642277-126642777"], "252-[-1]-92-[-2]-106"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:156887119-156887619"], "189-[-2]-78-[-1]-183"
+        )
+        self.assertEqual(
+            record.diagrams["chr15:81700367-81700867"], "109-[-1]-99-[-1]-252"
+        )
+        self.assertEqual(
+            record.diagrams["chr6:121187425-121187925"], "29-[+2]-313-[-1]-108"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:43977111-43977611"], "60-[+1]-148-[+1]-252"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:102236405-102236905"],
+            "10-[+2]-145-[-1]-3-[-1]-6-[+2]-60-[+1]-156",
+        )
         self.assertEqual(record.diagrams["chr17:5112057-5112557"], "249-[+1]-231")
         self.assertEqual(record.diagrams["chr10:110604369-110604869"], "232-[+1]-248")
-        self.assertEqual(record.diagrams["chr1:169314208-169314708"], "192-[-1]-[-1]-11-[-2]-227")
-        self.assertEqual(record.diagrams["chr9:57618594-57619094"], "125-[+2]-151-[-1]-4-[-1]-150")
-        self.assertEqual(record.diagrams["chr10:128184604-128185104"], "30-[-2]-128-[+1]-292")
-        self.assertEqual(record.diagrams["chr4:109112541-109113041"], "21-[-1]-13-[+1]-94-[+2]-302")
-        self.assertEqual(record.diagrams["chr3:97461668-97462168"], "18-[+2]-256-[-1]-81-[+1]-21-[+1]-34")
+        self.assertEqual(
+            record.diagrams["chr1:169314208-169314708"], "192-[-1]-[-1]-11-[-2]-227"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:57618594-57619094"], "125-[+2]-151-[-1]-4-[-1]-150"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:128184604-128185104"], "30-[-2]-128-[+1]-292"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:109112541-109113041"], "21-[-1]-13-[+1]-94-[+2]-302"
+        )
+        self.assertEqual(
+            record.diagrams["chr3:97461668-97462168"],
+            "18-[+2]-256-[-1]-81-[+1]-21-[+1]-34",
+        )
         self.assertEqual(record.diagrams["chr9:102674395-102674895"], "372-[+2]-98")
         self.assertEqual(record.diagrams["chr17:24289205-24289705"], "262-[-1]-218")
-        self.assertEqual(record.diagrams["chr17:28960252-28960752"], "221-[+1]-81-[+1]-158")
+        self.assertEqual(
+            record.diagrams["chr17:28960252-28960752"], "221-[+1]-81-[+1]-158"
+        )
         self.assertEqual(record.diagrams["chr2:73323093-73323593"], "49-[-2]-421")
-        self.assertEqual(record.diagrams["chr11:32150818-32151318"], "151-[-1]-27-[-1]-118-[-2]-134")
-        self.assertEqual(record.diagrams["chr7:103853792-103854292"], "212-[-2]-42-[+1]-196")
-        self.assertEqual(record.diagrams["chr16:49839621-49840121"], "192-[+2]-47-[-1]-17-[+2]-164")
+        self.assertEqual(
+            record.diagrams["chr11:32150818-32151318"], "151-[-1]-27-[-1]-118-[-2]-134"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:103853792-103854292"], "212-[-2]-42-[+1]-196"
+        )
+        self.assertEqual(
+            record.diagrams["chr16:49839621-49840121"], "192-[+2]-47-[-1]-17-[+2]-164"
+        )
         self.assertEqual(record.diagrams["chr6:135115628-135116128"], "231-[-1]-249")
         self.assertEqual(record.diagrams["chr3:88305500-88306000"], "229-[+1]-251")
         self.assertEqual(record.diagrams["chr18:57137388-57137888"], "296-[+2]-174")
         self.assertEqual(record.diagrams["chr5:97380648-97381148"], "188-[-2]-282")
-        self.assertEqual(record.diagrams["chr15:91082416-91082916"], "239-[-1]-104-[-1]-73-[+2]-14")
-        self.assertEqual(record.diagrams["chr14:61272713-61273213"], "216-[+2]-104-[+1]-130")
+        self.assertEqual(
+            record.diagrams["chr15:91082416-91082916"], "239-[-1]-104-[-1]-73-[+2]-14"
+        )
+        self.assertEqual(
+            record.diagrams["chr14:61272713-61273213"], "216-[+2]-104-[+1]-130"
+        )
         self.assertEqual(record.diagrams["chr5:33616214-33616714"], "247-[-1]-233")
         self.assertEqual(record.diagrams["chr18:23982470-23982970"], "285-[-1]-195")
-        self.assertEqual(record.diagrams["chr9:24715045-24715545"], "214-[-1]-153-[+1]-93")
+        self.assertEqual(
+            record.diagrams["chr9:24715045-24715545"], "214-[-1]-153-[+1]-93"
+        )
         self.assertEqual(record.diagrams["chr10:116195445-116195945"], "400-[+2]-70")
-        self.assertEqual(record.diagrams["chr11:77795184-77795684"], "247-[+1]-42-[-2]-67-[-2]-64")
-        self.assertEqual(record.diagrams["chr16:32508975-32509475"], "213-[+2]-29-[-1]-208")
+        self.assertEqual(
+            record.diagrams["chr11:77795184-77795684"], "247-[+1]-42-[-2]-67-[-2]-64"
+        )
+        self.assertEqual(
+            record.diagrams["chr16:32508975-32509475"], "213-[+2]-29-[-1]-208"
+        )
         self.assertEqual(record.diagrams["chr18:80416880-80417380"], "239-[-1]-241")
-        self.assertEqual(record.diagrams["chr10:57252236-57252736"], "155-[+1]-158-[+2]-137")
-        self.assertEqual(record.diagrams["chr5:34915767-34916267"], "179-[+2]-29-[-1]-242")
+        self.assertEqual(
+            record.diagrams["chr10:57252236-57252736"], "155-[+1]-158-[+2]-137"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:34915767-34916267"], "179-[+2]-29-[-1]-242"
+        )
         self.assertEqual(record.diagrams["chr9:98389943-98390443"], "252-[-1]-228")
-        self.assertEqual(record.diagrams["chr19:5845899-5846399"], "136-[+1]-193-[+1]-131")
-        self.assertEqual(record.diagrams["chr3:151777796-151778296"], "30-[-2]-58-[-1]-362")
+        self.assertEqual(
+            record.diagrams["chr19:5845899-5846399"], "136-[+1]-193-[+1]-131"
+        )
+        self.assertEqual(
+            record.diagrams["chr3:151777796-151778296"], "30-[-2]-58-[-1]-362"
+        )
         self.assertEqual(record.diagrams["chr4:76585120-76585620"], "329-[+2]-141")
-        self.assertEqual(record.diagrams["chr7:104332488-104332988"], "164-[+2]-23-[-1]-222-[+1]-21")
+        self.assertEqual(
+            record.diagrams["chr7:104332488-104332988"], "164-[+2]-23-[-1]-222-[+1]-21"
+        )
         self.assertEqual(record.diagrams["chr5:138127197-138127697"], "238-[+1]-242")
-        self.assertEqual(record.diagrams["chr11:60988820-60989320"], "115-[+1]-68-[+1]-47-[+1]-210")
-        self.assertEqual(record.diagrams["chr8:19984030-19984530"], "103-[-1]-81-[+2]-266")
-        self.assertEqual(record.diagrams["chr11:31712262-31712762"], "118-[+2]-53-[+2]-269")
-        self.assertEqual(record.diagrams["chr15:41338514-41339014"], "173-[+2]-75-[+2]-192")
-        self.assertEqual(record.diagrams["chr9:21362671-21363171"], "105-[+1]-131-[+1]-224")
+        self.assertEqual(
+            record.diagrams["chr11:60988820-60989320"], "115-[+1]-68-[+1]-47-[+1]-210"
+        )
+        self.assertEqual(
+            record.diagrams["chr8:19984030-19984530"], "103-[-1]-81-[+2]-266"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:31712262-31712762"], "118-[+2]-53-[+2]-269"
+        )
+        self.assertEqual(
+            record.diagrams["chr15:41338514-41339014"], "173-[+2]-75-[+2]-192"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:21362671-21363171"], "105-[+1]-131-[+1]-224"
+        )
         self.assertEqual(record.diagrams["chr18:58822702-58823202"], "467-[-2]-3")
         self.assertEqual(record.diagrams["chr1:173447614-173448114"], "369-[-1]-111")
         self.assertEqual(record.diagrams["chr6:81915769-81916269"], "197-[+1]-283")
         self.assertEqual(record.diagrams["chr1:169322898-169323398"], "253-[-1]-227")
-        self.assertEqual(record.diagrams["chr12:70860461-70860961"], "197-[+2]-22-[-1]-231")
-        self.assertEqual(record.diagrams["chr9:59598186-59598686"], "163-[-2]-10-[-1]-277")
+        self.assertEqual(
+            record.diagrams["chr12:70860461-70860961"], "197-[+2]-22-[-1]-231"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:59598186-59598686"], "163-[-2]-10-[-1]-277"
+        )
         self.assertEqual(record.diagrams["chr3:19550495-19550995"], "452-[-2]-18")
         self.assertEqual(record.diagrams["chr7:36132953-36133453"], "157-[-1]-323")
-        self.assertEqual(record.diagrams["chr7:38970375-38970875"], "49-[+1]-114-[+1]-297")
+        self.assertEqual(
+            record.diagrams["chr7:38970375-38970875"], "49-[+1]-114-[+1]-297"
+        )
         self.assertEqual(record.diagrams["chr15:78243390-78243890"], "234-[+1]-246")
-        self.assertEqual(record.diagrams["chr7:87847381-87847881"], "99-[+2]-2-[-1]-230-[-1]-99")
+        self.assertEqual(
+            record.diagrams["chr7:87847381-87847881"], "99-[+2]-2-[-1]-230-[-1]-99"
+        )
         self.assertEqual(record.diagrams["chr1:33631214-33631714"], "358-[-1]-122")
-        self.assertEqual(record.diagrams["chr4:135407873-135408373"], "116-[-1]-64-[+2]-270")
+        self.assertEqual(
+            record.diagrams["chr4:135407873-135408373"], "116-[-1]-64-[+2]-270"
+        )
         self.assertEqual(record.diagrams["chr7:101244829-101245329"], "311-[-2]-159")
         self.assertEqual(record.diagrams["chr10:60612190-60612690"], "215-[+1]-265")
-        self.assertEqual(record.diagrams["chr19:56465963-56466463"], "306-[+1]-36-[+1]-18-[+1]-80")
+        self.assertEqual(
+            record.diagrams["chr19:56465963-56466463"], "306-[+1]-36-[+1]-18-[+1]-80"
+        )
         self.assertEqual(record.diagrams["chr4:41334759-41335259"], "204-[+1]-276")
         self.assertEqual(record.diagrams["chr8:92969521-92970021"], "453-[+2]-17")
-        self.assertEqual(record.diagrams["chr6:145703215-145703715"], "154-[-2]-58-[+2]-228")
+        self.assertEqual(
+            record.diagrams["chr6:145703215-145703715"], "154-[-2]-58-[+2]-228"
+        )
         self.assertEqual(record.diagrams["chr13:57679178-57679678"], "217-[-1]-263")
         self.assertEqual(record.diagrams["chr19:45121628-45122128"], "35-[-2]-435")
         self.assertEqual(record.diagrams["chr15:79757891-79758391"], "310-[+1]-170")
@@ -1865,7 +2090,9 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.diagrams["chr13:81067500-81068000"], "252-[+1]-228")
         self.assertEqual(record.diagrams["chr11:69714224-69714724"], "145-[+2]-325")
         self.assertEqual(record.diagrams["chr2:103728071-103728571"], "369-[+1]-111")
-        self.assertEqual(record.diagrams["chr5:105994747-105995247"], "93-[+2]-153-[-2]-194")
+        self.assertEqual(
+            record.diagrams["chr5:105994747-105995247"], "93-[+2]-153-[-2]-194"
+        )
         self.assertEqual(record.diagrams["chr17:84209565-84210065"], "64-[-2]-406")
         self.assertEqual(record.diagrams["chr7:16507689-16508189"], "231-[+2]-239")
 
@@ -1929,7 +2156,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 9], 2)
         self.assertEqual(motif.counts["T", 10], 3)
         self.assertEqual(motif.counts["T", 11], 1)
-        self.assertEqual(str(motif.counts.degenerate_consensus), "SRACAGGTGKYG")
+        self.assertEqual(motif.counts.degenerate_consensus, "SRACAGGTGKYG")
         motif = record[1]
         self.assertEqual(motif["ID"], "motif2")
         self.assertEqual(len(motif.counts), 4)
@@ -1974,12 +2201,12 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 7], 0)
         self.assertEqual(motif.counts["T", 8], 5)
         self.assertEqual(motif.counts["T", 9], 3)
-        self.assertEqual(str(motif.counts.degenerate_consensus), "RSCAGAGGTY")
+        self.assertEqual(motif.counts.degenerate_consensus, "RSCAGAGGTY")
 
     def test_permissive_transfac_parser(self):
         """Parse the TRANSFAC-like file motifs/MA0056.1.transfac."""
-        # The test file MA0056.1.transfac was provided by the JASPAR database
-        # in a TRANSFAC-like format
+        # The test file MA0056.1.transfac was obtained from the JASPAR database
+        # in a TRANSFAC-like format.
         # Khan, A. et al. JASPAR 2018: update of the open-access database of
         # transcription factor binding profiles and its web framework.
         # Nucleic Acids Res. 2018; 46:D260-D266,
@@ -2028,7 +2255,77 @@ class MotifTestPWM(unittest.TestCase):
         """Define motif and sequence for tests."""
         with open("motifs/SRF.pfm") as handle:
             self.m = motifs.read(handle, "pfm")
-        self.s = Seq("ACGTGTGCGTAGTGCGT", self.m.alphabet)
+        self.s = Seq("ACGTGTGCGTAGTGCGT")
+
+    def test_getitem(self):
+        counts = self.m.counts
+        python_integers = range(13)
+        numpy_integers = numpy.array(python_integers)
+        integers = {"python": python_integers, "numpy": numpy_integers}
+        for int_type in ("python", "numpy"):
+            i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12 = integers[int_type]
+            msg = f"using {int_type} integers as indices"
+            # slice, slice
+            d = counts[i1::i2, i2:i12:i3]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertEqual(len(d["C"]), 4, msg=msg)
+            self.assertEqual(len(d["T"]), 4, msg=msg)
+            self.assertAlmostEqual(d["C"][i0], 45.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i1], 1.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i2], 0.0, msg=msg)
+            self.assertAlmostEqual(d["C"][i3], 1.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i0], 0.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i1], 42.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i2], 3.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i3], 0.0, msg=msg)
+            # slice, int
+            d = counts[i1::i2, i4]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertAlmostEqual(d["C"], 1.0, msg=msg)
+            self.assertAlmostEqual(d["T"], 13.0, msg=msg)
+            # int, slice
+            t = counts[i2, i3:i12:i2]
+            self.assertIsInstance(t, tuple, msg=msg)
+            self.assertAlmostEqual(t[i0], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i1], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i2], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i3], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i4], 43.0, msg=msg)
+            # int, int
+            v = counts[i1, i5]
+            self.assertAlmostEqual(v, 1.0, msg=msg)
+            # tuple, slice
+            d = counts[(i0, i3), i3:i12:i2]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertEqual(len(d["A"]), 5, msg=msg)
+            self.assertEqual(len(d["T"]), 5, msg=msg)
+            self.assertAlmostEqual(d["A"][i0], 1.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i1], 3.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i2], 1.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i3], 15.0, msg=msg)
+            self.assertAlmostEqual(d["A"][i4], 2.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i0], 0.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i1], 42.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i2], 45.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i3], 30.0, msg=msg)
+            self.assertAlmostEqual(d["T"][i4], 0.0, msg=msg)
+            # tuple, int
+            d = counts[(i0, i3), i5]
+            self.assertIsInstance(d, dict, msg=msg)
+            self.assertEqual(len(d), 2, msg=msg)
+            self.assertAlmostEqual(d["A"], 3.0, msg=msg)
+            self.assertAlmostEqual(d["T"], 42.0, msg=msg)
+            # str, slice
+            t = counts["C", i2:i12:i4]
+            self.assertIsInstance(t, tuple, msg=msg)
+            self.assertAlmostEqual(t[i0], 45.0, msg=msg)
+            self.assertAlmostEqual(t[i1], 0.0, msg=msg)
+            self.assertAlmostEqual(t[i2], 0.0, msg=msg)
+            # str, int
+            self.assertAlmostEqual(counts["T", i4], 13.0, msg=msg)
 
     def test_simple(self):
         """Test if Bio.motifs PWM scoring works."""
@@ -2049,18 +2346,12 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
 
-    def test_with_alt_alphabet(self):
-        """Test motif search using alternative instance of alphabet."""
-        self.s = Seq(str(self.s), IUPAC.IUPACUnambiguousDNA())
-        self.test_simple()
-
     def test_with_mixed_case(self):
         """Test if Bio.motifs PWM scoring works with mixed case."""
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.log_odds()
-        # Note we're breaking Seq/Alphabet expectations here:
-        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT", self.m.alphabet))
+        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT"))
         self.assertEqual(6, len(result))
         self.assertAlmostEqual(result[0], -29.18363571, places=5)
         self.assertAlmostEqual(result[1], -38.3365097, places=5)
@@ -2074,7 +2365,7 @@ class MotifTestPWM(unittest.TestCase):
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.log_odds()
-        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN", self.m.alphabet))
+        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN"))
         self.assertEqual(7, len(result))
         self.assertAlmostEqual(result[0], -29.18363571, places=5)
         self.assertAlmostEqual(result[1], -38.3365097, places=5)
@@ -2082,20 +2373,7 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
-        self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
-
-    def test_mixed_alphabets(self):
-        """Test creating motif with mixed alphabets."""
-        # TODO - Can we support this?
-        seqs = [Seq("TACAA", IUPAC.unambiguous_dna),
-                Seq("TACGC", IUPAC.ambiguous_dna),
-                Seq("TACAC", IUPAC.extended_dna),
-                Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
-                Seq("AACCC", IUPAC.unambiguous_dna),
-                Seq("AATGC", IUPAC.unambiguous_dna),
-                Seq("AATGC", generic_dna)]
-        # ValueError: Alphabets are inconsistent
-        self.assertRaises(ValueError, motifs.create, seqs)
+        self.assertTrue(math.isnan(result[6]), f"Expected nan, not {result[6]!r}")
 
     def test_calculate_pseudocounts(self):
         pseudocounts = motifs.jaspar.calculate_pseudocounts(self.m)

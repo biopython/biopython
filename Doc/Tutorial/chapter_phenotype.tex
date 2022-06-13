@@ -1,10 +1,10 @@
-\chapter{Bio.phenotype: analyse phenotypic data}
+\chapter{Bio.phenotype: analyze phenotypic data}
 \label{chapter:phenotype}
 
 This chapter gives an overview of the functionalities of the
 \verb|Bio.phenotype| package included in Biopython. The scope of this
 package is the analysis of phenotypic data, which means parsing and
-analysing growth measurements of cell cultures.
+analyzing growth measurements of cell cultures.
 In its current state the package is focused on the analysis of
 high-throughput phenotypic experiments produced by the
 \href{https://en.wikipedia.org/wiki/Phenotype_microarray}{Phenotype Microarray technology},
@@ -59,9 +59,11 @@ There are several ways to access WellRecord objects from a PlateRecord objects:
 \begin{description}
   \item[Well identifier]
     If you know the well identifier (row + column identifiers) you can access the desired well directly.
+%cont-doctest
 \begin{minted}{pycon}
-    >>> record["A02"]
-    \end{minted}
+>>> record["A02"]
+WellRecord('(0.0, 12.0), (0.25, 18.0), (0.5, 27.0), (0.75, 35.0), (1.0, 37.0), ..., (71.75, 143.0)')
+\end{minted}
 
   \item[Well plate coordinates]
     The same well can be retrieved by using the row and columns numbers (0-based index).
@@ -121,7 +123,7 @@ in the example below only the first ten time points are shown.
 %rest of code snippet output is truncated
 \begin{minted}{pycon}
 >>> for time, signal in well:
-...    print(time, signal)
+...     print(time, signal)
 ...
 (0.0, 12.0)
 (0.25, 18.0)
@@ -151,7 +153,7 @@ indexing; the default time interval is therefore one hour.
 
 %cont-doctest
 \begin{minted}{pycon}
->>> well[:10]  
+>>> well[:10]
 [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
 \end{minted}
 
@@ -246,8 +248,7 @@ the logistic and then the richards function. The user can also specify one of th
 >>> well.fit()
 >>> print("Function fitted: %s" % well.model)
 Function fitted: gompertz
->>> for param in ["area", "average_height", "lag", "max", "min",
-...               "plateau", "slope"]:
+>>> for param in ["area", "average_height", "lag", "max", "min", "plateau", "slope"]:
 ...     print("%s\t%.2f" % (param, getattr(well, param)))
 ...
 area    4414.38

@@ -43,7 +43,7 @@ class PDBParser:
         """Create a PDBParser object.
 
         The PDB parser call a number of standard methods in an aggregated
-        StructureBuilder object. Normally this object is instanciated by the
+        StructureBuilder object. Normally this object is instantiated by the
         PDBParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
 
@@ -52,7 +52,7 @@ class PDBParser:
            constructing the SMCRA data structure are fatal. If true (DEFAULT),
            the exceptions are caught, but some residues or atoms will be missing.
            THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
-         - get_header - unused argument kept for historical compatibilty.
+         - get_header - unused argument kept for historical compatibility.
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
@@ -141,6 +141,20 @@ class PDBParser:
 
     def _parse_coordinates(self, coords_trailer):
         """Parse the atomic data in the PDB file (PRIVATE)."""
+        allowed_records = {
+            "ATOM  ",
+            "HETATM",
+            "MODEL ",
+            "ENDMDL",
+            "TER   ",
+            "ANISOU",
+            # These are older 2.3 format specs:
+            "SIGATM",
+            "SIGUIJ",
+            # bookkeeping records after coordinates:
+            "MASTER",
+        }
+
         local_line_counter = 0
         structure_builder = self.structure_builder
         current_model_id = 0
@@ -150,12 +164,15 @@ class PDBParser:
         current_segid = None
         current_residue_id = None
         current_resname = None
+
         for i in range(0, len(coords_trailer)):
             line = coords_trailer[i].rstrip("\n")
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
-            if record_type == "ATOM  " or record_type == "HETATM":
+            if not line.strip():
+                continue  # skip empty lines
+            elif record_type == "ATOM  " or record_type == "HETATM":
                 # Initialize the Model - there was no explicit MODEL record
                 if not model_open:
                     structure_builder.init_model(current_model_id)
@@ -172,7 +189,7 @@ class PDBParser:
                     # atom name is like " CA ", so we can strip spaces
                     name = split_list[0]
                 altloc = line[16]
-                resname = line[17:20]
+                resname = line[17:20].strip()
                 chainid = line[21]
                 try:
                     serial_number = int(line[6:11])
@@ -277,7 +294,7 @@ class PDBParser:
                         self._handle_PDB_exception(message, global_line_counter)
 
                 if not self.is_pqr:
-                    # init atom with pdb fiels
+                    # init atom with pdb fields
                     try:
                         structure_builder.init_atom(
                             name,
@@ -366,7 +383,7 @@ class PDBParser:
                     float(x)
                     for x in (
                         line[30:38],
-                        line[38:45],
+                        line[38:46],
                         line[46:54],
                         line[54:60],
                         line[60:66],
@@ -374,6 +391,13 @@ class PDBParser:
                 ]
                 sigatm_array = numpy.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
+            elif record_type not in allowed_records:
+                warnings.warn(
+                    "Ignoring unrecognized record '{}' at line {}".format(
+                        record_type, global_line_counter
+                    ),
+                    PDBConstructionWarning,
+                )
             local_line_counter += 1
         # EOF (does not end in END or CONECT)
         self.line_counter = self.line_counter + local_line_counter

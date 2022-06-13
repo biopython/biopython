@@ -19,7 +19,7 @@ temperature of oligonucleotides:
    additives are available.
 
 Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
-however, recommended to use Tm_NN instead, since Tm_staluc may be depreceated
+however, recommended to use Tm_NN instead, since Tm_staluc may be deprecated
 in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
 with default parameters gives (essentially) the same results.
 
@@ -62,7 +62,7 @@ For example:
     >>> print('%0.2f' % mt.Tm_Wallace(myseq))
     84.00
     >>> print('%0.2f' % mt.Tm_GC(myseq))
-    58.73
+    58.97
     >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
@@ -83,7 +83,7 @@ Tables for RNA and RNA/DNA hybrids are included:
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.RNA_NN1))  # Freier '86
     73.35
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.R_DNA_NN1))  # Sugimoto '95
-    57.17
+    58.45
 
 Several types of salc correction (for Tm_NN and Tm_GC):
 
@@ -137,7 +137,7 @@ The same for RNA:
     73.00
 
 Note, that thermodynamic data are not available for all kind of mismatches,
-e.g. most double mismatches or terminal mismaches combined with danglind ends:
+e.g. most double mismatches or terminal mismatches combined with dangling ends:
 
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
     ...                   c_seq='TtCAAGGcTTCTACACCCGTACTCGAATGC',
@@ -167,6 +167,7 @@ import warnings
 
 from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 
 
 # Thermodynamic lookup tables (dictionaries):
@@ -266,12 +267,12 @@ R_DNA_NN1 = {
     "init": (1.9, -3.9), "init_A/T": (0, 0), "init_G/C": (0, 0),
     "init_oneG/C": (0, 0), "init_allA/T": (0, 0), "init_5T/A": (0, 0),
     "sym": (0, 0),
-    "AA/TT": (-11.5, -36.4), "AC/TG": (-7.8, -21.6), "AG/TC": (-7.0, -19.7),
-    "AT/TA": (-8.3, -23.9), "CA/GT": (-10.4, -28.4), "CC/GG": (-12.8, -31.9),
-    "CG/GC": (-16.3, -47.1), "CT/GA": (-9.1, -23.5), "GA/CT": (-8.6, -22.9),
-    "GC/CG": (-8.0, -17.1), "GG/CC": (-9.3, -23.2), "GT/CA": (-5.9, -12.3),
-    "TA/AT": (-7.8, -23.2), "TC/AG": (-5.5, -13.5), "TG/AC": (-9.0, -26.1),
-    "TT/AA": (-7.8, -21.9)}
+    "TT/AA": (-11.5, -36.4), "GT/CA": (-7.8, -21.6), "CT/GA": (-7.0, -19.7),
+    "AT/TA": (-8.3, -23.9), "TG/AC": (-10.4, -28.4), "GG/CC": (-12.8, -31.9),
+    "CG/GC": (-16.3, -47.1), "AG/TC": (-9.1, -23.5), "TC/AG": (-8.6, -22.9),
+    "GC/CG": (-8.0, -17.1), "CC/GG": (-9.3, -23.2), "AC/TG": (-5.9, -12.3),
+    "TA/AT": (-7.8, -23.2), "GA/CT": (-5.5, -13.5), "CA/GT": (-9.0, -26.1),
+    "AA/TT": (-7.8, -21.9)}
 
 # Internal mismatch and inosine table (DNA)
 # Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
@@ -390,9 +391,9 @@ RNA_DE1 = {
 def make_table(oldtable=None, values=None):
     """Return a table with thermodynamic parameters (as dictionary).
 
-    Parameters:
-    oldtable: An existing dictionary with thermodynamic parameters.
-    values: A dictionary with new or updated values.
+    Arguments:
+     - oldtable: An existing dictionary with thermodynamic parameters.
+     - values: A dictionary with new or updated values.
 
     E.g., to replace the initiation parameters in the Sugimoto '96 dataset with
     the initiation parameters from Allawi & SantaLucia '97:
@@ -436,7 +437,7 @@ def make_table(oldtable=None, values=None):
 
 
 def _check(seq, method):
-    """Return a sequence which fullfils the requirements of the given method (PRIVATE).
+    """Return a sequence which fulfills the requirements of the given method (PRIVATE).
 
     All Tm methods in this package require the sequence in uppercase format.
     Most methods make use of the length of the sequence (directly or
@@ -445,8 +446,8 @@ def _check(seq, method):
     backtranscribed to DNA. This method is PRIVATE.
 
     Arguments:
-    seq: The sequence as given by the user (passed as string).
-    method: Tm_Wallace, Tm_GC or Tm_NN.
+     - seq: The sequence as given by the user (passed as string).
+     - method: Tm_Wallace, Tm_GC or Tm_NN.
 
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> mt._check('10 ACGTTGCAAG tccatggtac', 'Tm_NN')
@@ -493,7 +494,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
      - method 5: deltaS(new) = deltaS(old) + corr
      - methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
 
-    Parameters:
+    Arguments:
      - Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To
        have a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
        dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated
@@ -765,7 +766,7 @@ def Tm_GC(
        concentration is calculated and used for salt correction (von Ahsen et
        al., 2001).
      - saltcorr: Type of salt correction (see method salt_correction).
-       Default=5. 0 or None means no salt correction.
+       Default=0. 0 or None means no salt correction.
      - mismatch: If 'True' (default) every 'X' in the sequence is counted as
        mismatch.
 
@@ -799,19 +800,19 @@ def Tm_GC(
             saltcorr = 0
         if valueset == 3:
             A, B, C, D = (81.5, 0.41, 675, 1)
-            saltcorr = 2
+            saltcorr = 1
         if valueset == 4:
             A, B, C, D = (81.5, 0.41, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 5:
             A, B, C, D = (78.0, 0.7, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 6:
             A, B, C, D = (67.0, 0.8, 500, 1)
-            saltcorr = 3
+            saltcorr = 2
         if valueset == 7:
             A, B, C, D = (81.5, 0.41, 600, 1)
-            saltcorr = 2
+            saltcorr = 1
         if valueset == 8:
             A, B, C, D = (77.1, 0.41, 528, 1)
             saltcorr = 4
@@ -832,7 +833,7 @@ def _key_error(neighbors, strict):
     """Throw an error or a warning if there is no data for the neighbors (PRIVATE)."""
     # We haven't found the key in the tables
     if strict:
-        raise ValueError("no thermodynamic data for neighbors %r available" % neighbors)
+        raise ValueError(f"no thermodynamic data for neighbors {neighbors!r} available")
     else:
         warnings.warn(
             "no themodynamic data for neighbors %r available. "
@@ -891,7 +892,7 @@ def Tm_NN(
 
         - RNA_NN1: values from Freier et al. (1986)
         - RNA_NN2: values from Xia et al. (1998)
-        - RNA_NN3: valuse from Chen et al. (2012)
+        - RNA_NN3: values from Chen et al. (2012)
 
        For RNA/DNA hybridizations:
 
@@ -1086,7 +1087,7 @@ def Tm_NN(
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     """Return DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
 
-    This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
+    This method may be deprecated in the future. Use Tm_NN instead. Tm_NN
     with default values gives the same result as Tm_staluc.
 
     s is the sequence as string or Seq object
@@ -1107,8 +1108,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     You can also use a Seq object instead of a string,
 
     >>> from Bio.Seq import Seq
-    >>> from Bio.Alphabet import generic_nucleotide
-    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA', generic_nucleotide)
+    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA')
     >>> print("%0.2f" % Tm_staluc(s))
     59.87
     >>> print("%0.2f" % Tm_staluc(s, rna=True))
@@ -1119,8 +1119,8 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     # now superseded by Tm_NN.
 
     warnings.warn(
-        "Tm_staluc may be depreciated in the future. Use Tm_NN instead.",
-        PendingDeprecationWarning,
+        "Tm_staluc is deprecated; please use Tm_NN instead.",
+        BiopythonDeprecationWarning,
     )
     if not rna:
         return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)

@@ -60,7 +60,7 @@ class AbstractDPAlgorithms:
 
         """
         # all of the different letters that the state path can be in
-        state_letters = self._seq.states.alphabet.letters
+        state_letters = self._mm.state_alphabet
 
         # -- initialize the algorithm
         #
@@ -119,7 +119,7 @@ class AbstractDPAlgorithms:
 
         """
         # all of the different letters that the state path can be in
-        state_letters = self._seq.states.alphabet.letters
+        state_letters = self._mm.state_alphabet
 
         # -- initialize the algorithm
         #
@@ -198,7 +198,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
         """
         # all of the different letters the state can have
-        state_letters = self._seq.states.alphabet.letters
+        state_letters = self._mm.state_alphabet
 
         # loop over all of the possible states
         s_value = 0
@@ -322,5 +322,5 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
     """
 
     def __init__(self, markov_model, sequence):
-        """Initialize."""
+        """Initialize the class."""
         raise NotImplementedError("Haven't coded this yet...")

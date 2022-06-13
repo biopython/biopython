@@ -3,7 +3,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Testing online code for fetching sequences, and parsing them.
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
@@ -16,16 +15,13 @@ Goals:
 """
 import unittest
 
-# We want to test these:
-from Bio import Entrez
-from Bio import ExPASy
+import requires_internet
 
-# In order to check any sequences returned
+from Bio import Entrez  # Testing this
+from Bio import ExPASy  # Testing this
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SwissProt import SwissProtParserError
-
-import requires_internet
 
 requires_internet.check()
 
@@ -63,17 +59,14 @@ class EntrezTests(unittest.TestCase):
             record = SeqIO.read(handle, f)
             handle.close()
             # NCBI still takes GI on input, but phasing it out in output
-            gi_to_acc = {
-                "6273291": "AF191665.1",
-                "16130152": "NP_416719.1",
-            }
+            gi_to_acc = {"6273291": "AF191665.1", "16130152": "NP_416719.1"}
             if entry in gi_to_acc:
                 entry = gi_to_acc[entry]
             self.assertTrue(
                 (entry in record.name)
                 or (entry in record.id)
                 or ("gi" in record.annotations and record.annotations["gi"] == entry),
-                "%s got %s, %s" % (entry, record.name, record.id),
+                f"{entry} got {record.name}, {record.id}",
             )
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
@@ -93,12 +86,12 @@ for database, formats, entry, length, checksum in [
 
     def funct(d, f, e, l, c):
         method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
-        method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
+        method.__doc__ = f"Bio.Entrez.efetch({d!r}, id={e!r}, ...)"
         return method
 
     setattr(
         EntrezTests,
-        "test_%s_%s" % (database, entry),
+        f"test_{database}_{entry}",
         funct(database, formats, entry, length, checksum),
     )
     del funct

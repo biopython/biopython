@@ -13,15 +13,18 @@ from Bio import NaiveBayes
 # Importing NaiveBayes will itself raise MissingPythonDependencyError
 # if NumPy is unavailable.
 import numpy
+
 try:
     hash(numpy.float64(123.456))
 except TypeError:
     # Due to a bug in NumPy 1.12.1, this is unhashable under
     # PyPy3.5 v5.7 beta - it has been fixed in NumPy
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
         "Please update NumPy if you want to use Bio.NaiveBayes "
-        "(under this version numpy.float64 is unhashable).") from None
+        "(under this version numpy.float64 is unhashable)."
+    ) from None
 del numpy
 
 
@@ -42,24 +45,17 @@ class CarTest(unittest.TestCase):
             ["Yellow", "SUV", "Domestic"],
             ["Red", "SUV", "Imported"],
             ["Red", "Sports", "Imported"],
-            ]
+        ]
 
-        ycar = [
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "Yes",
-            "No",
-            "No",
-            "Yes",
-            ]
+        ycar = ["Yes", "No", "Yes", "No", "Yes", "No", "Yes", "No", "No", "Yes"]
 
         carmodel = NaiveBayes.train(xcar, ycar)
-        self.assertEqual("Yes", NaiveBayes.classify(carmodel, ["Red", "Sports", "Domestic"]))
-        self.assertEqual("No", NaiveBayes.classify(carmodel, ["Red", "SUV", "Domestic"]))
+        self.assertEqual(
+            "Yes", NaiveBayes.classify(carmodel, ["Red", "Sports", "Domestic"])
+        )
+        self.assertEqual(
+            "No", NaiveBayes.classify(carmodel, ["Red", "SUV", "Domestic"])
+        )
 
 
 class NaiveBayesTest(unittest.TestCase):

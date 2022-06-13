@@ -27,13 +27,13 @@ from Bio.Data import CodonTable
 main_window = tk.Tk()
 main_window.title("Greetings from Biopython")
 
-menue = tk.Menu(main_window)
-menue_single = tk.Menu(menue, tearoff=0)
-menue.add_cascade(menu=menue_single, label="File")
+main_menu = tk.Menu(main_window)
+menue_single = tk.Menu(main_menu, tearoff=0)
+main_menu.add_cascade(menu=menue_single, label="File")
 menue_single.add_command(label="About")
 menue_single.add_separator()
 menue_single.add_command(label="Exit", command=main_window.destroy)
-main_window.config(menu=menue)
+main_window.config(menu=main_menu)
 
 # Left panel with parameters
 param_panel = ttk.Frame(main_window, relief=tk.GROOVE, padding=5)
@@ -110,7 +110,6 @@ def clear_output():
     """Clear the output window."""
     input_text.delete(1.0, tk.END)
     output_text.delete(1.0, tk.END)
-    return
 
 
 def apply_operation():
@@ -136,7 +135,6 @@ def apply_operation():
     output_text.delete(1.0, tk.END)
     output_text.insert(tk.END, result)
     print(f"Result: {result}")
-    return
 
 
 def set_statusbar(event):
@@ -148,7 +146,6 @@ def set_statusbar(event):
         statustext.set("Terminate the program")
     else:
         statustext.set("This is the statusbar")
-    return
 
 
 # Set commands and bind events

@@ -1,0 +1,11 @@
+/* Specific changes to adjust the Read-the-Docs theme to the Biopython home page */
+
+/* side bar: deep black, white text */
+.wy-nav-side {
+  background: #10100F;
+}
+
+/* This would make the footer the same black background:
+.rst-versions .rst-current-version {
+  background: #10100F;
+}*/

@@ -24,7 +24,7 @@ from copy import deepcopy
 
 def get_indiv(line):
     """Extract the details of the individual information on the line."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def int_no_zero(val):
         """Return integer of val, or None if is zero."""
         v = int(val)
@@ -55,11 +55,11 @@ def read(handle):
     handle is a file-like object that contains a GenePop record.
     """
     record = Record()
-    record.comment_line = str(next(handle)).rstrip()
+    record.comment_line = next(handle).rstrip()
     # We can now have one loci per line or all loci in a single line
     # separated by either space or comma+space...
     # We will remove all commas on loci... that should not be a problem
-    sample_loci_line = str(next(handle)).rstrip().replace(",", "")
+    sample_loci_line = next(handle).rstrip().replace(",", "")
     all_loci = sample_loci_line.split(" ")
     record.loci_list.extend(all_loci)
     for line in handle:
@@ -170,12 +170,12 @@ class Record:
 
         """
         gp_pops = {}
-        for i in range(len(self.populations)):
+        for i, population in enumerate(self.populations):
             gp_pop = Record()
             gp_pop.marker_len = self.marker_len
             gp_pop.comment_line = self.comment_line
             gp_pop.loci_list = deepcopy(self.loci_list)
-            gp_pop.populations = [deepcopy(self.populations[i])]
+            gp_pop.populations = [deepcopy(population)]
             gp_pops[pop_names[i]] = gp_pop
         return gp_pops
 
@@ -187,11 +187,11 @@ class Record:
         with a single locus and n pops.
         """
         gp_loci = {}
-        for i in range(len(self.loci_list)):
+        for i, locus in enumerate(self.loci_list):
             gp_pop = Record()
             gp_pop.marker_len = self.marker_len
             gp_pop.comment_line = self.comment_line
-            gp_pop.loci_list = [self.loci_list[i]]
+            gp_pop.loci_list = [locus]
             gp_pop.populations = []
             for pop in self.populations:
                 my_pop = []
@@ -215,8 +215,8 @@ class Record:
 
     def remove_locus_by_name(self, name):
         """Remove a locus by name."""
-        for i in range(len(self.loci_list)):
-            if self.loci_list[i] == name:
+        for i, locus in enumerate(self.loci_list):
+            if locus == name:
                 self.remove_locus_by_position(i)
                 return
         # If here than locus not existent... Maybe raise exception?
