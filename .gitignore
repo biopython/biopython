@@ -26,6 +26,7 @@ dist
 *.pyc
 *.pyo
 *.py-e
+*.pyd
 
 #Ignore all Jython class files (present if using Jython)
 *.class
@@ -93,6 +94,7 @@ Doc/Tutorial.pdf
 Doc/Tutorial.html
 Doc/Tutorial.pyg
 Doc/biopdb_faq.pdf
+Doc/version.sh
 Doc/install/Installation.txt
 Doc/install/Installation.pdf
 Doc/install/Installation.html
@@ -120,3 +122,6 @@ Doc/api/*.rst
 
 #Ignore mypy cache directory
 .mypy_cache
+
+#Ignore virtual environment file
+.env

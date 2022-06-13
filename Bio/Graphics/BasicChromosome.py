@@ -18,7 +18,7 @@ breaking the general drawing capabilities of the system. The
 relationship between classes is that everything derives from
 _ChromosomeComponent, which specifies the overall interface. The parts
 then are related so that an Organism contains Chromosomes, and these
-Chromosomes contain ChromosomeSegments. This representation differents
+Chromosomes contain ChromosomeSegments. This representation differs
 from the canonical composite structure in that we don't really have
 'leaf' nodes here -- all components can potentially hold sub-components.
 
@@ -70,9 +70,7 @@ class _ChromosomeComponent(Widget):
     def add(self, component):
         """Add a sub_component to the list of components under this item."""
         if not isinstance(component, _ChromosomeComponent):
-            raise TypeError(
-                "Expected a _ChromosomeComponent object, got %s" % component
-            )
+            raise TypeError(f"Expected a _ChromosomeComponent object, got {component}")
 
         self._sub_components.append(component)
 
@@ -86,7 +84,7 @@ class _ChromosomeComponent(Widget):
             self._sub_components.remove(component)
         except ValueError:
             raise ValueError(
-                "Component %s not found in sub_components." % component
+                f"Component {component} not found in sub_components."
             ) from None
 
     def draw(self):
@@ -97,7 +95,7 @@ class _ChromosomeComponent(Widget):
 class Organism(_ChromosomeComponent):
     """Top level class for drawing chromosomes.
 
-    This class holds information about an organism and all of it's
+    This class holds information about an organism and all of its
     chromosomes, and provides the top level object which could be used
     for drawing a chromosome representation of an organism.
 
@@ -106,7 +104,7 @@ class Organism(_ChromosomeComponent):
     """
 
     def __init__(self, output_format="pdf"):
-        """Initialize."""
+        """Initialize the class."""
         _ChromosomeComponent.__init__(self)
 
         # customizable attributes
@@ -209,7 +207,7 @@ class Chromosome(_ChromosomeComponent):
          - scale_num - A number of scale the drawing by. This is useful if
            you want to draw multiple chromosomes of different sizes at the
            same scale. If this is not set, then the chromosome drawing will
-           be scaled by the number of segements in the chromosome (so each
+           be scaled by the number of segments in the chromosome (so each
            chromosome will be the exact same final size).
 
         """
@@ -512,10 +510,10 @@ class ChromosomeSegment(_ChromosomeComponent):
 
 
 def _spring_layout(desired, minimum, maximum, gap=0):
-    """Try to layout label co-ordinates or other floats (PRIVATE).
+    """Try to layout label coordinates or other floats (PRIVATE).
 
     Originally written for the y-axis vertical positioning of labels on a
-    chromosome diagram (where the minimum gap between y-axis co-ordinates is
+    chromosome diagram (where the minimum gap between y-axis coordinates is
     the label height), it could also potentially be used for x-axis placement,
     or indeed radial placement for circular chromosomes within GenomeDiagram.
 
@@ -534,7 +532,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     if count <= 1:
         return desired  # Easy!
     if minimum >= maximum:
-        raise ValueError("Bad min/max %f and %f" % (minimum, maximum))
+        raise ValueError(f"Bad min/max {minimum:f} and {maximum:f}")
     if min(desired) < minimum or max(desired) > maximum:
         raise ValueError(
             "Data %f to %f out of bounds (%f to %f)"
@@ -641,13 +639,13 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         ReportLab color (string or object), and optional ReportLab fill color.
 
         Note we require 0 <= start <= end <= bp_length, and within the vertical
-        space allocated to this segmenet lines will be places according to the
+        space allocated to this segment lines will be places according to the
         start/end coordinates (starting from the top).
 
         Positive stand features are drawn on the right, negative on the left,
         otherwise all the way across.
 
-        We recommend using consisent units for all the segment's scale values
+        We recommend using consistent units for all the segment's scale values
         (e.g. their length in base pairs).
 
         When providing features as SeqFeature objects, the default color

@@ -391,7 +391,7 @@ class MixinTests(unittest.TestCase):
         d = tree.clade[1].get_terminals()
         self.assertEqual(tree.is_monophyletic(abcd), tree.root)
         self.assertEqual(tree.is_monophyletic(abc), tree.clade[0])
-        self.assertEqual(tree.is_monophyletic(ab), False)
+        self.assertFalse(tree.is_monophyletic(ab))
         self.assertEqual(tree.is_monophyletic(d), tree.clade[1])
         # Alternate argument form
         self.assertEqual(tree.is_monophyletic(*abcd), tree.root)
@@ -438,7 +438,7 @@ class MixinTests(unittest.TestCase):
 
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
-        # This comment stops black style adding a blank line here, causing flake8 D202.
+
         def ordered_names(tree):
             return [n.name for n in tree.get_terminals()]
 

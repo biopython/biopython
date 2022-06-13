@@ -5,13 +5,16 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Xdna module."""
-
 import unittest
+
 from io import BytesIO
 
-from Bio import Alphabet, SeqIO, BiopythonWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 
@@ -24,7 +27,7 @@ class TestXdna(unittest.TestCase):
             "id": "Sample",
             "description": "Sample sequence A",
             "length": 1000,
-            "alphabet": Alphabet.generic_dna,
+            "molecule_type": "DNA",
             "topology": "linear",
             "features": [
                 {
@@ -32,24 +35,24 @@ class TestXdna(unittest.TestCase):
                     "start": 49,
                     "end": 150,
                     "strand": 1,
-                    "label": "FeatureA"
-                    },
+                    "label": "FeatureA",
+                },
                 {
                     "type": "misc_binding",
                     "start": 499,
                     "end": 700,
                     "strand": -1,
-                    "label": "FeatureB"
-                    }
-                ]
-            },
+                    "label": "FeatureB",
+                },
+            ],
+        },
         "sample-b": {
             "file": "Xdna/sample-b.xdna",
             "name": "Sample",
             "id": "Sample",
             "description": "Sample sequence B",
             "length": 1000,
-            "alphabet": Alphabet.generic_dna,
+            "molecule_type": "DNA",
             "topology": "circular",
             "features": [
                 {
@@ -57,24 +60,24 @@ class TestXdna(unittest.TestCase):
                     "start": 160,
                     "end": 241,
                     "strand": 1,
-                    "label": "FeatureA"
-                    },
+                    "label": "FeatureA",
+                },
                 {
                     "type": "terminator",
                     "start": 399,
                     "end": 750,
                     "strand": -1,
-                    "label": "FeatureB"
-                    }
-                ]
-            },
+                    "label": "FeatureB",
+                },
+            ],
+        },
         "sample-c": {
             "file": "Xdna/sample-c.xprt",
             "name": "Sample",
             "id": "Sample",
             "description": "Sample Sequence C",
             "length": 1000,
-            "alphabet": Alphabet.generic_protein,
+            "molecule_type": "protein",
             "topology": "linear",
             "features": [
                 {
@@ -82,18 +85,18 @@ class TestXdna(unittest.TestCase):
                     "start": 10,
                     "end": 11,
                     "strand": 1,
-                    "label": "S11"
-                    },
+                    "label": "S11",
+                },
                 {
                     "type": "misc_binding",
                     "start": 164,
                     "end": 195,
                     "strand": 1,
-                    "label": "RIP1"
-                    }
-                ]
-            }
-        }
+                    "label": "RIP1",
+                },
+            ],
+        },
+    }
 
     def test_read(self):
         """Read sample files."""
@@ -103,7 +106,9 @@ class TestXdna(unittest.TestCase):
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
             self.assertEqual(sample["length"], len(record))
-            self.assertEqual(sample["alphabet"], record.seq.alphabet)
+            self.assertEqual(
+                sample["molecule_type"], record.annotations["molecule_type"]
+            )
             self.assertEqual(sample["topology"], record.annotations["topology"])
 
             self.assertEqual(len(sample["features"]), len(record.features))
@@ -118,7 +123,6 @@ class TestXdna(unittest.TestCase):
 
 
 class TestInvalidXdna(unittest.TestCase):
-
     def setUp(self):
         with open("Xdna/sample-a.xdna", "rb") as f:
             self.buffer = f.read()
@@ -126,7 +130,7 @@ class TestInvalidXdna(unittest.TestCase):
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
         if isinstance(value, list):
-            mod_buffer[position:position + len(value) - 1] = value
+            mod_buffer[position : position + len(value) - 1] = value
         else:
             mod_buffer[position] = value
         return BytesIO(mod_buffer)
@@ -172,19 +176,19 @@ class TestInvalidXdna(unittest.TestCase):
 
 
 class TestXdnaWriter(unittest.TestCase):
-
     def test_write_sequence_type(self):
         """Write correct sequence type."""
         h = BytesIO()
 
         record = SeqRecord(Seq("ACGT"))
 
-        for alphabet, expected_byte in [
-                (Alphabet.generic_alphabet, 0),
-                (Alphabet.generic_dna, 1),
-                (Alphabet.generic_rna, 3),
-                (Alphabet.generic_protein, 4)]:
-            record.seq.alphabet = alphabet
+        for molecule_type, expected_byte in [
+            (None, 0),
+            ("DNA", 1),
+            ("RNA", 3),
+            ("protein", 4),
+        ]:
+            record.annotations["molecule_type"] = molecule_type
             h.seek(0, 0)
             SeqIO.write([record], h, "xdna")
             buf = bytearray(h.getvalue())
@@ -205,19 +209,22 @@ class TestXdnaWriter(unittest.TestCase):
             SeqIO.write([record], h, "xdna")
 
         # Now a record with a fuzzy-located feature
-        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3),
-                             type="misc_feature")
+        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3), type="misc_feature")
         record.features = [feature]
-        with self.assertWarnsRegex(BiopythonWarning, r"Dropping \d+ features with fuzzy locations"):
+        with self.assertWarnsRegex(
+            BiopythonWarning, r"Dropping \d+ features with fuzzy locations"
+        ):
             SeqIO.write([record], h, "xdna")
 
         # Now a record with a feature with a qualifier too long
         qualifiers = {"note": ["x" * 260]}
-        feature = SeqFeature(FeatureLocation(2, 3),
-                             type="misc_feature",
-                             qualifiers=qualifiers)
+        feature = SeqFeature(
+            FeatureLocation(2, 3), type="misc_feature", qualifiers=qualifiers
+        )
         record.features = [feature]
-        with self.assertWarnsRegex(BiopythonWarning, "Some annotations were truncated to 255 characters"):
+        with self.assertWarnsRegex(
+            BiopythonWarning, "Some annotations were truncated to 255 characters"
+        ):
             SeqIO.write([record], h, "xdna")
 
         h.close()

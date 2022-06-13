@@ -177,7 +177,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(
                 self.bml._options[key],
                 target_options[key],
-                "%s: %r vs %r" % (key, self.bml._options[key], target_options[key]),
+                f"{key}: {self.bml._options[key]!r} vs {target_options[key]!r}",
             )
 
     def testCtlFileExistsOnRead(self):
@@ -287,7 +287,7 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "baseml", "SE")
         for results_file in os.listdir(res_dir):
             version = results_file.split("-")[1].split(".")[0]
-            version_msg = "Improper parsing for version %s" % version.replace("_", ".")
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = baseml.read(results_path)
             # There are 6 top-levels: parameters, tree, lnL, version,

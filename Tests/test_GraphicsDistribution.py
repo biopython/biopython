@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2001 by Brad Chapman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -15,15 +14,19 @@ import random
 import unittest
 
 from Bio import MissingExternalDependencyError
+
 try:
     import reportlab as r
+
     del r
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.") from None
+        "Install reportlab if you want to use Bio.Graphics."
+    ) from None
 
 # local stuff
 from Bio.Graphics.Distribution import BarChartDistribution
+
 # TODO from Bio.Graphics.Distribution import LineDistribution
 from Bio.Graphics.Distribution import DistributionPage
 
@@ -72,7 +75,7 @@ class BarChartTest(unittest.TestCase):
             dist_info.append(new_info)
 
             distribution = BarChartDistribution(dist_info)
-            distribution.chart_title = "Distribution %s" % (multi + 1)
+            distribution.chart_title = f"Distribution {multi + 1}"
             dist_page.distributions.append(distribution)
 
         dist_page.draw(self.multi_page, "Test Multi Bar Chart")

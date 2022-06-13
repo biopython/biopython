@@ -22,17 +22,16 @@ class TestCellosaurus(unittest.TestCase):
         self.assertEqual(record["DR"][1], ("ECACC", "94050311"))
         self.assertEqual(record["DR"][2], ("IHW", "IHW9326"))
         self.assertEqual(record["DR"][3], ("IMGT/HLA", "10074"))
-        self.assertEqual(record["WW"][0], "http://bioinformatics."
-                                          "hsanmartino.it"
-                                          "/ecbr/cl326.html")
-        self.assertEqual(record["CC"][0],
-                         "Part of: 12th International "
-                         "Histocompatibility Workshop "
-                         "(12IHW) cell line panel.")
-        self.assertEqual(record["CC"][1],
-                         "Transformant: EBV.")
-        self.assertEqual(record["OX"][0],
-                         "NCBI_TaxID=9606; ! Homo sapiens")
+        self.assertEqual(
+            record["WW"][0], "http://bioinformatics.hsanmartino.it/ecbr/cl326.html"
+        )
+        self.assertEqual(
+            record["CC"][0],
+            "Part of: 12th International Histocompatibility Workshop (12IHW) "
+            "cell line panel.",
+        )
+        self.assertEqual(record["CC"][1], "Transformant: EBV.")
+        self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens")
         self.assertEqual(record["SX"], "Female")
         self.assertEqual(record["CA"], "Transformed cell line")
 
@@ -63,19 +62,21 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["ST"][7], "TH01: 7")
             self.assertEqual(record["ST"][8], "TPOX: 8,11")
             self.assertEqual(record["ST"][9], "vWA: 14,16")
-            self.assertEqual(record["DI"][0], "NCIt; C3965; Xeroderma pigmentosum,"
-                                              " complementation group A")
+            self.assertEqual(
+                record["DI"][0],
+                "NCIt; C3965; Xeroderma pigmentosum, complementation group A",
+            )
             self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens")
             self.assertEqual(record["SX"], "Female")
             self.assertEqual(record["CA"], "Finite cell line")
             record = next(records)
             self.assertEqual(record["ID"], "1-5c-4")
             self.assertEqual(record["AC"], "CVCL_2260")
-            self.assertEqual(record["SY"],
-                             "Clone 1-5c-4; Clone 1-5c-4 WKD of "
-                             "Chang Conjunctiva; "
-                             "Wong-Kilbourne derivative of "
-                             "Chang conjunctiva; ChWK")
+            self.assertEqual(
+                record["SY"],
+                "Clone 1-5c-4; Clone 1-5c-4 WKD of Chang Conjunctiva; "
+                "Wong-Kilbourne derivative of Chang conjunctiva; ChWK",
+            )
             self.assertEqual(len(record["DR"]), 10)
             self.assertEqual(record["DR"][0], ("CLO", "CLO_0002500"))
             self.assertEqual(record["DR"][1], ("CLO", "CLO_0002501"))
@@ -90,13 +91,15 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["RX"][0], "PubMed=566722;")
             self.assertEqual(record["RX"][1], "PubMed=19630270;")
             self.assertEqual(record["RX"][2], "PubMed=20143388;")
-            self.assertEqual(record["WW"][0], "http://iclac.org/"
-                                              "wp-content/uploads/"
-                                              "Cross-Contaminations-v7_2.pdf")
-            self.assertEqual(record["CC"][0],
-                             "Problematic cell line: Contaminated. "
-                             "Shown to be a HeLa derivative "
-                             "(PubMed 566722, PubMed 20143388).")
+            self.assertEqual(
+                record["WW"][0],
+                "http://iclac.org/wp-content/uploads/Cross-Contaminations-v7_2.pdf",
+            )
+            self.assertEqual(
+                record["CC"][0],
+                "Problematic cell line: Contaminated. "
+                "Shown to be a HeLa derivative (PubMed 566722, PubMed 20143388).",
+            )
             self.assertEqual(record["CC"][1], "Omics: Transcriptome analysis.")
             self.assertEqual(record["ST"][0], "Source(s): ATCC; KCLB")
             self.assertEqual(record["ST"][1], "Amelogenin: X")
@@ -110,8 +113,7 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["ST"][9], "TH01: 7")
             self.assertEqual(record["ST"][10], "TPOX: 8,12")
             self.assertEqual(record["ST"][11], "vWA: 16,18")
-            self.assertEqual(record["DI"][0], "NCIt; C4029; Cervical "
-                                              "adenocarcinoma")
+            self.assertEqual(record["DI"][0], "NCIt; C4029; Cervical adenocarcinoma")
             self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens")
             self.assertEqual(record["HI"][0], "CVCL_0030 ! HeLa")
             self.assertEqual(record["SX"], "Female")

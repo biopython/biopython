@@ -1,22 +1,15 @@
+# Copyright 2019 by Michiel de Hoon.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Substitution matrices."""
 
 import os
 import string
 import numpy
-
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.substitution_matrices is an experimental module "
-    "which may still undergo significant changes. In particular, "
-    "the location of this module may change, and the Array class "
-    "defined in this module may be moved to other existing or new "
-    "modules in Biopython.",
-    BiopythonExperimentalWarning,
-)
 
 
 class Array(numpy.ndarray):
@@ -94,7 +87,7 @@ class Array(numpy.ndarray):
             if dims is None:
                 dims = 1
             elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %s)" % str(dims))
+                raise ValueError("dims should be 1 or 2 (found %s)" % dims)
             shape = (n,) * dims
         else:
             if dims is None:
@@ -240,6 +233,22 @@ class Array(numpy.ndarray):
 
         return results[0] if len(results) == 1 else results
 
+    def __reduce__(self):
+        import pickle
+
+        values = numpy.array(self)
+        state = pickle.dumps(values)
+        alphabet = self._alphabet
+        dims = len(self.shape)
+        dtype = self.dtype
+        arguments = (Array, alphabet, dims, None, dtype)
+        return (Array.__new__, arguments, state)
+
+    def __setstate__(self, state):
+        import pickle
+
+        self[:, :] = pickle.loads(state)
+
     def transpose(self, axes=None):
         """Transpose the array."""
         other = numpy.ndarray.transpose(self, axes)
@@ -320,10 +329,28 @@ class Array(numpy.ndarray):
         for key in F:
             self[key] = F[key]
 
+    def select(self, alphabet):
+        """Subset the array by selecting the letters from the specified alphabet."""
+        ii = []
+        jj = []
+        for i, key in enumerate(alphabet):
+            try:
+                j = self._alphabet.index(key)
+            except ValueError:
+                continue
+            ii.append(i)
+            jj.append(j)
+        dims = len(self.shape)
+        a = Array(alphabet, dims=dims)
+        ii = numpy.ix_(*[ii] * dims)
+        jj = numpy.ix_(*[jj] * dims)
+        a[ii] = numpy.ndarray.__getitem__(self, jj)
+        return a
+
     def _format_1D(self, fmt):
         _alphabet = self._alphabet
         n = len(_alphabet)
-        words = [None for i in range(n)]
+        words = [None] * n
         lines = []
         try:
             header = self.header
@@ -352,7 +379,7 @@ class Array(numpy.ndarray):
     def _format_2D(self, fmt):
         alphabet = self.alphabet
         n = len(alphabet)
-        words = [[None for j in range(n)] for i in range(n)]
+        words = [[None] * n for _ in range(n)]
         lines = []
         try:
             header = self.header
@@ -389,6 +416,16 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
+        return self.format(fmt)
+
+    def format(self, fmt=""):
+        """Return a string representation of the array.
+
+        The argument ``fmt`` specifies the number format to be used.
+        By default, the number format is "%i" if the array contains integer
+        numbers, and "%.1f" otherwise.
+
+        """
         if fmt == "":
             if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
@@ -403,7 +440,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("Array has unexpected rank %d" % n)
 
     def __str__(self):
-        return self.__format__("")
+        return self.format()
 
     def __repr__(self):
         text = numpy.ndarray.__repr__(self)
@@ -471,6 +508,12 @@ def load(name=None):
     subdirectory = os.path.join(directory, "data")
     if name is None:
         filenames = os.listdir(subdirectory)
+        try:
+            filenames.remove("README.txt")
+            # The README.txt file is not present in usual Biopython
+            # installations, but is included in a development install.
+        except ValueError:
+            pass
         return sorted(filenames)
     path = os.path.join(subdirectory, name)
     matrix = read(path)

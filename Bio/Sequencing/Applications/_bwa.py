@@ -1,8 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2013 Saket Choudhary.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Command line wrapper for bwa."""
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
@@ -547,7 +548,7 @@ class BwaMemCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-c", "c"],
-                "Discard a MEM if it has more than INT occurence in the genome. This is an insensitive parameter. [10000]",
+                "Discard a MEM if it has more than INT occurrence in the genome. This is an insensitive parameter. [10000]",
                 checker_function=lambda x: isinstance(x, int),
                 equate=False,
             ),

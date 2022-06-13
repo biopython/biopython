@@ -41,11 +41,11 @@ Exceptions:
 """
 
 import re
-
-# other Biopython stuff
-from Bio import SeqFeature
 import warnings
+
 from Bio import BiopythonParserWarning
+from Bio.Seq import Seq
+from Bio import SeqFeature
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
@@ -269,7 +269,7 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
-def _loc(loc_str, expected_seq_length, strand, seq_type=None):
+def _loc(loc_str, expected_seq_length, strand, is_circular=False):
     """Make FeatureLocation from non-compound non-complement location (PRIVATE).
 
     This is also invoked to 'automatically' fix ambiguous formatting of features
@@ -337,9 +337,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
-                raise ValueError(
-                    "Invalid between location %s" % repr(loc_str)
-                ) from None
+                raise ValueError(f"Invalid between location {loc_str!r}") from None
             return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
@@ -350,7 +348,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     s_pos = _pos(s, -1)
     e_pos = _pos(e)
     if int(s_pos) > int(e_pos):
-        if seq_type is None or "circular" not in seq_type.lower():
+        if not is_circular:
             warnings.warn(
                 "It appears that %r is a feature that spans "
                 "the origin, but the sequence topology is "
@@ -508,7 +506,7 @@ class FeatureParser:
     Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
 
-    def __init__(self, debug_level=0, use_fuzziness=1, feature_cleaner=_cleaner):
+    def __init__(self, debug_level=0, use_fuzziness=1, feature_cleaner=None):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
@@ -526,7 +524,10 @@ class FeatureParser:
         """
         self._scanner = GenBankScanner(debug_level)
         self.use_fuzziness = use_fuzziness
-        self._cleaner = feature_cleaner
+        if feature_cleaner:
+            self._cleaner = feature_cleaner
+        else:
+            self._cleaner = _cleaner  # default
 
     def parse(self, handle):
         """Parse the specified handle."""
@@ -721,12 +722,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         self._seq_type = type.strip()
 
-    def topology(self, topology):  # noqa: D402
-        """Validate and record sequence topology (linear or circular as strings)."""
+    def topology(self, topology):
+        """Validate and record sequence topology.
+
+        The topology argument should be "linear" or "circular" (string).
+        """
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.annotations["topology"] = topology
 
@@ -735,7 +739,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -745,7 +749,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
@@ -979,8 +983,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # otherwise raise an error
         else:
             raise ValueError(
-                "Could not parse base info %s in record %s"
-                % (ref_base_info, self.data.id)
+                f"Could not parse base info {ref_base_info} in record {self.data.id}"
             )
 
         self._cur_reference.location = all_locations
@@ -1096,6 +1099,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         cur_feature = self._cur_feature
 
+        # Check if the sequence is circular for features that span the origin
+        is_circular = "circular" in self.data.annotations.get("topology", "").lower()
+
         # Handle top level complement here for speed
         if location_line.startswith("complement("):
             assert location_line.endswith(")")
@@ -1122,7 +1128,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     location_line,
                     self._expected_size,
                     strand,
-                    seq_type=self._seq_type.lower(),
+                    is_circular=is_circular,
                 )
             return
 
@@ -1193,7 +1199,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 location_line,
                 self._expected_size,
                 strand,
-                seq_type=self._seq_type.lower(),
+                is_circular=is_circular,
             )
             return
 
@@ -1219,7 +1225,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                         part,
                         self._expected_size,
                         part_strand,
-                        seq_type=self._seq_type.lower(),
+                        is_circular=is_circular,
                     ).parts
 
                 except ValueError:
@@ -1260,7 +1266,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         cur_feature.location = None
         warnings.warn(
             BiopythonParserWarning(
-                "Couldn't parse feature location: %r" % location_line
+                f"Couldn't parse feature location: {location_line!r}"
             )
         )
 
@@ -1350,10 +1356,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def record_end(self, content):
         """Clean up when we've finished the record."""
-        from Bio import Alphabet
-        from Bio.Alphabet import IUPAC
-        from Bio.Seq import Seq, UnknownSeq
-
         # Try and append the version number to the accession for the full id
         if not self.data.id:
             if "accessions" in self.data.annotations:
@@ -1369,12 +1371,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 pass
 
         # add the sequence information
-        # first, determine the alphabet
-        # we default to an generic alphabet if we don't have a
-        # seq type or have strange sequence information.
-        seq_alphabet = Alphabet.generic_alphabet
 
-        # now set the sequence
         sequence = "".join(self._seq_data)
 
         if (
@@ -1388,22 +1385,20 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 BiopythonParserWarning,
             )
 
+        molecule_type = None
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
             if "DNA" in self._seq_type.upper() or "MRNA" in self._seq_type.upper():
-                seq_alphabet = IUPAC.ambiguous_dna
+                molecule_type = "DNA"
             # are there ever really RNA sequences in GenBank?
             elif "RNA" in self._seq_type.upper():
                 # Even for data which was from RNA, the sequence string
-                # is usually given as DNA (T not U).  Bug 2408
-                if "T" in sequence and "U" not in sequence:
-                    seq_alphabet = IUPAC.ambiguous_dna
-                else:
-                    seq_alphabet = IUPAC.ambiguous_rna
+                # is usually given as DNA (T not U).  Bug 3010
+                molecule_type = "RNA"
             elif (
                 "PROTEIN" in self._seq_type.upper() or self._seq_type == "PRT"
             ):  # PRT is used in EMBL-bank for patents
-                seq_alphabet = IUPAC.protein  # or extended protein?
+                molecule_type = "protein"
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
             elif self._seq_type in ["circular", "linear", "unspecified"]:
@@ -1411,13 +1406,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # we have a bug if we get here
             else:
                 raise ValueError(
-                    "Could not determine alphabet for seq_type %s" % self._seq_type
+                    f"Could not determine molecule_type for seq_type {self._seq_type}"
                 )
-
+        # Don't overwrite molecule_type
+        if molecule_type is not None:
+            self.data.annotations["molecule_type"] = self.data.annotations.get(
+                "molecule_type", molecule_type
+            )
         if not sequence and self._expected_size:
-            self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
+            self.data.seq = Seq(None, length=self._expected_size)
         else:
-            self.data.seq = Seq(sequence, seq_alphabet)
+            self.data.seq = Seq(sequence)
 
 
 class _RecordConsumer(_BaseGenBankConsumer):
@@ -1456,7 +1455,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
         if "dna" in content or "rna" in content:
             warnings.warn(
-                "Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
+                f"Invalid seq_type ({content}): DNA/RNA should be uppercase.",
                 BiopythonParserWarning,
             )
         self.data.residue_type = content
@@ -1480,7 +1479,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -1490,20 +1489,21 @@ class _RecordConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
             self.data.molecule_type = mol_type
 
-    def topology(
-        self, topology
-    ):  # noqa: D402  # flake8 thinks this line is a function signature. It ain't
-        """Validate and record sequence topology (linear or circular as strings)."""
+    def topology(self, topology):
+        """Validate and record sequence topology.
+
+        The topology argument should be "linear" or "circular" (string).
+        """
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.topology = topology
 
@@ -1652,7 +1652,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         for content in content_list:
             # the record parser keeps the /s -- add them if we don't have 'em
             if not content.startswith("/"):
-                content = "/%s" % content
+                content = f"/{content}"
             # add on a qualifier if we've got one
             if self._cur_qualifier is not None:
                 self._cur_feature.qualifiers.append(self._cur_qualifier)
@@ -1663,7 +1663,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
         if "=" not in self._cur_qualifier.key:
-            self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
+            self._cur_qualifier.key = f"{self._cur_qualifier.key}="
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
         # are not important

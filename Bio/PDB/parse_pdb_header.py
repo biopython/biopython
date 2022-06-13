@@ -150,7 +150,7 @@ def _parse_remark_465(line):
         (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
             [A-Z]{1,3})               # Or only residue name with 1 (RNA) to 3 letters
         \s ([A-Za-z0-9])              # A single character chain
-        \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed by an optional
+        \s+(-?\d+[A-Za-z]?)$          # Residue number: A digit followed by an optional
                                       # insertion code (Hetero-flags make no sense in
                                       # context with missing res)
         """,
@@ -186,7 +186,7 @@ def _parse_pdb_header_list(header):
         "deposition_date": "1909-01-08",
         "release_date": "1909-01-08",
         "structure_method": "unknown",
-        "resolution": 0.0,
+        "resolution": None,
         "structure_reference": "unknown",
         "journal_reference": "unknown",
         "author": "",
@@ -322,6 +322,7 @@ def _parse_pdb_header_list(header):
             # print(key)
             pass
     if pdbh_dict["structure_method"] == "unknown":
-        if pdbh_dict["resolution"] > 0.0:
+        res = pdbh_dict["resolution"]
+        if res is not None and res > 0.0:
             pdbh_dict["structure_method"] = "x-ray diffraction"
     return pdbh_dict

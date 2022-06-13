@@ -24,16 +24,11 @@ class ScopTests(unittest.TestCase):
         """
         fields1 = cla_line_1.rstrip().split("\t")
         fields2 = cla_line_2.rstrip().split("\t")
-        print(fields1)
-        print(fields2)
         # compare the first five fields in a Cla line, which should be exactly
         # the same
-        if fields1[:5] != fields2[:5]:
-            return False
+        self.assertEqual(fields1[:5], fields2[:5])
         # compare the hierarchy key-value pairs, which are unordered
-        if set(fields1[5].split(",")) != set(fields2[5].split(",")):
-            return False
-        return True
+        self.assertCountEqual(fields1[5].split(","), fields2[5].split(","))
 
     def testParse(self):
         with open("./SCOP/dir.cla.scop.txt_test") as f:
@@ -49,7 +44,7 @@ class ScopTests(unittest.TestCase):
         scop.write_cla(cla_out)
         lines = zip(cla.rstrip().split("\n"), cla_out.getvalue().rstrip().split("\n"))
         for expected_line, line in lines:
-            self.assertTrue(self._compare_cla_lines(expected_line, line))
+            self._compare_cla_lines(expected_line, line)
 
         des_out = StringIO()
         scop.write_des(des_out)
@@ -67,9 +62,9 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(domains[4].sunid, 14988)
 
         dom = scop.getNodeBySunid(-111)
-        self.assertEqual(dom, None)
+        self.assertIsNone(dom)
         dom = scop.getDomainBySid("no such domain")
-        self.assertEqual(dom, None)
+        self.assertIsNone(dom)
 
     def testSccsOrder(self):
         self.assertEqual(cmp_sccs("a.1.1.1", "a.1.1.1"), 0)
@@ -126,11 +121,11 @@ class ScopTests(unittest.TestCase):
 
         # px has no px ascendent
         px = domain.getAscendent("px")
-        self.assertEqual(px, None)
+        self.assertIsNone(px)
 
         # an sf has no px ascendent
         px2 = sf.getAscendent("px")
-        self.assertEqual(px2, None)
+        self.assertIsNone(px2)
 
     def test_get_descendents(self):
         """Test getDescendents method."""

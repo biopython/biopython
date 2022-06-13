@@ -6,12 +6,10 @@
 """Bio.SearchIO parser for HHSUITE version 2 and 3 plain text output format."""
 
 import re
-from collections import OrderedDict
 import warnings
 
 from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio.Alphabet import generic_protein
 
 __all__ = ("Hhsuite2TextParser",)
 
@@ -35,7 +33,7 @@ _END_OF_FILE_MARKER = "Done!"
 _PROGRAM = "HHSUITE"
 
 # Maximum number of lines to read before expecting a hit block
-# This determines the maximum numnber of hits that would be allowed in
+# This determines the maximum number of hits that would be allowed in
 # the initial hit table.
 MAX_READ_UNTIL = 5000
 
@@ -164,7 +162,7 @@ class Hhsuite2TextParser:
             T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_is_valid(match):
             """Return True if match is not a Consensus column (PRIVATE).
 
@@ -194,13 +192,13 @@ class Hhsuite2TextParser:
     def _create_qresult(self, hit_blocks):
         """Create the Biopython data structures from the parsed data (PRIVATE)."""
         query_id = self.query_id
-        hit_dict = OrderedDict()
+        hit_dict = {}
 
         for output_index, block in enumerate(hit_blocks):
             hit_id = block["hit_id"]
 
             frag = HSPFragment(hit_id, query_id)
-            frag.alphabet = generic_protein
+            frag.molecule_type = "protein"
             frag.query_start = block["query_start"] - 1
             frag.query_end = block["query_end"]
             frag.hit_start = block["hit_start"] - 1

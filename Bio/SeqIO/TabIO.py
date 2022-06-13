@@ -1,4 +1,4 @@
-# Copyright 2008-2017 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017,2020 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -31,57 +31,58 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 .id and .seq (and not the description or any other information) as in the
 example above.
 """
-
-
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio.SeqIO.Interfaces import _clean, _get_seq_string
-from Bio import StreamModeError
+
+from .Interfaces import _clean
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
-def TabIterator(source, alphabet=single_letter_alphabet):
-    """Iterate over tab separated lines as SeqRecord objects.
+class TabIterator(SequenceIterator):
+    """Parser for tab-delimited files."""
 
-    Each line of the file should contain one tab only, dividing the line
-    into an identifier and the full sequence.
+    def __init__(self, source):
+        """Iterate over tab separated lines as SeqRecord objects.
 
-    Arguments:
-     - source - file-like object opened in text mode, or a path to a file
-     - alphabet - optional alphabet
+        Each line of the file should contain one tab only, dividing the line
+        into an identifier and the full sequence.
 
-    The first field is taken as the record's .id and .name (regardless of
-    any spaces within the text) and the second field is the sequence.
+        Arguments:
+         - source - file-like object opened in text mode, or a path to a file
 
-    Any blank lines are ignored.
+        The first field is taken as the record's .id and .name (regardless of
+        any spaces within the text) and the second field is the sequence.
 
-    Examples
-    --------
-    >>> with open("GenBank/NC_005816.tsv") as handle:
-    ...     for record in TabIterator(handle):
-    ...         print("%s length %i" % (record.id, len(record)))
-    gi|45478712|ref|NP_995567.1| length 340
-    gi|45478713|ref|NP_995568.1| length 260
-    gi|45478714|ref|NP_995569.1| length 64
-    gi|45478715|ref|NP_995570.1| length 123
-    gi|45478716|ref|NP_995571.1| length 145
-    gi|45478717|ref|NP_995572.1| length 357
-    gi|45478718|ref|NP_995573.1| length 138
-    gi|45478719|ref|NP_995574.1| length 312
-    gi|45478720|ref|NP_995575.1| length 99
-    gi|45478721|ref|NP_995576.1| length 90
+        Any blank lines are ignored.
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError(
-                "Tab-separated plain-text files must be opened in text mode."
-            ) from None
-    try:
+        Examples
+        --------
+        >>> with open("GenBank/NC_005816.tsv") as handle:
+        ...     for record in TabIterator(handle):
+        ...         print("%s length %i" % (record.id, len(record)))
+        gi|45478712|ref|NP_995567.1| length 340
+        gi|45478713|ref|NP_995568.1| length 260
+        gi|45478714|ref|NP_995569.1| length 64
+        gi|45478715|ref|NP_995570.1| length 123
+        gi|45478716|ref|NP_995571.1| length 145
+        gi|45478717|ref|NP_995572.1| length 357
+        gi|45478718|ref|NP_995573.1| length 138
+        gi|45478719|ref|NP_995574.1| length 312
+        gi|45478720|ref|NP_995575.1| length 99
+        gi|45478721|ref|NP_995576.1| length 90
+
+        """
+        super().__init__(source, mode="t", fmt="Tab-separated plain-text")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         for line in handle:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!
@@ -96,21 +97,19 @@ def TabIterator(source, alphabet=single_letter_alphabet):
                 ) from None
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
-            yield SeqRecord(Seq(seq, alphabet), id=title, name=title, description="")
-    finally:
-        if handle is not source:
-            handle.close()
+            yield SeqRecord(Seq(seq), id=title, name=title, description="")
 
 
 class TabWriter(SequenceWriter):
-    """Class to write simple tab separated format files (OBSOLETE).
+    """Class to write simple tab separated format files.
 
     Each line consists of "id(tab)sequence" only.
 
     Any description, name or other annotation is not recorded.
 
-    This class is now obsolete. Please use the function ``as_tab`` instead,
-    or the top level ``Bio.SeqIO.write()`` function with ``format="tab"``.
+    This class is not intended to be used directly. Instead, please use
+    the function ``as_tab``, or the top level ``Bio.SeqIO.write()`` function
+    with ``format="tab"``.
     """
 
     def write_record(self, record):
@@ -131,7 +130,7 @@ def as_tab(record):
     assert "\t" not in seq
     assert "\n" not in seq
     assert "\r" not in seq
-    return "%s\t%s\n" % (title, seq)
+    return f"{title}\t{seq}\n"
 
 
 if __name__ == "__main__":

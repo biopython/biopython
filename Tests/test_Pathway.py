@@ -16,7 +16,6 @@ from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 
 class GraphTestCase(unittest.TestCase):
-
     def test_Equals(self):
         a = Graph(["a", "b", "c"])
         a.add_edge("a", "b", "label1")
@@ -50,11 +49,11 @@ class GraphTestCase(unittest.TestCase):
     def test_Edges(self):
         a = Graph(["a", "b", "c", "d"])
         a.add_edge("a", "b", "label1")
-        self.assertEqual(a.child_edges("a"), [("b", "label1")])  # , "incorrect child edges")
+        self.assertEqual(a.child_edges("a"), [("b", "label1")])
         a.add_edge("b", "a", "label2")
-        self.assertEqual(a.parent_edges("a"), [("b", "label2")])  # , "incorrect parent edges")
+        self.assertEqual(a.parent_edges("a"), [("b", "label2")])
         a.add_edge("b", "c", "label3")
-        self.assertEqual(a.parent_edges("c"), [("b", "label3")])  # , "incorrect parent edges")
+        self.assertEqual(a.parent_edges("c"), [("b", "label3")])
         self.assertEqual(sorted(a.children("b")), ["a", "c"], "incorrect children")
         self.assertEqual(a.children("d"), [], "incorrect children for singleton")
         self.assertEqual(a.parents("a"), ["b"], "incorrect parents")
@@ -77,16 +76,16 @@ class GraphTestCase(unittest.TestCase):
         a.add_edge("a", "b", "label1")
         a.add_edge("b", "c", "label1")
         a.add_edge("b", "a", "label2")
-        self.assertTrue(
-            str(a) == "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
-        self.assertTrue(
-            repr(a) == "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
-        self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
-        self.assertListEqual(a.labels(), ["label1", "label2"])
+        self.assertEqual(str(a), "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertEqual(
+            repr(a),
+            "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>",
+        )
+        self.assertEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
+        self.assertEqual(a.labels(), ["label1", "label2"])
 
 
 class MultiGraphTestCase(unittest.TestCase):
-
     def test_Equals(self):
         a = MultiGraph(["a", "b", "c"])
         a.add_edge("a", "b", "label1")
@@ -120,14 +119,13 @@ class MultiGraphTestCase(unittest.TestCase):
     def test_Edges(self):
         a = MultiGraph(["a", "b", "c", "d"])
         a.add_edge("a", "b", "label1")
-        self.assertEqual(a.child_edges("a"), [("b", "label1")])  # , "incorrect child edges")
+        self.assertEqual(a.child_edges("a"), [("b", "label1")])
         a.add_edge("a", "b", "label2")
-        self.assertEqual(sorted(a.child_edges("a")),
-                         [("b", "label1"), ("b", "label2")])  # , "incorrect child edges")
+        self.assertEqual(sorted(a.child_edges("a")), [("b", "label1"), ("b", "label2")])
         a.add_edge("b", "a", "label2")
-        self.assertEqual(a.parent_edges("a"), [("b", "label2")])  # , "incorrect parent edges")
+        self.assertEqual(a.parent_edges("a"), [("b", "label2")])
         a.add_edge("b", "c", "label3")
-        self.assertEqual(a.parent_edges("c"), [("b", "label3")])  # , "incorrect parent edges")
+        self.assertEqual(a.parent_edges("c"), [("b", "label3")])
         children = a.children("b")
         children.sort()
         self.assertEqual(children, ["a", "c"], "incorrect children")
@@ -137,18 +135,27 @@ class MultiGraphTestCase(unittest.TestCase):
     def test_RemoveNode(self):
         a = MultiGraph(["a", "b", "c", "d", "e"])
         a.add_edge("a", "e", "label1")
-        self.assertEqual(repr(a), "<MultiGraph: ('a': ('e', 'label1'))('b': )('c': )('d': )('e': )>")
+        self.assertEqual(
+            repr(a), "<MultiGraph: ('a': ('e', 'label1'))('b': )('c': )('d': )('e': )>"
+        )
         a.add_edge("b", "e", "label1")
         a.add_edge("c", "e", "label2")
         a.add_edge("d", "e", "label3")
         a.add_edge("e", "d", "label4")
         a.add_edge("a", "b", "label5")
-        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'),('e', 'label1'))('b': ('e', 'label1'))('c': ('e', 'label2'))('d': ('e', 'label3'))('e': ('d', 'label4'))>")
+        self.assertEqual(
+            repr(a),
+            "<MultiGraph: ('a': ('b', 'label5'),('e', 'label1'))('b': ('e', 'label1'))('c': ('e', 'label2'))('d': ('e', 'label3'))('e': ('d', 'label4'))>",
+        )
         a.remove_node("e")
-        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
+        self.assertEqual(
+            repr(a), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>"
+        )
         b = MultiGraph(["a", "b", "c", "d"])
         b.add_edge("a", "b", "label5")
-        self.assertEqual(repr(b), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
+        self.assertEqual(
+            repr(b), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>"
+        )
         self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)  # , "incorrect node removal")
 
@@ -157,14 +164,14 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_edge("a", "b", "label1")
         a.add_edge("b", "c", "label1")
         a.add_edge("b", "a", "label2")
-        self.assertTrue(
-            str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
-        self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
-        self.assertListEqual(a.labels(), ["label1", "label2"])
+        self.assertEqual(
+            str(a), "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>"
+        )
+        self.assertEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
+        self.assertEqual(a.labels(), ["label1", "label2"])
 
 
 class ReactionTestCase(unittest.TestCase):
-
     def setUp(self):
         self.r_empty = Reaction()
         self.r_prod = Reaction({"a": 1})
@@ -180,13 +187,20 @@ class ReactionTestCase(unittest.TestCase):
         self.assertNotEqual(self.r_3, self.r_4)  # , "equal to different")
 
     def test_rev(self):
-        self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
-        self.assertEqual(self.r_prod.reverse(), self.r_dest,
-                         "reversed reaction not equal to similar")
-        self.assertEqual(self.r_4.reverse(), Reaction({"c": 1, "d": 1, "a": -1, "e": -2}),
-                         "reversed reaction not equal to similar")
-        self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
-                         "double reversal not identity")
+        self.assertEqual(
+            self.r_empty.reverse(), self.r_empty, "empty reversed not empty"
+        )
+        self.assertEqual(
+            self.r_prod.reverse(), self.r_dest, "reversed reaction not equal to similar"
+        )
+        self.assertEqual(
+            self.r_4.reverse(),
+            Reaction({"c": 1, "d": 1, "a": -1, "e": -2}),
+            "reversed reaction not equal to similar",
+        )
+        self.assertEqual(
+            self.r_3.reverse().reverse(), self.r_3, "double reversal not identity"
+        )
 
 
 if __name__ == "__main__":

@@ -3,9 +3,10 @@
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 # Revisions copyright 2009 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
 This module can be used directly, which will return Record objects
@@ -16,7 +17,6 @@ internally.  This will give SeqRecord objects for each contig sequence.
 """
 
 from Bio import Seq
-from Bio.Alphabet import generic_dna
 
 
 CKEYWORDS = [
@@ -191,7 +191,7 @@ def _read(handle):
     else:
         raise ValueError("Failed to find END_SEQUENCE line")
 
-    record.seq = Seq.Seq("".join(n[0] for n in record.sites), generic_dna)
+    record.seq = Seq.Seq("".join(n[0] for n in record.sites))
     if record.comments["trim"] is not None:
         first, last = record.comments["trim"][:2]
         record.seq_trimmed = record.seq[first:last]

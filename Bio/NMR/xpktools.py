@@ -9,7 +9,7 @@ HEADERLEN = 6
 
 
 class XpkEntry:
-    """Provide dictonary access to single entry from nmrview .xpk file.
+    """Provide dictionary access to single entry from nmrview .xpk file.
 
     This class is suited for handling single lines of non-header data
     from an nmrview .xpk file. This class provides methods for extracting

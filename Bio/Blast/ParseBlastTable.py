@@ -98,7 +98,7 @@ class BlastTableReader:
     def _consume_header(self, inline):
         for keyword in self.reader_keywords:
             if keyword in inline:
-                return self._Parse("_parse_%s" % self.reader_keywords[keyword], inline)
+                return self._Parse(f"_parse_{self.reader_keywords[keyword]}", inline)
 
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]

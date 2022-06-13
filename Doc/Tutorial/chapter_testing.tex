@@ -91,7 +91,7 @@ If you are interested in using Tox, you could start with the example
 
 \begin{minted}{text}
 [tox]
-envlist = pypy,py36,py37
+envlist = pypy,py37,py38,py39
 
 [testenv]
 changedir = Tests
@@ -102,8 +102,8 @@ deps =
 \end{minted}
 
 Using the template above, executing \texttt{tox} will test your Biopython
-code against PyPy, Python 3.6 and Python3.7. It assumes that those Pythons'
-executables are named accordingly: ``python3.7`` for Python 3.7, and so on.
+code against PyPy, Python 3.7, 3.8 and 3.9. It assumes that those Pythons'
+executables are named ``python3.7`` for Python 3.7, and so on.
 
 
 \section{Writing tests}
@@ -145,7 +145,7 @@ Ran 107 tests in 86.127 seconds
 The \verb|unittest|-framework has been included with Python since version
 2.1, and is documented in the Python Library Reference (which I know you
 are keeping under your pillow, as recommended).  There is also
-\href{https://docs.python.org/3/library/unittest.html}{online documentaion
+\href{https://docs.python.org/3/library/unittest.html}{online documentation
 for unittest}.
 If you are familiar with the \verb|unittest| system (or something similar
 like the nose test framework), you shouldn't have any trouble.  You may
@@ -332,7 +332,7 @@ EXCLUDE_DOCTEST_MODULES = [
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
-ONLINE_DOCTEST_MODULES = [ "Bio.Entrez", "Bio.ExPASy", "Bio.TogoWS"]
+ONLINE_DOCTEST_MODULES = ["Bio.Entrez", "Bio.ExPASy", "Bio.TogoWS"]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
@@ -377,9 +377,9 @@ e.g.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
->>> len("ACGT")
+>>> s = Seq("ACGT")
+>>> len(s)
 4
 \end{minted}
 \end{verbatim}
@@ -392,7 +392,7 @@ magic comment \verb|%cont-doctest| as shown here:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> Seq("ACGT") == Seq("ACGT", generic_dna)
+>>> s == "ACGT"
 True
 \end{minted}
 \end{verbatim}

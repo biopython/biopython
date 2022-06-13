@@ -50,7 +50,6 @@ import sys
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
 
@@ -75,9 +74,9 @@ class ProteinAnalysis:
     def __init__(self, prot_sequence, monoisotopic=False):
         """Initialize the class."""
         if prot_sequence.islower():
-            self.sequence = Seq(prot_sequence.upper(), IUPAC.protein)
+            self.sequence = Seq(prot_sequence.upper())
         else:
-            self.sequence = Seq(prot_sequence, IUPAC.protein)
+            self.sequence = Seq(prot_sequence)
         self.amino_acids_content = None
         self.amino_acids_percent = None
         self.length = len(self.sequence)
@@ -125,7 +124,9 @@ class ProteinAnalysis:
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
-        return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
+        return molecular_weight(
+            self.sequence, seq_type="protein", monoisotopic=self.monoisotopic
+        )
 
     def aromaticity(self):
         """Calculate the aromaticity according to Lobry, 1994.
@@ -188,9 +189,24 @@ class ProteinAnalysis:
 
         return scores
 
-    def gravy(self):
-        """Calculate the gravy according to Kyte and Doolittle."""
-        total_gravy = sum(ProtParamData.kd[aa] for aa in self.sequence)
+    def gravy(self, scale="KyteDoolitle"):
+        """Calculate the GRAVY (Grand Average of Hydropathy) according to Kyte and Doolitle, 1982.
+
+        Utilizes the given Hydrophobicity scale, by default uses the original
+        proposed by Kyte and Doolittle (KyteDoolitle). Other options are:
+        Aboderin, AbrahamLeo, Argos, BlackMould, BullBreese, Casari, Cid,
+        Cowan3.4, Cowan7.5, Eisenberg, Engelman, Fasman, Fauchere, GoldSack,
+        Guy, Jones, Juretic, Kidera, Miyazawa, Parker,Ponnuswamy, Rose,
+        Roseman, Sweet, Tanford, Wilson and Zimmerman.
+
+        New scales can be added in ProtParamData.
+        """
+        selected_scale = ProtParamData.gravy_scales.get(scale, -1)
+
+        if selected_scale == -1:
+            raise ValueError(f"scale: {scale} not known")
+
+        total_gravy = sum(selected_scale[aa] for aa in self.sequence)
 
         return total_gravy / self.length
 
@@ -278,9 +294,7 @@ class ProteinAnalysis:
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write(
-                    "warning: %s  is not a standard amino acid.\n" % middle
-                )
+                sys.stderr.write(f"warning: {middle} is not a standard amino acid.\n")
 
             scores.append(score / sum_of_weights)
 

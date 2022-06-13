@@ -125,8 +125,7 @@ def qblast(
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
     if program not in programs:
         raise ValueError(
-            "Program specified is %s. Expected one of %s"
-            % (program, ", ".join(programs))
+            f"Program specified is {program}. Expected one of {', '.join(programs)}"
         )
 
     # SHORT_QUERY_ADJUST throws an error when using blastn (wrong parameter
@@ -308,22 +307,22 @@ def _parse_qblast_ref_page(handle):
             msg = s[i + len('<div class="error msInf">') :].strip()
             msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
-                raise ValueError("Error message from NCBI: %s" % msg)
+                raise ValueError(f"Error message from NCBI: {msg}")
         # In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
             msg = s[i + len('<p class="error">') :].strip()
             msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
-                raise ValueError("Error message from NCBI: %s" % msg)
+                raise ValueError(f"Error message from NCBI: {msg}")
         # Generic search based on the way the error messages start:
         i = s.find("Message ID#")
         if i != -1:
             # Break the message at the first HTML tag
             msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
-            raise ValueError("Error message from NCBI: %s" % msg)
+            raise ValueError(f"Error message from NCBI: {msg}")
         # We didn't recognise the error layout :(
-        # print s
+        # print(s)
         raise ValueError(
             "No RID and no RTOE found in the 'please wait' page, "
             "there was probably an error in your request but we "
@@ -332,17 +331,17 @@ def _parse_qblast_ref_page(handle):
     elif not rid:
         # Can this happen?
         raise ValueError(
-            "No RID found in the 'please wait' page. (although RTOE = %s)" % repr(rtoe)
+            f"No RID found in the 'please wait' page. (although RTOE = {rtoe!r})"
         )
     elif not rtoe:
         # Can this happen?
         raise ValueError(
-            "No RTOE found in the 'please wait' page. (although RID = %s)" % repr(rid)
+            f"No RTOE found in the 'please wait' page. (although RID = {rid!r})"
         )
 
     try:
         return rid, int(rtoe)
     except ValueError:
         raise ValueError(
-            "A non-integer RTOE found in the 'please wait' page, %s" % repr(rtoe)
+            f"A non-integer RTOE found in the 'please wait' page, {rtoe!r}"
         ) from None

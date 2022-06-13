@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -64,28 +63,46 @@ class TestPSW(unittest.TestCase):
     def test_AlignmentColumn_full(self):
         ac = psw.AlignmentColumn(psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
         ac.append(psw.ColumnUnit(1, random.randint(0, 9999), "END"))
-        self.assertRaises(psw.AlignmentColumnFullException, ac.append, psw.ColumnUnit(1, random.randint(0, 9999), "END"))
+        self.assertRaises(
+            psw.AlignmentColumnFullException,
+            ac.append,
+            psw.ColumnUnit(1, random.randint(0, 9999), "END"),
+        )
 
     def test_AlignmentColumn_assertions(self):
-        self.assertRaises(AssertionError, psw.AlignmentColumn, psw.ColumnUnit(1, random.randint(0, 9999), "SEQUENCE"))
+        self.assertRaises(
+            AssertionError,
+            psw.AlignmentColumn,
+            psw.ColumnUnit(1, random.randint(0, 9999), "SEQUENCE"),
+        )
 
         ac = psw.AlignmentColumn(psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
-        self.assertRaises(AssertionError, ac.append, psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
+        self.assertRaises(
+            AssertionError,
+            ac.append,
+            psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"),
+        )
 
     def test_ColumnUnit(self):
-        self.assertEqual(repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
-                         "ColumnUnit(unit=0, column=33, kind='SEQUENCE')")
+        self.assertEqual(
+            repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
+            "ColumnUnit(unit=0, column=33, kind='SEQUENCE')",
+        )
 
-        self.assertEqual(repr(psw.ColumnUnit(1, 33, "INSERT")),
-                         "ColumnUnit(unit=1, column=33, kind='INSERT')")
+        self.assertEqual(
+            repr(psw.ColumnUnit(1, 33, "INSERT")),
+            "ColumnUnit(unit=1, column=33, kind='INSERT')",
+        )
 
-        self.assertEqual(repr(psw.ColumnUnit(1, 33, "END")),
-                         "ColumnUnit(unit=1, column=33, kind='END')")
+        self.assertEqual(
+            repr(psw.ColumnUnit(1, 33, "END")),
+            "ColumnUnit(unit=1, column=33, kind='END')",
+        )
 
-    PARSED = "[SEQUENCE(39, 22), SEQUENCE(40, 23), SEQUENCE(41, 24), SEQUENCE(42, 25), SEQUENCE(43, 26), SEQUENCE(44, 27), END(0, 27)]"
-
-#    def test_align(self):
-#        self.assertEqual(repr(psw.align(("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"), "introns.bla", 23, 5, quiet=True)), self.PARSED)
+    PARSED = (
+        "[SEQUENCE(39, 22), SEQUENCE(40, 23), SEQUENCE(41, 24), "
+        "SEQUENCE(42, 25), SEQUENCE(43, 26), SEQUENCE(44, 27), END(0, 27)]"
+    )
 
 
 def run_tests(argv):

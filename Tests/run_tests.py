@@ -55,9 +55,9 @@ except ImportError:
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
-# Following modules have historic failures. If you fix one of these
-# please remove here!
-EXCLUDE_DOCTEST_MODULES = []
+# Bio.Alphabet has been removed from Biopython. Importing it will raise an
+# informative ImportError.
+EXCLUDE_DOCTEST_MODULES = ["Bio.Alphabet"]
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
@@ -75,8 +75,6 @@ if numpy is None:
             "Bio.Align",
             "Bio.Align.substitution_matrices",
             "Bio.Cluster",
-            "Bio.KDTree",
-            "Bio.KDTree.KDTree",
             "Bio.kNN",
             "Bio.LogisticRegression",
             "Bio.MarkovModel",
@@ -111,7 +109,6 @@ if numpy is None:
             "Bio.phenotype.phen_micro",
             "Bio.phenotype.pm_fitting",
             "Bio.SeqIO.PdbIO",
-            "Bio.Statistics.lowess",
             "Bio.SVDSuperimposer",
         ]
     )
@@ -143,23 +140,6 @@ SYSTEM_LANG = os.environ.get("LANG", "C")  # Cache this
 
 def main(argv):
     """Run tests, return number of failures (integer)."""
-    # insert our paths in sys.path:
-    # ../build/lib.*
-    # ..
-    # Q. Why this order?
-    # A. To find the C modules (which are in ../build/lib.*/Bio)
-    # Q. Then, why ".."?
-    # A. Because Martel may not be in ../build/lib.*
-    test_path = sys.path[0] or "."
-    source_path = os.path.abspath("%s/.." % test_path)
-    sys.path.insert(1, source_path)
-    build_path = os.path.abspath(
-        "%s/../build/lib.%s-%s"
-        % (test_path, distutils.util.get_platform(), sys.version[:3])
-    )
-    if os.access(build_path, os.F_OK):
-        sys.path.insert(1, build_path)
-
     # Using "export LANG=C" (which should work on Linux and similar) can
     # avoid problems detecting optional command line tools on
     # non-English OS (we may want 'command not found' in English).
@@ -210,8 +190,8 @@ def main(argv):
         if args[arg_num][-3:] == ".py":
             args[arg_num] = args[arg_num][:-3]
 
-    print("Python version: %s" % sys.version)
-    print("Operating system: %s %s" % (os.name, sys.platform))
+    print(f"Python version: {sys.version}")
+    print(f"Operating system: {os.name} {sys.platform}")
 
     # run the tests
     runner = TestRunner(args, verbosity)
@@ -272,7 +252,7 @@ class TestRunner(unittest.TextTestRunner):
             sys.stdout = output
             if name.startswith("test_"):
                 # It's a unittest
-                sys.stderr.write("%s ... " % name)
+                sys.stderr.write(f"{name} ... ")
                 loader = unittest.TestLoader()
                 suite = loader.loadTestsFromName(name)
                 if hasattr(loader, "errors") and loader.errors:
@@ -286,18 +266,18 @@ class TestRunner(unittest.TextTestRunner):
                             # Remove the traceback etc
                             msg = msg[msg.find("Bio.Missing") :]
                             msg = msg[msg.find("Error: ") :]
-                            sys.stderr.write("skipping. %s\n" % msg)
+                            sys.stderr.write(f"skipping. {msg}\n")
                             return True
                     # Looks like a real failure
                     sys.stderr.write("loading tests failed:\n")
                     for msg in loader.errors:
-                        sys.stderr.write("%s\n" % msg)
+                        sys.stderr.write(f"{msg}\n")
                     return False
                 if suite.countTestCases() == 0:
-                    raise RuntimeError("No tests found in %s" % name)
+                    raise RuntimeError(f"No tests found in {name}")
             else:
                 # It's a doc test
-                sys.stderr.write("%s docstring test ... " % name)
+                sys.stderr.write(f"{name} docstring test ... ")
                 try:
                     module = __import__(name, fromlist=name.split("."))
                 except MissingPythonDependencyError:
@@ -305,7 +285,7 @@ class TestRunner(unittest.TextTestRunner):
                     return True
                 except ImportError as e:
                     sys.stderr.write("FAIL, ImportError\n")
-                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.stream.write(f"ERROR while importing {name}: {e}\n")
                     result.printErrors()
                     return False
                 suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
@@ -314,11 +294,11 @@ class TestRunner(unittest.TextTestRunner):
             if self.testdir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
                 result.stream.write(result.separator1 + "\n")
-                result.stream.write("ERROR: %s\n" % name)
+                result.stream.write(f"ERROR: {name}\n")
                 result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
-                result.stream.write("Was: %s\n" % self.testdir)
-                result.stream.write("Now: %s\n" % os.path.abspath("."))
+                result.stream.write(f"Was: {self.testdir}\n")
+                result.stream.write(f"Now: {os.path.abspath('.')}\n")
                 os.chdir(self.testdir)
                 if not result.wasSuccessful():
                     result.printErrors()
@@ -333,13 +313,13 @@ class TestRunner(unittest.TextTestRunner):
         except MissingExternalDependencyError as msg:
             # Seems this isn't always triggered on Python 3.5,
             # exception messages can be in loader.errors instead.
-            sys.stderr.write("skipping. %s\n" % msg)
+            sys.stderr.write(f"skipping. {msg}\n")
             return True
         except Exception as msg:
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1 + "\n")
-            result.stream.write("ERROR: %s\n" % name)
+            result.stream.write(f"ERROR: {name}\n")
             result.stream.write(result.separator2 + "\n")
             result.stream.write(traceback.format_exc())
             return False

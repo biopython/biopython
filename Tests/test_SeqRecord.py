@@ -2,7 +2,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
@@ -10,12 +9,22 @@ and confirms they are consistent using our different parsers.
 """
 import unittest
 
+try:
+    import numpy
+except ImportError:
+    numpy = None
+
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna, generic_protein
-from Bio.Seq import Seq, MutableSeq
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import WithinPosition
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
-from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
 
 class SeqRecordCreation(unittest.TestCase):
@@ -23,12 +32,10 @@ class SeqRecordCreation(unittest.TestCase):
 
     def test_annotations(self):
         """Pass in annotations to SeqRecords."""
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
@@ -38,12 +45,10 @@ class SeqRecordCreation(unittest.TestCase):
 
     def test_letter_annotations(self):
         """Pass in letter annotations to SeqRecords."""
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
@@ -57,9 +62,7 @@ class SeqRecordCreation(unittest.TestCase):
         except (TypeError, ValueError) as e:
             pass
         # Now try setting it afterwards to a bad value...
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         try:
             rec.letter_annotations = {"test": [1, 2, 3]}
             self.fail("Changing to bad letter_annotations should fail!")
@@ -68,7 +71,7 @@ class SeqRecordCreation(unittest.TestCase):
         # Now try setting it at creation time to a bad value...
         try:
             rec = SeqRecord(
-                Seq("ACGT", generic_dna),
+                Seq("ACGT"),
                 id="Test",
                 name="Test",
                 description="Test",
@@ -81,49 +84,49 @@ class SeqRecordCreation(unittest.TestCase):
     def test_replacing_seq(self):
         """Replacing .seq if .letter_annotation present."""
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
             letter_annotations={"example": [1, 2, 3, 4]},
         )
         try:
-            rec.seq = Seq("ACGTACGT", generic_dna)
+            rec.seq = Seq("ACGTACGT")
             self.fail(
                 "Changing .seq length with letter_annotations present should fail!"
             )
         except ValueError as e:
             self.assertEqual(str(e), "You must empty the letter annotations first!")
         # Check we can replace IF the length is the same
-        self.assertEqual(str(rec.seq), "ACGT")
+        self.assertEqual(rec.seq, "ACGT")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
-        rec.seq = Seq("NNNN", generic_dna)
-        self.assertEqual(str(rec.seq), "NNNN")
+        rec.seq = Seq("NNNN")
+        self.assertEqual(rec.seq, "NNNN")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
 
     def test_valid_id(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), id={})
+            SeqRecord(Seq("ACGT"), id={})
 
     def test_valid_name(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), name={})
+            SeqRecord(Seq("ACGT"), name={})
 
     def test_valid_description(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), description={})
+            SeqRecord(Seq("ACGT"), description={})
 
     def test_valid_dbxrefs(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), dbxrefs={})
+            SeqRecord(Seq("ACGT"), dbxrefs={})
 
     def test_valid_annotations(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), annotations=[])
+            SeqRecord(Seq("ACGT"), annotations=[])
 
     def test_valid_features(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), features={})
+            SeqRecord(Seq("ACGT"), features={})
 
 
 class SeqRecordMethods(unittest.TestCase):
@@ -146,7 +149,7 @@ class SeqRecordMethods(unittest.TestCase):
             )
         )
         self.record = SeqRecord(
-            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX"),
             id="TestID",
             name="TestName",
             description="TestDescr",
@@ -162,7 +165,7 @@ class SeqRecordMethods(unittest.TestCase):
             break
 
     def test_contains(self):
-        self.assertIn(Seq("ABC", generic_protein), self.record)
+        self.assertIn(Seq("ABC"), self.record)
 
     def test_str(self):
         expected = """
@@ -173,12 +176,12 @@ Database cross-references: TestXRef
 Number of features: 4
 /k=v
 Per letter annotation for: fake
-Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
+Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual(expected.lstrip(), str(self.record))
 
     def test_repr(self):
         expected = (
-            "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), "
+            "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX'), "
             "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
         )
         self.assertEqual(expected, repr(self.record))
@@ -199,7 +202,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
 
     def test_format_spaces(self):
         rec = SeqRecord(
-            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX"),
             id="TestID",
             name="TestName",
             description="TestDescr",
@@ -209,18 +212,20 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(expected, rec.format("fasta"))
 
     def test_upper(self):
-        self.assertEqual(
-            "ABCDEFGHIJKLMNOPQRSTUVWZYX", str(self.record.lower().upper().seq)
-        )
+        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", self.record.lower().upper().seq)
 
     def test_lower(self):
-        self.assertEqual("abcdefghijklmnopqrstuvwzyx", str(self.record.lower().seq))
+        self.assertEqual("abcdefghijklmnopqrstuvwzyx", self.record.lower().seq)
 
     def test_slicing(self):
         self.assertEqual("B", self.record[1])
         self.assertEqual("BC", self.record[1:3].seq)
         with self.assertRaises(ValueError):
             c = self.record["a"].seq
+        if numpy is not None:
+            start, stop = numpy.array([1, 3])  # numpy integers
+            self.assertEqual("B", self.record[start])
+            self.assertEqual("BC", self.record[start:stop].seq)
 
     def test_slice_variants(self):
         """Simple slices using different start/end values."""
@@ -240,11 +245,11 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         rec = self.record
         self.assertEqual(len(rec), 26)
         left = rec[:10]
-        self.assertEqual(str(left.seq), str(rec.seq[:10]))
+        self.assertEqual(left.seq, rec.seq[:10])
         right = rec[-10:]
-        self.assertEqual(str(right.seq), str(rec.seq[-10:]))
+        self.assertEqual(right.seq, rec.seq[-10:])
         mid = rec[12:22]
-        self.assertEqual(str(mid.seq), str(rec.seq[12:22]))
+        self.assertEqual(mid.seq, rec.seq[12:22])
         for sub in [left, right, mid]:
             self.assertEqual(len(sub), 10)
             self.assertEqual(sub.id, "TestID")
@@ -255,8 +260,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(sub.annotations, {})  # May change this...
             self.assertEqual(len(sub.features), 1)
             # By construction, each feature matches the full sliced region:
-            self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
-            self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
+            self.assertEqual(sub.features[0].extract(sub.seq), sub.seq)
+            self.assertEqual(sub.features[0].extract(sub.seq), sub.seq)
 
     def test_slice_zero(self):
         """Zero slice."""
@@ -283,7 +288,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         for other in [Seq("BIO"), "BIO"]:
             rec = self.record + other  # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26 + 3)
-            self.assertEqual(str(rec.seq), str(self.record.seq) + "BIO")
+            self.assertEqual(rec.seq, str(self.record.seq) + "BIO")
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
@@ -301,7 +306,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         other.dbxrefs = ["dummy"]
         rec = self.record + other
         self.assertEqual(len(rec), len(self.record) + len(other))
-        self.assertEqual(str(rec.seq), str(self.record.seq) + str(other.seq))
+        self.assertEqual(rec.seq, self.record.seq + other.seq)
         self.assertEqual(rec.id, "<unknown id>")
         self.assertEqual(rec.name, "<unknown name>")
         self.assertEqual(rec.description, "<unknown description>")
@@ -326,7 +331,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         for other in [Seq("BIO"), "BIO"]:
             rec = other + self.record  # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26 + 3)
-            self.assertEqual(str(rec.seq), "BIO" + str(self.record.seq))
+            self.assertEqual(rec.seq, "BIO" + self.record.seq)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
             self.assertEqual(rec.description, "TestDescr")
@@ -342,7 +347,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         """Simple slice and add."""
         for cut in range(27):
             rec = self.record[:cut] + self.record[cut:]
-            self.assertEqual(str(rec.seq), str(self.record.seq))
+            self.assertEqual(rec.seq, self.record.seq)
             self.assertEqual(len(rec), 26)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
@@ -350,15 +355,13 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake": "X" * 26})
-            self.assertTrue(len(rec.features) <= len(self.record.features))
+            self.assertLessEqual(len(rec.features), len(self.record.features))
 
     def test_slice_add_shift(self):
         """Simple slice and add to shift."""
         for cut in range(27):
             rec = self.record[cut:] + self.record[:cut]
-            self.assertEqual(
-                str(rec.seq), str(self.record.seq[cut:] + self.record.seq[:cut])
-            )
+            self.assertEqual(rec.seq, self.record.seq[cut:] + self.record.seq[:cut])
             self.assertEqual(len(rec), 26)
             self.assertEqual(rec.id, "TestID")
             self.assertEqual(rec.name, "TestName")
@@ -366,7 +369,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake": "X" * 26})
-            self.assertTrue(len(rec.features) <= len(self.record.features))
+            self.assertLessEqual(len(rec.features), len(self.record.features))
 
 
 class SeqRecordMethodsMore(unittest.TestCase):
@@ -395,7 +398,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
             letter_annotations=True,
         )
 
-        self.assertEqual("CAGT", str(rc.seq))
+        self.assertEqual("CAGT", rc.seq)
         self.assertEqual("TestID", rc.id)
         self.assertEqual("TestID", s.reverse_complement(id="TestID").id)
 
@@ -441,7 +444,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_reverse_complement_mutable_seq(self):
         s = SeqRecord(MutableSeq("ACTG"))
-        self.assertEqual("CAGT", str(s.reverse_complement().seq))
+        self.assertEqual("CAGT", s.reverse_complement().seq)
 
     def test_translate(self):
         s = SeqRecord(
@@ -462,7 +465,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual(t.description, "<unknown description>")
         self.assertFalse(t.dbxrefs)
         self.assertFalse(t.features)
-        self.assertFalse(t.annotations)
+        self.assertEqual(t.annotations, {"molecule_type": "protein"})
         self.assertFalse(t.letter_annotations)
 
         t = s.translate(
@@ -479,42 +482,44 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {"organism": "bombyx"})
+        self.assertEqual(
+            t.annotations, {"organism": "bombyx", "molecule_type": "protein"}
+        )
         self.assertFalse(t.letter_annotations)
 
     def test_lt_exception(self):
         def lt():
-            SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, lt)
 
     def test_le_exception(self):
         def le():
-            SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
-            SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, equality)
 
     def test_ne_exception(self):
         def notequality():
-            SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, notequality)
 
     def test_gt_exception(self):
         def gt():
-            SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, gt)
 
     def test_ge_exception(self):
         def ge():
-            SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
 
         self.assertRaises(NotImplementedError, ge)
 
@@ -551,7 +556,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "<unknown description>")
         self.assertFalse(t.dbxrefs)
         self.assertFalse(t.features)
-        self.assertFalse(t.annotations)
+        self.assertEqual(t.annotations, {"molecule_type": "protein"})
         self.assertFalse(t.letter_annotations)
 
     def test_preserve(self):
@@ -569,7 +574,9 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {"organism": "bombyx"})
+        self.assertEqual(
+            t.annotations, {"organism": "bombyx", "molecule_type": "protein"}
+        )
         self.assertFalse(t.letter_annotations)
 
         # Should not preserve these
@@ -595,7 +602,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "Baz")
         self.assertEqual(t.dbxrefs, ["Nope"])
         self.assertEqual(len(t.features), 1)
-        self.assertEqual(t.annotations, {"a": "team"})
+        self.assertEqual(t.annotations, {"a": "team", "molecule_type": "protein"})
         self.assertEqual(t.letter_annotations, {"aa": ["Met", "Val"]})
 
 

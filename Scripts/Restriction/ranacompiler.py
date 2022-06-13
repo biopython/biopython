@@ -117,25 +117,9 @@ def regex(site):
     return reg_ex
 
 
-def is_palindrom(sequence):
-    """Check whether the sequence is a palindrome or not (DEPRECATED).
-
-    Deprecated alias for is_palindrome (with e at end).
-    """
-    import warnings
-    from Bio import BiopythonDeprecationWarning
-
-    warnings.warn(
-        "is_palindrom is deprecated, please use is_palindrome instead.",
-        BiopythonDeprecationWarning,
-    )
-
-    return is_palindrome(sequence)
-
-
 def is_palindrome(sequence):
     """Check whether the sequence is a palindrome or not."""
-    return str(sequence) == str(sequence.reverse_complement())
+    return sequence == sequence.reverse_complement()
 
 
 class newenzyme:
@@ -283,7 +267,6 @@ class newenzyme:
                 "\n\tin this REBASE release."
                 "\n\tThe supplier is : %s." % (name, supp)
             )
-        return
 
 
 class TypeCompiler:
@@ -424,7 +407,7 @@ class DictionaryBuilder:
             #   Now select the right type for the enzyme.
             #
             bases = cls.bases
-            clsbases = tuple([eval(x) for x in bases])  # noqa: C407
+            clsbases = tuple(eval(x) for x in bases)
             typestuff = ""
             for t in tdct.values():
                 #
@@ -548,8 +531,7 @@ class DictionaryBuilder:
             exec(compile(open(new).read(), new, "exec"))
             print("\n\tThe new file seems ok. Proceeding with the installation.")
         except SyntaxError:
-            print("\n The new dictionary file is corrupted. Aborting the installation.")
-            return
+            sys.exit("ERROR: new dictionary file is corrupted. Aborting installation.")
         try:
             shutil.copyfile(new, old)
             print(
@@ -566,7 +548,6 @@ class DictionaryBuilder:
                 "\n\t %s ?\n\n" % os.path.split(old)[0]
             )
             return self.no_install()
-        return
 
     def no_install(self):
         """Build the new dictionary but do not install the dictionary."""
@@ -600,7 +581,6 @@ class DictionaryBuilder:
             "\n\t%s\n" % places
         )
         print("\n " + "*" * 78 + "\n")
-        return
 
     def lastrebasefile(self):
         """Check the emboss files are up to date and download them if not."""
@@ -614,9 +594,7 @@ class DictionaryBuilder:
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd()  # added for biopython current directory
         for name in emboss_now:
-            if name in dircontent:
-                pass
-            else:
+            if name not in dircontent:
                 update_needed = True
 
         if not update_needed:
@@ -658,7 +636,6 @@ class DictionaryBuilder:
                         print(f"\nNo {name} file found. Upgrade is impossible.\n")
                         sys.exit()
                     continue
-                pass
         #
         #   now find the last file.
         #
@@ -977,7 +954,7 @@ class DictionaryBuilder:
                     other = line[0].replace("-", "_").replace(".", "_")
                     dna = Seq(line[1])
                     sense1 = regex(dna)
-                    antisense1 = regex(str(dna.reverse_complement()))
+                    antisense1 = regex(dna.reverse_complement())
                     dna = Seq(enzymedict[other][0])
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
@@ -999,7 +976,6 @@ class DictionaryBuilder:
             #
             t = i.strip().split(" ", 1)
             suppliersdict[t[0]] = (t[1], [])
-        return
 
 
 def standalone():

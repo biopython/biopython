@@ -11,7 +11,7 @@ The file format was produced by the GCG PileUp and and LocalPileUp tools,
 and later tools such as T-COFFEE and MUSCLE support it as an optional
 output format.
 
-The original GCG toola would write gaps at ends of each sequence which could
+The original GCG tool would write gaps at ends of each sequence which could
 be missing data as tildes (``~``), whereas internal gaps were periods (``.``)
 instead. This parser replaces both with minus signs (``-``) for consistency
 with the rest of ``Bio.AlignIO``.
@@ -19,11 +19,10 @@ with the rest of ``Bio.AlignIO``.
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
-
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+
 from .Interfaces import AlignmentIterator
 
 
@@ -171,16 +170,16 @@ class MsfIterator(AlignmentIterator):
                         # T-COFFEE oddity, ignore this
                         name = name[:-3]
                     if name in ids:
-                        raise ValueError("Duplicated ID of %r" % name)
+                        raise ValueError(f"Duplicated ID of {name!r}")
                     if " " in name:
-                        raise NotImplementedError("Space in ID %r" % name)
+                        raise NotImplementedError(f"Space in ID {name!r}")
                     ids.append(name)
                     # Expect aln_length <= int(length.strip()), see below
                     lengths.append(int(length.strip()))
                     checks.append(int(check.strip()))
                     weights.append(float(weight.strip()))
                 else:
-                    raise ValueError("Malformed GCG MSF name line: %r" % line)
+                    raise ValueError(f"Malformed GCG MSF name line: {line!r}")
         if not line:
             raise ValueError("End of file while looking for end of header // line.")
 
@@ -266,21 +265,19 @@ class MsfIterator(AlignmentIterator):
                         # expect a line with name and a block of trailing ~ here.
                         pass
                     else:
-                        raise ValueError(
-                            "Expected sequence for %s, got: %r" % (name, line)
-                        )
+                        raise ValueError(f"Expected sequence for {name}, got: {line!r}")
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
                     seqs[idx].extend(words[1:])
                 else:
-                    raise ValueError("Expected sequence for %r, got: %r" % (name, line))
+                    raise ValueError(f"Expected sequence for {name!r}, got: {line!r}")
             # TODO - check the sequence lengths thus far are consistent
             # with blocks of 50?
             completed_length += 50
             line = handle.readline()
             if line.strip():
-                raise ValueError("Expected blank line, got: %r" % line)
+                raise ValueError(f"Expected blank line, got: {line!r}")
 
         # Skip over any whitespace at the end...
         while True:
@@ -296,7 +293,7 @@ class MsfIterator(AlignmentIterator):
                 self._header = line
                 break
             else:
-                raise ValueError("Unexpected line after GCG MSF alignment: %r" % line)
+                raise ValueError(f"Unexpected line after GCG MSF alignment: {line!r}")
 
         # Combine list of strings into single string, remap gaps
         seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
@@ -317,18 +314,12 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(
-                Seq(s, self.alphabet),
-                id=i,
-                name=i,
-                description=i,
-                annotations={"weight": w},
-            )
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w})
             for (i, s, w) in zip(ids, seqs, weights)
         )
 
         # This will check alignment lengths are self-consistent:
-        align = MultipleSeqAlignment(records, self.alphabet)
+        align = MultipleSeqAlignment(records)
         # Check matches the header:
         if align.get_alignment_length() != aln_length:
             raise ValueError(

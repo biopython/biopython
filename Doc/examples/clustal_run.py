@@ -17,11 +17,9 @@ import sys
 import subprocess
 
 # biopython
-from Bio.Alphabet import Gapped, IUPAC
 from Bio.Align.Applications import ClustalwCommandline
 from Bio import AlignIO
 from Bio.Align import AlignInfo
-from Bio.SubsMat import FreqTable
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
@@ -33,7 +31,7 @@ return_code = subprocess.call(str(cline), shell=(sys.platform != "win32"))
 assert return_code == 0, "Calling ClustalW failed"
 
 # Parse the output
-alignment = AlignIO.read("test.aln", "clustal", alphabet=Gapped(IUPAC.unambiguous_dna))
+alignment = AlignIO.read("test.aln", "clustal")
 
 print(alignment)
 
@@ -52,17 +50,12 @@ consensus = summary_align.dumb_consensus()
 print("consensus %s" % consensus)
 
 my_pssm = summary_align.pos_specific_score_matrix(consensus, chars_to_ignore=["N"])
-
 print(my_pssm)
 
 expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 
-freq_table_info = FreqTable.FreqTable(
-    expect_freq, FreqTable.FREQ, IUPAC.unambiguous_dna
-)
-
 info_content = summary_align.information_content(
-    5, 30, chars_to_ignore=["N"], e_freq_table=freq_table_info
+    5, 30, chars_to_ignore=["N"], e_freq_table=expect_freq
 )
 
 print("relative info content: %f" % info_content)

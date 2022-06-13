@@ -148,7 +148,7 @@ class Fragment:
         :param resname: residue name (eg. GLY).
         :type resname: string
 
-        :param ca_coord: the c-alpha coorinates of the residues
+        :param ca_coord: the c-alpha coordinates of the residues
         :type ca_coord: Numeric array with length 3
         """
         if self.counter >= self.length:
@@ -158,7 +158,7 @@ class Fragment:
         self.counter = self.counter + 1
 
     def __len__(self):
-        """Return lengt of the fragment."""
+        """Return length of the fragment."""
         return self.length
 
     def __sub__(self, other):

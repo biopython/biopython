@@ -2,205 +2,41 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-
 import os
 import unittest
+import warnings
+
 from io import StringIO
 
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
-from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
-from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
-from Bio.SeqFeature import OneOfPosition, WithinPosition, UnknownPosition
+from Bio.Seq import MutableSeq
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import UnknownSeq
+from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import OneOfPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqFeature import WithinPosition
 from Bio.SeqIO.InsdcIO import _insdc_location_string
+from Bio.SeqRecord import SeqRecord
+from test_SeqIO import SeqIOTestBaseClass
 
 
 def _get_location_string(feature, record_length):
     return _insdc_location_string(feature.location, record_length)
-
-
-# Top level function as this makes it easier to use for debugging:
-def write_read(filename, in_format="gb", out_formats=("gb", "embl", "imgt")):
-    for out_format in out_formats:
-        gb_records = list(SeqIO.parse(filename, in_format))
-        # Write it out...
-        handle = StringIO()
-        SeqIO.write(gb_records, handle, out_format)
-        handle.seek(0)
-        # Now load it back and check it agrees,
-        gb_records2 = list(SeqIO.parse(handle, out_format))
-        compare_records(gb_records, gb_records2)
-
-
-def compare_record(old, new, expect_minor_diffs=False):
-    # Note the name matching is a bit fuzzy
-    if (
-        not expect_minor_diffs
-        and old.id != new.id
-        and old.name != new.name
-        and (old.id not in new.id)
-        and (new.id not in old.id)
-        and (old.id.replace(" ", "_") != new.id.replace(" ", "_"))
-    ):
-        raise ValueError(
-            "'%s' or '%s' vs '%s' or '%s' records"
-            % (old.id, old.name, new.id, new.name)
-        )
-    if len(old.seq) != len(new.seq):
-        raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-    if isinstance(old.seq, UnknownSeq) and isinstance(new.seq, UnknownSeq):
-        # Jython didn't like us comparing the string of very long
-        # UnknownSeq object (out of heap memory error)
-        if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%s vs %s" % (repr(old.seq), repr(new.seq)))
-    elif str(old.seq).upper() != str(new.seq).upper():
-        if len(old.seq) < 200:
-            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
-        else:
-            raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
-    if old.features and new.features:
-        if not compare_features(old.features, new.features):
-            return False
-    # Just insist on at least one word in common:
-    if (old.description or new.description) and not set(
-        old.description.split()
-    ).intersection(new.description.split()):
-        raise ValueError(
-            "%s versus %s" % (repr(old.description), repr(new.description))
-        )
-    # This only checks common annotation
-    # Would a white list be easier?
-    for key in set(old.annotations).intersection(new.annotations):
-        if key in ["data_file_division", "accessions"]:
-            # TODO - These are not yet supported on output, or
-            # have other complications (e.g. different number of accessions
-            # allowed in various file formats)
-            continue
-        if key == "molecule_type":
-            # EMBL allows e.g. "genomics DNA" where GenBank is limited.
-            common_words = set(old.annotations[key].split())
-            common_words = common_words.intersection(new.annotations[key].split())
-            if not common_words:
-                raise ValueError(
-                    "Annotation mis-match for molecule_type:\n%s\n%s"
-                    % (old.annotations[key], new.annotations[key])
-                )
-            continue
-        if key == "comment":
-            # Ignore whitespace
-            if old.annotations[key].split() != new.annotations[key].split():
-                raise ValueError(
-                    "Annotation mis-match for comment:\n%s\n%s"
-                    % (old.annotations[key], new.annotations[key])
-                )
-            continue
-        if key == "references":
-            if expect_minor_diffs:
-                # TODO - Implement EMBL output of references
-                continue
-            assert len(old.annotations[key]) == len(new.annotations[key])
-            for r1, r2 in zip(old.annotations[key], new.annotations[key]):
-                assert r1.title == r2.title
-                assert r1.authors == r2.authors, "Old: '%s'\nNew: '%s'" % (
-                    r1.authors,
-                    r2.authors,
-                )
-                assert r1.journal == r2.journal
-                if r1.consrtm and r2.consrtm:
-                    # Not held in EMBL files
-                    assert r1.consrtm == r2.consrtm
-                if r1.medline_id and r2.medline_id:
-                    # Not held in EMBL files
-                    assert r1.medline_id == r2.medline_id
-                assert r1.pubmed_id == r2.pubmed_id
-            continue
-        if repr(old.annotations[key]) != repr(new.annotations[key]):
-            raise ValueError(
-                "Annotation mis-match for %s:\n%s\n%s"
-                % (key, old.annotations[key], new.annotations[key])
-            )
-    return True
-
-
-def compare_records(old_list, new_list, expect_minor_diffs=False):
-    """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list):
-        raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list):
-        if not compare_record(old, new, expect_minor_diffs):
-            return False
-    return True
-
-
-def compare_feature(old, new):
-    """Check two SeqFeatures agree."""
-    if old.type != new.type:
-        raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
-    if (
-        old.location.nofuzzy_start != new.location.nofuzzy_start
-        or old.location.nofuzzy_end != new.location.nofuzzy_end
-    ):
-        raise ValueError(
-            "%s versus %s:\n%s\nvs:\n%s"
-            % (old.location, new.location, repr(old), repr(new))
-        )
-    if old.strand is not None and old.strand != new.strand:
-        raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
-    if old.ref != new.ref:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
-    if old.ref_db != new.ref_db:
-        raise ValueError("Different ref_db:\n%s\nvs:\n%s" % (repr(old), repr(new)))
-    if old.location_operator != new.location_operator:
-        raise ValueError(
-            "Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new))
-        )
-    if old.location.start != new.location.start or str(old.location.start) != str(
-        new.location.start
-    ):
-        raise ValueError(
-            "Start %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.start, new.location.start, repr(old), repr(new))
-        )
-    if old.location.end != new.location.end or str(old.location.end) != str(
-        new.location.end
-    ):
-        raise ValueError(
-            "End %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.end, new.location.end, repr(old), repr(new))
-        )
-    # This only checks key shared qualifiers
-    # Would a white list be easier?
-    # for key in ["name","gene","translation","codon_table","codon_start","locus_tag"]:
-    for key in set(old.qualifiers).intersection(new.qualifiers):
-        if key in ["db_xref", "protein_id", "product", "note"]:
-            # EMBL and GenBank files are use different references/notes/etc
-            continue
-        if old.qualifiers[key] != new.qualifiers[key]:
-            raise ValueError(
-                "Qualifier mis-match for %s:\n%s\n%s"
-                % (key, old.qualifiers[key], new.qualifiers[key])
-            )
-    return True
-
-
-def compare_features(old_list, new_list):
-    """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list):
-        raise ValueError("%i vs %i features" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list):
-        # This assumes they are in the same order
-        if not compare_feature(old, new):
-            return False
-    return True
 
 
 def make_join_feature(f_list, ftype="misc_feature"):
@@ -251,7 +87,132 @@ assert len(gbk_template) == 4445
 assert gbk_template.count("%") == 1, gbk_template
 
 
-class GenBankLocations(unittest.TestCase):
+class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
+    def compare_feature(self, old, new, msg=None):
+        """Check two SeqFeatures agree."""
+        self.assertEqual(old.type, new.type, msg=msg)
+        self.assertEqual(
+            old.location.nofuzzy_start, new.location.nofuzzy_start, msg=msg
+        )
+        if old.strand is not None:
+            self.assertEqual(old.strand, new.strand, msg=msg)
+        self.assertEqual(old.ref, new.ref, msg=msg)
+        self.assertEqual(old.ref_db, new.ref_db, msg=msg)
+        self.assertEqual(old.location_operator, new.location_operator, msg=msg)
+        self.assertEqual(old.location.start, new.location.start, msg=msg)
+        self.assertEqual(str(old.location.start), str(new.location.start), msg=msg)
+        self.assertEqual(old.location.end, new.location.end, msg=msg)
+        self.assertEqual(str(old.location.end), str(new.location.end), msg=msg)
+        # This only checks key shared qualifiers
+        # Would a white list be easier?
+        # for key in ["name","gene","translation","codon_table","codon_start","locus_tag"]:
+        for key in set(old.qualifiers).intersection(new.qualifiers):
+            if key in ["db_xref", "protein_id", "product", "note"]:
+                # EMBL and GenBank files are use different references/notes/etc
+                continue
+            err_msg = f"qualifier mismatch for {key}"
+            if msg:
+                err_msg = f"{msg}; {err_msg}"
+            self.assertEqual(old.qualifiers[key], new.qualifiers[key], msg=err_msg)
+
+    def compare_record(self, old, new, msg=None, expect_minor_diffs=False):
+        # Note the name matching is a bit fuzzy
+        if not expect_minor_diffs:
+            err_msg = "'%s' or '%s' vs '%s' or '%s' records" % (
+                old.id,
+                old.name,
+                new.id,
+                new.name,
+            )
+            if msg:
+                err_msg = f"{msg}; {err_msg}"
+            self.assertTrue(
+                old.id == new.id
+                or old.name == new.name
+                or old.id in new.id
+                or new.id in old.id
+                or old.id.replace(" ", "_") == new.id.replace(" ", "_"),
+                msg=err_msg,
+            )
+        self.assertEqual(len(old.seq), len(new.seq), msg=msg)
+        if len(old.seq) < 200:
+            old_seq = old.seq
+        else:
+            old_seq = old.seq[:100]
+        if len(new.seq) < 200:
+            new_seq = new.seq
+        else:
+            new_seq = new.seq[:100]
+        old_seq_upper = old.seq.upper()
+        try:
+            bytes(old_seq)
+        except UndefinedSequenceError:
+            old_seq = None
+        new_seq_upper = new.seq.upper()
+        try:
+            bytes(new_seq)
+        except UndefinedSequenceError:
+            new_seq = None
+        err_msg = f"'{old_seq}' vs '{new_seq}'"
+        if msg:
+            err_msg = f"{msg}; {err_msg}"
+        if old_seq is None and new_seq is None:
+            self.assertEqual(repr(old_seq_upper), repr(new_seq_upper), msg=err_msg)
+        else:
+            self.assertEqual(old_seq_upper, new_seq_upper, msg=err_msg)
+        if old.features and new.features:
+            self.assertEqual(len(old.features), len(new.features), msg=msg)
+            for old_feature, new_feature in zip(old.features, new.features):
+                # This assumes they are in the same order
+                self.compare_feature(old_feature, new_feature, msg=msg)
+
+        # Just insist on at least one word in common:
+        if old.description or new.description:
+            words = set(old.description.split()).intersection(new.description.split())
+            self.assertGreater(len(words), 0, msg=msg)
+        # This only checks common annotation
+        # Would a white list be easier?
+        for key in set(old.annotations).intersection(new.annotations):
+            if key in ["data_file_division", "accessions"]:
+                # TODO - These are not yet supported on output, or
+                # have other complications (e.g. different number of accessions
+                # allowed in various file formats)
+                continue
+            elif key == "molecule_type":
+                # EMBL allows e.g. "genomics DNA" where GenBank is limited.
+                common_words = set(old.annotations[key].split())
+                common_words = common_words.intersection(new.annotations[key].split())
+                self.assertGreater(len(common_words), 0, msg=msg)
+            elif key == "comment":
+                # Ignore whitespace
+                self.assertEqual(
+                    old.annotations[key].split(), new.annotations[key].split(), msg=msg
+                )
+            elif key == "references":
+                if expect_minor_diffs:
+                    # TODO - Implement EMBL output of references
+                    continue
+                self.assertEqual(
+                    len(old.annotations[key]), len(new.annotations[key]), msg=msg
+                )
+                for r1, r2 in zip(old.annotations[key], new.annotations[key]):
+                    self.assertEqual(r1.title, r2.title, msg=msg)
+                    self.assertEqual(r1.authors, r2.authors, msg=msg)
+                    self.assertEqual(r1.journal, r2.journal, msg=msg)
+                    if r1.consrtm and r2.consrtm:
+                        # Not held in EMBL files
+                        self.assertEqual(r1.consrtm, r2.consrtm, msg=msg)
+                    if r1.medline_id and r2.medline_id:
+                        # Not held in EMBL files
+                        self.assertEqual(r1.medline_id, r2.medline_id, msg=msg)
+                    self.assertEqual(r1.pubmed_id, r2.pubmed_id, msg=msg)
+            else:
+                self.assertEqual(
+                    repr(old.annotations[key]), repr(new.annotations[key]), msg=msg
+                )
+
+
+class GenBankLocations(SeqIOFeatureTestBaseClass):
     """Tests for parsing GenBank feature locations."""
 
     def check_loc(self, expected_location_obj, input_location_str, round_trip=True):
@@ -310,7 +271,7 @@ class GenBankLocations(unittest.TestCase):
         self.check_loc(expected_loc, loc_str)
 
 
-class SeqFeatureExtractionWritingReading(unittest.TestCase):
+class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
     """Tests for SeqFeature sequence extract method, writing, and reading."""
 
     def check(self, parent_seq, feature, answer_str, location_str):
@@ -318,19 +279,21 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
         new = feature.extract(parent_seq)
         self.assertIsInstance(new, Seq)
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
         new = feature.extract(str(parent_seq))
         self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
-        new = feature.extract(parent_seq.tomutable())
+        new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
-        self.assertEqual(str(new), answer_str)
+        self.assertEqual(new, answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
-        self.assertIsInstance(new, UnknownSeq)
+        new = feature.extract(Seq(None, len(parent_seq)))
+        self.assertIsInstance(new, Seq)
         self.assertEqual(len(new), len(answer_str))
+        if len(answer_str) > 0:
+            self.assertRaises(UndefinedSequenceError, str, new)
 
         if _get_location_string(feature, 1326) != location_str:
             # This is to avoid issues with the N^1 between feature which only
@@ -349,8 +312,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         feature.type = "misc_feature"  # hack as may not be misc_feature
         if not feature.strand:
             feature.strand = new_f.strand  # hack as above
-        self.assertEqual(feature.strand, new_f.strand)
-        self.assertTrue(compare_feature(feature, new_f))
+        self.compare_feature(feature, new_f)
 
         # Some feature method tests
         parent = "ACGT" * 250
@@ -364,55 +326,57 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         if len(feature):
             self.assertEqual(feature.location.start, min(feature.location))
             self.assertEqual(feature.location.end, max(feature.location) + 1)
-        self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
+        self.assertLessEqual(
+            len(feature), feature.location.end - feature.location.start
+        )
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)."""
-        s = Seq("GAUCRYWSMKHBVDN", generic_rna)
+        s = Seq("GAUCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
-        self.assertEqual(f.strand, None)
-        self.assertEqual(f.location.strand, None)
+        self.assertIsNone(f.strand)
+        self.assertIsNone(f.location.strand)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
         """Feature on DNA (simple, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_single_letter_dna(self):
         """Feature on DNA (single letter, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 6))
         self.check(s, f, "Y", "6")
 
     def test_zero_len_dna(self):
         """Feature on DNA (between location, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_zero_len_dna_end(self):
         """Feature on DNA (between location at end, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(15, 15))
         self.check(s, f, "", "15^1")
 
     def test_simple_dna_strand0(self):
         """Feature on DNA (simple, strand 0)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=0)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_none(self):
         """Feature on DNA (simple, strand None)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
         """Feature on DNA (simple, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=1)
         self.assertEqual(f.strand, +1)
         self.assertEqual(f.location.strand, +1)
@@ -420,7 +384,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_strand_minus(self):
         """Feature on DNA (simple, strand -1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=-1)
         self.assertEqual(f.strand, -1)
         self.assertEqual(f.location.strand, -1)
@@ -428,7 +392,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join(self):
         """Feature on DNA (join, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=1)
         f = make_join_feature([f1, f2])
@@ -436,7 +400,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_strand_minus(self):
         """Feature on DNA (join, strand -1)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -446,7 +410,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_before(self):
         """Feature on DNA (join, strand -1, before position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -456,7 +420,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_after(self):
         """Feature on DNA (join, strand -1, after position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
         f = make_join_feature([f1, f2])
@@ -466,7 +430,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_join(self):
         """Feature on DNA (join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -476,7 +440,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_multi_join(self):
         """Feature on DNA (multi-join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f3 = SeqFeature(FeatureLocation(BeforePosition(0), 5), strand=+1)
@@ -490,13 +454,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_simple(self):
         """Feature on protein (simple)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "FGHIJ", "6..10")
 
     def test_protein_join(self):
         """Feature on protein (join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
         f = make_join_feature([f1, f2])
@@ -504,7 +468,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_join_fuzzy(self):
         """Feature on protein (fuzzy join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10))
         f2 = SeqFeature(
             FeatureLocation(
@@ -517,7 +481,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_multi_join(self):
         """Feature on protein (multi-join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(1, 2))
         f2 = SeqFeature(FeatureLocation(8, 9))
         f3 = SeqFeature(FeatureLocation(14, 16))
@@ -531,13 +495,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_between(self):
         """Feature on protein (between location, zero length)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_protein_oneof(self):
         """Feature on protein (one-of positions)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         start = OneOfPosition(5, (ExactPosition(5), ExactPosition(7)))
         end = OneOfPosition(11, (ExactPosition(10), ExactPosition(11)))
         f = SeqFeature(FeatureLocation(start, 10))
@@ -564,18 +528,19 @@ class SeqFeatureCreation(unittest.TestCase):
         self.assertEqual(f.qualifiers["test"], ["a test"])
 
 
-class FeatureWriting(unittest.TestCase):
+class FeatureWriting(SeqIOFeatureTestBaseClass):
     def setUp(self):
         self.record = SeqRecord(
-            Seq("ACGT" * 100, generic_dna), id="Test", name="Test", description="Test"
+            Seq("ACGT" * 100), id="Test", name="Test", description="Test"
         )
+        self.record.annotations["molecule_type"] = "DNA"
 
     def write_read_check(self, check_format):
         handle = StringIO()
         SeqIO.write([self.record], handle, check_format)
         handle.seek(0)
         record2 = SeqIO.read(handle, check_format)
-        compare_record(self.record, record2)
+        self.compare_record(self.record, record2)
 
     def write_read_checks(self, formats=("gb", "embl", "imgt")):
         for f in formats:
@@ -1094,7 +1059,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
 
-class NC_000932(unittest.TestCase):
+class NC_000932(SeqIOFeatureTestBaseClass):
     # This includes an evil dual strand gene
     basename = "NC_000932"
     emblname = None  # "AP000423" has different annotation (e.g. more CDS)
@@ -1104,7 +1069,7 @@ class NC_000932(unittest.TestCase):
         "gi|7525057|ref|NP_051038.1|",  # dual-strand
         "gi|90110725|ref|NP_051109.2|",  # Invalid annotation? No start codon
     ]
-    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
+    __doc__ = f"Tests using {basename} GenBank and FASTA files from the NCBI"
     # TODO - neat way to change the docstrings...
 
     def setUp(self):
@@ -1121,7 +1086,7 @@ class NC_000932(unittest.TestCase):
         gb_record = SeqIO.read(self.gb_filename, "genbank")
         gb_cds = list(SeqIO.parse(self.gb_filename, "genbank-cds"))
         fasta = list(SeqIO.parse(self.faa_filename, "fasta"))
-        compare_records(gb_cds, fasta)
+        self.compare_records(gb_cds, fasta)
         cds_features = [f for f in gb_record.features if f.type == "CDS"]
         self.assertEqual(len(cds_features), len(fasta))
         for f, r in zip(cds_features, fasta):
@@ -1133,14 +1098,12 @@ class NC_000932(unittest.TestCase):
             try:
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
-                print(e)
-                print("%r, %r, %r" % (r.id, nuc, self.table))
-                print(f)
-                raise
+                msg = f"{e}\n{r.id!r}, {nuc!r}, {self.table!r}\n{f}"
+                self.fail(msg)
             if pro[-1] == "*":
-                self.assertEqual(str(pro)[:-1], str(r.seq))
+                self.assertEqual(pro[:-1], r.seq)
             else:
-                self.assertEqual(str(pro), str(r.seq))
+                self.assertEqual(pro, r.seq)
 
 
 class NC_005816(NC_000932):
@@ -1148,7 +1111,7 @@ class NC_005816(NC_000932):
     emblname = "AE017046"
     table = 11
     skip_trans_test = []
-    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
+    __doc__ = f"Tests using {basename} GenBank and FASTA files from the NCBI"
 
     def test_GenBank_vs_EMBL(self):
         if not self.emblname:
@@ -1164,7 +1127,7 @@ class NC_005816(NC_000932):
             gb_record.features = [
                 f for f in gb_record.features if f.type != "misc_feature"
             ]
-        return compare_record(gb_record, embl_record, expect_minor_diffs=True)
+        self.compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Translations(self):
         """Checking translation of FASTA features (faa vs ffn)."""
@@ -1175,22 +1138,21 @@ class NC_005816(NC_000932):
             translation = fna.seq.translate(self.table, cds=True)
             if faa.id in self.skip_trans_test:
                 continue
-            if (str(translation) != str(faa.seq)) and (
-                str(translation) != str(faa.seq) + "*"
-            ):
-                t = SeqRecord(
-                    translation, id="Translation", description="Table %s" % self.table
-                )
-                raise ValueError(
-                    "FAA vs FNA translation problem:\n%s\n%s\n%s\n"
-                    % (fna.format("fasta"), t.format("fasta"), faa.format("fasta"))
-                )
+            t = SeqRecord(
+                translation, id="Translation", description=f"Table {self.table}"
+            )
+            msg = "FAA vs FNA translation problem:\n%s\n%s\n%s\n" % (
+                fna.format("fasta"),
+                t.format("fasta"),
+                faa.format("fasta"),
+            )
+            self.assertTrue(translation == faa.seq or translation != faa.seq + "*")
 
     def test_Genome(self):
         """Checking GenBank sequence vs FASTA fna file."""
         gb_record = SeqIO.read(self.gb_filename, "genbank")
         fa_record = SeqIO.read(self.fna_filename, "fasta")
-        compare_record(gb_record, fa_record)
+        self.compare_record(gb_record, fa_record)
         if self.emblname is None:
             return
         embl_record = SeqIO.read(self.embl_filename, "embl")
@@ -1202,7 +1164,7 @@ class NC_005816(NC_000932):
             gb_record.features = [
                 f for f in gb_record.features if f.type != "misc_feature"
             ]
-        compare_record(gb_record, embl_record, expect_minor_diffs=True)
+        self.compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Features(self):
         """Checking GenBank features sequences vs FASTA ffn file."""
@@ -1212,107 +1174,118 @@ class NC_005816(NC_000932):
         self.assertEqual(len(fa_records), len(features))
         # This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features):
-            # TODO - check the FASTA ID line against the co-ordinates?
+            # TODO - check the FASTA ID line against the coordinates?
             f_seq = f.extract(gb_record.seq)
-            self.assertEqual(len(fa_record.seq), len(f_seq))
-            self.assertEqual(str(fa_record.seq), str(f_seq))
+            self.assertEqual(fa_record.seq, f_seq)
             self.assertEqual(len(f_seq), len(f))
 
 
-class TestWriteRead(unittest.TestCase):
+class TestWriteRead(SeqIOFeatureTestBaseClass):
     """Test can write and read back files."""
+
+    def write_read(self, filename, in_format="gb", out_formats=("gb", "embl", "imgt")):
+        for out_format in out_formats:
+            msg = f"Convert {filename} from {in_format} to {out_format}"
+            gb_records = list(SeqIO.parse(filename, in_format))
+            # Write it out...
+            handle = StringIO()
+            SeqIO.write(gb_records, handle, out_format)
+            handle.seek(0)
+            # Now load it back and check it agrees,
+            gb_records2 = list(SeqIO.parse(handle, out_format))
+            self.compare_records(gb_records, gb_records2, msg=msg)
 
     def test_NC_000932(self):
         """Write and read back NC_000932.gb."""
-        write_read(os.path.join("GenBank", "NC_000932.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "NC_000932.gb"), "gb")
 
     def test_NC_005816(self):
         """Write and read back NC_005816.gb."""
-        write_read(os.path.join("GenBank", "NC_005816.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "NC_005816.gb"), "gb")
 
     def test_gbvrl1_start(self):
         """Write and read back gbvrl1_start.seq."""
-        write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb")
+        self.write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb")
 
     def test_NT_019265(self):
         """Write and read back NT_019265.gb."""
-        write_read(os.path.join("GenBank", "NT_019265.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "NT_019265.gb"), "gb")
 
     def test_cor6(self):
         """Write and read back cor6_6.gb."""
-        write_read(os.path.join("GenBank", "cor6_6.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "cor6_6.gb"), "gb")
 
     def test_arab1(self):
         """Write and read back arab1.gb."""
-        write_read(os.path.join("GenBank", "arab1.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "arab1.gb"), "gb")
 
     def test_one_of(self):
         """Write and read back of_one.gb."""
-        write_read(os.path.join("GenBank", "one_of.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "one_of.gb"), "gb")
 
     def test_pri1(self):
         """Write and read back pri1.gb."""
-        write_read(os.path.join("GenBank", "pri1.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "pri1.gb"), "gb")
 
     def test_noref(self):
         """Write and read back noref.gb."""
-        write_read(os.path.join("GenBank", "noref.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "noref.gb"), "gb")
 
     def test_origin_line(self):
         """Write and read back origin_line.gb."""
-        write_read(os.path.join("GenBank", "origin_line.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "origin_line.gb"), "gb")
 
     def test_dbsource_wrap(self):
         """Write and read back dbsource_wrap.gb."""
-        write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
+        self.write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_blank_seq(self):
         """Write and read back blank_seq.gb."""
-        write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", ["gb"])
+        self.write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_extra_keywords(self):
         """Write and read back extra_keywords.gb."""
-        write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb")
+        self.write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb")
 
     def test_protein_refseq(self):
         """Write and read back protein_refseq.gb."""
-        write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", ["gb"])
+        self.write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_protein_refseq2(self):
         """Write and read back protein_refseq2.gb."""
-        write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", ["gb"])
+        self.write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_AAA03323(self):
         """Write and read back AAA03323.embl."""
-        write_read(os.path.join("EMBL", "AAA03323.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "AAA03323.embl"), "embl")
 
     def test_AE017046(self):
         """Write and read back AE017046.embl."""
-        write_read(os.path.join("EMBL", "AE017046.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "AE017046.embl"), "embl")
 
     def test_DD231055_edited(self):
         """Write and read back DD231055_edited.embl."""
-        write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl")
 
     def test_Human_contigs(self):
         """Write and read back Human_contigs.embl."""
-        write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl")
 
     def test_SC10H5(self):
         """Write and read back SC10H5.embl."""
-        write_read(os.path.join("EMBL", "SC10H5.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "SC10H5.embl"), "embl")
 
     def test_TRBG361(self):
         """Write and read back TRBG361.embl."""
-        write_read(os.path.join("EMBL", "TRBG361.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "TRBG361.embl"), "embl")
 
     def test_U87107(self):
         """Write and read back U87107.embl."""
-        write_read(os.path.join("EMBL", "U87107.embl"), "embl")
+        self.write_read(os.path.join("EMBL", "U87107.embl"), "embl")
 
 
 if __name__ == "__main__":

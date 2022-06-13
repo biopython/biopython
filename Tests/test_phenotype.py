@@ -75,9 +75,7 @@ class TestPhenoMicro(unittest.TestCase):
             # I want to see the output when called from the test harness,
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            raise ValueError(
-                "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-            ) from None
+            self.fail(f"{e}\n\n{handle.read()!r}\n\n{records!r}")
 
         self.assertEqual(p1, records[0])
 
@@ -132,8 +130,8 @@ class TestPhenoMicro(unittest.TestCase):
         p["A02"] = p["A02"]
         for w in p:
             pass
-        self.assertEqual("A01" in p, True)
-        self.assertEqual("test" in p, False)
+        self.assertIn("A01", p)
+        self.assertNotIn("test", p)
         self.assertRaises(ValueError, next, p.get_row("test"))
         self.assertEqual(next(p.get_row("A")), p["A01"])
         self.assertRaises(ValueError, next, p.get_column("test"))
@@ -256,13 +254,13 @@ class TestPhenoMicro(unittest.TestCase):
         )
 
         w.fit(None)
-        self.assertEqual(w.area, None)
-        self.assertEqual(w.model, None)
-        self.assertEqual(w.lag, None)
-        self.assertEqual(w.plateau, None)
-        self.assertEqual(w.slope, None)
-        self.assertEqual(w.v, None)
-        self.assertEqual(w.y0, None)
+        self.assertIsNone(w.area)
+        self.assertIsNone(w.model)
+        self.assertIsNone(w.lag)
+        self.assertIsNone(w.plateau)
+        self.assertIsNone(w.slope)
+        self.assertIsNone(w.v)
+        self.assertIsNone(w.y0)
         self.assertEqual(w.max, 313.0)
         self.assertEqual(w.min, 29.0)
         self.assertEqual(w.average_height, 217.82552083333334)
@@ -312,6 +310,22 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w2.get_signals()[-1], 107.0)
 
         w[1] = 1
+
+    def test_JsonIterator(self):
+        """Test basic functionalities of JsonIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO(
+            '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
+        )
+        for w in phenotype.phen_micro.JsonIterator(handle):
+            self.assertEqual(w.id, "PM999")
+
+    def test_CsvIterator(self):
+        """Test basic functionalities of CsvIterator file parser."""
+        # Parse file content big enough to trigger issue #3783
+        handle = StringIO('"Data File",3\n"Plate Type",PM-33\n')
+        for w in phenotype.phen_micro.CsvIterator(handle):
+            self.assertEqual(w.id, "PM33")
 
 
 if __name__ == "__main__":

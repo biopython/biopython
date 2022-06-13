@@ -40,20 +40,20 @@ class TestApp(unittest.TestCase):
     def test_echo_capture_stdout(self):
         cline = EchoApp(text="Hello World")
         stdout, stderr = cline(stdout=True, stderr=False)
-        self.assertEqual(stderr, None)
+        self.assertIsNone(stderr)
         self.assertEqual(stdout, "Hello World\n")
 
     def test_echo_capture_stderr(self):
         cline = EchoApp(text="Hello World")
         stdout, stderr = cline(stdout=False, stderr=True)
         self.assertEqual(stderr, "")
-        self.assertEqual(stdout, None)
+        self.assertIsNone(stdout)
 
     def test_echo_capture_neither(self):
         cline = EchoApp(text="Hello World")
         stdout, stderr = cline(stdout=False, stderr=False)
-        self.assertEqual(stderr, None)
-        self.assertEqual(stdout, None)
+        self.assertIsNone(stderr)
+        self.assertIsNone(stdout)
 
     def test_echo_file_stdout(self):
         cline = EchoApp(text="Hello World")
@@ -62,7 +62,7 @@ class TestApp(unittest.TestCase):
             os.remove(tmp)
         stdout, stderr = cline(stdout=tmp)
         self.assertEqual(stderr, "")
-        self.assertEqual(stdout, None)
+        self.assertIsNone(stdout)
         self.assertTrue(os.path.isfile(tmp))
         with open(tmp) as handle:
             contents = handle.read()
@@ -75,7 +75,7 @@ class TestApp(unittest.TestCase):
         if os.path.isfile(tmp):
             os.remove(tmp)
         stdout, stderr = cline(stderr=tmp)
-        self.assertEqual(stderr, None)
+        self.assertIsNone(stderr)
         self.assertEqual(stdout, "Hello World\n")
         self.assertTrue(os.path.isfile(tmp))
         with open(tmp) as handle:
@@ -89,8 +89,8 @@ class TestApp(unittest.TestCase):
         if os.path.isfile(tmp):
             os.remove(tmp)
         stdout, stderr = cline(stdout=tmp, stderr=tmp)
-        self.assertEqual(stderr, None)
-        self.assertEqual(stdout, None)
+        self.assertIsNone(stderr)
+        self.assertIsNone(stdout)
         self.assertTrue(os.path.isfile(tmp))
         with open(tmp) as handle:
             contents = handle.read()
@@ -106,8 +106,8 @@ class TestApp(unittest.TestCase):
         if os.path.isfile(tmp2):
             os.remove(tmp2)
         stdout, stderr = cline(stdout=tmp, stderr=tmp2)
-        self.assertEqual(stderr, None)
-        self.assertEqual(stdout, None)
+        self.assertIsNone(stderr)
+        self.assertIsNone(stdout)
         self.assertTrue(os.path.isfile(tmp), tmp)
         with open(tmp) as handle:
             contents = handle.read()

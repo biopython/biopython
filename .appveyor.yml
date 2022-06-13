@@ -36,14 +36,8 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-# Pinning pillow==5.4.1 as version 6 breaks on current latest reportlab
-# https://bitbucket.org/rptlab/reportlab/issues/176/incompatibility-with-pillow-600
-  - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
-
-# Pinning mysql-connector-python==8.0.13 for Python 3 as 8.0.16 breaks our tests
-# https://github.com/biopython/biopython/issues/2120
-  - conda install mysql-connector-python==8.0.13
-  - python setup.py build
+  - python -m pip install --upgrade coverage setuptools numpy
+  - python -m pip install .
 
 test_script:
   - python -c "import sys; print(sys.version)"

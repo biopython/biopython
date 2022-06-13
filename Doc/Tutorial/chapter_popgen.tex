@@ -9,7 +9,7 @@ support widely used data formats, applications and databases.
 
 GenePop (\url{http://genepop.curtin.edu.au/}) is a popular population
 genetics software package supporting Hardy-Weinberg tests, linkage
-desiquilibrium, population diferentiation, basic statistics, $F_{st}$ and
+disequilibrium, population differentiation, basic statistics, $F_{st}$ and
 migration estimates, among others. GenePop does not supply sequence
 based statistics as it doesn't handle sequence data.
 The GenePop file format is supported by a wide range of other population
@@ -46,7 +46,9 @@ rec.populations:
         ("Ind1", [(1, 2), (3, 3), (200, 201)]),
         ("Ind2", [(2, None), (3, 3), (None, None)]),
     ],
-    [("Other1", [(1, 1), (4, 3), (200, 200)]),],
+    [
+        ("Other1", [(1, 1), (4, 3), (200, 200)]),
+    ],
 ]
 \end{minted}
 

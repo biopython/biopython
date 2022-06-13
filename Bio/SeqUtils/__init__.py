@@ -13,8 +13,7 @@
 import re
 from math import pi, sin, cos
 
-from Bio.Seq import Seq, MutableSeq
-from Bio import Alphabet
+from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
 
 
@@ -135,7 +134,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text="GC %3.2f%%" % (GC(seq)))
+    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -183,7 +182,7 @@ def nt_search(seq, subseq):
         if len(value) == 1:
             pattern += value
         else:
-            pattern += "[%s]" % value
+            pattern += f"[{value}]"
 
     pos = -1
     result = [pattern]
@@ -315,7 +314,7 @@ def seq1(seq, custom_map=None, undef_code="X"):
 
 
 def molecular_weight(
-    seq, seq_type=None, double_stranded=False, circular=False, monoisotopic=False
+    seq, seq_type="DNA", double_stranded=False, circular=False, monoisotopic=False
 ):
     """Calculate the molecular mass of DNA, RNA or protein sequences as float.
 
@@ -324,16 +323,11 @@ def molecular_weight(
 
     Arguments:
      - seq: String or Biopython sequence object.
-     - seq_type: The default (None) is to take the alphabet from the seq
-       argument, or assume DNA if the seq argument is a string. Override this
-       with a string 'DNA', 'RNA', or 'protein'.
+     - seq_type: The default is to assume DNA; override this with a string
+       "DNA", "RNA", or "protein".
      - double_stranded: Calculate the mass for the double stranded molecule?
      - circular: Is the molecule circular (has no ends)?
      - monoisotopic: Use the monoisotopic mass tables?
-
-    Note that for backwards compatibility, if the seq argument is a string,
-    or Seq object with a generic alphabet, and no seq_type is specified
-    (i.e. left as None), then DNA is assumed.
 
     >>> print("%0.2f" % molecular_weight("AGC"))
     949.61
@@ -349,60 +343,8 @@ def molecular_weight(
     >>> print("%0.2f" % molecular_weight("AGC", "protein"))
     249.29
 
-    Or, with the sequence alphabet:
-
-    >>> from Bio.Seq import Seq
-    >>> from Bio.Alphabet import generic_dna, generic_rna, generic_protein
-    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_dna)))
-    949.61
-    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_rna)))
-    997.61
-    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_protein)))
-    249.29
-
-    Also note that contradictory sequence alphabets and seq_type will also
-    give an exception:
-
-    >>> from Bio.Seq import Seq
-    >>> from Bio.Alphabet import generic_dna
-    >>> print("%0.2f" % molecular_weight(Seq("AGC", generic_dna), "RNA"))
-    Traceback (most recent call last):
-      ...
-    ValueError: seq_type='RNA' contradicts DNA from seq alphabet
-
     """
     # Rewritten by Markus Piotrowski, 2014
-
-    # Find the alphabet type
-    tmp_type = ""
-    if isinstance(seq, (Seq, MutableSeq)):
-        base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
-        if isinstance(base_alphabet, Alphabet.DNAAlphabet):
-            tmp_type = "DNA"
-        elif isinstance(base_alphabet, Alphabet.RNAAlphabet):
-            tmp_type = "RNA"
-        elif isinstance(base_alphabet, Alphabet.ProteinAlphabet):
-            tmp_type = "protein"
-        elif isinstance(base_alphabet, Alphabet.ThreeLetterProtein):
-            tmp_type = "protein"
-            # Convert to one-letter sequence. Have to use a string for seq1
-            seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
-        elif not isinstance(base_alphabet, Alphabet.Alphabet):
-            raise TypeError(
-                "%s is not a valid alphabet for mass calculations" % base_alphabet
-            )
-        else:
-            tmp_type = "DNA"  # backward compatibity
-        if seq_type and tmp_type and tmp_type != seq_type:
-            raise ValueError(
-                "seq_type=%r contradicts %s from seq alphabet" % (seq_type, tmp_type)
-            )
-        seq_type = tmp_type
-    elif isinstance(seq, str):
-        if seq_type is None:
-            seq_type = "DNA"  # backward compatibity
-    else:
-        raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
     seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
 
@@ -422,7 +364,7 @@ def molecular_weight(
         else:
             weight_table = IUPACData.protein_weights
     else:
-        raise ValueError("Allowed seq_types are DNA, RNA or protein, not %r" % seq_type)
+        raise ValueError(f"Allowed seq_types are DNA, RNA or protein, not {seq_type!r}")
 
     if monoisotopic:
         water = 18.010565
@@ -435,16 +377,19 @@ def molecular_weight(
             weight -= water
     except KeyError as e:
         raise ValueError(
-            "%s is not a valid unambiguous letter for %s" % (e, seq_type)
+            f"{e} is not a valid unambiguous letter for {seq_type}"
         ) from None
 
-    if seq_type in ("DNA", "RNA") and double_stranded:
-        seq = str(Seq(seq).complement())
+    if double_stranded:
+        if seq_type == "protein":
+            raise ValueError("protein sequences cannot be double-stranded")
+        elif seq_type == "DNA":
+            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+        elif seq_type == "RNA":
+            seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
-    elif seq_type == "protein" and double_stranded:
-        raise ValueError("double-stranded proteins await their discovery")
 
     return weight
 
@@ -457,7 +402,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
-    GC_Frame: a:5 t:0 g:8 c:5 
+    GC_Frame: a:5 t:0 g:8 c:5
     Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
     <BLANKLINE>
     <BLANKLINE>
@@ -467,16 +412,19 @@ def six_frame_translations(seq, genetic_code=1):
     M  A  I  V  M  G  R  *
     auggccauuguaaugggccgcuga   54 %
     uaccgguaacauuacccggcgacu
-    A  M  T  I  P  R  Q 
+    A  M  T  I  P  R  Q
      H  G  N  Y  H  A  A  S
       P  W  Q  L  P  G  S
     <BLANKLINE>
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, translate
+    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
-    anti = reverse_complement(seq)
+    if "u" in seq.lower():
+        anti = reverse_complement_rna(seq)
+    else:
+        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
     comp = anti[::-1]
     length = len(seq)
     frames = {}
@@ -487,12 +435,12 @@ def six_frame_translations(seq, genetic_code=1):
 
     # create header
     if length > 20:
-        short = "%s ... %s" % (seq[:10], seq[-10:])
+        short = f"{seq[:10]} ... {seq[-10:]}"
     else:
         short = seq
-    header = "GC_Frame: "
+    header = "GC_Frame:"
     for nt in ["a", "t", "g", "c"]:
-        header += "%s:%d " % (nt, seq.count(nt.upper()))
+        header += " %s:%d" % (nt, seq.count(nt.upper()))
 
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
@@ -513,7 +461,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
         res += csubseq.lower() + "\n"
         # - frames
-        res += "  ".join(frames[-2][p : p + 20]) + " \n"
+        res += "  ".join(frames[-2][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res

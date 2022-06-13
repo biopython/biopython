@@ -863,13 +863,13 @@ class BlastTabWriter:
         except AttributeError:
             program_line = "# %s" % program
         else:
-            program_line = "# %s %s" % (program, version)
+            program_line = f"# {program} {version}"
         comments.append(program_line)
         # description may or may not be None
         if qres.description is None:
             comments.append("# Query: %s" % qres.id)
         else:
-            comments.append("# Query: %s %s" % (qres.id, qres.description))
+            comments.append(f"# Query: {qres.id} {qres.description}")
         # try appending RID line, if present
         try:
             comments.append("# RID: %s" % qres.rid)

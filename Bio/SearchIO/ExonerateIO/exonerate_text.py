@@ -9,8 +9,6 @@ import re
 from itertools import chain
 
 
-from Bio.Alphabet import generic_protein
-
 from ._base import (
     _BaseExonerateParser,
     _BaseExonerateIndexer,
@@ -29,7 +27,7 @@ _RE_ALN_ROW = re.compile(r"\s*\d+\s+: (.*) :\s+\d+")
 # for splitting the line based on intron annotations
 # e.g. '  >>>> Target Intron 1 >>>>  ' or 'gt.........................ag'
 _RE_EXON = re.compile(
-    r"[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?"
+    r"[atgc ]{2}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2}?"
 )
 # captures the intron length
 # from e.g. '61 bp // 154295 bp' (joint intron lengths) or '177446 bp'
@@ -367,14 +365,14 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp["query"] = [x["query"] for x in seq_blocks]
         hsp["hit"] = [x["hit"] for x in seq_blocks]
         hsp["aln_annotation"] = {}
-        # set the alphabet
+        # set the molecule type
         # currently only limited to models with protein queries
         if (
             "protein2" in qresult["model"]
             or "coding2" in qresult["model"]
             or "2protein" in qresult["model"]
         ):
-            hsp["alphabet"] = generic_protein
+            hsp["molecule_type"] = "protein"
         # get the annotations if they exist
         for annot_type in ("similarity", "query_annotation", "hit_annotation"):
             try:
@@ -446,7 +444,7 @@ class ExonerateTextParser(_BaseExonerateParser):
     def _read_alignment(self):
         """Read the raw alignment block strings, returns them in a list (PRIVATE)."""
         raw_aln_blocks = []
-        # flag to check whether we're in an aligment row
+        # flag to check whether we're in an alignment row
         in_aln_row = False
         # flag for vulgar line, if present, we can parse coordinates from it
         vulgar_comp = None

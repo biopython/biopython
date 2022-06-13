@@ -14,13 +14,7 @@ from math import log
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_dna, _ungap
-
-from Bio.codonalign.codonalphabet import (
-    CodonAlphabet,
-    default_codon_alphabet,
-    default_codon_table,
-)
+from Bio.Data import CodonTable
 
 
 class CodonSeq(Seq):
@@ -57,9 +51,7 @@ class CodonSeq(Seq):
 
     """
 
-    def __init__(
-        self, data="", alphabet=default_codon_alphabet, gap_char="-", rf_table=None
-    ):
+    def __init__(self, data="", gap_char="-", rf_table=None):
         """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -73,31 +65,20 @@ class CodonSeq(Seq):
         #   feature ensures the rf_table is independent of where the
         #   codon sequence appears in the alignment
 
-        Seq.__init__(self, data.upper(), alphabet=alphabet)
+        Seq.__init__(self, data.upper())
         self.gap_char = gap_char
 
-        if not isinstance(alphabet, CodonAlphabet):
-            raise TypeError("Input alphabet should be a CodonAlphabet object.")
         # check the length of the alignment to be a triple
         if rf_table is None:
-            seq_ungapped = self._data.replace(gap_char, "")
-            if len(self) % 3 != 0:
+            length = len(self)
+            if length % 3 != 0:
                 raise ValueError(
                     "Sequence length is not a multiple of "
                     "three (i.e. a whole number of codons)"
                 )
-            self.rf_table = list(filter(lambda x: x % 3 == 0, range(len(seq_ungapped))))
-            # check alphabet
-            # Not use Alphabet._verify_alphabet function because it
-            # only works for single alphabet
-            for i in self.rf_table:
-                if self._data[i : i + 3] not in alphabet.letters:
-                    raise ValueError(
-                        "Sequence contain codon not in the alphabet"
-                        f" ({self._data[i:i + 3]})!"
-                    )
+            self.rf_table = list(range(0, length - self.count(gap_char), 3))
         else:
-            # if gap_char in self._data:
+            # if gap_char in self:
             #    assert  len(self) % 3 == 0, \
             #            "Gapped sequence length is not a triple number"
             if not isinstance(rf_table, (tuple, list)):
@@ -108,18 +89,7 @@ class CodonSeq(Seq):
                     "that specify the codon positions of "
                     "the sequence"
                 )
-            seq_ungapped = self._data.replace(gap_char, "")
-            for i in rf_table:
-                if seq_ungapped[i : i + 3] not in alphabet.letters:
-                    raise ValueError(
-                        "Sequence contain undefined letters from alphabet"
-                        f" ({seq_ungapped[i:i + 3]})!"
-                    )
             self.rf_table = rf_table
-
-    def __getitem__(self, index):
-        # TODO: handle alphabet elegantly
-        return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
         """Get the index codon from the sequence."""
@@ -130,9 +100,9 @@ class CodonSeq(Seq):
             )
         if isinstance(index, int):
             if index != -1:
-                return self._data[index * 3 : (index + 1) * 3]
+                return str(self[index * 3 : (index + 1) * 3])
             else:
-                return self._data[index * 3 :]
+                return str(self[index * 3 :])
         else:
             # This slice ensures that codon will always be the unit
             # in slicing (it won't change to other codon if you are
@@ -146,22 +116,18 @@ class CodonSeq(Seq):
                 aa_slice = aa_index[p]
                 codon_slice = ""
                 for i in aa_slice:
-                    codon_slice += self._data[i * 3 : i * 3 + 3]
-                return codon_slice
+                    codon_slice += self[i * 3 : i * 3 + 3]
+                return str(codon_slice)
 
             codon_slice = cslice(index)
-            return CodonSeq(codon_slice, alphabet=self.alphabet)
+            return CodonSeq(codon_slice)
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq."""
         return len(self.rf_table)
 
     def translate(
-        self,
-        codon_table=default_codon_table,
-        stop_symbol="*",
-        rf_table=None,
-        ungap_seq=True,
+        self, codon_table=None, stop_symbol="*", rf_table=None, ungap_seq=True
     ):
         """Translate the CodonSeq based on the reading frame in rf_table.
 
@@ -171,11 +137,13 @@ class CodonSeq(Seq):
         way. ungap_seq should be set to true for this
         purpose.
         """
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         amino_acids = []
         if ungap_seq:
-            tr_seq = self._data.replace(self.gap_char, "")
+            tr_seq = str(self).replace(self.gap_char, "")
         else:
-            tr_seq = self._data
+            tr_seq = str(self)
         if rf_table is None:
             rf_table = self.rf_table
         p = -1  # initiation
@@ -210,9 +178,9 @@ class CodonSeq(Seq):
                 )
         return "".join(amino_acids)
 
-    def toSeq(self, alphabet=generic_dna):
+    def toSeq(self):
         """Convert DNA to seq object."""
-        return Seq(self._data, generic_dna)
+        return Seq(str(self))
 
     def get_full_rf_table(self):
         """Return full rf_table of the CodonSeq records.
@@ -221,22 +189,21 @@ class CodonSeq(Seq):
         it translate gaps in CodonSeq. It is helpful to construct
         alignment containing frameshift.
         """
-        ungap_seq = self._data.replace("-", "")
-        codon_lst = [ungap_seq[i : i + 3] for i in self.rf_table]
+        ungap_seq = str(self).replace("-", "")
         relative_pos = [self.rf_table[0]]
         for i in range(1, len(self.rf_table[1:]) + 1):
             relative_pos.append(self.rf_table[i] - self.rf_table[i - 1])
         full_rf_table = []
         codon_num = 0
-        for i in filter(lambda x: x % 3 == 0, range(len(self._data))):
-            if self._data[i : i + 3] == self.gap_char * 3:
+        for i in range(0, len(self), 3):
+            if self[i : i + 3] == self.gap_char * 3:
                 full_rf_table.append(i + 0.0)
             elif relative_pos[codon_num] == 0:
                 full_rf_table.append(i)
                 codon_num += 1
             elif relative_pos[codon_num] in (-1, -2):
                 # check the gap status of previous codon
-                gap_stat = len(self._data[i - 3 : i].replace("-", ""))
+                gap_stat = 3 - self.count("-", i - 3, i)
                 if gap_stat == 3:
                     full_rf_table.append(i + relative_pos[codon_num])
                 elif gap_stat == 2:
@@ -247,15 +214,17 @@ class CodonSeq(Seq):
             elif relative_pos[codon_num] > 0:
                 full_rf_table.append(i + 0.0)
             try:
-                this_len = len(self._data[i : i + 3].replace("-", ""))
+                this_len = 3 - self.count("-", i, i + 3)
                 relative_pos[codon_num] -= this_len
             except Exception:  # TODO: IndexError?
                 # we probably reached the last codon
                 pass
         return full_rf_table
 
-    def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
+    def full_translate(self, codon_table=None, stop_symbol="*"):
         """Apply full translation with gaps considered."""
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         full_rf_table = self.get_full_rf_table()
         return self.translate(
             codon_table=codon_table,
@@ -264,32 +233,19 @@ class CodonSeq(Seq):
             ungap_seq=False,
         )
 
-    def ungap(self, gap=None):
+    def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
-        if hasattr(self.alphabet, "gap_char"):
-            if not gap:
-                gap = self.alphabet.gap_char
-            elif gap != self.alphabet.gap_char:
-                raise ValueError(
-                    "Gap %s does not match %s from alphabet"
-                    % (repr(gap), repr(self.alphabet.alphabet.gap_char))
-                )
-            alpha = _ungap(self.alphabet)
-        elif not gap:
-            raise ValueError("Gap character not given and not defined in alphabet")
-        else:
-            alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, %s" % repr(gap))
-        return CodonSeq(str(self._data).replace(gap, ""), alpha, rf_table=self.rf_table)
+            raise ValueError(f"Unexpected gap character, {repr(gap)}")
+        return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
-    def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
+    def from_seq(cls, seq, rf_table=None):
         """Get codon sequence from sequence data."""
         if rf_table is None:
-            return cls(seq._data, alphabet=alphabet)
+            return cls(str(seq))
         else:
-            return cls(seq._data, alphabet=alphabet, rf_table=rf_table)
+            return cls(str(seq), rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):
@@ -320,14 +276,7 @@ def _get_codon_list(codonseq):
     return codon_lst
 
 
-def cal_dn_ds(
-    codon_seq1,
-    codon_seq2,
-    method="NG86",
-    codon_table=default_codon_table,
-    k=1,
-    cfreq=None,
-):
+def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None):
     """Calculate dN and dS of the given two sequences.
 
     Available methods:
@@ -377,6 +326,8 @@ def cal_dn_ds(
             "Only F1x4, F3x4 and F61 are acceptable. Used F3x4 in the following."
         )
         cfreq = "F3x4"
+    if codon_table is None:
+        codon_table = CodonTable.generic_by_id[1]
     seq1_codon_lst = _get_codon_list(codon_seq1)
     seq2_codon_lst = _get_codon_list(codon_seq2)
     # remove gaps in seq_codon_lst
@@ -423,7 +374,7 @@ def _ng86(seq1, seq2, k, codon_table):
     return dN, dS
 
 
-def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
+def _count_site_NG86(codon_lst, codon_table, k=1):
     """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
@@ -485,7 +436,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
     return (S_site, N_site)
 
 
-def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
+def _count_diff_NG86(codon1, codon2, codon_table):
     """Count differences between two codons, three-letter string (PRIVATE).
 
     The function will take multiple pathways from codon1 to codon2
@@ -523,7 +474,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
             if k[0] != k[1]:
                 diff_pos.append(i)
 
-        def compare_codon(codon1, codon2, codon_table=default_codon_table, weight=1):
+        def compare_codon(codon1, codon2, codon_table, weight=1):
             """Compare two codon accounting for different pathways."""
             sd = nd = 0
             if len(set(map(codon_table.forward_table.get, [codon1, codon2]))) == 1:
@@ -540,7 +491,6 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                 )
             ]
         elif len(diff_pos) == 2:
-            codon2_aa = codon_table.forward_table[codon2]
             for i in diff_pos:
                 temp_codon = codon1[:i] + codon2[i] + codon1[i + 1 :]
                 SN = [
@@ -562,7 +512,6 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                     )
                 ]
         elif len(diff_pos) == 3:
-            codon2_aa = codon_table.forward_table[codon2]
             paths = list(permutations([0, 1, 2], 3))
             tmp_codon = []
             for p in paths:
@@ -812,7 +761,6 @@ def _yn00(seq1, seq2, k, codon_table):
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q * t)
         TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transversion
-        sites = [0, 0]
         codon_npath = {}
         for i, j in zip(seq1, seq2):
             if i != "---" and j != "---":
@@ -831,14 +779,12 @@ def _yn00(seq1, seq2, k, codon_table):
             S_sites + N_sites
         )
         w = dSdN[1] / dSdN[0]
-        if all(
-            map(lambda x: x < tolerance, (abs(i - j) for i, j in zip(dSdN, dSdN_pre)))
-        ):
+        if all(abs(i - j) < tolerance for i, j in zip(dSdN, dSdN_pre)):
             return dSdN[1], dSdN[0]  # dN, dS
         dSdN_pre = dSdN
 
 
-def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
+def _get_TV(codon_lst1, codon_lst2, codon_table):
     """Get TV (PRIVATE).
 
     Arguments:
@@ -901,7 +847,7 @@ def _get_kappa_t(pi, TV, t=False):
         return t
 
 
-def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table=default_codon_table):
+def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table):
     """Site counting method from Ina / Yang and Nielsen (PRIVATE).
 
     Method from `Ina (1995)`_ as modified by `Yang and Nielsen (2000)`_.
@@ -968,7 +914,7 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table=default_codon_ta
     return S_sites, N_sites, freqSN
 
 
-def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_table):
+def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table):
     """Count differences between two codons (three-letter string; PRIVATE).
 
     The function will weighted multiple pathways from codon1 to codon2
@@ -992,7 +938,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
         0,
         0,
     ]  # transition and transversion counts (synonymous and nonsynonymous)
-    site = 0
     if codon1 == "---" or codon2 == "---":
         return TV
     base_tuple = ("A", "C", "G", "T")
@@ -1043,13 +988,11 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                     return [0, 0, 0, weight]
 
         if len(diff_pos) == 1:
-            prob = 1
             TV = [
                 p + q
                 for p, q in zip(TV, count_TV(codon1, codon2, diff_pos[0], codon_table))
             ]
         elif len(diff_pos) == 2:
-            codon2_aa = codon_table.forward_table[codon2]
             tmp_codon = [codon1[:i] + codon2[i] + codon1[i + 1 :] for i in diff_pos]
             path_prob = []
             for i in tmp_codon:
@@ -1078,7 +1021,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                     )
                 ]
         elif len(diff_pos) == 3:
-            codon2_aa = codon_table.forward_table[codon2]
             paths = list(permutations([0, 1, 2], 3))
             path_prob = []
             tmp_codon = []
@@ -1113,12 +1055,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                         TV, count_TV(i[1], codon2, k[1], codon_table, weight=j / 3)
                     )
                 ]
-        if codon1 in codon_table.stop_codons or codon2 in codon_table.stop_codons:
-            site = [0, 3]
-        elif codon_table.forward_table[codon1] == codon_table.forward_table[codon2]:
-            site = [3, 0]
-        else:
-            site = [0, 3]
     return TV
 
 
@@ -1185,15 +1121,31 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     pass
     Sd *= t
     Nd *= t
+
     # count differences (with w fixed to 1)
+    def func_w1(
+        params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst, codon_table=codon_table
+    ):
+        """Temporary function, params = [t, k]. w is fixed to 1."""
+        return -_likelihood_func(
+            params[0],
+            params[1],
+            1.0,
+            pi,
+            codon_cnt,
+            codon_lst=codon_lst,
+            codon_table=codon_table,
+        )
+
     opt_res = minimize(
-        func,
-        [1, 0.1, 2],
+        func_w1,
+        [1, 0.1],
         method="L-BFGS-B",
-        bounds=((1e-10, 20), (1e-10, 20), (1, 1)),
+        bounds=((1e-10, 20), (1e-10, 20)),
         tol=1e-5,
     )
-    t, k, w = opt_res.x
+    t, k = opt_res.x
+    w = 1.0
     Q = _get_Q(pi, k, w, codon_lst, codon_table)
     rhoS = rhoN = 0
     for i, c1 in enumerate(codon_lst):
@@ -1216,7 +1168,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     return dN, dS
 
 
-def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
+def _get_pi(seq1, seq2, cmethod, codon_table):
     """Obtain codon frequency dict (pi) from two codon list (PRIVATE).
 
     This function is designed for ML method. Available counting methods
@@ -1267,7 +1219,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
     return pi
 
 
-def _q(i, j, pi, k, w, codon_table=default_codon_table):
+def _q(i, j, pi, k, w, codon_table):
     """Q matrix for codon substitution (PRIVATE).
 
     Arguments:

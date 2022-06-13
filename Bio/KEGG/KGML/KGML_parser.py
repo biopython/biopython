@@ -106,7 +106,7 @@ class KGMLParser:
 
     def parse(self):
         """Parse the input elements."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)
@@ -115,7 +115,7 @@ class KGMLParser:
             new_entry = Entry()
             for k, v in element.attrib.items():
                 new_entry.__setattr__(k, v)
-            for subelement in element.getchildren():
+            for subelement in element:
                 if subelement.tag == "graphics":
                     _parse_graphics(subelement, new_entry)
                 elif subelement.tag == "component":
@@ -138,7 +138,7 @@ class KGMLParser:
             new_reaction = Reaction()
             for k, v in element.attrib.items():
                 new_reaction.__setattr__(k, v)
-            for subelement in element.getchildren():
+            for subelement in element:
                 if subelement.tag == "substrate":
                     new_reaction.add_substrate(int(subelement.attrib["id"]))
                 elif subelement.tag == "product":
@@ -150,7 +150,7 @@ class KGMLParser:
             new_relation.entry1 = int(element.attrib["entry1"])
             new_relation.entry2 = int(element.attrib["entry2"])
             new_relation.type = element.attrib["type"]
-            for subtype in element.getchildren():
+            for subtype in element:
                 name, value = subtype.attrib["name"], subtype.attrib["value"]
                 if name in ("compound", "hidden compound"):
                     new_relation.subtypes.append((name, int(value)))
@@ -163,7 +163,7 @@ class KGMLParser:
         self.pathway = Pathway()
         # Get information about the pathway itself
         _parse_pathway(self.entry.attrib)
-        for element in self.entry.getchildren():
+        for element in self.entry:
             if element.tag == "entry":
                 _parse_entry(element)
             elif element.tag == "reaction":
@@ -177,7 +177,7 @@ class KGMLParser:
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(
-                    "Warning: tag %s not implemented in parser" % element.tag,
+                    f"Warning: tag {element.tag} not implemented in parser",
                     BiopythonParserWarning,
                 )
         return self.pathway

@@ -1,0 +1,9 @@
+Command line: [exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no]
+Hostname: [blackbriar]
+cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 560077 560974 + 4485  M 897
+cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 492933 492033 - 941  M 4 I 2 M 21 I 1 M 51 I 2 M 6 I 3 M 11 I 3 M 1 I 1 M 26 I 3 M 102 I 1 M 1 I 1 M 1 I 1 M 55 D 3 M 5 I 2 M 7 D 1 M 4 D 1 M 9 I 1 M 3 D 1 M 2 D 2 M 2 D 3 M 3 D 1 M 22 D 1 M 9 I 1 M 68 D 1 M 3 I 1 M 174 I 1 M 8 D 1 M 154 D 3 M 8 D 1 M 4 D 2 M 9 D 2 M 1 D 1 M 5 D 6 M 53 D 1 M 14 I 1 M 23
+cigar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 267809 300717 + 651  M 34 I 1 M 8 I 1 M 1 I 2 M 7 D 4 M 4 I 2 M 3 I 3 M 10 I 3 M 28 I 1 M 34 I 1 M 6 D 2 M 10 D 1 M 14 D 1 M 15 I 1 M 12 I 1 M 1 I 1 M 3 I 3 M 28 I 8 M 3 I 2 M 21 I 2 M 7 D 4 M 2 D 2 M 6 D 3 M 13 D 2 M 4 D 1 M 11 I 5 M 6 I 2 M 12 D 1 M 52 I 1 M 7 D 1 M 55 D 1 M 7 I 3 M 13 D 2 M 100 D 1 M 6 I 1 M 40 I 2 M 6 D 2 M 22 D 32238 M 12 D 1 M 18
+cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150  M 1230
+cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85010 473201 + 439  M 11 I 1 M 15 I 2 M 4 I 1 M 1 I 1 M 8 I 4 M 17 D 168908 M 4 D 1 M 8 I 1 M 3 I 2 M 33 D 1 M 7 D 2 M 102 D 96824 M 14 D 2 M 10 I 2 M 5 D 2 M 10 I 2 M 4 D 1 M 20 I 1 M 15 D 1 M 5 I 3 M 4 D 122118 M 20 D 5 M 6
+cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 130198 11338 - 263  M 14 D 1 M 4 I 2 M 25 D 1 M 9 D 6 M 42 I 2 M 16 D 2 M 7 D 1 M 3 I 2 M 23 I 3 M 6 D 9357 M 1 I 1 M 11 D 1 M 12 I 1 M 9 D 1 M 10 I 1 M 18 D 1 M 5 D 109125 M 16 I 4 M 4 I 1 M 11 I 5 M 8 I 1 M 22 D 2 M 4 D 2 M 34 D 1 M 3 D 1 M 41
+-- completed exonerate analysis

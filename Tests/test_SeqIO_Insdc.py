@@ -2,21 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO Insdc module."""
-
 import unittest
+
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO._convert import _converter
-
-
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOConverterTestBaseClass
 
 
@@ -67,7 +63,8 @@ class TestEmbl(unittest.TestCase):
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
-        record = SeqRecord(Seq("A" * 100, generic_dna), "dummy", features=[f])
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
         gbk = record.format("gb")
         self.assertIn(" /empty\n", gbk)
         self.assertIn(" /zero=0\n", gbk)
@@ -75,7 +72,7 @@ class TestEmbl(unittest.TestCase):
         self.assertIn(' /text="blah"\n', gbk)
 
 
-class TestEmblRewrite(unittest.TestCase):
+class TestEmblRewrite(SeqRecordTestBaseClass):
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
@@ -89,7 +86,7 @@ class TestEmblRewrite(unittest.TestCase):
         buffer.seek(0)
         new = SeqIO.read(buffer, "embl")
 
-        self.assertTrue(compare_record(old, new))
+        self.compare_record(old, new)
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""
@@ -105,20 +102,19 @@ class TestEmblRewrite(unittest.TestCase):
 
 
 class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
-
     def test_conversion(self):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         tests = [
-            ("EMBL/U87107.embl", "embl", None),
-            ("EMBL/TRBG361.embl", "embl", None),
-            ("GenBank/NC_005816.gb", "gb", None),
-            ("GenBank/cor6_6.gb", "genbank", None),
+            ("EMBL/U87107.embl", "embl"),
+            ("EMBL/TRBG361.embl", "embl"),
+            ("GenBank/NC_005816.gb", "gb"),
+            ("GenBank/cor6_6.gb", "genbank"),
         ]
-        for filename, fmt, alphabet in tests:
-            for (in_format, out_format) in _converter:
+        for filename, fmt in tests:
+            for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
-                self.check_conversion(filename, in_format, out_format, alphabet)
+                self.check_conversion(filename, in_format, out_format)
 
 
 if __name__ == "__main__":

@@ -10,11 +10,8 @@ You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
-
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
 
 
@@ -62,25 +59,13 @@ def AceIterator(source):
     for ace_contig in Ace.parse(source):
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
-        # Assume its DNA unless there is a U in it,
-        if "U" in consensus_seq_str:
-            if "T" in consensus_seq_str:
-                # Very odd! Error?
-                alpha = generic_nucleotide
-            else:
-                alpha = generic_rna
-        else:
-            alpha = generic_dna
-
         if "*" in consensus_seq_str:
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(
-                consensus_seq_str.replace("*", "-"), Gapped(alpha, gap_char="-")
-            )
+            consensus_seq = Seq(consensus_seq_str.replace("*", "-"))
         else:
-            consensus_seq = Seq(consensus_seq_str, alpha)
+            consensus_seq = Seq(consensus_seq_str)
 
         # TODO? - Base segments (BS lines) which indicates which read
         # phrap has chosen to be the consensus at a particular position.

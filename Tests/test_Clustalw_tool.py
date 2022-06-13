@@ -47,11 +47,16 @@ if sys.platform == "win32":
     # One particular case is www.tc.cornell.edu currently provide a
     # clustalw1.83 installer which uses the following long location:
     # C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
-    likely_dirs = ["ClustalW2", "",
-                   "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
-                   r"CTCBioApps\clustalw\v1.83"]
-    likely_exes = ["clustalw2.exe",
-                   "clustalw.exe", "clustalw1.83.exe"]
+    likely_dirs = [
+        "ClustalW2",
+        "",
+        "Clustal",
+        "Clustalw",
+        "Clustalw183",
+        "Clustalw1.83",
+        r"CTCBioApps\clustalw\v1.83",
+    ]
+    likely_exes = ["clustalw2.exe", "clustalw.exe", "clustalw1.83.exe"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
@@ -62,6 +67,7 @@ if sys.platform == "win32":
                 break
 else:
     from subprocess import getoutput
+
     # Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     # command, but this does cause them to quit cleanly.  Otherwise they prompt
     # the user for input (causing a lock up).
@@ -79,7 +85,8 @@ else:
 
 if not clustalw_exe:
     raise MissingExternalDependencyError(
-        "Install clustalw or clustalw2 if you want to use it from Biopython.")
+        "Install clustalw or clustalw2 if you want to use it from Biopython."
+    )
 
 
 class ClustalWTestCase(unittest.TestCase):
@@ -95,9 +102,10 @@ class ClustalWTestCase(unittest.TestCase):
 
     def standard_test_procedure(self, cline):
         """Shared test procedure used by all tests."""
-        self.assertTrue(str(eval(repr(cline))) == str(cline))
-        input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
-                                      lambda rec: rec.id.replace(":", "_"))  # noqa: E731
+        self.assertEqual(str(eval(repr(cline))), str(cline))
+        input_records = SeqIO.to_dict(
+            SeqIO.parse(cline.infile, "fasta"), lambda rec: rec.id.replace(":", "_")
+        )  # noqa: E731
 
         # Determine name of tree file
         if cline.newtree:
@@ -112,19 +120,19 @@ class ClustalWTestCase(unittest.TestCase):
 
         output, error = cline()
         self.assertTrue(output.strip().startswith("CLUSTAL"))
-        self.assertTrue(error.strip() == "")
+        self.assertEqual(error.strip(), "")
 
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         # The length of the alignment will depend on the version of clustalw
         # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
+        self.assertCountEqual(input_records.keys(), output_records.keys())
         for record in align:
-            self.assertEqual(str(record.seq),
-                             str(output_records[record.id].seq))
-            self.assertEqual(str(record.seq).replace("-", ""),
-                             str(input_records[record.id].seq))
+            self.assertEqual(record.seq, output_records[record.id].seq)
+            self.assertEqual(
+                str(record.seq).replace("-", ""), input_records[record.id].seq
+            )
 
         # Check the DND file was created.
         # TODO - Try and parse this with Bio.Nexus?
@@ -147,9 +155,13 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("Cannot open sequence file" in str(err) or
-                            "Cannot open input file" in str(err) or
-                            "Non-zero return code " in str(err), str(err))
+            message = str(err)
+            self.assertTrue(
+                "Cannot open sequence file" in message
+                or "Cannot open input file" in message
+                or "Non-zero return code " in message,
+                message,
+            )
         else:
             self.fail("expected an ApplicationError")
 
@@ -157,7 +169,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         """Test an input file containing a single sequence."""
         input_file = "Fasta/f001"
         self.assertTrue(os.path.isfile(input_file))
-        self.assertTrue(len(list(SeqIO.parse(input_file, "fasta"))) == 1)
+        self.assertEqual(len(list(SeqIO.parse(input_file, "fasta"))), 1)
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 
         try:
@@ -171,7 +183,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             pass
 
         if os.path.isfile(input_file + ".aln"):
-            # Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            # Clustalw 2.1 made an empty aln file, clustalw 1.83 did not
             self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
@@ -180,21 +192,22 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format", rather than just notice there
-            # is not output file.
-            # Note:
-            # Python 2.3 on Windows gave (0, 'Error')
-            # Python 2.5 on Windows gives [Errno 0] Error
-            self.assertTrue("invalid format" in str(err) or
-                            "not produced" in str(err) or
-                            "No sequences in file" in str(err) or
-                            "Non-zero return code " in str(err))
-        else:
-            self.fail("expected an ApplicationError")
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format", rather than just notice there
+        # is not output file.
+        # Note:
+        # Python 2.3 on Windows gave (0, 'Error')
+        # Python 2.5 on Windows gives [Errno 0] Error
+        self.assertTrue(
+            "invalid format" in err
+            or "not produced" in err
+            or "No sequences in file" in err
+            or "Non-zero return code " in err
+        )
 
 
 class ClustalWTestNormalConditions(ClustalWTestCase):
@@ -213,9 +226,9 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test a simple fasta input file."""
         input_file = "Fasta/f002"
         output_file = "temp_test.aln"
-        cline = ClustalwCommandline(clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file)
+        cline = ClustalwCommandline(
+            clustalw_exe, infile=input_file, outfile=output_file
+        )
 
         self.standard_test_procedure(cline)
 
@@ -224,11 +237,13 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
         newtree_file = "temp_test.dnd"
-        cline = ClustalwCommandline(clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    newtree=newtree_file,
-                                    align=True)
+        cline = ClustalwCommandline(
+            clustalw_exe,
+            infile=input_file,
+            outfile=output_file,
+            newtree=newtree_file,
+            align=True,
+        )
 
         self.standard_test_procedure(cline)
         cline.newtree = "temp with space.dnd"
@@ -248,9 +263,9 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         del records
         output_file = "temp_cw_prot.aln"
 
-        cline = ClustalwCommandline(clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file)
+        cline = ClustalwCommandline(
+            clustalw_exe, infile=input_file, outfile=output_file
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -262,9 +277,9 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
             SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp with space.aln"
 
-        cline = ClustalwCommandline(clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file)
+        cline = ClustalwCommandline(
+            clustalw_exe, infile=input_file, outfile=output_file
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -273,9 +288,9 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test an output filename containing spaces."""
         input_file = "GFF/multi.fna"
         output_file = "temp with space.aln"
-        cline = ClustalwCommandline(clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file)
+        cline = ClustalwCommandline(
+            clustalw_exe, infile=input_file, outfile=output_file
+        )
 
         self.standard_test_procedure(cline)
 
@@ -289,10 +304,12 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
             input_file = "Fasta/f002"
             output_file = "temp_test.aln"
             statistics_file = "temp_stats.txt"
-            cline = ClustalwCommandline(clustalw_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        stats=statistics_file)
+            cline = ClustalwCommandline(
+                clustalw_exe,
+                infile=input_file,
+                outfile=output_file,
+                stats=statistics_file,
+            )
 
             self.add_file_to_clean(statistics_file)
             self.standard_test_procedure(cline)

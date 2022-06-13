@@ -51,12 +51,11 @@ Or,
 
 Note these examples only show the first 50 bases to keep the output short.
 """
-
-
+from Bio.SeqIO import QualityIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
-from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio.SeqIO import QualityIO
+
+from .Interfaces import SequenceWriter
 
 
 def PhdIterator(source):
@@ -80,6 +79,7 @@ def PhdIterator(source):
         )
         # Just re-use the comments dictionary as the SeqRecord's annotations
         seq_record.annotations = phd_record.comments
+        seq_record.annotations["molecule_type"] = "DNA"
         # And store the qualities and peak locations as per-letter-annotation
         seq_record.letter_annotations["phred_quality"] = [
             int(site[1]) for site in phd_record.sites
@@ -122,11 +122,11 @@ class PhdWriter(SequenceWriter):
                 )
         if None in phred_qualities:
             raise ValueError("A quality value of None was found")
-        if record.description.startswith("%s " % record.id):
+        if record.description.startswith(f"{record.id} "):
             title = record.description
         else:
-            title = "%s %s" % (record.id, record.description)
-        self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" % self.clean(title))
+            title = f"{record.id} {record.description}"
+        self.handle.write(f"BEGIN_SEQUENCE {self.clean(title)}\nBEGIN_COMMENT\n")
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
             if annot == "trim":
@@ -134,11 +134,11 @@ class PhdWriter(SequenceWriter):
                     value = "%s %s %.4f" % record.annotations["trim"]
             elif annot == "trace_peak_area_ratio":
                 if record.annotations.get("trace_peak_area_ratio"):
-                    value = "%.4f" % record.annotations["trace_peak_area_ratio"]
+                    value = f"{record.annotations['trace_peak_area_ratio']:.4f}"
             else:
                 value = record.annotations.get(annot)
             if value or value == 0:
-                self.handle.write("%s: %s\n" % (annot.upper(), value))
+                self.handle.write(f"{annot.upper()}: {value}\n")
 
         self.handle.write("END_COMMENT\nBEGIN_DNA\n")
         for i, site in enumerate(record.seq):

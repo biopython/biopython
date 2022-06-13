@@ -2,12 +2,11 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO AbiIO module."""
-
 import unittest
 
-from os.path import join, basename
+from os.path import basename
+from os.path import join
 
 from Bio import SeqIO
 
@@ -249,7 +248,7 @@ class TestAbi(unittest.TestCase):
                     basename(test_data[trace]["path"][-1]).replace(".ab1", ""),
                     record.name,
                 )
-                self.assertEqual(test_data[trace]["seq"], str(record.seq))
+                self.assertEqual(test_data[trace]["seq"], record.seq)
                 self.assertEqual(
                     test_data[trace]["qual"], record.letter_annotations["phred_quality"]
                 )
@@ -275,19 +274,19 @@ class TestAbi(unittest.TestCase):
         for trace in test_data:
             record = SeqIO.read(test_data[trace]["handle"], "abi-trim")
             if trace != "data_empty" and trace != "test_fsa":
-                self.assertNotEqual(str(record.seq), test_data[trace]["seq"])
+                self.assertNotEqual(record.seq, test_data[trace]["seq"])
                 self.assertIn(str(record.seq), test_data[trace]["seq"])
             else:
-                self.assertEqual(str(record.seq), test_data[trace]["seq"])
+                self.assertEqual(record.seq, test_data[trace]["seq"])
 
     def test_no_smpl1(self):
         """Test parsing of ABIF file without the normally expected SMPL1 tag."""
         record = SeqIO.read("Abi/no_smpl1.ab1", "abi")
         self.assertEqual(record.id, "<unknown id>")
         raw_keys = record.annotations["abif_raw"]
-        self.assertEqual(
-            set(raw_keys),
-            {
+        self.assertCountEqual(
+            raw_keys,
+            [
                 "FWO_1",
                 "AEPt1",
                 "AEPt2",
@@ -307,7 +306,7 @@ class TestAbi(unittest.TestCase):
                 "PLOC2",
                 "PCON1",
                 "PCON2",
-            },
+            ],
         )
 
     # Turn black code style off
@@ -315,38 +314,39 @@ class TestAbi(unittest.TestCase):
     def test_raw(self):
         """Test access to raw ABIF tags."""
         record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
-        self.assertEqual(set(record.annotations),
-                         {"polymer", "run_finish", "sample_well", "run_start",
-                          "machine_model", "dye", "abif_raw"})
+        self.assertCountEqual(record.annotations,
+                              ["polymer", "run_finish", "sample_well", "run_start",
+                               "machine_model", "dye", "abif_raw", "molecule_type"])
 
-        self.assertEqual(set(record.annotations["abif_raw"]),
-                         {"RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",
-                          "PCON2", "RUNT2", "PBAS2", "RUNT1", "MODL1",
-                          "TUBE1", "RMdX1", "ASPt1", "ASPt2", "PCON1",
-                          "DyeN4", "DyeN1", "DyeN3", "DyeN2", "APrX1",
-                          "SVER3", "SVER2", "SVER1", "LsrP1", "RPrV1",
-                          "ARTN1", "Dye#1", "LAST1", "P1AM1", "MCHN1",
-                          "DCHT1", "P1RL1", "DyeW4", "DyeW2", "RGOw1",
-                          "DyeW1", "EVNT4", "ASPF1", "EVNT2", "EVNT3",
-                          "PDMF2", "PDMF1", "BCTS1", "phCH1", "HCFG3",
-                          "HCFG2", "HCFG1", "B1Pt1", "B1Pt2", "HCFG4",
-                          "phQL1", "LANE1", "EPVt1", "Scal1", "PTYP1",
-                          "PLOC2", "PLOC1", "P2RL1", "CTNM1", "RMdN1",
-                          "FWO_1", "APXV1", "DATA8", "SMLt1", "DATA4",
-                          "CpEP1", "DATA6", "DATA1", "DATA3", "DATA2",
-                          "phAR1", "RUNT4", "RUNT3", "SMED1", "FTab1",
-                          "phDY1", "FVoc1", "APFN2", "RMXV1", "InVt1",
-                          "DSam1", "CMNT1", "phTR2", "phTR1", "CTOw1",
-                          "Rate1", "NOIS1", "Feat1", "Scan1", "InSc1",
-                          "RUND4", "RUND3", "CTID1", "NAVG1", "P2BA1",
-                          "P2AM1", "SCAN1", "BufT1", "APrV1", "LIMS1",
-                          "LNTD1", "P1WD1", "Tmpr1", "MODF1", "DyeW3",
-                          "SPAC2", "SPAC3", "SPAC1", "APrN1", "PSZE1",
-                          "RunN1", "DATA5", "DATA7", "RPrN1", "EVNT1",
-                          "AEPt2", "AEPt1", "User1", "NLNE1", "PBAS1",
-                          "S/N%1", "CTTL1", "AUDT1", "PXLB1", "RMdV1",
-                          "DATA9", "RGNm1", "DATA11", "DATA10", "DATA12"
-                          })
+        self.assertCountEqual(record.annotations["abif_raw"].keys(),
+                              ["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",
+                               "PCON2", "RUNT2", "PBAS2", "RUNT1", "MODL1",
+                               "TUBE1", "RMdX1", "ASPt1", "ASPt2", "PCON1",
+                               "DyeN4", "DyeN1", "DyeN3", "DyeN2", "APrX1",
+                               "SVER3", "SVER2", "SVER1", "LsrP1", "RPrV1",
+                               "ARTN1", "Dye#1", "LAST1", "P1AM1", "MCHN1",
+                               "DCHT1", "P1RL1", "DyeW4", "DyeW2", "RGOw1",
+                               "DyeW1", "EVNT4", "ASPF1", "EVNT2", "EVNT3",
+                               "PDMF2", "PDMF1", "BCTS1", "phCH1", "HCFG3",
+                               "HCFG2", "HCFG1", "B1Pt1", "B1Pt2", "HCFG4",
+                               "phQL1", "LANE1", "EPVt1", "Scal1", "PTYP1",
+                               "PLOC2", "PLOC1", "P2RL1", "CTNM1", "RMdN1",
+                               "FWO_1", "APXV1", "DATA8", "SMLt1", "DATA4",
+                               "CpEP1", "DATA6", "DATA1", "DATA3", "DATA2",
+                               "phAR1", "RUNT4", "RUNT3", "SMED1", "FTab1",
+                               "phDY1", "FVoc1", "APFN2", "RMXV1", "InVt1",
+                               "DSam1", "CMNT1", "phTR2", "phTR1", "CTOw1",
+                               "Rate1", "NOIS1", "Feat1", "Scan1", "InSc1",
+                               "RUND4", "RUND3", "CTID1", "NAVG1", "P2BA1",
+                               "P2AM1", "SCAN1", "BufT1", "APrV1", "LIMS1",
+                               "LNTD1", "P1WD1", "Tmpr1", "MODF1", "DyeW3",
+                               "SPAC2", "SPAC3", "SPAC1", "APrN1", "PSZE1",
+                               "RunN1", "DATA5", "DATA7", "RPrN1", "EVNT1",
+                               "AEPt2", "AEPt1", "User1", "NLNE1", "PBAS1",
+                               "S/N%1", "CTTL1", "AUDT1", "PXLB1", "RMdV1",
+                               "DATA9", "RGNm1", "DATA11", "DATA10", "DATA12"
+                              ]  # noqa: E124
+                             )  # noqa: E124
 
         self.assertEqual(record.annotations["abif_raw"]["AEPt1"], 16627)
         self.assertEqual(record.annotations["abif_raw"]["AEPt2"], 16627)

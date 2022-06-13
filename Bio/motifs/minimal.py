@@ -38,7 +38,7 @@ def read(handle):
     >>> print(motif.name)
     IFXA
 
-    This function wont retrieve instances, as there are none in minimal meme format.
+    This function won't retrieve instances, as there are none in minimal meme format.
 
     """
     motif_number = 0
@@ -55,8 +55,8 @@ def read(handle):
             return record
         name = line.split()[1]
         motif_number += 1
-        length, num_occurrences, evalue = _read_motif_statistics(line, handle)
-        counts = _read_lpm(line, handle)
+        length, num_occurrences, evalue = _read_motif_statistics(handle)
+        counts = _read_lpm(handle, num_occurrences)
         # {'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
         motif = motifs.Motif(alphabet=record.alphabet, counts=counts)
         motif.background = record.background
@@ -148,17 +148,17 @@ def _read_alphabet(record, handle):
     record.alphabet = al
 
 
-def _read_lpm(line, handle):
+def _read_lpm(handle, num_occurrences):
     """Read letter probability matrix (PRIVATE)."""
     counts = [[], [], [], []]
     for line in handle:
         freqs = line.split()
         if len(freqs) != 4:
             break
-        counts[0].append(int(float(freqs[0]) * 1000000))
-        counts[1].append(int(float(freqs[1]) * 1000000))
-        counts[2].append(int(float(freqs[2]) * 1000000))
-        counts[3].append(int(float(freqs[3]) * 1000000))
+        counts[0].append(round(float(freqs[0]) * num_occurrences))
+        counts[1].append(round(float(freqs[1]) * num_occurrences))
+        counts[2].append(round(float(freqs[2]) * num_occurrences))
+        counts[3].append(round(float(freqs[3]) * num_occurrences))
     c = {}
     c["A"] = counts[0]
     c["C"] = counts[1]
@@ -167,7 +167,7 @@ def _read_lpm(line, handle):
     return c
 
 
-def _read_motif_statistics(line, handle):
+def _read_motif_statistics(handle):
     """Read motif statistics (PRIVATE)."""
     # minimal :
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
