@@ -45,8 +45,10 @@ def parse(file, format, **kwargs):
     True
 
     """
-    with File.as_handle(file) as fp:
-        yield from getattr(supported_formats[format], "parse")(fp, **kwargs)
+    open_kwargs = {k: v for k, v in kwargs.items() if k == "encoding"}
+    parse_kwargs = {k: v for k, v in kwargs.items() if k != "encoding"}
+    with File.as_handle(file, **open_kwargs) as fp:
+        yield from getattr(supported_formats[format], "parse")(fp, **parse_kwargs)
 
 
 def read(file, format, **kwargs):
