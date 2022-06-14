@@ -6,6 +6,8 @@
 """Unit tests for the PhyloXML and PhyloXMLIO modules."""
 
 import os
+import platform  # for Windows hack, see issue #3944
+import sys  # for Windows hack
 import tempfile
 import unittest
 from itertools import chain
@@ -509,6 +511,12 @@ class WriterTests(unittest.TestCase):
         for cls, tests in test_cases:
             inst = cls("setUp")
             for test in tests:
+                if (
+                    test == "test_Distribution"
+                    and platform.system() == "Windows"
+                    and sys.version_info.minor > 8
+                ):
+                    continue  # Skip, see issue #3944
                 getattr(inst, test)()
 
     def test_apaf(self):
