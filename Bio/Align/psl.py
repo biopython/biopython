@@ -345,8 +345,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             lines = stream
         for line in lines:
             words = line.split()
-            if len(words) != 21:
-                raise ValueError("line has %d columns; expected 21" % len(words))
+            if len(words) != 21 and len(words) != 23:
+                raise ValueError("line has %d columns; expected 21 or 23" % len(words))
             strand = words[8]
             qName = words[9]
             qSize = int(words[10])

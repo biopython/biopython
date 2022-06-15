@@ -324,8 +324,14 @@ class TestAlign_dna_rna(unittest.TestCase):
 
 class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_001(self):
-        """Test parsing psl_34_001.psl."""
+        """Test parsing psl_34_001.psl and pslx_34_001.pslx."""
         path = "Blat/psl_34_001.psl"
+        self.check_reading_psl_34_001(path)
+        path = "Blat/pslx_34_001.pslx"
+        self.check_reading_psl_34_001(path)
+
+    def check_reading_psl_34_001(self, path):
+        """Check parsing psl_34_001.psl or pslx_34_001.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -896,8 +902,14 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_002(self):
-        """Test parsing psl_34_002.psl."""
+        """Test parsing psl_34_002.psl and pslx_34_002.pslx."""
         path = "Blat/psl_34_002.psl"
+        self.check_reading_psl_34_002(path)
+        path = "Blat/pslx_34_002.pslx"
+        self.check_reading_psl_34_002(path)
+
+    def check_reading_psl_34_002(self, path):
+        """Check parsing psl_34_002.psl or pslx_34_002.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         self.assertRaises(StopIteration, next, alignments)
@@ -918,8 +930,14 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_003(self):
-        """Test parsing psl_34_003.psl."""
+        """Test parsing psl_34_003.psl and pslx_34_003.pslx."""
         path = "Blat/psl_34_003.psl"
+        self.check_reading_psl_34_003(path)
+        path = "Blat/pslx_34_003.pslx"
+        self.check_reading_psl_34_003(path)
+
+    def check_reading_psl_34_003(self, path):
+        """Check parsing psl_34_003.psl or pslx_34_003.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -1015,8 +1033,14 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_004(self):
-        """Test parsing psl_34_004.psl."""
+        """Test parsing psl_34_004.psl and pslx_34_004.pslx."""
         path = "Blat/psl_34_004.psl"
+        self.check_reading_psl_34_004(path)
+        path = "Blat/pslx_34_004.pslx"
+        self.check_reading_psl_34_004(path)
+
+    def check_reading_psl_34_004(self, path):
+        """Check parsing psl_34_004.psl or pslx_34_004.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -1512,8 +1536,14 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(original_data, written_data)
 
     def test_reading_psl_34_005(self):
-        """Test parsing psl_34_005.psl."""
+        """Test parsing psl_34_005.psl and pslx_34_005.pslx."""
         path = "Blat/psl_34_005.psl"
+        self.check_reading_psl_34_005(path)
+        path = "Blat/psl_34_005.psl"
+        self.check_reading_psl_34_005(path)
+
+    def check_reading_psl_34_005(self, path):
+        """Check parsing psl_34_005.psl or pslx_34_005.pslx."""
         alignments = psl.AlignmentIterator(path)
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -2084,8 +2114,14 @@ class TestAlign_dna(unittest.TestCase):
 
 class TestAlign_dnax_prot(unittest.TestCase):
     def test_reading_psl_35_001(self):
-        """Test parsing psl_35_001.psl."""
+        """Test parsing psl_35_001.psl and pslx_35_001.pslx."""
         path = "Blat/psl_35_001.psl"
+        self.check_reading_psl_35_001(path)
+        path = "Blat/pslx_35_001.pslx"
+        self.check_reading_psl_35_001(path)
+
+    def check_reading_psl_35_001(self, path):
+        """Check parsing psl_35_001.psl or pslx_35_001.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -2450,6 +2486,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
         path = "Blat/psl_35_002.psl"
+        self.check_reading_psl_35_002(path)
+        path = "Blat/pslx_35_002.pslx"
+        self.check_reading_psl_35_002(path)
+
+    def check_reading_psl_35_002(self, path):
+        """Check parsing psl_35_002.psl or pslx_35_002.pslx."""
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
