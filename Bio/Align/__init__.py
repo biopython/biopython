@@ -1025,8 +1025,14 @@ class Alignment:
         """
         self.sequences = sequences
         if coordinates is None:
-            if sequences[0] is not None:  # None means unmapped
+            try:
                 lengths = {len(sequence) for sequence in sequences}
+            except TypeError:
+                # this may happen if sequences contain a SeqRecord where
+                # the seq attribute is None, as neither the sequence nor
+                # its length are known.
+                pass
+            else:
                 if len(lengths) != 1:
                     raise ValueError(
                         "sequences must have the same length if coordinates is None"
