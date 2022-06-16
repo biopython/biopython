@@ -568,6 +568,9 @@ deprecated in Release 1.64, and removed in Release 1.67. Use function
 list(SimpleFastaParser(handle)) from Bio.SeqIO.FastaIO instead (but
 ideally convert your code to using an iterator approach).
 
+Function Tm_staluc in Bio.SeqUtils.MeltingTemp was deprecated in Release 1.78,
+and removed in Release 1.80.
+
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 ------------------------------------------------------------------
 The whole of the old ``Bio.GFF`` module was deprecated in Release 1.53, and
