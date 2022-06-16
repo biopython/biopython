@@ -2722,13 +2722,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
-        path = "Blat/psl_35_002.psl"
-        self.check_reading_psl_35_002(path)
-        path = "Blat/pslx_35_002.pslx"
-        self.check_reading_psl_35_002(path)
+        self.check_reading_psl_35_002("psl")
+        self.check_reading_psl_35_002("pslx")
 
-    def check_reading_psl_35_002(self, path):
+    def check_reading_psl_35_002(self, fmt):
         """Check parsing psl_35_002.psl or pslx_35_002.pslx."""
+        path = "Blat/%s_35_002.%s" % (fmt, fmt)
         alignments = psl.AlignmentIterator(path)
         self.assertEqual(alignments.metadata["version"], "3")
         alignment = next(alignments)
@@ -2745,6 +2744,8 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 14052872)
         self.assertEqual(len(alignment.query.seq), 230)
+        if fmt == "pslx":
+            self.assertEqual(alignment.query.seq[17:], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2771,6 +2772,9 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 7819582)
         self.assertEqual(len(alignment.query.seq), 230)
+        if fmt == "pslx":
+            self.assertEqual(alignment.query.seq[:20], "MEGQRWLPLEANPEVTNQFL")
+            self.assertEqual(alignment.query.seq[21:], "QLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2795,6 +2799,9 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertEqual(len(alignment.target.seq), 37111980)
         self.assertEqual(len(alignment.query.seq), 230)
+        if fmt == "pslx":
+            self.assertEqual(alignment.query.seq[:183], "MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL")
+            self.assertEqual(alignment.query.seq[203:], "DAIEVCKKFMERDPDELRFNAIALSAA")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
