@@ -1597,6 +1597,10 @@ def _test():
     doctest.testmod(verbose=1)
 
 
+def my_new_function(x, ls=[]):
+    ls.append(x)
+
+
 if __name__ == "__main__":
     # Run the doctests
     _test()
