@@ -499,13 +499,12 @@ class DataHandler(metaclass=DataHandlerMeta):
             # and endNamespaceDeclHandler. Therefore we need to count how often
             # startNamespaceDeclHandler and endNamespaceDeclHandler were called
             # to find out their first and last invocation for each namespace.
-            uri = uri.rstrip("/")
             if prefix == "mml":
                 assert uri == "http://www.w3.org/1998/Math/MathML"
             elif prefix == "xlink":
                 assert uri == "http://www.w3.org/1999/xlink"
             elif prefix == "ali":
-                assert uri == "http://www.niso.org/schemas/ali/1.0"
+                assert uri.rstrip("/") == "http://www.niso.org/schemas/ali/1.0"
             else:
                 raise ValueError(f"Unknown prefix '{prefix}' with uri '{uri}'")
             self.namespace_level[prefix] += 1
