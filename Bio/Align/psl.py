@@ -475,13 +475,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if pslx is True:
                 qSeqs = words[21].rstrip(",").split(",")
                 tSeqs = words[22].rstrip(",").split(",")
+                qSeq = dict(zip(qStarts, qSeqs))
                 if strand in ("++", "+-"):
                     # protein sequence aligned against translated DNA sequence
                     target_sequence = Seq(None, length=tSize)
-                    query_sequence = Seq(None, length=qSize)
+                    query_sequence = Seq(qSeq, length=qSize)
                 else:
                     tSeq = dict(zip(tStarts, tSeqs))
-                    qSeq = dict(zip(qStarts, qSeqs))
                     target_sequence = Seq(tSeq, length=tSize)
                     query_sequence = Seq(qSeq, length=qSize)
                     if strand == "-":
