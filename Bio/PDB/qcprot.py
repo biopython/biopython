@@ -28,7 +28,7 @@ from Bio.PDB.PDBExceptions import PDBException
 
 
 def qcp(coords1, coords2, natoms):
-    """Implementats of the QCP code in Python.
+    """Implement the QCP code in Python.
 
     Input coordinate arrays must be centered at the origin and have
     shape Nx3.
@@ -200,15 +200,15 @@ def qcp(coords1, coords2, natoms):
     ax = q1 * q2
 
     rot = np.zeros((3, 3))
-    # Transposed rotation matrix.
+
     rot[0][0] = a2 + x2 - y2 - z2
-    rot[1][0] = 2 * (xy + az)
-    rot[2][0] = 2 * (zx - ay)
-    rot[0][1] = 2 * (xy - az)
+    rot[0][1] = 2 * (xy + az)
+    rot[0][2] = 2 * (zx - ay)
+    rot[1][0] = 2 * (xy - az)
     rot[1][1] = a2 - x2 + y2 - z2
-    rot[2][1] = 2 * (yz + ax)
-    rot[0][2] = 2 * (zx + ay)
-    rot[1][2] = 2 * (yz - ax)
+    rot[1][2] = 2 * (yz + ax)
+    rot[2][0] = 2 * (zx + ay)
+    rot[2][1] = 2 * (yz - ax)
     rot[2][2] = a2 - x2 - y2 + z2
 
     return rmsd, rot, (q1, q2, q3, q4)
@@ -318,7 +318,7 @@ class QCPSuperimposer:
         coords -= com1
         coords_ref -= com2
 
-        (self.rms, self.rot, self.lquart) = qcp(coords_ref, coords, self._natoms)
+        (self.rms, self.rot, _) = qcp(coords_ref, coords, self._natoms)
         self.tran = com2 - np.dot(com1, self.rot)
 
     # Getters
