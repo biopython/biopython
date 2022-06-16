@@ -345,7 +345,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             lines = stream
         for line in lines:
             words = line.split()
-            if len(words) != 21 and len(words) != 23:
+            if len(words) == 23:
+                pslx = True
+            elif len(words) == 21:
+                pslx = False
+            else:
                 raise ValueError("line has %d columns; expected 21 or 23" % len(words))
             strand = words[8]
             qName = words[9]
@@ -373,14 +377,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of target start positions (%d found, expected %d)"
                     % (len(tStarts), blockCount)
                 )
-            target_sequence = Seq(None, length=tSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_sequence = Seq(None, length=qSize)
-            query_record = SeqRecord(query_sequence, id=qName)
-            records = [target_record, query_record]
-            qBlockSizes = numpy.array(blockSizes)
             qStarts = numpy.array(qStarts)
             tStarts = numpy.array(tStarts)
+            qBlockSizes = numpy.array(blockSizes)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 tBlockSizes = 3 * qBlockSizes
@@ -473,6 +472,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent qEnd found (%d, expected %d)"
                     % (qEnd, coordinates[1, -1])
                 )
+            if pslx is True:
+                qSeqs = words[21].rstrip(",").split(",")
+                tSeqs = words[22].rstrip(",").split(",")
+                if strand in ("++", "+-"):
+                    # protein sequence aligned against translated DNA sequence
+                    target_sequence = Seq(None, length=tSize)
+                    query_sequence = Seq(None, length=qSize)
+                else:
+                    tSeq = dict(zip(tStarts, tSeqs))
+                    qSeq = dict(zip(qStarts, qSeqs))
+                    target_sequence = Seq(tSeq, length=tSize)
+                    query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "-":
+                        query_sequence = query_sequence.reverse_complement()
+            else:
+                target_sequence = Seq(None, length=tSize)
+                query_sequence = Seq(None, length=qSize)
+            target_record = SeqRecord(target_sequence, id=tName)
+            query_record = SeqRecord(query_sequence, id=qName)
+            records = [target_record, query_record]
             alignment = Alignment(records, coordinates)
             alignment.matches = int(words[0])
             alignment.misMatches = int(words[1])
