@@ -504,7 +504,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             elif prefix == "xlink":
                 assert uri == "http://www.w3.org/1999/xlink"
             elif prefix == "ali":
-                assert uri == "http://www.niso.org/schemas/ali/1.0/"
+                assert uri.rstrip("/") == "http://www.niso.org/schemas/ali/1.0"
             else:
                 raise ValueError(f"Unknown prefix '{prefix}' with uri '{uri}'")
             self.namespace_level[prefix] += 1
