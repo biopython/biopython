@@ -487,7 +487,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         locations = []
                         for tEnd, qEnd in coordinates[:, 1:].transpose():
                             if qEnd > qStart and tEnd > tStart:
-                                location = FeatureLocation(ExactPosition(tStart), ExactPosition(tEnd), strand=+1)
+                                location = FeatureLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=+1,
+                                )
                                 locations.append(location)
                                 qStart = qEnd
                                 tStart = tEnd
@@ -495,10 +499,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 qStart = qEnd
                                 tStart = tEnd
                         if len(locations) > 1:
-                            location = CompoundLocation(locations, 'join')
+                            location = CompoundLocation(locations, "join")
                         tSeq = "".join(tSeqs)
                         qualifiers = {"translation": [tSeq]}
-                        feature = SeqFeature(location, type='CDS', qualifiers=qualifiers)
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
                 else:
                     tSeq = dict(zip(tStarts, tSeqs))
                     target_sequence = Seq(tSeq, length=tSize)

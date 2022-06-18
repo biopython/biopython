@@ -325,9 +325,10 @@ class TestAlign_dna_rna(unittest.TestCase):
 
 class TestAlign_dna(unittest.TestCase):
 
-    queries = {"hg18_dna": "atgagcttccaaggtaaactgccttcaagattc",
-               "hg19_dna": "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
-              }
+    queries = {
+        "hg18_dna": "atgagcttccaaggtaaactgccttcaagattc",
+        "hg19_dna": "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
+    }
 
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl and pslx_34_001.pslx."""
@@ -355,8 +356,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61646095:61646111], "aggtaaactgccttca")
-            self.assertEqual(alignment.query.seq[11: 27], self.queries[alignment.query.id][11: 27])
+            self.assertEqual(
+                alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -383,7 +388,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[10271783:10271816], "atgagcttccaaggtaaactgccttcaagattc")
+            self.assertEqual(
+                alignment.target.seq[10271783:10271816],
+                "atgagcttccaaggtaaactgccttcaagattc",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -411,8 +419,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg")
-            self.assertEqual(alignment.query.seq[8: 25], self.queries[alignment.query.id][8: 25])
+            self.assertEqual(
+                alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
+            )
+            self.assertEqual(
+                alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -439,8 +451,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[85737865:85737906], "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa")
-            self.assertEqual(alignment.query.seq[9: 50], self.queries[alignment.query.id][9: 50])
+            self.assertEqual(
+                alignment.target.seq[85737865:85737906],
+                "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
+            )
+            self.assertEqual(
+                alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -467,8 +484,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[95160479:95160520], "cacaaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[8: 49], self.queries[alignment.query.id][8: 49])
+            self.assertEqual(
+                alignment.target.seq[95160479:95160520],
+                "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -495,8 +517,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[42144400:42144436], "aaaggggctgggcgtggtagctcatgcctgtaatcc")
-            self.assertEqual(alignment.query.seq[11: 47], self.queries[alignment.query.id][11: 47])
+            self.assertEqual(
+                alignment.target.seq[42144400:42144436],
+                "aaaggggctgggcgtggtagctcatgcctgtaatcc",
+            )
+            self.assertEqual(
+                alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -524,9 +551,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
-            self.assertEqual(alignment.target.seq[183925990:183926028], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1:7], self.queries[alignment.query.id][1:7])
-            self.assertEqual(alignment.query.seq[38:49], self.queries[alignment.query.id][38:49])
+            self.assertEqual(
+                alignment.target.seq[183925990:183926028],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:7], self.queries[alignment.query.id][1:7]
+            )
+            self.assertEqual(
+                alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -553,9 +587,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga")
+            self.assertEqual(
+                alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
+            )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
-            self.assertEqual(alignment.query.seq[10: 46], self.queries[alignment.query.id][10: 46])
+            self.assertEqual(
+                alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -582,8 +620,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[23891310:23891349], "caaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[23891310:23891349],
+                "caaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -610,8 +653,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[21: 49], self.queries[alignment.query.id][21: 49])
+            self.assertEqual(
+                alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
+            )
+            self.assertEqual(
+                alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -639,9 +686,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
-            self.assertEqual(alignment.target.seq[52759160:52759198], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1:8], self.queries[alignment.query.id][1:8])
-            self.assertEqual(alignment.query.seq[38:49], self.queries[alignment.query.id][38:49])
+            self.assertEqual(
+                alignment.target.seq[52759160:52759198],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:8], self.queries[alignment.query.id][1:8]
+            )
+            self.assertEqual(
+                alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -668,7 +722,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[1207056:1207106], "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa")
+            self.assertEqual(
+                alignment.target.seq[1207056:1207106],
+                "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -696,8 +753,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61700837:61700871], "aaaaatgaacaaaggggctgggcgcggtggctca")
-            self.assertEqual(alignment.query.seq[1: 35], self.queries[alignment.query.id][1: 35])
+            self.assertEqual(
+                alignment.target.seq[61700837:61700871],
+                "aaaaatgaacaaaggggctgggcgcggtggctca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -725,9 +787,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
-            self.assertEqual(alignment.target.seq[37558173:37558191], "accacgcccagccccttt")
-            self.assertEqual(alignment.query.seq[11:29], self.queries[alignment.query.id][11:29])
-            self.assertEqual(alignment.query.seq[39:49], self.queries[alignment.query.id][39:49])
+            self.assertEqual(
+                alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:29], self.queries[alignment.query.id][11:29]
+            )
+            self.assertEqual(
+                alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -754,8 +822,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[48997405:48997442], "tgggattacaggcgggagccaccacgcccagcccctt")
-            self.assertEqual(alignment.query.seq[12: 49], self.queries[alignment.query.id][12: 49])
+            self.assertEqual(
+                alignment.target.seq[48997405:48997442],
+                "tgggattacaggcgggagccaccacgcccagcccctt",
+            )
+            self.assertEqual(
+                alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -782,8 +855,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[120641740:120641776], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[120641740:120641776],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -810,8 +888,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[54017130:54017169], "tgggattacaggtgtgagccaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[54017130:54017169],
+                "tgggattacaggtgtgagccaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -838,8 +921,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[553742:553781], "tgggatgacaggggtgaggcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[553742:553781],
+                "tgggatgacaggggtgaggcaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -866,8 +954,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[99388555:99388591], "tgggattataggcatgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[99388555:99388591],
+                "tgggattataggcatgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -894,8 +987,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 35], self.queries[alignment.query.id][10: 35])
+            self.assertEqual(
+                alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
+            )
+            self.assertEqual(
+                alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -922,8 +1019,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[39368490:39368526], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[39368490:39368526],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -950,8 +1052,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[220325687:220325721], "ggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 47], self.queries[alignment.query.id][13: 47])
+            self.assertEqual(
+                alignment.target.seq[220325687:220325721],
+                "ggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1033,8 +1140,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61646095:61646111], "aggtaaactgccttca")
-            self.assertEqual(alignment.query.seq[11: 27], self.queries[alignment.query.id][11: 27])
+            self.assertEqual(
+                alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1061,7 +1172,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[10271783:10271816], "atgagcttccaaggtaaactgccttcaagattc")
+            self.assertEqual(
+                alignment.target.seq[10271783:10271816],
+                "atgagcttccaaggtaaactgccttcaagattc",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -1089,8 +1203,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg")
-            self.assertEqual(alignment.query.seq[8: 25], self.queries[alignment.query.id][8: 25])
+            self.assertEqual(
+                alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
+            )
+            self.assertEqual(
+                alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1144,8 +1262,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[85737865:85737906], "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa")
-            self.assertEqual(alignment.query.seq[9: 50], self.queries[alignment.query.id][9: 50])
+            self.assertEqual(
+                alignment.target.seq[85737865:85737906],
+                "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
+            )
+            self.assertEqual(
+                alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1172,8 +1295,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[95160479:95160520], "cacaaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[8: 49], self.queries[alignment.query.id][8: 49])
+            self.assertEqual(
+                alignment.target.seq[95160479:95160520],
+                "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1200,8 +1328,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[42144400:42144436], "aaaggggctgggcgtggtagctcatgcctgtaatcc")
-            self.assertEqual(alignment.query.seq[11: 47], self.queries[alignment.query.id][11: 47])
+            self.assertEqual(
+                alignment.target.seq[42144400:42144436],
+                "aaaggggctgggcgtggtagctcatgcctgtaatcc",
+            )
+            self.assertEqual(
+                alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1229,9 +1362,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
-            self.assertEqual(alignment.target.seq[183925990:183926028], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1:7], self.queries[alignment.query.id][1:7])
-            self.assertEqual(alignment.query.seq[38:49], self.queries[alignment.query.id][38:49])
+            self.assertEqual(
+                alignment.target.seq[183925990:183926028],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:7], self.queries[alignment.query.id][1:7]
+            )
+            self.assertEqual(
+                alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1258,9 +1398,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga")
+            self.assertEqual(
+                alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
+            )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
-            self.assertEqual(alignment.query.seq[10: 46], self.queries[alignment.query.id][10: 46])
+            self.assertEqual(
+                alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1287,8 +1431,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[23891310:23891349], "caaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[23891310:23891349],
+                "caaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1315,8 +1464,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[21: 49], self.queries[alignment.query.id][21: 49])
+            self.assertEqual(
+                alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
+            )
+            self.assertEqual(
+                alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1344,9 +1497,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
-            self.assertEqual(alignment.target.seq[52759160:52759198], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1:8], self.queries[alignment.query.id][1:8])
-            self.assertEqual(alignment.query.seq[38:49], self.queries[alignment.query.id][38:49])
+            self.assertEqual(
+                alignment.target.seq[52759160:52759198],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:8], self.queries[alignment.query.id][1:8]
+            )
+            self.assertEqual(
+                alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1373,7 +1533,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[1207056:1207106], "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa")
+            self.assertEqual(
+                alignment.target.seq[1207056:1207106],
+                "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -1401,8 +1564,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61700837:61700871], "aaaaatgaacaaaggggctgggcgcggtggctca")
-            self.assertEqual(alignment.query.seq[1: 35], self.queries[alignment.query.id][1: 35])
+            self.assertEqual(
+                alignment.target.seq[61700837:61700871],
+                "aaaaatgaacaaaggggctgggcgcggtggctca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1430,9 +1598,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
-            self.assertEqual(alignment.target.seq[37558173:37558191], "accacgcccagccccttt")
-            self.assertEqual(alignment.query.seq[11: 29], self.queries[alignment.query.id][11: 29])
-            self.assertEqual(alignment.query.seq[39: 49], self.queries[alignment.query.id][39: 49])
+            self.assertEqual(
+                alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:29], self.queries[alignment.query.id][11:29]
+            )
+            self.assertEqual(
+                alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1459,8 +1633,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[48997405:48997442], "tgggattacaggcgggagccaccacgcccagcccctt")
-            self.assertEqual(alignment.query.seq[12: 49], self.queries[alignment.query.id][12: 49])
+            self.assertEqual(
+                alignment.target.seq[48997405:48997442],
+                "tgggattacaggcgggagccaccacgcccagcccctt",
+            )
+            self.assertEqual(
+                alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1487,8 +1666,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[120641740:120641776], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[120641740:120641776],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1515,8 +1699,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[54017130:54017169], "tgggattacaggtgtgagccaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[54017130:54017169],
+                "tgggattacaggtgtgagccaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1543,8 +1732,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[553742:553781], "tgggatgacaggggtgaggcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[553742:553781],
+                "tgggatgacaggggtgaggcaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1571,8 +1765,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[99388555:99388591], "tgggattataggcatgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[99388555:99388591],
+                "tgggattataggcatgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1599,8 +1798,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 35], self.queries[alignment.query.id][10: 35])
+            self.assertEqual(
+                alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
+            )
+            self.assertEqual(
+                alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1627,8 +1830,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[39368490:39368526], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[39368490:39368526],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1655,8 +1863,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[220325687:220325721], "ggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 47], self.queries[alignment.query.id][13: 47])
+            self.assertEqual(
+                alignment.target.seq[220325687:220325721],
+                "ggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1709,8 +1922,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61646095:61646111], "aggtaaactgccttca")
-            self.assertEqual(alignment.query.seq[11: 27], self.queries[alignment.query.id][11: 27])
+            self.assertEqual(
+                alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1737,7 +1954,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[10271783:10271816], "atgagcttccaaggtaaactgccttcaagattc")
+            self.assertEqual(
+                alignment.target.seq[10271783:10271816],
+                "atgagcttccaaggtaaactgccttcaagattc",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -1765,8 +1985,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg")
-            self.assertEqual(alignment.query.seq[8: 25], self.queries[alignment.query.id][8: 25])
+            self.assertEqual(
+                alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
+            )
+            self.assertEqual(
+                alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1793,8 +2017,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[85737865:85737906], "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa")
-            self.assertEqual(alignment.query.seq[9:], self.queries[alignment.query.id][9:])
+            self.assertEqual(
+                alignment.target.seq[85737865:85737906],
+                "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
+            )
+            self.assertEqual(
+                alignment.query.seq[9:], self.queries[alignment.query.id][9:]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1821,8 +2050,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[95160479:95160520], "cacaaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[8: 49], self.queries[alignment.query.id][8: 49])
+            self.assertEqual(
+                alignment.target.seq[95160479:95160520],
+                "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1849,8 +2083,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[42144400:42144436], "aaaggggctgggcgtggtagctcatgcctgtaatcc")
-            self.assertEqual(alignment.query.seq[11: 47], self.queries[alignment.query.id][11: 47])
+            self.assertEqual(
+                alignment.target.seq[42144400:42144436],
+                "aaaggggctgggcgtggtagctcatgcctgtaatcc",
+            )
+            self.assertEqual(
+                alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1878,9 +2117,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
-            self.assertEqual(alignment.target.seq[183925990:183926028], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1:7], self.queries[alignment.query.id][1:7])
-            self.assertEqual(alignment.query.seq[11:49], self.queries[alignment.query.id][11:49])
+            self.assertEqual(
+                alignment.target.seq[183925990:183926028],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:7], self.queries[alignment.query.id][1:7]
+            )
+            self.assertEqual(
+                alignment.query.seq[11:49], self.queries[alignment.query.id][11:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1907,9 +2153,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga")
+            self.assertEqual(
+                alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
+            )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
-            self.assertEqual(alignment.query.seq[10: 46], self.queries[alignment.query.id][10: 46])
+            self.assertEqual(
+                alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1936,8 +2186,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[23891310:23891349], "caaaggggctgggcgtggtggctcacacctgtaatccca")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[23891310:23891349],
+                "caaaggggctgggcgtggtggctcacacctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1964,8 +2219,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[21: 49], self.queries[alignment.query.id][21: 49])
+            self.assertEqual(
+                alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
+            )
+            self.assertEqual(
+                alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1993,9 +2252,16 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
-            self.assertEqual(alignment.target.seq[52759160:52759198], "aaaggggctgggcgtggtggctcacgcctgtaatccca")
-            self.assertEqual(alignment.query.seq[1: 8], self.queries[alignment.query.id][1: 8])
-            self.assertEqual(alignment.query.seq[38: 49], self.queries[alignment.query.id][38: 49])
+            self.assertEqual(
+                alignment.target.seq[52759160:52759198],
+                "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:8], self.queries[alignment.query.id][1:8]
+            )
+            self.assertEqual(
+                alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2022,7 +2288,10 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[1207056:1207106], "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa")
+            self.assertEqual(
+                alignment.target.seq[1207056:1207106],
+                "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
+            )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
@@ -2050,8 +2319,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[61700837:61700871], "aaaaatgaacaaaggggctgggcgcggtggctca")
-            self.assertEqual(alignment.query.seq[1: 35], self.queries[alignment.query.id][1: 35])
+            self.assertEqual(
+                alignment.target.seq[61700837:61700871],
+                "aaaaatgaacaaaggggctgggcgcggtggctca",
+            )
+            self.assertEqual(
+                alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2079,9 +2353,15 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
-            self.assertEqual(alignment.target.seq[37558173:37558191], "accacgcccagccccttt")
-            self.assertEqual(alignment.query.seq[11:29], self.queries[alignment.query.id][11:29])
-            self.assertEqual(alignment.query.seq[39:49], self.queries[alignment.query.id][39:49])
+            self.assertEqual(
+                alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
+            )
+            self.assertEqual(
+                alignment.query.seq[11:29], self.queries[alignment.query.id][11:29]
+            )
+            self.assertEqual(
+                alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2108,8 +2388,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[48997405:48997442], "tgggattacaggcgggagccaccacgcccagcccctt")
-            self.assertEqual(alignment.query.seq[12: 49], self.queries[alignment.query.id][12: 49])
+            self.assertEqual(
+                alignment.target.seq[48997405:48997442],
+                "tgggattacaggcgggagccaccacgcccagcccctt",
+            )
+            self.assertEqual(
+                alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2136,8 +2421,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[120641740:120641776], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[120641740:120641776],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2164,8 +2454,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[54017130:54017169], "tgggattacaggtgtgagccaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[54017130:54017169],
+                "tgggattacaggtgtgagccaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2192,8 +2487,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[553742:553781], "tgggatgacaggggtgaggcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 49], self.queries[alignment.query.id][10: 49])
+            self.assertEqual(
+                alignment.target.seq[553742:553781],
+                "tgggatgacaggggtgaggcaccacgcccagcccctttg",
+            )
+            self.assertEqual(
+                alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2220,8 +2520,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[99388555:99388591], "tgggattataggcatgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[99388555:99388591],
+                "tgggattataggcatgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2248,8 +2553,12 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg")
-            self.assertEqual(alignment.query.seq[10: 35], self.queries[alignment.query.id][10: 35])
+            self.assertEqual(
+                alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
+            )
+            self.assertEqual(
+                alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2276,8 +2585,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[39368490:39368526], "tgggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 49], self.queries[alignment.query.id][13: 49])
+            self.assertEqual(
+                alignment.target.seq[39368490:39368526],
+                "tgggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2303,8 +2617,13 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
         if fmt == "pslx":
-            self.assertEqual(alignment.target.seq[220325687:220325721], "ggattacaggcgtgagccaccacgcccagcccct")
-            self.assertEqual(alignment.query.seq[13: 47], self.queries[alignment.query.id][13: 47])
+            self.assertEqual(
+                alignment.target.seq[220325687:220325721],
+                "ggattacaggcgtgagccaccacgcccagcccct",
+            )
+            self.assertEqual(
+                alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2359,15 +2678,26 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[61: 113], "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF")
+            self.assertEqual(
+                alignment.query.seq[61:113],
+                "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF",
+            )
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75566694), ExactPosition(75566850), strand=+1))
+            self.assertEqual(
+                feature.location,
+                FeatureLocation(
+                    ExactPosition(75566694), ExactPosition(75566850), strand=+1
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2393,15 +2723,26 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[17:61], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK")
+            self.assertEqual(
+                alignment.query.seq[17:61],
+                "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK",
+            )
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75560749), ExactPosition(75560881), strand=+1))
+            self.assertEqual(
+                feature.location,
+                FeatureLocation(
+                    ExactPosition(75560749), ExactPosition(75560881), strand=+1
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2428,15 +2769,33 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[:15], "MEGQRWLPLEANPEV")
-            self.assertEqual(alignment.query.seq[113:142], "ESGSTLKKFLEESVSMSPEERARYLENYD")
+            self.assertEqual(
+                alignment.query.seq[113:142], "ESGSTLKKFLEESVSMSPEERARYLENYD"
+            )
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(75549820), ExactPosition(75549865), strand=+1), FeatureLocation(ExactPosition(75567225), ExactPosition(75567312), strand=+1)], operator="join"))
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(75549820), ExactPosition(75549865), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(75567225), ExactPosition(75567312), strand=+1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2462,15 +2821,34 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 114364328)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[183:], "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(
+                alignment.query.seq[183:],
+                "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(75604767), ExactPosition(75604827), strand=+1), FeatureLocation(ExactPosition(75605728), ExactPosition(75605809), strand=+1)], operator="join"))
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(75604767), ExactPosition(75604827), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(75605728), ExactPosition(75605809), strand=+1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2500,11 +2878,18 @@ class TestAlign_dnax_prot(unittest.TestCase):
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75594914), ExactPosition(75594989), strand=+1))
+            self.assertEqual(
+                feature.location,
+                FeatureLocation(
+                    ExactPosition(75594914), ExactPosition(75594989), strand=+1
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "APSIDEKVDLHFIALVHVDGHLYEL")
+            self.assertEqual(
+                feature.qualifiers["translation"][0], "APSIDEKVDLHFIALVHVDGHLYEL"
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2534,7 +2919,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75569459), ExactPosition(75569507), strand=+1))
+            self.assertEqual(
+                feature.location,
+                FeatureLocation(
+                    ExactPosition(75569459), ExactPosition(75569507), strand=+1
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
@@ -2564,15 +2954,25 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 190214555)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[76:110], "GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK")
+            self.assertEqual(
+                alignment.query.seq[76:110], "GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK"
+            )
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, FeatureLocation(ExactPosition(41260685), ExactPosition(41260787), strand=+1))
+            self.assertEqual(
+                feature.location,
+                FeatureLocation(
+                    ExactPosition(41260685), ExactPosition(41260787), strand=+1
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2598,16 +2998,34 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 190214555)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[17:59], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPIT")
+            self.assertEqual(
+                alignment.query.seq[17:59], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPIT"
+            )
             self.assertEqual(alignment.query.seq[162:183], "DEKVDLHFIALVHVDGHLYEL")
             self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
             self.assertEqual(len(alignment.target.features), 1)
             feature = alignment.target.features[0]
-            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(41257605), ExactPosition(41257731), strand=+1), FeatureLocation(ExactPosition(41263227), ExactPosition(41263290), strand=+1)], operator="join"))
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(41257605), ExactPosition(41257731), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(41263227), ExactPosition(41263290), strand=+1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
             self.assertEqual(feature.type, "CDS")
             self.assertEqual(len(feature.qualifiers), 1)
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
-            self.assertEqual(feature.qualifiers["translation"][0], "QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHLYEL")
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHLYEL",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2810,7 +3228,10 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(len(alignment.target.seq), 14052872)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[17:], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(
+                alignment.query.seq[17:],
+                "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2839,7 +3260,10 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[:20], "MEGQRWLPLEANPEVTNQFL")
-            self.assertEqual(alignment.query.seq[21:], "QLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(
+                alignment.query.seq[21:],
+                "QLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2865,7 +3289,10 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         self.assertEqual(len(alignment.target.seq), 37111980)
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
-            self.assertEqual(alignment.query.seq[:183], "MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL")
+            self.assertEqual(
+                alignment.query.seq[:183],
+                "MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL",
+            )
             self.assertEqual(alignment.query.seq[203:], "DAIEVCKKFMERDPDELRFNAIALSAA")
         self.assertTrue(
             numpy.array_equal(
