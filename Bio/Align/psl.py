@@ -33,6 +33,7 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, ExactPosition, FeatureLocation, CompoundLocation
 from Bio import BiopythonExperimentalWarning
 
 import warnings
@@ -345,8 +346,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             lines = stream
         for line in lines:
             words = line.split()
-            if len(words) != 21:
-                raise ValueError("line has %d columns; expected 21" % len(words))
+            if len(words) == 23:
+                pslx = True
+            elif len(words) == 21:
+                pslx = False
+            else:
+                raise ValueError("line has %d columns; expected 21 or 23" % len(words))
             strand = words[8]
             qName = words[9]
             qSize = int(words[10])
@@ -373,14 +378,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of target start positions (%d found, expected %d)"
                     % (len(tStarts), blockCount)
                 )
-            target_sequence = Seq(None, length=tSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_sequence = Seq(None, length=qSize)
-            query_record = SeqRecord(query_sequence, id=qName)
-            records = [target_record, query_record]
-            qBlockSizes = numpy.array(blockSizes)
             qStarts = numpy.array(qStarts)
             tStarts = numpy.array(tStarts)
+            qBlockSizes = numpy.array(blockSizes)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 tBlockSizes = 3 * qBlockSizes
@@ -473,6 +473,69 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent qEnd found (%d, expected %d)"
                     % (qEnd, coordinates[1, -1])
                 )
+            feature = None
+            if pslx is True:
+                qSeqs = words[21].rstrip(",").split(",")
+                tSeqs = words[22].rstrip(",").split(",")
+                qSeq = dict(zip(qStarts, qSeqs))
+                if strand in ("++", "+-"):
+                    # protein sequence aligned against translated DNA sequence
+                    target_sequence = Seq(None, length=tSize)
+                    query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "++":
+                        tStart, qStart = coordinates[:, 0]
+                        locations = []
+                        for tEnd, qEnd in coordinates[:, 1:].transpose():
+                            if qStart < qEnd and tStart < tEnd:
+                                location = FeatureLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=+1,
+                                )
+                                locations.append(location)
+                            qStart = qEnd
+                            tStart = tEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, "join")
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
+                    elif strand == "+-":
+                        tEnd, qStart = coordinates[:, 0]
+                        locations = []
+                        for tStart, qEnd in coordinates[:, 1:].transpose():
+                            if qStart < qEnd and tStart < tEnd:
+                                location = FeatureLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=-1,
+                                )
+                                locations.append(location)
+                            tEnd = tStart
+                            qStart = qEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, "join")
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
+                else:
+                    tSeq = dict(zip(tStarts, tSeqs))
+                    target_sequence = Seq(tSeq, length=tSize)
+                    query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "-":
+                        query_sequence = query_sequence.reverse_complement()
+            else:
+                target_sequence = Seq(None, length=tSize)
+                query_sequence = Seq(None, length=qSize)
+            target_record = SeqRecord(target_sequence, id=tName)
+            query_record = SeqRecord(query_sequence, id=qName)
+            if feature is not None:
+                target_record.features.append(feature)
+            records = [target_record, query_record]
             alignment = Alignment(records, coordinates)
             alignment.matches = int(words[0])
             alignment.misMatches = int(words[1])
