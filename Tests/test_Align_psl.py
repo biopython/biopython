@@ -11,6 +11,7 @@ from io import StringIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 
@@ -2359,6 +2360,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[61: 113], "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75566694), ExactPosition(75566850), strand=+1))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2385,6 +2394,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[17:61], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75560749), ExactPosition(75560881), strand=+1))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2412,6 +2429,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[:15], "MEGQRWLPLEANPEV")
             self.assertEqual(alignment.query.seq[113:142], "ESGSTLKKFLEESVSMSPEERARYLENYD")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(75549820), ExactPosition(75549865), strand=+1), FeatureLocation(ExactPosition(75567225), ExactPosition(75567312), strand=+1)], operator="join"))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2438,6 +2463,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[183:], "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(75604767), ExactPosition(75604827), strand=+1), FeatureLocation(ExactPosition(75605728), ExactPosition(75605809), strand=+1)], operator="join"))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2464,6 +2497,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[158:183], "APSIDEKVDLHFIALVHVDGHLYEL")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75594914), ExactPosition(75594989), strand=+1))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "APSIDEKVDLHFIALVHVDGHLYEL")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2490,6 +2531,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[142:158], "AIRVTHETSAHEGQTE")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, FeatureLocation(ExactPosition(75569459), ExactPosition(75569507), strand=+1))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "AIRVTHETSAHEGQTE")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2516,6 +2565,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(len(alignment.query.seq), 230)
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[76:110], "GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, FeatureLocation(ExactPosition(41260685), ExactPosition(41260787), strand=+1))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2543,6 +2600,14 @@ class TestAlign_dnax_prot(unittest.TestCase):
         if fmt == "pslx":
             self.assertEqual(alignment.query.seq[17:59], "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPIT")
             self.assertEqual(alignment.query.seq[162:183], "DEKVDLHFIALVHVDGHLYEL")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(feature.location, CompoundLocation([FeatureLocation(ExactPosition(41257605), ExactPosition(41257731), strand=+1), FeatureLocation(ExactPosition(41263227), ExactPosition(41263290), strand=+1)], operator="join"))
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(feature.qualifiers["translation"][0], "QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHLYEL")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,

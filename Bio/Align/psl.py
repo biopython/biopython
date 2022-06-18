@@ -33,6 +33,7 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, ExactPosition, FeatureLocation, CompoundLocation
 from Bio import BiopythonExperimentalWarning
 
 import warnings
@@ -472,6 +473,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent qEnd found (%d, expected %d)"
                     % (qEnd, coordinates[1, -1])
                 )
+            feature = None
             if pslx is True:
                 qSeqs = words[21].rstrip(",").split(",")
                 tSeqs = words[22].rstrip(",").split(",")
@@ -480,6 +482,23 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     # protein sequence aligned against translated DNA sequence
                     target_sequence = Seq(None, length=tSize)
                     query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "++":
+                        tStart, qStart = coordinates[:, 0]
+                        locations = []
+                        for tEnd, qEnd in coordinates[:, 1:].transpose():
+                            if qEnd > qStart and tEnd > tStart:
+                                location = FeatureLocation(ExactPosition(tStart), ExactPosition(tEnd), strand=+1)
+                                locations.append(location)
+                                qStart = qEnd
+                                tStart = tEnd
+                            else:
+                                qStart = qEnd
+                                tStart = tEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, 'join')
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(location, type='CDS', qualifiers=qualifiers)
                 else:
                     tSeq = dict(zip(tStarts, tSeqs))
                     target_sequence = Seq(tSeq, length=tSize)
@@ -491,6 +510,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_sequence = Seq(None, length=qSize)
             target_record = SeqRecord(target_sequence, id=tName)
             query_record = SeqRecord(query_sequence, id=qName)
+            if feature is not None:
+                target_record.features.append(feature)
             records = [target_record, query_record]
             alignment = Alignment(records, coordinates)
             alignment.matches = int(words[0])
