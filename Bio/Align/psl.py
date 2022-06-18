@@ -486,18 +486,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         tStart, qStart = coordinates[:, 0]
                         locations = []
                         for tEnd, qEnd in coordinates[:, 1:].transpose():
-                            if qEnd > qStart and tEnd > tStart:
+                            if qStart < qEnd and tStart < tEnd:
                                 location = FeatureLocation(
                                     ExactPosition(tStart),
                                     ExactPosition(tEnd),
                                     strand=+1,
                                 )
                                 locations.append(location)
-                                qStart = qEnd
-                                tStart = tEnd
-                            else:
-                                qStart = qEnd
-                                tStart = tEnd
+                            qStart = qEnd
+                            tStart = tEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, "join")
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
+                    elif strand == "+-":
+                        tEnd, qStart = coordinates[:, 0]
+                        locations = []
+                        for tStart, qEnd in coordinates[:, 1:].transpose():
+                            if qStart < qEnd and tStart < tEnd:
+                                location = FeatureLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=-1,
+                                )
+                                locations.append(location)
+                            tEnd = tStart
+                            qStart = qEnd
                         if len(locations) > 1:
                             location = CompoundLocation(locations, "join")
                         tSeq = "".join(tSeqs)

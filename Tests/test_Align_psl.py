@@ -3205,6 +3205,17 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
+        # See below for a description of the file balAcu1.fa.
+        # We use this file here so we can check the SeqFeatures.
+        records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
+        self.dna = {}
+        for record in records:
+            name, start_end = record.id.split(":")
+            start, end = start_end.split("-")
+            start = int(start)
+            end = int(end)
+            sequence = str(record.seq)
+            self.dna[name] = Seq({start: sequence}, length=end)
         self.check_reading_psl_35_002("psl")
         self.check_reading_psl_35_002("pslx")
 
@@ -3232,6 +3243,49 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 alignment.query.seq[17:],
                 "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
             )
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(9712654), ExactPosition(9712786), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9715941), ExactPosition(9716097), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9716445), ExactPosition(9716532), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9718374), ExactPosition(9718422), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9739264), ExactPosition(9739339), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9743706), ExactPosition(9743766), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(9744511), ExactPosition(9744592), strand=+1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
+            # confirm that the feature coordinates are correct by extracting
+            # the feature sequence from the target sequence and tranlating it.
+            cds = feature.extract(self.dna[alignment.target.id]).translate()
+            self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3264,6 +3318,34 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 alignment.query.seq[21:],
                 "QLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
             )
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(2103463), ExactPosition(2103523), strand=+1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(2103522), ExactPosition(2104149), strand=+1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLYELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA",
+            )
+            # confirm that the feature coordinates are correct by extracting
+            # the feature sequence from the target sequence and tranlating it.
+            cds = feature.extract(self.dna[alignment.target.id]).translate()
+            self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3294,6 +3376,34 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 "MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL",
             )
             self.assertEqual(alignment.query.seq[203:], "DAIEVCKKFMERDPDELRFNAIALSAA")
+            self.assertEqual(len(alignment.target.seq.defined_ranges), 0)
+            self.assertEqual(len(alignment.target.features), 1)
+            feature = alignment.target.features[0]
+            self.assertEqual(
+                feature.location,
+                CompoundLocation(
+                    [
+                        FeatureLocation(
+                            ExactPosition(20872472), ExactPosition(20873021), strand=-1
+                        ),
+                        FeatureLocation(
+                            ExactPosition(20872390), ExactPosition(20872471), strand=-1
+                        ),
+                    ],
+                    operator="join",
+                ),
+            )
+            self.assertEqual(feature.type, "CDS")
+            self.assertEqual(len(feature.qualifiers), 1)
+            self.assertEqual(len(feature.qualifiers["translation"]), 1)
+            self.assertEqual(
+                feature.qualifiers["translation"][0],
+                "MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA",
+            )
+            # confirm that the feature coordinates are correct by extracting
+            # the feature sequence from the target sequence and tranlating it.
+            cds = feature.extract(self.dna[alignment.target.id]).translate()
+            self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
