@@ -165,7 +165,6 @@ class TestFASTAReadingWriting(unittest.TestCase):
 
     def test_muscle(self):
         path = "Clustalw/muscle.fa"
-        # includes the sequence length on the right hand side of each line
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             alignment = next(alignments)
@@ -230,7 +229,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
     def test_probcons(self):
         path = "Clustalw/probcons.fa"
         # example taken from the PROBCONS documentation,
-        # converted to aligned FASTA.
+        # and converted to aligned FASTA format.
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
             alignment = next(alignments)
