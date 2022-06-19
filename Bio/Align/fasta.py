@@ -26,7 +26,7 @@ warnings.warn(
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Alignment file writer for the Pattern Space Layout (PSL) file format."""
+    """Alignment file writer for the aligned FASTA file format."""
 
     def __init__(self, target):
         """Create an AlignmentWriter object.
