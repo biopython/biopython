@@ -297,8 +297,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
-            self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26)  # not +3
+            self.assertEqual(rec.features[0].location.start, 0)
+            self.assertEqual(rec.features[0].location.end, 26)  # not +3
 
     def test_add_seqrecord(self):
         """Simple left addition of SeqRecord from genbank file."""
@@ -317,14 +317,12 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             len(rec.features), len(self.record.features) + len(other.features)
         )
         self.assertEqual(rec.features[0].type, "source")
-        self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-        self.assertEqual(
-            rec.features[0].location.nofuzzy_end, len(self.record)
-        )  # not +3
+        self.assertEqual(rec.features[0].location.start, 0)
+        self.assertEqual(rec.features[0].location.end, len(self.record))  # not +3
         i = len(self.record.features)
         self.assertEqual(rec.features[i].type, "source")
-        self.assertEqual(rec.features[i].location.nofuzzy_start, len(self.record))
-        self.assertEqual(rec.features[i].location.nofuzzy_end, len(rec))
+        self.assertEqual(rec.features[i].location.start, len(self.record))
+        self.assertEqual(rec.features[i].location.end, len(rec))
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string."""
@@ -340,8 +338,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
-            self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26 + 3)
+            self.assertEqual(rec.features[0].location.start, 3)
+            self.assertEqual(rec.features[0].location.end, 26 + 3)
 
     def test_slice_add_simple(self):
         """Simple slice and add."""
