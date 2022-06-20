@@ -1092,12 +1092,16 @@ class FeatureLocation:
 
     @property
     def nofuzzy_start(self):
-        """Start position (integer, approximated if fuzzy, read only) (OBSOLETE).
+        """Start position (integer, approximated if fuzzy, read only) (DEPRECATED).
 
         This is now an alias for int(feature.start), which should be
         used in preference -- unless you are trying to support old
         versions of Biopython.
         """
+        warnings.warn(
+            "Use int(feature.start) rather than feature.nofuzzy_start",
+            BiopythonDeprecationWarning,
+        )
         try:
             return int(self._start)
         except TypeError:
@@ -1107,12 +1111,16 @@ class FeatureLocation:
 
     @property
     def nofuzzy_end(self):
-        """End position (integer, approximated if fuzzy, read only) (OBSOLETE).
+        """End position (integer, approximated if fuzzy, read only) (DEPRECATED).
 
         This is now an alias for int(feature.end), which should be
         used in preference -- unless you are trying to support old
         versions of Biopython.
         """
+        warnings.warn(
+            "Use int(feature.end) rather than feature.nofuzzy_end",
+            BiopythonDeprecationWarning,
+        )
         try:
             return int(self._end)
         except TypeError:
@@ -1156,7 +1164,7 @@ class FeatureLocation:
                 parent_sequence = parent_sequence.seq
             except AttributeError:
                 pass
-        f_seq = parent_sequence[self.nofuzzy_start : self.nofuzzy_end]
+        f_seq = parent_sequence[int(self.start) : int(self.end)]
         if isinstance(f_seq, MutableSeq):
             f_seq = Seq(f_seq)
         if self.strand == -1:
@@ -1513,12 +1521,16 @@ class CompoundLocation:
 
     @property
     def nofuzzy_start(self):
-        """Start position (integer, approximated if fuzzy, read only) (OBSOLETE).
+        """Start position (integer, approximated if fuzzy, read only) (DEPRECATED).
 
         This is an alias for int(feature.start), which should be used in
         preference -- unless you are trying to support old versions of
         Biopython.
         """
+        warnings.warn(
+            "Use int(feature.start) rather than feature.nofuzzy_start",
+            BiopythonDeprecationWarning,
+        )
         try:
             return int(self.start)
         except TypeError:
@@ -1528,12 +1540,16 @@ class CompoundLocation:
 
     @property
     def nofuzzy_end(self):
-        """End position (integer, approximated if fuzzy, read only) (OBSOLETE).
+        """End position (integer, approximated if fuzzy, read only) (DEPRECATED).
 
         This is an alias for int(feature.end), which should be used in
         preference -- unless you are trying to support old versions of
         Biopython.
         """
+        warnings.warn(
+            "Use int(feature.end) rather than feature.nofuzzy_end",
+            BiopythonDeprecationWarning,
+        )
         try:
             return int(self.end)
         except TypeError:

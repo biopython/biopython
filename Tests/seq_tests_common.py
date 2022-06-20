@@ -100,8 +100,15 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertEqual(len(old_f.location.parts), len(new_f.location.parts))
         for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
             # These are FeatureLocation objects
-            self.assertEqual(old_sub.nofuzzy_start, new_sub.nofuzzy_start)
-            self.assertEqual(old_sub.nofuzzy_end, new_sub.nofuzzy_end)
+            # Note UnknownPosition != UnknownPosition (just like NaN != NaN)
+            if isinstance(old_sub.start, UnknownPosition):
+                self.assertIsInstance(new_sub.start, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.start, new_sub.start)
+            if isinstance(old_sub.end, UnknownPosition):
+                self.assertIsInstance(new_sub.end, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.end, new_sub.end)
             self.assertEqual(old_sub.strand, new_sub.strand)
 
         self.assertCountEqual(old_f.qualifiers, new_f.qualifiers)

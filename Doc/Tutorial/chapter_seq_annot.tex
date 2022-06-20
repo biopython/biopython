@@ -456,20 +456,6 @@ they are actually subclasses of integers so should work like integers:
 9
 \end{minted}
 
-For compatibility with older versions of Biopython you can ask for the
-\verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location
-which are plain integers:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> my_location.nofuzzy_start
-5
->>> my_location.nofuzzy_end
-9
-\end{minted}
-
-Notice that this just gives you back the position attributes of the fuzzy locations.
-
 Similarly, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
 %cont-doctest
@@ -480,8 +466,6 @@ Similarly, to make it easy to create a position without worrying about fuzzy pos
 >>> exact_location.start
 ExactPosition(5)
 >>> int(exact_location.start)
-5
->>> exact_location.nofuzzy_start
 5
 \end{minted}
 
