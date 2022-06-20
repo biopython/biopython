@@ -512,11 +512,11 @@ A \verb|SeqFeature| or location object doesn't directly contain a sequence, inst
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
 >>> seq = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
->>> feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
+>>> feature = SeqFeature(FeatureLocation(5, 18, strand=-1), type="gene")
 \end{minted}
 
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
-If you are using Biopython 1.59 or later, the feature location's start and end are integer like so this works:
+The feature location's start and end are integer-like so this works:
 
 %cont-doctest
 \begin{minted}{pycon}
