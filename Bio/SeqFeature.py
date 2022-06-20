@@ -331,7 +331,6 @@ class SeqFeature:
         return SeqFeature(
             location=self.location._shift(offset),
             type=self.type,
-            location_operator=self.location_operator,
             id=self.id,
             qualifiers=self.qualifiers.copy(),
         )
@@ -349,7 +348,6 @@ class SeqFeature:
         return SeqFeature(
             location=self.location._flip(length),
             type=self.type,
-            location_operator=self.location_operator,
             id=self.id,
             qualifiers=self.qualifiers.copy(),
         )
