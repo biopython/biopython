@@ -275,10 +275,18 @@ There were multiple deprecations in Release 1.80:
 * Arguments ``strand``, ``ref`` and ``ref_db`` to the ``SeqFeature``
   class - set them via the location object
 * Unused class ``PositionGap`` - originally for very old GenBank files.
-* Attributes ``location.nofuzzy_start`` and ``location..nofuzzy_end`` -
+* Location attributes ``location.nofuzzy_start`` and ``location.nofuzzy_end`` -
   use the location directly or if required ``int(location.start)`` and
   ``int(location.end)``. This will fail for the ``UnknownPosition``
   where the nofuzzy aliases returned ``None``.
+* Position attribute ``.position`` returned the (left) position as an
+  integer - use the location directly or if required ``int(position)``,
+  however for ``OneOfPosition``, ``BetweenPosition``, and
+  ``WithinPosition`` that will give the default position rather than
+  the left-most (minimum) value.
+* Position attribute ``.extension`` returned the "width", typically
+  zero except for ``OneOfPosition``, ``BetweenPosition``, and
+  ``WithinPosition`` where this must be handled explicitly now.
 
 Bio.Motif
 ---------

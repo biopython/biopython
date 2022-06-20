@@ -387,13 +387,7 @@ of fuzzy positions, so we have five classes do deal with them:
   this class models a position which occurs somewhere between two
   specified nucleotides. In GenBank/EMBL notation, this would be
   represented as `(1.5)', to represent that the position is somewhere
-  within the range 1 to 5. To get the information in this class you
-  have to look at two attributes. The \verb|position| attribute
-  specifies the lower boundary of the range we are looking at, so in
-  our example case this would be one. The \verb|extension| attribute
-  specifies the range to the higher boundary, so in this case it
-  would be 4. So \verb|object.position| is the lower boundary and
-  \verb|object.position + object.extension| is the upper boundary.
+  within the range 1 to 5.
 
   \item[OneOfPosition] -- Occasionally used for GenBank/EMBL locations,
   this class deals with a position where several possible values exist,
