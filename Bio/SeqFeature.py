@@ -2214,11 +2214,16 @@ class OneOfPosition(int, AbstractPosition):
 
 
 class PositionGap:
-    """Simple class to hold information about a gap between positions."""
+    """Simple class to hold information about a gap between positions (DEPRECATED)."""
 
     def __init__(self, gap_size):
         """Initialize with a position object containing the gap information."""
         self.gap_size = gap_size
+        warnings.warn(
+            "The PositionGap class is deprecated and will be removed in a future release. "
+            "It has not been used in Biopython for over ten years.",
+            BiopythonDeprecationWarning,
+        )
 
     def __repr__(self):
         """Represent the position gap as a string for debugging."""
