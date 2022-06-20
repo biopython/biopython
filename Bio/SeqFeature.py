@@ -818,8 +818,8 @@ class FeatureLocation:
         else:
             raise TypeError(f"end={end!r} {type(end)}")
         if (
-            isinstance(self.start.position, int)
-            and isinstance(self.end.position, int)
+            isinstance(self.start, int)
+            and isinstance(self.end, int)
             and self.start > self.end
         ):
             raise ValueError(
