@@ -121,7 +121,7 @@ class SeqFeature:
 
         An invalid strand will trigger an exception:
 
-        >>> f4 = SeqFeature(FeatureLocation(50, 60), strand=2)
+        >>> f4 = SeqFeature(FeatureLocation(50, 60, strand=2))
         Traceback (most recent call last):
            ...
         ValueError: Strand should be +1, -1, 0 or None, not 2
@@ -540,7 +540,7 @@ class SeqFeature:
         along the feature using the parent sequence coordinates:
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5, 10), type="domain", strand=-1)
+        >>> f = SeqFeature(FeatureLocation(5, 10, strand=-1), type="domain")
         >>> len(f)
         5
         >>> for i in f: print(i)
@@ -563,7 +563,7 @@ class SeqFeature:
         """Check if an integer position is within the feature.
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5, 10), type="domain", strand=-1)
+        >>> f = SeqFeature(FeatureLocation(5, 10, strand=-1), type="domain")
         >>> len(f)
         5
         >>> [i for i in range(15) if i in f]
