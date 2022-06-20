@@ -289,7 +289,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             # Treat the unknown start position as a BeforePosition
             return "%s<%i..%s" % (
                 ref,
-                location.nofuzzy_end,
+                location.end,
                 _insdc_feature_position_string(location.end),
             )
         else:
@@ -297,7 +297,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             return "%s%s..>%i" % (
                 ref,
                 _insdc_feature_position_string(location.start, +1),
-                location.nofuzzy_start + 1,
+                location.start + 1,
             )
     else:
         # Typical case, e.g. 12..15 gets mapped to 11:15
@@ -884,8 +884,8 @@ class GenBankWriter(_InsdcWriter):
                     units = "bases"
                 data += "  (%s %i to %i)" % (
                     units,
-                    ref.location[0].nofuzzy_start + 1,
-                    ref.location[0].nofuzzy_end,
+                    ref.location[0].start + 1,
+                    ref.location[0].end,
                 )
             self._write_single_line("REFERENCE", data)
             if ref.authors:
@@ -1364,8 +1364,7 @@ class EmblWriter(_InsdcWriter):
             if ref.location and len(ref.location) == 1:
                 self._write_single_line(
                     "RP",
-                    "%i-%i"
-                    % (ref.location[0].nofuzzy_start + 1, ref.location[0].nofuzzy_end),
+                    "%i-%i" % (ref.location[0].start + 1, ref.location[0].end),
                 )
             # TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:

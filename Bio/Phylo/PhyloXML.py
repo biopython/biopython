@@ -1134,8 +1134,8 @@ class ProteinDomain(PhyloElement):
         """Create ProteinDomain object from SeqFeature."""
         return ProteinDomain(
             feat.id,
-            feat.location.nofuzzy_start,
-            feat.location.nofuzzy_end,
+            feat.location.start,
+            feat.location.end,
             confidence=feat.qualifiers.get("confidence"),
         )
 
