@@ -829,10 +829,11 @@ class DiagramTest(unittest.TestCase):
             if feature.type != "CDS":
                 # We're going to ignore these.
                 continue
-            if feature.location.end.position < start:
+            # These may miss fuzzy locations where the integer sorting is a simplification
+            if feature.location.end < start:
                 # Out of frame (too far left)
                 continue
-            if feature.location.start.position > end:
+            if feature.location.start > end:
                 # Out of frame (too far right)
                 continue
 
