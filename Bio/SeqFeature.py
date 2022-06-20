@@ -1599,6 +1599,30 @@ class AbstractPosition:
         """Represent the AbstractPosition object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
 
+    @property
+    def position(self):
+        """Legacy attribute to get (left-most) position as an integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.position is deprecated and will be removed in a future "
+            "release. Use location directly, or int(location). However, that will "
+            "fail for UnknownPosition, and for OneOfPosition and WithinPosition "
+            "will give the default rather than left-most value.",
+            BiopythonDeprecationWarning,
+        )
+        return int(self)
+
+    @property
+    def extension(self):
+        """Legacy attribute to get the position's 'width' as an integer, tyically zero (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.extension is deprecated and will be removed in a "
+            "future release. It was undefined or zero except for OneOfPosition, "
+            "WithinPosition and WithinPosition which must now be handled "
+            "explicitly instead.",
+            BiopythonDeprecationWarning,
+        )
+        return 0
+
 
 class ExactPosition(int, AbstractPosition):
     """Specify the specific position of a boundary.
@@ -1650,16 +1674,6 @@ class ExactPosition(int, AbstractPosition):
         """Represent the ExactPosition object as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
-    @property
-    def position(self):
-        """Legacy attribute to get position as integer (OBSOLETE)."""
-        return int(self)
-
-    @property
-    def extension(self):
-        """Not present in this object, return zero (OBSOLETE)."""
-        return 0
-
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         # By default preserve any subclass
@@ -1697,13 +1711,26 @@ class UnknownPosition(AbstractPosition):
 
     @property
     def position(self):
-        """Legacy attribute to get location (None) (OBSOLETE)."""
-        return None
+        """Legacy attribute to get location (None) (DEPRECATED).
 
-    @property
-    def extension(self):  # noqa: D402
-        """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""  # noqa: D402
-        return 0
+        In general you can use the location directly as with the exception of
+        UnknownPosition it subclasses int, or use int(location), rather than
+        this location.position legacy attribute.
+
+        However, the UnknownPosition cannot be cast to an integer, and thus
+        does not subclass int, and int(...) will fail. The legacy attribute
+        would return None instead.
+
+        Note that while None == None, UnknownPosition() != UnknownPosition()
+        which is like the behavour for NaN.
+        """
+        warnings.warn(
+            "Alias location.position is deprecated and will be removed in a future release. "
+            "In general use position directly, but not note for UnknownPosition "
+            "int(location) will fail. Use try/except or isinstance(location, UnknownPosition).",
+            BiopythonDeprecationWarning,
+        )
+        return None
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -1722,10 +1749,10 @@ class WithinPosition(int, AbstractPosition):
     - left - The start (left) position of the boundary
     - right - The end (right) position of the boundary
 
-    This allows dealing with a location like ((1.4)..100). This
-    indicates that the start of the sequence is somewhere between 1
-    and 4. Since this is a start coordinate, it should acts like
-    it is at position 1 (or in Python counting, 0).
+    This allows dealing with a location like ((11.14)..100). This
+    indicates that the start of the sequence is somewhere between 11
+    and 14. Since this is a start coordinate, it should act like
+    it is at position 11 (or in Python counting, 10).
 
     >>> p = WithinPosition(10, 10, 13)
     >>> p
@@ -1766,7 +1793,8 @@ class WithinPosition(int, AbstractPosition):
     >>> p == AfterPosition(10)
     True
 
-    If this were an end point, you would want the position to be 13:
+    If this were an end point, you would want the position to be 13
+    (the right/larger value, not the left/smaller value as above):
 
     >>> p2 = WithinPosition(13, 10, 13)
     >>> p2
@@ -1778,23 +1806,6 @@ class WithinPosition(int, AbstractPosition):
     >>> p2 == 13
     True
     >>> p2 == ExactPosition(13)
-    True
-
-    The old legacy properties of position and extension give the
-    starting/lower/left position as an integer, and the distance
-    to the ending/higher/right position as an integer. Note that
-    the position object will act like either the left or the right
-    end-point depending on how it was created:
-
-    >>> p.position == p2.position == 10
-    True
-    >>> p.extension == p2.extension == 3
-    True
-    >>> int(p) == int(p2)
-    False
-    >>> p == 10
-    True
-    >>> p2 == 13
     True
 
     """
@@ -1833,12 +1844,23 @@ class WithinPosition(int, AbstractPosition):
 
     @property
     def position(self):
-        """Legacy attribute to get (left) position as integer (OBSOLETE)."""
+        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.position is deprecated and will be removed in a future release. "
+            "Use location directly, or int(location) which will return the preferred location "
+            "defined for WithinPosition (which may not be the left-most position).",
+            BiopythonDeprecationWarning,
+        )
         return self._left
 
     @property
-    def extension(self):  # noqa: D402
-        """Legacy attribute to get extension (from left to right) as an integer (OBSOLETE)."""  # noqa: D402
+    def extension(self):
+        """Legacy attribute to get the within-position's 'width' as an integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.extension is deprecated and will be removed in a future release. "
+            "This is usually zero, but there is no neat replacement for the WithinPosition object.",
+            BiopythonDeprecationWarning,
+        )
         return self._right - self._left
 
     def _shift(self, offset):
@@ -1892,14 +1914,6 @@ class BetweenPosition(int, AbstractPosition):
     end-point depending on how it was created:
 
     >>> p2 = BetweenPosition(123, left=123, right=456)
-    >>> p.position == p2.position == 123
-    True
-    >>> p.extension
-    333
-    >>> p2.extension
-    333
-    >>> p.extension == p2.extension == 333
-    True
     >>> int(p) == int(p2)
     False
     >>> p == 456
@@ -1924,6 +1938,7 @@ class BetweenPosition(int, AbstractPosition):
     def __new__(cls, position, left, right):
         """Create a new instance in BetweenPosition object."""
         assert position == left or position == right
+        # TODO - public API for getting left/right, especially the unknown one
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -1951,12 +1966,23 @@ class BetweenPosition(int, AbstractPosition):
 
     @property
     def position(self):
-        """Legacy attribute to get (left) position as integer (OBSOLETE)."""
+        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.position is deprecated and will be removed in a future release. "
+            "Use location directly, or int(location) which will return the preferred location "
+            "defined for a BetweenPosition (which may not be the left-most position).",
+            BiopythonDeprecationWarning,
+        )
         return self._left
 
     @property
-    def extension(self):  # noqa: D402
-        """Legacy attribute to get extension (from left to right) as an integer (OBSOLETE)."""  # noqa: D402
+    def extension(self):
+        """Legacy attribute to get the between-position's 'width' as an integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.extension is deprecated and will be removed in a future release. "
+            "This is usually zero, but there is no neat replacement for the BetweenPosition object.",
+            BiopythonDeprecationWarning,
+        )
         return self._right - self._left
 
     def _shift(self, offset):
@@ -2012,23 +2038,13 @@ class BeforePosition(int, AbstractPosition):
             raise AttributeError(f"Non-zero extension {extension} for exact position.")
         return int.__new__(cls, position)
 
-    @property
-    def position(self):
-        """Legacy attribute to get position as integer (OBSOLETE)."""
-        return int(self)
-
-    @property
-    def extension(self):  # noqa: D402
-        """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""  # noqa: D402
-        return 0
-
     def __repr__(self):
         """Represent the location as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
         """Return a representation of the BeforePosition object (with python counting)."""
-        return f"<{self.position}"
+        return f"<{int(self)}"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2086,23 +2102,13 @@ class AfterPosition(int, AbstractPosition):
             raise AttributeError(f"Non-zero extension {extension} for exact position.")
         return int.__new__(cls, position)
 
-    @property
-    def position(self):
-        """Legacy attribute to get position as integer (OBSOLETE)."""
-        return int(self)
-
-    @property
-    def extension(self):  # noqa: D402
-        """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""  # noqa: D402
-        return 0
-
     def __repr__(self):
         """Represent the location as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
         """Return a representation of the AfterPosition object (with python counting)."""
-        return f">{self.position}"
+        return f">{int(self)}"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2144,24 +2150,6 @@ class OneOfPosition(int, AbstractPosition):
     >>> isinstance(p, int)
     True
 
-    The old legacy properties of position and extension give the
-    starting/lowest/left-most position as an integer, and the
-    distance to the ending/highest/right-most position as an integer.
-    Note that the position object will act like one of the list of
-    possible locations depending on how it was created:
-
-    >>> p2 = OneOfPosition(1901, [ExactPosition(1888), ExactPosition(1901)])
-    >>> p.position == p2.position == 1888
-    True
-    >>> p.extension == p2.extension == 13
-    True
-    >>> int(p) == int(p2)
-    False
-    >>> p == 1888
-    True
-    >>> p2 == 1901
-    True
-
     """
 
     def __new__(cls, position, choices):
@@ -2189,12 +2177,25 @@ class OneOfPosition(int, AbstractPosition):
 
     @property
     def position(self):
-        """Legacy attribute to get (left) position as integer (OBSOLETE)."""
+        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.position is deprecated and will be removed in a future release. "
+            "Use location directly, or int(location) which will return the preferred location "
+            "defined for a OneOfPosition (which may not be the left-most position), or "
+            "min(location.position_choices) instead.",
+            BiopythonDeprecationWarning,
+        )
         return min(int(pos) for pos in self.position_choices)
 
     @property
     def extension(self):
-        """Legacy attribute to get extension as integer (OBSOLETE)."""
+        """Legacy attribute to get the one-of-position's 'width' as an integer (DEPRECATED)."""
+        warnings.warn(
+            "Alias location.extension is deprecated and will be removed in a future release. "
+            "This is usually zero, but for a OneOfPosition you can use "
+            "max(position.position_choices) - min(position.position_choices)",
+            BiopythonDeprecationWarning,
+        )
         positions = [int(pos) for pos in self.position_choices]
         return max(positions) - min(positions)
 
