@@ -41,9 +41,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
         lines = []
+        state = alignment.column_annotations["state"]
         for sequence, line in zip(alignment.sequences, alignment):
             lines.append(f">{sequence.id} {sequence.description}")
-            lines.append(line)
+            s = ""
+            for c, m in zip(line, state):
+                if m == "D":
+                    s += c.upper()
+                elif m == "I":
+                    if c == "-":
+                        s += "."
+                    else:
+                        s += c.lower()
+            lines.append(s)
         return "\n".join(lines)
 
 
@@ -86,6 +96,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 lines[-1] += line.strip()
         if not lines:
             raise ValueError("Empty file.")
+        state = ""
+        for c in lines[0]:
+            if c == "-" or c.isupper():
+                state += "D"  # Match/deletion state
+            elif c == "." or c.islower():
+                state += "I"  # Insertion state
+            else:
+                raise Exception("Unexpected letter '%s' in alignment" % c)
+        for line in lines[1:]:
+            for c, m in zip(line, state):
+                if m == "D":  # Match/deletion state
+                    assert c == "-" or c.isupper()
+                elif m == "I":  # Insertion state
+                    assert c == "." or c.islower()
+                else:
+                    raise Exception("Unexpected letter '%s' in alignment" % c)
+        for i, line in enumerate(lines):
+            lines[i] = line.upper().replace(".", "-")
         coordinates = Alignment.infer_coordinates(lines)
         records = []
         for name, description, line in zip(names, descriptions, lines):
@@ -97,5 +125,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 record = SeqRecord(sequence, name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
+        alignment.column_annotations = {}
+        alignment.column_annotations["state"] = state
         yield alignment
-
