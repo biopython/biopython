@@ -53,7 +53,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     An aligned FASTA file contains one multiple alignment. Alignment gaps are
     represented by dashes in the sequence lines. Header lines start with '>'
-    followed by name of the sequence, and optionally a description.
+    followed by the name of the sequence, and optionally a description.
     """
 
     def __init__(self, source):
