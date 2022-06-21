@@ -39,7 +39,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
             self.assertEqual(sequence.seq, saved_sequence.seq)
             self.assertEqual(alignment[i], saved_alignment[i])
 
-    def test_fastaw(self):
+    def test_clustalw(self):
         path = "Clustalw/clustalw.fa"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
