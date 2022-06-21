@@ -1613,7 +1613,7 @@ class AbstractPosition:
 
     @property
     def extension(self):
-        """Legacy attribute to get the position's 'width' as an integer, tyically zero (DEPRECATED)."""
+        """Legacy attribute to get the position's 'width' as an integer, typically zero (DEPRECATED)."""
         warnings.warn(
             "Alias location.extension is deprecated and will be removed in a "
             "future release. It was undefined or zero except for OneOfPosition, "
