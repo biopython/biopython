@@ -67,13 +67,3 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
-ci:
-    # Settings for the https://pre-commit.ci/ continuous integration service
-    autofix_prs: false
-    # Default message is more verbose
-    autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
-    # Default is weekly
-    autoupdate_schedule: quarterly
-    # Currently pre-commit.ci checks all files, and flake8 takes too long
-    # and causes a timeout - so as a short-term workaround, skip it:
-    skip: [flake8]

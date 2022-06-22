@@ -4,9 +4,6 @@
 .. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg?logo=conda-forge
    :alt: Biopython on the Conda package conda-forge channel
    :target: https://anaconda.org/conda-forge/biopython
-.. image:: https://results.pre-commit.ci/badge/github/biopython/biopython/master.svg
-   :target: https://results.pre-commit.ci/latest/github/biopython/biopython/master
-   :alt: pre-commit.ci status
 .. image:: https://img.shields.io/circleci/build/github/biopython/biopython.svg?logo=circleci
    :alt: Linux testing with CircleCI
    :target: https://app.circleci.com/pipelines/github/biopython/biopython
