@@ -319,6 +319,8 @@ jobs:
 
   # Flag step
   check_tests:
+    permissions:
+      contents: none
     needs: [test_linux, test_macos, test_windows]
     runs-on: ubuntu-latest
     steps:
@@ -366,6 +368,8 @@ jobs:
       shell: bash
     
   cleanup_wheels:
+    permissions:
+      contents: none
     if: always()
     needs: [build_wheels]
     runs-on: ubuntu-latest
