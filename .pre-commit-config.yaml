@@ -10,7 +10,6 @@ repos:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
     -   id: check-json
-    -   id: debug-statements
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending

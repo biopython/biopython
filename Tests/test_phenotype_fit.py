@@ -67,7 +67,7 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertAlmostEqual(w.plateau, 188.51404344898586, places=4)
         self.assertAlmostEqual(w.slope, 48.190618284831132, places=4)
         self.assertAlmostEqual(w.v, 0.10000000000000001, places=5)
-        self.assertAlmostEqual(w.y0, 45.879770069807989, places=5)
+        self.assertAlmostEqual(w.y0, 45.879770069807989, places=4)
         self.assertEqual(w.max, 313.0)
         self.assertEqual(w.min, 29.0)
         self.assertEqual(w.average_height, 217.82552083333334)

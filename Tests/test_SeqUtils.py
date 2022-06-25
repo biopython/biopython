@@ -58,8 +58,8 @@ class SeqUtilsTests(unittest.TestCase):
         records = []
         for feature in record.features:
             if feature.type == "CDS" and len(feature.location.parts) == 1:
-                start = feature.location.start.position
-                end = feature.location.end.position
+                start = feature.location.start
+                end = feature.location.end
                 table = int(feature.qualifiers["transl_table"][0])
                 if feature.strand == -1:
                     seq = record.seq[start:end].reverse_complement()

@@ -389,7 +389,7 @@ class LabelTest(unittest.TestCase):
                 strand = -1
                 name = "Reverse"
                 color = colors.blue
-            feature = SeqFeature(FeatureLocation(start, end), strand=strand)
+            feature = SeqFeature(FeatureLocation(start, end, strand=strand))
             self.gds_features.add_feature(
                 feature, name=name, color=color, label=True, **kwargs
             )
@@ -427,11 +427,11 @@ class SigilsTest(unittest.TestCase):
         # We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
         # Add three features to show the strand options,
-        feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
+        feature = SeqFeature(FeatureLocation(25, 125, strand=+1))
         self.gds_features.add_feature(feature, name="Forward", **kwargs)
-        feature = SeqFeature(FeatureLocation(150, 250), strand=None)
-        self.gds_features.add_feature(feature, name="Strandless", **kwargs)
-        feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
+        feature = SeqFeature(FeatureLocation(150, 250, strand=None))
+        self.gds_features.add_feature(feature, name="strandless", **kwargs)
+        feature = SeqFeature(FeatureLocation(275, 375, strand=-1))
         self.gds_features.add_feature(feature, name="Reverse", **kwargs)
 
     def finish(self, name, circular=True):
@@ -563,69 +563,69 @@ class SigilsTest(unittest.TestCase):
         # - Red arrows should be small triangles (so short no shaft shown)
 
         # Forward strand:
-        feature = SeqFeature(FeatureLocation(15, 30), strand=-1)
+        feature = SeqFeature(FeatureLocation(15, 30, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(15, 30), strand=+1)
+        feature = SeqFeature(FeatureLocation(15, 30, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(55, 60), strand=-1)
+        feature = SeqFeature(FeatureLocation(55, 60, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(55, 60), strand=+1)
+        feature = SeqFeature(FeatureLocation(55, 60, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(75, 125), strand=-1)
+        feature = SeqFeature(FeatureLocation(75, 125, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(75, 125), strand=+1)
+        feature = SeqFeature(FeatureLocation(75, 125, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=0.05
         )
 
         # Strandless:
-        feature = SeqFeature(FeatureLocation(140, 155), strand=None)
+        feature = SeqFeature(FeatureLocation(140, 155, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(180, 185), strand=None)
+        feature = SeqFeature(FeatureLocation(180, 185, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(200, 250), strand=None)
+        feature = SeqFeature(FeatureLocation(200, 250, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=0.05
         )
 
         # Reverse strand:
-        feature = SeqFeature(FeatureLocation(265, 280), strand=+1)
+        feature = SeqFeature(FeatureLocation(265, 280, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(265, 280), strand=-1)
+        feature = SeqFeature(FeatureLocation(265, 280, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(305, 310), strand=+1)
+        feature = SeqFeature(FeatureLocation(305, 310, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(305, 310), strand=-1)
+        feature = SeqFeature(FeatureLocation(305, 310, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(325, 375), strand=+1)
+        feature = SeqFeature(FeatureLocation(325, 375, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(325, 375), strand=-1)
+        feature = SeqFeature(FeatureLocation(325, 375, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=0.05
@@ -657,11 +657,11 @@ class SigilsTest(unittest.TestCase):
         self.gds_features = self.gdt_features.new_set()
         if glyph in ["BIGARROW"]:
             # These straddle the axis, so don't want to draw them on top of each other
-            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=None))
             self.gds_features.add_feature(feature, color="lightblue")
-            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=+1))
         else:
-            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=+1))
             self.gds_features.add_feature(feature, color="lightblue")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, color="blue", arrowhead_length=2.0
@@ -671,11 +671,11 @@ class SigilsTest(unittest.TestCase):
             # These straddle the axis, so don't want to draw them on top of each other
             self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
             self.gds_features = self.gdt_features.new_set()
-            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=None))
             self.gds_features.add_feature(feature, color="pink")
-            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=-1))
         else:
-            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+            feature = SeqFeature(FeatureLocation(25, 375, strand=-1))
             self.gds_features.add_feature(feature, color="pink")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, color="red", arrowhead_length=2.0
@@ -684,7 +684,7 @@ class SigilsTest(unittest.TestCase):
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
         # We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
-        feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+        feature = SeqFeature(FeatureLocation(25, 375, strand=None))
         self.gds_features.add_feature(feature, color="lightgreen")
         self.gds_features.add_feature(
             feature, name="Standless", sigil=glyph, color="green", arrowhead_length=2.0
@@ -829,10 +829,11 @@ class DiagramTest(unittest.TestCase):
             if feature.type != "CDS":
                 # We're going to ignore these.
                 continue
-            if feature.location.end.position < start:
+            # These may miss fuzzy locations where the integer sorting is a simplification
+            if feature.location.end < start:
                 # Out of frame (too far left)
                 continue
-            if feature.location.start.position > end:
+            if feature.location.start > end:
                 # Out of frame (too far right)
                 continue
 
@@ -941,7 +942,7 @@ class DiagramTest(unittest.TestCase):
                 index = genbank_entry.seq.find(site, start=index)
                 if index == -1:
                     break
-                feature = SeqFeature(FeatureLocation(index, index + 6), strand=None)
+                feature = SeqFeature(FeatureLocation(index, index + 6, strand=None))
 
                 # This URL should work in SVG output from recent versions
                 # of ReportLab.  You need ReportLab 2.4 or later

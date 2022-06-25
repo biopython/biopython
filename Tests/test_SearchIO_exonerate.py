@@ -2346,7 +2346,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual("SPAdes contig NODE_1", hit.description)
         self.assertEqual(1, len(hit))
         # first hit, first hsp
-        self.assertEqual(1958, hsp.score)
+        self.assertEqual(1978, hsp.score)
         self.assertEqual([0, 0, 0, 0, 0, 0], hsp.query_strand_all)
         self.assertEqual([-1, -1, -1, -1, -1, -1], hsp.hit_strand_all)
         self.assertEqual(48, hsp.query_start)

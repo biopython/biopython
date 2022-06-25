@@ -286,6 +286,8 @@ warnings.warn(
 
 MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
 
+Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
+
 
 class align:
     """Provide functions that do alignments.
@@ -1152,7 +1154,6 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
-    Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:

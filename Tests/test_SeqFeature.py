@@ -225,12 +225,12 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(str(location3.start), "(10.13)")
         self.assertEqual(str(location3.end), ">40")
         # --- test non-fuzzy representations
-        self.assertEqual(location1.nofuzzy_start, 5)
-        self.assertEqual(location1.nofuzzy_end, 13)
-        self.assertEqual(location2.nofuzzy_start, 15)
-        self.assertEqual(location2.nofuzzy_end, 24)
-        self.assertEqual(location3.nofuzzy_start, 10)
-        self.assertEqual(location3.nofuzzy_end, 40)
+        self.assertEqual(int(location1.start), 5)
+        self.assertEqual(int(location1.end), 13)
+        self.assertEqual(int(location2.start), 15)
+        self.assertEqual(int(location2.end), 24)
+        self.assertEqual(int(location3.start), 10)
+        self.assertEqual(int(location3.end), 40)
 
 
 class TestPositions(unittest.TestCase):

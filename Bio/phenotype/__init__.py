@@ -167,15 +167,11 @@ def parse(handle, format):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in _FormatToIterator:
+        raise ValueError(f"Unknown format '{format}'")
 
     with as_handle(handle) as fp:
-        # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
-            i = iterator_generator(fp)
-        else:
-            raise ValueError(f"Unknown format '{format}'")
-        yield from i
+        yield from _FormatToIterator[format](fp)
 
 
 def read(handle, format):

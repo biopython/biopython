@@ -48,20 +48,30 @@ performance improvement and to much better maintainability. The refactored
 ``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
 that of ``Bio.PDB.Superimposer``.
 
+In the ``Bio.Restriction`` module, each restriction enzyme now includes an `id`
+property giving the numerical identifier for the REBASE database identifier
+from which the enzyme object was created, and a `uri` property with a canonical
+`identifiers.org` link to the database, for use in linked-data representations.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
+- Christian Brueffer
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Hussein Faara (first contribution)
 - Manuel Lera Ramirez
+- Jacob Beal (first contribution)
 - João Rodrigues
+- Jarrod Millman
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
@@ -69,6 +79,7 @@ possible, especially the following contributors:
 - Sebastian Bassi
 - Sean Aubin
 - Tim Burke
+- Valentin Vareškić (first contribution)
 
 3 June 2021: Biopython 1.79
 ===========================
