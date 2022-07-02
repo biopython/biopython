@@ -469,8 +469,8 @@ covalent_radii = {
     "Nsb": 0.70,
     "Nres": 0.66,
     "Ndb": 0.62,
-    "Hsb": 0.37,
     "Ssb": 1.04,
+    "Hsb": 0.37,
 }
 
 # Atom classes based on Heyrovska, Raji covalent radii paper.
