@@ -477,7 +477,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target = SeqRecord(target_seq, id=target_name, description=target_description)
         records = [target, query]
         alignment = Alignment(records, coordinates=coordinates)
-        annotations = self.annotations
+        alignment.annotations = self.annotations
         confidence = self.confidence
         matchline = self.matchline
         query_consensus = self.query_consensus
