@@ -432,9 +432,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 break
             key, value = line.split(None, 1)
             if key == "Query":
-                query_name = value
+                self.query_name = value
             elif key == "Match_columns":
-                query_length = int(value)
+                metadata[key] = int(value)
             elif key == "No_of_seqs":
                 value1, value2 = value.split(" out of ")
                 metadata[key] = (int(value1), int(value2))
@@ -448,8 +448,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.commandline = value
             else:
                 raise ValueError("Unknown key '%s'" % key)
-        sequence = Seq(None, length=query_length)
-        self.query = SeqRecord(None, id=query_name)
         self.metadata = metadata
         for line in stream:
             # Skip everything until we reach the first alignment
@@ -457,11 +455,37 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 break
 
     def create_alignment(self):
-        query = self.query
-        name = self.target_name
-        description = self.target_description
-        target = SeqRecord(None, id=name, description=description)
-        return (target, query)
+        query_name = self.query_name
+        query_length = self.query_length
+        assert query_length == self.metadata["Match_columns"]
+        target_name = self.target_name
+        target_description = self.target_description
+        query_sequence = self.query_sequence
+        target_sequence = self.target_sequence
+        assert len(target_sequence) == len(query_sequence)
+        coordinates = Alignment.infer_coordinates([target_sequence, query_sequence])
+        coordinates[0, :] += self.target_start
+        coordinates[1, :] += self.query_start
+        query_sequence = query_sequence.replace("-", "")
+        query_sequence = {self.query_start: query_sequence}
+        query_seq = Seq(query_sequence, length=query_length)
+        query = SeqRecord(query_seq, id=query_name)
+        target_sequence = target_sequence.replace("-", "")
+        target_sequence = {self.target_start: target_sequence}
+        target_length = self.target_length
+        target_seq = Seq(target_sequence, length=target_length)
+        target = SeqRecord(target_seq, id=target_name, description=target_description)
+        records = [target, query]
+        alignment = Alignment(records, coordinates=coordinates)
+        annotations = self.annotations
+        confidence = self.confidence
+        matchline = self.matchline
+        query_consensus = self.query_consensus
+        query_ss_pred = self.query_ss_pred
+        target_consensus = self.target_consensus
+        target_ss_desp = self.target_ss_dssp
+        target_ss_pred = self.target_ss_pred
+        return alignment
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -482,10 +506,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.query_ss_pred = ""
                 self.query_consensus = ""
                 self.query_sequence = ""
+                self.query_start = None
                 self.target_ss_pred = ""
                 self.target_consensus = ""
                 self.target_ss_dssp = ""
                 self.target_sequence = ""
+                self.target_start = None
                 self.matchline = ""
                 self.confidence = ""
                 line = next(stream)
@@ -503,30 +529,50 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 yield self.create_alignment()
                 break
             elif line.startswith(" "):
-                self.matchline += value
+                self.matchline += line.strip()
             elif line.startswith("No "):
                 key, value = line.split()
                 assert int(value) == counter + 1
             elif line.startswith("Confidence"):
+                key, value = line.split(None, 1)
                 self.confidence += value
             elif line.startswith("Q ss_pred "):
+                key, value = line.rsplit(None, 1)
                 self.query_ss_pred += value
             elif line.startswith("Q Consensus "):
+                key, value = line.rsplit(None, 1)
                 self.query_consensus += value
             elif line.startswith("Q "):
-                key1, key2, value = line.split(None, 2)
-                assert self.query.id.startswith(key2)
-                self.query_sequence += value
+                key1, key2, start, sequence, end, total = line.split()
+                assert self.query_name.startswith(key2)
+                start = int(start) - 1
+                end = int(end)
+                assert total.startswith("(")
+                assert total.endswith(")")
+                self.query_length = int(total[1:-1])
+                if self.query_start is None:
+                    self.query_start = start
+                self.query_sequence += sequence
             elif line.startswith("T ss_pred "):
+                key, value = line.rsplit(None, 1)
                 self.target_ss_pred += value
             elif line.startswith("T ss_dssp "):
+                key, value = line.rsplit(None, 1)
                 self.target_ss_dssp += value
             elif line.startswith("T Consensus "):
+                key, value = line.rsplit(None, 1)
                 self.target_consensus += value
             elif line.startswith("T "):
-                key1, key2, value = line.split(None, 2)
+                key1, key2, start, sequence, end, total = line.split()
                 assert self.target_name.startswith(key2)
-                self.target_sequence += value
+                start = int(start) - 1
+                end = int(end)
+                assert total.startswith("(")
+                assert total.endswith(")")
+                self.target_length = int(total[1:-1])
+                if self.target_start is None:
+                    self.target_start = start
+                self.target_sequence += sequence
             else:
                 raise ValueError("Failed to parse line '%s...'" % line[:30])
         else:
