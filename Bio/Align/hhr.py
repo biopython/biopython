@@ -475,16 +475,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_length = self.target_length
         target_seq = Seq(target_sequence, length=target_length)
         target = SeqRecord(target_seq, id=target_name, description=target_description)
+        query_consensus = self.query_consensus.replace("-", "")
+        query_consensus = " " * self.query_start + query_consensus
+        query_consensus += " " * (query_length - len(query_consensus))
+        query.letter_annotations["Consensus"] = query_consensus
+        target_consensus = self.target_consensus.replace("-", "")
+        target_consensus = " " * self.target_start + target_consensus
+        target_consensus += " " * (target_length - len(target_consensus))
+        target.letter_annotations["Consensus"] = target_consensus
+        target_ss_dssp = self.target_ss_dssp.replace("-", "")
+        target_ss_dssp = " " * self.target_start + target_ss_dssp
+        target_ss_dssp += " " * (target_length - len(target_ss_dssp))
+        target.letter_annotations["ss_dssp"] = target_ss_dssp
+        query_ss_pred = self.query_ss_pred.replace("-", "")
+        query_ss_pred = " " * self.query_start + query_ss_pred
+        query_ss_pred += " " * (query_length - len(query_ss_pred))
+        query.letter_annotations["ss_pred"] = query_ss_pred
+        target_ss_pred = self.target_ss_pred.replace("-", "")
+        target_ss_pred = " " * self.target_start + target_ss_pred
+        target_ss_pred += " " * (target_length - len(target_ss_pred))
+        target.letter_annotations["ss_pred"] = target_ss_pred
+        confidence = self.confidence.replace(" ", "")
+        confidence = " " * self.target_start + confidence
+        confidence += " " * (target_length - len(confidence))
+        target.letter_annotations["Confidence"] = confidence
         records = [target, query]
         alignment = Alignment(records, coordinates=coordinates)
         alignment.annotations = self.annotations
-        confidence = self.confidence
-        matchline = self.matchline
-        query_consensus = self.query_consensus
-        query_ss_pred = self.query_ss_pred
-        target_consensus = self.target_consensus
-        target_ss_desp = self.target_ss_dssp
-        target_ss_pred = self.target_ss_pred
+        alignment.column_annotations = {}
+        alignment.column_annotations["column score"] = self.column_score
         return alignment
 
     def parse(self, stream):
@@ -512,7 +531,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.target_ss_dssp = ""
                 self.target_sequence = ""
                 self.target_start = None
-                self.matchline = ""
+                self.column_score = ""
                 self.confidence = ""
                 line = next(stream)
                 words = line.split()
@@ -529,7 +548,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 yield self.create_alignment()
                 break
             elif line.startswith(" "):
-                self.matchline += line.strip()
+                self.column_score += line.strip()
             elif line.startswith("No "):
                 key, value = line.split()
                 assert int(value) == counter + 1
@@ -540,8 +559,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 key, value = line.rsplit(None, 1)
                 self.query_ss_pred += value
             elif line.startswith("Q Consensus "):
-                key, value = line.rsplit(None, 1)
-                self.query_consensus += value
+                key1, key2, start, consensus, end, total = line.split()
+                start = int(start) - 1
+                end = int(end)
+                assert total.startswith("(")
+                assert total.endswith(")")
+                total = int(total[1:-1])
+                self.query_consensus += consensus
             elif line.startswith("Q "):
                 key1, key2, start, sequence, end, total = line.split()
                 assert self.query_name.startswith(key2)
@@ -560,8 +584,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 key, value = line.rsplit(None, 1)
                 self.target_ss_dssp += value
             elif line.startswith("T Consensus "):
-                key, value = line.rsplit(None, 1)
-                self.target_consensus += value
+                key1, key2, start, consensus, end, total = line.split()
+                start = int(start) - 1
+                end = int(end)
+                assert total.startswith("(")
+                assert total.endswith(")")
+                total = int(total[1:-1])
+                self.target_consensus += consensus
             elif line.startswith("T "):
                 key1, key2, start, sequence, end, total = line.split()
                 assert self.target_name.startswith(key2)
