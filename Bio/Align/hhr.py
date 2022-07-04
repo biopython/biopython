@@ -438,7 +438,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "No_of_seqs":
                 value1, value2 = value.split(" out of ")
                 metadata[key] = (int(value1), int(value2))
-            elif key == "Neff":
+            elif key in ("Neff", "Template_Neff"):
                 metadata[key] = float(value)
             elif key == "Searched_HMMs":
                 metadata[key] = int(value)
