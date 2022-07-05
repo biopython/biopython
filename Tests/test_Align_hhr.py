@@ -1450,6 +1450,27 @@ class Align_hhr_allx(unittest.TestCase):
             next(alignments)
 
 
+class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
+    def test_reading(self):
+        path = os.path.join("HHsuite", "2uvo_hhblits_emptytable.hhr")
+        alignments = hhr.AlignmentIterator(path)
+        self.assertEqual(alignments.metadata["Match_columns"], 171)
+        self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
+        self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
+        self.assertEqual(alignments.metadata["Searched_HMMs"], 34)
+        self.assertEqual(alignments.metadata["Date"], 'Fri Feb 15 16:34:13 2019')
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+
+class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
+    def test_reading(self):
+        path = os.path.join("HHsuite", "2uvo_hhblits_onlyheader.hhr")
+        with self.assertRaises(ValueError) as cm:
+            alignments = hhr.AlignmentIterator(path)
+        self.assertEqual(str(cm.exception), "Truncated file.")
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

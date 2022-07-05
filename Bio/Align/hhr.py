@@ -449,10 +449,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Unknown key '%s'" % key)
         self.metadata = metadata
+        try:
+            line = next(stream)
+        except StopIteration:
+            raise ValueError("Truncated file.") from None
+        assert line.split() == ["No", "Hit", "Prob", "E-value", "P-value", "Score", "SS", "Cols", "Query", "HMM", "Template", "HMM"]
+        number = 0
         for line in stream:
-            # Skip everything until we reach the first alignment
-            if line.strip() == "No 1":
+            if line.strip() == "":
                 break
+            number += 1
+            word, _ = line.split(None, 1)
+            assert int(word) == number
+        self.number = number
+        self.counter = 0
 
     def create_alignment(self):
         query_name = self.query_name
@@ -508,19 +518,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
-        counter = 1
-        self.target_name = None
+        if self.number == 0:
+            return
         for line in stream:
             line = line.rstrip()
             if not line:
                 pass
             elif line.startswith(">"):
-                if self.target_name is not None:
-                    yield self.create_alignment()
-                    counter += 1
                 self.target_name, self.target_description = line[1:].split(None, 1)
                 self.query_ss_pred = ""
                 self.query_consensus = ""
@@ -550,8 +554,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif line.startswith(" "):
                 self.column_score += line.strip()
             elif line.startswith("No "):
+                if self.counter > 0:
+                    yield self.create_alignment()
+                self.counter += 1
                 key, value = line.split()
-                assert int(value) == counter + 1
+                assert int(value) == self.counter
             elif line.startswith("Confidence"):
                 key, value = line.split(None, 1)
                 self.confidence += value
@@ -615,3 +622,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         raise ValueError(
             "Found additional data after 'Done!'; corrupt file?"
         )
+        if self.number != self.counter:
+            raise ValueError(
+                "Expected %d alignments, found %d" % (self.number, self.counter)
+            )
