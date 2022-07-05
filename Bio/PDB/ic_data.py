@@ -559,8 +559,10 @@ electronegativity = {"C": 2.55, "O": 3.44, "N": 3.04, "H": 2.20, "S": 2.58}
 #
 # hedra defaults based on residue-atom classes from reference database
 #
-# values in comments after each entry are std dev for each value, followed by
-# total count of hedra in class
+# entry format is
+# [(len1, angle, len3 averages), angle_sd]  # len1, len3 std dev, [total count]
+#
+# angle standard deviation is used by  :func:`ic_data.write_PIC`
 #
 # N.B. these are just intended as reasonable starting values.  Despite the low
 # standard deviations, structures degrade quickly with any variation from true
@@ -1484,16 +1486,18 @@ hedra_defaults = {
 # aromatic sidechains as required by the algorithm.  These are the ones you
 # really need to specify.
 #
-# each entry is the most common rounded int value observed over the class
+# each entry is the most common rounded int value observed over the class,
+# followed by standard deviation (used by :func:`ic_data.write_PIC`)
 #
-# numbers in comments after each entry are count of dihedra in class, average
-# angle, and standard deviation.
+# numbers in comments after each entry are count of dihedra in class and average
+# angle
 #
 # N.B. these are just intended as reasonable starting values, in practice they
 # generate a helical backbone with a kink at proline residues
 
 # 134 total primary entries
 dihedra_primary_defaults = {
+    # [most common int(value), std_dev] # count average
     "ANACAACAOXT": [169, 95.25474],  # 81 -165.46932
     "ANACAACXN": [-42, 98.15673],  # 36750 -29.47243
     "CNCCACCBCSG": [-70, 81.01579],  # 5998 -85.23394
