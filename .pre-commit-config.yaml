@@ -41,7 +41,11 @@ repos:
     rev: v6.0.0.post1
     hooks:
     -   id: rstcheck
-        args: [--report-level=warning]
+        args: [
+            --ignore-roles=ref,
+            --ignore-directives=toctree,
+            --report-level=warning
+        ]
 -   repo: https://github.com/PyCQA/doc8
     rev: 0.11.2
     hooks:
