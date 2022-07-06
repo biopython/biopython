@@ -98,7 +98,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.number = number
         self.counter = 0
 
-    def create_alignment(self):
+    def _create_alignment(self):
         query_name = self.query_name
         query_length = self.query_length
         assert query_length == self.metadata["Match_columns"]
@@ -197,7 +197,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.column_score += line.strip()
             elif line.startswith("No "):
                 if self.counter > 0:
-                    yield self.create_alignment()
+                    yield self._create_alignment()
                 self.counter += 1
                 key, value = line.split()
                 assert int(value) == self.counter
@@ -254,7 +254,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.target_sequence += sequence
             else:
                 raise ValueError("Failed to parse line '%s...'" % line[:30])
-        yield self.create_alignment()
+        yield self._create_alignment()
         if self.number != self.counter:
             raise ValueError(
                 "Expected %d alignments, found %d" % (self.number, self.counter)
