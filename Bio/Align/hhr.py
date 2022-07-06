@@ -74,7 +74,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = next(stream)
         except StopIteration:
             raise ValueError("Truncated file.") from None
-        assert line.split() == ["No", "Hit", "Prob", "E-value", "P-value", "Score", "SS", "Cols", "Query", "HMM", "Template", "HMM"]
+        assert line.split() == [
+            "No",
+            "Hit",
+            "Prob",
+            "E-value",
+            "P-value",
+            "Score",
+            "SS",
+            "Cols",
+            "Query",
+            "HMM",
+            "Template",
+            "HMM",
+        ]
         number = 0
         for line in stream:
             if line.strip() == "":
@@ -106,8 +119,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_sequence = {self.target_start: target_sequence}
         target_length = self.target_length
         target_seq = Seq(target_sequence, length=target_length)
-        target_annotations = {"hmm_name": hmm_name,
-                              "hmm_description": hmm_description}
+        target_annotations = {"hmm_name": hmm_name, "hmm_description": hmm_description}
         target = SeqRecord(target_seq, id=target_name, annotations=target_annotations)
         query_consensus = self.query_consensus.replace("-", "")
         query_consensus = " " * self.query_start + query_consensus
