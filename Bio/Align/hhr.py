@@ -469,7 +469,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_length = self.query_length
         assert query_length == self.metadata["Match_columns"]
         target_name = self.target_name
-        target_description = self.target_description
+        hmm_name = self.hmm_name
+        hmm_description = self.hmm_description
         query_sequence = self.query_sequence
         target_sequence = self.target_sequence
         assert len(target_sequence) == len(query_sequence)
@@ -484,7 +485,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_sequence = {self.target_start: target_sequence}
         target_length = self.target_length
         target_seq = Seq(target_sequence, length=target_length)
-        target = SeqRecord(target_seq, id=target_name, description=target_description)
+        target_annotations = {"hmm_name": hmm_name,
+                              "hmm_description": hmm_description}
+        target = SeqRecord(target_seq, id=target_name, annotations=target_annotations)
         query_consensus = self.query_consensus.replace("-", "")
         query_consensus = " " * self.query_start + query_consensus
         query_consensus += " " * (query_length - len(query_consensus))
@@ -525,7 +528,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if not line:
                 pass
             elif line.startswith(">"):
-                self.target_name, self.target_description = line[1:].split(None, 1)
+                self.hmm_name, self.hmm_description = line[1:].split(None, 1)
                 self.query_ss_pred = ""
                 self.query_consensus = ""
                 self.query_sequence = ""
@@ -549,8 +552,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     value = float(value)
                     self.annotations[key] = value
             elif line == "Done!":
-                yield self.create_alignment()
-                break
+                try:
+                    next(stream)
+                except StopIteration:
+                    pass
+                else:
+                    raise ValueError(
+                        "Found additional data after 'Done!'; corrupt file?"
+                    )
             elif line.startswith(" "):
                 self.column_score += line.strip()
             elif line.startswith("No "):
@@ -599,8 +608,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 total = int(total[1:-1])
                 self.target_consensus += consensus
             elif line.startswith("T "):
-                key1, key2, start, sequence, end, total = line.split()
-                assert self.target_name.startswith(key2)
+                key, name, start, sequence, end, total = line.split()
+                assert key == "T"
+                self.target_name = name
                 start = int(start) - 1
                 end = int(end)
                 assert total.startswith("(")
@@ -611,17 +621,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.target_sequence += sequence
             else:
                 raise ValueError("Failed to parse line '%s...'" % line[:30])
-        else:
-            raise ValueError(
-            "Failed to find 'Done!'; truncated file?"
-        )
-        try:
-            next(stream)
-        except StopIteration:
-            return
-        raise ValueError(
-            "Found additional data after 'Done!'; corrupt file?"
-        )
+        yield self.create_alignment()
         if self.number != self.counter:
             raise ValueError(
                 "Expected %d alignments, found %d" % (self.number, self.counter)
