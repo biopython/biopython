@@ -83,6 +83,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "799999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998899999999999999999999999999999999999999999999999999999999999999999999999999986",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0, 171],
+                             [  0, 171]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.92)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-30)
@@ -132,6 +142,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 699999999999999999999999999999999999888888899873567889999999999999999999999988888888999744568899999999999999999999999999998899987356788999999999999999999999999876 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  48,  48,  90,  90, 131, 131, 163],
+                             [  1,  48,  50,  92,  94, 135, 137, 169]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.77)
@@ -183,6 +203,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 389999999999999999999999999999999999752346788765567888999999999999999999999986422467877554567899999999999999999999999973     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
+                             [  0,  38,  39,  40,  41,  81,  82,  83,  84, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.8e-24)
@@ -232,6 +262,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 468888778999999999999999999999999998642345777654456788899999999999999999999997422467787555668999999999999999999999999984     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
+                             [ 43,  81,  82,  83,  84, 124, 125, 126, 127, 167]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.72)
@@ -283,6 +323,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 57776556789999999999999999999999999888888899998654567889999999999999999999999988888889999754456789999999999999999999999998755                                             ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1, 126],
+                             [ 44, 169]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e-21)
@@ -328,6 +378,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "  cCCCcccccCCCCceECCcceECCCCccccCccccCcccccceeccCCCcCCCCcccCCCceeCCCCcccCCCccccccccccccCcccccCCCCCccCCCCCccCccccccCCccccccc                                         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  48,  48,  90,  90, 123],
+                             [ 45,  91,  93, 135, 137, 170]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.31)
@@ -379,6 +439,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 467776667789999999999999999999999998642356788765567788999999999999999999999986   ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  79],
+                             [ 43,  81,  83, 123]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.26)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.7e-16)
@@ -428,6 +498,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "689999988999999999999999999999999999764347889986556788999999999999999999998698753        ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0, 38, 38, 40, 44, 80, 81, 86],
+                             [ 0, 38, 39, 41, 41, 77, 77, 82]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.22)
@@ -479,6 +559,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 5777666678999999999999999999999999875434788887654567889999999999999999999979974         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  38,  38,  40,  44,  80,  81,  85],
+                             [ 44,  81,  82,  84,  84, 120, 120, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.6e-16)
@@ -529,6 +619,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  466654457789999999999999999999999997423467887655678899999999999999999999999974  ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  39,  39,  40,  40,  80],
+                             [ 87, 124, 125, 126, 127, 167]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 7.7e-09)
@@ -570,6 +670,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 3555444567889999999999999999998679874     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  33,  35,  40],
+                             [ 87, 119, 119, 124]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.67)
@@ -613,6 +723,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "6899567789999999999999999999999849864    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0,  5,  5, 32, 33, 38],
+                             [ 0,  5,  6, 33, 33, 38]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.9e-08)
@@ -654,6 +774,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 355333567889999999999999999999849874    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,   5,   5,  33,  34,  38],
+                             [ 87,  91,  92, 120, 120, 124]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.65)
@@ -697,6 +827,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "57999988889999999999999999999999679864     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0, 33, 35, 40],
+                             [ 0, 33, 33, 38]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.62)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e-08)
@@ -738,6 +878,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   6888887789999999999999999999999999864     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3, 40],
+                             [ 1, 38]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.59)
@@ -781,6 +931,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  4555444567889999999999999999999868864     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  35,  36,  40],
+                             [ 87, 120, 120, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.57)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.3e-08)
@@ -822,6 +982,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "  45665544567889999999999999999999999873     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  40],
+                             [ 86, 124]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.46)
@@ -865,6 +1035,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 47899987789999999999999999999999868864     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 1, 35, 36, 40],
+                             [ 0, 34, 34, 38]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.25)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-07)
@@ -904,6 +1084,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "  45678875436899999999999999999986 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 2, 12, 12, 34],
+                             [41, 51, 53, 75]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.13)
@@ -945,6 +1135,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  45677775436889999999999999999986 ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  12,  12,  34],
+                             [ 84,  94,  96, 118]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.8e-07)
@@ -982,6 +1182,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "     3468899999999999999999963",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  5,  30],
+                             [ 94, 119]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.99)
@@ -1021,6 +1231,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "   345689999999999999999999973",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3, 30],
+                             [ 6, 33]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.90)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3e-06)
@@ -1059,6 +1279,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "       36888999999999999999985",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  7,  30],
+                             [ 95, 118]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.3e-06)
@@ -1096,6 +1326,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   566258999999999999999999985",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3,  6,  6, 30],
+                             [ 1,  4,  8, 32]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.11)
@@ -1139,6 +1379,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 35666555578999999999999999999999999975                                                                                                                                                                                                                                                                              ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39],
+                             [ 86, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 95.96)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.8e-05)
@@ -1181,6 +1431,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 46777666678999999999999999999999999865                                                                                                                                                                                                                                                                              ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 1, 39],
+                             [43, 81]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.64)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.043)
@@ -1218,6 +1478,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                                               6899999999999999973565                                                                                                                                                                                           ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 47,  65,  66,  70],
+                             [143, 161, 161, 165]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.97)
@@ -1265,6 +1535,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "          456667777777777777777665554434333344332235666778877777777777776665544333333343323456667788888888777777776665544433334443234566677888777787777777665543    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  49,  49,  90,  90, 131, 131, 160],
+                             [ 10,  49,  51,  92,  94, 135, 137, 166]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.29)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.11)
@@ -1307,6 +1587,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "                          57765423467657899999999999999974576                                                                                                                                                                                                   ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[26, 32, 37, 44, 47, 66, 67, 70],
+                             [ 1,  7,  7, 14, 14, 33, 33, 36]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.27)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.11)
@@ -1344,6 +1634,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                             368999999999999999835553                                                                                                                                                                                       ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 29,  49,  50,  54],
+                             [ 99, 119, 119, 123]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 79.58)
@@ -1386,6 +1686,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "        3677664334565378999999999999999845654                                                                                                                                                                                               ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 8, 15, 20, 27, 30, 49, 50, 54],
+                             [ 0,  7,  7, 14, 14, 33, 33, 37]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 40.43)
@@ -1432,6 +1742,16 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "          3445566666666666665665555433332233333212346666777777777777666666555443322233332223344455555555555555544433                                                ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  49,  49,  90,  90, 116],
+                             [ 53,  92,  94, 135, 137, 163]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -1498,6 +1818,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "799999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998899999999999999999999999999999999999999999999999999999999999999999999999999986",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0, 171],
+                             [  0, 171]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.95)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.8e-33)
@@ -1547,6 +1877,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 588899999999999999999999999999999999999999999985789999999999999999999999999999999999999855679999999999999999999999999999999999988367899999999999999999999999999876 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  48,  48,  90,  90, 130, 130, 163],
+                             [  1,  48,  50,  92,  94, 134, 136, 169]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
@@ -1598,6 +1938,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "489999999999999999999999999999999999999999999999998899999999999999999999999999999999999999988889999999999999999999999999998644                                             ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0, 126],
+                             [ 43, 169]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.5e-25)
@@ -1647,6 +1997,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 699999999999999999999999999999999999764355788888889999999999999999999999999998633578999888999999999999999999999999999984     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  41,  41,  80,  80,  81,  81, 121],
+                             [ 43,  81,  82,  84,  85, 124, 125, 126, 127, 167]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.82)
@@ -1698,6 +2058,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 48999999999999999999999999999999999976444589988889999999999999999999999999999753356888888888999999999999999999999999997      ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  41,  41,  80,  80,  82,  82, 120],
+                             [  0,  38,  39,  41,  42,  81,  82,  84,  85, 123]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.78)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.7e-23)
@@ -1747,6 +2117,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 4889999999999999999999999999999999999999999999857889999999999999999999999999999999999998667899999999999999999999999998654                                          ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  48,  48,  90,  90, 122],
+                             [ 44,  91,  93, 135, 137, 169]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.54)
@@ -1798,6 +2178,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 5899999999999999999999999999999999996534678998888999999999999999999999999999984  ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  39,  39,  40,  40,  80],
+                             [ 43,  81,  82,  83,  84, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-18)
@@ -1847,6 +2237,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 7999999999999999999999999999999999976665889999888899999999999999999999999989985         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  38,  38,  41,  45,  80,  81,  85],
+                             [ 44,  81,  82,  85,  85, 120, 120, 124]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.41)
@@ -1898,6 +2298,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "68999999999999999999999999999999999986764678998888889999999999999999999999988863         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0, 38, 38, 41, 45, 80, 81, 85],
+                             [ 0, 38, 39, 42, 42, 77, 77, 81]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.38)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-16)
@@ -1948,6 +2358,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  588999999999999999999999999999999998624678999889999999999999999999999999999984  ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  39,  39,  80],
+                             [ 87, 124, 126, 167]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.20)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-09)
@@ -1989,6 +2409,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 45688888889999999999999999999999999998554   ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  40,  40,  42],
+                             [ 85, 124, 125, 127]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.12)
@@ -2032,6 +2462,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 4788888899999999999999999999999689985     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  33,  35,  40],
+                             [ 87, 119, 119, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 8e-09)
@@ -2073,6 +2513,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   68888888999999999999999999999999999756543 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3, 40, 40, 44],
+                             [ 1, 38, 39, 43]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.97)
@@ -2116,6 +2566,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  5788888899999999999999999999999879976     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  35,  36,  40],
+                             [ 87, 120, 120, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2e-08)
@@ -2158,6 +2618,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "6899578889999999999999999999999959976    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0,  4,  4, 33, 34, 38],
+                             [ 0,  4,  5, 34, 34, 38]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.83)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.8e-08)
@@ -2195,6 +2665,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "  788889999999999999999999996 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  29],
+                             [ 91, 118]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.83)
@@ -2238,6 +2718,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 477477889999999999999999999999859986    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,   4,   4,  33,  34,  38],
+                             [ 87,  90,  91, 120, 120, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.76)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.7e-08)
@@ -2279,6 +2769,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "58999988899999999999999999999999778864     ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 0, 33, 35, 40],
+                             [ 0, 33, 33, 38]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.58)
@@ -2322,6 +2822,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 47888888889999999999999999999999878865     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 1, 35, 36, 40],
+                             [ 0, 34, 34, 38]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-07)
@@ -2359,6 +2869,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "    34568999999999999999999985",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  4,  30],
+                             [ 92, 118]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.56)
@@ -2402,6 +2922,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 467889988876999999999999999999986 ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  12,  12,  34],
+                             [ 83,  94,  96, 118]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.24)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-06)
@@ -2444,6 +2974,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  4888889999999999999999999999999999987                                                                                                                                                                                                                                                                              ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  39],
+                             [ 87, 124]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.14)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.9e-06)
@@ -2482,6 +3022,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "  4456689999999999999999999974",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 2, 30],
+                             [ 5, 33]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.02)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e-06)
@@ -2519,6 +3069,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   566348999999999999999999985",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3,  6,  6, 30],
+                             [ 1,  4,  8, 32]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.79)
@@ -2562,6 +3122,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             " 47999999999999999999999999999999999965                                                                                                                                                                                                                                                                              ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 1, 39],
+                             [43, 81]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.68)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-05)
@@ -2601,6 +3171,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   45788888779999999999999999999963",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 3, 12, 12, 35],
+                             [42, 51, 53, 76]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 92.12)
@@ -2648,6 +3228,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "        45688889999999999999999999999999999988754467999999999999999999999999999999999887544679999999999999999999999999999999998876446799999999999998888888877765444 ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  8,  49,  49,  90,  90, 131, 131, 163],
+                             [  8,  49,  51,  92,  94, 135, 137, 169]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 88.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.1)
@@ -2689,6 +3279,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "     55666776655567775899999999999999886                                                                                                                                                                                                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  5,  15,  20,  27,  30,  48],
+                             [ 83,  93,  93, 100, 100, 118]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 88.13)
@@ -2732,6 +3332,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "       346666656678875899999999999999997                                                                                                                                                                                                    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 7, 15, 20, 27, 30, 48],
+                             [42, 50, 50, 57, 57, 75]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.21)
@@ -2774,6 +3384,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "                      34555555544457776899999999999999875                                                                                                                                                                                                       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 22,  32,  37,  44,  47,  65],
+                             [ 83,  93,  93, 100, 100, 118]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.31)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.23)
@@ -2815,6 +3435,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                         456665555788768999999999999999864555                                                                                                                                                                                                   ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[25, 32, 37, 44, 47, 65, 66, 70],
+                             [43, 50, 50, 57, 57, 75, 75, 79]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 72.00)
@@ -2861,6 +3491,16 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                                                 456788899999999999999999999999999998887544679999999999999999999999999999999998875446799999999999998888888776655443 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 49,  90,  90, 131, 131, 163],
+                             [  8,  49,  51,  92,  94, 126]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -2911,6 +3551,16 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                       H      ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[23, 24],
+                             [38, 39]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e04)
@@ -2944,6 +3594,16 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "         C                   ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 9, 10],
+                             [ 3,  4]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
@@ -2979,6 +3639,16 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "C                           ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[0, 1],
+                             [3, 4]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e04)
@@ -3012,6 +3682,16 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          C                  ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[10, 11],
+                             [ 3,  4]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
@@ -3047,6 +3727,16 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "     C                         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[5, 6],
+                             [3, 4]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e04)
@@ -3080,6 +3770,16 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                            C ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[28, 29],
+                             [37, 38]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
@@ -3115,6 +3815,16 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "C                           ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[0, 1],
+                             [1, 2]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.6e04)
@@ -3146,6 +3856,16 @@ class Align_hhr_allx(unittest.TestCase):
         )
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"], "                h         "
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[16, 17],
+                             [35, 36]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
@@ -3181,6 +3901,16 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                            C",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[28, 29],
+                             [35, 36]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.6e04)
@@ -3214,6 +3944,16 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "C                               ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[0, 1],
+                             [3, 4]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -3282,6 +4022,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CChHHHHHHHHHHHHHHHHHHHHHHHHHcCCcccccccCCCccccceEEeccchhhhhcCCCCcccccchHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhccccCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhccCcCCCCCCcccchhHHHHHHHHHHHHHHHHHHHhchhccCCCCccCC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0, 198],
+                             [  0, 198]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-27)
@@ -3332,6 +4082,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "ChhHHHHHHHHHHHHHHHHHHHHHHhCchhhhcccCCCcccccceeeeeccchhhhcCCCcEEceechhHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHcchhhhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCCCcccccHHHHHHHHHHHHHHHHHHHHhcC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  38,  39, 153, 154, 185],
+                             [  3,  41,  41, 155, 155, 186]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
@@ -3384,6 +4144,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                                                                       hhhHHHHHHHHHHHHHHHHHHHHHHHHhCchhhhhcccCCcccCceeEEEeccchheeecCCceEeeechhhhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcccCCCChhhHHHHHHHHHHHHHHHHHHhHHHHHHHHHHHHHHhcCcccCCCCCcccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[167, 207, 208, 279, 279, 321, 322, 364],
+                             [  1,  41,  41, 112, 113, 155, 155, 197]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.82)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-24)
@@ -3434,6 +4204,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CchhhHHHHHHHHHHHHHHHHHHHHHHHhcCCceeeecccCCCCCcccccccccceeeeeccccchhccccccCCceeeccCCCCCccCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCcccCccCCCcccccHHHHHHHHHHHHHHHHHHHHHHHHhhhhHHHHHHH                                                                                                               ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  41,  52,  86,  97, 128, 128, 212],
+                             [  0,  41,  41,  75,  75, 106, 114, 198]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.81)
@@ -3486,6 +4266,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CCccccHHHHHHHHHHHHHHHHHHHHHhCcchhhcCCCCCCCCcchheeecccHHHhchhhccCCCCCCccccCCCcccceeeeccCCCCCCCCCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCChhhHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCcceEeecchHHHHHHHHHHHHHHHHHHHHHHcccCCCCCcchh        ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  41,  43,  63,  76,  87,  98, 131, 131, 214],
+                             [  1,  42,  42,  62,  62,  73,  73, 106, 115, 198]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.7e-24)
@@ -3536,6 +4326,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                           HhHHHHHHHHHHHHHHHHHHHHHHHChHhhCCCCCCCCCceeehhhhhccccCCcceeeecCCCCHhhCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHcccCCCCHHHHHHhcCCCCCCCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhhcCchhh          ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 27,  64,  64,  80,  81,  95,  97, 128, 128, 165, 172, 218],
+                             [  4,  41,  45,  61,  61,  75,  75, 106, 115, 152, 152, 198]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.53)
@@ -3588,6 +4388,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   CchHHHHHHHHHHHHHHHHHHHHHHHhccCcceeeccccccccCCcCccccccccccccccceeeeeecCcccCceeecccCCCCcCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcccCCceehhhHHHHHHHHHHHHHHHHHHHHHhcCCcccCCCCcccceecHHHHHHHHHHHHHHHHHHHHHHHHHHHhHhhcCCC ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 819,  851,  862,  902,  913,  946,  946, 1030],
+                             [   1,   33,   33,   73,   73,  106,  114,  198]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.7)
@@ -3628,6 +4438,16 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "        HHHHHHHHHHHHHHHHHHHHHHHcccccccccCC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 8, 34, 36, 42],
+                             [ 5, 31, 31, 37]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -3696,6 +4516,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             " CCcHHHHHHHHHHHHHHHHHHHHHHhcCCCChhhHHHHHHHHHHHHHHHHHHHHHHcCCCceeeccCCCCCcchHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHhHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHhC ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1, 227],
+                             [  0, 226]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.9e-45)
@@ -3746,6 +4576,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                  CchHHHHHHHHHHHHHHHHHHHHHHHcCCCChhhHHHHHHHHHHHHHHHHHHHHHHcCCCceeccCCCCcCccchHHHHHHHhHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcccchhhHHHHHHHHHHHHHHHHHHHHhHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCCchHHHHHHHHHHHHHHHHHHHHHHHHHHHhc                  ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 18, 244],
+                             [  0, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -3798,6 +4638,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "     hhHHHHHHHHHHHHHHHHHHHHHHhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCceeEecCCcceeeeHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcCChhhHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHcccccCCCCChHHHHHHHHHHHHHHHHhHHHHHHHhhHHHH          ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  5, 194, 195, 231],
+                             [  1, 190, 190, 226]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-42)
@@ -3848,6 +4698,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "               CchHHHHHHHHHHHHHHHHHHHHHHhcCCCCHHHHHHHHHHHHHHHHHHHHHHHHHcCCCceeEecCCCCeeeecHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHhCCCchhHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHCcCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhc                 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 15,  80,  81, 242],
+                             [  0,  65,  65, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -3900,6 +4760,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "    hhHHHHHHHHHHHHHHHHHHHHHHHcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCeeEeecCCcceeeeHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcccCCccCcchHHHHHHHHHHHHHHHHHHHHHhhhhHHHhcCChhHHHHHHHHHHHHHHHHHHHHHHHHHccccccccCHHHHHHHHHHHHHHHHHHHHHHHHHHcchh                ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  4, 128, 134, 234],
+                             [  1, 125, 125, 225]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-42)
@@ -3950,6 +4820,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "             hhHHHHHHHHHHHHHHHHHHHHHHhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCceeeeccCCCeeeeeHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHccchhhHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCcccccccCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhC                       ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 13,  78,  79, 239],
+                             [  1,  66,  66, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4002,6 +4882,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             " chHHHHHHHHHHHHHHHHHHHHHHHcCCCCCcHHHHHHHHHHHHHHHHHHHHHHcCCCccccCcccccHHHHHHHHHHHHHHHHHHHHHcCCChHHHHHHHHHHHHHHHHHHHHHhCCcchHHHHHHHHHHHHHHHHHHHHchHHHHHhhcchhHHHHHHHHHHHHHHHHHHHHHHHHHCccccCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHH       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  30,  30,  63,  63, 120, 120, 218],
+                             [  1,  30,  31,  64,  68, 125, 126, 224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.6e-42)
@@ -4053,6 +4943,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "     cHHHHHHHHHHHHHHHHHHHHHHHHHcCCChhhHHHHHHHHHHHHHHHHHHHHHHhcccccccCCcccchHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHhCCccchHHHHHHHHHHHHHHHHHHHHHhhHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCcCCCChHHHHHHHHHHHHHhhHHHHHHHHHHHHHH    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  5,  35,  35,  69,  69, 188, 188, 225],
+                             [  0,  30,  31,  65,  68, 187, 188, 225]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-41)
@@ -4099,6 +4999,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "  HHHHHHHHHHHHHHHHHHHHHHHcCCCCCcHHHHHHHHHHHHHHHHHHHHHHcCCCceecCcccccHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHhCCcchHHHHHHHHHHHHHHHHHHHHcHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCCcccCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                               ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  2,  29,  29,  62,  62, 119, 119, 217],
+                             [  3,  30,  31,  64,  68, 125, 126, 224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4151,6 +5061,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                     HHHHHHHHHHHHHHHHHHHhcCCCcchhhHHHHHHHHHHHHHHHHHHHHhcCCCCCCCCCCCCCceeeeHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhChhhHHHHHHHHHHHHHHHHHHHHHHHHcCccccCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHH     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 21,  45,  45,  77,  79, 141, 141, 201, 201, 239],
+                             [  6,  30,  31,  63,  63, 125, 126, 186, 187, 225]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-40)
@@ -4201,6 +5121,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             " chHHHHHHHHHHHHHHHHHHHHHHhCCCCCCchHHHHHHHHHHHHHHHHHHHHHhccCceecccccccHHHHHHHHHHHHHHHHHHHHHHHhcccCCHHHHHHHHHHHHHHHHHHHHHHhcCCcchHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHCCCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcc                                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  28,  28,  63,  63,  93,  97, 225],
+                             [  1,  28,  29,  64,  68,  98,  98, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4253,6 +5183,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                    HHHHHHHHHHHHHHHHHHHHcCCCChHHHHHHHHHHHHHHHHHHHHHHHHcCCCceEEecccccccCCceeeecCCccCceeccHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcCCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhChHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHh                      ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 36,  95, 111, 172, 173, 206, 206, 269],
+                             [  6,  65,  65, 126, 126, 159, 161, 224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-40)
@@ -4303,6 +5243,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                               HHHHHHHHHHHHHHHHHHHHcCCCCCCccHHHHHHHHHHHHHHHHHHHHHcCCCceeeecccCCcccCCeEeeeHHHHHHHHhHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcCCchhhHHHHHHHHHHHHHHHHHHHHhHHHHhcCChhHHHHHHHHHHHHHHHHHHHHHHHHHccccccccCChHHHHHHHHHHHHHHHHHHHHHHHHHHHhch                 ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 31,  91,  97, 156, 156, 157, 159, 188, 188, 224, 225, 257],
+                             [  6,  66,  66, 125, 126, 127, 127, 156, 158, 194, 194, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4355,6 +5305,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             " CCcHHHHHHHHHHHHHHHHHHHHHHHhCCCChHHHHHHHHHHHHHHHHHHHHHHHHhCCCceeccCCCCCCcchhHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHhccchhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHhHHhHhcC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1, 149, 149, 196],
+                             [  0, 148, 170, 217]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.7e-39)
@@ -4405,6 +5365,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                        hHHHHHHHHHHHHHHHHHHHHHHHHHcCCCcchhHHHHHHHHHHHHHHHHHHHHHhchhhcccccchhcccccCCCCCccchHHHHHHHHHHHHHHHHHHHHHHcccccchHHHHHHHHHHHHHHHHHHHHHHHhccCcchhHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCcccCCCCHHHHHHHHHHHHHHhHHHHHHHHHHHHHH                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 24,  54,  54,  90,  97, 103, 105, 136, 140, 161, 163, 227, 231,
+                              236, 238, 268],
+                             [  0,  30,  31,  67,  67,  73,  73, 104, 104, 125, 125, 189, 189,
+                              194, 194, 224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4457,6 +5429,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                       chhHHHHHHHHHHHHHHHHHHHHHHHccCCCCchhHHHHHHHHHHHHHHHHHHHHHHHHcCcCCCccccHHHHHHHHHHHHHHHHHHHHHhCCCCcchHHHHHHHHHHHHHHHHHHHHHHccchHHHHHHHHHHHHHHHHHHHHHHHHHHHhccCCchHHHHHHHHHHHHHHHHHHHHHHHHHHCcccCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                                    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 87, 117, 117, 127, 130, 150, 150, 182, 185, 210, 210, 242, 243,
+                              311],
+                             [  0,  30,  31,  41,  41,  61,  68, 100, 100, 125, 126, 158, 158,
+                              226]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.1e-38)
@@ -4507,6 +5491,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "            HHHHHHHHHHHHHHHHHHHHccCCChHHHHHHHHHHHHHHHHHHHHHHHHcchhhcCCCCchHHHHHHHhHHHHHHHHHHHHHHHHccCCHHHHHHHHHHHHHHHHHHHHHHhccccHHHHHHHHHHHHHHHHHHHHhhHHHHHhhCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhccCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 12,  37,  37,  67,  67,  97, 101, 129, 129, 158, 160, 189, 189,
+                              226],
+                             [  5,  30,  31,  61,  68,  98,  98, 126, 128, 157, 157, 186, 187,
+                              224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4559,6 +5555,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                       HHHHHHHHHHHHHHHHHHHhccCCchhHHHHHHHHHHHHHHHHHHHHHHcccccceeeeCCccccCCcccccHHHHHHHHHHHHHHHHHHHHHHccCCcchHHHHHHHHHHHHHHHHHHHHHHhcCCChhHHHHHHHHHHHHHHHHHHHHHhhHHHHHHHhccCCchHHHHHHHHHHHHHHHHHHHHHHhhhhcCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                        ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 23,  47,  47,  82,  88,  95,  95, 122, 126, 151, 153, 251],
+                             [  6,  30,  31,  66,  66,  73,  74, 101, 101, 126, 126, 224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4e-38)
@@ -4609,6 +5615,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "       hHHHHHHHHHHHHHHHHHHHHHHHHHcCCChhhHHHHHHHHHHHHHHHHHHHHHHhcccccccccccCCCCcHHHHhHHHhHHHHHHHHHHHHHccccccCHHHHHHHHHHHHHHHHHHHHHHHhhhccCCCcchHHHHHHHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCcchhHHHHHHHHHHHHHHHHHHHHHHHHHHHh                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  7,  37,  37,  79,  79, 103, 107, 134, 139, 238],
+                             [  0,  30,  31,  73,  74,  98,  98, 125, 125, 224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4661,6 +5677,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                          chHHHHHHHHHHHHHHHHHHHHHHHhcCCCcchHHHHHHHHHHHHHHHHHHHHHHhccccCCCCCcHHHHHHHHhHHHHHHHHHHHHHhhcccchHHHHHHHHHHHHHHHHHHHHHHhcccchHHHHHHHHHHHHHHHHHHHhhhHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH               ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 26,  56,  56,  86,  86, 117, 121, 147, 147, 170, 171, 208, 209,
+                              246],
+                             [  0,  30,  31,  61,  68,  99,  99, 125, 127, 150, 150, 187, 187,
+                              224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.6e-38)
@@ -4711,6 +5739,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                  HHHHHHHHHHHHHHHHHHhccCCcchHHHHHHHHHHHHHHHHHHHHHHHhcccceeccCCcccCCCceeccHHHHHHHHHHHHHHHHHHHHHHccchhccHHHHHHHHHHHHHHHHhHHHHHhCCCCcchhHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCchHHHHHHHHHHHHHhcHHHHHHHHHHHHHh                      ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 18,  41,  41,  66,  67,  78,  82, 114, 118, 176, 178, 211, 212,
+                              246],
+                             [  7,  30,  31,  56,  56,  67,  67,  99,  99, 157, 157, 190, 190,
+                              224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4763,6 +5803,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                  HHHHHHHHHHHHHHHHHHHhcCCCcchhHHHHHHHHHHHHHHHHHHHHHhchHhHHHhhCCCCCCCCcccchHHHHHHHHHHHHHHHHHHHHHhCCCcccchhHHHHHHHHHHHHHHhchHHHhcccccccchhHHHHHHHHHHHHHHHHHHHHHHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcCcccCCCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                    ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 18,  42,  42,  79,  82,  89,  91, 118, 122, 146, 149, 212, 215,
+                              222, 225, 253],
+                             [  6,  30,  31,  68,  68,  75,  75, 102, 102, 126, 126, 189, 189,
+                              196, 196, 224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.1e-37)
@@ -4813,6 +5865,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                    HHHHHHHHHHHHHHHHHHHHHHhcCCCCchHHHHHHHHHHHHHHHHHHHhcCCceeecCCCceeeHHHHHHHHhHHHHHHHHHHHHhCCCCcchHHHHHHHHHHHHHHHHHHHHHHcccchhHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCChHHHHHHHHHHHHHHHHHHHHHHHHHHCccCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                                               ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 68,  94,  94, 106, 107, 111, 111, 127, 127, 160, 163, 187, 187,
+                              220, 221, 286],
+                             [  4,  30,  31,  43,  43,  47,  49,  65,  68, 101, 101, 125, 126,
+                              159, 159, 224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4865,6 +5929,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "      HHHHHHHHHHHHHHHHHHHHcCCCChHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCCcHHHHhHHHhHHHHHHHHHHHHHhcccchHHHHHHHHHHHHHHHHHHHHHHHhcCCccchHHHHHHHHHHHHHHHHHHHHhhccCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcCChHHHHHHHHHHHHHHhHHHHHHHHHHHHHH       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  6,  31,  31,  60,  60,  93,  96, 120, 121, 145, 145, 182, 182,
+                              185, 185, 213],
+                             [  5,  30,  31,  60,  68, 101, 101, 125, 125, 149, 153, 190, 192,
+                              195, 196, 224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.7e-36)
@@ -4915,6 +5991,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                          HHHHHHHHHHHHHHHHHHHHHHhcCCCCcHHHHHHHHHHHHHHHHHHhCCCceecCCCccchHHHHHHHHHHHHHHHHHHHHHhcCCcccCChHHHHHHHHHHHHHHHHHHHhcCCchHHHHHHHHHHHHHHHHHHHHHHHHHHHHhhHHhhcccCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCccCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHh                             ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 26,  34,  34,  53,  53,  82,  82, 114, 117, 167, 174, 248],
+                             [  0,   8,  11,  30,  36,  65,  68, 100, 100, 150, 150, 224]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -4967,6 +6053,18 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "        cccchHHHHHHHHHHHHHHHHHHHHHHhCCCCChHHHHHHHHHHHHHHHHHHHHHccccchhHHHHHHHHHHHHHHHHHHHHHHhcCCCchhHHHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHchHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhccccCCCCcccCCHHHHHHHHHHHHHhhHHHHHHHHHHHHHH      ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  8,  22,  23,  38,  38,  65,  65,  98, 103, 126, 126, 184, 189,
+                              226],
+                             [  0,  14,  14,  29,  31,  58,  69, 102, 102, 125, 129, 187, 187,
+                              224]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.28)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.4e-15)
@@ -5017,6 +6115,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             " CHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  1,  69],
+                             [158, 226]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.44)
@@ -5069,6 +6177,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "     ChhHHHHHHHHHHHHHHHHHHHHHHHhCCCChhhHHHHHHHHHHHHHHHHHHHHHHhcCCcccCCC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 5, 33, 34, 36, 36, 71],
+                             [ 0, 28, 28, 30, 31, 66]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.55)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.3e-05)
@@ -5117,6 +6235,16 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "              HHHHHHHHHHHHHHHHHHhhccChhhhHHHHHHHHHHHHHHHHHHHHHHHH    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14, 37, 37, 65],
+                             [ 7, 30, 31, 59]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -5184,6 +6312,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CCcHHHHHHHHHhcCCccceEEEEECCCCCCCCcEEEEcCCCceEEEEcCccCeEEEEEEEcCCCcEEEEcCeeecCCCCCCcHHHHHHHhcCCCCCcccCCCCeEEEEeCcEEEEeeCCcccCCCCccccccccCCCCCCCceEEEEEEeCCccccccccccccCCCCCCCCCchhcCCCCceEEEEEEEcCCCCceEEEEEEcCCCCCcCCccceeceEEEEecCCHHHHHHHhCCCceEEEcCcccccccCCCCCCCCCCcchhchhHHHhCcceeecCCCcEEEEEEeeCCCCCCccccccccCeEEEEeCCCcchhcceecCCCCceecCcccHHHHHHHhccCCCCEEEecCCCCCCCCCCCcEEEEecCCEEEEEecCCcEEEEEeC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0, 121, 121, 140, 142, 156, 165, 169, 170, 208, 208, 260, 260,
+                              317, 317, 322, 328, 346, 346, 394],
+                             [ 21, 142, 147, 166, 166, 180, 180, 184, 184, 222, 224, 276, 277,
+                              334, 335, 340, 340, 358, 359, 407]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 71.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 67)
@@ -5234,6 +6374,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           eeecCCcccCCCCCCHHHHHHHHCCCceEEeeeeCCeEEEEEEEEeCCeEEEEEEECCEEEEEEEEeceecCCCCCCHHHHHhcCCCCCHHHHHHHHCCCCeeEEEeeCCceEEEEEEEecccCCCCCcEEEEEEECCeEEEeEecCC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  14,  23,  46,  46,  67,  67,  77,  82,  93,  93, 108, 108,
+                              119, 119, 132, 138, 145, 146, 159],
+                             [238, 241, 241, 264, 277, 298, 299, 309, 309, 320, 343, 358, 362,
+                              373, 376, 389, 389, 396, 396, 409]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 70.25)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.9)
@@ -5271,6 +6423,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCcee                                          ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  31],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 68.06)
@@ -5314,6 +6476,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                          CCCCCCHHHHHHHhCCCcee                                                ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 26,  46],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 58.72)
         self.assertAlmostEqual(alignment.annotations["E-value"], 13)
@@ -5351,6 +6523,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                 cCCCCCHHHHHHHhCCCcee                                                   ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 33,  53],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 58.46)
@@ -5393,6 +6575,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                             CCCCCCHHHHHHHHCCCcee                                                           ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 29,  49],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 57.72)
@@ -5448,6 +6640,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHhCCCceecCCceeEEEEcCCCCCcceEEEEEccCCEEEEEEecccCCCCCCCCCHHHHhhcCCCCCHHHHHHHcCCccceeceeccCCCCCCCCeEEEEEeCCCCCCCCCeEEEEEE             ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  34,  36,  59,  59,  70,  71, 100, 100, 106, 116, 126, 134,
+                              141],
+                             [ 18,  41,  41,  64,  74,  85,  85, 114, 116, 122, 122, 132, 132,
+                              139]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 57.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 24)
@@ -5498,6 +6702,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                             ccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcchhccceeEEECCEEEEEEEECCCCEEEEEEEecH         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 61,  98,  98, 131],
+                             [238, 275, 279, 312]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.37)
         self.assertAlmostEqual(alignment.annotations["E-value"], 14)
@@ -5539,6 +6753,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "            CCCCCCHHHHHHHhCCCcee                                                        ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 12,  32],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.24)
@@ -5590,6 +6814,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CCCCHHHHHHHHCCCcEEeccccCCeEEEEecCCCcEEEEEEECCEEEEEEEcCC                                                                                     ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  24,  24,  32,  33,  55],
+                             [240, 264, 282, 290, 290, 312]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 14)
@@ -5631,6 +6865,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                       CCCCCCHHHHHHHhCCCCee                                                            ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 23,  43],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.09)
@@ -5682,6 +6926,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                            CccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcchhccceeEEECCEEEEEEEECCCCEEEEEEEec          ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
+                             [ 12,  13,  18,  38,  38,  59,  60,  83]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 53.82)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e02)
@@ -5732,6 +6986,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "          CCCCCCCCCCCCCcHHHHHHHhCCCCceehhhhcCceeEEecCceEEEEECCCCeEEEEEEechhhcCCCHHHHHHHhCCCcEEEEECCEEEEEEEeCCCEEEEEEeCCCCCCCCCCeeeEEEeC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  16,  16,  23,  24,  34,  34,  44,  44,  64,  64,  78,  78,
+                               89,  89, 105, 106, 108, 112, 123, 123, 135],
+                             [  8,  14,  17,  24,  24,  34,  40,  50,  53,  73,  74,  88, 102,
+                              113, 115, 131, 131, 133, 133, 144, 162, 174]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 16)
@@ -5770,6 +7036,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "       CCCCCCHHHHHHHHCCCcee                                                                                              ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  7,  27],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 50.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 27)
@@ -5807,6 +7083,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          cCCCCCHHHHHHHhCCCcEEEeEeeec                                                         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  37],
+                             [238, 265]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 49.44)
@@ -5858,6 +7144,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "          ceeecCCcccCCCCCCHHHHHHHHCCCceEEeeeeCCeEEEEEEEEeCCeEEEEEEECCEEEEEEEEeceecCCCCCCHHHHHhcCCCCCHHHHHHHHCCCCeeEEEeeCCceEEEEEEEecccCCCCCcEEEEEE             ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  20,  20,  44,  51,  57,  57,  67,  67,  82,  83, 109, 109,
+                              118, 122, 130, 140, 146],
+                             [  4,  14,  18,  42,  42,  48,  60,  70,  72,  87,  87, 113, 115,
+                              124, 124, 132, 132, 138]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 48.69)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e02)
@@ -5908,6 +7206,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "    cCHHHHHHHHHHhCCccCeEEEEeceeecceeEEEEeeceecCCCeEEEEEEeCCCeecceEEEe                       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 4, 42, 46, 63, 64, 69],
+                             [22, 60, 60, 77, 77, 82]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 43.68)
         self.assertAlmostEqual(alignment.annotations["E-value"], 24)
@@ -5949,6 +7257,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                         CCCCCCHHHHHHHhCCCccC                                                                         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 25,  45],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 42.97)
@@ -5992,6 +7310,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHhCCCcee                                                                                                                           ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  31],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.38)
         self.assertAlmostEqual(alignment.annotations["E-value"], 33)
@@ -6033,6 +7361,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                             CCCCCCHHHHHHHhCCCcee                                                          ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 45,  65],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 39.07)
@@ -6088,6 +7426,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                              eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeCCEEEEEEEEEeCCeEEEEEEECCeEEEeeeec                                                                                  ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 30,  33,  42,  65,  65,  86,  86,  97],
+                             [238, 241, 241, 264, 277, 298, 299, 310]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.91)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3e02)
@@ -6142,6 +7490,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                              eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeCCEEEEEEEEEeCCeEEEEEEECCeEEEeeeecCccccCCCCCHHHHHHCCCCCCHHHHHHHHCCCceeeeecCCCceEEEEEEEcCCcCCCCccEEEEEEE             ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 30,  33,  42,  60,  67,  76,  76,  86,  86, 100, 101, 129, 129,
+                              138, 142, 148, 158, 166],
+                             [ 18,  21,  21,  39,  39,  48,  60,  70,  72,  86,  86, 114, 116,
+                              125, 125, 131, 131, 139]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.62)
         self.assertAlmostEqual(alignment.annotations["E-value"], 88)
@@ -6179,6 +7539,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "    EEEECCEEecCCCCCCCHHHHHHHHHHhCH                            ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  4,  34],
+                             [ 87, 117]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.36)
@@ -6222,6 +7592,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCCee                                                                                                                                      ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  31],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.69)
         self.assertAlmostEqual(alignment.annotations["E-value"], 44)
@@ -6263,6 +7643,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                    cCCCCCHHHHHHHcCCccce                                                  ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 84, 104],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.59)
@@ -6314,6 +7704,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                 CCCCCCcHHHHHHHhCCCCceehhhhcCceeEEecCceEEEEECCCCeEEEE                                                                  ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 17,  23,  24,  45,  45,  62,  62,  69],
+                             [238, 244, 244, 265, 282, 299, 300, 307]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 54)
@@ -6351,6 +7751,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                              cCCCCCHHHHHHHHCCCCee                                             ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 94, 114],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.93)
@@ -6393,6 +7803,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                          HhcCCcHHHHHHHhCCCcEEE                                                                                                                                                                                                                                                                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 42,  63],
+                             [238, 259]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.07)
@@ -6442,6 +7862,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                     ceeEEEEEcCCCHHHHHHHHHHhCcCcCCCCCeeEecCCCCccccCCCceEEeecCCEEEEEccCC        ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[101, 128, 130, 140, 144, 151, 151, 167],
+                             [ 12,  39,  39,  49,  49,  56,  57,  73]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 29.78)
@@ -6497,6 +7927,18 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "        CCCCCcceEeccccEEEEecccHheEEEEeCCCCcCCccceeEeeeeeeeceecceeeeeeccCCCCcEEEEecCCCCCCceEEEcCCcEEEEEEEeCCCCceeEEEEEEeeEEEEEEeccCCccccEEeeceeEeeeecCcceEeeee         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  8,  15,  15,  21,  21,  53,  53,  65,  65,  82,  82,  95, 111,
+                              147, 147, 157],
+                             [  6,  13,  18,  24,  29,  61,  62,  74,  76,  93, 111, 124, 124,
+                              160, 165, 175]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 26.30)
         self.assertAlmostEqual(alignment.annotations["E-value"], 89)
@@ -6538,6 +7980,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                 CCCCCCHHHHHHHHCCCcee                                              ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[113, 133],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 24.37)
@@ -6581,6 +8033,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                          ccCCCCHHHHHHHHCCCcee                                                       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 90, 110],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 23.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 89)
@@ -6618,6 +8080,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                cCCCCCHHHHHHhcCCccccc                    ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 80, 101],
+                             [238, 259]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 21.56)
@@ -6668,6 +8140,16 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "       CCCCCCHHHHHHHHCCCceecCCcceEEEEeCCCCCCCEEEEEEcCCCEEEEEEECCCCCCCCCCCCHHHHHhcCCCCCHHHHHHhcCC                         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  7,  42,  42,  53,  53,  76,  77,  96],
+                             [ 18,  53,  60,  71,  72,  95,  95, 114]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -6735,6 +8217,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CCccEEeCCcHHHHHHHHHhcccccccEEEEECCCCccCCcEEEEeCCCcEEEEEcCCCcEEEEEEEEcCCccEEEECCEEecCCCCCCCHHHHHHHhcCCCCCccccccCEEEEeeCCEEEEeeCCccccCCccCCCcccccccccCCCCCeeEEEEEeeCCCccccCCCCCCchhcCCceeeEEEEEEeCCCCCcceEEEEEeCCCCCCcccccccccceEEEEecCCHHHHHHHhCCCceEEEcCcccccccCCCCCCCCCccccccchhhHHhceeeeeeCCCceeEEEEEecCCCCccccCccccCcEEEEecCCcCCCccCcccceecCCCcHHHHHHHhcCCCCCCEEEecCCCCCCCCCCccEEEEeeCCEEEEEecCCcEEEEEeC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,   4,   4, 329, 331, 395],
+                             [ 10,  14,  18, 343, 343, 407]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 71.64)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.97)
@@ -6773,6 +8265,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCCcc                                          ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  31],
+                             [238, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 53.47)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.1)
@@ -6810,6 +8312,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                 CCCCCCHHHHHHHhCCCcee                                                   ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 33,  53],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.40)
@@ -6861,6 +8373,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                 CCCCCCcHHHHHHHhCCCCceehhhhcCCeeEEEeCCeEEEEECCCCcEEEEEEeCccccc                                                         ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 17,  23,  24,  45,  45,  78],
+                             [238, 244, 244, 265, 282, 315]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 48.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.3)
@@ -6899,6 +8421,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "CCCcccCCcccCCCCCHHHHHHHhCCCeee                                                               ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  30],
+                             [228, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.13)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.7)
@@ -6936,6 +8468,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CCCCHHHHHHHHCCCceeC                                                                                                                         ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  0,  19],
+                             [240, 259]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.12)
@@ -6987,6 +8529,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                             ccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECcchhceeeeEEECCEEEEEEEeCCCCEEEEEEE            ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 61,  81,  90,  96,  96, 128],
+                             [238, 258, 258, 264, 277, 309]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 21)
@@ -7024,6 +8576,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "    EEEECCEEccCCCCCCCHHHHHHHHHhhCH                            ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[  4,  34],
+                             [ 87, 117]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 35.95)
@@ -7075,6 +8637,18 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "          CCCCCCCCCCCCCcHHHHHHHhCCCCceehhhhcCCeeEEEeCCeEEEEECCCCcEEEEEEeCccccccCHHHHHHhhCCCceEEEECCEEEEEEEcCCCEEEEEEeCCCCCCCCCCceeEEEeC",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 10,  16,  16,  23,  24,  32,  32,  39,  46,  65,  65,  72,  72,
+                               90,  90, 106, 107, 108, 112, 123, 123, 135],
+                             [  8,  14,  17,  24,  24,  32,  48,  55,  55,  74,  77,  84,  96,
+                              114, 116, 132, 132, 133, 133, 144, 162, 174]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 33.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 69)
@@ -7124,6 +8698,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                     CeeEEEEEecCChHHHHHHHHHHCCCCCCCCcEEEEecCCCcccCCCCceEEEEcCCEEEEEccCC        ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[101, 129, 131, 139, 144, 156, 156, 167],
+                             [ 12,  40,  40,  48,  48,  60,  62,  73]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.70)
         self.assertAlmostEqual(alignment.annotations["E-value"], 18)
@@ -7161,6 +8745,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                              cCCCCCHHHHHHHHCCCCee                                             ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 94, 114],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 29.70)
@@ -7212,6 +8806,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                                                            CccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECcchhceeeeEEECCEEEEEEEeCCCCEEEEEEEec          ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
+                             [ 12,  13,  18,  38,  38,  59,  60,  83]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 28.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e02)
@@ -7262,6 +8866,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "    CCHHHHHHHHHHhCCcCCeEEEEeceeeeeeeEEEEecccccCCCcEEEEEEECCCcccceEEEe                       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 4, 42, 46, 63, 64, 69],
+                             [22, 60, 60, 77, 77, 82]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 26.31)
         self.assertAlmostEqual(alignment.annotations["E-value"], 22)
@@ -7299,6 +8913,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                       cCCCCCHHHHHHHhCCCCee                                                                                                                             ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 39,  59],
+                             [238, 258]])
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 25.89)
@@ -7338,6 +8962,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "           eeecCcccCCCCCCCHHHHHHHHCCCceE                                                                                                                       ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 11,  15,  24,  40],
+                             [238, 242, 242, 258]])
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 20.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 78)
@@ -7375,6 +9009,16 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                         cCCEEEEECCCCCEEEEEEEecC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[25, 35, 35, 48],
+                             [61, 71, 72, 85]])
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
