@@ -71,14 +71,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def write_header(self, alignments):
         """Write the header."""
-        try:
-            commandline = alignments.commandline
-        except AttributeError:
-            commandline = ""
-        try:
-            hostname = alignments.hostname
-        except AttributeError:
-            hostname = ""
+        commandline = alignments.metadata.get("Command line", "")
+        hostname = alignments.metadata.get("Hostname", "")
         self.stream.write(f"Command line: [{commandline}]\n")
         self.stream.write(f"Hostname: [{hostname}]\n")
 
@@ -440,21 +434,22 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="Exonerate")
         stream = self.stream
-        self.program = "exonerate"
+        self.metadata = {}
+        self.metadata["Program"] = "exonerate"
         line = next(stream)
         prefix = "Command line: "
         assert line.startswith(prefix)
         commandline = line[len(prefix) :].strip()
         assert commandline.startswith("[")
         assert commandline.endswith("]")
-        self.commandline = commandline[1:-1]
+        self.metadata["Command line"] = commandline[1:-1]
         line = next(stream)
         prefix = "Hostname: "
         assert line.startswith(prefix)
         hostname = line[len(prefix) :].strip()
         assert hostname.startswith("[")
         assert hostname.endswith("]")
-        self.hostname = hostname[1:-1]
+        self.metadata["Hostname"] = hostname[1:-1]
 
     @staticmethod
     def _parse_cigar(words):

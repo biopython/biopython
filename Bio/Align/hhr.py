@@ -64,9 +64,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "Searched_HMMs":
                 metadata[key] = int(value)
             elif key == "Date":
-                metadata[key] = value
+                metadata["Rundate"] = value
             elif key == "Command":
-                self.commandline = value
+                metadata["Command line"] = value
             else:
                 raise ValueError("Unknown key '%s'" % key)
         self.metadata = metadata

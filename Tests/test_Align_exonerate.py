@@ -50,12 +50,12 @@ class Exonerate_est2genome(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -155,12 +155,12 @@ class Exonerate_est2genome(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m est2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -278,12 +278,12 @@ class Exonerate_affine_local(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
+        self.assertEqual(alignments.metadata["Hostname"], "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -385,12 +385,12 @@ class Exonerate_affine_local(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m affine:local ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -510,12 +510,12 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -610,12 +610,12 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -727,12 +727,12 @@ class Exonerate_coding2coding(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -797,12 +797,12 @@ class Exonerate_coding2coding(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2coding ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -875,12 +875,12 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -948,12 +948,12 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1029,12 +1029,12 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate --showcigar yes --showvulgar no --showalignment no nuc2.fa pro.fa",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "dna")
         self.assertEqual(alignment.target.id, "protein")
@@ -1071,12 +1071,12 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate --showcigar no --showvulgar yes --showalignment no nuc2.fa pro.fa",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "dna")
         self.assertEqual(alignment.target.id, "protein")
@@ -1116,12 +1116,12 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1366,12 +1366,12 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.check_vulgar(alignments)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes --showcigar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1520,12 +1520,12 @@ class Exonerate_ungapped(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1585,12 +1585,12 @@ class Exonerate_ungapped(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ungapped ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1658,12 +1658,12 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1723,12 +1723,12 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1796,12 +1796,12 @@ class Exonerate_ner(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1959,12 +1959,12 @@ class Exonerate_ner(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2124,12 +2124,12 @@ class Exonerate_multiple(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443482|ref|NC_001134.8|")
@@ -2318,12 +2318,12 @@ class Exonerate_multiple(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m est2genome comb.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443482|ref|NC_001134.8|")
@@ -2548,12 +2548,12 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showcigar yes --showvulgar no --showalignment no --bestn 3",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2612,12 +2612,12 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar yes --showalignment no --bestn 3",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2682,12 +2682,12 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2749,12 +2749,12 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2832,12 +2832,12 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showcigar yes --showvulgar no --showalignment no --bestn 3",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2885,12 +2885,12 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar yes --showalignment no --bestn 3",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2944,12 +2944,12 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3015,12 +3015,12 @@ class Exonerate_protein2genome(unittest.TestCase):
         # does not regenerate all information provided in the vulgar file.
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3102,12 +3102,12 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 2 --refine full",
         )
-        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
+        self.assertEqual(alignments.metadata["Hostname"], "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
@@ -3154,12 +3154,12 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         self.check_vulgar(alignments, check_operations=False)
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome gene026_baits.fasta gene026_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 2 --refine full",
         )
-        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
+        self.assertEqual(alignments.metadata["Hostname"], "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene026")
         self.assertEqual(alignment.target.id, "NODE_2_length_1708_cov_48.590765")
@@ -3210,12 +3210,12 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar yes --showvulgar no --bestn 1 --refine full",
         )
-        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
+        self.assertEqual(alignments.metadata["Hostname"], "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
         self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
@@ -3258,12 +3258,12 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         # information provided in the vulgar file.
 
     def check_vulgar(self, alignments, check_operations=True):
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showalignment no --showcigar no --showvulgar yes --bestn 1 --refine full",
         )
-        self.assertEqual(alignments.hostname, "Michiels-MacBook-Pro.local")
+        self.assertEqual(alignments.metadata["Hostname"], "Michiels-MacBook-Pro.local")
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "Morus-gene001")
         self.assertEqual(alignment.target.id, "NODE_1_length_2817_cov_100.387732")
@@ -3297,12 +3297,12 @@ class Exonerate_none(unittest.TestCase):
         """Test parsing exonerate output (exn_22_q_none.exn)."""
         exn_file = os.path.join("Exonerate", "exn_22_q_none.exn")
         alignments = exonerate.AlignmentIterator(exn_file)
-        self.assertEqual(alignments.program, "exonerate")
+        self.assertEqual(alignments.metadata["Program"], "exonerate")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes",
         )
-        self.assertEqual(alignments.hostname, "blackbriar")
+        self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
         self.assertRaises(StopIteration, next, alignments)
 
 

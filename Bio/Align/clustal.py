@@ -33,15 +33,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """Use this to write the file header."""
         stream = self.stream
         try:
-            program = alignments.program
-        except AttributeError:
+            metadata = alignments.metadata
+            program = metadata["Program"]
+        except (AttributeError, KeyError):
             program = "Biopython"
             version = Bio.__version__
         else:
-            try:
-                version = alignments.version
-            except AttributeError:
-                version = ""
+            version = metadata.get("Version", "")
         line = f"{program} {version} multiple sequence alignment\n"
         stream.write(line)
         stream.write("\n")
@@ -119,6 +117,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         except StopIteration:
             raise ValueError("Empty file.") from None
 
+        self.metadata = {}
         # Whitelisted programs we know about
         words = line.split()
         known_programs = [
@@ -135,17 +134,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "%s is not known to generate CLUSTAL files: %s"
                 % (program, ", ".join(known_programs))
             )
-        self.program = program
+        self.metadata["Program"] = program
 
         # find the clustal version in the header line
         for word in words:
             if word[0] == "(" and word[-1] == ")":
                 word = word[1:-1]
-            if word[0] in "0123456789":
-                self.version = word
+            if word[0].isdigit():
+                self.metadata["Version"] = word
                 break
-        else:
-            self.version = None
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
