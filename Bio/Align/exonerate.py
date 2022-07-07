@@ -20,12 +20,9 @@ Bio.Align.exonerate was tested on the following Exonerate versions and models:
       - protein2dna                 - protein2genome
       - ungapped                    - ungapped:translated
 
-Although model testing were not exhaustive, ExonerateIO should be able to cope
+Although model testing were not exhaustive, the parser should be able to cope
 with all Exonerate models. Please file a bug report if you stumble upon an
 unparsable file.
-
-More information on Exonerate is available on its home page at
-www.ebi.ac.uk/~guy/exonerate/
 
 You are expected to use this module via the Bio.Align functions.
 """
@@ -441,7 +438,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
          - source   - input data or file name
 
         """
-        super().__init__(source, mode="t", fmt="PSL")
+        super().__init__(source, mode="t", fmt="Exonerate")
         stream = self.stream
         self.program = "exonerate"
         line = next(stream)

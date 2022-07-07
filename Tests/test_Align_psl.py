@@ -76,7 +76,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-
                 numpy.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
                               [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
