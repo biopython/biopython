@@ -81,6 +81,8 @@ ci:
     # Currently pre-commit.ci checks all files, and all hooks takes too long
     # and causes a timeout - so as a short-term workaround, skip flake8 etc:
     skip: [
+        mixed-line-ending,
         flake8,
-	mixed-line-ending
+        rstcheck,
+        doc8
     ]
