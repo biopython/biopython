@@ -225,7 +225,7 @@ def read_PIC(
         resPos = AtomKey.fields.respos
         aks = [ek[i].akl for i in range(3)]
 
-        atpl = tuple([aks[i][atmNdx] for i in range(3)])
+        atpl = tuple(aks[i][atmNdx] for i in range(3))
         res = aks[0][resNdx]
         if (
             aks[0][resPos] != aks[2][resPos]  # hedra crosses amide bond so not reversed
