@@ -14862,11 +14862,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
+                r"Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
+                r"Drosophila pseudoobscura pseudoobscura GA20452 (Dpse\GA20452), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -14996,11 +14996,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
+                r"Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
+                r"Drosophila simulans GD23923 (Dsim\GD23923), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15063,11 +15063,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
+                r"Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
+                r"Drosophila yakuba GE18681 (Dyak\GE18681), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15130,11 +15130,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
+                r"Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
+                r"Drosophila willistoni GK24228 (Dwil\GK24228), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15197,11 +15197,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
+                r"Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
+                r"Drosophila virilis GJ18143 (Dvir\GJ18143), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15264,11 +15264,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
+                r"Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
+                r"Drosophila sechellia GM15214 (Dsec\GM15214), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15331,11 +15331,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
+                r"Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
+                r"Drosophila persimilis GL21229 (Dper\GL21229), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15398,11 +15398,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
+                r"Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
+                r"Drosophila mojavensis GI18236 (Dmoj\GI18236), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15465,11 +15465,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
+                r"Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
+                r"Drosophila grimshawi GH11113 (Dgri\GH11113), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15532,11 +15532,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila erecta GG23880 (Dere\GG23880), mRNA",
+                r"Drosophila erecta GG23880 (Dere\GG23880), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila erecta GG23880 (Dere\GG23880), mRNA",
+                r"Drosophila erecta GG23880 (Dere\GG23880), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
@@ -15599,11 +15599,11 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["super kingdoms"], "N/A")
             self.assertEqual(
                 alignment.target.annotations["title"],
-                "Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
+                r"Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
             )
             self.assertEqual(
                 alignment.target.annotations["titles"],
-                "Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
+                r"Drosophila ananassae GF14256 (Dana\GF14256), mRNA",
             )
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
