@@ -61,7 +61,7 @@ class DSSP_tool_test(unittest.TestCase):
             try:
                 # Newer versions of DSSP
                 version_string = subprocess.check_output(
-                    ["dssp", "--version"], universal_newlines=True
+                    ["dssp", "--version"], text=True
                 )
                 cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
@@ -72,7 +72,7 @@ class DSSP_tool_test(unittest.TestCase):
         except OSError:
             try:
                 version_string = subprocess.check_output(
-                    ["mkdssp", "--version"], universal_newlines=True
+                    ["mkdssp", "--version"], text=True
                 )
                 cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
