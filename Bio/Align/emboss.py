@@ -221,7 +221,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # Record the start
                         starts[index] = start
                     else:
-                        if self.metadata["Align_format"] == "srspair" and len(sequence) == 0:
+                        if (
+                            self.metadata["Align_format"] == "srspair"
+                            and len(sequence) == 0
+                        ):
                             start += 1
                         assert start == starts[index] + length
                     assert end == start + len(sequence)

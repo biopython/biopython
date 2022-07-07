@@ -32,7 +32,9 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 34)
         self.assertEqual(alignments.metadata["Rundate"], "Fri Feb 15 16:34:13 2019")
-        self.assertEqual(alignments.metadata["Command line"], "hhblits -i 2uvoAh.fasta -d /pdb70")
+        self.assertEqual(
+            alignments.metadata["Command line"], "hhblits -i 2uvoAh.fasta -d /pdb70"
+        )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.95)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.7e-34)
@@ -1766,7 +1768,8 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
         self.assertEqual(alignments.metadata["Rundate"], "Fri Feb  1 13:49:32 2019")
         self.assertEqual(
-            alignments.metadata["Command line"], "hhsearch -i 2uvo.fasta -d /pdb70_hhm_db"
+            alignments.metadata["Command line"],
+            "hhsearch -i 2uvo.fasta -d /pdb70_hhm_db",
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -3515,7 +3518,8 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
         self.assertEqual(alignments.metadata["Rundate"], "Fri Feb 15 16:24:19 2019")
         self.assertEqual(
-            alignments.metadata["Command line"], "hhsearch -i allx.fasta -d /pdb70_hhm_db"
+            alignments.metadata["Command line"],
+            "hhsearch -i allx.fasta -d /pdb70_hhm_db",
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
