@@ -33,9 +33,9 @@ class TestEmboss(unittest.TestCase):
         path = "Emboss/water.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Wed Jan 16 17:23:19 2002")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Program"], "water")
+            self.assertEqual(alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -82,14 +82,14 @@ class TestEmboss(unittest.TestCase):
         path = "Emboss/water2.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "water")
-            self.assertEqual(alignments.rundate, "Sat Apr 04 2009 22:08:44")
+            self.assertEqual(alignments.metadata["Program"], "water")
+            self.assertEqual(alignments.metadata["Rundate"], "Sat Apr 04 2009 22:08:44")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "water -asequence asis:ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG -bsequence asis:CGTTTGAGTACTGGGATG -gapopen 10 -gapextend 0.5 -filter",
             )
-            self.assertEqual(alignments.align_format, "srspair")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Align_format"], "srspair")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -125,14 +125,14 @@ class TestEmboss(unittest.TestCase):
         path = "Emboss/matcher_simple.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "matcher")
-            self.assertEqual(alignments.rundate, "Tue  8 Dec 2009 11:48:35")
+            self.assertEqual(alignments.metadata["Program"], "matcher")
+            self.assertEqual(alignments.metadata["Rundate"], "Tue  8 Dec 2009 11:48:35")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "matcher [-asequence] rose.pro [-bsequence] rosemary.pro [-outfile] matcher_simple.txt -auto -sprotein -aformat simple",
             )
-            self.assertEqual(alignments.align_format, "simple")
-            self.assertEqual(alignments.report_file, "matcher_simple.txt")
+            self.assertEqual(alignments.metadata["Align_format"], "simple")
+            self.assertEqual(alignments.metadata["Report_file"], "matcher_simple.txt")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -170,14 +170,14 @@ class TestEmboss(unittest.TestCase):
         path = "Emboss/matcher_pair.txt"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "matcher")
-            self.assertEqual(alignments.rundate, "Tue  8 Dec 2009 12:01:34")
+            self.assertEqual(alignments.metadata["Program"], "matcher")
+            self.assertEqual(alignments.metadata["Rundate"], "Tue  8 Dec 2009 12:01:34")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "matcher [-asequence] hba_human.fasta [-bsequence] hbb_human.fasta [-outfile] matcher_pair.txt -alternatives 5 -aformat pair -sprotein",
             )
-            self.assertEqual(alignments.align_format, "pair")
-            self.assertEqual(alignments.report_file, "matcher_pair.txt")
+            self.assertEqual(alignments.metadata["Align_format"], "pair")
+            self.assertEqual(alignments.metadata["Report_file"], "matcher_pair.txt")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 5)
         alignment = alignments[0]
@@ -358,14 +358,14 @@ class TestEmboss(unittest.TestCase):
         path = "Emboss/needle_nobrief_multiple.pair"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "needle")
-            self.assertEqual(alignments.rundate, "Fri 23 Jul 2021 22:45:41")
+            self.assertEqual(alignments.metadata["Program"], "needle")
+            self.assertEqual(alignments.metadata["Rundate"], "Fri 23 Jul 2021 22:45:41")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "needle -asequence seqa.fa -bsequence seqb.fa -datafile EBLOSUM62 -gapopen 10 -gapextend 0.5 -nobrief -outfile stdout",
             )
-            self.assertEqual(alignments.align_format, "srspair")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Align_format"], "srspair")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
@@ -500,14 +500,14 @@ class TestEmboss(unittest.TestCase):
     def test_pair_example2(self):
         with open("Emboss/needle.txt") as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "needle")
-            self.assertEqual(alignments.rundate, "Sun 27 Apr 2007 17:20:35")
+            self.assertEqual(alignments.metadata["Program"], "needle")
+            self.assertEqual(alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
             )
-            self.assertEqual(alignments.align_format, "srspair")
-            self.assertEqual(alignments.report_file, "ref_rec .needle")
+            self.assertEqual(alignments.metadata["Align_format"], "srspair")
+            self.assertEqual(alignments.metadata["Report_file"], "ref_rec .needle")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 5)
         alignment = alignments[0]
@@ -717,14 +717,14 @@ class TestEmboss(unittest.TestCase):
     def test_pair_example3(self):
         with open("Emboss/needle_overhang.txt") as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "needle")
-            self.assertEqual(alignments.rundate, "Mon 14 Jul 2008 11:45:42")
+            self.assertEqual(alignments.metadata["Program"], "needle")
+            self.assertEqual(alignments.metadata["Rundate"], "Mon 14 Jul 2008 11:45:42")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "needle [-asequence] asis:TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGTGTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTTGAAATTTTTAGGTTATTTAGACCATTTTTTTTTGTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTTTGGGGTTAAGACAAGGTGTCGTTGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATAGGATCTACCTTTTATCTTTCTAATCTTTTGTTTTAGTATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGC [-bsequence] asis:TTATTAATCTTATGGTTTTGCCGTAAAATTTCTTTCTTTATTTTTTATTGTTAGGATTTTGTTGATTTTATTTTTCTCAAGAATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGTTTAAAGTTTTATTAATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTTTTGGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGGAGTAAGAATTTCGATTCAGCAACTTTAGTTCACAGTCTTTTTTTTTATTAAGAAAGGTTT -filter",
             )
-            self.assertEqual(alignments.align_format, "srspair")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Align_format"], "srspair")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -876,14 +876,14 @@ class TestEmboss(unittest.TestCase):
     def test_needle_asis(self):
         with open("Emboss/needle_asis.txt") as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "needle")
-            self.assertEqual(alignments.rundate, "Mon 14 Jul 2008 11:37:15")
+            self.assertEqual(alignments.metadata["Program"], "needle")
+            self.assertEqual(alignments.metadata["Rundate"], "Mon 14 Jul 2008 11:37:15")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "needle [-asequence] asis:TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTATTTAAACCGTTTTTTTTTAATTTAGTGTTTGAGTTTTGACAGGTCTCCACTTTGGGGGCTCCATCGCAAGGAAATTAGAATTCTTATACTTGGTTCTCTTTCCCAGGGACTCCAAGGATCTTTTCATTAGTTTGGATTTTGGTGTTTTCTTTAATTTTGTTAAGAAACAAATCCTTTCTAGAGTTTTTTCTAGCATTATGTTTTTTTTTCTCCTTATCTAAGGGGGTTTGTCGAGGTTTCTTAAATCTTTTTTTCTCTGGGTTTTAAAATTGTTTAAATTTTTTTGACCGAGGGGTTGGGGTGGTTTTCTCATGATAACAGGGGCTGGTGCTTTAGATCCTACCTCTACTGACCCGGGGTCTGCTACTGTGGCTTCTGATGAAGATCCACAGTATGCGCCTACGGAARCTCGGCAGTTTGGTGTTCGAAATCCAGCCCCTCGAATTAATACTCTTGTGCAGGTGGTTGACGAGCGCGGTATCGAATTGCAAAATTTGGGGCGGGACCCCGCTGTTCCGCCTGTTGCTCCGGGGGGGGCAGGTTAATCCTCCAGTCGTCTCCTTTTGGGGGCGTCTTTGACGGGGGTTTAAATCTTTCTTTGGTTGTGGATAGGATTTTTTTTCTAATATCGATCCTACCTGTTTTGGCGGGGCTATTACTTTGTTACTTTTGACCGAAATTTTAATGGAAATTTCTTTGATTCAAATGAATCCCTTAGTTTTCCAACACTTTTTTTTGGTTTTTTTAGGGATAGTCTACGCTGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGTGTAGTAGCTCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTTGAAATTTTTAGGTTATTTAGACCATTTTTTTTTGTTTCGCTAATTAGAATTTTATTAGCCTTTGGTTTTTTTTTATTTTTTGGGGTTAAGACAAGGTGTCGTTGAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATAGGATCTACCTTTTATCTTTCTAATCTTTTGTTTTAGTATAATTGGTCTTCGATTCAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTTTCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGTTAATAGCAGGATTTGCTTTTTTAACTTATACTGGTTCGTAACGCATTAGCTCAACTCTCTCTTGTAGTTCTAGCAGCCGCCTTTTCTTTGTTGGGGGAGGGTTTAGGAGGAGTCTTTTTTTTCCTAACCCAAGGTGTTTCTTTCTTTTTTTCTTTAAAGTTCTTGACTGTTGGCACTTGTCTCCATAAATTTTCTTTCTTGTAAAGGGCTCCTAAGGCTTCTTGTTTCTGAATTCCTCTTTTCTTTTATTCTGTTTTGAGCTTATTTTTCTTGTTAGCTATTACGTAGGCATAGGGCAAATAATTTTTTTTTCTGCTCTCATTATTCCTTCTCCCTGCTTGTTTCACCCTGTGGGCTCTTTGAGCCCCACTAAGTGAGCGGGGCTCCTGCTTCCGCTCAATTAAATTTTGGTGGGTATTGAGTCTCAGAGGGACTATGATATAGGTTCAGATTGATGGACCTAATCAATCAATTGTATCGCTATACAATCTAGTACCCCTACCAGGGTACCAAGAGAGAGATAACTAGGGTGAATACTACGACTTAGATGTAGTGTTTAAGTTTCTACGGGCTACAGAGAAGCTACCCGCAGGGTAYATATTTGTTCATTACATATTTGTTGACTTTTCTATCTCTGCTTTTACTTTTTTATTTATTTTTAAATCTTTTTAACTTCAGCTGTTTTTCCTTATCTATTTGACGTAGGCATAGGAAAGTTAACGAATTTTGTAATATTTTTAATTATTTTGTATAGTATACAGGGTAGTGGTATGTAATAGGTAAATTCCATAAGTTCATTATAGTTTATCAGTTGAGAGGAATTTAGTATAAGAAGGCCCATTGGGGCTCTTGTCTTATCCAAGAACTGGTAAGATTTAATTCTACCGGGACGGTAGAAATCGGGCAGAGCATGATCTATTTCTTCGGGTATGGCTATAGGGACTAGGTGCTAGGGAGGTATTAGGGCACCGCTCTTTATACAATCTCCATAGATACAACCAGGTCAACTAGGACAACGGAGGACGTTGACAGAGCATAAATAGCGATAGCGTACAAGATAWAATAGGGGCAGTGGTAGCGAAGCGTAGAAGAAAAAATAAGAGTATTGTTTGTAAATAATTCTTTTTTTAGTTTTTAAATATTCTTTTTTTAGGTGGTGTGTGGTTAGGTATGGGGTTAAGGGTGTGGCAAAGAGAAATGTTTATTAAACATTCTTATGGCCGTAGATAGCATATCGATTATACGAGACCTTCGTAAGATCAATCCCCACTAGCATTGCTCATACAGGTTAACTCAATAGGAGGAGCTGGGGTAGAACGTTTCTAGTTCGGGGGTAACCGCAGTTCAATGAAAGTGACGACGTCGGATGGAACAAACTTAATACCACCAGTTGTGCTAACGATTGTTATCTCAATCTATCCCAACAGGCCCCCAGGTAGTGATGAGTGGTGGAATGGTACAGGGTACCAGTGGGTGAAGAGCGTCACGAACCAGGGAATACGGAGTACAGAGTTGAGCGCCCGGGGCTCCGCCCCCGGCTTTTATAGCGCGAGACGTGGTCAGTCGATTCAGCGTTAGGTTTAAACTCCTTTGGCAAAGATTGACTCTAGCGATCCAGAGACCCTGCCTGGCATAAAAGTCTTTATWAACACCAGTAGGTTCAATAAGGTAGTAATCCAATAGAATGGAAAACTCAAGATCTAATCTCTCGAYTTCCTAGTGTCATGGAAATCAGCCAGGTTCTCTTCATCTGCAACAGTAGAAGAAGAAGAGAGACTAGCGAGAGAGTCTTATGGCGGAGACGCTAAGGCTTAAATGTAATGTAGATAACCCCTTACGGAACACTAGAGTGCGACGTAGACTACATAATCCCTCAGGGATATTAGCTCTGCTCGATTAACAATAGCATACTTTGTTACACGGAGTGTATCTAGGGGGAATAATACTAACTTACTTAGCACTATCGCGATGCTACGCATTCGCTCTTTCGCTAAATAAGATACGACGATGAGTGGTTGGTGGAGAGAATAACCGATTCTAACTTGATAATTCGCATGAAATAATTTTTTTATTTTGTTTTTTTTTTGCTCTTAATTTTAGWGGGRGTGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA [-bsequence] asis:TTATTAATCTTATGGTTTTGCCGTAAAATTTCTTTCTTTATTTTTTATTGTTAGGATTTTGTTGATTTTATTTTTCTCAAGAATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGTTTAAAGTTTTATTAATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTTTTGGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGGAGTAAGAATTTCGATTCAGCAACTTTAGTTCACAGTCTTTTTTTTTATTAAGAAAGGTTTTAATATTCTTGTGGTTTTGAACCTTTAGGTTTCTTTCTTTACCTTCGAGGGATTGGGCACTAGAATGAGTTTTAAGAGTGTGTGAAAGGGGGCTTGATAGCAGGGGAATGCTTTTTTAACTTATACTGGCTCGTAACGCATCAGTTCAACTCTCTCTTGCAGTTCTAGCAGCCGCCTTTTTTTTGTTGGGGGGGGGTTAAGAGAGTGTTTTTTTTCTAATCCAAGGGTCTTACTTTCTTTCTTTCTTTAAAAATTCTTTGGCTGTCGACACCTTTCTCTCCCGTCAGTCTCATGGTTTCTGGCTCTCTTGGGCTTTTTTTGTTTGTGAATGCCTCTTTTTTTTATTCTGTTTTGAGCTTATTTTTCTTGTTTACTATTACGTAGGTATAGGGCAAATAATTTTTTTTTCGCGTCTCTTGGCATGCCCATTACTCTAGTTTTATTCCCGGGCTTCTTCTCTCACCCTAGAGGGCTCTTTGAGCCCACACTCAAGTGAGCGGGGCTCCCGCTTCCGCTCAATTAAATTTGGTGGGTATTGAGTCTCAGAGGGACTATGATATAGGTTCAGATTGATGGACCTAGTCAATCAATTGTATCGCTATACAATCTAGTACCCCTACCAGGGTACCAGGAGAGAGATAACTAGGGTGAATACTACGACTTAGATGTACTGTTTAAGTTTCTACGGGCTACAGAGAAGCTACCCGCAGGGTATATATTTGCTCATTACATATTTGTTGATTTTTCTATGTCCGCTTTACTTTTTATATTTTTTTAACTTCAGCTGTTTTTCCTTATCTATTTGACGTAGGCATAGGAAAGTTAACGAATTTTGTAATATTTTTAATTATTTTGTATAGTATACAGGGTAGTGGTATGTAATAGGTAAATTCCATAAGTTCATTATAGTCTATCAGTTGAGAGGAATTTAGTATAAGAAAGCCTGTCAGGGCTCTTGCCTTATCCAAGAACTGGTAAGGATTTCTTGACAGAGGGACTCTGTCAAATCGGGCAGAGCATGATCTATTTCTTCGGGTATGGTTATAAGGCTTAGGTGCTTGGAGGGTATTAGGGCACCGCTCTTAATACAGTCTCCATAGGTGTAACCAGGTCAACTAGGACAACGGAGGACGTTGACAAAGCATGGATAGCGATAGCGTAGAAGATAAAATGGGGCAGTGGTAGCGAAGCGTAGAAGAAAAAATAAGAGTATTGTTTGTAAATAATTCTTTTTTTAGTTTTTAAATATTCTTTTTTTAGGTGGTGTGTGGTTAGGTATGGGGTTAGGGGAGTGGCAAAGAGAAGTGTTTATTAAACATTCTTATGGCCGTAGATAGCATATCGATTATACGAGACCTTCGTAAGATCAATCCCCACTAGCATTGCTCATACAGGTTAACTCAATAGGAGGAGCTGGGGTAGAACGTATCTAGTTCGGGGGTAACCGCAGTTCAATGAAAGTGACGACGTCGGATGGAACAAACTTAATACCACCAGTTGTGCTAACGATTGTTATCTCAATCTATCCCAACAGGCCCCCAGGTAGTGATGAGTGGTGGAATGGTACAGGGTACCAGTGGGTGAAGAGCGTCACGAACCAGGGAATACGGAGTACAGAGTTGAGCGCCCGGGGCTCCGCCCCCGGCTTTTATAGCGCGAGACGTGGTCAGTCGATTCAGCGTTAGGTTTTAAACTCCTTTGGCAAAGATTGATTCTAGCGATCCAGAGACCCTGCCTGGCATAAAAGTCTTTATTAGCACCAGTAGGTTCAATAAGGTAGTAGTCCAATAGAATGGAAAACTCGAGATCTAATCTCTCGATTTCCTAGTGTCATGGAAATCAGCCAGGTTCTCTTCATCTGCAACAGTAGAAGAAGAAGAGAGGCTAGCGAGAGAGTCTTATGGCGGAGACGCTAAGGCTTAAATGTAATGTAGATAACCCCTTACGGAACACTTGAGTGCGACGTAGACTACATAATCCCTCAGGGATATTAGCTCTGCTCGATTAACAATAGCATACTTTGTTACACGGAGTGTATCTGGGGGGAATAATACTAACTTACTTAGCACTATCGCGATGCTACGCATTCGCTCTTTCGCTAAATAAGATACGACGATGAGTGGTTGGTGGAGAGAATAACCGATTCTAACTTGATAATTCGCATGAAATAATTTTTTATTTGTTTTTTTTTTTGCTCTTAATTTTAGAGGATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA -filter",
             )
-            self.assertEqual(alignments.align_format, "srspair")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Align_format"], "srspair")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1197,14 +1197,14 @@ class TestEmboss(unittest.TestCase):
     def test_pair_aln_full_blank_line(self):
         with open("Emboss/emboss_pair_aln_full_blank_line.txt") as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "stretcher")
-            self.assertEqual(alignments.rundate, "Tue 15 May 2018 17:01:31")
+            self.assertEqual(alignments.metadata["Program"], "stretcher")
+            self.assertEqual(alignments.metadata["Rundate"], "Tue 15 May 2018 17:01:31")
             self.assertEqual(
-                alignments.commandline,
+                alignments.metadata["Command line"],
                 "stretcher -auto -stdout -asequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.aupfile -bsequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.bupfile -datafile EDNAFULL -gapopen 16 -gapextend 4 -aformat3 pair -snucleotide1 -snucleotide2",
             )
-            self.assertEqual(alignments.align_format, "pair")
-            self.assertEqual(alignments.report_file, "stdout")
+            self.assertEqual(alignments.metadata["Align_format"], "pair")
+            self.assertEqual(alignments.metadata["Report_file"], "stdout")
             alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]

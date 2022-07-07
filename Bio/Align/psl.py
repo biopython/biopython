@@ -91,7 +91,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             version = "3"
         else:
-            version = metadata.get("version", "3")
+            version = metadata.get("psLayout version", "3")
         # fmt: off
         self.stream.write(
             f"""\
@@ -322,7 +322,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             words = line.split()
             if words[1] != "version":
                 raise ValueError("Unexpected word '%s' in header line" % words[1])
-            self.metadata = {"version": words[2]}
+            self.metadata = {"psLayout version": words[2]}
             line = next(stream)
             line = next(stream)
             line = next(stream)

@@ -50,7 +50,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         # assume srspair format (default) if not specified explicitly in
         # the output file
-        self.align_format = "srspair"
+        self.metadata = {}
+        self.metadata["Align_format"] = "srspair"
         commandline = None
         for line in stream:
             if line.rstrip() == "########################################":
@@ -61,17 +62,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if line.startswith("#    "):
                     commandline += " " + line[1:].strip()
                     continue
-                self.commandline = commandline
+                self.metadata["Command line"] = commandline
                 commandline = None
             key, value = line[2:].split(":", 1)
             if key == "Program":
-                self.program = value.strip()
+                self.metadata["Program"] = value.strip()
             elif key == "Rundate":
-                self.rundate = value.strip()
+                self.metadata["Rundate"] = value.strip()
             elif key == "Report_file":
-                self.report_file = value.strip()
+                self.metadata["Report_file"] = value.strip()
             elif key == "Align_format":
-                self.align_format = value.strip()
+                self.metadata["Align_format"] = value.strip()
             elif key == "Commandline":
                 commandline = value.strip()
 
@@ -220,7 +221,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # Record the start
                         starts[index] = start
                     else:
-                        if self.align_format == "srspair" and len(sequence) == 0:
+                        if self.metadata["Align_format"] == "srspair" and len(sequence) == 0:
                             start += 1
                         assert start == starts[index] + length
                     assert end == start + len(sequence)

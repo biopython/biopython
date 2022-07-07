@@ -98,15 +98,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for key, value in metadata.items():
             if key in track_keys:
                 continue
-            if key == "comments":
+            if key == "Comments":
                 continue
-            if key not in ("version", "scoring", "program"):
+            if key == "MAF Version":
+                if value != "1":
+                    raise ValueError("MAF version must be 1")
+                key = "version"
+            elif key == "Scoring":
+                key = "scoring"
+            elif key == "Program":
+                key = "program"
+            else:
                 raise ValueError("Unexpected key '%s' for header" % key)
-            if key == "version" and value != "1":
-                raise ValueError("MAF version must be 1")
             stream.write(f" {key}={value}")
         stream.write("\n")
-        comments = metadata.get("comments")
+        comments = metadata.get("Comments")
         if comments is not None:
             for comment in comments:
                 stream.write(f"# {comment}\n")
@@ -303,10 +309,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             raise ValueError("header line does not start with ##maf")
         for word in words[1:]:
             key, value = word.split("=")
-            if key not in ("version", "scoring", "program"):
+            if key == "version":
+                key = "MAF Version"
+            elif key == "scoring":
+                key = "Scoring"
+            elif key == "program":
+                key = "Porgram"
+            else:
                 raise ValueError("Unexpected variable '%s' in header line" % key)
             metadata[key] = value
-        if metadata.get("version") != "1":
+        if metadata.get("MAF Version") != "1":
             raise ValueError("MAF version must be 1")
         comments = []
         for line in stream:
@@ -320,7 +332,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             self.stream = None
             self.line = None
         if comments:
-            metadata["comments"] = comments
+            metadata["Comments"] = comments
         self.metadata = metadata
 
     @staticmethod

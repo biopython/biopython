@@ -31,8 +31,8 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 34)
-        self.assertEqual(alignments.metadata["Date"], "Fri Feb 15 16:34:13 2019")
-        self.assertEqual(alignments.commandline, "hhblits -i 2uvoAh.fasta -d /pdb70")
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Feb 15 16:34:13 2019")
+        self.assertEqual(alignments.metadata["Command line"], "hhblits -i 2uvoAh.fasta -d /pdb70")
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.95)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.7e-34)
@@ -1764,9 +1764,9 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 4))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
-        self.assertEqual(alignments.metadata["Date"], "Fri Feb  1 13:49:32 2019")
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Feb  1 13:49:32 2019")
         self.assertEqual(
-            alignments.commandline, "hhsearch -i 2uvo.fasta -d /pdb70_hhm_db"
+            alignments.metadata["Command line"], "hhsearch -i 2uvo.fasta -d /pdb70_hhm_db"
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
@@ -3513,9 +3513,9 @@ class Align_hhr_allx(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 1))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
-        self.assertEqual(alignments.metadata["Date"], "Fri Feb 15 16:24:19 2019")
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Feb 15 16:24:19 2019")
         self.assertEqual(
-            alignments.commandline, "hhsearch -i allx.fasta -d /pdb70_hhm_db"
+            alignments.metadata["Command line"], "hhsearch -i allx.fasta -d /pdb70_hhm_db"
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
@@ -3966,9 +3966,9 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (110, 1051))
         self.assertAlmostEqual(alignments.metadata["Neff"], 10.453)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
-        self.assertEqual(alignments.metadata["Date"], "Thu Nov 29 16:33:45 2018")
+        self.assertEqual(alignments.metadata["Rundate"], "Thu Nov 29 16:33:45 2018")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "hhsearch -cpu 8 -i ../results/full.a3m -d /cluster/toolkit/production/databases/hh-suite/mmcif70/pdb70 -o ../results/4P79_1.hhr -oa3m ../results/4P79_1.a3m -p 50 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 0 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 -contxt /cluster/toolkit/production/bioprogs/tools/hh-suite-build/data/context_data.crf",
         )
         alignment = next(alignments)
@@ -4460,9 +4460,9 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (141, 1242))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.55177)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
-        self.assertEqual(alignments.metadata["Date"], "Thu Nov 29 16:28:55 2018")
+        self.assertEqual(alignments.metadata["Rundate"], "Thu Nov 29 16:28:55 2018")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "hhsearch -cpu 8 -i ../results/full.a3m -d /cluster/toolkit/production/databases/hh-suite/mmcif70/pdb70 -o ../results/4Y9H_1.hhr -oa3m ../results/4Y9H_1.a3m -p 50 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 0 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 -contxt /cluster/toolkit/production/bioprogs/tools/hh-suite-build/data/context_data.crf",
         )
         alignment = next(alignments)
@@ -6257,9 +6257,9 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (157, 584))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.82639)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 64707)
-        self.assertEqual(alignments.metadata["Date"], "Fri Feb  1 15:48:30 2019")
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Feb  1 15:48:30 2019")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "hhsearch -cpu 8 -i ../results/full.a3m -d /cluster/toolkit/production/databases/hh-suite/mmcif70/pdb70 -d /cluster/toolkit/production/databases/hh-suite/pfama/pfama -o ../results/9590198.hhr -oa3m ../results/9590198.a3m -p 20 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 2 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 -contxt /cluster/toolkit/production/bioprogs/tools/hh-suite-build/data/context_data.crf",
         )
         alignment = next(alignments)
@@ -8162,9 +8162,9 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (149, 573))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.62119)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 16712)
-        self.assertEqual(alignments.metadata["Date"], "Wed Feb 13 09:26:07 2019")
+        self.assertEqual(alignments.metadata["Rundate"], "Wed Feb 13 09:26:07 2019")
         self.assertEqual(
-            alignments.commandline,
+            alignments.metadata["Command line"],
             "/home/shah/hh-suite/build/bin/hhsearch -i /home/shah/seq/q9bsu1/hhblits/q9bsu1_uniclust_w_ss.a3m -d /home/shah/db/pfamA_30/pfam -o /home/shah/seq/q9bsu1/hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr -p 20 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 2 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000",
         )
         alignment = next(alignments)
@@ -9032,7 +9032,7 @@ class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 34)
-        self.assertEqual(alignments.metadata["Date"], "Fri Feb 15 16:34:13 2019")
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Feb 15 16:34:13 2019")
         with self.assertRaises(StopIteration):
             next(alignments)
 

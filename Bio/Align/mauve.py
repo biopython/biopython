@@ -58,7 +58,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(line)
                 line = f"#Sequence{number}Format\tFastA\n"
                 stream.write(line)
-        backbone_file = metadata.get("BackboneFile", None)
+        backbone_file = metadata.get("BackboneFile")
         if backbone_file is not None:
             line = f"#BackboneFile\t{backbone_file}\n"
             stream.write(line)

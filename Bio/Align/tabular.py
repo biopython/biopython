@@ -66,15 +66,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self._parse_header(stream, line)
 
     def _parse_header(self, stream, line):
-        self.metadata = {}
+        metadata = {}
         if line[2:].startswith("TBLASTN ") or line[2:].startswith("TBLASTX "):
-            self.program, self.metadata["version"] = line[2:].split(None, 1)
+            metadata["Program"], metadata["Version"] = line[2:].split(None, 1)
             self.final_prefix = "# BLAST processed "
         else:
-            self.commandline = line[2:]
+            metadata["Command line"] = line[2:]
             line = next(stream)
             assert line.startswith("# ")
-            self.program, self.metadata["version"] = line[2:].rstrip().split(None, 1)
+            metadata["Program"], metadata["Version"] = line[2:].rstrip().split(None, 1)
             self.final_prefix = "# FASTA processed "
         for line in stream:
             line = line.strip()
@@ -85,9 +85,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 suffix = " hits found"
                 assert line.endswith(suffix)
                 hits = int(line[2 : -len(suffix)])
-                return
+                break
             if prefix == "Query":
-                if self.program == "FASTA":
+                if metadata["Program"] == "FASTA":
                     query_line, query_size = value.rsplit(" - ", 1)
                     query_size, unit = query_size.split()
                     self._query_size = int(query_size)
@@ -100,11 +100,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     self._query_id = query_line.strip()
                     self._query_description = None
             elif prefix == "Database":
-                self.metadata["database"] = value
+                metadata["Database"] = value
             elif prefix == "Fields":
                 self._fields = value.split(", ")
             elif prefix == "RID":
-                self.metadata["RID"] = value
+                metadata["RID"] = value
+        self.metadata = metadata
 
     def parse(self, stream):
         """Parse the next alignment from the stream."""
@@ -265,11 +266,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 query_seq = Seq(None, length=query_size)
         else:
+            program = self.metadata["Program"]
             query_sequence = query_sequence.replace("-", "")
-            if self.program == "TBLASTN":
+            if program == "TBLASTN":
                 assert len(query_sequence) == query_end - query_start
                 query_seq = Seq({query_start: query_sequence}, length=query_size)
-            elif self.program == "TBLASTX":
+            elif program == "TBLASTX":
                 query_annotations["start"] = query_start
                 query_annotations["end"] = query_end
                 query_seq = Seq(query_sequence)
@@ -280,7 +282,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query.description = self._query_description
         if query_annotations:
             query.annotations = query_annotations
-        if self.program in ("TBLASTN", "TBLASTX"):
+        if self.metadata["Program"] in ("TBLASTN", "TBLASTX"):
             target_annotations["start"] = target_start
             target_annotations["end"] = target_end
             target_annotations["length"] = target_length
