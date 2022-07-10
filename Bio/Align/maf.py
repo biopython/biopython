@@ -30,8 +30,6 @@ zero-based end position. We can therefore manipulate ``start`` and
 """
 import shlex
 
-from itertools import chain
-
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
