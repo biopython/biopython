@@ -30,8 +30,6 @@ zero-based end position. We can therefore manipulate ``start`` and
 """
 import shlex
 
-from itertools import chain
-
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -277,7 +275,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="MAF")
-        stream = self.stream
+
+    def _read_header(self, stream):
         metadata = {}
         line = next(stream)
         if line.startswith("track "):
@@ -324,76 +323,42 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in stream:
             if line.strip():
                 if not line.startswith("#"):
-                    self.line = line
+                    self._line = line
                     break
                 comment = line[1:].strip()
                 comments.append(comment)
         else:
-            self.stream = None
-            self.line = None
+            self._close()
         if comments:
             metadata["Comments"] = comments
         self.metadata = metadata
 
-    @staticmethod
-    def create_alignment(
-        records,
-        aligned_sequences,
-        strands,
-        annotations,
-        column_annotations,
-        score,
-    ):
-        """Create the Alignment object from the collected alignment data."""
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for record, strand, row in zip(records, strands, coordinates):
-            if strand == "-":
-                row[:] = row[-1] - row[0] - row
-            start = record.seq.defined_ranges[0][0]
-            row += start
-        alignment = Alignment(records, coordinates)
-        if annotations is not None:
-            alignment.annotations = annotations
-        if column_annotations is not None:
-            alignment.column_annotations = column_annotations
-        if score is not None:
-            alignment.score = score
-        return alignment
+    def _read_next_alignment(self, stream):
+        records = []
+        strands = []
+        column_annotations = {}
+        aligned_sequences = []
+        annotations = {}
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
+        line = self._line
+        assert line.startswith("a")
+        words = line[1:].split()
+        for word in words:
+            key, value = word.split("=")
+            if key == "score":
+                score = float(value)
+            elif key == "pass":
+                value = int(value)
+                if value <= 0:
+                    raise ValueError("pass value must be positive (found %d)" % value)
+                annotations["pass"] = value
+            else:
+                raise ValueError("Unknown annotation variable '%s'" % key)
 
-        line = self.line
-        self.line = None
-        if line is not None:
-            lines = chain([line], stream)
-        else:
-            lines = stream
-        records = None
-        for line in lines:
+        for line in stream:
             if line.startswith("a"):
-                strands = []
-                annotations = {}
-                column_annotations = {}
-                records = []
-                aligned_sequences = []
-                score = None
-                words = line[1:].split()
-                for word in words:
-                    key, value = word.split("=")
-                    if key == "score":
-                        score = float(value)
-                    elif key == "pass":
-                        value = int(value)
-                        if value <= 0:
-                            raise ValueError(
-                                "pass value must be positive (found %d)" % value
-                            )
-                        annotations["pass"] = value
-                    else:
-                        raise ValueError("Unknown annotation variable '%s'" % key)
+                self._line = line
+                break
             elif line.startswith("s "):
                 words = line.strip().split()
                 if len(words) != 7:
@@ -466,25 +431,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 value = words[2].replace("-", "")
                 record.annotations["quality"] = value
             elif not line.strip():
-                # reached the end of this alignment
-                yield AlignmentIterator.create_alignment(
-                    records,
-                    aligned_sequences,
-                    strands,
-                    annotations,
-                    column_annotations,
-                    score,
-                )
-                records = None
+                # reached the end of the alignment, but keep reading until we
+                # find the next alignment
+                continue
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
-        if records is None:
-            return
-        yield AlignmentIterator.create_alignment(
-            records,
-            aligned_sequences,
-            strands,
-            annotations,
-            column_annotations,
-            score,
-        )
+        else:
+            self._close()
+        coordinates = Alignment.infer_coordinates(aligned_sequences)
+        for record, strand, row in zip(records, strands, coordinates):
+            if strand == "-":
+                row[:] = row[-1] - row[0] - row
+            start = record.seq.defined_ranges[0][0]
+            row += start
+        alignment = Alignment(records, coordinates)
+        if annotations is not None:
+            alignment.annotations = annotations
+        if column_annotations is not None:
+            alignment.column_annotations = column_annotations
+        if score is not None:
+            alignment.score = score
+        return alignment

@@ -111,7 +111,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="Clustal")
-        stream = self.stream
+
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -144,11 +145,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self.metadata["Version"] = word
                 break
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         # If the alignment contains entries with the same sequence
         # identifier (not a good idea - but seems possible), then this
         # dictionary based parser will merge their sequences.  Fix this?
@@ -262,8 +259,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        # TODO - Handle alignment annotation better, for now
-        # mimic the old parser in Bio.Clustalw
         if consensus:
             rows, columns = alignment.shape
             if len(consensus) != columns:
@@ -275,4 +270,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 )
             alignment.column_annotations = {}
             alignment.column_annotations["clustal_consensus"] = consensus
-        yield alignment
+        self._close()
+        return alignment

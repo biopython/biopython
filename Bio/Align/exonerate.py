@@ -433,7 +433,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="Exonerate")
-        stream = self.stream
+
+    def _read_header(self, stream):
         self.metadata = {}
         self.metadata["Program"] = "exonerate"
         line = next(stream)
@@ -613,11 +614,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment.score = score
         return alignment
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         for line in stream:
             line = line.strip()
             if line == "-- completed exonerate analysis":
@@ -628,14 +625,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError(
                     "Found additional data after 'completed exonerate analysis'; corrupt file?"
                 )
-            elif line.startswith("vulgar: "):
+            if line.startswith("vulgar: "):
                 words = line[8:].split()
                 alignment = self._parse_vulgar(words)
-                yield alignment
             elif line.startswith("cigar: "):
                 words = line[7:].split()
                 alignment = self._parse_cigar(words)
-                yield alignment
+            return alignment
         raise ValueError(
             "Failed to find 'completed exonerate analysis'; truncated file?"
         )

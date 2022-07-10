@@ -65,8 +65,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="FASTA")
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
+    def _read_next_alignment(self, stream):
         names = []
         descriptions = []
         lines = []
@@ -96,4 +95,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 record = SeqRecord(sequence, name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
-        yield alignment
+        self._close()
+        return alignment

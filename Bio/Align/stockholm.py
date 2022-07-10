@@ -301,11 +301,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     letter_annotation = letter_annotation.replace(".", "")
                 record.letter_annotations[feature] = letter_annotation
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         for line in stream:
             line = line.strip()
             if not line:
@@ -353,7 +349,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 AlignmentIterator._store_per_sequence_and_per_column_annotations(
                     alignment, gr
                 )
-                yield alignment
+                return alignment
             elif not line.startswith("#"):
                 # Sequence
                 # Format: "<seqname> <sequence>"
