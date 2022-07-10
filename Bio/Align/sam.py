@@ -400,12 +400,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="SAM")
-        stream = self.stream
+
+    def _read_header(self, stream):
         self.metadata = {}
         self.targets = {}
         for line in stream:
             if not line.startswith("@"):
-                self.line = line
+                self._line = line
                 break
             fields = line[1:].strip().split("\t")
             tag = fields[0]
@@ -457,17 +458,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         self.metadata[tag] = []
                     self.metadata[tag].append(values)
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
-        line = self.line
-        self.line = None
-        if line is not None:
-            lines = chain([line], stream)
-        else:
+    def _read_next_alignment(self, stream):
+        try:
+            line = self._line
+        except AttributeError:
             lines = stream
+        else:
+            lines = chain([line], stream)
+            del self._line
         for line in lines:
             fields = line.split()
             if len(fields) < 11:
@@ -752,4 +750,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 alignment.hard_clip_right = hard_clip_right
             if store_operations:
                 alignment.operations = operations
-            yield alignment
+            return alignment

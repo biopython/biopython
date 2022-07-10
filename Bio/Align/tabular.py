@@ -55,7 +55,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="Tabular")
-        stream = self.stream
+
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -69,13 +70,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         metadata = {}
         if line[2:].startswith("TBLASTN ") or line[2:].startswith("TBLASTX "):
             metadata["Program"], metadata["Version"] = line[2:].split(None, 1)
-            self.final_prefix = "# BLAST processed "
+            self._final_prefix = "# BLAST processed "
         else:
             metadata["Command line"] = line[2:]
             line = next(stream)
             assert line.startswith("# ")
             metadata["Program"], metadata["Version"] = line[2:].rstrip().split(None, 1)
-            self.final_prefix = "# FASTA processed "
+            self._final_prefix = "# FASTA processed "
         for line in stream:
             line = line.strip()
             assert line.startswith("# ")
@@ -94,6 +95,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     assert unit in ("nt", "aa")
                 else:
                     query_line = value
+                    self._query_size = None
                 try:
                     self._query_id, self._query_description = query_line.split(None, 1)
                 except ValueError:
@@ -107,22 +109,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 metadata["RID"] = value
         self.metadata = metadata
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         for line in stream:
             line = line.rstrip()
             if line.startswith("# "):
-                if line.startswith(self.final_prefix) and line.endswith(" queries"):
+                if line.startswith(self._final_prefix) and line.endswith(" queries"):
+                    del self._fields
+                    del self._query_id
+                    del self._query_description
+                    del self._query_size
+                    del self._final_prefix
                     return
                 self._parse_header(stream, line)
             else:
-                yield self.create_alignment(line)
-
-    def create_alignment(self, line):
-        """Parse one line of output and return an Alignment object."""
+                break
         alignment_length = None
         identical = None
         btop = None
@@ -138,10 +138,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_sequence = None
         target_length = None
         coordinates = None
-        try:
-            query_size = self._query_size
-        except AttributeError:
-            query_size = None
+        query_size = self._query_size
         columns = line.split("\t")
         assert len(columns) == len(self._fields)
         annotations = {}
@@ -276,7 +273,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_annotations["end"] = query_end
                 query_seq = Seq(query_sequence)
             else:
-                raise Exception("Unknown program %s" % self.program)
+                raise Exception("Unknown program %s" % program)
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description

@@ -20,6 +20,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
 
+from collections import defaultdict
+
 import warnings
 
 warnings.warn(
@@ -45,7 +47,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="hhr")
-        stream = self.stream
+
+    def _read_header(self, stream):
         metadata = {}
         for line in stream:
             line = line.strip()
@@ -95,87 +98,60 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             number += 1
             word, _ = line.split(None, 1)
             assert int(word) == number
-        self.number = number
-        self.counter = 0
+        self._number = number
+        self._counter = 0
 
-    def _create_alignment(self):
-        query_name = self.query_name
-        query_length = self.query_length
-        assert query_length == self.metadata["Match_columns"]
-        target_name = self.target_name
-        hmm_name = self.hmm_name
-        hmm_description = self.hmm_description
-        query_sequence = self.query_sequence
-        target_sequence = self.target_sequence
-        assert len(target_sequence) == len(query_sequence)
-        coordinates = Alignment.infer_coordinates([target_sequence, query_sequence])
-        coordinates[0, :] += self.target_start
-        coordinates[1, :] += self.query_start
-        query_sequence = query_sequence.replace("-", "")
-        query_sequence = {self.query_start: query_sequence}
-        query_seq = Seq(query_sequence, length=query_length)
-        query = SeqRecord(query_seq, id=query_name)
-        target_sequence = target_sequence.replace("-", "")
-        target_sequence = {self.target_start: target_sequence}
-        target_length = self.target_length
-        target_seq = Seq(target_sequence, length=target_length)
-        target_annotations = {"hmm_name": hmm_name, "hmm_description": hmm_description}
-        target = SeqRecord(target_seq, id=target_name, annotations=target_annotations)
-        query_consensus = self.query_consensus.replace("-", "")
-        query_consensus = " " * self.query_start + query_consensus
-        query_consensus += " " * (query_length - len(query_consensus))
-        query.letter_annotations["Consensus"] = query_consensus
-        target_consensus = self.target_consensus.replace("-", "")
-        target_consensus = " " * self.target_start + target_consensus
-        target_consensus += " " * (target_length - len(target_consensus))
-        target.letter_annotations["Consensus"] = target_consensus
-        target_ss_dssp = self.target_ss_dssp.replace("-", "")
-        target_ss_dssp = " " * self.target_start + target_ss_dssp
-        target_ss_dssp += " " * (target_length - len(target_ss_dssp))
-        target.letter_annotations["ss_dssp"] = target_ss_dssp
-        query_ss_pred = self.query_ss_pred.replace("-", "")
-        query_ss_pred = " " * self.query_start + query_ss_pred
-        query_ss_pred += " " * (query_length - len(query_ss_pred))
-        query.letter_annotations["ss_pred"] = query_ss_pred
-        target_ss_pred = self.target_ss_pred.replace("-", "")
-        target_ss_pred = " " * self.target_start + target_ss_pred
-        target_ss_pred += " " * (target_length - len(target_ss_pred))
-        target.letter_annotations["ss_pred"] = target_ss_pred
-        confidence = self.confidence.replace(" ", "")
-        confidence = " " * self.target_start + confidence
-        confidence += " " * (target_length - len(confidence))
-        target.letter_annotations["Confidence"] = confidence
-        records = [target, query]
-        alignment = Alignment(records, coordinates=coordinates)
-        alignment.annotations = self.annotations
-        alignment.column_annotations = {}
-        alignment.column_annotations["column score"] = self.column_score
-        return alignment
+    def _read_next_alignment(self, stream):
+        def create_alignment():
+            n = len(target_sequence)
+            assert len(query_sequence) == n
+            if n == 0:
+                return
+            coordinates = Alignment.infer_coordinates([target_sequence, query_sequence])
+            coordinates[0, :] += target_start
+            coordinates[1, :] += query_start
+            sequence = {query_start: query_sequence.replace("-", "")}
+            query_seq = Seq(sequence, length=query_length)
+            query = SeqRecord(query_seq, id=self.query_name)
+            sequence = {target_start: target_sequence.replace("-", "")}
+            target_seq = Seq(sequence, length=target_length)
+            target_annotations = {"hmm_name": hmm_name, "hmm_description": hmm_description}
+            target = SeqRecord(target_seq, id=target_name, annotations=target_annotations)
+            fmt = f"{' ' * target_start}%-{target_length - target_start}s"
+            target.letter_annotations["Consensus"] = fmt % target_consensus.replace("-", "")
+            target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
+            target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
+            target.letter_annotations["Confidence"] = fmt % confidence.replace(" ", "")
+            fmt = f"{' ' * query_start}%-{query_length - query_start}s"
+            query.letter_annotations["Consensus"] = fmt % query_consensus.replace("-", "")
+            query.letter_annotations["ss_pred"] = fmt % query_ss_pred.replace("-", "")
+            records = [target, query]
+            alignment = Alignment(records, coordinates=coordinates)
+            alignment.annotations = alignment_annotations
+            alignment.column_annotations = {}
+            alignment.column_annotations["column score"] = column_score
+            return alignment
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if self.number == 0:
-            return
+        query_start = None
+        query_sequence = ""
+        query_consensus = ""
+        query_ss_pred = ""
+        target_start = None
+        target_sequence = ""
+        target_consensus = ""
+        target_ss_pred = ""
+        target_ss_dssp = ""
+        column_score = ""
+        confidence = ""
         for line in stream:
             line = line.rstrip()
             if not line:
                 pass
             elif line.startswith(">"):
-                self.hmm_name, self.hmm_description = line[1:].split(None, 1)
-                self.query_ss_pred = ""
-                self.query_consensus = ""
-                self.query_sequence = ""
-                self.query_start = None
-                self.target_ss_pred = ""
-                self.target_consensus = ""
-                self.target_ss_dssp = ""
-                self.target_sequence = ""
-                self.target_start = None
-                self.column_score = ""
-                self.confidence = ""
+                hmm_name, hmm_description = line[1:].split(None, 1)
                 line = next(stream)
                 words = line.split()
-                self.annotations = {}
+                alignment_annotations = {}
                 for word in words:
                     key, value = word.split("=")
                     if key == "Aligned_cols":
@@ -183,7 +159,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if key == "Identities":
                         value = value.rstrip("%")
                     value = float(value)
-                    self.annotations[key] = value
+                    alignment_annotations[key] = value
             elif line == "Done!":
                 try:
                     next(stream)
@@ -194,19 +170,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         "Found additional data after 'Done!'; corrupt file?"
                     )
             elif line.startswith(" "):
-                self.column_score += line.strip()
+                column_score += line.strip()
             elif line.startswith("No "):
-                if self.counter > 0:
-                    yield self._create_alignment()
-                self.counter += 1
+                counter = self._counter
+                self._counter += 1
                 key, value = line.split()
-                assert int(value) == self.counter
+                assert int(value) == self._counter
+                if self._counter > self._number:
+                    raise ValueError(
+                        "Expected %d alignments, found %d" % (self._number, self._counter)
+                    )
+                if counter > 0:
+                    return create_alignment()
             elif line.startswith("Confidence"):
                 key, value = line.split(None, 1)
-                self.confidence += value
+                confidence += value
             elif line.startswith("Q ss_pred "):
                 key, value = line.rsplit(None, 1)
-                self.query_ss_pred += value
+                query_ss_pred += value
             elif line.startswith("Q Consensus "):
                 key1, key2, start, consensus, end, total = line.split()
                 start = int(start) - 1
@@ -214,7 +195,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert total.startswith("(")
                 assert total.endswith(")")
                 total = int(total[1:-1])
-                self.query_consensus += consensus
+                query_consensus += consensus
             elif line.startswith("Q "):
                 key1, key2, start, sequence, end, total = line.split()
                 assert self.query_name.startswith(key2)
@@ -222,16 +203,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 end = int(end)
                 assert total.startswith("(")
                 assert total.endswith(")")
-                self.query_length = int(total[1:-1])
-                if self.query_start is None:
-                    self.query_start = start
-                self.query_sequence += sequence
+                query_length = int(total[1:-1])
+                assert query_length == self.metadata["Match_columns"]
+                if query_start is None:
+                    query_start = start
+                query_sequence += sequence
             elif line.startswith("T ss_pred "):
                 key, value = line.rsplit(None, 1)
-                self.target_ss_pred += value
+                target_ss_pred += value
             elif line.startswith("T ss_dssp "):
                 key, value = line.rsplit(None, 1)
-                self.target_ss_dssp += value
+                target_ss_dssp += value
             elif line.startswith("T Consensus "):
                 key1, key2, start, consensus, end, total = line.split()
                 start = int(start) - 1
@@ -239,23 +221,30 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert total.startswith("(")
                 assert total.endswith(")")
                 total = int(total[1:-1])
-                self.target_consensus += consensus
+                target_consensus += consensus
             elif line.startswith("T "):
                 key, name, start, sequence, end, total = line.split()
                 assert key == "T"
-                self.target_name = name
+                target_name = name
                 start = int(start) - 1
                 end = int(end)
                 assert total.startswith("(")
                 assert total.endswith(")")
-                self.target_length = int(total[1:-1])
-                if self.target_start is None:
-                    self.target_start = start
-                self.target_sequence += sequence
+                target_length = int(total[1:-1])
+                if target_start is None:
+                    target_start = start
+                target_sequence += sequence
             else:
                 raise ValueError("Failed to parse line '%s...'" % line[:30])
-        yield self._create_alignment()
-        if self.number != self.counter:
+        alignment = create_alignment()
+        number = self._number
+        counter = self._counter
+        if number == counter:
+            self._close()
+            del self._number
+            del self._counter
+        if alignment is None and number > 0:
             raise ValueError(
-                "Expected %d alignments, found %d" % (self.number, self.counter)
+                "Expected %d alignments, found %d" % (number, counter)
             )
+        return alignment

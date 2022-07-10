@@ -40,7 +40,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="EMBOSS")
-        stream = self.stream
+
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -76,11 +77,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "Commandline":
                 commandline = value.strip()
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         identifiers = None
         number_of_sequences = None
         annotations = {}
@@ -201,9 +198,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
                                 }
-                            yield alignment
-                            identifiers = None
-                            annotations = {}
+                            return alignment
                     continue
                 prefix = line[:21].strip()
                 if prefix == "":

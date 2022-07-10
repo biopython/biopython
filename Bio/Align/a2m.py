@@ -76,8 +76,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         """
         super().__init__(source, mode="t", fmt="A2M")
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
+    def _read_next_alignment(self, stream):
         names = []
         descriptions = []
         lines = []
@@ -127,4 +126,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = Alignment(records, coordinates)
         alignment.column_annotations = {}
         alignment.column_annotations["state"] = state
-        yield alignment
+        self._close()  # a2m files contain only one alignment
+        return alignment

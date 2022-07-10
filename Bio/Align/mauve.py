@@ -133,7 +133,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="Mauve")
-        stream = self.stream
+
+    def _read_header(self, stream):
         metadata = {}
         prefix = "Sequence"
         suffixes = ("File", "Entry", "Format")
@@ -189,20 +190,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             start -= 1  # python counting
         return (identifier, start, end, strand, comments)
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            return
-
+    def _read_next_alignment(self, stream):
         descriptions = []
         seqs = []
 
-        line = self._line
-        del self._line
-        description = self._parse_description(line)
-        identifier, start, end, strand, comments = description
-        descriptions.append(description)
-        seqs.append("")
+        try:
+            line = self._line
+        except AttributeError:
+            pass
+        else:
+            del self._line
+            description = self._parse_description(line)
+            identifier, start, end, strand, comments = description
+            descriptions.append(description)
+            seqs.append("")
 
         for line in stream:
             line = line.strip()
@@ -231,10 +232,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     record = SeqRecord(seq, id=identifier, description=comments)
                     records.append(record)
 
-                yield Alignment(records, coordinates)
+                return Alignment(records, coordinates)
 
-                descriptions = []
-                seqs = []
             elif line.startswith(">"):
                 description = self._parse_description(line)
                 identifier, start, end, strand, comments = description
@@ -242,3 +241,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seqs.append("")
             else:
                 seqs[-1] += line
+        del self._identifiers

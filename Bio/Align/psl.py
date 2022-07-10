@@ -316,7 +316,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="PSL")
-        stream = self.stream
+
+    def _read_header(self, stream):
         line = next(stream)
         if line.startswith("psLayout "):
             words = line.split()
@@ -329,21 +330,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = next(stream)
             if line.lstrip("-").strip() != "":
                 raise ValueError("End of header not found")
-            self.line = None
         else:
-            self.line = line
+            self._line = line
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
-        line = self.line
-        self.line = None
-        if line is not None:
-            lines = chain([line], stream)
-        else:
+    def _read_next_alignment(self, stream):
+        try:
+            line = self._line
+        except AttributeError:
             lines = stream
+        else:
+            del self._line
+            lines = chain([line], stream)
         for line in lines:
             words = line.split()
             if len(words) == 23:
@@ -541,4 +538,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             alignment.misMatches = int(words[1])
             alignment.repMatches = int(words[2])
             alignment.nCount = int(words[3])
-            yield alignment
+            return alignment
