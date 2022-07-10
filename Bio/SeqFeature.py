@@ -288,7 +288,8 @@ class SeqFeature:
     def __eq__(self, other):
         """Check if two SeqFeature objects should be considered equal."""
         return (
-            self.id == other.id
+            isinstance(other, SeqFeature)
+            and self.id == other.id
             and self.type == other.type
             and self.location == other.location
             and self.qualifiers == other.qualifiers
