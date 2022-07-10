@@ -352,9 +352,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "pass":
                 value = int(value)
                 if value <= 0:
-                    raise ValueError(
-                        "pass value must be positive (found %d)" % value
-                    )
+                    raise ValueError("pass value must be positive (found %d)" % value)
                 annotations["pass"] = value
             else:
                 raise ValueError("Unknown annotation variable '%s'" % key)

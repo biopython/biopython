@@ -115,15 +115,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query = SeqRecord(query_seq, id=self.query_name)
             sequence = {target_start: target_sequence.replace("-", "")}
             target_seq = Seq(sequence, length=target_length)
-            target_annotations = {"hmm_name": hmm_name, "hmm_description": hmm_description}
-            target = SeqRecord(target_seq, id=target_name, annotations=target_annotations)
+            target_annotations = {
+                "hmm_name": hmm_name,
+                "hmm_description": hmm_description,
+            }
+            target = SeqRecord(
+                target_seq, id=target_name, annotations=target_annotations
+            )
             fmt = f"{' ' * target_start}%-{target_length - target_start}s"
-            target.letter_annotations["Consensus"] = fmt % target_consensus.replace("-", "")
+            target.letter_annotations["Consensus"] = fmt % target_consensus.replace(
+                "-", ""
+            )
             target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
             target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
             target.letter_annotations["Confidence"] = fmt % confidence.replace(" ", "")
             fmt = f"{' ' * query_start}%-{query_length - query_start}s"
-            query.letter_annotations["Consensus"] = fmt % query_consensus.replace("-", "")
+            query.letter_annotations["Consensus"] = fmt % query_consensus.replace(
+                "-", ""
+            )
             query.letter_annotations["ss_pred"] = fmt % query_ss_pred.replace("-", "")
             records = [target, query]
             alignment = Alignment(records, coordinates=coordinates)
@@ -178,7 +187,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert int(value) == self._counter
                 if self._counter > self._number:
                     raise ValueError(
-                        "Expected %d alignments, found %d" % (self._number, self._counter)
+                        "Expected %d alignments, found %d"
+                        % (self._number, self._counter)
                     )
                 if counter > 0:
                     return create_alignment()
@@ -244,7 +254,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             del self._number
             del self._counter
         if alignment is None and number > 0:
-            raise ValueError(
-                "Expected %d alignments, found %d" % (number, counter)
-            )
+            raise ValueError("Expected %d alignments, found %d" % (number, counter))
         return alignment
