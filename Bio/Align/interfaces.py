@@ -60,6 +60,8 @@ class AlignmentIterator(list, ABC):
 
     def __next__(self):
         """Return the next entry."""
+        if self._loaded:
+            return super().__next__()
         try:
             stream = self._stream
         except AttributeError:
@@ -80,6 +82,8 @@ class AlignmentIterator(list, ABC):
         left as is, which will call the subclass implementation of __next__
         to actually parse the file.
         """
+        if self._loaded:
+            return super().__iter__()
         return self
 
     def _read_header(self, stream):
@@ -100,13 +104,13 @@ class AlignmentIterator(list, ABC):
 
     def _load(self):
         if not self._loaded:
+            print("Loading")
             for item in self:
                 super().append(item)
             self._loaded = True
 
     def __repr__(self):
-        self._load()
-        return super().__repr__()   
+        return super(list, self).__repr__()
 
     def __lt__(self, other):
         self._load()
@@ -166,6 +170,7 @@ class AlignmentIterator(list, ABC):
 
     def __iadd__(self, other):
         self.extend(other)
+        return self
 
     def __mul__(self, n):
         return list(self) * n
@@ -175,7 +180,7 @@ class AlignmentIterator(list, ABC):
 
     def __imul__(self, n):
         self._load()
-        super().__imul(n)
+        return super().__imul__(n)
 
     def append(self, item):
         self._load()
@@ -191,11 +196,11 @@ class AlignmentIterator(list, ABC):
 
     def remove(self, item):
         self._load()
-        return super().remove(item)
+        super().remove(item)
 
     def clear(self):
         self._close()
-        return super().clear()
+        super().clear()
 
     def copy(self):
         self._load()
@@ -213,7 +218,7 @@ class AlignmentIterator(list, ABC):
 
     def reverse(self):
         self._load()
-        super().revers()
+        super().reverse()
 
     def sort(self, /, *args, **kwds):
         self._load()
@@ -221,9 +226,8 @@ class AlignmentIterator(list, ABC):
 
     def extend(self, other):
         self._load()
-        if isinstance(other, AlignmentIterator):
-            other._load()
-        return super().extend(other)
+        for item in other:
+            super().append(item)
 
 
 class AlignmentWriter:
