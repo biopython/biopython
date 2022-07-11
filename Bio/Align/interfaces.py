@@ -15,7 +15,7 @@ from abc import abstractmethod
 from Bio import StreamModeError
 
 
-class AlignmentIterator(ABC):
+class AlignmentIterator(list, ABC):
     """Base class for building Alignment iterators.
 
     You should write a parse method that returns an Alignment generator.  You
@@ -51,6 +51,7 @@ class AlignmentIterator(ABC):
             else:
                 raise ValueError("Unknown mode '%s'" % mode) from None
             self._stream = source
+        self._loaded = False
         try:
             self._read_header(self._stream)
         except Exception:
@@ -96,6 +97,133 @@ class AlignmentIterator(ABC):
         if stream is not self.source:
             stream.close()
         del self._stream
+
+    def _load(self):
+        if not self._loaded:
+            for item in self:
+                super().append(item)
+            self._loaded = True
+
+    def __repr__(self):
+        self._load()
+        return super().__repr__()   
+
+    def __lt__(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().__lt__(other)
+
+    def __le__(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().__le__(other)
+
+    def __eq__(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().__eq__(other)
+
+    def __gt__(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().__gt__(other)
+
+    def __ge__(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().__ge__(other)
+
+    def __contains__(self, alignment):
+        self._load()
+        return super().__contains__(alignment)
+
+    def __len__(self):
+        self._load()
+        return super().__len__()
+
+    def __getitem__(self, i):
+        self._load()
+        return super().__getitem__(i)
+
+    def __setitem__(self, i, item):
+        self._load()
+        super().__setitem__(i, item)
+
+    def __delitem__(self, i):
+        self._load()
+        super().__delitem__(i)
+
+    def __add__(self, other):
+        return list(self) + list(other)
+
+    def __radd__(self, other):
+        return list(other) + list(self)
+
+    def __iadd__(self, other):
+        self.extend(other)
+
+    def __mul__(self, n):
+        return list(self) * n
+
+    def __rmul__(self, n):
+        return list(self) * n
+
+    def __imul__(self, n):
+        self._load()
+        super().__imul(n)
+
+    def append(self, item):
+        self._load()
+        super().append(item)
+
+    def insert(self, i, item):
+        self._load()
+        super().insert(i, item)
+
+    def pop(self, i=-1):
+        self._load()
+        return super().pop(i)
+
+    def remove(self, item):
+        self._load()
+        return super().remove(item)
+
+    def clear(self):
+        self._close()
+        return super().clear()
+
+    def copy(self):
+        self._load()
+        inst = self.__class__.__new__(self.__class__)
+        inst.__dict__.update(self.__dict__)
+        return inst
+
+    def count(self, item):
+        self._load()
+        return super().count(item)
+
+    def index(self, item, *args):
+        self._load()
+        return super().index(item, *args)
+
+    def reverse(self):
+        self._load()
+        super().revers()
+
+    def sort(self, /, *args, **kwds):
+        self._load()
+        super().sort(*args, **kwds)
+
+    def extend(self, other):
+        self._load()
+        if isinstance(other, AlignmentIterator):
+            other._load()
+        return super().extend(other)
 
 
 class AlignmentWriter:
