@@ -42,19 +42,16 @@ class TestFastaProtein(unittest.TestCase):
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CB.txt"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(
-                alignments.metadata["Command line"],
-                "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg",
-            )
-            self.assertEqual(alignments.metadata["Program"], "FASTA")
-            self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
-            self.assertEqual(alignments.metadata["Database"], "seq/prot_test.lseg")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 12)
+        alignments = AlignmentIterator(path)
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg",
+        )
+        self.assertEqual(alignments.metadata["Program"], "FASTA")
+        self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
+        self.assertEqual(alignments.metadata["Database"], "seq/prot_test.lseg")
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
-        alignment = alignments[0]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 77.98)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -88,7 +85,7 @@ class TestFastaProtein(unittest.TestCase):
             "MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
-        alignment = alignments[1]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 29.76)
         self.assertEqual(alignment.annotations["gap opens"], 18)
@@ -128,7 +125,7 @@ class TestFastaProtein(unittest.TestCase):
             "ILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKL--GLDFPNLPYL-IDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMD-TRMQLIMLCYNPDFEKQKPEFLK--TIPEKMKLYSEFLGK--RPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
-        alignment = alignments[2]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 27.03)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -160,7 +157,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
-        alignment = alignments[3]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 24.29)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -198,7 +195,7 @@ class TestFastaProtein(unittest.TestCase):
             "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
-        alignment = alignments[4]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 57.14)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -223,7 +220,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
-        alignment = alignments[5]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 45.00)
         self.assertEqual(alignment.annotations["gap opens"], 10)
@@ -261,7 +258,7 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
-        alignment = alignments[6]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.03)
         self.assertEqual(alignment.annotations["gap opens"], 10)
@@ -301,7 +298,7 @@ class TestFastaProtein(unittest.TestCase):
             "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
-        alignment = alignments[7]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.11)
         self.assertEqual(alignment.annotations["gap opens"], 9)
@@ -338,7 +335,7 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
-        alignment = alignments[8]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.67)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -370,7 +367,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
-        alignment = alignments[9]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 50.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -398,7 +395,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
-        alignment = alignments[10]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 28.95)
         self.assertEqual(alignment.annotations["gap opens"], 1)
@@ -426,7 +423,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
-        alignment = alignments[11]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 19.40)
         self.assertEqual(alignment.annotations["gap opens"], 4)
@@ -463,25 +460,24 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_m8CC(self):
         # Alignment file obtained by running
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CC.txt"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(
-                alignments.metadata["Command line"],
-                "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg",
-            )
-            self.assertEqual(alignments.metadata["Program"], "FASTA")
-            self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
-            self.assertEqual(alignments.metadata["Database"], "seq/prot_test.lseg")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 12)
+        alignments = AlignmentIterator(path)
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg",
+        )
+        self.assertEqual(alignments.metadata["Program"], "FASTA")
+        self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
+        self.assertEqual(alignments.metadata["Database"], "seq/prot_test.lseg")
         # sp|P10649|GSTM1_MOUSE   sp|P09488|GSTM1_HUMAN
-        alignment = alignments[0]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 77.98)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -515,7 +511,7 @@ class TestFastaProtein(unittest.TestCase):
             "MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
-        alignment = alignments[1]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 29.76)
         self.assertEqual(alignment.annotations["gap opens"], 18)
@@ -555,7 +551,7 @@ class TestFastaProtein(unittest.TestCase):
             "ILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKL--GLDFPNLPYL-IDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMD-TRMQLIMLCYNPDFEKQKPEFLK--TIPEKMKLYSEFLGK--RPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
-        alignment = alignments[2]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 27.03)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -587,7 +583,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
-        alignment = alignments[3]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 24.29)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -625,7 +621,7 @@ class TestFastaProtein(unittest.TestCase):
             "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
-        alignment = alignments[4]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 57.14)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -650,7 +646,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
-        alignment = alignments[5]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 45.00)
         self.assertEqual(alignment.annotations["gap opens"], 10)
@@ -688,7 +684,7 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
-        alignment = alignments[6]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.03)
         self.assertEqual(alignment.annotations["gap opens"], 10)
@@ -728,7 +724,7 @@ class TestFastaProtein(unittest.TestCase):
             "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
-        alignment = alignments[7]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.11)
         self.assertEqual(alignment.annotations["gap opens"], 9)
@@ -764,7 +760,7 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
-        alignment = alignments[8]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.67)
         self.assertEqual(alignment.annotations["gap opens"], 2)
@@ -796,7 +792,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
-        alignment = alignments[9]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 28.95)
         self.assertEqual(alignment.annotations["gap opens"], 1)
@@ -828,7 +824,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
-        alignment = alignments[10]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 50.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -856,7 +852,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
-        alignment = alignments[11]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 19.40)
         self.assertEqual(alignment.annotations["gap opens"], 4)
@@ -893,6 +889,8 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
 
 class TestFastaNucleotide(unittest.TestCase):
@@ -910,19 +908,16 @@ class TestFastaNucleotide(unittest.TestCase):
         # fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CB.txt"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(
-                alignments.metadata["Command line"],
-                "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
-            )
-            self.assertEqual(alignments.metadata["Program"], "FASTA")
-            self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
-            self.assertEqual(alignments.metadata["Database"], "seq/gst.nlib")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 12)
+        alignments = AlignmentIterator(path)
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
+        )
+        self.assertEqual(alignments.metadata["Program"], "FASTA")
+        self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
+        self.assertEqual(alignments.metadata["Database"], "seq/gst.nlib")
         # pGT875   pGT875
-        alignment = alignments[0]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -956,7 +951,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
         # pGT875   RABGLTR
-        alignment = alignments[1]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 79.10)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -990,7 +985,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
         )
         # pGT875   BTGST
-        alignment = alignments[2]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.56)
         self.assertEqual(alignment.annotations["gap opens"], 21)
@@ -1030,7 +1025,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG",
         )
         # pGT875   RABGSTB
-        alignment = alignments[3]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.93)
         self.assertEqual(alignment.annotations["gap opens"], 8)
@@ -1070,7 +1065,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG",
         )
         # pGT875   OCDHPR
-        alignment = alignments[4]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 91.30)
         self.assertEqual(alignment.annotations["gap opens"], 1)
@@ -1102,7 +1097,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   RABALP1A
-        alignment = alignments[5]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 76.19)
         self.assertEqual(alignment.annotations["gap opens"], 4)
@@ -1134,7 +1129,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
         # pGT875   OCDHPR
-        alignment = alignments[6]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1162,7 +1157,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABALP1A
-        alignment = alignments[7]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1190,7 +1185,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABGSTB
-        alignment = alignments[8]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 87.50)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1218,7 +1213,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
         # pGT875   RABGLTR
-        alignment = alignments[9]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 53.57)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1252,7 +1247,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC",
         )
         # pGT875   pGT875
-        alignment = alignments[10]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1280,7 +1275,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCTGGTTCTC")
         self.assertEqual(alignment[1], "CCTGGTTCTC")
         # pGT875   BTGST
-        alignment = alignments[11]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.15)
         self.assertEqual(alignment.annotations["gap opens"], 3)
@@ -1317,25 +1312,24 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_m8CC(self):
         # Alignment file obtained by running
         # fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CC.txt"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            self.assertEqual(
-                alignments.metadata["Command line"],
-                "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
-            )
-            self.assertEqual(alignments.metadata["Program"], "FASTA")
-            self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
-            self.assertEqual(alignments.metadata["Database"], "seq/gst.nlib")
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 12)
+        alignments = AlignmentIterator(path)
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
+        )
+        self.assertEqual(alignments.metadata["Program"], "FASTA")
+        self.assertEqual(alignments.metadata["Version"], "36.3.8h May, 2020")
+        self.assertEqual(alignments.metadata["Database"], "seq/gst.nlib")
         # pGT875   pGT875
-        alignment = alignments[0]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1369,7 +1363,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
         # pGT875   RABGLTR
-        alignment = alignments[1]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 79.10)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1403,7 +1397,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
         )
         # pGT875   BTGST
-        alignment = alignments[2]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.56)
         self.assertEqual(alignment.annotations["gap opens"], 21)
@@ -1443,7 +1437,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG",
         )
         # pGT875   RABGSTB
-        alignment = alignments[3]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.93)
         self.assertEqual(alignment.annotations["gap opens"], 8)
@@ -1483,7 +1477,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG",
         )
         # pGT875   OCDHPR
-        alignment = alignments[4]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 91.30)
         self.assertEqual(alignment.annotations["gap opens"], 1)
@@ -1515,7 +1509,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   RABALP1A
-        alignment = alignments[5]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 76.19)
         self.assertEqual(alignment.annotations["gap opens"], 4)
@@ -1547,7 +1541,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
         # pGT875   OCDHPR
-        alignment = alignments[6]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1575,7 +1569,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABALP1A
-        alignment = alignments[7]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1603,7 +1597,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABGSTB
-        alignment = alignments[8]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 87.50)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1631,7 +1625,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
         # pGT875   RABGLTR
-        alignment = alignments[9]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 53.57)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1665,7 +1659,7 @@ class TestFastaNucleotide(unittest.TestCase):
             "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC",
         )
         # pGT875   pGT875
-        alignment = alignments[10]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
         self.assertEqual(alignment.annotations["gap opens"], 0)
@@ -1693,7 +1687,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment[0], "CCTGGTTCTC")
         self.assertEqual(alignment[1], "CCTGGTTCTC")
         # pGT875   BTGST
-        alignment = alignments[11]
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.15)
         self.assertEqual(alignment.annotations["gap opens"], 3)
@@ -1730,6 +1724,8 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
 
 class TestFastaBasic(unittest.TestCase):
