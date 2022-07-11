@@ -76,6 +76,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Neil P. (first contribution)
 - Peter Cock
+- Robert Sawicki (first contribution)
 - Sebastian Bassi
 - Sean Aubin
 - Tim Burke

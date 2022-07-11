@@ -259,6 +259,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Richard Neher <https://github.com/rneher>
 - Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
+- Robert Sawicki <https://github.com/Battlesheepu>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
 - Ryan Stecher <https://github.com/rystecher>
