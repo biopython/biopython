@@ -1,4 +1,4 @@
-# Copyright 2017 by Valentin Vareskic (valentin.vareskic@gmail.com).
+# Copyright 2022 by Valentin Vareskic (valentin.vareskic@gmail.com).
 # All rights reserved. This code is part of the Biopython distribution
 # and governed by its license.  Please see the LICENSE file that should
 # have been included as part of this package.
@@ -7,24 +7,92 @@
 
 import unittest
 from ftplib import FTP
-from Bio.PDB.PSEA import run_psea
+from Bio.PDB.PSEA import run_psea, psea, psea2HEC, annotate, PSEA
+from Bio.PDB import PDBParser
 
 
-# ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
-def setup():
-    with FTP("ftp.lmcp.jussieu.fr") as ftp:
-        ftp.login()
-        ftp.dir()
+class TestPDBPSEA(unittest.TestCase):
+    def test_run_psea(self):
+        psae_run = run_psea("PDB/1A8O.pdb")
+        self.assertEqual(psae_run, "1A8O.sea")
+
+    def test_psea(self):
+        psae_run = psea("PDB/2BEG.pdb")
+        self.assertEqual(psae_run, "ccccbbbbbbbccccbbbbbbbbbbc")
+
+    def test_psea_2HEC(self):
+        seq = psea("PDB/2BEG.pdb")
+        psae_run = psea2HEC(seq)
+        self.assertEqual(
+            psae_run,
+            [
+                "C",
+                "C",
+                "C",
+                "C",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "C",
+                "C",
+                "C",
+                "C",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "C",
+            ],
+        )
 
 
-# TODO Create unittest for run_psea(fname)
-def test_run_psea():
-    pass
+class TestPSEA(unittest.TestCase):
+    def test_get_seq(self):
+        p = PDBParser()
+        s = p.get_structure("X", "PDB/2BEG.pdb")
+        psea_class = PSEA(s[0], "PDB/2BEG.pdb")
+        self.assertEqual(
+            psea_class.get_seq(),
+            [
+                "C",
+                "C",
+                "C",
+                "C",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "C",
+                "C",
+                "C",
+                "C",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "E",
+                "C",
+            ],
+        )
 
 
 if __name__ == "__main__":
-    setup()
-# TODO Create unittest psea(pname)
-# TODO Create unittest psea2HEC(pseq)
-# TODO Create unittest annotate(m, ss_seq)
-# TODO Create unittest class PSEA
+    unittest.main()
