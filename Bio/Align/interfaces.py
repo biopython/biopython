@@ -104,7 +104,6 @@ class AlignmentIterator(list, ABC):
 
     def _load(self):
         if not self._loaded:
-            print("Loading")
             for item in self:
                 super().append(item)
             self._loaded = True
