@@ -29,11 +29,8 @@ except ImportError:
 class TestMSF(unittest.TestCase):
     def test_protein1(self):
         path = "msf/W_prot.msf"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
+        alignments = AlignmentIterator(path)
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 11)
         self.assertEqual(alignment.shape, (11, 99))
         self.assertEqual(alignment.sequences[0].id, "W*01:01:01:01")
@@ -156,21 +153,20 @@ class TestMSF(unittest.TestCase):
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_protein2(self):
         path = "msf/DOA_prot.msf"
 
+        alignments = AlignmentIterator(path)
         with warnings.catch_warnings(record=True) as w:
-            with open(path) as stream:
-                alignments = AlignmentIterator(stream)
-                alignments = list(alignments)
+            alignment = next(alignments)
         self.assertEqual(len(w), 1)
         self.assertIsInstance(w[0].message, BiopythonParserWarning)
         self.assertEqual(
             str(w[0].message), "GCG MSF headers said alignment length 62, but found 250"
         )
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
         self.assertEqual(len(alignment), 12)
         self.assertEqual(alignment.shape, (12, 250))
         self.assertEqual(alignment.sequences[0].id, "DOA*01:01:01")
@@ -302,6 +298,8 @@ class TestMSF(unittest.TestCase):
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
 
 if __name__ == "__main__":
