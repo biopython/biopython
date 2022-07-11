@@ -6,7 +6,6 @@
 """Tests for PDB PSEA."""
 
 import unittest
-from ftplib import FTP
 from Bio.PDB.PSEA import run_psea, psea, psea2HEC, annotate, PSEA
 from Bio.PDB import PDBParser
 
