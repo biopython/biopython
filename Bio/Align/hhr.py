@@ -251,8 +251,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         counter = self._counter
         if number == counter:
             self._close()
-            del self._number
             del self._counter
         if alignment is None and number > 0:
             raise ValueError("Expected %d alignments, found %d" % (number, counter))
         return alignment
+
+    def __len__(self):
+        return self._number
