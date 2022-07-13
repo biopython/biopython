@@ -26,7 +26,7 @@ except ImportError:
     ) from None
 
 
-class TestEmboss(unittest.TestCase):
+class TestAlignments(unittest.TestCase):
     def setUp(self):
         self.path = "Emboss/needle.txt"
         self.alignments = AlignmentIterator(self.path)
@@ -35,9 +35,10 @@ class TestEmboss(unittest.TestCase):
         representation = "<Bio.Align.emboss.AlignmentIterator object at %s>" % hex(id(self.alignments))
         self.assertFalse(self.alignments._loaded)
         self.assertEqual(repr(self.alignments), representation)
-        alignments = self.alignments[::1]
+        alignments = self.alignments[:]
         self.assertTrue(self.alignments._loaded)
         self.assertEqual(repr(self.alignments), representation)
+        representation = "<Bio.Align.interfaces.AlignmentIterator object at %s>" % hex(id(alignments))
         self.assertEqual(repr(alignments), representation)
 
     def test_lt_false(self):
@@ -227,21 +228,192 @@ class TestEmboss(unittest.TestCase):
         other_repr = ("<Bio.Align.Alignment object (2 rows x 131 columns) at ",
                      )
         same_alignments = AlignmentIterator(self.path)
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
         self.assertFalse(self.alignments._loaded)
         self.assertFalse(same_alignments._loaded)
         alignments = self.alignments + same_alignments
         self.assertTrue(self.alignments._loaded)
         self.assertTrue(same_alignments._loaded)
+        self.assertTrue(alignments._loaded)
         for alignment, representation in zip(alignments, 2 * same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 10)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
         other_alignments = AlignmentIterator("Emboss/water.txt")
+        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(other_alignments.metadata['Program'], 'water')
+        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
+        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(len(other_alignments.metadata), 4)
+
         self.assertFalse(other_alignments._loaded)
         alignments = self.alignments + other_alignments
         self.assertTrue(other_alignments._loaded)
+        self.assertTrue(alignments._loaded)
         for alignment, representation in zip(alignments, same_repr + other_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 6)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
+
+    def test_radd(self):
+        same_repr = ("<Bio.Align.Alignment object (2 rows x 124 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 119 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 120 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 118 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 125 columns) at ",
+                    )
+        other_repr = ("<Bio.Align.Alignment object (2 rows x 131 columns) at ",
+                     )
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
+        other_alignments = AlignmentIterator("Emboss/water.txt")
+        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(other_alignments.metadata['Program'], 'water')
+        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
+        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(len(other_alignments.metadata), 4)
+        self.assertFalse(self.alignments._loaded)
+        self.assertFalse(other_alignments._loaded)
+        alignments = list(other_alignments) + self.alignments
+        self.assertTrue(self.alignments._loaded)
+        self.assertTrue(other_alignments._loaded)
+        self.assertTrue(alignments._loaded)
+        for alignment, representation in zip(alignments, other_repr + same_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(alignments), 6)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
+
+    def test_iadd(self):
+        same_repr = ("<Bio.Align.Alignment object (2 rows x 124 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 119 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 120 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 118 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 125 columns) at ",
+                    )
+        other_repr = ("<Bio.Align.Alignment object (2 rows x 131 columns) at ",
+                     )
+        same_alignments = AlignmentIterator(self.path)
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
+        self.assertFalse(self.alignments._loaded)
+        self.assertFalse(same_alignments._loaded)
+        self.alignments += same_alignments
+        self.assertTrue(self.alignments._loaded)
+        self.assertFalse(same_alignments._loaded)
+        for alignment, representation in zip(self.alignments, 2 * same_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(self.alignments), 10)
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        other_alignments = AlignmentIterator("Emboss/water.txt")
+        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(other_alignments.metadata['Program'], 'water')
+        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
+        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(len(other_alignments.metadata), 4)
+
+        self.assertFalse(other_alignments._loaded)
+        self.alignments += other_alignments
+        self.assertFalse(other_alignments._loaded)
+        for alignment, representation in zip(self.alignments, 2 * same_repr + other_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(self.alignments), 11)
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+
+    def test_mul(self):
+        same_repr = ("<Bio.Align.Alignment object (2 rows x 124 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 119 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 120 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 118 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 125 columns) at ",
+                    )
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
+        self.assertFalse(self.alignments._loaded)
+        alignments = 3 * self.alignments
+        self.assertTrue(self.alignments._loaded)
+        self.assertTrue(alignments._loaded)
+        for alignment, representation in zip(alignments, 3 * same_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(alignments), 15)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
+
+    def test_rmul(self):
+        same_repr = ("<Bio.Align.Alignment object (2 rows x 124 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 119 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 120 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 118 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 125 columns) at ",
+                    )
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
+        self.assertFalse(self.alignments._loaded)
+        alignments = self.alignments * 3
+        self.assertTrue(self.alignments._loaded)
+        self.assertTrue(alignments._loaded)
+        for alignment, representation in zip(alignments, 3 * same_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(alignments), 15)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
+
+    def test_imul(self):
+        same_repr = ("<Bio.Align.Alignment object (2 rows x 124 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 119 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 120 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 118 columns) at ",
+                     "<Bio.Align.Alignment object (2 rows x 125 columns) at ",
+                    )
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
+        self.assertFalse(self.alignments._loaded)
+        self.alignments *= 3
+        self.assertTrue(self.alignments._loaded)
+        for alignment, representation in zip(self.alignments, 3 * same_repr):
+            self.assertTrue(repr(alignment).startswith(representation))
+        self.assertEqual(len(self.alignments), 15)
+        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
+        self.assertEqual(self.alignments.metadata['Program'], 'needle')
+        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
+        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
+        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(len(self.alignments.metadata), 5)
 
     def test_needle(self):
         alignments = self.alignments

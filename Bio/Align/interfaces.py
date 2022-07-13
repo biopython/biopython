@@ -35,6 +35,9 @@ class AlignmentIterator(list, ABC):
         - you can add additional optional arguments.
         """
         self.source = source
+        if source is None:
+            return
+        self._loaded = False
         try:
             self._stream = open(source, "r" + mode)
         except TypeError:  # not a path, assume we received a stream
@@ -51,7 +54,6 @@ class AlignmentIterator(list, ABC):
             else:
                 raise ValueError("Unknown mode '%s'" % mode) from None
             self._stream = source
-        self._loaded = False
         try:
             self._read_header(self._stream)
         except Exception:
@@ -158,12 +160,13 @@ class AlignmentIterator(list, ABC):
     def __getitem__(self, i):
         self._load()
         if isinstance(i, slice):
-            length = super().__len__()
-            if i.indices(length) == (0, length, 1):
-                # user is asking for the full list; keep the metadata
-                return self
-        # this will return a plain list, so without the metadata
-        return super().__getitem__(i)
+            alignments = AlignmentIterator(None)
+            items = super().__getitem__(i)
+            list.extend(alignments, items)
+            alignments._loaded = True
+            return alignments
+        else:
+            return super().__getitem__(i)
 
     def __setitem__(self, i, item):
         self._load()
@@ -174,20 +177,34 @@ class AlignmentIterator(list, ABC):
         super().__delitem__(i)
 
     def __add__(self, other):
-        return list(self) + list(other)
+        alignments = AlignmentIterator(None)
+        list.extend(alignments, self)
+        list.extend(alignments, other)
+        alignments._loaded = True
+        return alignments
 
     def __radd__(self, other):
-        return list(other) + list(self)
+        alignments = AlignmentIterator(None)
+        list.extend(alignments, other)
+        list.extend(alignments, self)
+        alignments._loaded = True
+        return alignments
 
     def __iadd__(self, other):
         self.extend(other)
         return self
 
     def __mul__(self, n):
-        return list(self) * n
+        alignments = AlignmentIterator(None)
+        list.extend(alignments, list(self) * n)
+        alignments._loaded = True
+        return alignments
 
     def __rmul__(self, n):
-        return list(self) * n
+        alignments = AlignmentIterator(None)
+        list.extend(alignments, n * list(self))
+        alignments._loaded = True
+        return alignments
 
     def __imul__(self, n):
         self._load()
