@@ -81,7 +81,7 @@ class AlignmentIterator(list, ABC):
         return alignment
 
     def __iter__(self):
-        """Iterate over the entries as Alignment objects.
+        """Iterate over the alignments as Alignment objects.
 
         This method SHOULD NOT be overridden by any subclass. It should be
         left as is, which will call the subclass implementation of __next__
@@ -157,6 +157,12 @@ class AlignmentIterator(list, ABC):
 
     def __getitem__(self, i):
         self._load()
+        if isinstance(i, slice):
+            length = super().__len__()
+            if i.indices(length) == (0, length, 1):
+                # user is asking for the full list; keep the metadata
+                return self
+        # this will return a plain list, so without the metadata
         return super().__getitem__(i)
 
     def __setitem__(self, i, item):
