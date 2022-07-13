@@ -61,7 +61,12 @@ class AlignmentIterator(list, ABC):
     def __next__(self):
         """Return the next entry."""
         if self._loaded:
-            return super().__next__()
+            index = self._index
+            length = super().__len__()
+            if index == length:
+                raise StopIteration from None
+            self._index += 1
+            return super().__getitem__(index)
         try:
             stream = self._stream
         except AttributeError:
@@ -83,7 +88,7 @@ class AlignmentIterator(list, ABC):
         to actually parse the file.
         """
         if self._loaded:
-            return super().__iter__()
+            self._index = 0
         return self
 
     def _read_header(self, stream):
@@ -107,6 +112,7 @@ class AlignmentIterator(list, ABC):
             for item in self:
                 super().append(item)
             self._loaded = True
+            self._index = 0  # for use by the iterator
 
     def __repr__(self):
         return super(list, self).__repr__()
