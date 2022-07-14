@@ -534,6 +534,30 @@ class TestAlignments(unittest.TestCase):
             next(alignments)
         self.assertEqual(self.alignments.metadata, alignments.metadata)
 
+    def test_count(self):
+        same_alignments = AlignmentIterator(self.path)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        fourth_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertFalse(same_alignments._loaded)
+        self.assertFalse(self.alignments._loaded)
+        count = self.alignments.count(first_alignment)
+        self.assertTrue(self.alignments._loaded)
+        self.assertEqual(count, 1)
+        count = self.alignments.count(second_alignment)
+        self.assertEqual(count, 1)
+        self.alignments.insert(3, first_alignment)
+        count = self.alignments.count(first_alignment)
+        self.assertEqual(count, 2)
+        same_alignments.insert(3, first_alignment)
+        self.assertTrue(same_alignments._loaded)
+        count = self.alignments.count(first_alignment)
+        self.assertEqual(count, 2)
+
     def test_needle(self):
         alignments = self.alignments
         self.assertEqual(alignments.metadata["Program"], "needle")
