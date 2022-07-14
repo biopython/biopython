@@ -103,16 +103,3 @@ class PSEA:
     def get_seq(self):
         """Return secondary structure string."""
         return self.ss_seq
-
-
-if __name__ == "__main__":
-
-    import sys
-    from Bio.PDB import PDBParser
-
-    # Parse PDB file
-    p = PDBParser()
-    s = p.get_structure("X", sys.argv[1])
-
-    # Annotate structure with PSEA secondary structure info
-    PSEA(s[0], sys.argv[1])
