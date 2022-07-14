@@ -40,7 +40,7 @@ with open(gzname, "wb") as gzh:
 if os.path.getsize(gzname) < 29944258:
     warnings.warn("ERROR: Downloaded file is too small", RuntimeWarning)
 
-fh = gzip.open(gzname, "rb")
+fh = gzip.open(gzname, "rt")
 
 # write extracted file to disk (not necessary)
 # with open(cifname, 'wb') as cifh:

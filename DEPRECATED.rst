@@ -252,6 +252,12 @@ This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
 from the standard library instead. This had required manual intervention to
 include when installing Biopython from source due to a dependency on flex.
 
+Bio.PDB.Polypeptide
+-------------------
+The ``one_to_three`` and ``three_to_one`` functions in Bio.PDB.Polypeptide were
+deprecated in Release 1.80. Please use the `seq3` and `seq` functions in
+Bio.SeqUtils instead.
+
 Bio.PDB.Residue
 ---------------
 The ``sort`` and ``get_atom`` methods of the ``Residue`` class were removed in

@@ -129,7 +129,6 @@ except ImportError:
     )
 
 from Bio.PDB.Atom import Atom, DisorderedAtom
-from Bio.PDB.Polypeptide import three_to_one
 
 from Bio.PDB.vectors import multi_coord_space, multi_rot_Z
 from Bio.PDB.vectors import coord_space
@@ -138,6 +137,8 @@ from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import primary_angles
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 from Bio.PDB.ic_data import dihedra_primary_defaults, hedra_defaults
+
+from Bio.SeqUtils import seq1
 
 # for type checking only
 from typing import (
@@ -2391,12 +2392,13 @@ class IC_Residue:
         # rbase = position, insert code or none, resname (1 letter if in 20)
         rid = parent.id
         rbase = [rid[1], rid[2] if " " != rid[2] else None, parent.resname]
-        try:
-            rbase[2] = three_to_one(rbase[2]).upper()
-        except KeyError:
+        resname = seq1(rbase[2])
+        if resname == "X":
             self.is20AA = False
             if rbase[2] not in self.accept_resnames:
                 self.isAccept = False
+        else:
+            rbase[2] = resname
 
         self.rbase = tuple(rbase)
         self.lc = rbase[2]

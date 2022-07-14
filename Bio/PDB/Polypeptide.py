@@ -57,6 +57,8 @@ from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_dihedral, calc_angle
 
+from Bio import BiopythonDeprecationWarning
+
 
 standard_aa_names = [
     "ALA",
@@ -159,6 +161,12 @@ def three_to_one(s):
        ...
     KeyError: 'MSE'
     """
+    warnings.warn(
+        "The function one_to_three in Bio.PDB.Polypeptide is deprecated and "
+        "will be removed in a future release of Biopython. Please use the "
+        "function seq1 in Bio.SeqUtils instead.",
+        BiopythonDeprecationWarning,
+    )
     i = d3_to_index[s]
     return dindex_to_1[i]
 
@@ -171,6 +179,12 @@ def one_to_three(s):
     >>> one_to_three('Y')
     'TYR'
     """
+    warnings.warn(
+        "The function one_to_three in Bio.PDB.Polypeptide is deprecated and "
+        "will be removed in a future release of Biopython. Please use the "
+        "function seq1 in Bio.SeqUtils instead.",
+        BiopythonDeprecationWarning,
+    )
     i = d1_to_index[s]
     return dindex_to_3[i]
 

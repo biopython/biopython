@@ -24,8 +24,6 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBException
 
-from Bio.PDB.Polypeptide import one_to_three
-
 from Bio.PDB.internal_coords import (
     IC_Residue,
     IC_Chain,
@@ -48,6 +46,7 @@ from typing import TextIO, Set, List, Tuple, Union, Optional
 from Bio.PDB.Structure import Structure
 from Bio.PDB.Residue import Residue
 from Bio import SeqIO
+from Bio.SeqUtils import seq3
 
 
 # @profile
@@ -831,8 +830,8 @@ def read_PIC_seq(
     output += f"TITLE     {title.upper():69}\n"
 
     ndx = 1
-    for r in seqRec.seq:
-        output += f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {one_to_three(r)}\n"
+    for r in seqRec:
+        output += f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {seq3(r).upper()}\n"
         ndx += 1
 
     sp = StringIO()
