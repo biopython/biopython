@@ -134,6 +134,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hussein Faara <https://github.com/hfaara18>
 - Hye-Shik Chang <perky at domain fallin.lv>
+- Ian Switzer <https://github.com/ianswitzer>
 - Iddo Friedberg <https://github.com/idoerg>
 - Ilya Flyamer <https://github.com/Phlya>
 - Isaac Ellmen <https://github.com/Ellmen>
@@ -169,6 +170,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
+- Joshua Devine <https://github.com/jdvne>
 - Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
 - João Rodrigues <https://github.com/joaorodrigues>
