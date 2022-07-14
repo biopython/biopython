@@ -733,7 +733,7 @@ if __name__ == "__main__":
         if sys.argv[1] == "update":
             # update PDB
             print("updating local PDB at " + pdb_path)
-            pl.update_pdb(file_format=file_format)
+            pl.update_pdb(file_format=file_format, with_assemblies=with_assemblies)
 
         elif sys.argv[1] == "all":
             # get the entire PDB
