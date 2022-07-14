@@ -6,8 +6,16 @@
 """Tests for PDB PSEA."""
 
 import unittest
-from Bio.PDB.PSEA import run_psea, psea, psea2HEC, annotate, PSEA
+from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
 from Bio.PDB import PDBParser
+from subprocess import getoutput
+from Bio import MissingExternalDependencyError
+import os
+
+if "command not found" in getoutput("psea -h"):
+    raise MissingExternalDependencyError(
+        "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
+    )
 
 
 class TestPDBPSEA(unittest.TestCase):
@@ -93,5 +101,9 @@ class TestPSEA(unittest.TestCase):
         )
 
 
-if __name__ == "__main__":
-    unittest.main()
+def clean_up():
+    file_list: list = ["1A8O", "2BEG"]
+    try:
+        [os.remove(f"./{file}.sea") for file in file_list]
+    except OSError as err:
+        print("No eligible files found for deletion.")
