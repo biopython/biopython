@@ -12,6 +12,8 @@ from subprocess import getoutput
 from Bio import MissingExternalDependencyError
 import os
 
+os.environ["LANG"] = "C"
+
 if "command not found" or "'psea' is not recognized" in getoutput("psea -h"):
     raise MissingExternalDependencyError(
         "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
