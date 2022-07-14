@@ -12,7 +12,7 @@ from subprocess import getoutput
 from Bio import MissingExternalDependencyError
 import os
 
-if "command not found" in getoutput("psea -h"):
+if "command not found" or "'psea' is not recognized" in getoutput("psea -h"):
     raise MissingExternalDependencyError(
         "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
     )
@@ -107,3 +107,8 @@ def clean_up():
         [os.remove(f"./{file}.sea") for file in file_list]
     except OSError as err:
         print("No eligible files found for deletion.")
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
