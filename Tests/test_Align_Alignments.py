@@ -415,6 +415,125 @@ class TestAlignments(unittest.TestCase):
         self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
         self.assertEqual(len(self.alignments.metadata), 5)
 
+    def test_append(self):
+        same_alignments = AlignmentIterator(self.path)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        fourth_alignment = next(same_alignments)
+        self.assertFalse(same_alignments._loaded)
+        self.assertFalse(self.alignments._loaded)
+        self.alignments.append(second_alignment)
+        self.assertTrue(self.alignments._loaded)
+        alignment = next(self.alignments)
+        self.assertEqual(zeroth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(first_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(third_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(fourth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_insert(self):
+        same_alignments = AlignmentIterator(self.path)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        fourth_alignment = next(same_alignments)
+        self.assertFalse(same_alignments._loaded)
+        self.assertFalse(self.alignments._loaded)
+        self.alignments.insert(1, fourth_alignment)
+        self.assertTrue(self.alignments._loaded)
+        alignment = next(self.alignments)
+        self.assertEqual(zeroth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(fourth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(first_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(third_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(fourth_alignment, alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_pop(self):
+        self.assertFalse(self.alignments._loaded)
+        alignment = self.alignments.pop(1)
+        self.assertTrue(self.alignments._loaded)
+        same_alignments = AlignmentIterator(self.path)
+        zeroth_alignment = next(same_alignments)
+        self.assertEqual(zeroth_alignment, next(self.alignments))
+        first_alignment = next(same_alignments)
+        self.assertEqual(first_alignment, alignment)
+        second_alignment = next(same_alignments)
+        self.assertEqual(second_alignment, next(self.alignments))
+        third_alignment = next(same_alignments)
+        self.assertEqual(third_alignment, next(self.alignments))
+        fourth_alignment = next(same_alignments)
+        self.assertEqual(fourth_alignment, next(self.alignments))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertFalse(same_alignments._loaded)
+
+    def test_remove(self):
+        same_alignments = AlignmentIterator(self.path)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        fourth_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertFalse(same_alignments._loaded)
+        self.assertFalse(self.alignments._loaded)
+        result = self.alignments.remove(first_alignment)
+        self.assertTrue(self.alignments._loaded)
+        self.assertIsNone(result)
+        self.assertEqual(zeroth_alignment, next(self.alignments))
+        self.assertEqual(second_alignment, next(self.alignments))
+        self.assertEqual(third_alignment, next(self.alignments))
+        self.assertEqual(fourth_alignment, next(self.alignments))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_clear(self):
+        self.assertFalse(self.alignments._loaded)
+        result = self.alignments.clear()
+        self.assertIsNone(result)
+        self.assertFalse(self.alignments._loaded)
+        with self.assertRaises(AttributeError):
+            self.alignments._stream
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        self.assertEqual(len(self.alignments), 0)
+
+    def test_copy(self):
+        self.assertFalse(self.alignments._loaded)
+        alignments = self.alignments.copy()
+        self.assertTrue(self.alignments._loaded)
+        self.assertTrue(alignments._loaded)
+        self.assertEqual(len(self.alignments), 5)
+        for alignment in self.alignments:
+            self.assertEqual(alignment, next(alignments))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
+        self.assertEqual(self.alignments.metadata, alignments.metadata)
+
     def test_needle(self):
         alignments = self.alignments
         self.assertEqual(alignments.metadata["Program"], "needle")

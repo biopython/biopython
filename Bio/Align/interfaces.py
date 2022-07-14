@@ -35,9 +35,9 @@ class AlignmentIterator(list, ABC):
         - you can add additional optional arguments.
         """
         self.source = source
+        self._loaded = False
         if source is None:
             return
-        self._loaded = False
         try:
             self._stream = open(source, "r" + mode)
         except TypeError:  # not a path, assume we received a stream
@@ -232,9 +232,11 @@ class AlignmentIterator(list, ABC):
 
     def copy(self):
         self._load()
-        inst = self.__class__.__new__(self.__class__)
-        inst.__dict__.update(self.__dict__)
-        return inst
+        alignments = AlignmentIterator(None)
+        alignments.__dict__.update(self.__dict__)
+        for alignment in self:
+            list.append(alignments, alignment)
+        return alignments
 
     def count(self, item):
         self._load()
