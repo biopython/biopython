@@ -226,7 +226,7 @@ def _parse_pdb_header_list(header):
         "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
-        "chain_orientations":{},
+        "chain_orientations":None,
     }
 
     pdbh_dict["structure_reference"] = _get_references(header)
