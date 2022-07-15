@@ -15,6 +15,7 @@ Kristian Rother.
 
 
 import re
+import numpy
 
 from Bio import File
 
@@ -39,8 +40,8 @@ def _get_chain_orientations(inl):
                 structure_orientations[counter][chain]=[]
             next_index+=1
             while "BIOMT" in inl[next_index+index]:
-                rotation_matrix=np.zeros((3,3))
-                translation_matrix=np.zeros(3)
+                rotation_matrix=numpy.zeros((3,3))
+                translation_matrix=numpy.zeros(3)
                 for i in range(3):
                     relevant_elems=' '.join(inl[next_index+index+i].split()).split(' ')
                     for j in range(4,7):
