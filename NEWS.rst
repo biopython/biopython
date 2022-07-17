@@ -79,6 +79,7 @@ possible, especially the following contributors:
 - Robert Sawicki (first contribution)
 - Sebastian Bassi
 - Sean Aubin
+- Sean Workman (first contribution)
 - Tim Burke
 - Valentin Vareškić (first contribution)
 
