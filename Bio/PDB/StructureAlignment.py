@@ -8,7 +8,7 @@
 """Map residues of two structures to each other based on a FASTA alignment."""
 
 
-from Bio.Data import SCOPData
+from Bio.Data import PDBData
 
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
@@ -80,7 +80,7 @@ class StructureAlignment:
     def _test_equivalence(self, r1, aa1):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
-        resname = SCOPData.protein_letters_3to1[resname]
+        resname = PDBData.protein_letters_3to1_extended[resname]
         assert aa1 == resname
 
     def get_maps(self):

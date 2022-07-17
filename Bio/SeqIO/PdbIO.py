@@ -9,8 +9,8 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
-from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -18,8 +18,8 @@ from .Interfaces import SequenceIterator
 
 
 _aa3to1_dict = {}
-_aa3to1_dict.update(iupac_3to1_ext)
-_aa3to1_dict.update(scop_3to1)
+_aa3to1_dict.update(protein_letters_3to1)
+_aa3to1_dict.update(protein_letters_3to1_extended)
 
 
 def _res2aacode(residue, undef_code="X"):

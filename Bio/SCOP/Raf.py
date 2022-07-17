@@ -19,14 +19,14 @@ ascii alphabetic character, a-z, A-Z). e.g. "1", "10A", "1010b", "-1"
 
 See "ASTRAL RAF Sequence Maps":http://astral.stanford.edu/raf.html
 
-Dictionary `protein_letters_3to1` provides a mapping from the 3-letter amino
-acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
-chemically modified residues.
+Dictionary `protein_letters_3to1_extended` provides a mapping from the
+3-letter amino acid codes found in PDB files to 1-letter codes. The 3-letter
+codes include chemically modified residues.
 """
 
 from copy import copy
 
-from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 
 from Bio.SCOP.Residues import Residues
 
@@ -274,8 +274,8 @@ class SeqMap:
                     res = resSet[key]
                     atom_aa = res.atom
                     resName = line[17:20]
-                    if resName in protein_letters_3to1:
-                        if protein_letters_3to1[resName] == atom_aa:
+                    if resName in protein_letters_3to1_extended:
+                        if protein_letters_3to1_extended[resName] == atom_aa:
                             out_handle.write(line)
                             resFound[key] = res
 

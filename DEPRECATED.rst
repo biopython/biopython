@@ -73,6 +73,10 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.Data.SCOPData
+-----------------
+Declared obsolete in release 1.80. Please use Bio.Data.PDBData instead.
+
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
 Declared obsolete in release 1.79. Please use the standard library subprocess
