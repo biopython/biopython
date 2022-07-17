@@ -41,6 +41,24 @@ class ParseReal(unittest.TestCase):
             "name": "hiv capsid c-terminal domain",
             "release_date": "1998-10-14",
             "structure_method": "x-ray diffraction",
+            "chain_transformations": {
+                1: {
+                    "A": [
+                        (
+                            numpy.array(
+                                [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+                            ),
+                            numpy.array([0.0, 0.0, 0.0]),
+                        ),
+                        (
+                            numpy.array(
+                                [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
+                            ),
+                            numpy.array([41.98, 41.98, 44.46]),
+                        ),
+                    ]
+                }
+            },
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
@@ -59,6 +77,7 @@ class ParseReal(unittest.TestCase):
             "name": "3d structure of alzheimer's abeta(1-42) fibrils",
             "release_date": "2005-11-22",
             "structure_method": "solution nmr",
+            "chain_transformations": "No symmetry operation",
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())

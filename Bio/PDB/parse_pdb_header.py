@@ -20,38 +20,49 @@ import numpy
 from Bio import File
 
 
-def _get_chain_orientations(inl):
-    ##automated approach to extracting information about the relative orientations of the chains from pdb header. This information is typically located at REMARK 350
-    structure_orientations={}
-    counter=0
+def _get_chain_transformations(inl):
+    """Get information from REMARK 350 of PDB header about orientation of chains.
+
+    Returns a dictionary with integer keys that correspond to the different expected oligomeric states.
+    Each key leads to a dictionary with keys corresponding to the chains.
+    Each chain is then mapped to a tuple with the rotation and translation matrix
+    """
+    chain_transformations = {}
+    biomolecule = 0
     for index, l in enumerate(inl):
-    
         if "REMARK 350 BIOMOLECULE" in l:
-            counter+=1
-            structure_orientations[counter]={}
-            next_index=0
-            curr_tex=''
-            while "APPLY THE FOLLOWING TO CHAINS:" not in inl[index+next_index]:
-                next_index+=1
-            chains_to_apply_string=inl[next_index+index].split(":")[-1]
-            chains_to_apply_string=chains_to_apply_string.replace(' ','')
-            chains_to_apply_to=chains_to_apply_string.rstrip().split(',')
+            biomolecule += 1
+            chain_transformations[biomolecule] = {}
+            next_index = 0
+            curr_tex = ""
+            while "APPLY THE FOLLOWING TO CHAINS:" not in inl[index + next_index]:
+                next_index += 1
+            chains_to_apply_string = inl[next_index + index].split(":")[-1]
+            chains_to_apply_string = chains_to_apply_string.replace(" ", "")
+            chains_to_apply_to = chains_to_apply_string.rstrip().split(",")
             for chain in chains_to_apply_to:
-                structure_orientations[counter][chain]=[]
-            next_index+=1
-            while "BIOMT" in inl[next_index+index]:
-                rotation_matrix=numpy.zeros((3,3))
-                translation_matrix=numpy.zeros(3)
+                chain_transformations[biomolecule][chain] = []
+            next_index += 1
+            while "BIOMT" in inl[next_index + index]:
+                rotation_matrix = numpy.zeros((3, 3))
+                translation_matrix = numpy.zeros(3)
                 for i in range(3):
-                    relevant_elems=' '.join(inl[next_index+index+i].split()).split(' ')
-                    for j in range(4,7):
-                        rotation_matrix[i,j-4]=float(relevant_elems[j])
-                    translation_matrix[i]=float(relevant_elems[-1])
+                    relevant_elems = " ".join(
+                        inl[next_index + index + i].split()
+                    ).split(" ")
+                    for j in range(4, 7):
+                        rotation_matrix[i, j - 4] = float(relevant_elems[j])
+                    translation_matrix[i] = float(relevant_elems[-1])
                 for chain in chains_to_apply_to:
-                    structure_orientations[counter][chain].append((rotation_matrix, translation_matrix))
-                next_index+=3
-    return structure_orientations
-           
+                    chain_transformations[biomolecule][chain].append(
+                        (rotation_matrix, translation_matrix)
+                    )
+                next_index += 3
+    if len(chain_transformations) == 0:
+        chain_transformations = "No symmetry operations"
+    return chain_transformations
+
+
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal = ""
@@ -227,12 +238,12 @@ def _parse_pdb_header_list(header):
         "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
-        "chain_orientations":None,
+        "chain_transformations": None,
     }
 
     pdbh_dict["structure_reference"] = _get_references(header)
     pdbh_dict["journal_reference"] = _get_journal(header)
-    pdbh_dict["chain_orientations"]=_get_chain_orientations(header)
+    pdbh_dict["chain_transformations"] = _get_chain_transformations(header)
     comp_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
