@@ -21,9 +21,9 @@ from Bio import File
 
 
 def _get_chain_transformations(inl):
-    """Get information from REMARK 350 of PDB header about orientation of chains.
+    """Get symmetry transformations from REMARK 350 to construct full assembly.
 
-    Returns a dictionary with integer keys that correspond to the different expected oligomeric states.
+    Returns a dictionary with integer keys, each of which mapping to an assembly.
     Each key leads to a dictionary with keys corresponding to the chains.
     Each chain is then mapped to a tuple with the rotation and translation matrix
     """
