@@ -196,10 +196,11 @@ class ParseReal(unittest.TestCase):
         }
         for biomolecule in header["chain_transformations"].keys():
             for chain in header["chain_transformations"][biomolecule].keys():
-                numpy.testing.assert_array_equal(
-                    header["chain_transformations"][biomolecule][chain],
-                    comparison_dict[biomolecule][chain],
-                )
+                for i in range(2):
+                    numpy.testing.assert_array_equal(
+                        header["chain_transformations"][biomolecule][chain][i],
+                        comparison_dict[biomolecule][chain][i],
+                    )
 
     def test_parse_pdb_with_remark_350_test_2(self):
         """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
@@ -225,10 +226,11 @@ class ParseReal(unittest.TestCase):
 
         for biomolecule in header["chain_transformations"].keys():
             for chain in header["chain_transformations"][biomolecule].keys():
-                numpy.testing.assert_array_equal(
-                    header["chain_transformations"][biomolecule][chain],
-                    comparison_dict[biomolecule][chain],
-                )
+                for i in range(2):
+                    numpy.testing.assert_array_equal(
+                        header["chain_transformations"][biomolecule][chain][i],
+                        comparison_dict[biomolecule][chain][i],
+                    )
 
 
 if __name__ == "__main__":
