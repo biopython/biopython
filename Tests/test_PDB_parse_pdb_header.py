@@ -195,7 +195,7 @@ class ParseReal(unittest.TestCase):
             }
         }
         for biomolecule in header["chain_transformations"].keys():
-            for chain in biomolecule:
+            for chain in biomolecule.keys():
                 self.assertEqual(
                     header["chain_transformations"][biomolecule][chain],
                     comparison_dict[biomolecule][chain],
@@ -225,7 +225,7 @@ class ParseReal(unittest.TestCase):
             },
         )
         for biomolecule in header["chain_transformations"].keys():
-            for chain in biomolecule:
+            for chain in biomolecule.keys():
                 self.assertEqual(
                     header["chain_transformations"][biomolecule][chain],
                     comparison_dict[biomolecule][chain],
