@@ -201,8 +201,8 @@ class ParseReal(unittest.TestCase):
                 ):
                     for j in range(2):
                         numpy.testing.assert_array_equal(
-                            header["chain_transformations"][biomolecule][chain][i],
-                            comparison_dict[biomolecule][chain][i],
+                            header["chain_transformations"][biomolecule][chain][i][j],
+                            comparison_dict[biomolecule][chain][i][j],
                         )
 
     def test_parse_pdb_with_remark_350_test_2(self):
@@ -234,8 +234,8 @@ class ParseReal(unittest.TestCase):
                 ):
                     for j in range(2):
                         numpy.testing.assert_array_equal(
-                            header["chain_transformations"][biomolecule][chain][i],
-                            comparison_dict[biomolecule][chain][i],
+                            header["chain_transformations"][biomolecule][chain][i][j],
+                            comparison_dict[biomolecule][chain][i][j],
                         )
 
 
