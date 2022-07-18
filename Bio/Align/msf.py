@@ -14,7 +14,7 @@ output format.
 You are expected to use this module via the Bio.Align functions.
 """
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -30,7 +30,7 @@ warnings.warn(
 )
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """GCG MSF alignment iterator."""
 
     def __init__(self, source):

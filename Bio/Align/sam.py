@@ -35,7 +35,7 @@ except ImportError:
     ) from None
 
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -49,7 +49,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Alignment file writer for the Sequence Alignment/Map (SAM) file format."""
 
     def __init__(self, target, md=False):
@@ -366,7 +366,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return line
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for Sequence Alignment/Map (SAM) files.
 
     Each line in the file contains one genomic alignment, which are loaded

@@ -48,7 +48,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 601 columns) at 0x%x>"
+            "<Alignment object (2 rows x 601 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 2)
@@ -84,7 +84,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (8 rows x 298 columns) at 0x%x>"
+            "<Alignment object (8 rows x 298 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 8)
@@ -172,7 +172,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (3 rows x 687 columns) at 0x%x>"
+            "<Alignment object (3 rows x 687 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 3)
@@ -214,7 +214,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 27 columns) at 0x%x>"
+            "<Alignment object (2 rows x 27 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 2)
@@ -237,7 +237,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (5 rows x 101 columns) at 0x%x>"
+            "<Alignment object (5 rows x 101 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 5)

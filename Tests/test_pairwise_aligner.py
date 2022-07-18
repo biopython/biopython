@@ -8,6 +8,7 @@
 import array
 import os
 import unittest
+import warnings
 
 try:
     import numpy
@@ -21,6 +22,12 @@ except ImportError:
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqUtils import GC
+
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import bed, psl, sam
 
 
 class TestAlignerProperties(unittest.TestCase):

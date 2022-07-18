@@ -9,7 +9,7 @@
 You are expected to use this module via the Bio.Align functions.
 """
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -26,7 +26,7 @@ warnings.warn(
 _PHYLIP_ID_WIDTH = 10
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Clustalw alignment writer."""
 
     def format_alignment(self, alignment):
@@ -62,7 +62,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Reads a Phylip alignment file and returns an Alignment iterator.
 
     Record names are limited to at most 10 characters.

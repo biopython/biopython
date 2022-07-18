@@ -61,7 +61,7 @@ class TestPhylipReading(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (8 rows x 286 columns) at 0x%x>"
+            "<Alignment object (8 rows x 286 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 8)
@@ -535,7 +535,7 @@ class TestPhylipReading(unittest.TestCase):
                     next(alignments)
             self.assertEqual(
                 repr(alignment),
-                "<Bio.Align.Alignment object (5 rows x 60 columns) at 0x%x>"
+                "<Alignment object (5 rows x 60 columns) at 0x%x>"
                 % id(alignment),
             )
             self.assertEqual(len(alignment), 5)
@@ -604,7 +604,7 @@ class TestPhylipReading(unittest.TestCase):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (5 rows x 42 columns) at 0x%x>"
+            "<Alignment object (5 rows x 42 columns) at 0x%x>"
             % id(alignment),
         )
         self.assertEqual(len(alignment), 5)
@@ -652,7 +652,7 @@ class TestPhylipReading(unittest.TestCase):
                     next(alignments)
             self.assertEqual(
                 repr(alignment),
-                "<Bio.Align.Alignment object (5 rows x 42 columns) at 0x%x>"
+                "<Alignment object (5 rows x 42 columns) at 0x%x>"
                 % id(alignment),
             )
             self.assertEqual(len(alignment), 5)

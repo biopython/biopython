@@ -30,7 +30,7 @@ import numpy
 
 
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -44,7 +44,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
 
     def __init__(self, target, fmt="vulgar"):
@@ -417,7 +417,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return line
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for the Exonerate text, cigar, and vulgar formats.
 
     Each line in the file contains one pairwise alignment, which are loaded

@@ -32,7 +32,7 @@ import shlex
 
 
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -47,7 +47,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Accepts Alignment objects, writes a MAF file."""
 
     def _write_trackline(self, metadata):
@@ -247,7 +247,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for Multiple Alignment Format files.
 
     The file may contain multiple concatenated alignments, which are loaded

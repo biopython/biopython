@@ -91,7 +91,7 @@ import textwrap
 from collections import defaultdict
 
 from Bio.Align import Alignment
-from Bio.Align import interfaces
+from Bio.Align import _base
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -105,7 +105,7 @@ warnings.warn(
 )
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for alignment files in the Stockholm format.
 
     The file may contain multiple concatenated alignments, which are loaded
@@ -446,7 +446,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 gr[seqname][feature] = terms[2].strip()
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Alignment file writer for the Stockholm file format."""
 
     gf_mapping = {value: key for key, value in AlignmentIterator.gf_mapping.items()}

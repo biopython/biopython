@@ -9,7 +9,8 @@
 You are expected to use this module via the Bio.Align functions.
 """
 
-from Bio.Align import interfaces, Alignment
+from Bio.Align import Alignment
+from Bio.Align import _base
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -24,7 +25,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(interfaces.AlignmentWriter):
+class AlignmentWriter(_base.AlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
     def write_header(self, alignments):
@@ -79,7 +80,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         alignments = ListWithAttributes(alignments)
         alignments.metadata = metadata
         self._filename = metadata.get("File")
-        count = interfaces.AlignmentWriter.write_file(self, alignments)
+        count = _base.AlignmentWriter.write_file(self, alignments)
         return count
 
     def format_alignment(self, alignment):
@@ -122,7 +123,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(interfaces.AlignmentIterator):
+class AlignmentIterator(_base.AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
     def __init__(self, source):

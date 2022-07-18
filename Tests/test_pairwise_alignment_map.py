@@ -8,6 +8,7 @@
 import os
 import random
 import unittest
+import warnings
 
 try:
     import numpy
@@ -20,6 +21,13 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.Align import PairwiseAligner
+
+
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.Align import psl
 
 
 class TestSimple(unittest.TestCase):
