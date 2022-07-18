@@ -195,7 +195,7 @@ class ParseReal(unittest.TestCase):
             }
         }
         for key in header["chain_transformations"].keys():
-            self.assertEqual(header["chain_transformations"], comparison_dict[key])
+            self.assertEqual(header["chain_transformations"][key], comparison_dict[key])
 
     def test_parse_pdb_with_remark_350_test_2(self):
         """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
@@ -221,7 +221,7 @@ class ParseReal(unittest.TestCase):
             },
         )
         for key in header["chain_transformations"].keys():
-            self.assertEqual(header["chain_transformations"], comparison_dict[key])
+            self.assertEqual(header["chain_transformations"][key], comparison_dict[key])
 
 
 if __name__ == "__main__":
