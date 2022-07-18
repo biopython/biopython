@@ -196,7 +196,7 @@ class ParseReal(unittest.TestCase):
         }
         for biomolecule in header["chain_transformations"].keys():
             for chain in header["chain_transformations"][biomolecule].keys():
-                self.assertEqual(
+                numpy.testing.assert_array_equal(
                     header["chain_transformations"][biomolecule][chain],
                     comparison_dict[biomolecule][chain],
                 )
@@ -204,29 +204,28 @@ class ParseReal(unittest.TestCase):
     def test_parse_pdb_with_remark_350_test_2(self):
         """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
         header = parse_pdb_header("PDB/1A8O.pdb")
-        comparison_dict = (
-            {
-                1: {
-                    "A": [
-                        (
-                            numpy.array(
-                                [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
-                            ),
-                            numpy.array([0.0, 0.0, 0.0]),
+        comparison_dict = {
+            1: {
+                "A": [
+                    (
+                        numpy.array(
+                            [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
                         ),
-                        (
-                            numpy.array(
-                                [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
-                            ),
-                            numpy.array([41.98, 41.98, 44.46]),
+                        numpy.array([0.0, 0.0, 0.0]),
+                    ),
+                    (
+                        numpy.array(
+                            [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
                         ),
-                    ]
-                }
-            },
-        )
+                        numpy.array([41.98, 41.98, 44.46]),
+                    ),
+                ]
+            }
+        }
+
         for biomolecule in header["chain_transformations"].keys():
             for chain in header["chain_transformations"][biomolecule].keys():
-                self.assertEqual(
+                numpy.testing.assert_array_equal(
                     header["chain_transformations"][biomolecule][chain],
                     comparison_dict[biomolecule][chain],
                 )
