@@ -41,24 +41,6 @@ class ParseReal(unittest.TestCase):
             "name": "hiv capsid c-terminal domain",
             "release_date": "1998-10-14",
             "structure_method": "x-ray diffraction",
-            "chain_transformations": {
-                1: {
-                    "A": [
-                        (
-                            numpy.array(
-                                [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
-                            ),
-                            numpy.array([0.0, 0.0, 0.0]),
-                        ),
-                        (
-                            numpy.array(
-                                [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
-                            ),
-                            numpy.array([41.98, 41.98, 44.46]),
-                        ),
-                    ]
-                }
-            },
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
@@ -189,8 +171,8 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["astral"]["Region"], "a:")
         self.assertEqual(header["astral"]["ASTRAL-SPACI"], "0.72")
 
-    def test_parse_pdb_with_remark_350(self):
-        """Tests that parse_pdb_header_accurately pulled out symmetry transformations."""
+    def test_parse_pdb_with_remark_350_test_1(self):
+        """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
         header = parse_pdb_header("PDB/7DDO.pdb")
         self.assertEqual(
             header["chain_transformations"],
@@ -212,6 +194,31 @@ class ParseReal(unittest.TestCase):
                             numpy.array([0.0, 0.0, 0.0]),
                         )
                     ],
+                }
+            },
+        )
+
+    def test_parse_pdb_with_remark_350_test_2(self):
+        """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
+        header = parse_pdb_header("PDB/1A8O.pdb")
+        self.assertEqual(
+            header["chain_transformations"],
+            {
+                1: {
+                    "A": [
+                        (
+                            numpy.array(
+                                [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+                            ),
+                            numpy.array([0.0, 0.0, 0.0]),
+                        ),
+                        (
+                            numpy.array(
+                                [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
+                            ),
+                            numpy.array([41.98, 41.98, 44.46]),
+                        ),
+                    ]
                 }
             },
         )
