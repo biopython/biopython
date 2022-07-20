@@ -29,8 +29,18 @@ except ImportError:
 
 
 class TestParsedAlignments(unittest.TestCase):
+
+    path = "Emboss/needle.txt"
+    same_repr = ("<Alignment object (2 rows x 124 columns) at ",
+                 "<Alignment object (2 rows x 119 columns) at ",
+                 "<Alignment object (2 rows x 120 columns) at ",
+                 "<Alignment object (2 rows x 118 columns) at ",
+                 "<Alignment object (2 rows x 125 columns) at ",
+                )
+    other_repr = ("<Alignment object (2 rows x 131 columns) at ",
+                 )
+
     def setUp(self):
-        self.path = "Emboss/needle.txt"
         self.alignments = AlignmentIterator(self.path)
 
     def test_repr(self):
@@ -221,14 +231,6 @@ class TestParsedAlignments(unittest.TestCase):
             next(self.alignments)
 
     def test_add(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
-        other_repr = ("<Alignment object (2 rows x 131 columns) at ",
-                     )
         same_alignments = AlignmentIterator(self.path)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
@@ -241,7 +243,7 @@ class TestParsedAlignments(unittest.TestCase):
         alignments = self.alignments + same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
-        for alignment, representation in zip(alignments, 2 * same_repr):
+        for alignment, representation in zip(alignments, 2 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 10)
         with self.assertRaises(AttributeError):
@@ -256,21 +258,13 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(other_alignments), AlignmentIterator)
         alignments = self.alignments + other_alignments
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(alignments, same_repr + other_repr):
+        for alignment, representation in zip(alignments, self.same_repr + self.other_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 6)
         with self.assertRaises(AttributeError):
             alignments.metadata
 
     def test_radd(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
-        other_repr = ("<Alignment object (2 rows x 131 columns) at ",
-                     )
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
         self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
@@ -288,21 +282,13 @@ class TestParsedAlignments(unittest.TestCase):
         alignments = list(other_alignments) + self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(alignments, other_repr + same_repr):
+        for alignment, representation in zip(alignments, self.other_repr + self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 6)
         with self.assertRaises(AttributeError):
             alignments.metadata
 
     def test_iadd(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
-        other_repr = ("<Alignment object (2 rows x 131 columns) at ",
-                     )
         same_alignments = AlignmentIterator(self.path)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
@@ -315,7 +301,7 @@ class TestParsedAlignments(unittest.TestCase):
         self.alignments += same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * same_repr):
+        for alignment, representation in zip(self.alignments, 2 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 10)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
@@ -333,7 +319,7 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(other_alignments), AlignmentIterator)
         self.alignments += other_alignments
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * same_repr + other_repr):
+        for alignment, representation in zip(self.alignments, 2 * self.same_repr + self.other_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 11)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
@@ -343,12 +329,6 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
 
     def test_mul(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
         self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
@@ -358,19 +338,13 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(self.alignments), AlignmentIterator)
         alignments = 3 * self.alignments
         self.assertIs(type(self.alignments), Alignments)
-        for alignment, representation in zip(alignments, 3 * same_repr):
+        for alignment, representation in zip(alignments, 3 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 15)
         with self.assertRaises(AttributeError):
             alignments.metadata
 
     def test_rmul(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
         self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
@@ -380,19 +354,13 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(self.alignments), AlignmentIterator)
         alignments = self.alignments * 3
         self.assertIs(type(self.alignments), Alignments)
-        for alignment, representation in zip(alignments, 3 * same_repr):
+        for alignment, representation in zip(alignments, 3 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 15)
         with self.assertRaises(AttributeError):
             alignments.metadata
 
     def test_imul(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
         self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
@@ -402,7 +370,7 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.alignments *= 3
         self.assertIs(type(self.alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 3 * same_repr):
+        for alignment, representation in zip(self.alignments, 3 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 15)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
@@ -519,16 +487,17 @@ class TestParsedAlignments(unittest.TestCase):
 
     def test_copy(self):
         self.assertIs(type(self.alignments), AlignmentIterator)
-        alignments = self.alignments.copy()
+        copied_alignments = self.alignments.copy()
         self.assertIs(type(self.alignments), Alignments)
+        self.assertIs(type(copied_alignments), Alignments)
         self.assertEqual(len(self.alignments), 5)
-        for alignment in self.alignments:
-            self.assertEqual(alignment, next(alignments))
+        for alignment, copied_alignment in zip(self.alignments, copied_alignments):
+            self.assertEqual(id(alignment), id(copied_alignment))
         with self.assertRaises(StopIteration):
             next(self.alignments)
         with self.assertRaises(StopIteration):
-            next(alignments)
-        self.assertEqual(self.alignments.metadata, alignments.metadata)
+            next(copied_alignments)
+        self.assertEqual(self.alignments.metadata, copied_alignments.metadata)
 
     def test_count(self):
         same_alignments = AlignmentIterator(self.path)
@@ -638,14 +607,6 @@ class TestParsedAlignments(unittest.TestCase):
             next(self.alignments)
 
     def test_extend(self):
-        same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                     "<Alignment object (2 rows x 119 columns) at ",
-                     "<Alignment object (2 rows x 120 columns) at ",
-                     "<Alignment object (2 rows x 118 columns) at ",
-                     "<Alignment object (2 rows x 125 columns) at ",
-                    )
-        other_repr = ("<Alignment object (2 rows x 131 columns) at ",
-                     )
         same_alignments = AlignmentIterator(self.path)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
         self.assertEqual(self.alignments.metadata['Program'], 'needle')
@@ -658,7 +619,7 @@ class TestParsedAlignments(unittest.TestCase):
         self.alignments.extend(same_alignments)
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * same_repr):
+        for alignment, representation in zip(self.alignments, 2 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 10)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
@@ -676,7 +637,7 @@ class TestParsedAlignments(unittest.TestCase):
         self.assertIs(type(other_alignments), AlignmentIterator)
         self.alignments.extend(other_alignments)
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * same_repr + other_repr):
+        for alignment, representation in zip(self.alignments, 2 * self.same_repr + self.other_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 11)
         self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
@@ -687,11 +648,37 @@ class TestParsedAlignments(unittest.TestCase):
 
 
 class TestPairwiseAlignments(unittest.TestCase):
+    target = "AACCGG"
+    query = "ACCG"
+    other_query = "CCGG"
+    same_str = ["""\
+AACCGG
+|-|||-
+A-CCG-
+""",
+"""\
+AACCGG
+-||||-
+-ACCG-
+""",
+"""\
+AACCGG
+|-||-|
+A-CC-G
+""",
+"""\
+AACCGG
+-|||-|
+-ACC-G
+"""]
+    other_str = ["""\
+AACCGG
+--||||
+--CCGG
+"""]
+
     def setUp(self):
         self.aligner = PairwiseAligner()
-        self.target = "AACCGG"
-        self.query = "ACCG"
-        self.other_query = "CCGG"
         self.alignments = self.aligner.align(self.target, self.query)
 
     def test_repr(self):
@@ -872,6 +859,331 @@ class TestPairwiseAlignments(unittest.TestCase):
         self.assertEqual(third_alignment, alignment)
         with self.assertRaises(StopIteration):
             next(self.alignments)
+
+    def test_add(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        alignments = self.alignments + same_alignments
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        for alignment, text in zip(alignments, 2 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(alignments), 8)
+        with self.assertRaises(AttributeError):
+            alignments.score
+        other_alignments = self.aligner.align(self.target, self.other_query)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        alignments = self.alignments + other_alignments
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        for alignment, text in zip(alignments, self.same_str + self.other_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(alignments), 5)
+        with self.assertRaises(AttributeError):
+            alignments.metadata
+
+    def test_radd(self):
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        other_alignments = self.aligner.align(self.target, self.other_query)
+        self.assertAlmostEqual(other_alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        alignments = list(other_alignments) + self.alignments
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        self.assertIs(type(alignments), Alignments)
+        for alignment, text in zip(alignments, self.other_str + self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(alignments), 5)
+        with self.assertRaises(AttributeError):
+            alignments.score
+
+    def test_iadd(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertEqual(len(self.alignments), 4)
+        self.alignments += same_alignments
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        for alignment, text in zip(self.alignments, 2 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(self.alignments), 8)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        other_alignments = self.aligner.align(self.target, self.other_query)
+        self.assertAlmostEqual(other_alignments.score, 4.0)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        self.alignments += other_alignments
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        for alignment, text in zip(self.alignments, 2 * self.same_str + self.other_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(self.alignments), 9)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+
+    def test_mul(self):
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        alignments = 3 * self.alignments
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(alignments), Alignments)
+        for alignment, text in zip(alignments, 3 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(alignments), 12)
+        with self.assertRaises(AttributeError):
+            alignments.score
+
+    def test_rmul(self):
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        alignments = self.alignments * 3
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(alignments), Alignments)
+        for alignment, text in zip(alignments, 3 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(alignments), 12)
+        with self.assertRaises(AttributeError):
+            alignments.score
+
+    def test_imul(self):
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.alignments *= 3
+        self.assertIs(type(self.alignments), Alignments)
+        for alignment, text in zip(self.alignments, 3 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(self.alignments), 12)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+
+    def test_append(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.alignments.append(second_alignment)
+        self.assertIs(type(self.alignments), Alignments)
+        alignment = next(self.alignments)
+        self.assertEqual(zeroth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(first_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(third_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_insert(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.alignments.insert(1, third_alignment)
+        self.assertIs(type(self.alignments), Alignments)
+        alignment = next(self.alignments)
+        self.assertEqual(zeroth_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(third_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(first_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(second_alignment, alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(third_alignment, alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_pop(self):
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        alignment = self.alignments.pop(1)
+        self.assertIs(type(self.alignments), Alignments)
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        self.assertEqual(zeroth_alignment, next(self.alignments))
+        first_alignment = next(same_alignments)
+        self.assertEqual(first_alignment, alignment)
+        second_alignment = next(same_alignments)
+        self.assertEqual(second_alignment, next(self.alignments))
+        third_alignment = next(same_alignments)
+        self.assertEqual(third_alignment, next(self.alignments))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+
+    def test_remove(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        result = self.alignments.remove(first_alignment)
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertIsNone(result)
+        self.assertEqual(zeroth_alignment, next(self.alignments))
+        self.assertEqual(second_alignment, next(self.alignments))
+        self.assertEqual(third_alignment, next(self.alignments))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_clear(self):
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        result = self.alignments.clear()
+        self.assertIsNone(result)
+        self.assertIs(type(self.alignments), Alignments)
+        with self.assertRaises(AttributeError):
+            self.alignments.paths
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        self.assertEqual(len(self.alignments), 0)
+
+    def test_copy(self):
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        copied_alignments = self.alignments.copy()
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertIs(type(copied_alignments), Alignments)
+        self.assertEqual(len(self.alignments), 4)
+        for alignment, copied_alignment in zip(self.alignments, copied_alignments):
+            self.assertEqual(id(alignment), id(copied_alignment))
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        with self.assertRaises(StopIteration):
+            next(copied_alignments)
+        self.assertAlmostEqual(self.alignments.score, copied_alignments.score)
+
+    def test_count(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        count = self.alignments.count(first_alignment)
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertEqual(count, 1)
+        count = self.alignments.count(second_alignment)
+        self.assertEqual(count, 1)
+        self.alignments.insert(3, first_alignment)
+        count = self.alignments.count(first_alignment)
+        self.assertEqual(count, 2)
+        same_alignments.insert(3, first_alignment)
+        self.assertIs(type(same_alignments), Alignments)
+        count = self.alignments.count(first_alignment)
+        self.assertEqual(count, 2)
+
+    def test_index(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        index = self.alignments.index(second_alignment)
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertEqual(index, 2)
+
+    def test_reverse(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.alignments.reverse()
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertEqual(next(self.alignments), third_alignment)
+        self.assertEqual(next(self.alignments), second_alignment)
+        self.assertEqual(next(self.alignments), first_alignment)
+        self.assertEqual(next(self.alignments), zeroth_alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+        alignments = self.aligner.align(self.target, self.query)
+        self.assertIs(type(alignments), PairwiseAlignments)
+        alignments.reverse()
+        self.assertIs(type(alignments), Alignments)
+        self.assertEqual(alignments[0], third_alignment)
+        self.assertEqual(alignments[1], second_alignment)
+        self.assertEqual(alignments[2], first_alignment)
+        self.assertEqual(alignments[3], zeroth_alignment)
+        self.assertEqual(len(alignments), 4)
+        self.assertEqual(next(alignments), third_alignment)
+        self.assertEqual(next(alignments), second_alignment)
+        self.assertEqual(next(alignments), first_alignment)
+        self.assertEqual(next(alignments), zeroth_alignment)
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+    def test_sort(self):
+        same_alignments = self.aligner.align(self.target, self.query)
+        zeroth_alignment = next(same_alignments)
+        first_alignment = next(same_alignments)
+        second_alignment = next(same_alignments)
+        third_alignment = next(same_alignments)
+        with self.assertRaises(StopIteration):
+            next(same_alignments)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.alignments.sort(key=lambda alignment: str(alignment), reverse=True)
+        self.assertIs(type(self.alignments), Alignments)
+        alignment = next(self.alignments)
+        self.assertEqual(alignment, zeroth_alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(alignment, second_alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(alignment, first_alignment)
+        alignment = next(self.alignments)
+        self.assertEqual(alignment, third_alignment)
+        with self.assertRaises(StopIteration):
+            next(self.alignments)
+
+    def test_extend(self):
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        same_alignments = self.aligner.align(self.target, self.query)
+        self.assertIs(type(self.alignments), PairwiseAlignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        self.alignments.extend(same_alignments)
+        self.assertIs(type(self.alignments), Alignments)
+        self.assertIs(type(same_alignments), PairwiseAlignments)
+        for alignment, text in zip(self.alignments, 2 * self.same_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(self.alignments), 8)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
+        other_alignments = self.aligner.align(self.target, self.other_query)
+        self.assertAlmostEqual(other_alignments.score, 4.0)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        self.alignments.extend(other_alignments)
+        self.assertIs(type(other_alignments), PairwiseAlignments)
+        for alignment, text in zip(self.alignments, 2 * self.same_str + self.other_str):
+            self.assertEqual(str(alignment), text)
+        self.assertEqual(len(self.alignments), 9)
+        self.assertAlmostEqual(self.alignments.score, 4.0)
 
 
 if __name__ == "__main__":

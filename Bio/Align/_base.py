@@ -1660,6 +1660,84 @@ class LazyAlignments(Alignments, ABC):
         self._load()
         self.__delitem__(i)
 
+    def __add__(self, other):
+        alignments = Alignments()
+        alignments.extend(self)
+        alignments.extend(other)
+        return alignments
+
+    def __radd__(self, other):
+        alignments = Alignments()
+        alignments.extend(other)
+        alignments.extend(self)
+        return alignments
+
+    def __iadd__(self, other):
+        self._load()
+        self.extend(other)
+        return self
+
+    def __mul__(self, n):
+        alignments = Alignments()
+        items = list(self)
+        for i in range(n):
+            alignments.extend(items)
+        return alignments
+
+    def __rmul__(self, n):
+        alignments = Alignments()
+        items = list(self)
+        for i in range(n):
+            alignments.extend(items)
+        return alignments
+
+    def __imul__(self, n):
+        self._load()
+        return self.__imul__(n)
+
+    def append(self, item):
+        self._load()
+        self.append(item)
+
+    def insert(self, i, item):
+        self._load()
+        self.insert(i, item)
+
+    def pop(self, i=-1):
+        self._load()
+        return self.pop(i)
+
+    def remove(self, item):
+        self._load()
+        self.remove(item)
+
+    def copy(self):
+        self._load()
+        alignments = Alignments()
+        alignments.__dict__.update(self.__dict__)
+        alignments.extend(self)
+        return alignments
+
+    def count(self, item):
+        self._load()
+        return self.count(item)
+
+    def index(self, item, *args):
+        self._load()
+        return self.index(item, *args)
+
+    def reverse(self):
+        self._load()
+        self.reverse()
+
+    def sort(self, /, *args, **kwds):
+        self._load()
+        self.sort(*args, **kwds)
+
+    def extend(self, other):
+        self._load()
+        self.extend(other)
+
 
 class AlignmentIterator(LazyAlignments, ABC):
     """Base class for building Alignment iterators.
@@ -1745,85 +1823,8 @@ class AlignmentIterator(LazyAlignments, ABC):
             stream.close()
         del self._stream
 
-    def __add__(self, other):
-        alignments = Alignments()
-        alignments.extend(self)
-        alignments.extend(other)
-        return alignments
-
-    def __radd__(self, other):
-        alignments = Alignments()
-        alignments.extend(other)
-        alignments.extend(self)
-        return alignments
-
-    def __iadd__(self, other):
-        self.extend(other)
-        return self
-
-    def __mul__(self, n):
-        alignments = Alignments()
-        items = list(self)
-        for i in range(n):
-            alignments.extend(items)
-        return alignments
-
-    def __rmul__(self, n):
-        alignments = Alignments()
-        items = list(self)
-        for i in range(n):
-            alignments.extend(items)
-        return alignments
-
-    def __imul__(self, n):
-        self._load()
-        return self.__imul__(n)
-
-    def append(self, item):
-        self._load()
-        self.append(item)
-
-    def insert(self, i, item):
-        self._load()
-        self.insert(i, item)
-
-    def pop(self, i=-1):
-        self._load()
-        return self.pop(i)
-
-    def remove(self, item):
-        self._load()
-        self.remove(item)
-
     def clear(self):
         self._close()
-        super().clear()
-
-    def copy(self):
-        alignments = Alignments()
-        alignments.__dict__.update(self.__dict__)
-        alignments.extend(self)
-        return alignments
-
-    def count(self, item):
-        self._load()
-        return self.count(item)
-
-    def index(self, item, *args):
-        self._load()
-        return self.index(item, *args)
-
-    def reverse(self):
-        self._load()
-        self.reverse()
-
-    def sort(self, /, *args, **kwds):
-        self._load()
-        self.sort(*args, **kwds)
-
-    def extend(self, other):
-        self._load()
-        self.extend(other)
 
 
 class AlignmentWriter:
@@ -1951,7 +1952,7 @@ class AlignmentWriter:
                 )
             else:
                 raise ValueError(
-                    "Number of alignmnets is %d (expected at least %d)"
+                    "Number of alignments is %d (expected at least %d)"
                     % (count, mincount)
                 )
         return count

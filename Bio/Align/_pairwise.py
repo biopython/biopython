@@ -104,6 +104,11 @@ class PairwiseAlignments(LazyAlignments):
         self.alignment = alignment
         return alignment
 
+    def clear(self):
+        del self.paths
+        self._index = 0
+        self.__class__ = Alignments
+
 
 class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
