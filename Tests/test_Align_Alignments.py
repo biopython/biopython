@@ -31,14 +31,14 @@ except ImportError:
 class TestParsedAlignments(unittest.TestCase):
 
     path = "Emboss/needle.txt"
-    same_repr = ("<Alignment object (2 rows x 124 columns) at ",
-                 "<Alignment object (2 rows x 119 columns) at ",
-                 "<Alignment object (2 rows x 120 columns) at ",
-                 "<Alignment object (2 rows x 118 columns) at ",
-                 "<Alignment object (2 rows x 125 columns) at ",
-                )
-    other_repr = ("<Alignment object (2 rows x 131 columns) at ",
-                 )
+    same_repr = (
+        "<Alignment object (2 rows x 124 columns) at ",
+        "<Alignment object (2 rows x 119 columns) at ",
+        "<Alignment object (2 rows x 120 columns) at ",
+        "<Alignment object (2 rows x 118 columns) at ",
+        "<Alignment object (2 rows x 125 columns) at ",
+    )
+    other_repr = ("<Alignment object (2 rows x 131 columns) at ",)
 
     def setUp(self):
         self.alignments = AlignmentIterator(self.path)
@@ -57,7 +57,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
-        result = (self.alignments < same_alignments)
+        result = self.alignments < same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertFalse(result)
@@ -66,7 +66,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
-        result = (self.alignments < other_alignments)
+        result = self.alignments < other_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertTrue(result)
@@ -75,7 +75,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
-        result = (other_alignments <= self.alignments)
+        result = other_alignments <= self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -84,7 +84,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
-        result = (self.alignments <= same_alignments)
+        result = self.alignments <= same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -93,7 +93,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
-        result = (other_alignments == self.alignments)
+        result = other_alignments == self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -102,7 +102,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
-        result = (self.alignments == same_alignments)
+        result = self.alignments == same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -111,7 +111,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
-        result = (same_alignments > self.alignments)
+        result = same_alignments > self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertFalse(result)
@@ -120,7 +120,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
-        result = (other_alignments > self.alignments)
+        result = other_alignments > self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertTrue(result)
@@ -129,7 +129,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
-        result = (self.alignments >= other_alignments)
+        result = self.alignments >= other_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -138,7 +138,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
-        result = (self.alignments >= same_alignments)
+        result = self.alignments >= same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -147,7 +147,7 @@ class TestParsedAlignments(unittest.TestCase):
         other_alignments = AlignmentIterator("Emboss/water.txt")
         alignment = next(other_alignments)
         self.assertIs(type(self.alignments), AlignmentIterator)
-        result = (alignment in self.alignments)
+        result = alignment in self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertFalse(result)
 
@@ -155,7 +155,7 @@ class TestParsedAlignments(unittest.TestCase):
         same_alignments = AlignmentIterator(self.path)
         alignment = next(same_alignments)
         self.assertIs(type(self.alignments), AlignmentIterator)
-        result = (alignment in self.alignments)
+        result = alignment in self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertTrue(result)
 
@@ -232,11 +232,16 @@ class TestParsedAlignments(unittest.TestCase):
 
     def test_add(self):
         same_alignments = AlignmentIterator(self.path)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
@@ -249,40 +254,53 @@ class TestParsedAlignments(unittest.TestCase):
         with self.assertRaises(AttributeError):
             alignments.metadata
         other_alignments = AlignmentIterator("Emboss/water.txt")
-        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(other_alignments.metadata['Program'], 'water')
-        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
-        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(other_alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(other_alignments.metadata["Program"], "water")
+        self.assertEqual(
+            other_alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002"
+        )
+        self.assertEqual(other_alignments.metadata["Report_file"], "stdout")
         self.assertEqual(len(other_alignments.metadata), 4)
 
         self.assertIs(type(other_alignments), AlignmentIterator)
         alignments = self.alignments + other_alignments
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(alignments, self.same_repr + self.other_repr):
+        for alignment, representation in zip(
+            alignments, self.same_repr + self.other_repr
+        ):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 6)
         with self.assertRaises(AttributeError):
             alignments.metadata
 
     def test_radd(self):
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         other_alignments = AlignmentIterator("Emboss/water.txt")
-        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(other_alignments.metadata['Program'], 'water')
-        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
-        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(other_alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(other_alignments.metadata["Program"], "water")
+        self.assertEqual(
+            other_alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002"
+        )
+        self.assertEqual(other_alignments.metadata["Report_file"], "stdout")
         self.assertEqual(len(other_alignments.metadata), 4)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(other_alignments), AlignmentIterator)
         alignments = list(other_alignments) + self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(alignments, self.other_repr + self.same_repr):
+        for alignment, representation in zip(
+            alignments, self.other_repr + self.same_repr
+        ):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(alignments), 6)
         with self.assertRaises(AttributeError):
@@ -290,11 +308,16 @@ class TestParsedAlignments(unittest.TestCase):
 
     def test_iadd(self):
         same_alignments = AlignmentIterator(self.path)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
@@ -304,36 +327,55 @@ class TestParsedAlignments(unittest.TestCase):
         for alignment, representation in zip(self.alignments, 2 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 10)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         other_alignments = AlignmentIterator("Emboss/water.txt")
-        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(other_alignments.metadata['Program'], 'water')
-        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
-        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(other_alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(other_alignments.metadata["Program"], "water")
+        self.assertEqual(
+            other_alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002"
+        )
+        self.assertEqual(other_alignments.metadata["Report_file"], "stdout")
         self.assertEqual(len(other_alignments.metadata), 4)
 
         self.assertIs(type(other_alignments), AlignmentIterator)
         self.alignments += other_alignments
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * self.same_repr + self.other_repr):
+        for alignment, representation in zip(
+            self.alignments, 2 * self.same_repr + self.other_repr
+        ):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 11)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
 
     def test_mul(self):
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         alignments = 3 * self.alignments
@@ -345,11 +387,16 @@ class TestParsedAlignments(unittest.TestCase):
             alignments.metadata
 
     def test_rmul(self):
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         alignments = self.alignments * 3
@@ -361,11 +408,16 @@ class TestParsedAlignments(unittest.TestCase):
             alignments.metadata
 
     def test_imul(self):
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.alignments *= 3
@@ -373,11 +425,16 @@ class TestParsedAlignments(unittest.TestCase):
         for alignment, representation in zip(self.alignments, 3 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 15)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
 
     def test_append(self):
@@ -608,11 +665,16 @@ class TestParsedAlignments(unittest.TestCase):
 
     def test_extend(self):
         same_alignments = AlignmentIterator(self.path)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         self.assertEqual(len(self.alignments.metadata), 5)
         self.assertIs(type(self.alignments), AlignmentIterator)
         self.assertIs(type(same_alignments), AlignmentIterator)
@@ -622,60 +684,78 @@ class TestParsedAlignments(unittest.TestCase):
         for alignment, representation in zip(self.alignments, 2 * self.same_repr):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 10)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
         other_alignments = AlignmentIterator("Emboss/water.txt")
-        self.assertEqual(other_alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(other_alignments.metadata['Program'], 'water')
-        self.assertEqual(other_alignments.metadata['Rundate'], 'Wed Jan 16 17:23:19 2002')
-        self.assertEqual(other_alignments.metadata['Report_file'], 'stdout')
+        self.assertEqual(other_alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(other_alignments.metadata["Program"], "water")
+        self.assertEqual(
+            other_alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002"
+        )
+        self.assertEqual(other_alignments.metadata["Report_file"], "stdout")
         self.assertEqual(len(other_alignments.metadata), 4)
 
         self.assertIs(type(other_alignments), AlignmentIterator)
         self.alignments.extend(other_alignments)
         self.assertIs(type(other_alignments), Alignments)
-        for alignment, representation in zip(self.alignments, 2 * self.same_repr + self.other_repr):
+        for alignment, representation in zip(
+            self.alignments, 2 * self.same_repr + self.other_repr
+        ):
             self.assertTrue(repr(alignment).startswith(representation))
         self.assertEqual(len(self.alignments), 11)
-        self.assertEqual(self.alignments.metadata['Align_format'], 'srspair')
-        self.assertEqual(self.alignments.metadata['Program'], 'needle')
-        self.assertEqual(self.alignments.metadata['Rundate'], 'Sun 27 Apr 2007 17:20:35')
-        self.assertEqual(self.alignments.metadata['Command line'], 'needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson')
-        self.assertEqual(self.alignments.metadata['Report_file'], 'ref_rec .needle')
+        self.assertEqual(self.alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(self.alignments.metadata["Program"], "needle")
+        self.assertEqual(
+            self.alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35"
+        )
+        self.assertEqual(
+            self.alignments.metadata["Command line"],
+            "needle [-asequence] Spo0F.faa [-bsequence] paired_r.faa -sformat2 pearson",
+        )
+        self.assertEqual(self.alignments.metadata["Report_file"], "ref_rec .needle")
 
 
 class TestPairwiseAlignments(unittest.TestCase):
     target = "AACCGG"
     query = "ACCG"
     other_query = "CCGG"
-    same_str = ["""\
+    same_str = [
+        """\
 AACCGG
 |-|||-
 A-CCG-
 """,
-"""\
+        """\
 AACCGG
 -||||-
 -ACCG-
 """,
-"""\
+        """\
 AACCGG
 |-||-|
 A-CC-G
 """,
-"""\
+        """\
 AACCGG
 -|||-|
 -ACC-G
-"""]
-    other_str = ["""\
+""",
+    ]
+    other_str = [
+        """\
 AACCGG
 --||||
 --CCGG
-"""]
+"""
+    ]
 
     def setUp(self):
         self.aligner = PairwiseAligner()
@@ -695,7 +775,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(same_alignments), PairwiseAlignments)
-        result = (self.alignments < same_alignments)
+        result = self.alignments < same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertFalse(result)
@@ -704,7 +784,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(other_alignments), PairwiseAlignments)
-        result = (self.alignments < other_alignments)
+        result = self.alignments < other_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertTrue(result)
@@ -713,7 +793,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(other_alignments), PairwiseAlignments)
-        result = (other_alignments <= self.alignments)
+        result = other_alignments <= self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -722,7 +802,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(same_alignments), PairwiseAlignments)
-        result = (self.alignments <= same_alignments)
+        result = self.alignments <= same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -731,7 +811,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(other_alignments), PairwiseAlignments)
-        result = (other_alignments == self.alignments)
+        result = other_alignments == self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -740,7 +820,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(same_alignments), PairwiseAlignments)
-        result = (self.alignments == same_alignments)
+        result = self.alignments == same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -749,7 +829,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(same_alignments), PairwiseAlignments)
-        result = (same_alignments > self.alignments)
+        result = same_alignments > self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertFalse(result)
@@ -758,7 +838,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(other_alignments), PairwiseAlignments)
-        result = (other_alignments > self.alignments)
+        result = other_alignments > self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertTrue(result)
@@ -767,7 +847,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(other_alignments), PairwiseAlignments)
-        result = (self.alignments >= other_alignments)
+        result = self.alignments >= other_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(other_alignments), Alignments)
         self.assertFalse(result)
@@ -776,7 +856,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         self.assertIs(type(self.alignments), PairwiseAlignments)
         self.assertIs(type(same_alignments), PairwiseAlignments)
-        result = (self.alignments >= same_alignments)
+        result = self.alignments >= same_alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertIs(type(same_alignments), Alignments)
         self.assertTrue(result)
@@ -785,7 +865,7 @@ AACCGG
         other_alignments = self.aligner.align(self.target, self.other_query)
         alignment = next(other_alignments)
         self.assertIs(type(self.alignments), PairwiseAlignments)
-        result = (alignment in self.alignments)
+        result = alignment in self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertFalse(result)
 
@@ -793,7 +873,7 @@ AACCGG
         same_alignments = self.aligner.align(self.target, self.query)
         alignment = next(same_alignments)
         self.assertIs(type(self.alignments), PairwiseAlignments)
-        result = (alignment in self.alignments)
+        result = alignment in self.alignments
         self.assertIs(type(self.alignments), Alignments)
         self.assertTrue(result)
 

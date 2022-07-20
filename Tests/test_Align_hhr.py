@@ -26,6 +26,7 @@ except ImportError:
 
 class Align_hhr_2uvo_hhblits(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
@@ -1768,6 +1769,7 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
 
 class Align_hhr_2uvo_hhsearch(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhsearch.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 4))
@@ -3525,6 +3527,7 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
 
 class Align_hhr_allx(unittest.TestCase):
     path = os.path.join("HHsuite", "allx.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 1))
@@ -3986,6 +3989,7 @@ class Align_hhr_allx(unittest.TestCase):
 
 class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4p79_hhsearch_server_NOssm.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (110, 1051))
@@ -4487,6 +4491,7 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
 
 class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4y9h_hhsearch_server_NOssm.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (141, 1242))
@@ -6291,6 +6296,7 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
 
 class Align_hhr_hhpred_9590198(unittest.TestCase):
     path = os.path.join("HHsuite", "hhpred_9590198.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (157, 584))
@@ -8203,6 +8209,7 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
 
 class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
     path = os.path.join("HHsuite", "hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["No_of_seqs"], (149, 573))
@@ -9079,6 +9086,7 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
 
 class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits_emptytable.hhr")
+
     def test_reading(self):
         alignments = hhr.AlignmentIterator(self.path)
         self.assertEqual(alignments.metadata["Match_columns"], 171)
@@ -9099,6 +9107,7 @@ class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
 
 class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits_onlyheader.hhr")
+
     def test_reading(self):
         with self.assertRaises(ValueError) as cm:
             alignments = hhr.AlignmentIterator(self.path)
