@@ -10,7 +10,7 @@
 # ParsedAlignments class, and the AlignmentWriter class. Only the Alignment and
 # Alignments classes are made available to the user via Bio.Align; the other
 # classes are not intended to be directly used by a user.
-# 
+#
 # The Lazyalignments and ParsedAlignments classes are abstract base classes
 # derived from the Alignments class. Concrete subclasses are implemented in the
 # alignment file parser modules (the AlignmentIterator class) and in the
@@ -18,16 +18,16 @@
 # relations are shown in this diagram:
 #
 #                                        - ParsedAlignments <- AlignmentIterator
-#                                        |                      (in file parser
-# list <- Alignments <- LazyAlignments <-|                       modules)
-#                                        |
+#                                        |                      (in alignment
+# list <- Alignments <- LazyAlignments <-|                       file parser
+#                                        |                       modules)
 #                                        - PairwiseAlignments
 #                                          (in the pairwise
 #                                           alignment module)
-# 
+#
 # AlignmentWriter is also an abstract base class, with concrete subclasses
-# implemented in the file parser modules)>
-# 
+# implemented in the file parser modules).
+#
 # Unless you are writing a new parser or writer for Bio.Align, you should not
 # use this module directly.
 
