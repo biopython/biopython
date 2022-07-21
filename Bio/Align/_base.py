@@ -1695,10 +1695,12 @@ class Alignments(list):
     """
 
     def __init__(self):
+        """Initialize self."""
         super().__init__()
         self._index = 0
 
     def __repr__(self):
+        """Return repr(self)."""
         return "<Alignments object at %s>" % hex(id(self))
 
     def __next__(self):
@@ -1884,13 +1886,6 @@ class ParsedAlignments(LazyAlignments, ABC):
     # _read_next_alignment methods in this subclass, as well as the __init__
     # method to call the base class __init__ method with the appropriate
     # arguments.
-
-    def _read_header(self, stream):
-        """Read the file header and store it in metadata."""
-
-    @abstractmethod
-    def _read_next_alignment(self, stream):
-        """Read one Alignment from the stream, and return it."""
 
     def __init__(self, source, mode="t", fmt=None):
         """Create an ParsedAlignments object.

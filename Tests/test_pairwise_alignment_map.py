@@ -88,9 +88,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  GGCCCCCGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """,
@@ -138,9 +138,9 @@ AGGGGGCCCCCGGGGGGA
 GGGGGCCCCCGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 11	0	0	0	0	0	0	0	+	sequence	13	2	13	chromosome	24	0	11	1	11,	2,	0,
 """,
@@ -188,9 +188,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGG
                  GGCCCCCGGGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 10	0	0	0	0	0	0	0	+	sequence	12	0	10	chromosome	27	17	27	1	10,	0,	17,
 """,
@@ -244,9 +244,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  GGCCCCCGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 10	0	0	0	0	0	0	0	+	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """,
@@ -300,9 +300,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  GGCCCCCGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """,
@@ -356,9 +356,9 @@ AAAAAAAAAAAAGGGGGGGCCCCCGGGGGGAAAAAAAAAA
                  GGCCCCCGGG
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 10	0	0	0	0	0	0	0	-	sequence	10	0	10	chromosome	40	17	27	1	10,	0,	17,
 """,
@@ -421,9 +421,9 @@ GCCTACCGTATAACAATGGTTATAATACAAGGCGGTCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAA
                                    TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T------AACGCG----------------------------GGGACAGT--TG--A-T--CC--CATCCG-CCT------------------------------------------------------------------------------------------TTTACGAATTCAT--ACC------------------------------------------GTGGTAGGCG-GCA------TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GGT----T------------------------------------GC---C-----GTCATATCGGTGG----G--TTC
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 96	10	0	0	11	36	27	294	+	sequence	142	0	142	chromosome	440	35	435	37	2,6,1,5,4,3,4,1,6,2,2,2,1,1,2,6,3,2,1,4,3,3,3,2,1,2,2,10,3,1,2,1,3,6,2,1,3,	0,2,8,12,17,21,24,28,29,35,41,43,45,46,47,49,55,58,63,67,71,81,84,87,90,95,99,108,118,121,122,124,125,129,136,138,139,	35,43,52,53,63,78,83,88,95,129,131,135,139,141,144,148,155,248,250,251,257,302,306,315,317,318,320,339,359,366,403,408,414,417,423,429,432,
 """,
@@ -475,9 +475,9 @@ CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATG
           TC-----------------------CCCTT---------------CT--------A----------A------TGGA---------------------------------------ATCCCCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G---------------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----G--------GA--C-------------------------------------------------TTGT--------------CAC-ACT---------------TGTAC--G-----CGAT
 """,
         )
-        psl = format(alignment, "psl")
+        line = format(alignment, "psl")
         self.assertEqual(
-            psl,
+            line,
             """\
 61	6	0	0	14	32	28	260	+	sequence	100	0	99	chromosome	440	10	337	35	2,2,1,2,1,1,4,1,2,1,1,1,2,2,3,2,3,1,1,4,2,2,2,3,2,1,2,1,2,3,3,2,1,1,3,	0,3,6,7,9,10,11,21,22,24,27,28,29,35,37,42,44,49,50,52,57,61,63,68,74,76,77,79,82,84,87,90,94,95,96,	10,35,37,53,63,74,81,124,127,132,133,135,137,139,146,151,154,157,167,183,194,197,210,212,216,222,231,235,285,301,305,323,325,328,334,
 """,
@@ -485,19 +485,19 @@ CTAATGCGCCTTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAAATCTTCAATG
 
 
 def map_check(alignment1, alignment2):
-    psl1 = format(alignment1, "psl")
+    line1 = format(alignment1, "psl")
     handle = open("transcript.psl", "w")
-    handle.write(psl1)
+    handle.write(line1)
     handle.close()
-    psl2 = format(alignment2, "psl")
+    line2 = format(alignment2, "psl")
     handle = open("sequence.psl", "w")
-    handle.write(psl2)
+    handle.write(line2)
     handle.close()
     stdout = os.popen("pslMap sequence.psl transcript.psl stdout")
-    psl = stdout.read()
+    line = stdout.read()
     os.remove("transcript.psl")
     os.remove("sequence.psl")
-    return psl
+    return line
 
 
 def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1="+", strand2="+"):
@@ -533,9 +533,9 @@ def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1="+", strand2="+"):
     alignments2 = aligner.align(transcript, sequence, strand=strand2)
     alignment2 = alignments2[0]
     alignment = alignment1.map(alignment2)
-    psl_check = map_check(alignment1, alignment2)
-    psl = format(alignment, "psl")
-    assert psl == psl_check
+    line_check = map_check(alignment1, alignment2)
+    line = format(alignment, "psl")
+    assert line == _check
     print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
 
@@ -553,17 +553,17 @@ def test_random_sequences(aligner, strand1="+", strand2="+"):
     alignment1 = alignments[0]
     alignments = aligner.align(transcript, sequence, strand=strand2)
     alignment2 = alignments[0]
-    psl_check = map_check(alignment1, alignment2)
+    line_check = map_check(alignment1, alignment2)
     alignment = alignment1.map(alignment2)
-    psl_check = psl_check.split()
-    psl = format(alignment, "psl")
-    psl = psl.split()
-    assert psl[8:] == psl_check[8:]
-    psl1 = format(alignment1, "psl")
-    words = psl1.split()
+    line_check = line_check.split()
+    line = format(alignment, "psl")
+    line = line.split()
+    assert line[8:] == line_check[8:]
+    line1 = format(alignment1, "psl")
+    words = line1.split()
     nBlocks1 = int(words[17])
-    psl2 = format(alignment2, "psl")
-    words = psl2.split()
+    line2 = format(alignment2, "psl")
+    words = line2.split()
     nBlocks2 = int(words[17])
     print(
         "Randomized sequence test %d, %d, %s, %s OK"
