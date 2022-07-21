@@ -54,7 +54,6 @@ from Bio import BiopythonDeprecationWarning
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 
-# fmt: off
 
 class Alignment:
     """An Alignment object represents a sequence alignment.
@@ -2092,7 +2091,6 @@ class AlignmentWriter:
                 )
         return count
 
-# fmt: on
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
