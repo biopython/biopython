@@ -104,11 +104,13 @@ class PairwiseAlignments(LazyAlignments):
         self.alignment = alignment
         return alignment
 
-    def clear(self):  # fmt: skip
-        # black complains if we inherit the parent's docstring  # fmt: skip
-        del self.paths  # fmt: skip
+# fmt: off
+    def clear(self):
+        # black complains if we inherit the parent's docstring
+        del self.paths
         self._index = 0
         self.__class__ = Alignments
+# fmt: on
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):
