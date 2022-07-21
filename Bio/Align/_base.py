@@ -7,10 +7,27 @@
 # package.
 """Bio.Align support module (not for general use).
 
-This module defines the Alignment class, used in the Bio.Align module.
+This module defines the Alignment class, the Alignments, LazyAlignments, and
+ParsedAlignments class, and the AlignmentWriter class. Only the Alignment and
+Alignments classes are made available to the user via Bio.Align; the other
+classes are not intended to be directly used by a user.
+
+The Lazyalignments and ParsedAlignments classes are abstract base classes
+derived from the Alignments class. Concrete subclasses are implemented in the
+alignment file parser modules (the AlignmentIterator class) and in the pairwise
+alignment module (the PairwiseAlignments class). The inheritance relations are
+shown in this diagram:
+
+                               .- ParsedAlignments <- AlignmentIterator
+Alignments <- LazyAlignments <-|                      (in file parser modules)
+                               .- PairwiseAlignments
+                                  (in the pairwise alignment module)
+
+AlignmentWriter is also an abstract base class, with concrete subclasses
+implemented in the file parser modules)>
 
 Unless you are writing a new parser or writer for Bio.Align, you should not
-use this module.  It provides base classes to try and simplify things.
+use this module directly.
 """
 
 import sys
@@ -36,12 +53,14 @@ from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 
 
 class Alignment:
-    """Represents a sequence alignment.
+    """An Alignment object represents a sequence alignment.
 
-    Internally, the alignment is stored as a numpy array containing the
-    sequence coordinates defining the alignment.
+    An Alignment object has a `.sequences` attribute storing the sequences
+    (Seq, MutableSeq, SeqRecord, or string objects) that were aligned, as well
+    as a `.coordinates` attribute storing the sequence coordinates defining the
+    alignment as a numpy array.
 
-    Commonly used attributes (which may or may not be present):
+    Other commonly used attributes (which may or may not be present) are:
          - annotations        - A dictionary with annotations describing the
                                 alignment;
          - column_annotations - A dictionary with annotations describing each
@@ -120,7 +139,8 @@ class Alignment:
         """Initialize a new Alignment object.
 
         Arguments:
-         - sequences   - A list of the sequences that were aligned.
+         - sequences   - A list of the sequences (Seq, MutableSeq, SeqRecord,
+                         or string objects)that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
@@ -1563,10 +1583,112 @@ class Alignment:
 
 
 class Alignments(list):
-    """Base class for building Alignment iterators.
+    """A list-like object storing sequence alignments.
 
-    You should write a parse method that returns an Alignment generator.  You
-    may wish to redefine the __init__ method as well.
+    An `Alignments` object can be used as an iterator or as a list-like object.
+
+    This is an example of an `Alignments` object used as an iterator:
+
+    >>> from Bio.Align import emboss
+    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
+    >>> for alignment in alignments:
+    ...     print("******************************")
+    ...     print(alignment[0, :30])
+    ...     print(alignment[1, :30])
+    ...
+    ******************************
+    KILIVDD----QYGIRILLNEVFNKEGYQT
+    -VLLADDHALVRRGFRLMLED--DPEIEIV
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -ILIVDDEANTLASLSRAFRLAGHEATVCD
+    ******************************
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
+
+    In general, alignments obtained by parsing an alignment file can iterated
+    over only once. However, an `Alignments` object is automatically converted
+    to a list-like object when needed, for example if a specific alignment is
+    accessed by index:
+
+    >>> from Bio.Align import emboss
+    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
+    >>> alignment = alignments[2]
+    >>> print(alignment[0, :30]); print(alignment[1, :30])
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
+
+    Use `alignments[:]` to get all alignments as a list-like object:
+
+    >>> from Bio.Align import emboss
+    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
+    >>> alignments = alignments[:]
+    >>> len(alignments)
+    5
+    >>> alignment = alignments[2]
+    >>> print(alignment[0, :30]); print(alignment[1, :30])
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
+    >>> for alignment in alignments:
+    ...     print("******************************")
+    ...     print(alignment[0, :30])
+    ...     print(alignment[1, :30])
+    ...
+    ******************************
+    KILIVDD----QYGIRILLNEVFNKEGYQT
+    -VLLADDHALVRRGFRLMLED--DPEIEIV
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -ILIVDDEANTLASLSRAFRLAGHEATVCD
+    ******************************
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
+
+    Note that here, we are using `alignments` as an iterator after converting
+    it to a list-like object. Importantly, using `alignments` as an iterator
+    and then converting it to a list-like object will lose the alignments that
+    were already extracted:
+
+    >>> from Bio.Align import emboss
+    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
+    >>> alignment = next(alignments)
+    >>> print(alignment[0, :30]); print(alignment[1, :30])
+    KILIVDD----QYGIRILLNEVFNKEGYQT
+    -VLLADDHALVRRGFRLMLED--DPEIEIV
+    >>> alignment = next(alignments)
+    >>> print(alignment[0, :30]); print(alignment[1, :30])
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -ILIVDDEANTLASLSRAFRLAGHEATVCD
+    >>> alignments = alignments[:]
+    >>> len(alignments)
+    3
+    >>> for alignment in alignments:
+    ...     print("******************************")
+    ...     print(alignment[0, :30])
+    ...     print(alignment[1, :30])
+    ...
+    ******************************
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
+    ******************************
+    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
+    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
+
     """
 
     def __init__(self):
@@ -1592,11 +1714,20 @@ class Alignments(list):
 
 
 class LazyAlignments(Alignments, ABC):
-    """Base class for building Alignment iterators.
-
-    You should write a parse method that returns an Alignment generator.  You
-    may wish to redefine the __init__ method as well.
-    """
+    # The LazyAlignments class is an abstract base class for lazy loading of
+    # sequence alignments. This class is a subclass of Alignments, which is a
+    # subclass of list.
+    #
+    # A newly created LazyAlignments object will act as an iterator until a
+    # method is used that requires list-like behavior. In that case, the _load
+    # method will read in all alignments and store them in the grandparent
+    # class list object. From that point on, the LazyAlignments class will act
+    # as a list-like object.
+    #
+    # The PairwiseAlignments class in Bio.Align._pairwise is a concrete subclass
+    # of the LazyAlignments class. The ParsedAlignments class is an abstract
+    # subclass of LazyAlignments, with concrete subclasses in the alignment file
+    # parser modules.
 
     def _load(self):
         for item in self:
@@ -1739,15 +1870,25 @@ class LazyAlignments(Alignments, ABC):
         self.extend(other)
 
 
-class AlignmentIterator(LazyAlignments, ABC):
-    """Base class for building Alignment iterators.
+class ParsedAlignments(LazyAlignments, ABC):
+    # The ParsedAlignments class is an abstract base class for parsing sequence
+    # alignment files. The alignment parser modules in Bio.Align implement
+    # concrete subclasses of ParsedAlignments.
+    #
+    # To write a new parser, you would create a new private module in Bio.Align,
+    # and define an AlignmentIterator class in it as a subclass of
+    # ParsedAlignments. Typically, you would override the _read_header and
+    # _read_next_alignment methods in this subclass, 
 
-    You should write a parse method that returns an Alignment generator.  You
-    may wish to redefine the __init__ method as well.
-    """
+    def _read_header(self, stream):
+        """Read the file header and store it in metadata."""
+
+    @abstractmethod
+    def _read_next_alignment(self, stream):
+        """Read one Alignment from the stream, and return it."""
 
     def __init__(self, source, mode="t", fmt=None):
-        """Create an AlignmentIterator object.
+        """Create an ParsedAlignments object.
 
         Arguments:
         - source - input file stream, or path to input file
@@ -1802,8 +1943,8 @@ class AlignmentIterator(LazyAlignments, ABC):
         """Iterate over the alignments as Alignment objects.
 
         This method SHOULD NOT be overridden by any subclass. It should be
-        left as is, which will call the subclass implementation of __next__
-        to actually parse the file.
+        left as is, which will call the subclass implementation of __next__ to
+        read the next alignment from the file.
         """
         return self
 
