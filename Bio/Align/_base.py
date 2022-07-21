@@ -18,10 +18,13 @@ alignment file parser modules (the AlignmentIterator class) and in the pairwise
 alignment module (the PairwiseAlignments class). The inheritance relations are
 shown in this diagram:
 
-                               .- ParsedAlignments <- AlignmentIterator
-Alignments <- LazyAlignments <-|                      (in file parser modules)
-                               .- PairwiseAlignments
-                                  (in the pairwise alignment module)
+                                       .- ParsedAlignments <- AlignmentIterator
+                                       |                      (in file parser
+list <- Alignments <- LazyAlignments <-|                       modules)
+                                       |
+                                       .- PairwiseAlignments
+                                          (in the pairwise
+                                           alignment module)
 
 AlignmentWriter is also an abstract base class, with concrete subclasses
 implemented in the file parser modules)>
@@ -1878,7 +1881,9 @@ class ParsedAlignments(LazyAlignments, ABC):
     # To write a new parser, you would create a new private module in Bio.Align,
     # and define an AlignmentIterator class in it as a subclass of
     # ParsedAlignments. Typically, you would override the _read_header and
-    # _read_next_alignment methods in this subclass, 
+    # _read_next_alignment methods in this subclass, as well as the __init__
+    # method to call the base class __init__ method with the appropriate
+    # arguments.
 
     def _read_header(self, stream):
         """Read the file header and store it in metadata."""

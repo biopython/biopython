@@ -48,7 +48,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "\n".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Alignment iterator for aligned FASTA files.
 
     An aligned FASTA file contains one multiple alignment. Alignment gaps are

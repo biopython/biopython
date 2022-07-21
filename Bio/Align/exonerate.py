@@ -417,7 +417,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return line
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Alignment iterator for the Exonerate text, cigar, and vulgar formats.
 
     Each line in the file contains one pairwise alignment, which are loaded

@@ -366,7 +366,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return line
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Alignment iterator for Sequence Alignment/Map (SAM) files.
 
     Each line in the file contains one genomic alignment, which are loaded

@@ -62,7 +62,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Reads a Phylip alignment file and returns an Alignment iterator.
 
     Record names are limited to at most 10 characters.

@@ -300,7 +300,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         return line
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Alignment iterator for Pattern Space Layout (PSL) files.
 
     Each line in the file contains one pairwise alignment, which are loaded

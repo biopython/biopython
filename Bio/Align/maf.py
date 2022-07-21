@@ -247,7 +247,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(_base.ParsedAlignments):
     """Alignment iterator for Multiple Alignment Format files.
 
     The file may contain multiple concatenated alignments, which are loaded
