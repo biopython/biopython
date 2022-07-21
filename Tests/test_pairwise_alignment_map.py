@@ -535,7 +535,7 @@ def test_random(aligner, nBlocks1=1, nBlocks2=1, strand1="+", strand2="+"):
     alignment = alignment1.map(alignment2)
     line_check = map_check(alignment1, alignment2)
     line = format(alignment, "psl")
-    assert line == _check
+    assert line == line_check
     print("Randomized test %d, %d, %s, %s OK" % (nBlocks1, nBlocks2, strand1, strand2))
 
 

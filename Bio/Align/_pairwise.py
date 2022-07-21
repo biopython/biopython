@@ -104,9 +104,7 @@ class PairwiseAlignments(LazyAlignments):
         self.alignment = alignment
         return alignment
 
-# fmt: off
-    def clear(self):  # black complains if we inherit the parent's docstring
-# fmt: on
+    def clear(self):  # fmt: skip
         del self.paths
         self._index = 0
         self.__class__ = Alignments
