@@ -54,6 +54,7 @@ from Bio import BiopythonDeprecationWarning
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 
+# fmt: off
 
 class Alignment:
     """An Alignment object represents a sequence alignment.
@@ -1925,7 +1926,6 @@ class ParsedAlignments(LazyAlignments, ABC):
             raise
 
     def __next__(self):
-        """Return the next entry."""
         try:
             stream = self._stream
         except AttributeError:
@@ -1940,12 +1940,6 @@ class ParsedAlignments(LazyAlignments, ABC):
         return alignment
 
     def __iter__(self):
-        """Iterate over the alignments as Alignment objects.
-
-        This method SHOULD NOT be overridden by any subclass. It should be
-        left as is, which will call the subclass implementation of __next__ to
-        read the next alignment from the file.
-        """
         return self
 
     def _read_header(self, stream):
@@ -2098,6 +2092,7 @@ class AlignmentWriter:
                 )
         return count
 
+# fmt: on
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
