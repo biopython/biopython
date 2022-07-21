@@ -5,33 +5,33 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.Align support module (not for general use).
 
-This module defines the Alignment class, the Alignments, LazyAlignments, and
-ParsedAlignments class, and the AlignmentWriter class. Only the Alignment and
-Alignments classes are made available to the user via Bio.Align; the other
-classes are not intended to be directly used by a user.
+# This module defines the Alignment class, the Alignments, LazyAlignments, and
+# ParsedAlignments class, and the AlignmentWriter class. Only the Alignment and
+# Alignments classes are made available to the user via Bio.Align; the other
+# classes are not intended to be directly used by a user.
+# 
+# The Lazyalignments and ParsedAlignments classes are abstract base classes
+# derived from the Alignments class. Concrete subclasses are implemented in the
+# alignment file parser modules (the AlignmentIterator class) and in the
+# pairwise alignment module (the PairwiseAlignments class). The inheritance
+# relations are shown in this diagram:
+#
+#                                        - ParsedAlignments <- AlignmentIterator
+#                                        |                      (in file parser
+# list <- Alignments <- LazyAlignments <-|                       modules)
+#                                        |
+#                                        - PairwiseAlignments
+#                                          (in the pairwise
+#                                           alignment module)
+# 
+# AlignmentWriter is also an abstract base class, with concrete subclasses
+# implemented in the file parser modules)>
+# 
+# Unless you are writing a new parser or writer for Bio.Align, you should not
+# use this module directly.
 
-The Lazyalignments and ParsedAlignments classes are abstract base classes
-derived from the Alignments class. Concrete subclasses are implemented in the
-alignment file parser modules (the AlignmentIterator class) and in the pairwise
-alignment module (the PairwiseAlignments class). The inheritance relations are
-shown in this diagram:
-
-                                       .- ParsedAlignments <- AlignmentIterator
-                                       |                      (in file parser
-list <- Alignments <- LazyAlignments <-|                       modules)
-                                       |
-                                       .- PairwiseAlignments
-                                          (in the pairwise
-                                           alignment module)
-
-AlignmentWriter is also an abstract base class, with concrete subclasses
-implemented in the file parser modules)>
-
-Unless you are writing a new parser or writer for Bio.Align, you should not
-use this module directly.
-"""
+"""Bio.Align support module (not for general use)."""
 
 import sys
 import warnings
@@ -1718,7 +1718,7 @@ class Alignments(list):
         return self
 
 
-class LazyAlignments(Alignments, ABC):
+class LazyAlignments(Alignments, ABC):  # noqa: D101
     # The LazyAlignments class is an abstract base class for lazy loading of
     # sequence alignments. This class is a subclass of Alignments, which is a
     # subclass of list.
@@ -1831,51 +1831,51 @@ class LazyAlignments(Alignments, ABC):
         self._load()
         return self.__imul__(n)
 
-    def append(self, item):
+    def append(self, item):  # noqa: D102
         self._load()
         self.append(item)
 
-    def insert(self, i, item):
+    def insert(self, i, item):  # noqa: D102
         self._load()
         self.insert(i, item)
 
-    def pop(self, i=-1):
+    def pop(self, i=-1):  # noqa: D102
         self._load()
         return self.pop(i)
 
-    def remove(self, item):
+    def remove(self, item):  # noqa: D102
         self._load()
         self.remove(item)
 
-    def copy(self):
+    def copy(self):  # noqa: D102
         self._load()
         alignments = Alignments()
         alignments.__dict__.update(self.__dict__)
         alignments.extend(self)
         return alignments
 
-    def count(self, item):
+    def count(self, item):  # noqa: D102
         self._load()
         return self.count(item)
 
-    def index(self, item, *args):
+    def index(self, item, *args):  # noqa: D102
         self._load()
         return self.index(item, *args)
 
-    def reverse(self):
+    def reverse(self):  # noqa: D102
         self._load()
         self.reverse()
 
-    def sort(self, /, *args, **kwds):
+    def sort(self, /, *args, **kwds):  # noqa: D102
         self._load()
         self.sort(*args, **kwds)
 
-    def extend(self, other):
+    def extend(self, other):  # noqa: D102
         self._load()
         self.extend(other)
 
 
-class ParsedAlignments(LazyAlignments, ABC):
+class ParsedAlignments(LazyAlignments, ABC):  # noqa: D101
     # The ParsedAlignments class is an abstract base class for parsing sequence
     # alignment files. The alignment parser modules in Bio.Align implement
     # concrete subclasses of ParsedAlignments.
@@ -1957,7 +1957,7 @@ class ParsedAlignments(LazyAlignments, ABC):
             stream.close()
         del self._stream
 
-    def clear(self):
+    def clear(self):  # noqa: D102
         self._close()
 
 
