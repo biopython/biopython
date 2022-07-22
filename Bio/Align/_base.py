@@ -1866,7 +1866,10 @@ class LazyAlignments(Alignments, ABC):  # noqa: D101
         self._load()
         self.reverse()
 
-    def sort(self, /, *args, **kwds):  # noqa: D102
+    def sort(self, *args, **kwds):  # noqa: D102
+    # Replace by
+    # def sort(self, /, *args, **kwds):  # noqa: D102
+    # once we drop Python 3.7
         self._load()
         self.sort(*args, **kwds)
 
