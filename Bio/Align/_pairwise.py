@@ -1,5 +1,4 @@
-# Copyright 2000, 2004 by Brad Chapman.
-# Revisions copyright 2010-2013, 2015-2018 by Peter Cock.
+# Copyright 2018-2022 by Michiel de Hoon.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
