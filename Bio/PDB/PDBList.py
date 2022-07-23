@@ -584,9 +584,7 @@ class PDBList:
             urlcleanup()
             urlretrieve(url, assembly_gz_file)
         except OSError as err:
-            print(
-                f"Download failed! Maybe the desired assembly does not exist: {err}"
-            )
+            print(f"Download failed! Maybe the desired assembly does not exist: {err}")
         else:
             with gzip.open(assembly_gz_file, "rb") as gz:
                 with open(assembly_final_file, "wb") as out:
