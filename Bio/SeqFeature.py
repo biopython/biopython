@@ -1156,12 +1156,6 @@ class FeatureLocation:
                     " not found in references"
                 )
             parent_sequence = references[self.ref]
-            try:
-                # If was a SeqRecord, just take the sequence
-                # (should focus on the annotation of the feature)
-                parent_sequence = parent_sequence.seq
-            except AttributeError:
-                pass
         f_seq = parent_sequence[int(self.start) : int(self.end)]
         if isinstance(f_seq, MutableSeq):
             f_seq = Seq(f_seq)

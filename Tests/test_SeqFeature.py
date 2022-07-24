@@ -280,7 +280,9 @@ class TestExtract(unittest.TestCase):
         ):
             location.extract(parent_record, references={"SOMEOTHER.2": another_record})
         self.assertEqual(
-            location.extract(parent_record, references={"ANOTHER.7": another_record}),
+            location.extract(
+                parent_record, references={"ANOTHER.7": another_record}
+            ).seq,
             "cta",
         )
 
