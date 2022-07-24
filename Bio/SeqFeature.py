@@ -101,7 +101,7 @@ class SeqFeature:
         ref=None,
         ref_db=None,
     ):
-        """Initialize a SeqFeature on a Sequence.
+        """Initialize a SeqFeature on a sequence.
 
         location can either be a FeatureLocation (with strand argument also
         given if required), or None.

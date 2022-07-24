@@ -235,7 +235,7 @@ class TestLocations(unittest.TestCase):
 
 class TestPositions(unittest.TestCase):
     def test_pickle(self):
-        """Test pickle behaviour of position instances."""
+        """Test pickle behavior of position instances."""
         # setup
         import pickle
 
@@ -249,7 +249,7 @@ class TestPositions(unittest.TestCase):
             oneof_pos.__getnewargs__(),
             (1888, [ExactPosition(1888), ExactPosition(1901)]),
         )
-        # test pickle behaviour
+        # test pickle behavior
         within_pos2 = pickle.loads(pickle.dumps(within_pos))
         between_pos2 = pickle.loads(pickle.dumps(between_pos))
         oneof_pos2 = pickle.loads(pickle.dumps(oneof_pos))
