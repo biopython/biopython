@@ -14,6 +14,7 @@ be put into classes in this module.
 
 import math
 import sys
+from collections import Counter
 
 from Bio.Seq import Seq
 
@@ -66,20 +67,20 @@ class SummaryInfo:
         # go through each seq item
         for n in range(con_len):
             # keep track of the counts of the different atoms we get
-            atom_dict = {}
+            atom_dict = Counter()
             num_atoms = 0
 
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] != "-" and record.seq[n] != ".":
-                        if record.seq[n] not in atom_dict:
-                            atom_dict[record.seq[n]] = 1
-                        else:
-                            atom_dict[record.seq[n]] += 1
+                try:
+                    c = record[n]
+                except IndexError:
+                    continue
+                if c != "-" and c != ".":
+                    atom_dict[c] += 1
 
-                        num_atoms = num_atoms + 1
+                    num_atoms += 1
 
             max_atoms = []
             max_size = 0
@@ -122,19 +123,19 @@ class SummaryInfo:
         # go through each seq item
         for n in range(con_len):
             # keep track of the counts of the different atoms we get
-            atom_dict = {}
+            atom_dict = Counter()
             num_atoms = 0
 
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] not in atom_dict:
-                        atom_dict[record.seq[n]] = 1
-                    else:
-                        atom_dict[record.seq[n]] += 1
+                try:
+                    c = record[n]
+                except IndexError:
+                    continue
+                atom_dict[c] += 1
 
-                    num_atoms += 1
+                num_atoms += 1
 
             max_atoms = []
             max_size = 0
