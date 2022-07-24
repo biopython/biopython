@@ -595,6 +595,6 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
-    rep_sequence = summary_info.alignment[rep_record].seq
-    for pos, ic in enumerate(summary_info.ic_vector):
-        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))
+    rep_sequence = summary_info.alignment[rep_record]
+    for pos, (aa, ic) in enumerate(zip(rep_sequence, summary_info.ic_vector)):
+        fout.write("%d %s %.3f\n" % (pos, aa, ic))
