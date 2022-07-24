@@ -899,7 +899,7 @@ class Astral:
         for dom in self.fasta_dict:
             cur.execute(
                 "INSERT INTO astral (sid,seq) values (%s,%s)",
-                (dom, self.fasta_dict[dom].seq.data),
+                (dom, self.fasta_dict[dom].seq),
             )
 
         for i in astralBibIds:
