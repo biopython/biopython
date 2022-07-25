@@ -737,7 +737,7 @@ class _BlastXmlGenerator(XMLGenerator):
 
     def characters(self, content):
         """Replace quotes and apostrophe."""
-        content = escape(str(content))
+        content = escape(f"{content}")
         for a, b in (('"', "&quot;"), ("'", "&apos;")):
             content = content.replace(a, b)
         self._write(content)
@@ -799,7 +799,7 @@ class BlastXmlWriter:
         for elem, attr in _WRITE_MAPS[map_name]:
             elem = block_name + elem
             try:
-                content = str(getattr(obj, attr))
+                content = f"{getattr(obj, attr)}"
             except AttributeError:
                 # ensure attrs that is not present is optional
                 if elem not in _DTD_OPT:
@@ -822,7 +822,7 @@ class BlastXmlWriter:
                 xml.endParent()
                 continue
             try:
-                content = str(getattr(qresult, attr))
+                content = f"{getattr(qresult, attr)}"
             except AttributeError:
                 if elem not in _DTD_OPT:
                     raise ValueError(f"Element {elem} (attribute {attr}) not found")
@@ -849,7 +849,7 @@ class BlastXmlWriter:
 
         for num, qresult in enumerate(qresults):
             xml.startParent("Iteration")
-            xml.simpleElement("Iteration_iter-num", str(num + 1))
+            xml.simpleElement("Iteration_iter-num", f"{num + 1}")
             opt_dict = {}
             if self._use_raw_query_ids:
                 query_id = qresult.blast_id
@@ -887,7 +887,7 @@ class BlastXmlWriter:
 
         for num, hit in enumerate(hits):
             xml.startParent("Hit")
-            xml.simpleElement("Hit_num", str(num + 1))
+            xml.simpleElement("Hit_num", f"{num + 1}")
             # use custom hit_id and hit_def mapping if the hit has a
             # BLAST-generated ID
             opt_dict = {}
@@ -918,7 +918,7 @@ class BlastXmlWriter:
         xml = self.xml
         for num, hsp in enumerate(hsps):
             xml.startParent("Hsp")
-            xml.simpleElement("Hsp_num", str(num + 1))
+            xml.simpleElement("Hsp_num", f"{num + 1}")
             for elem, attr in _WRITE_MAPS["hsp"]:
                 elem = "Hsp_" + elem
                 try:
@@ -929,7 +929,7 @@ class BlastXmlWriter:
                     if elem not in _DTD_OPT:
                         raise ValueError(f"Element {elem} (attribute {attr}) not found")
                 else:
-                    xml.simpleElement(elem, str(content))
+                    xml.simpleElement(elem, f"{content}")
             self.hsp_counter += 1
             self.frag_counter += len(hsp.fragments)
             xml.endParent()
@@ -962,7 +962,7 @@ class BlastXmlWriter:
 
         # for seqrecord objects, we only need the sequence string
         elif elem in ("Hsp_hseq", "Hsp_qseq"):
-            content = str(getattr(hsp, attr).seq)
+            content = f"{getattr(hsp, attr).seq}"
         elif elem == "Hsp_midline":
             content = hsp.aln_annotation["similarity"]
         elif elem in ("Hsp_evalue", "Hsp_bit-score"):

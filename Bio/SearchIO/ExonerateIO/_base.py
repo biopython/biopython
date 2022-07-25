@@ -123,10 +123,10 @@ def _adjust_aa_seq(fraglist):
 
         # fragment should have a length that is a multiple of 3
         # assert len(frag) % 3 == 0
-        qseq = str(frag.query.seq)
+        qseq = f"{frag.query.seq}"
         q_triplets_pre, q_triplets, q_triplets_post = _make_triplets(qseq, phase)
 
-        hseq = str(frag.hit.seq)
+        hseq = f"{frag.hit.seq}"
         h_triplets_pre, h_triplets, h_triplets_post = _make_triplets(hseq, phase)
 
         # get one letter codes

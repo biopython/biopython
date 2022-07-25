@@ -152,9 +152,9 @@ class MauveWriter(SequentialAlignmentWriter):
 
         seq_name = record.name
         try:
-            seq_name = str(int(record.name))
+            seq_name = f"{int(record.name)}"
         except ValueError:
-            seq_name = str(record_idx + 1)
+            seq_name = f"{record_idx + 1}"
 
         # We remove the "/{start}-{end}" before writing, as it cannot be part
         # of the produced XMFA file.

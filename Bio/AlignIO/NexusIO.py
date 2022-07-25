@@ -134,7 +134,7 @@ class NexusWriter(AlignmentWriter):
                 raise ValueError(f"{record.id} contains U, but DNA alignment")
             elif datatype == "rna" and "T" in record.seq:
                 raise ValueError(f"{record.id} contains T, but RNA alignment")
-            n.add_sequence(record.id, str(record.seq))
+            n.add_sequence(record.id, f"{record.seq}")
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:

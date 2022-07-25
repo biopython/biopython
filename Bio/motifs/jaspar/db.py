@@ -365,7 +365,7 @@ class JASPAR5:
         collection = row[2]
         name = row[3]
 
-        matrix_id = "".join([base_id, ".", str(version)])
+        matrix_id = f"{base_id}.{version}"
 
         # fetch the counts matrix
         counts = self._fetch_counts_matrix(int_id)
@@ -599,11 +599,11 @@ class JASPAR5:
             if isinstance(species, list):
                 # Multiple tax IDs passed in as a list
                 clause = "ms.TAX_ID in ('"
-                clause = "".join([clause, "','".join(str(s) for s in species)])
+                clause = "".join([clause, "','".join(f"{s}" for s in species)])
                 clause = "".join([clause, "')"])
             else:
                 # A single tax ID
-                clause = "ms.TAX_ID = '%s'" % species
+                clause = f"ms.TAX_ID = '{species}'"
 
             where_clauses.append(clause)
 
@@ -637,12 +637,10 @@ class JASPAR5:
             clause = "ma1.TAG = 'class'"
             if isinstance(tf_class, list):
                 # A list of TF classes
-                clause = "".join([clause, " and ma1.VAL in ('"])
-                clause = "".join([clause, "','".join(tf_class)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma1.VAL in ('" + "','".join(tf_class) + "')"
             else:
                 # A single TF class
-                clause = "".join([clause, " and ma1.VAL = '%s' " % tf_class])
+                clause = f"{clause} and ma1.VAL = '{tf_class}' "
 
             where_clauses.append(clause)
 
@@ -654,12 +652,10 @@ class JASPAR5:
             clause = "ma2.TAG = 'family'"
             if isinstance(tf_family, list):
                 # A list of TF families
-                clause = "".join([clause, " and ma2.VAL in ('"])
-                clause = "".join([clause, "','".join(tf_family)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma2.VAL in ('" + "','".join(tf_family) + "')"
             else:
                 # A single TF family
-                clause = "".join([clause, " and ma2.VAL = '%s' " % tf_family])
+                clause = f"{clause} and ma2.VAL = '{tf_family}' "
 
             where_clauses.append(clause)
 
@@ -671,12 +667,10 @@ class JASPAR5:
             clause = "ma3.TAG = 'pazar_tf_id'"
             if isinstance(pazar_id, list):
                 # A list of PAZAR IDs
-                clause = "".join([clause, " and ma3.VAL in ('"])
-                clause = "".join([clause, "','".join(pazar_id)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma3.VAL in ('" + "','".join(pazar_id) + "')"
             else:
                 # A single PAZAR ID
-                clause = "".join([" and ma3.VAL = '%s' " % pazar_id])
+                clause = f"{clause} and ma3.VAL = '{pazar_id}' "
 
             where_clauses.append(clause)
 
@@ -688,12 +682,10 @@ class JASPAR5:
             clause = "ma4.TAG = 'medline'"
             if isinstance(medline, list):
                 # A list of PubMed IDs
-                clause = "".join([clause, " and ma4.VAL in ('"])
-                clause = "".join([clause, "','".join(medline)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma4.VAL in ('" + "','".join(medline) + "')"
             else:
                 # A single PubMed ID
-                clause = "".join([" and ma4.VAL = '%s' " % medline])
+                clause = f"{clause} and ma4.VAL = '{medline}' "
 
             where_clauses.append(clause)
 
@@ -706,12 +698,10 @@ class JASPAR5:
             clause = "ma5.TAG = 'type'"
             if isinstance(data_type, list):
                 # A list of data types
-                clause = "".join([clause, " and ma5.VAL in ('"])
-                clause = "".join([clause, "','".join(data_type)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma5.VAL in ('" + "','".join(data_type) + "')"
             else:
                 # A single data type
-                clause = "".join([" and ma5.VAL = '%s' " % data_type])
+                clause = f"{clause} and ma5.VAL = '{data_type}' "
 
             where_clauses.append(clause)
 
@@ -723,21 +713,17 @@ class JASPAR5:
             clause = "ma6.TAG = 'tax_group'"
             if isinstance(tax_group, list):
                 # A list of tax IDs
-                clause = "".join([clause, " and ma6.VAL in ('"])
-                clause = "".join([clause, "','".join(tax_group)])
-                clause = "".join([clause, "')"])
+                clause = f"{clause} and ma6.VAL in ('" + "','".join(tax_group) + "')"
             else:
                 # A single tax ID
-                clause = "".join([clause, " and ma6.VAL = '%s' " % tax_group])
+                clause = f"{clause} and ma6.VAL = '{tax_group}' "
 
             where_clauses.append(clause)
 
-        sql = "".join(["select distinct(m.ID) from ", ", ".join(tables)])
+        sql = "select distinct(m.ID) from " + ", ".join(tables)
 
         if where_clauses:
-            sql = "".join([sql, " where ", " and ".join(where_clauses)])
-
-        # print("sql = %s" % sql)
+            sql += " where " + " and ".join(where_clauses)
 
         cur.execute(sql)
         rows = cur.fetchall()

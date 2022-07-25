@@ -731,15 +731,15 @@ class BlatPslWriter:
                 line.append(hsp.hit_start)
                 line.append(hsp.hit_end)
                 line.append(len(hsp))
-                line.append(",".join(str(x) for x in block_sizes) + ",")
-                line.append(",".join(str(x) for x in qstarts) + ",")
-                line.append(",".join(str(x) for x in hstarts) + ",")
+                line.append(",".join(f"{x}" for x in block_sizes) + ",")
+                line.append(",".join(f"{x}" for x in qstarts) + ",")
+                line.append(",".join(f"{x}" for x in hstarts) + ",")
 
                 if self.pslx:
-                    line.append(",".join(str(x.seq) for x in hsp.query_all) + ",")
-                    line.append(",".join(str(x.seq) for x in hsp.hit_all) + ",")
+                    line.append(",".join(f"{x.seq}" for x in hsp.query_all) + ",")
+                    line.append(",".join(f"{x.seq}" for x in hsp.hit_all) + ",")
 
-                qresult_lines.append("\t".join(str(x) for x in line))
+                qresult_lines.append("\t".join(f"{x}" for x in line))
 
         return "\n".join(qresult_lines) + "\n"
 

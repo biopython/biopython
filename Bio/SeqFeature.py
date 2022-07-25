@@ -1253,7 +1253,7 @@ class CompoundLocation:
 
     def __str__(self):
         """Return a representation of the CompoundLocation object (with python counting)."""
-        return "%s{%s}" % (self.operator, ", ".join(str(loc) for loc in self.parts))
+        return f"{self.operator} {{" + ", ".join(f"{loc}" for loc in self.parts) + "}}"
 
     def __repr__(self):
         """Represent the CompoundLocation object as string for debugging."""
@@ -1669,11 +1669,11 @@ class ExactPosition(int, AbstractPosition):
     # Must define this on Python 3.8 onwards because we redefine __repr__
     def __str__(self):
         """Return a representation of the ExactPosition object (with python counting)."""
-        return str(int(self))
+        return f"{int(self)}"
 
     def __repr__(self):
         """Represent the ExactPosition object as a string for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, int(self))
+        return f"{self.__class__.__name__}({int(self)})"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""

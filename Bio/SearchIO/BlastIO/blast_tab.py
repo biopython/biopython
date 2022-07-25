@@ -167,7 +167,7 @@ def _compute_gapopen_num(hsp):
     """Return the number of gap openings in the given HSP (PRIVATE)."""
     gapopen = 0
     for seq_type in ("query", "hit"):
-        seq = str(getattr(hsp, seq_type).seq)
+        seq = f"{getattr(hsp, seq_type).seq}"
         gapopen += len(re.findall(_RE_GAPOPEN, seq))
     return gapopen
 
@@ -788,7 +788,7 @@ class BlastTabWriter:
         """Adjust formatting of given field and value to mimic native tab output (PRIVATE)."""
         # qseq and sseq are stored as SeqRecord, but here we only need the str
         if field in ("qseq", "sseq"):
-            value = str(value.seq)
+            value = f"{value.seq}"
 
         # evalue formatting, adapted from BLAST+ source:
         # src/objtools/align_format/align_format_util.cpp#L668
@@ -796,36 +796,36 @@ class BlastTabWriter:
             if value < 1.0e-180:
                 value = "0.0"
             elif value < 1.0e-99:
-                value = "%2.0e" % value
+                value = f"{value:2.0e}"
             elif value < 0.0009:
-                value = "%3.0e" % value
+                value = f"{value:3.0e}"
             elif value < 0.1:
-                value = "%4.3f" % value
+                value = f"{value:4.3f}"
             elif value < 1.0:
-                value = "%3.2f" % value
+                value = f"{value:3.2f}"
             elif value < 10.0:
-                value = "%2.1f" % value
+                value = f"{value:2.1f}"
             else:
-                value = "%5.0f" % value
+                value = f"{value:5.0f}"
 
         # pident and ppos formatting
         elif field in ("pident", "ppos"):
-            value = "%.2f" % value
+            value = f"{value:.2f}"
 
         # evalue formatting, adapted from BLAST+ source:
         # src/objtools/align_format/align_format_util.cpp#L723
         elif field == "bitscore":
             if value > 9999:
-                value = "%4.3e" % value
+                value = f"{value:4.3e}"
             elif value > 99.9:
-                value = "%4.0d" % value
+                value = f"{value:4.0d}"
             else:
-                value = "%4.1f" % value
+                value = f"{value:4.1f}"
 
         # coverages have no comma (using floats still ~ a more proper
         # representation)
         elif field in ("qcovhsp", "qcovs"):
-            value = "%.0f" % value
+            value = f"{value:.0f}"
 
         # list into '<>'-delimited string
         elif field == "salltitles":
@@ -845,7 +845,7 @@ class BlastTabWriter:
 
         # everything else
         else:
-            value = str(value)
+            value = f"{value}"
 
         return value
 
@@ -861,28 +861,28 @@ class BlastTabWriter:
         try:
             version = qres.version
         except AttributeError:
-            program_line = "# %s" % program
+            program_line = f"# {program}"
         else:
             program_line = f"# {program} {version}"
         comments.append(program_line)
         # description may or may not be None
         if qres.description is None:
-            comments.append("# Query: %s" % qres.id)
+            comments.append(f"# Query: {qres.id}")
         else:
             comments.append(f"# Query: {qres.id} {qres.description}")
         # try appending RID line, if present
         try:
-            comments.append("# RID: %s" % qres.rid)
+            comments.append(f"# RID: {qres.id}")
         except AttributeError:
             pass
-        comments.append("# Database: %s" % qres.target)
+        comments.append(f"# Database: {qres.target}")
         # qresults without hits don't show the Fields comment
         if qres:
             comments.append(
                 "# Fields: %s"
                 % ", ".join(inv_field_map[field] for field in self.fields)
             )
-        comments.append("# %i hits found" % len(qres))
+        comments.append(f"# {len(qres):i} hits found")
 
         return "\n".join(comments) + "\n"
 

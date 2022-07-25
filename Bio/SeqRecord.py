@@ -493,7 +493,7 @@ class SeqRecord:
             start, stop, step = index.indices(parent_length)
             if step == 1:
                 # Select relevant features, add them with shifted locations
-                # assert str(self.seq)[index] == str(self.seq)[start:stop]
+                # assert f"{self.seq}"[index] == f"{self.seq}"[start:stop]
                 for f in self.features:
                     if f.ref or f.ref_db:
                         # TODO - Implement this (with lots of tests)?
@@ -614,7 +614,7 @@ class SeqRecord:
         >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein, small")
-        >>> print(str(record))
+        >>> print(f"{record}")
         ID: YP_025292.1
         Name: HokC
         Description: toxic membrane protein, small
@@ -751,7 +751,7 @@ class SeqRecord:
         """
         if not format_spec:
             # Follow python convention and default to using __str__
-            return str(self)
+            return f"{self}"
         from Bio import SeqIO
 
         # Easy case, can call string-building function directly
@@ -764,8 +764,7 @@ class SeqRecord:
             SeqIO.write(self, handle, format_spec)
         except StreamModeError:
             raise ValueError(
-                "Binary format %s cannot be used with SeqRecord format method"
-                % format_spec
+                f"Binary format {format_spec} cannot be used with SeqRecord format method"
             ) from None
         return handle.getvalue()
 
@@ -864,7 +863,7 @@ class SeqRecord:
         >>> new = right + left
         >>> print("%s %i" % (new.id, len(new)))
         pBAD30 4923
-        >>> str(new.seq) == str(right.seq + left.seq)
+        >>> f"{new.seq}" == f"{right.seq + left.seq}"
         True
         >>> len(new.features) == len(left.features) + len(right.features)
         True

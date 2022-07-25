@@ -95,7 +95,7 @@ def _open_for_random_access(filename):
             # If it is BGZF, we support that
             return bgzf.BgzfReader(mode="rb", fileobj=handle)
         except ValueError as e:
-            assert "BGZF" in str(e)
+            assert "BGZF" in f"{e}"
             # Not a BGZF file after all,
             handle.close()
             raise ValueError(
@@ -544,7 +544,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         for row in self._con.execute(
             "SELECT key FROM offset_data ORDER BY file_number, offset;"
         ):
-            yield str(row[0])
+            yield f"{row[0]}"
 
     def __getitem__(self, key):
         """Return record for the specified key."""

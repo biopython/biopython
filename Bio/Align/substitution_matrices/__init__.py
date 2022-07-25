@@ -368,7 +368,7 @@ class Array(numpy.ndarray):
             if width > maxwidth:
                 maxwidth = width
             words[i] = word
-        fmt2 = " %" + str(maxwidth) + "s"
+        fmt2 = f" %{maxwidth}s"
         for letter, word in zip(_alphabet, words):
             word = fmt2 % word
             line = letter + word + "\n"
@@ -387,7 +387,7 @@ class Array(numpy.ndarray):
             pass
         else:
             for line in header:
-                line = "#  %s\n" % line
+                line = f"#  {line}\n"
                 lines.append(line)
         width = max(len(c) for c in alphabet)
         line = " " * width
@@ -401,7 +401,7 @@ class Array(numpy.ndarray):
                 if width > maxwidth:
                     maxwidth = width
                 words[i][j] = word
-            fmt2 = " %" + str(maxwidth) + "s"
+            fmt2 = f" %{maxwidth}s"
             word = fmt2 % c2
             line += word
             for i, c1 in enumerate(alphabet):

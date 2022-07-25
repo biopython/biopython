@@ -166,7 +166,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # A single file containing all sequences was provided as input;
             # store the file name once, and use the entry number as ID
             metadata["File"] = id_info["File"][0]
-            self._identifiers = [str(entry) for entry in id_info["Entry"]]
+            self._identifiers = [f"{entry}" for entry in id_info["Entry"]]
         else:
             assert len(set(id_info["File"])) == len(id_info["File"])
             # Separate files for each of the sequences were provided as input;

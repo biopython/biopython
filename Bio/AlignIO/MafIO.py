@@ -75,10 +75,10 @@ class MafWriter(SequentialAlignmentWriter):
             "%-40s" % record.id.replace(" ", "_"),
             "%15s" % record.annotations.get("start", 0),
             "%5s"
-            % record.annotations.get("size", len(str(record.seq).replace("-", ""))),
+            % record.annotations.get("size", len(f"{record.seq}".replace("-", ""))),
             strand,
             "%15s" % record.annotations.get("srcSize", 0),
-            str(record.seq),
+            f"{record.seq}",
         ]
         self.handle.write(f"{' '.join(fields)}\n")
 

@@ -157,7 +157,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             annotations = {"molecule_type": "protein"}
         else:
             annotations = None
-        aligned_seqs = [str(n.matrix[new_name]) for new_name in n.taxlabels]
+        aligned_seqs = [f"{n.matrix[new_name]}" for new_name in n.taxlabels]
         records = [
             SeqRecord(
                 n.matrix[new_name].replace("-", ""),

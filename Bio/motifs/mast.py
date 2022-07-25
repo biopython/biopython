@@ -76,7 +76,7 @@ def __read_metadata(record, xml_tree):
     for i, motif_tree in enumerate(xml_tree.find("motifs").findall("motif")):
         motif = meme.Motif(record.alphabet)
         # TODO - motif.name not in XML - always index?
-        motif.name = str(i + 1)
+        motif.name = f"{i + 1}"
         motif.id = motif_tree.get("id")
         motif.alt_id = motif_tree.get("alt")
         motif.length = int(motif_tree.get("length"))
@@ -109,7 +109,7 @@ def __make_diagram(record, sequence_tree):
             hit_motifs.append(record[int(hit_ele.get("idx"))])
             hit_eles.append(hit_ele)
     if not hit_eles:
-        return str(sequence_length)
+        return f"{sequence_length}"
     if record.strand_handling == "combine":
         motif_strs = [
             f"[{'-' if hit_ele.get('rc') == 'y' else '+'}{hit_motif.name}]"
@@ -125,8 +125,8 @@ def __make_diagram(record, sequence_tree):
     tail_length = (
         sequence_length - int(hit_eles[-1].get("pos")) - hit_motifs[-1].length + 1
     )
-    motifs_with_gaps = [str(s) for pair in zip(gaps, motif_strs) for s in pair] + [
-        str(tail_length)
+    motifs_with_gaps = [f"{s}" for pair in zip(gaps, motif_strs) for s in pair] + [
+        f"{tail_length}"
     ]
     # remove 0-length gaps
     motifs_with_gaps = [s for s in motifs_with_gaps if s != "0"]

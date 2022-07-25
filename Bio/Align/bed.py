@@ -97,7 +97,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 qStart = qEnd
         chromStart = blockStarts[0]  # start of alignment in target
         chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
-        fields = [chrom, str(chromStart), str(chromEnd)]
+        fields = [chrom, f"{chromStart}", f"{chromEnd}"]
         if bedN == 3:
             return "\t".join(fields) + "\n"
         try:
@@ -111,7 +111,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             score = alignment.score
         except AttributeError:
             score = 0
-        fields.append(str(score))
+        fields.append(f"{score}")
         if bedN == 5:
             return "\t".join(fields) + "\n"
         fields.append(strand)
@@ -121,25 +121,25 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             thickStart = alignment.thickStart
         except AttributeError:
             thickStart = chromStart
-        fields.append(str(thickStart))
+        fields.append(f"{thickStart}")
         if bedN == 7:
             return "\t".join(fields) + "\n"
         try:
             thickEnd = alignment.thickEnd
         except AttributeError:
             thickEnd = chromEnd
-        fields.append(str(thickEnd))
+        fields.append(f"{thickEnd}")
         if bedN == 8:
             return "\t".join(fields) + "\n"
         try:
             itemRgb = alignment.itemRgb
         except AttributeError:
             itemRgb = "0"
-        fields.append(str(itemRgb))
+        fields.append(f"{itemRgb}")
         if bedN == 9:
             return "\t".join(fields) + "\n"
         blockCount = len(blockSizes)
-        fields.append(str(blockCount))
+        fields.append(f"{blockCount}")
         if bedN == 10:
             return "\t".join(fields) + "\n"
         fields.append(",".join(map(str, blockSizes)) + ",")

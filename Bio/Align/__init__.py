@@ -347,7 +347,7 @@ class MultipleSeqAlignment:
             return handle.getvalue()
         else:
             # Follow python convention and default to using __str__
-            return str(self)
+            return f"{self}"
 
     def __iter__(self):
         """Iterate over alignment rows as SeqRecord objects.
@@ -1283,7 +1283,7 @@ class Alignment:
         for step, gap in zip(steps, gaps):
             if step:
                 j = i + step
-                line += str(sequence[i:j])
+                line += f"{sequence[i:j]}"
                 i = j
             else:
                 line += "-" * gap
@@ -1353,7 +1353,7 @@ class Alignment:
                 offset = start_index - indices[i]
                 start = sequence_indices[i] + offset
                 stop = start + length
-                line = str(sequence[start:stop])
+                line = f"{sequence[start:stop]}"
         else:
             length = indices[i] - start_index
             stop = sequence_indices[i]
@@ -1361,7 +1361,7 @@ class Alignment:
                 line = "-" * length
             else:
                 start = stop - length
-                line = str(sequence[start:stop])
+                line = f"{sequence[start:stop]}"
             i += 1
             while i < j:
                 step = gaps[i]
@@ -1370,7 +1370,7 @@ class Alignment:
                 else:
                     start = stop
                     stop = start + step
-                    line += str(sequence[start:stop])
+                    line += f"{sequence[start:stop]}"
                 i += 1
             length = stop_index - indices[j - 1]
             if length > 0:
@@ -1379,7 +1379,7 @@ class Alignment:
                 else:
                     start = stop
                     stop = start + length
-                    line += str(sequence[start:stop])
+                    line += f"{sequence[start:stop]}"
         return line
 
     def _get_row_cols_iterable(self, i, cols, steps, gaps, sequence):
@@ -1395,7 +1395,7 @@ class Alignment:
         for step, gap in zip(steps, gaps):
             if step:
                 j = i + step
-                line += str(sequence[i:j])
+                line += f"{sequence[i:j]}"
                 i = j
             else:
                 line += "-" * gap
@@ -1497,7 +1497,7 @@ class Alignment:
             for step, gap in zip(steps[i], gaps):
                 if step:
                     j = k + step
-                    line += str(sequence[k:j])
+                    line += f"{sequence[k:j]}"
                     k = j
                 else:
                     line += "-" * gap
@@ -1709,20 +1709,20 @@ class Alignment:
         if isinstance(sequence, str):
             return sequence
         if isinstance(sequence, Seq):
-            return str(sequence)
+            return f"{sequence}"
         try:  # check if target is a SeqRecord
             sequence = sequence.seq
         except AttributeError:
             pass
         else:
-            return str(sequence)
+            return f"{sequence}"
         try:
             view = memoryview(sequence)
         except TypeError:
             pass
         else:
             if view.format == "c":
-                return str(sequence)
+                return f"{sequence}"
         return None
 
     def __format__(self, format_spec):
@@ -1851,14 +1851,14 @@ class Alignment:
         if end1 > 0 or end2 > 0:
             if end1 <= end2:
                 for c2 in seq2[: end2 - end1]:
-                    s2 = str(c2)
+                    s2 = f"{c2}"
                     s1 = " " * len(s2)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
                     pattern.append(s1)
             else:  # end1 > end2
                 for c1 in seq1[: end1 - end2]:
-                    s1 = str(c1)
+                    s1 = f"{c1}"
                     s2 = " " * len(s1)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
@@ -1868,7 +1868,7 @@ class Alignment:
         for end1, end2 in self.coordinates[:, 1:].transpose():
             if end1 == start1:
                 for c2 in seq2[start2:end2]:
-                    s2 = str(c2)
+                    s2 = f"{c2}"
                     s1 = "-" * len(s2)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
@@ -1876,7 +1876,7 @@ class Alignment:
                 start2 = end2
             elif end2 == start2:
                 for c1 in seq1[start1:end1]:
-                    s1 = str(c1)
+                    s1 = f"{c1}"
                     s2 = "-" * len(s1)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
@@ -1888,8 +1888,8 @@ class Alignment:
                 if len(t1) != len(t2):
                     raise ValueError("Unequal step sizes in alignment")
                 for c1, c2 in zip(t1, t2):
-                    s1 = str(c1)
-                    s2 = str(c2)
+                    s1 = f"{c1}"
+                    s2 = f"{c2}"
                     m1 = len(s1)
                     m2 = len(s2)
                     if c1 == c2:

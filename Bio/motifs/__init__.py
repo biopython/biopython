@@ -194,12 +194,12 @@ class Instances(list):
                     length = len(instance)
                 elif length != len(instance):
                     message = (
-                        "All instances should have the same length (%d found, %d expected)"
-                        % (len(instance), length)
+                        f"All instances should have the same length ({len(instance)}"
+                        f" found, {length} expected)"
                     )
                     raise ValueError(message)
                 if not isinstance(instance, Seq):
-                    instance = Seq(str(instance))
+                    instance = Seq(f"{instance}")
                 sequences.append(instance)
             # no errors were raised; store the instances:
             self.extend(sequences)
@@ -210,7 +210,7 @@ class Instances(list):
         """Return a string containing the sequences of the motif."""
         text = ""
         for instance in self:
-            text += str(instance) + "\n"
+            text += f"{instance}\n"
         return text
 
     def count(self):
@@ -373,7 +373,7 @@ class Motif:
         """Return string representation of a motif."""
         text = ""
         if self.instances is not None:
-            text += str(self.instances)
+            text += f"{self.instances}"
 
         if masked:
             for i in range(self.length):
@@ -465,7 +465,7 @@ class Motif:
             'unit_name' : "bits",
             'first_index' : '1',
             'logo_start' : '1',
-            'logo_end': str(self.length),
+            'logo_end': f"{self.length}",
             'composition' : "comp_auto",
             'percentCG' : '',
             'scale_width' : True,
@@ -514,7 +514,7 @@ class Motif:
             "unit_name": "bits",
             "first_index": "1",
             "logo_start": "1",
-            "logo_end": str(self.length),
+            "logo_end": f"{self.length}",
             "composition": "comp_auto",
             "percentCG": "",
             "scale_width": True,
@@ -542,7 +542,7 @@ class Motif:
             "color4": "",
         }
 
-        values.update({k: "" if v is False else str(v) for k, v in kwds.items()})
+        values.update({k: "" if v is False else f"{v}" for k, v in kwds.items()})
         data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)

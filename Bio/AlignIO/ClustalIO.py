@@ -29,7 +29,7 @@ class ClustalWriter(SequentialAlignmentWriter):
 
         # Old versions of the parser in Bio.Clustalw used a ._version property
         try:
-            version = str(alignment._version)
+            version = f"{alignment._version}"
         except AttributeError:
             version = ""
         if not version:
@@ -73,7 +73,7 @@ class ClustalWriter(SequentialAlignmentWriter):
                 # identifier when output in the file by replacing
                 # them with underscores:
                 line = record.id[0:30].replace(" ", "_").ljust(36)
-                line += str(record.seq[cur_char : (cur_char + show_num)])
+                line += f"{record.seq[cur_char : (cur_char + show_num)]}"
                 output += line + "\n"
 
             # now we need to print out the star info, if we've got it

@@ -970,7 +970,7 @@ class Tree(TreeElement, TreeMixin):
             return handle.getvalue()
         else:
             # Follow python convention and default to using __str__
-            return str(self)
+            return f"{self}"
 
     def format(self, fmt=None, format=None):
         """Serialize the tree as a string in the specified file format.

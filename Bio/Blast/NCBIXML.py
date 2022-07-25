@@ -703,7 +703,7 @@ class BlastParser(_XMLparser):
         """XML v2. Start hit description item."""
         self._descr.append_item(self._hit_descr_item)
         if not self._hit.title:
-            self._hit.title = str(self._hit_descr_item)
+            self._hit.title = f"{self._hit_descr_item}"
         self._hit_descr_item = None
 
     def _end_description_id(self):

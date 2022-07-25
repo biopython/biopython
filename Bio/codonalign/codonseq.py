@@ -141,9 +141,9 @@ class CodonSeq(Seq):
             codon_table = CodonTable.generic_by_id[1]
         amino_acids = []
         if ungap_seq:
-            tr_seq = str(self).replace(self.gap_char, "")
+            tr_seq = f"{self}".replace(self.gap_char, "")
         else:
-            tr_seq = str(self)
+            tr_seq = f"{self}"
         if rf_table is None:
             rf_table = self.rf_table
         p = -1  # initiation
@@ -180,7 +180,7 @@ class CodonSeq(Seq):
 
     def toSeq(self):
         """Convert DNA to seq object."""
-        return Seq(str(self))
+        return Seq(f"{self}")
 
     def get_full_rf_table(self):
         """Return full rf_table of the CodonSeq records.
@@ -189,7 +189,7 @@ class CodonSeq(Seq):
         it translate gaps in CodonSeq. It is helpful to construct
         alignment containing frameshift.
         """
-        ungap_seq = str(self).replace("-", "")
+        ungap_seq = f"{self}".replace("-", "")
         relative_pos = [self.rf_table[0]]
         for i in range(1, len(self.rf_table[1:]) + 1):
             relative_pos.append(self.rf_table[i] - self.rf_table[i - 1])
@@ -237,7 +237,7 @@ class CodonSeq(Seq):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {repr(gap)}")
-        return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
+        return CodonSeq(f"{self}".replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
     def from_seq(cls, seq, rf_table=None):

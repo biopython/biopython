@@ -137,7 +137,7 @@ class Record(list):
 
     def __str__(self):
         """Return a string of all motifs in the Record."""
-        return "\n".join(str(the_motif) for the_motif in self)
+        return "\n".join(f"{the_motif}" for the_motif in self)
 
     def to_dict(self):
         """Return the list of matrices as a dictionary of matrices."""

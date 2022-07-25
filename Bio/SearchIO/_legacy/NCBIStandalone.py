@@ -337,7 +337,7 @@ class _Scanner:
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
-                if str(err) != "Unexpected end of stream.":
+                if f"{err}" != "Unexpected end of stream.":
                     raise
 
             consumer.end_descriptions()
@@ -509,7 +509,7 @@ class _Scanner:
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
-                if str(err) != "Unexpected end of stream.":
+                if f"{err}" != "Unexpected end of stream.":
                     raise
                 # End of File (well, it looks like it with recent versions
                 # of BLAST for multiple queries after the Iterator class
@@ -546,7 +546,7 @@ class _Scanner:
         try:
             line = safe_peekline(uhandle)
         except ValueError as err:
-            if str(err) != "Unexpected end of stream.":
+            if f"{err}" != "Unexpected end of stream.":
                 raise
             line = ""
         return not line
@@ -641,7 +641,7 @@ class _Scanner:
         try:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         except ValueError as x:
-            if str(x) != "Unexpected end of stream.":
+            if f"{x}" != "Unexpected end of stream.":
                 raise
         consumer.end_database_report()
 

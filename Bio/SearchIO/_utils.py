@@ -16,7 +16,7 @@ def getattr_str(obj, attr, fmt=None, fallback="?"):
     except AttributeError:
         return fallback
     if fmt is None:
-        return str(value)
+        return f"{value}"
     return fmt % value
 
 

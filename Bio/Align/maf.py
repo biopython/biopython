@@ -158,9 +158,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 size = start - end
                 start = length - start
             name_width = max(name_width, len(name))
-            start_width = max(start_width, len(str(start)))
-            size_width = max(size_width, len(str(size)))
-            length_width = max(length_width, len(str(length)))
+            start_width = max(start_width, len(f"{start}"))
+            size_width = max(size_width, len(f"{size}"))
+            length_width = max(length_width, len(f"{length}"))
         for empty in alignment_annotations.get("empty", []):
             record, segment, status = empty
             name = record.id
@@ -172,9 +172,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 size = start - end
                 start = length - start
-            start_width = max(start_width, len(str(start)))
-            size_width = max(size_width, len(str(size)))
-            length_width = max(length_width, len(str(length)))
+            start_width = max(start_width, len(f"{start}"))
+            size_width = max(size_width, len(f"{size}"))
+            length_width = max(length_width, len(f"{length}"))
         quality_width = name_width + start_width + size_width + length_width + 5
         for i in range(n):
             record = alignment.sequences[i]
@@ -192,9 +192,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 strand = "-"
             text = alignment[i]
             name = record.id.ljust(name_width)
-            start = str(start).rjust(start_width)
-            size = str(size).rjust(size_width)
-            length = str(length).rjust(length_width)
+            start = f"{start}".rjust(start_width)
+            size = f"{size}".rjust(size_width)
+            length = f"{length}".rjust(length_width)
             line = f"s {name} {start} {size} {strand} {length} {text}\n"
             lines.append(line)
             try:
@@ -238,9 +238,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 size = start - end
                 start = length - start
                 strand = "-"
-            start = str(start).rjust(start_width)
-            size = str(size).rjust(size_width)
-            length = str(length).rjust(length_width)
+            start = f"{start}".rjust(start_width)
+            size = f"{size}".rjust(size_width)
+            length = f"{length}".rjust(length_width)
             line = f"e {name} {start} {size} {strand} {length} {status}\n"
             lines.append(line)
         lines.append("\n")

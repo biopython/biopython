@@ -658,6 +658,6 @@ class SeqXmlWriter(SequenceWriter):
 
                 elif isinstance(value, (int, float, str)):
 
-                    attr = {"name": key, "value": str(value)}
+                    attr = {"name": key, "value": f"{value}"}
                     self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")

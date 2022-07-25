@@ -549,9 +549,9 @@ def _align(
         )
 
     if not isinstance(sequenceA, list):
-        sequenceA = str(sequenceA)
+        sequenceA = f"{sequenceA}"
     if not isinstance(sequenceB, list):
-        sequenceB = str(sequenceB)
+        sequenceB = f"{sequenceB}"
     if not align_globally and (penalize_end_gaps[0] or penalize_end_gaps[1]):
         warnings.warn(
             '"penalize_end_gaps" should not be used in local '
@@ -1336,7 +1336,7 @@ def print_matrix(matrix):
     matrixT = [[] for x in range(len(matrix[0]))]
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
-            matrixT[j].append(len(str(matrix[i][j])))
+            matrixT[j].append(len(f"{matrix[i][j]}"))
     ndigits = [max(x) for x in matrixT]
     for i in range(len(matrix)):
         # Using string formatting trick to add leading spaces,
@@ -1379,8 +1379,8 @@ def format_alignment(align1, align2, score, begin, end, full_sequences=False):
     if not full_sequences and (begin != 0 or end != len(align1)):
         # Calculate the actual start positions in the un-aligned sequences
         # This will only work if the gap symbol is '-' or ['-']!
-        start1 = str(len(align1[:begin]) - align1[:begin].count("-") + 1) + " "
-        start2 = str(len(align2[:begin]) - align2[:begin].count("-") + 1) + " "
+        start1 = f"{len(align1[:begin]) - align1[:begin].count('-') + 1} "
+        start2 = f"{len(align2[:begin]) - align2[:begin].count('-') + 1} "
         start_m = max(len(start1), len(start2))
     elif full_sequences:
         start_m = 0

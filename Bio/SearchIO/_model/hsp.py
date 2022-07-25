@@ -357,10 +357,10 @@ class HSP(_BaseHSP):
                 # hit region
                 hit_start = getattr_str(block, "hit_start")
                 hit_end = getattr_str(block, "hit_end")
-                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = f"{hit_start}:{hit_end}"
                 hit_range = hit_range[:20] + "~]" if len(hit_range) > 22 else hit_range
                 # append the hsp row
-                lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
+                lines.append(pattern % (f"{idx}", aln_span, query_range, hit_range))
 
             return self._str_hsp_header() + "\n" + "\n".join(lines)
 

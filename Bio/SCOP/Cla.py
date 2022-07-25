@@ -71,7 +71,7 @@ class Record:
 
         s.append(
             ",".join(
-                "=".join((key, str(value))) for key, value in self.hierarchy.items()
+                "=".join((key, f"{value}")) for key, value in self.hierarchy.items()
             )
         )
 

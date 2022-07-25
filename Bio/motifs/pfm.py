@@ -19,7 +19,7 @@ class Record(list):
 
     def __str__(self):
         """Return a string representation of the motifs in the Record object."""
-        return "\n".join(str(motif) for motif in self)
+        return "\n".join(f"{motif}" for motif in self)
 
 
 def read(handle, pfm_format):

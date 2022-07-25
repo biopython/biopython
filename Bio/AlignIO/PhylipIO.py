@@ -103,7 +103,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                     % (name, record.id)
                 )
             names.append(name)
-            sequence = str(record.seq)
+            sequence = f"{record.seq}"
             if "." in sequence:
                 # Do this check here (once per record, not once per block)
                 raise ValueError(_NO_DOTS)
@@ -340,7 +340,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         # happy.
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         for name, record in zip(names, alignment):
-            sequence = str(record.seq)
+            sequence = f"{record.seq}"
             if "." in sequence:
                 raise ValueError(_NO_DOTS)
             handle.write(name[:id_width].ljust(id_width))

@@ -1433,10 +1433,10 @@ class _SeqAbstractBaseClass(ABC):
         (e.g. "TA?" or "T-A") will throw a TranslationError.
 
         NOTE - This does NOT behave like the python string's translate
-        method.  For that use str(my_seq).translate(...) instead
+        method.  For that use f"{my_seq}".translate(...) instead
         """
         try:
-            data = str(self)
+            data = f"{self}"
         except UndefinedSequenceError:
             # translating an undefined sequence yields an undefined
             # sequence with the length divided by 3
@@ -1450,7 +1450,7 @@ class _SeqAbstractBaseClass(ABC):
             return Seq(None, n // 3)
 
         return self.__class__(
-            _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
+            _translate_str(f"{self}", table, stop_symbol, to_stop, cds, gap=gap)
         )
 
     def complement(self, inplace=None):
@@ -1858,9 +1858,9 @@ class _SeqAbstractBaseClass(ABC):
         Seq('ANNNNNCNNNNNGNNNNNT')
         """
         if isinstance(other, _SeqAbstractBaseClass):
-            return self.__class__(str(self).join(str(other)))
+            return self.__class__(f"{self}".join(f"{other}"))
         elif isinstance(other, str):
-            return self.__class__(str(self).join(other))
+            return self.__class__(f"{self}".join(other))
 
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
@@ -1874,7 +1874,7 @@ class _SeqAbstractBaseClass(ABC):
                 raise TypeError(
                     "Input must be an iterable of Seq objects, MutableSeq objects, or strings"
                 )
-        return self.__class__(str(self).join([str(_) for _ in other]))
+        return self.__class__(f"{self}".join([f"{_}" for _ in other]))
 
     def replace(self, old, new, inplace=False):
         """Return a copy with all occurrences of subsequence old replaced by new.
@@ -2103,7 +2103,7 @@ class Seq(_SeqAbstractBaseClass):
 
         The Seq object aims to match the interface of a Python string.
 
-        This is essentially to save you doing str(my_seq).encode() when
+        This is essentially to save you doing f"{my_seq}".encode() when
         you need a bytes string, for example for computing a hash:
 
         >>> from Bio.Seq import Seq
@@ -2114,7 +2114,7 @@ class Seq(_SeqAbstractBaseClass):
             "myseq.encode has been deprecated; please use bytes(myseq) instead.",
             BiopythonDeprecationWarning,
         )
-        return str(self).encode(encoding, errors)
+        return f"{self}".encode(encoding, errors)
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s) (OBSOLETE).
@@ -2378,7 +2378,7 @@ class UnknownSeq(Seq):
         1
         """
         if isinstance(sub, _SeqAbstractBaseClass):
-            sub = str(sub)
+            sub = f"{sub}"
         elif not isinstance(sub, str):
             raise TypeError(
                 f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
@@ -2429,7 +2429,7 @@ class UnknownSeq(Seq):
         True
         """
         if isinstance(sub, _SeqAbstractBaseClass):
-            sub = str(sub)
+            sub = f"{sub}"
         elif not isinstance(sub, str):
             raise TypeError(
                 f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
@@ -2692,7 +2692,7 @@ class UnknownSeq(Seq):
                 return self.__class__(
                     len(other) + len(self) * (len(other) - 1), character=self._character
                 )
-            return Seq(str(self).join(str(other)))
+            return Seq(f"{self}".join(f"{other}"))
         if isinstance(other, SeqRecord):
             raise TypeError("Iterable cannot be a SeqRecord")
 
@@ -2701,7 +2701,7 @@ class UnknownSeq(Seq):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif not isinstance(c, (str, _SeqAbstractBaseClass)):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
-        temp_data = str(self).join([str(_) for _ in other])
+        temp_data = f"{self}".join([f"{_}" for _ in other])
         if temp_data.count(self._character) == len(temp_data):
             # Can return an UnknownSeq
             return self.__class__(len(temp_data), character=self._character)
@@ -3456,7 +3456,7 @@ def _translate_str(
         )
 
     if cds:
-        if str(sequence[:3]).upper() not in codon_table.start_codons:
+        if f"{sequence[:3]}".upper() not in codon_table.start_codons:
             raise CodonTable.TranslationError(
                 f"First codon '{sequence[:3]}' is not a start codon"
             )
@@ -3464,7 +3464,7 @@ def _translate_str(
             raise CodonTable.TranslationError(
                 f"Sequence length {n} is not a multiple of three"
             )
-        if str(sequence[-3:]).upper() not in stop_codons:
+        if f"{sequence[-3:]}".upper() not in stop_codons:
             raise CodonTable.TranslationError(
                 f"Final codon '{sequence[-3:]}' is not a stop codon"
             )

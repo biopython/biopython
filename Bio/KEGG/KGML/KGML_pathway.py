@@ -852,6 +852,6 @@ class Relation:
         }
         for (name, value) in self.subtypes:
             subtype = ET.Element("subtype")
-            subtype.attrib = {"name": name, "value": str(value)}
+            subtype.attrib = {"name": name, "value": f"{value}"}
             relation.append(subtype)
         return relation

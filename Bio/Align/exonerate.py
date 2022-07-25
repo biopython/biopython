@@ -126,14 +126,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         words = [
             "cigar:",
             query_id,
-            str(query_start),
-            str(query_end),
+            f"{query_start}",
+            f"{query_end}",
             query_strand,
             target_id,
-            str(target_start),
-            str(target_end),
+            f"{target_start}",
+            f"{target_end}",
             target_strand,
-            str(score),
+            f"{score}",
         ]
         try:
             operations = alignment.operations
@@ -163,16 +163,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     step = query_step
                 else:
                     raise ValueError(
-                        "Unexpected step target %d, query %d for molecule type %s, %s"
-                        % (
-                            target_step,
-                            query_step,
-                            target_molecule_type,
-                            query_molecule_type,
-                        )
+                        f"Unexpected step target {target_step}, query {query_step} for"
+                        f" molecule type {target_molecule_type}, {query_molecule_type}"
                     )
                 words.append(operation)
-                words.append(str(step))
+                words.append(f"{step}")
         else:
             for step, operation in zip(steps.transpose(), operations.decode()):
                 target_step, query_step = step
@@ -189,7 +184,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         assert target_molecule_type == "protein"
                     else:
                         raise ValueError(
-                            "Unexpected steps target %d, query %s for operation 'M'"
+                            f"Unexpected steps targettarget {target_step}, "
+                            f"query {query_step} for operation 'M'"
                         )
                 elif operation == "5":  # 5' splice site
                     if query_step == 0:
@@ -211,8 +207,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         operation = "I"
                     else:
                         raise ValueError(
-                            "Unexpected intron with steps target %d, query %d"
-                            % (target_step, query_step)
+                            f"Unexpected intron with steps target {target_step}, "
+                            f"query {query_step}"
                         )
                 elif operation == "3":  # 3' splice site
                     if query_step == 0:
@@ -240,21 +236,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     if target_step > 0:
                         operation = "D"
                         words.append(operation)
-                        words.append(str(target_step))
+                        words.append(f"{target_step}")
                     if query_step > 0:
                         operation = "I"
                         words.append(operation)
-                        words.append(str(query_step))
+                        words.append(f"{query_step}")
                     continue
                 elif operation == "S":  # Split codon
                     if target_step > 0:
                         operation = "D"
                         words.append(operation)
-                        words.append(str(target_step))
+                        words.append(f"{target_step}")
                     if query_step > 0:
                         operation = "I"
                         words.append(operation)
-                        words.append(str(query_step))
+                        words.append(f"{query_step}")
                     continue
                 elif operation == "F":  # Frame shift
                     if target_step == 0:
@@ -266,9 +262,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     else:
                         raise ValueError("Expected target step or query step to be 0")
                 else:
-                    raise ValueError("Unknown operation %s" % operation)
+                    raise ValueError(f"Unknown operation {operation}")
                 words.append(operation)
-                words.append(str(step))
+                words.append(f"{step}")
         line = " ".join(words) + "\n"
         return line
 
@@ -318,14 +314,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         words = [
             "vulgar:",
             query_id,
-            str(query_start),
-            str(query_end),
+            f"{query_start}",
+            f"{query_end}",
             query_strand,
             target_id,
-            str(target_start),
-            str(target_end),
+            f"{target_start}",
+            f"{target_end}",
             target_strand,
-            str(score),
+            f"{score}",
         ]
         try:
             operations = alignment.operations
@@ -351,8 +347,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 else:
                     raise ValueError("Both target and query step are zero")
                 words.append(operation)
-                words.append(str(query_step))
-                words.append(str(target_step))
+                words.append(f"{query_step}")
+                words.append(f"{target_step}")
         else:
             steps = steps.transpose()
             operations = operations.decode()
@@ -408,10 +404,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif operation == "F":  # Frame shift
                     step = target_step
                 else:
-                    raise ValueError("Unknown operation %s" % operation)
+                    raise ValueError(f"Unknown operation {operation}")
                 words.append(operation)
-                words.append(str(query_step))
-                words.append(str(target_step))
+                words.append(f"{query_step}")
+                words.append(f"{target_step}")
                 i += 1
         line = " ".join(words) + "\n"
         return line

@@ -669,10 +669,10 @@ class Parser:
 def _serialize(value):
     """Convert a Python primitive to a phyloXML-compatible string (PRIVATE)."""
     if isinstance(value, float):
-        return str(value).upper()
+        return f"{value}".upper()
     elif isinstance(value, bool):
-        return str(value).lower()
-    return str(value)
+        return f"{value}".lower()
+    return f"{value}"
 
 
 def _clean_attrib(obj, attrs):

@@ -240,14 +240,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         tLen = 0
         fields = [
             qName,
-            str(flag),
+            f"{flag}",
             rName,
-            str(pos + 1),  # 1-based coordinates
-            str(mapq),
+            f"{pos + 1}",  # 1-based coordinates
+            f"{mapq}",
             cigar,
             rNext,
-            str(pNext),
-            str(tLen),
+            f"{pNext}",
+            f"{tLen}",
             query,
             qual,
         ]
@@ -272,7 +272,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         if True:
                             # deletion from the reference
                             if number:
-                                md += str(number)
+                                md += f"{number}"
                                 number = 0
                             md += "^" + target[tStart:tEnd]
                         tStart = tEnd
@@ -284,12 +284,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                             if tc == qc:
                                 number += 1
                             else:
-                                md += str(number) + tc
+                                md += f"{number}" + tc
                                 number = 0
                         tStart = tEnd
                         qStart = qEnd
                 if number:
-                    md += str(number)
+                    md += f"{number}"
             else:
                 for operation, (tEnd, qEnd) in zip(operations, coordinates[1:, :]):
                     tCount = tEnd - tStart
@@ -302,7 +302,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         if operation != ord("N"):
                             # deletion from the reference
                             if number:
-                                md += str(number)
+                                md += f"{number}"
                                 number = 0
                             md += "^" + target[tStart:tEnd]
                         tStart = tEnd
@@ -314,12 +314,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                             if tc == qc:
                                 number += 1
                             else:
-                                md += str(number) + tc
+                                md += f"{number}" + tc
                                 number = 0
                         tStart = tEnd
                         qStart = qEnd
                 if number:
-                    md += str(number)
+                    md += f"{number}"
             field = "MD:Z:%s" % md
             fields.append(field)
         try:
@@ -337,10 +337,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for key, value in annotations.items():
                 if isinstance(value, int):
                     datatype = "i"
-                    value = str(value)
+                    value = f"{value}"
                 elif isinstance(value, float):
                     datatype = "f"
-                    value = str(value)
+                    value = f"{value}"
                 elif isinstance(value, str):
                     if len(value) == 1:
                         datatype = "A"
