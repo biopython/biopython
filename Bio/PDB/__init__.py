@@ -35,7 +35,8 @@ from .PDBList import PDBList
 from .parse_pdb_header import parse_pdb_header
 
 # Find connected polypeptides in a Structure
-from .Polypeptide import PPBuilder, CaPPBuilder, is_aa, standard_aa_names
+from .Polypeptide import PPBuilder, CaPPBuilder
+from .Polypeptide import is_aa, standard_aa_names, is_nucleic
 
 # IO of PDB files (including flexible selective output)
 from .PDBIO import PDBIO, Select

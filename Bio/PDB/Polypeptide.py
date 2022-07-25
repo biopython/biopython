@@ -195,7 +195,7 @@ def is_aa(residue, standard=False):
         return residue in protein_letters_3to1_extended
 
 
-def is_na(residue, standard=False):
+def is_nucleic(residue, standard=False):
     """Return True if residue object/string is a nucleic acid.
 
     :param residue: a L{Residue} object OR a three letter code
@@ -205,17 +205,17 @@ def is_na(residue, standard=False):
         Default is False.
     :type standard: boolean
 
-    >>> is_na('DA ')
+    >>> is_nucleic('DA ')
     True
 
-    >>> is_na('A  ')
+    >>> is_nucleic('A  ')
     True
 
     Known three letter codes for modified nucleotides are supported,
 
-    >>> is_na('A2L')
+    >>> is_nucleic('A2L')
     True
-    >>> is_na('A2L', standard=True)
+    >>> is_nucleic('A2L', standard=True)
     False
     """
     if not isinstance(residue, str):
