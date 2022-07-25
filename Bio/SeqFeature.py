@@ -1244,7 +1244,7 @@ class CompoundLocation:
             if not isinstance(loc, FeatureLocation):
                 raise ValueError(
                     "CompoundLocation should be given a list of "
-                    "FeatureLocation objects, not %s" % loc.__class__
+                    f"FeatureLocation objects, not {loc.__class__}"
                 )
         if len(parts) < 2:
             raise ValueError(
@@ -1954,12 +1954,7 @@ class BetweenPosition(int, AbstractPosition):
 
     def __repr__(self):
         """Represent the BetweenPosition object as a string for debugging."""
-        return "%s(%i, left=%i, right=%i)" % (
-            self.__class__.__name__,
-            int(self),
-            self._left,
-            self._right,
-        )
+        return f"{self.__class__.__name__}({int(self)}, left={self._left}, right={self._right})"
 
     def __str__(self):
         """Return a representation of the BetweenPosition object (with python counting)."""

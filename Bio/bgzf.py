@@ -323,11 +323,11 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     """
     if within_block_offset < 0 or within_block_offset >= 65536:
         raise ValueError(
-            "Require 0 <= within_block_offset < 2**16, got %i" % within_block_offset
+            f"Require 0 <= within_block_offset < 2**16, got {within_block_offset}"
         )
     if block_start_offset < 0 or block_start_offset >= 281474976710656:
         raise ValueError(
-            "Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset
+            f"Require 0 <= block_start_offset < 2**48, got {block_start_offset}"
         )
     return (block_start_offset << 16) | within_block_offset
 
@@ -474,7 +474,7 @@ def _load_bgzf_block(handle, text_mode=False):
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
     if expected_size != len(data):
-        raise RuntimeError("Decompressed to %i, not %i" % (len(data), expected_size))
+        raise RuntimeError(f"Decompressed to {len(data)}, not {expected_size}")
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:
@@ -685,8 +685,7 @@ class BgzfReader:
         if within_block > len(self._buffer):
             if not (within_block == 0 and len(self._buffer) == 0):
                 raise ValueError(
-                    "Within offset %i but block size only %i"
-                    % (within_block, len(self._buffer))
+                    f"Within offset {within_block} but block size only {len(self._buffer)}"
                 )
         self._within_block_offset = within_block
         # assert virtual_offset == self.tell(), \

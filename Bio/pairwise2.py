@@ -430,8 +430,8 @@ where the alignment occurs.
 
             if len(args) != len(self.param_names):
                 raise TypeError(
-                    "%s takes exactly %d argument (%d given)"
-                    % (self.function_name, len(self.param_names), len(args))
+                    f"{self.function_name} takes exactly {len(self.param_names)}"
+                    f" arguments ({len(args)} given)"
                 )
 
             i = 0

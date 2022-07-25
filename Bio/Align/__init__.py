@@ -231,20 +231,12 @@ class MultipleSeqAlignment:
             if len(record.seq) <= length:
                 return f"{record.seq} {record.id}"
             else:
-                return "%s...%s %s" % (
-                    record.seq[: length - 3],
-                    record.seq[-3:],
-                    record.id,
-                )
+                return f"{record.seq[: length - 3]}...{record.seq[-3:]} {record.id}"
         else:
             if len(record.seq) <= length:
                 return f"{record.seq} {record.id}"
             else:
-                return "%s...%s %s" % (
-                    record.seq[: length - 6],
-                    record.seq[-3:],
-                    record.id,
-                )
+                return f"{record.seq[: length - 6]}...{record.seq[-3:]} {record.id}"
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
@@ -271,8 +263,7 @@ class MultipleSeqAlignment:
         """
         rows = len(self._records)
         lines = [
-            "Alignment with %i rows and %i columns"
-            % (rows, self.get_alignment_length())
+            f"Alignment with {rows} rows and {self.get_alignment_length()} columns"
         ]
         if rows <= 20:
             lines.extend(self._str_line(rec) for rec in self._records)

@@ -348,7 +348,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             if self._length != int(count):
                 con.close()
                 raise ValueError(
-                    "Corrupt database? %i entries not %i" % (int(count), self._length)
+                    f"Corrupt database? {int(count)} entries not {self._length}"
                 ) from None
             (self._format,) = con.execute(
                 "SELECT value FROM meta_data WHERE key=?;", ("format",)
@@ -393,8 +393,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             if filenames and len(filenames) != len(self._filenames):
                 con.close()
                 raise ValueError(
-                    "Index file says %i files, not %i"
-                    % (len(self._filenames), len(filenames))
+                    f"Index file says {len(self._filenames)} files, not {len(filenames)}"
                 ) from None
             if filenames and filenames != self._filenames:
                 for old, new in zip(self._filenames, filenames):

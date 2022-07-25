@@ -107,7 +107,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             elif key == "Program":
                 key = "program"
             else:
-                raise ValueError("Unexpected key '%s' for header" % key)
+                raise ValueError(f"Unexpected key '{key}' for header")
             stream.write(f" {key}={value}")
         stream.write("\n")
         comments = metadata.get("Comments")

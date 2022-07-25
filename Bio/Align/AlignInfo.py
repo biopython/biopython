@@ -351,8 +351,8 @@ class SummaryInfo:
 
         if start < 0 or end > len(self.alignment[0].seq):
             raise ValueError(
-                "Start (%s) and end (%s) are not in the range %s to %s"
-                % (start, end, 0, len(self.alignment[0].seq))
+                f"Start ({start}) and end ({end}) are not in the "
+                "range 0 to {len(self.alignment[0].seq)}"
             )
         # determine random expected frequencies, if necessary
         random_expected = None
@@ -573,12 +573,12 @@ class PSSM:
 
         # first print out the top header
         for res in all_residues:
-            out += "   %s" % res
+            out += f"   {res}"
         out += "\n"
 
         # for each item, write out the substitutions
         for item in self.pssm:
-            out += "%s " % item[0]
+            out += f"{item[0]} "
             for res in all_residues:
                 out += " %.1f" % item[1][res]
 

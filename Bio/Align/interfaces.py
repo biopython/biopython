@@ -41,15 +41,15 @@ class AlignmentIterator(ABC):
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        "%s files must be opened in text mode." % fmt
+                        f"{fmt} files must be opened in text mode."
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        "%s files must be opened in binary mode." % fmt
+                        f"{fmt} files must be opened in binary mode."
                     ) from None
             else:
-                raise ValueError("Unknown mode '%s'" % mode) from None
+                raise ValueError(f"Unknown mode '{mode}'") from None
             self._stream = source
         try:
             self._read_header(self._stream)
@@ -144,7 +144,7 @@ class AlignmentWriter:
                 else:
                     stream = target
             else:
-                raise RuntimeError("Unknown mode '%s'" % mode)
+                raise RuntimeError(f"Unknown mode '{mode}'")
             self.stream = stream
 
         self._target = target

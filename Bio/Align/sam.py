@@ -92,20 +92,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             fields.append("LN:%d" % length)
             for key, value in record.annotations.items():
                 if key == "alternate_locus":
-                    fields.append("AH:%s" % value)
+                    fields.append(f"AH:{value}")
                 elif key == "names":
                     fields.append("AN:%s" % ",".join(value))
                 elif key == "assembly":
-                    fields.append("AS:%s" % value)
+                    fields.append(f"AS:{value}")
                 elif key == "MD5":
-                    fields.append("M5:%s" % value)
+                    fields.append(f"M5:{value}")
                 elif key == "species":
-                    fields.append("SP:%s" % value)
+                    fields.append(f"SP:{value}")
                 elif key == "topology":
                     assert value in ("linear", "circular")
-                    fields.append("PP:%s" % value)
+                    fields.append(f"PP:{value}")
                 elif key == "URI":
-                    fields.append("UR:%s" % value)
+                    fields.append(f"UR:{value}")
                 else:
                     fields.append("%s:%s" % (key[:2], value))
             try:
