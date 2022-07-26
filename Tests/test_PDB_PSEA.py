@@ -4,12 +4,15 @@
 # have been included as part of this package.
 
 """Tests for PDB PSEA."""
-import unittest
-from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
-from Bio.PDB import PDBParser
-from subprocess import getoutput
-from Bio import MissingExternalDependencyError
+
 import os
+import unittest
+from subprocess import getoutput
+
+from Bio import MissingExternalDependencyError
+from Bio.PDB import PDBParser
+from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
+
 
 os.environ["LANG"] = "C"
 
@@ -17,7 +20,9 @@ os.environ["LANG"] = "C"
 cmd_output = getoutput("psea -h")
 if not cmd_output.startswith("o---"):
     raise MissingExternalDependencyError(
-        "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
+        "Download and install psea from "
+        "ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. "
+        "Make sure that psea is on path"
     )
 
 
