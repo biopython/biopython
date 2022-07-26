@@ -14,7 +14,9 @@ import os
 
 os.environ["LANG"] = "C"
 
-if "command not found" or "'psea' is not recognized" in getoutput("psea -h"):
+
+cmd_output = getoutput("psea -h")
+if not cmd_output.startswith("o-----------------------------------------------o"):
     raise MissingExternalDependencyError(
         "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
     )
@@ -66,6 +68,10 @@ class TestPDBPSEA(unittest.TestCase):
 
 
 class TestPSEA(unittest.TestCase):
+    def tearDown(self):
+        os.remove("2BEG.sea")
+        os.remove("1A8O.sea")
+
     def test_get_seq(self):
         p = PDBParser()
         s = p.get_structure("X", "PDB/2BEG.pdb")
@@ -101,14 +107,6 @@ class TestPSEA(unittest.TestCase):
                 "C",
             ],
         )
-
-
-def clean_up():
-    file_list: list = ["1A8O", "2BEG"]
-    try:
-        [os.remove(f"./{file}.sea") for file in file_list]
-    except OSError as err:
-        print("No eligible files found for deletion.")
 
 
 if __name__ == "__main__":
