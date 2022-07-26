@@ -4,7 +4,6 @@
 # have been included as part of this package.
 
 """Tests for PDB PSEA."""
-import pathlib
 import unittest
 from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
 from Bio.PDB import PDBParser
@@ -23,10 +22,15 @@ if not cmd_output.startswith("o---"):
 
 
 def remove_sea_files():
-    [os.remove(file) for file in os.listdir() if file.endswith(".sea")]
+    for file in os.listdir():
+        if file.endswith(".sea"):
+            os.remove(file)
 
 
 class TestPDBPSEA(unittest.TestCase):
+    def tearDown(self):
+        remove_sea_files()
+
     def test_run_psea(self):
         psae_run = run_psea("PDB/1A8O.pdb")
         self.assertEqual(psae_run, "1A8O.sea")
