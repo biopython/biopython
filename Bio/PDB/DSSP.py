@@ -98,7 +98,7 @@ import warnings
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.Polypeptide import three_to_one
+from Bio.Data.PDBData import protein_letters_3to1
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 # Match C in DSSP
@@ -582,10 +582,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            try:
-                resname = three_to_one(resname)
-            except KeyError:
-                resname = "X"
+            resname = protein_letters_3to1.get(resname, "X")
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'
