@@ -23,9 +23,7 @@ if not cmd_output.startswith("o---"):
 
 
 def remove_sea_files():
-    for file in os.listdir():
-        if file.endswith(".sea"):
-            os.remove(file)
+    [os.remove(file) for file in os.listdir() if file.endswith(".sea")]
 
 
 class TestPDBPSEA(unittest.TestCase):
