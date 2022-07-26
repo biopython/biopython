@@ -4,7 +4,7 @@
 # have been included as part of this package.
 
 """Tests for PDB PSEA."""
-
+import pathlib
 import unittest
 from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
 from Bio.PDB import PDBParser
@@ -16,10 +16,16 @@ os.environ["LANG"] = "C"
 
 
 cmd_output = getoutput("psea -h")
-if not cmd_output.startswith("o-----------------------------------------------o"):
+if not cmd_output.startswith("o---"):
     raise MissingExternalDependencyError(
         "Download and install psea from ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/. Make sure that psea is on path"
     )
+
+
+def remove_sea_files():
+    for file in os.listdir():
+        if file.endswith(".sea"):
+            os.remove(file)
 
 
 class TestPDBPSEA(unittest.TestCase):
@@ -69,8 +75,7 @@ class TestPDBPSEA(unittest.TestCase):
 
 class TestPSEA(unittest.TestCase):
     def tearDown(self):
-        os.remove("2BEG.sea")
-        os.remove("1A8O.sea")
+        remove_sea_files()
 
     def test_get_seq(self):
         p = PDBParser()
