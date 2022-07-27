@@ -468,9 +468,7 @@ def six_frame_translations(seq, genetic_code=1):
     return res
 
 
-def count_kmers(
-    seq: str, k: int, circular: bool = False, ordered: bool = True
-) -> Counter:
+def count_kmers(seq, k, circular=False, ordered=True):
     """Count how many times each kmer appears in seq.
 
     Counts instances of each substring of size k (kmers) in seq. Returns a

@@ -104,9 +104,7 @@ class PseudoAAC:
 
     """
 
-    def __init__(
-        self, protein_sequence: Union[Seq, str], aa_percents: Optional[dict] = None
-    ):
+    def __init__(self, protein_sequence, aa_percents=None):
         """Initialize the class."""
         self.seq = str(protein_sequence).upper()
         self.L = len(self.seq)
@@ -117,11 +115,11 @@ class PseudoAAC:
 
         self.aac = aa_percents
 
-    def _calc_correlation(self, aa1: str, aa2: str, scales: list) -> float:
+    def _calc_correlation(self, aa1, aa2, scales):
         """Calculate the sequence correlation between amino acids (PRIVATE)."""
         return sum([(s[aa1] - s[aa2]) ** 2 for s in scales]) / len(scales)
 
-    def _std_convert_scales(self, scales: list) -> list:
+    def _std_convert_scales(self, scales):
         """Perform the standard conversion on provided scales (PRIVATE)."""
         normalized = []
         for H in scales:
@@ -131,9 +129,7 @@ class PseudoAAC:
             normalized.append(H)
         return normalized
 
-    def get_pseudo_aac(
-        self, l_param: int = 3, weight: float = 0.05, scales: Optional[list] = None
-    ) -> List[float]:
+    def get_pseudo_aac(self, l_param=3, weight=0.05, scales=None):
         """Calculate the Pseudo AminoAcid Composition described by Chou, 2001.
 
         Calculates the Pseudo-Amino Acid Compositions utilizing the given l_param,

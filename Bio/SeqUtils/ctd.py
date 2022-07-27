@@ -61,7 +61,7 @@ class CTD_Property:
 
     """
 
-    def __init__(self, groups: List[str]):
+    def __init__(self, groups):
         """Initialize the class."""
         given_aas = "".join(groups)
         if any([(aa not in given_aas) for aa in protein_letters]):
@@ -74,13 +74,13 @@ class CTD_Property:
 
         self.size = len(groups)
 
-    def __getitem__(self, key) -> str:
+    def __getitem__(self, key):
         return self.d[key]
 
-    def __len__(self) -> int:
+    def __len__(self):
         return self.size
 
-    def transitions(self) -> Iterable:
+    def transitions(self):
         """Return Iterable of the possible transitions between groups."""
         for i in range(self.size):
             for j in range(i + 1, self.size):
@@ -195,14 +195,12 @@ class CTD:
     147
     """
 
-    def __init__(self, protein_sequence: Union[Seq, str]):
+    def __init__(self, protein_sequence):
         """Initialize the class."""
         self.seq = str(protein_sequence).upper()
         self.L = len(self.seq)
 
-    def _get_prop_tuples(
-        self, properties: List[CTD_Property]
-    ) -> List[Tuple[str, CTD_Property]]:
+    def _get_prop_tuples(self, properties):
         """Auxiliary function to convert between aa and properties groups (PRIVATE).
 
         Returns a list of (numberSeq, p) tuples, where numberSeq is the protein sequence
@@ -211,7 +209,7 @@ class CTD:
         """
         return [("".join([p[aa] for aa in self.seq]), p) for p in properties]
 
-    def _calc_C(self, prop_tuples: list) -> List[float]:
+    def _calc_C(self, prop_tuples):
         """Calculate the Composition descriptors of CTD (PRIVATE)."""
         C_descriptors = []
         for string, prop in prop_tuples:
@@ -221,7 +219,7 @@ class CTD:
 
         return C_descriptors
 
-    def _calc_T(self, prop_tuples: list) -> List[float]:
+    def _calc_T(self, prop_tuples):
         """Calculate the Transition descriptors of CTD (PRIVATE)."""
         T_descriptors = []
         for string, prop in prop_tuples:
@@ -232,7 +230,7 @@ class CTD:
 
         return T_descriptors
 
-    def _calc_D(self, prop_tuples: list) -> List[float]:
+    def _calc_D(self, prop_tuples):
         """Calculate the Distribution descriptors of CTD (PRIVATE)."""
         D_descriptors = []
         for string, prop in prop_tuples:
@@ -256,9 +254,7 @@ class CTD:
 
         return D_descriptors
 
-    def composition_descriptors(
-        self, properties: List[CTD_Property] = default_ctd_props
-    ) -> List[float]:
+    def composition_descriptors(self, properties=default_ctd_props):
         """Return the Composition descriptors of CTD.
 
         Returns the relative composition of each group of given properties
@@ -268,9 +264,7 @@ class CTD:
 
         return self._calc_C(prop_tuples)
 
-    def transition_descriptors(
-        self, properties: List[CTD_Property] = default_ctd_props
-    ) -> List[float]:
+    def transition_descriptors(self, properties=default_ctd_props):
         """Return the Transition descriptors of CTD.
 
         For each property, returns the relative frequency of each transition
@@ -280,9 +274,7 @@ class CTD:
 
         return self._calc_T(prop_tuples)
 
-    def distribution_descriptors(
-        self, properties: List[CTD_Property] = default_ctd_props
-    ) -> List[float]:
+    def distribution_descriptors(self, properties=default_ctd_props):
         """Return the Distribution descriptors of CTD.
 
         For each property, calculates the % of the sequence that contains
@@ -292,9 +284,7 @@ class CTD:
 
         return self._calc_D(prop_tuples)
 
-    def all_descriptors(
-        self, properties: List[CTD_Property] = default_ctd_props
-    ) -> List[float]:
+    def all_descriptors(self, properties=default_ctd_props):
         """Return the CTD descriptors, defined in Dubchak et al, 1995.
 
         Each property in _properties_, will add G*7 values to the final result,
