@@ -8,7 +8,6 @@
 import array
 import os
 import unittest
-import warnings
 
 try:
     import numpy

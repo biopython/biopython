@@ -8,7 +8,6 @@
 import os
 import random
 import unittest
-import warnings
 
 try:
     import numpy
