@@ -14,22 +14,9 @@ class, used in the Bio.AlignIO module.
 """
 
 import sys
-import numbers
 import warnings
+import numbers
 from itertools import zip_longest
-
-
-from Bio.Align import _aligners
-from Bio.Align import substitution_matrices
-from Bio.SeqRecord import SeqRecord, _RestrictedDict
-from Bio import BiopythonDeprecationWarning
-from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
-
-
-# Import errors may occur here if a compiled aligners.c file
-# (_aligners.pyd or _aligners.so) is missing or if the user is
-# importing from within the Biopython source tree, see PR #2007:
-# https://github.com/biopython/biopython/pull/2007
 
 try:
     import numpy
@@ -40,6 +27,18 @@ except ImportError:
         "Please install numpy if you want to use Bio.Align. "
         "See http://www.numpy.org/"
     ) from None
+
+from Bio import BiopythonDeprecationWarning
+from Bio.Align import _aligners
+from Bio.Align import substitution_matrices
+from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
+from Bio.SeqRecord import SeqRecord, _RestrictedDict
+
+
+# Import errors may occur here if a compiled aligners.c file
+# (_aligners.pyd or _aligners.so) is missing or if the user is
+# importing from within the Biopython source tree, see PR #2007:
+# https://github.com/biopython/biopython/pull/2007
 
 
 class MultipleSeqAlignment:
@@ -943,7 +942,7 @@ class MultipleSeqAlignment:
 
 
 class Alignment:
-    """An Alignment object represents a sequence alignment.
+    """Represents a sequence alignment.
 
     An Alignment object has a `.sequences` attribute storing the sequences
     (Seq, MutableSeq, SeqRecord, or string objects) that were aligned, as well

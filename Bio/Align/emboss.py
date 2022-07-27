@@ -80,7 +80,6 @@ class AlignmentIterator(_base.AlignmentIterator):
     def _read_next_alignment(self, stream):
         identifiers = None
         number_of_sequences = None
-        score = None
         annotations = {}
         for line in stream:
             line = line.rstrip("\r\n")
@@ -152,7 +151,7 @@ class AlignmentIterator(_base.AlignmentIterator):
                 elif key == "Gaps":
                     annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    score = float(value.strip())
+                    annotations[key] = float(value.strip())
                 # TODO:
                 # The following are generated if the -nobrief command line
                 # argument used. We could simply calculate them from the
@@ -195,8 +194,6 @@ class AlignmentIterator(_base.AlignmentIterator):
                             alignment = Alignment(records, coordinates)
                             if annotations:
                                 alignment.annotations = annotations
-                            if score is not None:
-                                alignment.score = score
                             if consensus:
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus

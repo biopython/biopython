@@ -1,3 +1,4 @@
+# Copyright 2006-2021 by Peter Cock.
 # Copyright 2022 by Michiel de Hoon.
 # All rights reserved.
 #
@@ -14,19 +15,7 @@
 import warnings
 from abc import ABC, abstractmethod
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Please install numpy if you want to use Bio.Align. "
-        "See http://www.numpy.org/"
-    ) from None
-
 from Bio import StreamModeError
-from Bio import BiopythonDeprecationWarning
-from Bio.Align import substitution_matrices
 
 
 class AlignmentIterator(ABC):
@@ -41,8 +30,10 @@ class AlignmentIterator(ABC):
 
         Arguments:
         - source - input file stream, or path to input file
+
         This method MAY be overridden by any subclass.
         Note when subclassing:
+
         - there should be a single non-optional argument, the source.
         - you can add additional optional arguments.
         """
@@ -239,9 +230,3 @@ class AlignmentWriter:
                     % (count, mincount)
                 )
         return count
-
-
-if __name__ == "__main__":
-    from Bio._utils import run_doctest
-
-    run_doctest()
