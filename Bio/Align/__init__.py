@@ -14,7 +14,7 @@ class, used in the Bio.AlignIO module.
 """
 
 from Bio.Align import substitution_matrices
-from Bio.Align._base import Alignment, Alignments
+from Bio.Align._base import Alignment
 from Bio.Align._pairwise import PairwiseAligner
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 

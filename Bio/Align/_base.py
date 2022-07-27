@@ -6,31 +6,9 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-# This module defines the Alignment class, the Alignments, LazyAlignments, and
-# ParsedAlignments class, and the AlignmentWriter class. Only the Alignment and
-# Alignments classes are made available to the user via Bio.Align; the other
-# classes are not intended to be directly used by a user.
-#
-# The Lazyalignments and ParsedAlignments classes are abstract base classes
-# derived from the Alignments class. Concrete subclasses are implemented in the
-# alignment file parser modules (the AlignmentIterator class) and in the
-# pairwise alignment module (the PairwiseAlignments class). The inheritance
-# relations are shown in this diagram:
-#
-#                                        - ParsedAlignments <- AlignmentIterator
-#                                        |                      (in alignment
-# list <- Alignments <- LazyAlignments <-|                       file parser
-#                                        |                       modules)
-#                                        - PairwiseAlignments
-#                                          (in the pairwise
-#                                           alignment module)
-#
-# AlignmentWriter is also an abstract base class, with concrete subclasses
-# implemented in the file parser modules).
-#
-# Unless you are writing a new parser or writer for Bio.Align, you should not
-# use this module directly.
-
+# This is a private module.
+# The Alignment class and the AlignmentWriter class are defined here,
+# and imported and made available to the user in Bio.Align.
 """Bio.Align support module (not for general use)."""
 
 import sys
@@ -1585,326 +1563,24 @@ class Alignment:
         return m
 
 
-class Alignments(list):
-    """A list-like object storing sequence alignments.
+class AlignmentIterator(ABC):
+    """Base class for building Alignment iterators.
 
-    An `Alignments` object can be used as an iterator or as a list-like object.
-
-    This is an example of an `Alignments` object used as an iterator:
-
-    >>> from Bio.Align import emboss
-    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
-    >>> for alignment in alignments:
-    ...     print("******************************")
-    ...     print(alignment[0, :30])
-    ...     print(alignment[1, :30])
-    ...
-    ******************************
-    KILIVDD----QYGIRILLNEVFNKEGYQT
-    -VLLADDHALVRRGFRLMLED--DPEIEIV
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -ILIVDDEANTLASLSRAFRLAGHEATVCD
-    ******************************
-    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
-    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
-
-    In general, alignments obtained by parsing an alignment file can iterated
-    over only once. However, an `Alignments` object is automatically converted
-    to a list-like object when needed, for example if a specific alignment is
-    accessed by index:
-
-    >>> from Bio.Align import emboss
-    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
-    >>> alignment = alignments[2]
-    >>> print(alignment[0, :30]); print(alignment[1, :30])
-    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
-    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
-
-    Use `alignments[:]` to get all alignments as a list-like object:
-
-    >>> from Bio.Align import emboss
-    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
-    >>> alignments = alignments[:]
-    >>> len(alignments)
-    5
-    >>> alignment = alignments[2]
-    >>> print(alignment[0, :30]); print(alignment[1, :30])
-    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
-    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
-    >>> for alignment in alignments:
-    ...     print("******************************")
-    ...     print(alignment[0, :30])
-    ...     print(alignment[1, :30])
-    ...
-    ******************************
-    KILIVDD----QYGIRILLNEVFNKEGYQT
-    -VLLADDHALVRRGFRLMLED--DPEIEIV
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -ILIVDDEANTLASLSRAFRLAGHEATVCD
-    ******************************
-    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
-    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
-
-    Note that here, we are using `alignments` as an iterator after converting
-    it to a list-like object. Importantly, using `alignments` as an iterator
-    and then converting it to a list-like object will lose the alignments that
-    were already extracted:
-
-    >>> from Bio.Align import emboss
-    >>> alignments = emboss.AlignmentIterator("Emboss/needle.txt")
-    >>> alignment = next(alignments)
-    >>> print(alignment[0, :30]); print(alignment[1, :30])
-    KILIVDD----QYGIRILLNEVFNKEGYQT
-    -VLLADDHALVRRGFRLMLED--DPEIEIV
-    >>> alignment = next(alignments)
-    >>> print(alignment[0, :30]); print(alignment[1, :30])
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -ILIVDDEANTLASLSRAFRLAGHEATVCD
-    >>> alignments = alignments[:]
-    >>> len(alignments)
-    3
-    >>> for alignment in alignments:
-    ...     print("******************************")
-    ...     print(alignment[0, :30])
-    ...     print(alignment[1, :30])
-    ...
-    ******************************
-    -KILIVDDQYGIRILLNEVFNKEGYQTFQA
-    LHIVVVDDDPGTCVYIESVFAELGHTCKSF
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    -VLLVEDEEALRAAAGDFLETRGYKIMTAR
-    ******************************
-    KILIVDDQYGIRILLNEVFNKEGYQTFQAA
-    TVLLVEDEEGVRKLVRGILSRQGYHVLEAT
-
+    You should write a parse method that returns an Alignment generator.  You
+    may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self):
-        """Initialize self."""
-        super().__init__()
-        self._index = 0
-
-    def __repr__(self):
-        """Return repr(self)."""
-        return "<Alignments object at %s>" % hex(id(self))
-
-    def __next__(self):
-        """Return the next entry."""
-        index = self._index
-        length = super().__len__()
-        if index == length:
-            raise StopIteration from None
-        self._index += 1
-        return super().__getitem__(index)
-
-    def __iter__(self):
-        """Iterate over the alignments as Alignment objects."""
-        self._index = 0
-        return self
-
-
-class LazyAlignments(Alignments, ABC):  # noqa: D101
-    # The LazyAlignments class is an abstract base class for lazy loading of
-    # sequence alignments. This class is a subclass of Alignments, which is a
-    # subclass of list.
-    #
-    # A newly created LazyAlignments object will act as an iterator until a
-    # method is used that requires list-like behavior. In that case, the _load
-    # method will read in all alignments and store them in the grandparent
-    # class list object. From that point on, the LazyAlignments class will act
-    # as a list-like object.
-    #
-    # The PairwiseAlignments class in Bio.Align._pairwise is a concrete subclass
-    # of the LazyAlignments class. The ParsedAlignments class is an abstract
-    # subclass of LazyAlignments, with concrete subclasses in the alignment file
-    # parser modules.
-
-    def _load(self):
-        for item in self:
-            super().append(item)
-        self._index = 0  # for use by the iterator
-        self.__class__ = Alignments
-
-    def __lt__(self, other):
-        self._load()
-        if isinstance(other, LazyAlignments):
-            other._load()
-        return self.__lt__(other)
-
-    def __le__(self, other):
-        self._load()
-        if isinstance(other, LazyAlignments):
-            other._load()
-        return self.__le__(other)
-
-    def __eq__(self, other):
-        self._load()
-        if isinstance(other, LazyAlignments):
-            other._load()
-        return self.__eq__(other)
-
-    def __gt__(self, other):
-        self._load()
-        if isinstance(other, LazyAlignments):
-            other._load()
-        return self.__gt__(other)
-
-    def __ge__(self, other):
-        self._load()
-        if isinstance(other, LazyAlignments):
-            other._load()
-        return self.__ge__(other)
-
-    def __contains__(self, alignment):
-        self._load()
-        return self.__contains__(alignment)
-
-    def __len__(self):
-        self._load()
-        return self.__len__()
-
-    def __getitem__(self, i):
-        self._load()
-        if isinstance(i, slice):
-            alignments = Alignments()
-            items = self.__getitem__(i)
-            alignments.extend(items)
-            return alignments
-        else:
-            return self.__getitem__(i)
-
-    def __setitem__(self, i, item):
-        self._load()
-        self.__setitem__(i, item)
-
-    def __delitem__(self, i):
-        self._load()
-        self.__delitem__(i)
-
-    def __add__(self, other):
-        alignments = Alignments()
-        alignments.extend(self)
-        alignments.extend(other)
-        return alignments
-
-    def __radd__(self, other):
-        alignments = Alignments()
-        alignments.extend(other)
-        alignments.extend(self)
-        return alignments
-
-    def __iadd__(self, other):
-        self._load()
-        self.extend(other)
-        return self
-
-    def __mul__(self, n):
-        alignments = Alignments()
-        items = list(self)
-        for i in range(n):
-            alignments.extend(items)
-        return alignments
-
-    def __rmul__(self, n):
-        alignments = Alignments()
-        items = list(self)
-        for i in range(n):
-            alignments.extend(items)
-        return alignments
-
-    def __imul__(self, n):
-        self._load()
-        return self.__imul__(n)
-
-    def append(self, item):  # noqa: D102
-        self._load()
-        self.append(item)
-
-    def insert(self, i, item):  # noqa: D102
-        self._load()
-        self.insert(i, item)
-
-    def pop(self, i=-1):  # noqa: D102
-        self._load()
-        return self.pop(i)
-
-    def remove(self, item):  # noqa: D102
-        self._load()
-        self.remove(item)
-
-    def copy(self):  # noqa: D102
-        self._load()
-        alignments = Alignments()
-        alignments.__dict__.update(self.__dict__)
-        alignments.extend(self)
-        return alignments
-
-    def count(self, item):  # noqa: D102
-        self._load()
-        return self.count(item)
-
-    def index(self, item, *args):  # noqa: D102
-        self._load()
-        return self.index(item, *args)
-
-    def reverse(self):  # noqa: D102
-        self._load()
-        self.reverse()
-
-    def sort(self, *args, **kwds):  # noqa: D102
-        # Replace by
-        # def sort(self, /, *args, **kwds):  # noqa: D102
-        # once we drop Python 3.7
-        self._load()
-        self.sort(*args, **kwds)
-
-    def extend(self, other):  # noqa: D102
-        self._load()
-        self.extend(other)
-
-
-class ParsedAlignments(LazyAlignments, ABC):  # noqa: D101
-    # The ParsedAlignments class is an abstract base class for parsing sequence
-    # alignment files. The alignment parser modules in Bio.Align implement
-    # concrete subclasses of ParsedAlignments.
-    #
-    # To write a new parser, you would create a new private module in Bio.Align,
-    # and define an AlignmentIterator class in it as a subclass of
-    # ParsedAlignments. Typically, you would override the _read_header and
-    # _read_next_alignment methods in this subclass, as well as the __init__
-    # method to call the base class __init__ method with the appropriate
-    # arguments.
-
     def __init__(self, source, mode="t", fmt=None):
-        """Create an ParsedAlignments object.
+        """Create an AlignmentIterator object.
 
         Arguments:
         - source - input file stream, or path to input file
-
         This method MAY be overridden by any subclass.
-
         Note when subclassing:
         - there should be a single non-optional argument, the source.
         - you can add additional optional arguments.
         """
         self.source = source
-        if source is None:
-            return
         try:
             self._stream = open(source, "r" + mode)
         except TypeError:  # not a path, assume we received a stream
@@ -1928,6 +1604,7 @@ class ParsedAlignments(LazyAlignments, ABC):  # noqa: D101
             raise
 
     def __next__(self):
+        """Return the next entry."""
         try:
             stream = self._stream
         except AttributeError:
@@ -1942,6 +1619,12 @@ class ParsedAlignments(LazyAlignments, ABC):  # noqa: D101
         return alignment
 
     def __iter__(self):
+        """Iterate over the entries as Alignment objects.
+
+        This method SHOULD NOT be overridden by any subclass. It should be
+        left as is, which will call the subclass implementation of __next__
+        to actually parse the file.
+        """
         return self
 
     def _read_header(self, stream):
@@ -1959,9 +1642,6 @@ class ParsedAlignments(LazyAlignments, ABC):  # noqa: D101
         if stream is not self.source:
             stream.close()
         del self._stream
-
-    def clear(self):  # noqa: D102
-        self._close()
 
 
 class AlignmentWriter:

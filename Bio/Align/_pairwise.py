@@ -26,7 +26,7 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
-from Bio.Align._base import Alignment, Alignments, LazyAlignments
+from Bio.Align._base import Alignment
 from Bio.Seq import Seq, MutableSeq, reverse_complement
 
 # Import errors may occur here if a compiled aligners.c file
@@ -35,7 +35,7 @@ from Bio.Seq import Seq, MutableSeq, reverse_complement
 # https://github.com/biopython/biopython/pull/2007
 
 
-class PairwiseAlignments(LazyAlignments):
+class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
 
     This class also supports indexing, which is fast for increasing indices,
@@ -71,12 +71,6 @@ class PairwiseAlignments(LazyAlignments):
         return len(self.paths)
 
     def __getitem__(self, index):
-        if isinstance(index, slice):
-            self._load()
-            alignments = Alignments()
-            items = self.__getitem__(index)
-            alignments.extend(items)
-            return alignments
         if index == self._index:
             return self.alignment
         if index < self._index:
@@ -102,11 +96,6 @@ class PairwiseAlignments(LazyAlignments):
         alignment.score = self.score
         self.alignment = alignment
         return alignment
-
-    def clear(self):  # noqa: D102
-        del self.paths
-        self._index = 0
-        self.__class__ = Alignments
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):

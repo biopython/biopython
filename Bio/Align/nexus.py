@@ -116,7 +116,7 @@ class AlignmentWriter(_base.AlignmentWriter):
             raise ValueError("Need the molecule type to be defined")
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Nexus alignment iterator."""
 
     def __init__(self, source):

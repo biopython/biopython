@@ -100,7 +100,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Clustalw alignment iterator."""
 
     def __init__(self, source):

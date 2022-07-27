@@ -30,7 +30,7 @@ warnings.warn(
 )
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """GCG MSF alignment iterator."""
 
     def __init__(self, source):

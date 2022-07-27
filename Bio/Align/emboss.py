@@ -25,7 +25,7 @@ warnings.warn(
 )
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Emboss alignment iterator.
 
     For reading the (pairwise) alignments from EMBOSS tools in what they

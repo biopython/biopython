@@ -105,7 +105,7 @@ warnings.warn(
 )
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for alignment files in the Stockholm format.
 
     The file may contain multiple concatenated alignments, which are loaded

@@ -150,7 +150,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "\t".join(fields) + "\n"
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for Browser Extensible Data (BED) files.
 
     Each line in the file contains one pairwise alignment, which are loaded

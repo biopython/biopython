@@ -57,7 +57,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "\n".join(lines)
 
 
-class AlignmentIterator(_base.ParsedAlignments):
+class AlignmentIterator(_base.AlignmentIterator):
     """Alignment iterator for files in the A2M file format.
 
     An A2M file contains one multiple alignment. Matches are represented by
