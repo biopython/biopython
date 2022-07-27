@@ -23,12 +23,6 @@ from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqUtils import GC
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bed, psl, sam
-
 
 class TestAlignerProperties(unittest.TestCase):
     def test_aligner_property_epsilon(self):

@@ -10,7 +10,7 @@ A2M files are alignment files created by align2model or hmmscore in the SAM
 Sequence Alignment and Modeling Software System.
 """
 from Bio.Align import Alignment
-from Bio.Align import _base
+from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -24,7 +24,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(_base.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the A2M file format."""
 
     def __init__(self, target):
@@ -57,7 +57,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "\n".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for files in the A2M file format.
 
     An A2M file contains one multiple alignment. Matches are represented by

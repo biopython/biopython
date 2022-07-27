@@ -6,10 +6,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
-# This is a private module.
-# The Alignment class and the AlignmentWriter class are defined here,
-# and imported and made available to the user in Bio.Align.
 """Bio.Align support module (not for general use).
 
 Unless you are writing a new parser or writer for Bio.Align, you should not

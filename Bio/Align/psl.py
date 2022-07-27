@@ -30,7 +30,7 @@ import numpy
 
 
 from Bio.Align import Alignment
-from Bio.Align import _base
+from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, ExactPosition, FeatureLocation, CompoundLocation
@@ -45,7 +45,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(_base.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Pattern Space Layout (PSL) file format."""
 
     def __init__(self, target, header=True, mask=None, wildcard="N"):
@@ -300,7 +300,7 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
         return line
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for Pattern Space Layout (PSL) files.
 
     Each line in the file contains one pairwise alignment, which are loaded

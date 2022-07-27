@@ -17,7 +17,7 @@ from io import StringIO
 
 import Bio
 from Bio.Align import Alignment
-from Bio.Align import _base
+from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
@@ -32,7 +32,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(_base.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Nexus alignment writer.
 
     Note that Nexus files are only expected to hold ONE alignment
@@ -116,7 +116,7 @@ class AlignmentWriter(_base.AlignmentWriter):
             raise ValueError("Need the molecule type to be defined")
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Nexus alignment iterator."""
 
     def __init__(self, source):

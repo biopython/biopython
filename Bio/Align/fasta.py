@@ -11,7 +11,7 @@ represented by dashes. Each sequence line in an aligned FASTA should have the
 same length.
 """
 from Bio.Align import Alignment
-from Bio.Align import _base
+from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -25,7 +25,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(_base.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the aligned FASTA file format."""
 
     def __init__(self, target):
@@ -48,7 +48,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "\n".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for aligned FASTA files.
 
     An aligned FASTA file contains one multiple alignment. Alignment gaps are

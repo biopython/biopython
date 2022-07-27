@@ -11,7 +11,7 @@ Bio.SeqIO functions if you are interested in the sequences only).
 """
 import Bio
 from Bio.Align import Alignment
-from Bio.Align import _base
+from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
@@ -26,7 +26,7 @@ warnings.warn(
 )
 
 
-class AlignmentWriter(_base.AlignmentWriter):
+class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
     def write_header(self, alignments):
@@ -100,7 +100,7 @@ class AlignmentWriter(_base.AlignmentWriter):
         return "".join(lines)
 
 
-class AlignmentIterator(_base.AlignmentIterator):
+class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
     def __init__(self, source):
