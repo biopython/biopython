@@ -342,31 +342,31 @@ TTT	0.886
 
     def test_gc_content(self):
         """Tests gc_content function."""
-        self.assertEqual(gc_content(""), 0)
-        self.assertEqual(gc_content("", "count"), 0)
-        self.assertEqual(gc_content("", "remove"), 0)
+        self.assertAlmostEqual(gc_content(""), 0, places=3)
+        self.assertAlmostEqual(gc_content("", "count"), 0, places=3)
+        self.assertAlmostEqual(gc_content("", "remove"), 0, places=3)
 
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
-        self.assertEqual(gc_content(seq), 0.5625)
-        self.assertEqual(gc_content(seq, "count"), 0.5625)
-        self.assertEqual(gc_content(seq, "remove"), 0.5625)
+        self.assertAlmostEqual(gc_content(seq), 0.5625, places=3)
+        self.assertAlmostEqual(gc_content(seq, "count"), 0.5625, places=3)
+        self.assertAlmostEqual(gc_content(seq, "remove"), 0.5625, places=3)
 
         seq = "ACTGSSSS"
-        self.assertEqual(gc_content(seq), 0.75)
-        self.assertEqual(gc_content(seq, "count"), 0.75)
-        self.assertEqual(gc_content(seq, "remove"), 0.75)
+        self.assertAlmostEqual(gc_content(seq), 0.75, places=3)
+        self.assertAlmostEqual(gc_content(seq, "count"), 0.75, places=3)
+        self.assertAlmostEqual(gc_content(seq, "remove"), 0.75, places=3)
 
         # Test ambiguous nucleotide behaviour
 
         seq = "CCTGNN"
-        self.assertEqual(gc_content(seq), 0.5)
+        self.assertAlmostEqual(gc_content(seq), 0.5, places=3)
         self.assertAlmostEqual(gc_content(seq, "count"), 0.667, places=3)
-        self.assertEqual(gc_content(seq, "remove"), 0.75)
+        self.assertAlmostEqual(gc_content(seq, "remove"), 0.75, places=3)
 
         seq = "GDVV"
-        self.assertEqual(gc_content(seq), 0.25)
+        self.assertAlmostEqual(gc_content(seq), 0.25, places=3)
         self.assertAlmostEqual(gc_content(seq, "count"), 0.6667, places=3)
-        self.assertEqual(gc_content(seq, "remove"), 1.00)
+        self.assertAlmostEqual(gc_content(seq, "remove"), 1.00, places=3)
 
         with self.assertRaises(ValueError):
             gc_content(seq, "other string")

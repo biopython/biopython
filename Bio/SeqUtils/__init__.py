@@ -44,7 +44,7 @@ _ambiguous_gc_values = {
 }
 
 
-def gc_content(seq: str, ambiguous: str = "ignore"):
+def gc_content(seq, ambiguous="ignore"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
     Copes with mixed case sequences. Ambiguous Nucleotides in this context are
