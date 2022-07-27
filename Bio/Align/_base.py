@@ -10,10 +10,13 @@
 # This is a private module.
 # The Alignment class and the AlignmentWriter class are defined here,
 # and imported and made available to the user in Bio.Align.
-"""Bio.Align support module (not for general use)."""
+"""Bio.Align support module (not for general use).
 
-import warnings
-from abc import ABC, abstractmethod
+Unless you are writing a new parser or writer for Bio.Align, you should not
+use this module.  It provides base classes to try and simplify things.
+"""
+from abc import ABC
+from abc import abstractmethod
 
 from Bio import StreamModeError
 
@@ -32,8 +35,8 @@ class AlignmentIterator(ABC):
         - source - input file stream, or path to input file
 
         This method MAY be overridden by any subclass.
-        Note when subclassing:
 
+        Note when subclassing:
         - there should be a single non-optional argument, the source.
         - you can add additional optional arguments.
         """
