@@ -8,7 +8,7 @@ Method is implemented as described in:
 
 Chou, Kuo-Chen. Prediction of Protein Cellular Attributes Using
 Pseudo-Amino Acid Composition. PROTEINS: Structure, Function, and
-Genetics 43:246 –255 (2001).
+Genetics 43:246 -255 (2001). https://doi.org/10.1002/PROT.1035
 
 
 Hidrophobicity, Hidrophilicity and Side-Chain Mass values are the same

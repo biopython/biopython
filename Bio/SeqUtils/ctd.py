@@ -9,10 +9,12 @@ Descriptors are calculated as described in:
     *  Inna Dubchak, Ilya Muchink, Stephen R.Holbrook and Sung-Hou Kim.
        Prediction of protein folding class using global description of amino
        acid sequence. Proc.Natl. Acad.Sci.USA, 1995, 92, 8700-8704.
+       https://doi.org/10.1073/PNAS.92.19.8700
 
     *  Inna Dubchak, Ilya Muchink, Christopher Mayor, Igor Dralyuk and Sung-Hou
        Kim. Recognition of a Protein Fold in the Context of the SCOP
        classification. Proteins: Structure, Function and Genetics,1999,35,401-407.
+       https://doi.org/10.1002/(SICI)1097-0134(19990601)35:4<401::AID-PROT3>3.0.CO;2-K
 
 """
 
