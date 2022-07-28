@@ -81,7 +81,7 @@ class IsoelectricPoint:
 
     def __init__(self, protein_sequence, aa_content=None):
         """Initialize the class."""
-        self.sequence = str(protein_sequence).upper()
+        self.sequence = protein_sequence.upper()
         if not aa_content:
             from Bio.SeqUtils.ProtParam import ProteinAnalysis as _PA
 
