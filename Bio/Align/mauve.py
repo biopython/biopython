@@ -9,7 +9,8 @@
 You are expected to use this module via the Bio.Align functions.
 """
 
-from Bio.Align import interfaces, Alignment
+from Bio.Align import Alignment
+from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning

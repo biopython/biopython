@@ -137,34 +137,34 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if len(identifiers) == number_of_sequences:
                             break
                 elif key == "Matrix":
-                    annotations["matrix"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Gap_penalty":
-                    annotations["gap_penalty"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 elif key == "Extend_penalty":
-                    annotations["extend_penalty"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 elif key == "Length":
                     ncols = int(value.strip())
                 elif key == "Identity":
-                    annotations["identity"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Similarity":
-                    annotations["similarity"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Gaps":
-                    annotations["gaps"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    annotations["score"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 # TODO:
                 # The following are generated if the -nobrief command line
                 # argument used. We could simply calculate them from the
                 # alignment, but then we have to define what we mean by
                 # "similar". For now, simply store them as an annotation.
                 elif key == "Longest_Identity":
-                    annotations["longest_identity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Longest_Similarity":
-                    annotations["longest_similarity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Shortest_Identity":
-                    annotations["shortest_identity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Shortest_Similarity":
-                    annotations["shortest_similarity"] = value.strip()
+                    annotations[key] = value.strip()
                 else:
                     raise ValueError("Failed to parse line '%s'" % line)
             else:

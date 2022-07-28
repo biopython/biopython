@@ -1,4 +1,6 @@
-# Copyright 2006-2021 by Peter Cock.  All rights reserved.
+# Copyright 2006-2021 by Peter Cock.
+# Copyright 2022 by Michiel de Hoon.
+# All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -223,7 +225,7 @@ class AlignmentWriter:
                 )
             else:
                 raise ValueError(
-                    "Number of alignmnets is %d (expected at least %d)"
+                    "Number of alignments is %d (expected at least %d)"
                     % (count, mincount)
                 )
         return count

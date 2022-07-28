@@ -16,6 +16,7 @@ class, used in the Bio.AlignIO module.
 import sys
 import warnings
 import numbers
+from itertools import zip_longest
 
 try:
     import numpy
@@ -318,6 +319,8 @@ class MultipleSeqAlignment:
 
         e.g.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
         >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha", description="")
         >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta", description="")
@@ -354,6 +357,8 @@ class MultipleSeqAlignment:
 
         e.g.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
         >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha")
         >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta")
@@ -391,6 +396,8 @@ class MultipleSeqAlignment:
         length. This function will go through and find this length
         by finding the maximum length of sequences in the alignment.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
         >>> a = SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha")
         >>> b = SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta")
@@ -936,10 +943,12 @@ class MultipleSeqAlignment:
 class Alignment:
     """Represents a sequence alignment.
 
-    Internally, the alignment is stored as a numpy array containing the
-    sequence coordinates defining the alignment.
+    An Alignment object has a `.sequences` attribute storing the sequences
+    (Seq, MutableSeq, SeqRecord, or string objects) that were aligned, as well
+    as a `.coordinates` attribute storing the sequence coordinates defining the
+    alignment as a numpy array.
 
-    Commonly used attributes (which may or may not be present):
+    Other commonly used attributes (which may or may not be present) are:
          - annotations        - A dictionary with annotations describing the
                                 alignment;
          - column_annotations - A dictionary with annotations describing each
@@ -1018,7 +1027,8 @@ class Alignment:
         """Initialize a new Alignment object.
 
         Arguments:
-         - sequences   - A list of the sequences that were aligned.
+         - sequences   - A list of the sequences (Seq, MutableSeq, SeqRecord,
+                         or string objects)that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
@@ -1087,8 +1097,6 @@ class Alignment:
 
     def __eq__(self, other):
         """Check if two Alignment objects specify the same alignment."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1104,8 +1112,6 @@ class Alignment:
 
     def __ne__(self, other):
         """Check if two Alignment objects have different alignments."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1122,8 +1128,6 @@ class Alignment:
 
     def __lt__(self, other):
         """Check if self should come before other."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1149,8 +1153,6 @@ class Alignment:
 
     def __le__(self, other):
         """Check if self should come before or is equal to other."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1176,8 +1178,6 @@ class Alignment:
 
     def __gt__(self, other):
         """Check if self should come after other."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1203,8 +1203,6 @@ class Alignment:
 
     def __ge__(self, other):
         """Check if self should come after or is equal to other."""
-        from itertools import zip_longest
-
         for left, right in zip_longest(self.sequences, other.sequences):
             try:
                 left = left.seq
@@ -1591,7 +1589,7 @@ class Alignment:
         >>> alignment[:, 5]
         '-G'
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
-        <Bio.Align.Alignment object (2 rows x 8 columns) at 0x...>
+        <Alignment object (2 rows x 8 columns) at 0x...>
         >>> print(alignment[:, 1:])
         ACCGG-TTT
          |-||-||-
@@ -1962,7 +1960,7 @@ class Alignment:
         The representation cannot be used with eval() to recreate the object,
         which is usually possible with simple python objects.  For example:
 
-        <Bio.Align.Alignment object (2 rows x 14 columns) at 0x10403d850>
+        <Alignment object (2 rows x 14 columns) at 0x10403d850>
 
         The hex string is the memory address of the object and can be used to
         distinguish different Alignment objects.  See help(id) for more
@@ -1980,11 +1978,10 @@ class Alignment:
         AC-GT
         <BLANKLINE>
         >>> alignment  # doctest:+ELLIPSIS
-        <Bio.Align.Alignment object (2 rows x 5 columns) at 0x...>
+        <Alignment object (2 rows x 5 columns) at 0x...>
         """
         n, m = self.shape
-        return "<%s.%s object (%i rows x %i columns) at 0x%x>" % (
-            self.__module__,
+        return "<%s object (%i rows x %i columns) at 0x%x>" % (
             self.__class__.__name__,
             n,
             m,
@@ -2502,19 +2499,19 @@ class PairwiseAlignments:
         self.sequences = [seqA, seqB]
         self.score = score
         self.paths = paths
-        self.index = -1
+        self._index = -1
 
     def __len__(self):
         """Return the number of alignments."""
         return len(self.paths)
 
     def __getitem__(self, index):
-        if index == self.index:
+        if index == self._index:
             return self.alignment
-        if index < self.index:
+        if index < self._index:
             self.paths.reset()
-            self.index = -1
-        while self.index < index:
+            self._index = -1
+        while self._index < index:
             try:
                 alignment = next(self)
             except StopIteration:
@@ -2523,12 +2520,12 @@ class PairwiseAlignments:
 
     def __iter__(self):
         self.paths.reset()
-        self.index = -1
+        self._index = -1
         return self
 
     def __next__(self):
         path = next(self.paths)
-        self.index += 1
+        self._index += 1
         coordinates = numpy.array(path)
         alignment = Alignment(self.sequences, coordinates)
         alignment.score = self.score

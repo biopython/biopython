@@ -91,14 +91,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             "Template",
             "HMM",
         ]
-        number = 0
+        counter = 0
         for line in stream:
             if line.strip() == "":
                 break
-            number += 1
+            counter += 1
             word, _ = line.split(None, 1)
-            assert int(word) == number
-        self._number = number
+            assert int(word) == counter
+        self._length = counter
         self._counter = 0
 
     def _read_next_alignment(self, stream):
@@ -185,10 +185,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 self._counter += 1
                 key, value = line.split()
                 assert int(value) == self._counter
-                if self._counter > self._number:
+                if self._counter > self._length:
                     raise ValueError(
                         "Expected %d alignments, found %d"
-                        % (self._number, self._counter)
+                        % (self._length, self._counter)
                     )
                 if counter > 0:
                     return create_alignment()
@@ -247,12 +247,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Failed to parse line '%s...'" % line[:30])
         alignment = create_alignment()
-        number = self._number
+        length = self._length
         counter = self._counter
-        if number == counter:
+        if length == counter:
             self._close()
-            del self._number
             del self._counter
-        if alignment is None and number > 0:
-            raise ValueError("Expected %d alignments, found %d" % (number, counter))
+        if alignment is None and length > 0:
+            raise ValueError("Expected %d alignments, found %d" % (length, counter))
         return alignment
+
+    def __len__(self):
+        return self._length
