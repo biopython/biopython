@@ -58,9 +58,7 @@ class ProteinAnalysis:
     """Class containing methods for protein analysis.
 
     The constructor takes two arguments.
-    The first is the protein sequence as a string, which is then converted to a
-    sequence object using the Bio.Seq module. This is done just to make sure
-    the sequence is a protein sequence and not anything else.
+    The first is the protein sequence as a string or a Seq object.
 
     The second argument is optional. If set to True, the weight of the amino
     acids will be calculated using their monoisotopic mass (the weight of the
@@ -73,10 +71,7 @@ class ProteinAnalysis:
 
     def __init__(self, prot_sequence, monoisotopic=False):
         """Initialize the class."""
-        if prot_sequence.islower():
-            self.sequence = Seq(prot_sequence.upper())
-        else:
-            self.sequence = Seq(prot_sequence)
+        self.sequence = prot_sequence.upper()
         self.amino_acids_content = None
         self.amino_acids_percent = None
         self.length = len(self.sequence)
