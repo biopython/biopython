@@ -12,7 +12,6 @@
 
 import re
 import warnings
-from collections import Counter
 from math import pi, sin, cos
 
 from Bio.Seq import Seq, complement, complement_rna
@@ -110,25 +109,23 @@ def gc_content(seq, ambiguous="ignore"):
     if ambiguous not in ("count", "remove", "ignore"):
         raise ValueError(f"ambiguous value '{ambiguous}' not recognized")
 
-    count = Counter(seq)
-
-    if ambiguous == "count":
-        gc = sum(
-            (count[x] + count[x.lower()]) * perc
-            for x, perc in _ambiguous_gc_values.items()
-        )
-    else:
-        gc = sum(count[x] + count[x.lower()] for x in "GCS")
+    gc = sum(seq.count(x) for x in "CGScgs")
 
     if ambiguous == "remove":
-        l = sum(count[x] + count[x.lower()] for x in "ACTGSW")
+        l = gc + sum(seq.count(x) for x in "ATWatw")
     else:
         l = len(seq)
 
-    try:
-        return gc / l
-    except ZeroDivisionError:
+    if ambiguous == "count":
+        gc += sum(
+            (seq.count(x) + seq.count(x.lower())) * _ambiguous_gc_values[x]
+            for x in "BDHKMNRVXY"
+        )
+
+    if l == 0:
         return 0
+
+    return gc / l
 
 
 def GC(seq):
