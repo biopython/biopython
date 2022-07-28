@@ -344,9 +344,7 @@ def molecular_weight(
     249.29
 
     """
-    # Rewritten by Markus Piotrowski, 2014
-
-    seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
+    seq = seq.upper()  # Do the minimum formatting
 
     if seq_type == "DNA":
         if monoisotopic:
@@ -377,7 +375,7 @@ def molecular_weight(
             weight -= water
     except KeyError as e:
         raise ValueError(
-            f"{e} is not a valid unambiguous letter for {seq_type}"
+            f"'{e}' is not a valid unambiguous letter for {seq_type}"
         ) from None
 
     if double_stranded:
