@@ -282,7 +282,7 @@ except ImportError:
     )
 
 from Bio.PDB.Atom import Atom, DisorderedAtom
-from Bio.PDB.Polypeptide import three_to_one
+from Bio.Data.PDBData import protein_letters_3to1
 
 from Bio.PDB.vectors import multi_coord_space, multi_rot_Z
 from Bio.PDB.vectors import coord_space
@@ -2588,7 +2588,7 @@ class IC_Residue:
         rid = parent.id
         rbase = [rid[1], rid[2] if " " != rid[2] else None, parent.resname]
         try:
-            rbase[2] = three_to_one(rbase[2]).upper()
+            rbase[2] = protein_letters_3to1[rbase[2]]
         except KeyError:
             self.is20AA = False
             if rbase[2] not in self.accept_resnames:
