@@ -16,7 +16,7 @@ tables without corresponding atom coordinates are ignored.
 for naming of individual atoms
 """
 
-# Backbone hedra and dihedra - within residue, no next or prev.
+# Backbone hedra and dihedra - within residue, no next or prev (no psi, phi, omg).
 ic_data_backbone = (
     ("N", "CA", "C", "O"),  # locate backbone O
     ("O", "C", "CA", "CB"),  # locate CB
