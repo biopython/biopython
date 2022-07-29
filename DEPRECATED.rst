@@ -589,6 +589,10 @@ ideally convert your code to using an iterator approach).
 Function Tm_staluc in Bio.SeqUtils.MeltingTemp was deprecated in Release 1.78,
 and removed in Release 1.80.
 
+The method 'print_index' of the CodonAdaptationIndex class in
+Bio.SeqUtils.CodonUsage was deprecated in Release 1.80. Instead of
+self.print_index(), please use print(self).
+
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 ------------------------------------------------------------------
 The whole of the old ``Bio.GFF`` module was deprecated in Release 1.53, and
