@@ -48,6 +48,10 @@ from urllib.request import urlretrieve
 from urllib.request import urlcleanup
 
 
+class PDBListError(Exception):
+    """Generic exception for PDBList module."""
+
+
 class PDBList:
     """Quick access to the structure lists on the PDB or its mirrors.
 
@@ -136,7 +140,10 @@ class PDBList:
             answer = []
             for line in handle:
                 pdb = line.strip()
-                assert len(pdb) == 4
+                if len(pdb) != 4:
+                    raise PDBListError(
+                        f"Status list contains unexpected value (url: {url}, value: {pdb})."
+                    )
                 answer.append(pdb.decode())
         return answer
 
@@ -204,13 +211,16 @@ class PDBList:
         url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
         with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
-            # to include an assert to check for mis-reading the data.
+            # to raise an Exception when mis-reading the data.
             obsolete = []
             for line in handle:
                 if not line.startswith(b"OBSLTE "):
                     continue
                 pdb = line.split()[2]
-                assert len(pdb) == 4
+                if len(pdb) != 4:
+                    raise PDBListError(
+                        f"Obsolete list contains unexpected value (url: {url}, value: {pdb})."
+                    )
                 obsolete.append(pdb.decode())
         return obsolete
 
@@ -353,8 +363,14 @@ class PDBList:
         automatically downloads the according PDB files.
         You can call this module as a weekly cron job.
         """
-        assert os.path.isdir(self.local_pdb)
-        assert os.path.isdir(self.obsolete_pdb)
+        if not os.path.isdir(self.local_pdb):
+            raise PDBListError(
+                f"Local PDB diretory does not exist (path: {self.local_pdb})."
+            )
+        if not os.path.isdir(self.obsolete_pdb):
+            raise PDBListError(
+                f"Obsolete PDB diretory does not exist (path: {self.obsolete_pdb})."
+            )
 
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
