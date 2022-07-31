@@ -35,17 +35,17 @@
 
 """Access the PDB over the internet (e.g. to download structures)."""
 
+from __future__ import annotations
 
 import contextlib
 import gzip
 import os
-import shutil
 import re
+import shutil
 import sys
-
+from urllib.request import urlcleanup
 from urllib.request import urlopen
 from urllib.request import urlretrieve
-from urllib.request import urlcleanup
 
 
 class PDBListError(Exception):
@@ -130,22 +130,22 @@ class PDBList:
         return file_format
 
     @staticmethod
-    def get_status_list(url):
+    def get_status_list(url: str) -> list[str]:
         """Retrieve a list of pdb codes in the weekly pdb status file from given URL.
 
         Used by get_recent_changes. Typical contents of the list files parsed
         by this method is now very simply - one PDB name per line.
         """
+        pdb_codes = []
         with contextlib.closing(urlopen(url)) as handle:
-            answer = []
             for line in handle:
-                pdb = line.strip()
-                if len(pdb) != 4:
+                pdb_code = line.strip()
+                if len(pdb_code) != 4:
                     raise PDBListError(
-                        f"Status list contains unexpected value (url: {url}, value: {pdb})."
+                        f"Status list contains unexpected PDB code value (url: {url}, value: {pdb_code})."
                     )
-                answer.append(pdb.decode())
-        return answer
+                pdb_codes.append(pdb_code.decode())
+        return pdb_codes
 
     def get_recent_changes(self):
         """Return three lists of the newest weekly files (added,mod,obsolete).
