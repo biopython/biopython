@@ -274,6 +274,7 @@ class PDBList:
 
         # Get the compressed PDB structure
         code = pdb_code.lower()
+        short_code = code[1:3]
         archive = {
             "pdb": "pdb%s.ent.gz",
             "mmCif": "%s.cif.gz",
@@ -302,12 +303,12 @@ class PDBList:
             url = self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
                 pdb_dir,
                 file_type,
-                code[1:3],
+                short_code,
                 archive_fn,
             )
         elif file_format == "bundle":
             url = self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
-                code[1:3],
+                short_code,
                 code,
                 archive_fn,
             )
@@ -318,7 +319,7 @@ class PDBList:
         if pdir is None:
             path = self.local_pdb if not obsolete else self.obsolete_pdb
             if not self.flat_tree:  # Put in PDB-style directory tree
-                path = os.path.join(path, code[1:3])
+                path = os.path.join(path, short_code)
         else:  # Put in specified directory
             path = pdir
         if not os.access(path, os.F_OK):
