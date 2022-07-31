@@ -142,7 +142,11 @@ class PDBList:
     """
 
     def __init__(
-        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True
+        self,
+        server: str = "ftp://ftp.wwpdb.org",
+        pdb: str | None = None,
+        obsolete_pdb: str | None = None,
+        verbose: bool = True,
     ):
         """Initialize the class with the default server or a custom one.
 
@@ -150,21 +154,17 @@ class PDBList:
         directory at the moment of initialisation.
         """
         self.pdb_server = server  # remote pdb server
-        if pdb:
-            self.local_pdb = pdb  # local pdb file tree
-        else:
-            self.local_pdb = os.getcwd()
+
+        self.local_pdb = pdb or os.getcwd()  # local pdb file tree
+        pathlib.Path(self.local_pdb).mkdir(parents=True, exist_ok=True)
+
+        self.obsolete_pdb = (
+            obsolete_pdb if obsolete_pdb else os.path.join(self.local_pdb, "obsolete")
+        )  # local file tree for obsolete pdb files
+        pathlib.Path(self.obsolete_pdb).mkdir(parents=True, exist_ok=True)
 
         # enable or disable verbose
         self._verbose = verbose
-
-        # local file tree for obsolete pdb files
-        if obsolete_pdb:
-            self.obsolete_pdb = obsolete_pdb
-        else:
-            self.obsolete_pdb = os.path.join(self.local_pdb, "obsolete")
-            if not os.access(self.obsolete_pdb, os.F_OK):
-                os.makedirs(self.obsolete_pdb)
 
         # variable for command-line option
         self.flat_tree = False
@@ -355,15 +355,16 @@ class PDBList:
         )
 
         # Skip download if the file already exists
-        if not overwrite:
-            if output_extracted_filepath.exists():
-                if self._verbose:
-                    print(f"Structure exists: '{output_extracted_filepath}' ")
-                return str(output_extracted_filepath)
+        if not overwrite and output_extracted_filepath.exists():
+            if self._verbose:
+                print(
+                    f"Structure exists, skip download and extract (path: {output_extracted_filepath}')."
+                )
+            return str(output_extracted_filepath)
 
         # Retrieve the file
         if self._verbose:
-            print(f"Downloading PDB structure '{pdb_code}'...")
+            print(f"Downloading and extracting PDB structure (code: {pdb_code}).")
         archive_url = self.build_archive_url(
             file_format_enum, obsolete, code, short_code, archive_filename
         )
@@ -464,8 +465,6 @@ class PDBList:
 
         # Move the obsolete files to a special folder
         if file_format in (FileFormat.PDB, FileFormat.MMCIF, FileFormat.XML):
-            pathlib.Path(self.local_pdb).mkdir(parents=True, exist_ok=True)
-            pathlib.Path(self.obsolete_pdb).mkdir(parents=True, exist_ok=True)
             for pdb_code in obsolete:
                 self.move_obsolete_file(pdb_code, file_format)
 
