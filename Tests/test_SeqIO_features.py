@@ -13,7 +13,6 @@ import warnings
 
 from io import StringIO
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import MutableSeq

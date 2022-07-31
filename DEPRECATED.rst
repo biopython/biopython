@@ -721,6 +721,10 @@ Bio.pairwise2
 -------------
 The ``Bio.pairwise2`` module was deprecated in Release 1.80.
 
+Bio.Wise
+--------
+The ``Bio.Wise`` module was deprecated in Release 1.80.
+
 Scripts/Restriction/ranacompiler.py
 -----------------------------------
 The ``is_palindrom`` function was removed in Release 1.79.
