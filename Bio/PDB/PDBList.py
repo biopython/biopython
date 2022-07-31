@@ -147,7 +147,7 @@ class PDBList:
                 pdb_codes.append(pdb_code.decode())
         return pdb_codes
 
-    def get_recent_changes(self):
+    def get_recent_changes(self) -> tuple[list[str], list[str], list[str]]:
         """Return three lists of the newest weekly files (added,mod,obsolete).
 
         Reads the directories with changed entries from the PDB server and
@@ -169,7 +169,7 @@ class PDBList:
         added = self.get_status_list(path + "added.pdb")
         modified = self.get_status_list(path + "modified.pdb")
         obsolete = self.get_status_list(path + "obsolete.pdb")
-        return [added, modified, obsolete]
+        return (added, modified, obsolete)
 
     def get_all_entries(self):
         """Retrieve the big file containing all the PDB entries and some annotation.
