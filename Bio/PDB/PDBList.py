@@ -279,8 +279,13 @@ class PDBList:
         return obsolete_pdb_codes
 
     def retrieve_pdb_file(
-        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False
-    ):
+        self,
+        pdb_code: str,
+        obsolete: bool = False,
+        pdir: str | None = None,
+        file_format: str | FileFormat | None = None,
+        overwrite: bool = False,
+    ) -> str:
         """Fetch PDB structure file from PDB server, and store it locally.
 
         The PDB structure's file name is returned as a single string.
@@ -300,7 +305,7 @@ class PDBList:
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        :type file_format: string
+        :type file_format: string | FileFormat
 
         :param overwrite: if set to True, existing structure files will be overwritten. Default: False
         :type overwrite: bool
@@ -323,8 +328,11 @@ class PDBList:
         :return: filename
         :rtype: string
         """
-        file_format = self._print_default_format_warning(file_format)
-        file_format_enum = FileFormat.from_label(file_format)
+        if isinstance(file_format, FileFormat):
+            file_format_enum = file_format
+        else:
+            file_format = self._print_default_format_warning(file_format)
+            file_format_enum = FileFormat.from_label(file_format)
 
         code = pdb_code.lower()
         short_code = code[1:3]
@@ -435,52 +443,62 @@ class PDBList:
         automatically downloads the according PDB files.
         You can call this module as a weekly cron job.
         """
-        if not os.path.isdir(self.local_pdb):
-            raise PDBListError(
-                f"Local PDB diretory does not exist (path: {self.local_pdb})."
-            )
-        if not os.path.isdir(self.obsolete_pdb):
-            raise PDBListError(
-                f"Obsolete PDB diretory does not exist (path: {self.obsolete_pdb})."
-            )
-
-        # Deprecation warning
-        file_format = self._print_default_format_warning(file_format)
+        if isinstance(file_format, FileFormat):
+            file_format_enum = file_format
+        else:
+            file_format = self._print_default_format_warning(file_format)
+            file_format_enum = FileFormat.from_label(file_format)
 
         new, modified, obsolete = self.get_recent_changes()
-
         for pdb_code in new + modified:
             try:
-                self.retrieve_pdb_file(pdb_code, file_format=file_format)
-            except Exception:
-                print(f"error {pdb_code}\n")
-                # you can insert here some more log notes that
-                # something has gone wrong.
+                self.retrieve_pdb_file(
+                    pdb_code,
+                    file_format=file_format_enum,
+                    overwrite=pdb_code in modified,
+                )
+            except Exception as err:
+                print(
+                    f"Error retrieving pdb file (code: {pdb_code}, exception: {err.__class__.__name__}).\n"
+                )
 
         # Move the obsolete files to a special folder
-        for pdb_code in obsolete:
-            if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.ent")
-                new_dir = self.obsolete_pdb
-            else:
-                old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.ent"
+        if file_format in (FileFormat.PDB, FileFormat.MMCIF, FileFormat.XML):
+            pathlib.Path(self.local_pdb).mkdir(parents=True, exist_ok=True)
+            pathlib.Path(self.obsolete_pdb).mkdir(parents=True, exist_ok=True)
+            for pdb_code in obsolete:
+                self.move_obsolete_file(pdb_code, file_format)
+
+    def move_obsolete_file(self, pdb_code: str, file_format: FileFormat) -> None:
+        """Move obsolete file to obsolete directory."""
+        short_code = pdb_code[1:3]
+        filename = (
+            f"{file_format.filename_prefix}{pdb_code}{file_format.filename_suffix}"
+        )
+
+        if self.flat_tree:
+            old_file = pathlib.Path(self.local_pdb, filename)
+            new_dir = pathlib.Path(self.obsolete_pdb)
+        else:
+            old_file = pathlib.Path(self.local_pdb, short_code, filename)
+            new_dir = pathlib.Path(self.obsolete_pdb, short_code)
+
+        new_file = pathlib.Path(new_dir, filename)
+
+        if old_file.is_file():
+            new_dir.mkdir(parents=True, exist_ok=True)
+            try:
+                shutil.move(old_file, new_file)
+            except Exception:
+                print(
+                    f"Could not move file to obsolete directory (source path: {old_file}, destination path: {new_file})."
                 )
-                new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, f"pdb{pdb_code}.ent")
-            if os.path.isfile(old_file):
-                if not os.path.isdir(new_dir):
-                    os.mkdir(new_dir)
-                try:
-                    shutil.move(old_file, new_file)
-                except Exception:
-                    print(f"Could not move {old_file} to obsolete folder")
-            elif os.path.isfile(new_file):
-                if self._verbose:
-                    print(f"Obsolete file {old_file} already moved")
-            else:
-                if self._verbose:
-                    print(f"Obsolete file {old_file} is missing")
+        elif new_file.is_file():
+            if self._verbose:
+                print(f"Obsolete file already moved (path: {old_file}).")
+        else:
+            if self._verbose:
+                print(f"Obsolete file is missing (path: {old_file}).")
 
     def download_pdb_files(
         self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
