@@ -318,16 +318,7 @@ class PDBList:
         archive_url = self.build_archive_url(
             file_format, obsolete, code, short_code, archive_fn
         )
-        try:
-            urlcleanup()
-            urlretrieve(archive_url, filename)
-        except OSError:
-            print(f"PDB file not found on remote server (url: {archive_url}).")
-        else:
-            with gzip.open(filename, "rb") as gz:
-                with open(final_file, "wb") as out:
-                    out.writelines(gz)
-            os.remove(filename)
+        self.download_and_extract_archive(archive_url, filename, final_file)
         return final_file
 
     def get_output_directory(
@@ -374,6 +365,28 @@ class PDBList:
         if file_format == "mmtf":
             return f"http://{MMTF_SERVER_URL}/v1.0/full/{code}"
         raise PDBListError(f"Unhandled file format (format: {file_format.label}).")
+
+    def download_and_extract_archive(
+        self,
+        archive_url: str,
+        output_archive_filepath: str,
+        output_extracted_filepath: str,
+    ) -> None:
+        """
+        Download archive from server and extract it to the output directory.
+
+        The archive is removed once extracted.
+        """
+        try:
+            urlcleanup()
+            urlretrieve(archive_url, output_archive_filepath)
+        except OSError:
+            print(f"PDB file not found on remote server (url: {archive_url}).")
+        else:
+            with gzip.open(output_archive_filepath, "rb") as gzip_stream:
+                with open(output_extracted_filepath, "wb") as output_stream:
+                    output_stream.writelines(gzip_stream)
+            os.remove(output_archive_filepath)
 
     def update_pdb(self, file_format=None):
         """Update your local copy of the PDB files.
