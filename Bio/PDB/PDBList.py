@@ -185,7 +185,7 @@ class PDBList:
             ]
         return all_entries
 
-    def get_all_obsolete(self):
+    def get_all_obsolete(self) -> list[str]:
         """Return a list of all obsolete entries ever in the PDB.
 
         Returns a list of all obsolete pdb codes that have ever been
@@ -209,20 +209,20 @@ class PDBList:
 
         """
         url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
+        obsolete_pdb_codes = []
         with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to raise an Exception when mis-reading the data.
-            obsolete = []
             for line in handle:
                 if not line.startswith(b"OBSLTE "):
                     continue
-                pdb = line.split()[2]
-                if len(pdb) != 4:
+                pdb_code = line.split()[2]
+                if len(pdb_code) != 4:
                     raise PDBListError(
-                        f"Obsolete list contains unexpected value (url: {url}, value: {pdb})."
+                        f"Obsolete list contains unexpected PDB code value (url: {url}, value: {pdb_code})."
                     )
-                obsolete.append(pdb.decode())
-        return obsolete
+                obsolete_pdb_codes.append(pdb_code.decode())
+        return obsolete_pdb_codes
 
     def retrieve_pdb_file(
         self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False
