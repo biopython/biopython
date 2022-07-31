@@ -13,7 +13,7 @@ import unittest.mock
 
 import requires_internet
 
-from Bio.PDB.PDBList import FileFormat
+from Bio.PDB.PDBList import PDBFileFormat
 from Bio.PDB.PDBList import PDBList
 import helpers
 
@@ -150,7 +150,7 @@ class TestPDBListUpdatePDB(unittest.TestCase):
         with unittest.mock.patch(
             "Bio.PDB.PDBList.get_recent_changes", return_value=(["127d"], [], [])
         ):
-            pdb_list.update_pdb(FileFormat.PDB)
+            pdb_list.update_pdb(PDBFileFormat.PDB)
             self.assertTrue(pathlib.Path(pdb_list.local_pdb, "27/pdb127d.ent").exists())
 
     @helpers.temporary_directory()
@@ -169,7 +169,7 @@ class TestPDBListUpdatePDB(unittest.TestCase):
             "Bio.PDB.PDBList.get_recent_changes",
             return_value=([], [filename.split(".")[0]], []),
         ):
-            pdb_list.update_pdb(FileFormat.MMCIF)
+            pdb_list.update_pdb(PDBFileFormat.MMCIF)
 
         with open(f"{pdb_list.local_pdb}/{directory}/{filename}", "r") as file_stream:
             self.assertNotEqual(outdated_pdb_file_content, file_stream.read())
@@ -190,7 +190,7 @@ class TestPDBListUpdatePDB(unittest.TestCase):
             "Bio.PDB.PDBList.get_recent_changes",
             return_value=([], [], [filename.split(".")[0]]),
         ):
-            pdb_list.update_pdb(FileFormat.XML)
+            pdb_list.update_pdb(PDBFileFormat.XML)
 
         self.assertFalse(pathlib.Path(pdb_list.local_pdb, directory, filename).exists())
         self.assertTrue(

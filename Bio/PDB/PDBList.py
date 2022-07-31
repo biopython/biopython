@@ -32,7 +32,7 @@
 #
 # (c) 2022 Julian Maurin
 #   - typing and refactoring
-#   - introduced FileFormat
+#   - introduced PDBFileFormat
 #   - handle multiple format moving obsolete file (PDBList.update_pdb)
 #
 # It may be distributed freely with respect to the original authors.
@@ -63,7 +63,7 @@ class PDBListError(Exception):
 
 
 @enum.unique
-class FileFormat(enum.Enum):
+class PDBFileFormat(enum.Enum):
     """Enum regrouping file format information."""
 
     PDB = ("pdb", "pdb", "pdb", ".ent")  # PDBx/mmCif (default)
@@ -101,14 +101,14 @@ class FileFormat(enum.Enum):
         return self.value[3]
 
     @classmethod
-    def from_label(cls, label) -> FileFormat:
-        """Get FileFormat from label."""
+    def from_label(cls, label) -> PDBFileFormat:
+        """Get PDBFileFormat from label."""
         for file_format in cls:
             if file_format.label == label:
                 return file_format
         raise PDBListError(
             "Specified file_format does not exist or is not supported, maybe a typo "
-            f" (file format: {label}, handled file formats: {','.join([file_format.label for file_format in FileFormat])}."
+            f" (file format: {label}, handled file formats: {','.join([file_format.label for file_format in PDBFileFormat])}."
         )
 
 
@@ -186,7 +186,7 @@ class PDBList:
             sys.stderr.write(
                 "WARNING: The default download format has changed from PDB to PDBx/mmCif\n"
             )
-            return FileFormat.MMCIF.label
+            return PDBFileFormat.MMCIF.label
         return file_format
 
     @staticmethod
@@ -289,7 +289,7 @@ class PDBList:
         pdb_code: str,
         obsolete: bool = False,
         pdir: str | None = None,
-        file_format: str | FileFormat | None = None,
+        file_format: str | PDBFileFormat | None = None,
         overwrite: bool = False,
     ) -> str:
         """Fetch PDB structure file from PDB server, and store it locally.
@@ -311,7 +311,7 @@ class PDBList:
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        :type file_format: string | FileFormat
+        :type file_format: string | PDBFileFormat
 
         :param overwrite: if set to True, existing structure files will be overwritten. Default: False
         :type overwrite: bool
@@ -334,16 +334,16 @@ class PDBList:
         :return: filename
         :rtype: string
         """
-        if isinstance(file_format, FileFormat):
+        if isinstance(file_format, PDBFileFormat):
             file_format_enum = file_format
         else:
             file_format = self._print_default_format_warning(file_format)
-            file_format_enum = FileFormat.from_label(file_format)
+            file_format_enum = PDBFileFormat.from_label(file_format)
 
         code = pdb_code.lower()
         short_code = code[1:3]
 
-        if file_format_enum != FileFormat.MMTF:
+        if file_format_enum != PDBFileFormat.MMTF:
             filename = f"{file_format_enum.filename_prefix}{code}{file_format_enum.filename_suffix}"
             archive_filename = f"{filename}.gz"
         else:
@@ -353,7 +353,7 @@ class PDBList:
         output_archive_filepath = pathlib.Path(output_directory, archive_filename)
         output_extracted_filename = (
             f"{filename}{file_format_enum.filename_suffix}"
-            if file_format_enum == FileFormat.MMTF
+            if file_format_enum == PDBFileFormat.MMTF
             else filename
         )
         output_extracted_filepath = pathlib.Path(
@@ -395,28 +395,28 @@ class PDBList:
 
     def build_archive_url(
         self,
-        file_format: FileFormat,
+        file_format: PDBFileFormat,
         obsolete: bool,
         code: str,
         short_code: str,
         archive_filename: str,
     ) -> str:
         """Build archive URL according to the file format."""
-        if file_format in (FileFormat.PDB, FileFormat.MMCIF, FileFormat.XML):
+        if file_format in (PDBFileFormat.PDB, PDBFileFormat.MMCIF, PDBFileFormat.XML):
             return self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
                 "divided" if not obsolete else "obsolete",
                 file_format.directory,
                 short_code,
                 archive_filename,
             )
-        elif file_format == FileFormat.BUNDLE:
+        elif file_format == PDBFileFormat.BUNDLE:
             return self.pdb_server + "/pub/pdb/compatible/%s/%s/%s/%s" % (
                 file_format.directory,
                 short_code,
                 code,
                 archive_filename,
             )
-        elif file_format == FileFormat.MMTF:
+        elif file_format == PDBFileFormat.MMTF:
             return f"http://{MMTF_SERVER_URL}/v1.0/full/{code}"
         raise PDBListError(f"Unhandled file format (format: {file_format.label}).")
 
@@ -450,11 +450,11 @@ class PDBList:
         automatically downloads the according PDB files.
         You can call this module as a weekly cron job.
         """
-        if isinstance(file_format, FileFormat):
+        if isinstance(file_format, PDBFileFormat):
             file_format_enum = file_format
         else:
             file_format = self._print_default_format_warning(file_format)
-            file_format_enum = FileFormat.from_label(file_format)
+            file_format_enum = PDBFileFormat.from_label(file_format)
 
         new, modified, obsolete = self.get_recent_changes()
         for pdb_code in new + modified:
@@ -470,11 +470,11 @@ class PDBList:
                 )
 
         # Move the obsolete files to a special folder
-        if file_format in (FileFormat.PDB, FileFormat.MMCIF, FileFormat.XML):
+        if file_format in (PDBFileFormat.PDB, PDBFileFormat.MMCIF, PDBFileFormat.XML):
             for pdb_code in obsolete:
                 self.move_obsolete_file(pdb_code, file_format)
 
-    def move_obsolete_file(self, pdb_code: str, file_format: FileFormat) -> None:
+    def move_obsolete_file(self, pdb_code: str, file_format: PDBFileFormat) -> None:
         """Move obsolete file to obsolete directory."""
         short_code = pdb_code[1:3]
         filename = (
