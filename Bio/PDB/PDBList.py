@@ -40,6 +40,7 @@ from __future__ import annotations
 import contextlib
 import gzip
 import os
+import pathlib
 import re
 import shutil
 import sys
@@ -315,16 +316,8 @@ class PDBList:
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
 
-        # Where does the final PDB file get saved?
-        if pdir is None:
-            path = self.local_pdb if not obsolete else self.obsolete_pdb
-            if not self.flat_tree:  # Put in PDB-style directory tree
-                path = os.path.join(path, short_code)
-        else:  # Put in specified directory
-            path = pdir
-        if not os.access(path, os.F_OK):
-            os.makedirs(path)
-        filename = os.path.join(path, archive_fn)
+        output_directory = str(self.get_output_directory(pdir, obsolete, short_code))
+        filename = os.path.join(output_directory, archive_fn)
         final = {
             "pdb": "pdb%s.ent",
             "mmCif": "%s.cif",
@@ -332,7 +325,7 @@ class PDBList:
             "mmtf": "%s.mmtf",
             "bundle": "%s-pdb-bundle.tar",
         }
-        final_file = os.path.join(path, final[file_format] % code)
+        final_file = os.path.join(output_directory, final[file_format] % code)
 
         # Skip download if the file already exists
         if not overwrite:
@@ -355,6 +348,20 @@ class PDBList:
                     out.writelines(gz)
             os.remove(filename)
         return final_file
+
+    def get_output_directory(
+        self, output_directory: str | None, obsolete: bool, short_code: str
+    ) -> pathlib.Path:
+        """Get the output directory path, creating it if does not exist."""
+        if output_directory is None:
+            path = pathlib.Path(self.obsolete_pdb if obsolete else self.local_pdb)
+            if not self.flat_tree:  # Put in PDB-style directory tree
+                path = pathlib.Path(path, short_code)
+        else:
+            path = pathlib.Path(output_directory)
+
+        path.mkdir(parents=True, exist_ok=True)
+        return path
 
     def update_pdb(self, file_format=None):
         """Update your local copy of the PDB files.
