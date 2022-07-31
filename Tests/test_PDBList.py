@@ -140,6 +140,64 @@ class TestPDBListGetStructure(unittest.TestCase):
         self.check(structure, os.path.join("b", f"{structure}.cif"), "mmCif", pdir="b")
 
 
+class TestPDBListUpdatePDB(unittest.TestCase):
+    """Test PDBList.update_pdb."""
+
+    @helpers.temporary_directory()
+    def test_update_pdb_new_file(self, temporary_directory=None):
+        """Test that the new files are retrieved locally."""
+        pdb_list = PDBList(pdb=temporary_directory)
+        with unittest.mock.patch(
+            "Bio.PDB.PDBList.get_recent_changes", return_value=(["127d"], [], [])
+        ):
+            pdb_list.update_pdb(FileFormat.PDB)
+            self.assertTrue(pathlib.Path(pdb_list.local_pdb, "27/pdb127d.ent").exists())
+
+    @helpers.temporary_directory()
+    def test_update_pdb_modified_file(self, temporary_directory=None):
+        """Test that the modified files are overridden locally."""
+        pdb_list = PDBList(pdb=temporary_directory)
+        directory = "27"
+        filename = "127d.cif"
+        outdated_pdb_file_content = "FAKE PDB FILE"
+
+        pathlib.Path(pdb_list.local_pdb, directory).mkdir()
+        with open(f"{pdb_list.local_pdb}/{directory}/{filename}", "w+") as file_stream:
+            file_stream.write(outdated_pdb_file_content)
+
+        with unittest.mock.patch(
+            "Bio.PDB.PDBList.get_recent_changes",
+            return_value=([], [filename.split(".")[0]], []),
+        ):
+            pdb_list.update_pdb(FileFormat.MMCIF)
+
+        with open(f"{pdb_list.local_pdb}/{directory}/{filename}", "r") as file_stream:
+            self.assertNotEqual(outdated_pdb_file_content, file_stream.read())
+
+    @helpers.temporary_directory()
+    def test_update_pdb_obsolete_file(self, temporary_directory=None):
+        """Test that the obsolete files are moved to the local obsolete directory."""
+        outdated_pdb_file_content = "FAKE PDB FILE"
+        directory = "47"
+        filename = "347d.xml"
+        pdb_list = PDBList(pdb=temporary_directory)
+
+        pathlib.Path(pdb_list.local_pdb, directory).mkdir()
+        with open(f"{pdb_list.local_pdb}/{directory}/{filename}", "w+") as file_stream:
+            file_stream.write(outdated_pdb_file_content)
+
+        with unittest.mock.patch(
+            "Bio.PDB.PDBList.get_recent_changes",
+            return_value=([], [], [filename.split(".")[0]]),
+        ):
+            pdb_list.update_pdb(FileFormat.XML)
+
+        self.assertFalse(pathlib.Path(pdb_list.local_pdb, directory, filename).exists())
+        self.assertTrue(
+            pathlib.Path(pdb_list.obsolete_pdb, directory, filename).exists()
+        )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
