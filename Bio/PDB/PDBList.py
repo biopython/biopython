@@ -38,6 +38,7 @@
 from __future__ import annotations
 
 import contextlib
+import enum
 import gzip
 import os
 import pathlib
@@ -53,6 +54,56 @@ MMTF_SERVER_URL = "mmtf.rcsb.org"
 
 class PDBListError(Exception):
     """Generic exception for PDBList module."""
+
+
+@enum.unique
+class FileFormat(enum.Enum):
+    """Enum regrouping file format information."""
+
+    PDB = ("pdb", "pdb", "pdb", ".ent")  # PDBx/mmCif (default)
+    MMCIF = ("mmCif", "mmCIF", "", ".cif")  # PDB
+    XML = ("xml", "XML", "", ".xml")  # PDBML/XML
+    MMTF = ("mmtf", "", "", ".mmtf")  # highly compressed
+    BUNDLE = (
+        "bundle",
+        "pdb_bundle",
+        "",
+        "-pdb-bundle.tar",
+    )  # PDB formatted archive for large structure
+
+    @property
+    def label(self) -> str:
+        """Allow backward compatibility with file_format as string.
+
+        NOTE: To be remove once the last usage of file_format as string is updated.
+        """
+        return self.value[0]
+
+    @property
+    def directory(self) -> str:
+        """Name of the directory where the file is stored on the server."""
+        return self.value[1]
+
+    @property
+    def filename_prefix(self) -> str:
+        """Return the string to add at the beginning of the code to build the filename."""
+        return self.value[2]
+
+    @property
+    def filename_suffix(self) -> str:
+        """Return the string to add at the end of the code to build the filename."""
+        return self.value[3]
+
+    @classmethod
+    def from_label(cls, label) -> FileFormat:
+        """Get FileFormat from label."""
+        for file_format in cls:
+            if file_format.label == label:
+                return file_format
+        raise PDBListError(
+            "Specified file_format does not exist or is not supported, maybe a typo "
+            f" (file format: {label}, handled file formats: {','.join([file_format.label for file_format in FileFormat])}."
+        )
 
 
 class PDBList:
@@ -129,7 +180,7 @@ class PDBList:
             sys.stderr.write(
                 "WARNING: The default download format has changed from PDB to PDBx/mmCif\n"
             )
-            return "mmCif"
+            return FileFormat.MMCIF.label
         return file_format
 
     @staticmethod
@@ -272,54 +323,46 @@ class PDBList:
         :return: filename
         :rtype: string
         """
-        # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
+        file_format_enum = FileFormat.from_label(file_format)
 
-        # Get the compressed PDB structure
         code = pdb_code.lower()
         short_code = code[1:3]
-        archive = {
-            "pdb": "pdb%s.ent.gz",
-            "mmCif": "%s.cif.gz",
-            "xml": "%s.xml.gz",
-            "mmtf": "%s",
-            "bundle": "%s-pdb-bundle.tar.gz",
-        }
-        archive_fn = archive[file_format] % code
 
-        if file_format not in archive.keys():
-            raise (
-                "Specified file_format %s doesn't exists or is not supported. Maybe a "
-                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
-                % file_format
-            )
+        if file_format_enum != FileFormat.MMTF:
+            filename = f"{file_format_enum.filename_prefix}{code}{file_format_enum.filename_suffix}"
+            archive_filename = f"{filename}.gz"
+        else:
+            filename = archive_filename = code
 
-        output_directory = str(self.get_output_directory(pdir, obsolete, short_code))
-        filename = os.path.join(output_directory, archive_fn)
-        final = {
-            "pdb": "pdb%s.ent",
-            "mmCif": "%s.cif",
-            "xml": "%s.xml",
-            "mmtf": "%s.mmtf",
-            "bundle": "%s-pdb-bundle.tar",
-        }
-        final_file = os.path.join(output_directory, final[file_format] % code)
+        output_directory = self.get_output_directory(pdir, obsolete, short_code)
+        output_archive_filepath = pathlib.Path(output_directory, archive_filename)
+        output_extracted_filename = (
+            f"{filename}{file_format_enum.filename_suffix}"
+            if file_format_enum == FileFormat.MMTF
+            else filename
+        )
+        output_extracted_filepath = pathlib.Path(
+            output_directory, output_extracted_filename
+        )
 
         # Skip download if the file already exists
         if not overwrite:
-            if os.path.exists(final_file):
+            if output_extracted_filepath.exists():
                 if self._verbose:
-                    print(f"Structure exists: '{final_file}' ")
-                return final_file
+                    print(f"Structure exists: '{output_extracted_filepath}' ")
+                return str(output_extracted_filepath)
 
         # Retrieve the file
         if self._verbose:
             print(f"Downloading PDB structure '{pdb_code}'...")
         archive_url = self.build_archive_url(
-            file_format, obsolete, code, short_code, archive_fn
+            file_format_enum, obsolete, code, short_code, archive_filename
         )
-        self.download_and_extract_archive(archive_url, filename, final_file)
-        return final_file
+        self.download_and_extract_archive(
+            archive_url, output_archive_filepath, output_extracted_filepath
+        )
+        return str(output_extracted_filepath)
 
     def get_output_directory(
         self, output_directory: str | None, obsolete: bool, short_code: str
@@ -337,40 +380,36 @@ class PDBList:
 
     def build_archive_url(
         self,
-        file_format: str,
+        file_format: FileFormat,
         obsolete: bool,
         code: str,
         short_code: str,
         archive_filename: str,
     ) -> str:
         """Build archive URL according to the file format."""
-        if file_format in ("pdb", "mmCif", "xml"):
-            file_type = (
-                "pdb"
-                if file_format == "pdb"
-                else ("mmCIF" if file_format == "mmCif" else "XML")
-            )
+        if file_format in (FileFormat.PDB, FileFormat.MMCIF, FileFormat.XML):
             return self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
                 "divided" if not obsolete else "obsolete",
-                file_type,
+                file_format.directory,
                 short_code,
                 archive_filename,
             )
-        if file_format == "bundle":
-            return self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
+        elif file_format == FileFormat.BUNDLE:
+            return self.pdb_server + "/pub/pdb/compatible/%s/%s/%s/%s" % (
+                file_format.directory,
                 short_code,
                 code,
                 archive_filename,
             )
-        if file_format == "mmtf":
+        elif file_format == FileFormat.MMTF:
             return f"http://{MMTF_SERVER_URL}/v1.0/full/{code}"
         raise PDBListError(f"Unhandled file format (format: {file_format.label}).")
 
     def download_and_extract_archive(
         self,
         archive_url: str,
-        output_archive_filepath: str,
-        output_extracted_filepath: str,
+        output_archive_filepath: pathlib.Path,
+        output_extracted_filepath: pathlib.Path,
     ) -> None:
         """
         Download archive from server and extract it to the output directory.
@@ -379,14 +418,14 @@ class PDBList:
         """
         try:
             urlcleanup()
-            urlretrieve(archive_url, output_archive_filepath)
+            urlretrieve(archive_url, str(output_archive_filepath))
         except OSError:
             print(f"PDB file not found on remote server (url: {archive_url}).")
         else:
             with gzip.open(output_archive_filepath, "rb") as gzip_stream:
                 with open(output_extracted_filepath, "wb") as output_stream:
                     output_stream.writelines(gzip_stream)
-            os.remove(output_archive_filepath)
+            output_archive_filepath.unlink()
 
     def update_pdb(self, file_format=None):
         """Update your local copy of the PDB files.
