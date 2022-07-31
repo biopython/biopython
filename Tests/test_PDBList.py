@@ -6,16 +6,16 @@
 
 """Testing access to the PDB over the internet."""
 
-import contextlib
 import os
-import shutil
-import tempfile
+import pathlib
 import unittest
-
-# We want to test this module:
-from Bio.PDB.PDBList import PDBList
+import unittest.mock
 
 import requires_internet
+
+from Bio.PDB.PDBList import FileFormat
+from Bio.PDB.PDBList import PDBList
+import helpers
 
 requires_internet.check()
 
@@ -53,25 +53,24 @@ class TestPBDListGetList(unittest.TestCase):
 class TestPDBListGetStructure(unittest.TestCase):
     """Test methods responsible for getting structures."""
 
-    @contextlib.contextmanager
-    def make_temp_directory(self, directory):
-        temp_dir = tempfile.mkdtemp(dir=directory)
-        try:
-            yield temp_dir
-        finally:
-            shutil.rmtree(temp_dir)
-
-    def check(self, structure, filename, file_format, obsolete=False, pdir=None):
-        with self.make_temp_directory(os.getcwd()) as tmp:
-            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
-            path = os.path.join(tmp, filename)
-            if pdir:
-                pdir = os.path.join(tmp, pdir)
-            pdblist.retrieve_pdb_file(
-                structure, obsolete=obsolete, pdir=pdir, file_format=file_format
-            )
-            self.assertTrue(os.path.isfile(path))
-            os.remove(path)
+    @helpers.temporary_directory()
+    def check(
+        self,
+        structure,
+        filename,
+        file_format,
+        obsolete=False,
+        pdir=None,
+        temporary_directory=None,
+    ):
+        pdb_list = PDBList(pdb=temporary_directory)
+        pdir = str(pathlib.Path(pdb_list.local_pdb, pdir)) if pdir else None
+        pdb_list.retrieve_pdb_file(
+            structure, obsolete=obsolete, pdir=pdir, file_format=file_format
+        )
+        pdb_filepath = pathlib.Path(pdb_list.local_pdb, filename)
+        self.assertTrue(pdb_filepath.is_file())
+        pdb_filepath.unlink()
 
     def test_retrieve_pdb_file_small_pdb(self):
         """Tests retrieving the small molecule in pdb format."""
