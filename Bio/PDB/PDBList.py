@@ -29,6 +29,12 @@
 #   homepage : http://jaceksmietanski.net
 #   email    : jacek.smietanski@ii.uj.edu.pl
 #
+#
+# (c) 2022 Julian Maurin
+#   - typing and refactoring
+#   - introduced FileFormat
+#   - handle multiple format moving obsolete file (PDBList.update_pdb)
+#
 # It may be distributed freely with respect to the original authors.
 # Any maintainer of the Biopython code may change this notice
 # when appropriate.
