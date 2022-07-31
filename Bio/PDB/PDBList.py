@@ -171,7 +171,7 @@ class PDBList:
         obsolete = self.get_status_list(path + "obsolete.pdb")
         return (added, modified, obsolete)
 
-    def get_all_entries(self):
+    def get_all_entries(self) -> list[str]:
         """Retrieve the big file containing all the PDB entries and some annotation.
 
         Returns a list of PDB codes in the index file.
