@@ -48,6 +48,8 @@ from urllib.request import urlcleanup
 from urllib.request import urlopen
 from urllib.request import urlretrieve
 
+MMTF_SERVER_URL = "mmtf.rcsb.org"
+
 
 class PDBListError(Exception):
     """Generic exception for PDBList module."""
@@ -292,30 +294,6 @@ class PDBList:
                 % file_format
             )
 
-        if file_format in ("pdb", "mmCif", "xml"):
-            pdb_dir = "divided" if not obsolete else "obsolete"
-            file_type = (
-                "pdb"
-                if file_format == "pdb"
-                else "mmCIF"
-                if file_format == "mmCif"
-                else "XML"
-            )
-            url = self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
-                pdb_dir,
-                file_type,
-                short_code,
-                archive_fn,
-            )
-        elif file_format == "bundle":
-            url = self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
-                short_code,
-                code,
-                archive_fn,
-            )
-        else:
-            url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
-
         output_directory = str(self.get_output_directory(pdir, obsolete, short_code))
         filename = os.path.join(output_directory, archive_fn)
         final = {
@@ -337,11 +315,14 @@ class PDBList:
         # Retrieve the file
         if self._verbose:
             print(f"Downloading PDB structure '{pdb_code}'...")
+        archive_url = self.build_archive_url(
+            file_format, obsolete, code, short_code, archive_fn
+        )
         try:
             urlcleanup()
-            urlretrieve(url, filename)
+            urlretrieve(archive_url, filename)
         except OSError:
-            print("Desired structure doesn't exists")
+            print(f"PDB file not found on remote server (url: {archive_url}).")
         else:
             with gzip.open(filename, "rb") as gz:
                 with open(final_file, "wb") as out:
@@ -362,6 +343,37 @@ class PDBList:
 
         path.mkdir(parents=True, exist_ok=True)
         return path
+
+    def build_archive_url(
+        self,
+        file_format: str,
+        obsolete: bool,
+        code: str,
+        short_code: str,
+        archive_filename: str,
+    ) -> str:
+        """Build archive URL according to the file format."""
+        if file_format in ("pdb", "mmCif", "xml"):
+            file_type = (
+                "pdb"
+                if file_format == "pdb"
+                else ("mmCIF" if file_format == "mmCif" else "XML")
+            )
+            return self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
+                "divided" if not obsolete else "obsolete",
+                file_type,
+                short_code,
+                archive_filename,
+            )
+        if file_format == "bundle":
+            return self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
+                short_code,
+                code,
+                archive_filename,
+            )
+        if file_format == "mmtf":
+            return f"http://{MMTF_SERVER_URL}/v1.0/full/{code}"
+        raise PDBListError(f"Unhandled file format (format: {file_format.label}).")
 
     def update_pdb(self, file_format=None):
         """Update your local copy of the PDB files.
