@@ -173,7 +173,7 @@ class TestPDBListGetAssembly(unittest.TestCase):
             self.assertTrue(os.path.isfile(path))
             os.remove(path)
 
-    def test_retrieve_assembly_file_small_mmcif(self):
+    def test_retrieve_assembly_file_mmcif(self):
         """Tests retrieving a small assembly in mmCif format."""
         structure = "127d"
         assembly_num = "1"
@@ -184,7 +184,7 @@ class TestPDBListGetAssembly(unittest.TestCase):
             "mmCif",
         )
 
-    def test_retrieve_assembly_file_small_pdb(self):
+    def test_retrieve_assembly_file_pdb(self):
         """Tests retrieving a small assembly in pdb format."""
         structure = "127d"
         assembly_num = "1"
@@ -193,17 +193,6 @@ class TestPDBListGetAssembly(unittest.TestCase):
             assembly_num,
             os.path.join(structure[1:3], f"{structure}.pdb{assembly_num}"),
             "pdb",
-        )
-
-    def test_retrieve_assembly_file_large_mmcif(self):
-        """Tests retrieving a large assembly in mmCif format."""
-        structure = "3k1q"
-        assembly_num = "1"
-        self.check(
-            structure,
-            assembly_num,
-            os.path.join(structure[1:3], f"{structure}-assembly{assembly_num}.cif"),
-            "mmCif",
         )
 
     def test_double_retrieve_assembly(self):
