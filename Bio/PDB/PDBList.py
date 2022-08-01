@@ -532,7 +532,7 @@ class PDBList:
         :return: file name of the downloaded assembly file.
         """
         archive = {
-            "pdb": "%s-pdb%s.gz",
+            "pdb": "%s.pdb%s.gz",
             "mmcif": "%s-assembly%s.cif.gz",
         }
 
