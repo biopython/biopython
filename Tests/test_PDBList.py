@@ -72,7 +72,7 @@ class TestPDBListGetStructure(unittest.TestCase):
 
     def check(self, structure, filename, file_format, obsolete=False, pdir=None):
         with self.make_temp_directory(os.getcwd()) as tmp:
-            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            pdblist = PDBList(pdb=tmp)
             path = os.path.join(tmp, filename)
             if pdir:
                 pdir = os.path.join(tmp, pdir)
@@ -80,7 +80,6 @@ class TestPDBListGetStructure(unittest.TestCase):
                 structure, obsolete=obsolete, pdir=pdir, file_format=file_format
             )
             self.assertTrue(os.path.isfile(path))
-            os.remove(path)
 
     def test_retrieve_pdb_file_small_pdb(self):
         """Tests retrieving the small molecule in pdb format."""
@@ -163,7 +162,7 @@ class TestPDBListGetAssembly(unittest.TestCase):
 
     def check(self, structure, assembly_num, filename, file_format, pdir=None):
         with self.make_temp_directory(os.getcwd()) as tmp:
-            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            pdblist = PDBList(pdb=tmp)
             path = os.path.join(tmp, filename)
             if pdir:
                 pdir = os.path.join(tmp, pdir)
@@ -171,7 +170,6 @@ class TestPDBListGetAssembly(unittest.TestCase):
                 structure, assembly_num, pdir=pdir, file_format=file_format
             )
             self.assertTrue(os.path.isfile(path))
-            os.remove(path)
 
     def test_retrieve_assembly_file_mmcif(self):
         """Tests retrieving a small assembly in mmCif format."""
