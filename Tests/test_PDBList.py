@@ -27,7 +27,7 @@ class TestPBDListGetList(unittest.TestCase):
         """Tests the Bio.PDB.PDBList.get_recent_changes method."""
         # obsolete_pdb declared to prevent from creating the "obsolete" directory
         pdblist = PDBList(obsolete_pdb="unimportant")
-        url = pdblist.pdb_server + "/pub/pdb/data/status/latest/added.pdb"
+        url = f"{pdblist.pdb_server}/data/status/latest/added.pdb"
         entries = pdblist.get_status_list(url)
         self.assertIsNotNone(entries)
 
