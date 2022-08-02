@@ -13,6 +13,8 @@ use) in order to use this. For DSSP, see https://swift.cmbi.umcn.nl/gv/dssp/.
 The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:
 
+    Ahmad
+        Ahmad et al. 2003 https://doi.org/10.1002/prot.10328
     Miller
         Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
     Sander
@@ -98,7 +100,7 @@ import warnings
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.Polypeptide import three_to_one
+from Bio.Data.PDBData import protein_letters_3to1
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 # Match C in DSSP
@@ -111,6 +113,7 @@ residue_max_acc = {
     # Miller max acc: Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
     # Wilke: Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
     # Sander: Sander & Rost 1994 https://doi.org/10.1002/prot.340200303
+    # Ahmad: Ahmad et al. 2003 https://doi.org/10.1002/prot.10328
     "Miller": {
         "ALA": 113.0,
         "ARG": 241.0,
@@ -176,6 +179,28 @@ residue_max_acc = {
         "TRP": 227.0,
         "TYR": 222.0,
         "VAL": 142.0,
+    },
+    "Ahmad": {
+        "ALA": 110.2,
+        "ARG": 229.0,
+        "ASN": 146.4,
+        "ASP": 144.1,
+        "CYS": 140.4,
+        "GLN": 178.6,
+        "GLU": 174.7,
+        "GLY": 78.7,
+        "HIS": 181.9,
+        "ILE": 183.1,
+        "LEU": 164.0,
+        "LYS": 205.7,
+        "MET": 200.1,
+        "PHE": 200.7,
+        "PRO": 141.9,
+        "SER": 117.2,
+        "THR": 138.7,
+        "TRP": 240.5,
+        "TYR": 213.7,
+        "VAL": 153.7,
     },
 }
 
@@ -409,8 +434,8 @@ class DSSP(AbstractResiduePropertyMap):
             The dssp executable (ie. the argument to subprocess)
         acc_array : string
             Accessible surface area (ASA) from either Miller et al. (1987),
-            Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
-            Sander/Wilke/Miller. Defaults to Sander.
+            Sander & Rost (1994), Wilke: Tien et al. 2013, or Ahmad et al.
+            (2003) as string Sander/Wilke/Miller/Ahmad. Defaults to Sander.
         file_type: string
             File type switch: either PDB, MMCIF or DSSP. Inferred from the
             file extension by default.
@@ -582,10 +607,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            try:
-                resname = three_to_one(resname)
-            except KeyError:
-                resname = "X"
+            resname = protein_letters_3to1.get(resname, "X")
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'

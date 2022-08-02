@@ -3908,7 +3908,7 @@ target	10	73	query	19.0	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
+query	0	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
         alignments = aligner.align(
@@ -3941,7 +3941,7 @@ target	10	73	query	19.0	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	11	255	10M1I3M11D12M14D7M1D5M	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
+query	16	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
 
@@ -3978,7 +3978,7 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
+query	0	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align(
@@ -4011,7 +4011,7 @@ target	0	13	query	13.0	-	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	1	255	4S13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
+query	16	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
@@ -4042,7 +4042,7 @@ target	4	17	query	13.0	+	4	17	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+query	0	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align(
@@ -4075,7 +4075,7 @@ target	4	17	query	13.0	-	4	17	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	5	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+query	16	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
@@ -4105,7 +4105,7 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
+query	0	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
         alignments = aligner.align(
@@ -4137,7 +4137,7 @@ target	0	13	query	13.0	-	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	1	255	13M4S	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
+query	16	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
@@ -4168,7 +4168,7 @@ target	0	13	query	13.0	+	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+query	0	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align(
@@ -4201,18 +4201,146 @@ target	0	13	query	13.0	-	0	13	0	1	13,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	1	255	13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
+query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
 
     def test_alignment_wildcard(self):
         aligner = Align.PairwiseAligner()
         aligner.gap_score = -10
-        aligner.end_gap_score = 0
         aligner.mismatch = -2
         aligner.wildcard = "N"
         target = "TTTTTNACGCTCGAGCAGCTACG"
         query = "ACGATCGAGCNGCTACGCCCNC"
+        # local alignment
+        aligner.mode = "local"
+        # use strings for target and query
+        alignments = aligner.align(target, query)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG
+      |||.||||||.||||||
+      ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 17))
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	+	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
+        alignments = aligner.align(target, reverse_complement(query), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG
+      |||.||||||.||||||
+      ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 17))
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	-	query	22	5	22	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	-	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
+        # use Seq objects for target and query
+        alignments = aligner.align(Seq(target), Seq(query))
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG
+      |||.||||||.||||||
+      ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 17))
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	+	query	22	0	17	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	+	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
+        alignments = aligner.align(
+            Seq(target), Seq(query).reverse_complement(), strand="-"
+        )
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+TTTTTNACGCTCGAGCAGCTACG
+      |||.||||||.||||||
+      ACGATCGAGCNGCTACGCCCNC
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 17))
+        self.assertEqual(
+            alignment.format("psl"),
+            """\
+15	1	0	1	0	0	0	0	-	query	22	5	22	target	23	6	23	1	17,	0,	6,
+""",
+        )
+        self.assertEqual(
+            alignment.format("bed"),
+            """\
+target	6	23	query	13.0	-	6	23	0	1	17,	0,
+""",
+        )
+        self.assertEqual(
+            alignment.format("sam"),
+            """\
+query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+""",
+        )
+        # global alignment
+        aligner.mode = "global"
+        aligner.end_gap_score = 0
         # use strings for target and query
         alignments = aligner.align(target, query)
         self.assertEqual(len(alignments), 1)
@@ -4241,7 +4369,7 @@ target	6	23	query	13.0	+	6	23	0	1	17,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
         alignments = aligner.align(target, reverse_complement(query), strand="-")
@@ -4271,7 +4399,7 @@ target	6	23	query	13.0	-	6	23	0	1	17,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
         # use Seq objects for target and query
@@ -4302,7 +4430,7 @@ target	6	23	query	13.0	+	6	23	0	1	17,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
         alignments = aligner.align(
@@ -4334,7 +4462,7 @@ target	6	23	query	13.0	-	6	23	0	1	17,	0,
         self.assertEqual(
             alignment.format("sam"),
             """\
-query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
+query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
 

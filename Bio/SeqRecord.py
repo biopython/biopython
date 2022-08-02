@@ -505,11 +505,12 @@ class SeqRecord:
                             "from segmented GenBank records) are ignored."
                         )
                         continue
-                    if (
-                        start <= f.location.nofuzzy_start
-                        and f.location.nofuzzy_end <= stop
-                    ):
-                        answer.features.append(f._shift(-start))
+                    try:
+                        if start <= f.location.start and f.location.end <= stop:
+                            answer.features.append(f._shift(-start))
+                    except TypeError:
+                        # Will fail on UnknownPosition
+                        pass
 
             # Slice all the values to match the sliced sequence
             # (this should also work with strides, even negative strides):
@@ -1244,7 +1245,15 @@ class SeqRecord:
             # so we need to resort in case of overlapping features.
             # NOTE - In the common case of gene before CDS (and similar) with
             # the exact same locations, this will still maintain gene before CDS
-            answer.features.sort(key=lambda x: x.location.start.position)
+
+            def key_fun(f):
+                """Sort on start position."""
+                try:
+                    return int(f.location.start)
+                except TypeError:  # Expected for UnknownPosition
+                    return None
+
+            answer.features.sort(key=key_fun)
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:

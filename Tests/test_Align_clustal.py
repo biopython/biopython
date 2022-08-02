@@ -27,8 +27,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         alignment = next(alignments)
         stream.seek(0)
         saved_alignments = AlignmentIterator(stream)
-        self.assertEqual(saved_alignments.program, alignments.program)
-        self.assertEqual(saved_alignments.version, alignments.version)
+        self.assertEqual(saved_alignments.metadata, alignments.metadata)
         saved_alignment = next(saved_alignments)
         with self.assertRaises(StopIteration):
             next(saved_alignments)
@@ -45,15 +44,14 @@ class TestClustalReadingWriting(unittest.TestCase):
         # includes the sequence length on the right hand side of each line
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "CLUSTAL")
-            self.assertEqual(alignments.version, "1.81")
+            self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
+            self.assertEqual(alignments.metadata["Version"], "1.81")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 601 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (2 rows x 601 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.sequences[0].id, "gi|4959044|gb|AAD34209.1|AF069")
@@ -82,15 +80,14 @@ class TestClustalReadingWriting(unittest.TestCase):
         # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "MSAPROBS")
-            self.assertEqual(alignments.version, "0.9.7")
+            self.assertEqual(alignments.metadata["Program"], "MSAPROBS")
+            self.assertEqual(alignments.metadata["Version"], "0.9.7")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (8 rows x 298 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (8 rows x 298 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(len(alignment), 8)
         self.assertEqual(alignment.shape, (8, 298))
@@ -177,15 +174,14 @@ class TestClustalReadingWriting(unittest.TestCase):
         # includes the sequence length on the right hand side of each line
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "MUSCLE")
-            self.assertEqual(alignments.version, "3.8")
+            self.assertEqual(alignments.metadata["Program"], "MUSCLE")
+            self.assertEqual(alignments.metadata["Version"], "3.8")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (3 rows x 687 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (3 rows x 687 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(len(alignment), 3)
         self.assertEqual(alignment.sequences[0].id, "Test1seq")
@@ -226,15 +222,14 @@ class TestClustalReadingWriting(unittest.TestCase):
         path = "Clustalw/kalign.aln"
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "Kalign")
-            self.assertEqual(alignments.version, "2.0")
+            self.assertEqual(alignments.metadata["Program"], "Kalign")
+            self.assertEqual(alignments.metadata["Version"], "2.0")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 27 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (2 rows x 27 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.sequences[0].id, "Test1seq")
@@ -250,15 +245,14 @@ class TestClustalReadingWriting(unittest.TestCase):
         # example taken from the PROBCONS documentation
         with open(path) as stream:
             alignments = AlignmentIterator(stream)
-            self.assertEqual(alignments.program, "PROBCONS")
-            self.assertEqual(alignments.version, "1.12")
+            self.assertEqual(alignments.metadata["Program"], "PROBCONS")
+            self.assertEqual(alignments.metadata["Version"], "1.12")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (5 rows x 101 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (5 rows x 101 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(len(alignment), 5)
         self.assertEqual(alignment.sequences[0].id, "plas_horvu")

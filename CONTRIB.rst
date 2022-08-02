@@ -140,6 +140,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
+- Jacob Beal <https://github.com/jakebeal>
 - Jakub Lipinski <https://github.com/jakublipinski>
 - James Baker <https://github.com/JamesABaker>
 - James Casbon <https://github.com/jamescasbon>
@@ -258,6 +259,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Richard Neher <https://github.com/rneher>
 - Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
+- Robert Sawicki <https://github.com/Battlesheepu>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
 - Ryan Stecher <https://github.com/rystecher>

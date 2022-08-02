@@ -284,10 +284,10 @@ def _cmp_res(
     if hasattr(r0, "internal_coord") and r0.internal_coord is not None:
         ric0 = r0.internal_coord
         ric1 = r1.internal_coord
-        r0prev = sorted((ric.rbase for ric in ric0.rprev))
-        r1prev = sorted((ric.rbase for ric in ric1.rprev))
-        r0next = sorted((ric.rbase for ric in ric0.rnext))
-        r1next = sorted((ric.rbase for ric in ric1.rnext))
+        r0prev = sorted(ric.rbase for ric in ric0.rprev)
+        r1prev = sorted(ric.rbase for ric in ric1.rprev)
+        r0next = sorted(ric.rbase for ric in ric0.rnext)
+        r1next = sorted(ric.rbase for ric in ric1.rnext)
 
         if r0prev != r1prev:
             if verbose:

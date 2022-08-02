@@ -41,13 +41,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="MSF")
-        stream = self.stream
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -256,4 +251,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
-        yield alignment
+        self._close()
+        return alignment

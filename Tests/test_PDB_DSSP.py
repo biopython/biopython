@@ -61,7 +61,7 @@ class DSSP_tool_test(unittest.TestCase):
             try:
                 # Newer versions of DSSP
                 version_string = subprocess.check_output(
-                    ["dssp", "--version"], universal_newlines=True
+                    ["dssp", "--version"], text=True
                 )
                 cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
@@ -72,7 +72,7 @@ class DSSP_tool_test(unittest.TestCase):
         except OSError:
             try:
                 version_string = subprocess.check_output(
-                    ["mkdssp", "--version"], universal_newlines=True
+                    ["mkdssp", "--version"], text=True
                 )
                 cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
@@ -232,6 +232,20 @@ class DSSP_test(unittest.TestCase):
         _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
         i = 0
         with open("PDB/Miller_RASA.txt") as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra["EXP_DSSP_RASA"])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
+        # Ahmad (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Ahmad", "DSSP")
+        i = 0
+        with open("PDB/Ahmad_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:

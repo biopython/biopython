@@ -338,8 +338,8 @@ class XdnaWriter(SequenceWriter):
 
             self._write_pstring(feature.type)
 
-            start = feature.location.start.position + 1  # 1-based coordinates
-            end = feature.location.end.position
+            start = int(feature.location.start) + 1  # 1-based coordinates
+            end = int(feature.location.end)
             strand = 1
             if feature.location.strand == -1:
                 start, end = end, start

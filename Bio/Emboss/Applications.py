@@ -428,7 +428,7 @@ class FNeighborCommandline(_EmbossCommandLine):
             ),
             _Option(
                 ["-matrixtype", "matrixtype"],
-                "is martrix square (S), upper (U) or lower (L)",
+                "is matrix square (S), upper (U) or lower (L)",
             ),
             _Option(["-treetype", "treetype"], "nj or UPGMA tree (n/u)"),
             _Option(["-outgrno", "outgrno"], "taxon to use as OG"),

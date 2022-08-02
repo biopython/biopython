@@ -29,7 +29,7 @@ class MSMS_tests(unittest.TestCase):
         # Check if MSMS is installed
         try:
             v = subprocess.check_output(
-                ["msms", "-h"], universal_newlines=True, stderr=subprocess.STDOUT
+                ["msms", "-h"], text=True, stderr=subprocess.STDOUT
             )
         except OSError:
             raise unittest.SkipTest(

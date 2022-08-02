@@ -30,8 +30,8 @@ class TestAlign_reading(unittest.TestCase):
         """Test parsing bundle_without_target.maf."""
         path = "MAF/bundle_without_target.maf"
         alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.assertEqual(alignment.score, 6441)
@@ -80,8 +80,8 @@ class TestAlign_reading(unittest.TestCase):
         """Test parsing MAF file ucsc_mm9_chr10.maf."""
         path = "MAF/ucsc_mm9_chr10.maf"
         alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6940,8 +6940,8 @@ class TestAlign_reading(unittest.TestCase):
         """Test parsing MAF file ucsc_mm9_chr10_bad.maf with incorrect sequence size."""
         path = "MAF/ucsc_mm9_chr10_bad.maf"
         alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         next(alignments)
         next(alignments)
         next(alignments)
@@ -6958,8 +6958,8 @@ class TestAlign_reading(unittest.TestCase):
         """Test parsing inconsistent MAF file length_coords_mismatch.maf."""
         path = "MAF/length_coords_mismatch.maf"
         alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
@@ -7021,10 +7021,10 @@ class TestAlign_reading(unittest.TestCase):
         self.check_ucsc_test(alignments)
 
     def check_ucsc_test(self, alignments):
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "tba.v8")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "tba.v8")
         self.assertEqual(
-            alignments.metadata["comments"],
+            alignments.metadata["Comments"],
             [
                 "tba.v8 (((human chimp) baboon) (mouse rat))",
                 "multiz.v7",

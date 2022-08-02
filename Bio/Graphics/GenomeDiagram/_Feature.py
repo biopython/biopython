@@ -131,8 +131,8 @@ class Feature:
         bounds = []
         # This will be a list of length one for simple FeatureLocation:
         for location in self._feature.location.parts:
-            start = location.nofuzzy_start
-            end = location.nofuzzy_end
+            start = int(location.start)
+            end = int(location.end)
             # if start > end and self.strand == -1:
             #    start, end = end, start
             self.locations.append((start, end))

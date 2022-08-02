@@ -127,7 +127,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="Nexus")
-        stream = self.stream
+
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -136,17 +137,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if line.strip() != "#NEXUS":
             raise ValueError("File does not start with NEXUS header.")
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream.
-
-        This uses the Bio.Nexus module to do the hard work.
-
-        You are expected to call this function via Bio.Align
-        (and not use it directly).
-
-        NOTE - We only expect ONE alignment matrix per Nexus file,
-        meaning this iterator will only yield one Alignment.
-        """
+    def _read_next_alignment(self, stream):
+        # NOTE - We only expect ONE alignment matrix per Nexus file.
         n = Nexus.Nexus(stream)
         if not n.matrix:
             # No alignment found
@@ -176,4 +168,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        yield alignment
+        self._close()
+        return alignment

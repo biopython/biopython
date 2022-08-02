@@ -40,7 +40,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         """
         super().__init__(source, mode="t", fmt="EMBOSS")
-        stream = self.stream
+
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -50,7 +51,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         # assume srspair format (default) if not specified explicitly in
         # the output file
-        self.align_format = "srspair"
+        self.metadata = {}
+        self.metadata["Align_format"] = "srspair"
         commandline = None
         for line in stream:
             if line.rstrip() == "########################################":
@@ -61,25 +63,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if line.startswith("#    "):
                     commandline += " " + line[1:].strip()
                     continue
-                self.commandline = commandline
+                self.metadata["Command line"] = commandline
                 commandline = None
             key, value = line[2:].split(":", 1)
             if key == "Program":
-                self.program = value.strip()
+                self.metadata["Program"] = value.strip()
             elif key == "Rundate":
-                self.rundate = value.strip()
+                self.metadata["Rundate"] = value.strip()
             elif key == "Report_file":
-                self.report_file = value.strip()
+                self.metadata["Report_file"] = value.strip()
             elif key == "Align_format":
-                self.align_format = value.strip()
+                self.metadata["Align_format"] = value.strip()
             elif key == "Commandline":
                 commandline = value.strip()
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         identifiers = None
         number_of_sequences = None
         annotations = {}
@@ -139,34 +137,34 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         if len(identifiers) == number_of_sequences:
                             break
                 elif key == "Matrix":
-                    annotations["matrix"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Gap_penalty":
-                    annotations["gap_penalty"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 elif key == "Extend_penalty":
-                    annotations["extend_penalty"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 elif key == "Length":
                     ncols = int(value.strip())
                 elif key == "Identity":
-                    annotations["identity"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Similarity":
-                    annotations["similarity"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Gaps":
-                    annotations["gaps"] = int(value.strip().split("/")[0])
+                    annotations[key] = int(value.strip().split("/")[0])
                 elif key == "Score":
-                    annotations["score"] = float(value.strip())
+                    annotations[key] = float(value.strip())
                 # TODO:
                 # The following are generated if the -nobrief command line
                 # argument used. We could simply calculate them from the
                 # alignment, but then we have to define what we mean by
                 # "similar". For now, simply store them as an annotation.
                 elif key == "Longest_Identity":
-                    annotations["longest_identity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Longest_Similarity":
-                    annotations["longest_similarity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Shortest_Identity":
-                    annotations["shortest_identity"] = value.strip()
+                    annotations[key] = value.strip()
                 elif key == "Shortest_Similarity":
-                    annotations["shortest_similarity"] = value.strip()
+                    annotations[key] = value.strip()
                 else:
                     raise ValueError("Failed to parse line '%s'" % line)
             else:
@@ -200,9 +198,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 alignment.column_annotations = {
                                     "emboss_consensus": consensus
                                 }
-                            yield alignment
-                            identifiers = None
-                            annotations = {}
+                            return alignment
                     continue
                 prefix = line[:21].strip()
                 if prefix == "":
@@ -220,7 +216,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # Record the start
                         starts[index] = start
                     else:
-                        if self.align_format == "srspair" and len(sequence) == 0:
+                        if (
+                            self.metadata["Align_format"] == "srspair"
+                            and len(sequence) == 0
+                        ):
                             start += 1
                         assert start == starts[index] + length
                     assert end == start + len(sequence)

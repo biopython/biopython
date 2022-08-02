@@ -167,7 +167,6 @@ import warnings
 
 from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 
 
 # Thermodynamic lookup tables (dictionaries):
@@ -1082,52 +1081,6 @@ def Tm_NN(
         melting_temp = 1 / (1 / (melting_temp + 273.15) + corr) - 273.15
 
     return melting_temp
-
-
-def Tm_staluc(s, dnac=50, saltc=50, rna=0):
-    """Return DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
-
-    This method may be deprecated in the future. Use Tm_NN instead. Tm_NN
-    with default values gives the same result as Tm_staluc.
-
-    s is the sequence as string or Seq object
-    dnac is DNA concentration [nM]
-    saltc is salt concentration [mM].
-    rna=0 is for DNA/DNA (default), use 1 for RNA/RNA hybridisation.
-
-    For DNA/DNA, see Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
-    For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735
-
-    Examples
-    --------
-    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
-    59.87
-    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))
-    77.90
-
-    You can also use a Seq object instead of a string,
-
-    >>> from Bio.Seq import Seq
-    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA')
-    >>> print("%0.2f" % Tm_staluc(s))
-    59.87
-    >>> print("%0.2f" % Tm_staluc(s, rna=True))
-    77.90
-
-    """
-    # Original method was by Sebastian Bassi <sbassi@genesdigitales.com>. It is
-    # now superseded by Tm_NN.
-
-    warnings.warn(
-        "Tm_staluc is deprecated; please use Tm_NN instead.",
-        BiopythonDeprecationWarning,
-    )
-    if not rna:
-        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)
-    elif rna == 1:
-        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc, nn_table=RNA_NN2)
-    else:
-        raise ValueError(f"rna={rna} not supported")
 
 
 if __name__ == "__main__":

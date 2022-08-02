@@ -27,8 +27,7 @@ class TestPairwiseAlignment(unittest.TestCase):
     def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (2 rows x 12 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment),
         )
         self.assertEqual(
             str(alignment),
@@ -681,8 +680,7 @@ class TestMultipleAlignment(unittest.TestCase):
     def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             repr(alignment),
-            "<Bio.Align.Alignment object (7 rows x 156 columns) at 0x%x>"
-            % id(alignment),
+            "<Alignment object (7 rows x 156 columns) at 0x%x>" % id(alignment),
         )
         # self.assertEqual(str(alignment), ..., msg=msg)  # FIXME
         self.assertEqual(len(alignment), 7)

@@ -222,21 +222,23 @@ def _insdc_feature_position_string(pos, offset=0):
     Use offset=1 to add one to convert a start position from python counting.
     """
     if isinstance(pos, SeqFeature.ExactPosition):
-        return "%i" % (pos.position + offset)
+        return "%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.WithinPosition):
+        # TODO - avoid private variables
         return "(%i.%i)" % (
-            pos.position + offset,
-            pos.position + pos.extension + offset,
+            pos._left + offset,
+            pos._right + offset,
         )
     elif isinstance(pos, SeqFeature.BetweenPosition):
+        # TODO - avoid private variables
         return "(%i^%i)" % (
-            pos.position + offset,
-            pos.position + pos.extension + offset,
+            pos._left + offset,
+            pos._right + offset,
         )
     elif isinstance(pos, SeqFeature.BeforePosition):
-        return "<%i" % (pos.position + offset)
+        return "<%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.AfterPosition):
-        return ">%i" % (pos.position + offset)
+        return ">%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" % ",".join(
             _insdc_feature_position_string(p, offset) for p in pos.position_choices
@@ -256,25 +258,25 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
     if (
         isinstance(location.start, SeqFeature.ExactPosition)
         and isinstance(location.end, SeqFeature.ExactPosition)
-        and location.start.position == location.end.position
+        and location.start == location.end
     ):
         # Special case, for 12:12 return 12^13
         # (a zero length slice, meaning the point between two letters)
-        if location.end.position == rec_length:
+        if location.end == rec_length:
             # Very special case, for a between position at the end of a
             # sequence (used on some circular genomes, Bug 3098) we have
             # N:N so return N^1
             return "%s%i^1" % (ref, rec_length)
         else:
-            return "%s%i^%i" % (ref, location.end.position, location.end.position + 1)
+            return "%s%i^%i" % (ref, location.end, location.end + 1)
     if (
         isinstance(location.start, SeqFeature.ExactPosition)
         and isinstance(location.end, SeqFeature.ExactPosition)
-        and location.start.position + 1 == location.end.position
+        and location.start + 1 == location.end
     ):
         # Special case, for 11:12 return 12 rather than 12..12
         # (a length one slice, meaning a single letter)
-        return "%s%i" % (ref, location.end.position)
+        return "%s%i" % (ref, location.end)
     elif isinstance(location.start, SeqFeature.UnknownPosition) or isinstance(
         location.end, SeqFeature.UnknownPosition
     ):
@@ -289,7 +291,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             # Treat the unknown start position as a BeforePosition
             return "%s<%i..%s" % (
                 ref,
-                location.nofuzzy_end,
+                location.end,
                 _insdc_feature_position_string(location.end),
             )
         else:
@@ -297,7 +299,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             return "%s%s..>%i" % (
                 ref,
                 _insdc_feature_position_string(location.start, +1),
-                location.nofuzzy_start + 1,
+                location.start + 1,
             )
     else:
         # Typical case, e.g. 12..15 gets mapped to 11:15
@@ -884,8 +886,8 @@ class GenBankWriter(_InsdcWriter):
                     units = "bases"
                 data += "  (%s %i to %i)" % (
                     units,
-                    ref.location[0].nofuzzy_start + 1,
-                    ref.location[0].nofuzzy_end,
+                    ref.location[0].start + 1,
+                    ref.location[0].end,
                 )
             self._write_single_line("REFERENCE", data)
             if ref.authors:
@@ -1364,8 +1366,7 @@ class EmblWriter(_InsdcWriter):
             if ref.location and len(ref.location) == 1:
                 self._write_single_line(
                     "RP",
-                    "%i-%i"
-                    % (ref.location[0].nofuzzy_start + 1, ref.location[0].nofuzzy_end),
+                    "%i-%i" % (ref.location[0].start + 1, ref.location[0].end),
                 )
             # TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:

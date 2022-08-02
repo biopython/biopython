@@ -13,7 +13,6 @@ import warnings
 
 from io import StringIO
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import MutableSeq
@@ -91,9 +90,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
     def compare_feature(self, old, new, msg=None):
         """Check two SeqFeatures agree."""
         self.assertEqual(old.type, new.type, msg=msg)
-        self.assertEqual(
-            old.location.nofuzzy_start, new.location.nofuzzy_start, msg=msg
-        )
+        self.assertEqual(old.location.start, new.location.start, msg=msg)
         if old.strand is not None:
             self.assertEqual(old.strand, new.strand, msg=msg)
         self.assertEqual(old.ref, new.ref, msg=msg)

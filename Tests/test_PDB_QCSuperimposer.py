@@ -70,12 +70,12 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertEqual(self._arr_to_list(self.sup.coords), self._arr_to_list(self.y))
         self.assertIsNone(self.sup.transformed_coords)
         calc_rot = [
-            [0.683, -0.523, -0.510],
-            [0.537, 0.833, -0.135],
-            [0.495, -0.181, 0.849],
+            [0.683, 0.537, 0.495],
+            [-0.523, 0.833, -0.181],
+            [-0.510, -0.135, 0.849],
         ]
         self.assertEqual(self._arr_to_list(self.sup.rot), calc_rot)
-        calc_tran = [-7.439, 36.515, 36.811]
+        calc_tran = [38.786, -20.655, -15.422]
         self.assertEqual(self._arr_to_list(self.sup.tran), calc_tran)
         # We can reduce precision here since we do a similar calculation
         # for a full structure down below.
@@ -86,10 +86,10 @@ class QCPSuperimposerTest(unittest.TestCase):
         """Test transformation of coordinates after QCP."""
         self.sup.run()
         transformed_coords = [
-            [49.055, -1.239, 50.584],
-            [50.022, -0.394, 51.425],
-            [51.477, -0.573, 51.068],
-            [52.396, -0.984, 52.033],
+            [51.652, -1.900, 50.071],
+            [50.398, -1.229, 50.649],
+            [50.680, -0.042, 51.537],
+            [50.220, -0.019, 52.853],
         ]
 
         self.assertEqual(

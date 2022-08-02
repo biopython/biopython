@@ -73,6 +73,10 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.Data.SCOPData
+-----------------
+Declared obsolete in release 1.80. Please use Bio.Data.PDBData instead.
+
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
 Declared obsolete in release 1.79. Please use the standard library subprocess
@@ -270,9 +274,23 @@ attribute sub_features was deprecated. It was removed in Release 1.68.
 Note that in Release 1.80 the location_operator argument can no longer be
 used, instead do this via the CompoundLocation object.
 
-The strand, ref and ref_db arguments to the SeqFeature were deprecated in
-Release 1.80, and will later be removed. Set them via the location object
-instead.
+There were multiple deprecations in Release 1.80:
+
+* Arguments ``strand``, ``ref`` and ``ref_db`` to the ``SeqFeature``
+  class - set them via the location object
+* Unused class ``PositionGap`` - originally for very old GenBank files.
+* Location attributes ``location.nofuzzy_start`` and ``location.nofuzzy_end`` -
+  use the location directly or if required ``int(location.start)`` and
+  ``int(location.end)``. This will fail for the ``UnknownPosition``
+  where the nofuzzy aliases returned ``None``.
+* Position attribute ``.position`` returned the (left) position as an
+  integer - use the location directly or if required ``int(position)``,
+  however for ``OneOfPosition``, ``BetweenPosition``, and
+  ``WithinPosition`` that will give the default position rather than
+  the left-most (minimum) value.
+* Position attribute ``.extension`` returned the "width", typically
+  zero except for ``OneOfPosition``, ``BetweenPosition``, and
+  ``WithinPosition`` where this must be handled explicitly now.
 
 Bio.Motif
 ---------
@@ -568,6 +586,9 @@ deprecated in Release 1.64, and removed in Release 1.67. Use function
 list(SimpleFastaParser(handle)) from Bio.SeqIO.FastaIO instead (but
 ideally convert your code to using an iterator approach).
 
+Function Tm_staluc in Bio.SeqUtils.MeltingTemp was deprecated in Release 1.78,
+and removed in Release 1.80.
+
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 ------------------------------------------------------------------
 The whole of the old ``Bio.GFF`` module was deprecated in Release 1.53, and
@@ -699,6 +720,10 @@ The ``draw_graphviz`` function was removed in Release 1.79.
 Bio.pairwise2
 -------------
 The ``Bio.pairwise2`` module was deprecated in Release 1.80.
+
+Bio.Wise
+--------
+The ``Bio.Wise`` module was deprecated in Release 1.80.
 
 Scripts/Restriction/ranacompiler.py
 -----------------------------------

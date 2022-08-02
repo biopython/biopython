@@ -103,7 +103,7 @@ class QCPSuperimposer:
             -1.0,
         )
         rot = array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
-        return (rmsd, rot.T, [q1, q2, q3, q4])
+        return (rmsd, rot, [q1, q2, q3, q4])
 
     # Public methods
     def set(self, reference_coords, coords):

@@ -225,12 +225,12 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(str(location3.start), "(10.13)")
         self.assertEqual(str(location3.end), ">40")
         # --- test non-fuzzy representations
-        self.assertEqual(location1.nofuzzy_start, 5)
-        self.assertEqual(location1.nofuzzy_end, 13)
-        self.assertEqual(location2.nofuzzy_start, 15)
-        self.assertEqual(location2.nofuzzy_end, 24)
-        self.assertEqual(location3.nofuzzy_start, 10)
-        self.assertEqual(location3.nofuzzy_end, 40)
+        self.assertEqual(int(location1.start), 5)
+        self.assertEqual(int(location1.end), 13)
+        self.assertEqual(int(location2.start), 15)
+        self.assertEqual(int(location2.end), 24)
+        self.assertEqual(int(location3.start), 10)
+        self.assertEqual(int(location3.end), 40)
 
 
 class TestPositions(unittest.TestCase):
@@ -279,22 +279,22 @@ class TestExtract(unittest.TestCase):
             r"Feature references another sequence \(ANOTHER\.7\), not found in references",
         ):
             location.extract(parent_record, references={"SOMEOTHER.2": another_record})
-        self.assertEqual(
-            location.extract(parent_record, references={"ANOTHER.7": another_record}),
-            "cta",
+        record = location.extract(
+            parent_record, references={"ANOTHER.7": another_record}
         )
+        self.assertEqual(type(record), SeqRecord.SeqRecord)
+        self.assertEqual(record.seq, "cta")
 
     def test_reference_in_location_sequence(self):
         """Test location with reference to another sequence."""
         parent_sequence = Seq.Seq("actg")
         another_sequence = Seq.Seq("gtcagctac")
         location = FeatureLocation(5, 8, ref="ANOTHER.7")
-        self.assertEqual(
-            location.extract(
-                parent_sequence, references={"ANOTHER.7": another_sequence}
-            ),
-            "cta",
+        sequence = location.extract(
+            parent_sequence, references={"ANOTHER.7": another_sequence}
         )
+        self.assertEqual(type(sequence), Seq.Seq)
+        self.assertEqual(sequence, "cta")
 
     def test_reference_in_compound_location_record(self):
         """Test compound location with reference to another record."""
@@ -311,24 +311,22 @@ class TestExtract(unittest.TestCase):
             r"Feature references another sequence \(ANOTHER\.7\), not found in references",
         ):
             location.extract(parent_record, references={"SOMEOTHER.2": another_record})
-        self.assertEqual(
-            location.extract(
-                parent_record, references={"ANOTHER.7": another_record}
-            ).seq,
-            "ccaatgg",
+        record = location.extract(
+            parent_record, references={"ANOTHER.7": another_record}
         )
+        self.assertEqual(type(record), SeqRecord.SeqRecord)
+        self.assertEqual(record.seq, "ccaatgg")
 
     def test_reference_in_compound_location_sequence(self):
         """Test compound location with reference to another sequence."""
         parent_sequence = Seq.Seq("aaccaaccaaccaaccaa")
         another_sequence = Seq.Seq("ttggttggttggttggtt")
         location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
-        self.assertEqual(
-            location.extract(
-                parent_sequence, references={"ANOTHER.7": another_sequence}
-            ),
-            "ccaatgg",
+        sequence = location.extract(
+            parent_sequence, references={"ANOTHER.7": another_sequence}
         )
+        self.assertEqual(type(sequence), Seq.Seq)
+        self.assertEqual(sequence, "ccaatgg")
 
 
 if __name__ == "__main__":

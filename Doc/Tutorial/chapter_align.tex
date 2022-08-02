@@ -1211,7 +1211,7 @@ with handles instead:
 ...     str(muscle_cline),
 ...     stdout=subprocess.PIPE,
 ...     stderr=subprocess.PIPE,
-...     universal_newlines=True,
+...     text=True,
 ...     shell=(sys.platform != "win32"),
 ... )
 >>> from Bio import AlignIO
@@ -1266,7 +1266,7 @@ Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 ...     stdin=subprocess.PIPE,
 ...     stdout=subprocess.PIPE,
 ...     stderr=subprocess.PIPE,
-...     universal_newlines=True,
+...     text=True,
 ...     shell=(sys.platform != "win32"),
 ... )
 \end{minted}
@@ -1960,7 +1960,7 @@ The \verb+aligner.align+ method returns \verb+Alignment+ objects, each represent
 >>> alignments = aligner.align(target, query)
 >>> alignment = alignments[0]
 >>> alignment  # doctest: +SKIP
-<Bio.Align.Alignment object (2 rows x 5 columns) at 0x10204d250>
+<Alignment object (2 rows x 5 columns) at 0x10204d250>
 \end{minted}
 
 Each alignment stores the alignment score:
@@ -2321,7 +2321,7 @@ Extracting the first 4 columns for the example alignment above gives:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, :4]  # doctest:+ELLIPSIS
-<Bio.Align.Alignment object (2 rows x 4 columns) at ...>
+<Alignment object (2 rows x 4 columns) at ...>
 >>> print(alignment[:, :4])
 GAACT
 |-|-
@@ -2334,7 +2334,7 @@ Similarly, extracting the last 3 columns gives:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Bio.Align.Alignment object (2 rows x 3 columns) at ...>
+<Alignment object (2 rows x 3 columns) at ...>
 >>> print(alignment[:, -3:])
 GAACT
   |-|
@@ -2347,7 +2347,7 @@ The column index can also be an iterable of integers:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Bio.Align.Alignment object (2 rows x 3 columns) at ...>
+<Alignment object (2 rows x 3 columns) at ...>
 >>> print(alignment[:, (1, 3, 0)])
 ACG
 --|

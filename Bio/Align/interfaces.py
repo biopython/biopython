@@ -1,4 +1,6 @@
-# Copyright 2006-2021 by Peter Cock.  All rights reserved.
+# Copyright 2006-2021 by Peter Cock.
+# Copyright 2022 by Michiel de Hoon.
+# All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -34,9 +36,9 @@ class AlignmentIterator(ABC):
         - there should be a single non-optional argument, the source.
         - you can add additional optional arguments.
         """
+        self.source = source
         try:
-            self.stream = open(source, "r" + mode)
-            self.should_close_stream = True
+            self._stream = open(source, "r" + mode)
         except TypeError:  # not a path, assume we received a stream
             if mode == "t":
                 if source.read(0) != "":
@@ -50,23 +52,27 @@ class AlignmentIterator(ABC):
                     ) from None
             else:
                 raise ValueError("Unknown mode '%s'" % mode) from None
-            self.stream = source
-            self.should_close_stream = False
+            self._stream = source
         try:
-            self.alignments = self.parse(self.stream)
+            self._read_header(self._stream)
         except Exception:
-            if self.should_close_stream:
-                self.stream.close()
+            self._close()
             raise
 
     def __next__(self):
         """Return the next entry."""
         try:
-            return next(self.alignments)
+            stream = self._stream
+        except AttributeError:
+            raise StopIteration from None
+        try:
+            alignment = self._read_next_alignment(stream)
+            if alignment is None:
+                raise StopIteration
         except Exception:
-            if self.should_close_stream:
-                self.stream.close()
+            self._close()
             raise
+        return alignment
 
     def __iter__(self):
         """Iterate over the entries as Alignment objects.
@@ -77,9 +83,21 @@ class AlignmentIterator(ABC):
         """
         return self
 
+    def _read_header(self, stream):
+        """Read the file header and store it in metadata."""
+
     @abstractmethod
-    def parse(self, stream):
-        """Start parsing the file, and return an Alignment iterator."""
+    def _read_next_alignment(self, stream):
+        """Read one Alignment from the stream, and return it."""
+
+    def _close(self):
+        try:
+            stream = self._stream
+        except AttributeError:
+            return
+        if stream is not self.source:
+            stream.close()
+        del self._stream
 
 
 class AlignmentWriter:
@@ -207,7 +225,7 @@ class AlignmentWriter:
                 )
             else:
                 raise ValueError(
-                    "Number of alignmnets is %d (expected at least %d)"
+                    "Number of alignments is %d (expected at least %d)"
                     % (count, mincount)
                 )
         return count

@@ -3331,7 +3331,7 @@ class IC_Residue:
                     base
                     + d.id
                     + " "
-                    + "{:9.5f}".format(set_accuracy_95(cic.dihedraAngle[d.ndx]))
+                    + f"{set_accuracy_95(cic.dihedraAngle[d.ndx]):9.5f}"
                     + "\n"
                 )
             except KeyError:

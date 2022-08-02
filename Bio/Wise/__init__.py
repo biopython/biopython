@@ -19,8 +19,17 @@ Bio.Wise.dnal is for Smith-Waterman DNA alignments
 import os
 import sys
 import tempfile
+import warnings
 
 from Bio import SeqIO
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "The 'Bio.Wise' module is deprecated and will be removed in a future "
+    "release of Biopython.",
+    BiopythonDeprecationWarning,
+)
 
 
 def _build_align_cmdline(

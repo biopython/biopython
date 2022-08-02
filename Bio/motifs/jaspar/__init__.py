@@ -233,7 +233,7 @@ def _read_sites(handle):
         line = next(handle)
         instance = ""
         for c in line.strip():
-            if c == c.upper():
+            if c.isupper():
                 instance += c
         instance = Seq(instance)
         instances.append(instance)
