@@ -129,5 +129,3 @@ Doc/api/*.rst
 env/
 venv/
 ENV/
-env.bak/
-venv.bak/
