@@ -410,7 +410,11 @@ def compare_residues(
                 else:
                     cmpdict["pass"] = False
             else:
-                cmpdict["aCount"] = numpy.size(e0.internal_coord.atomArray, 0)
+                cmpdict["aCount"] = (
+                    0
+                    if e0.internal_coord.atomArray is None
+                    else numpy.size(e0.internal_coord.atomArray, 0)
+                )
                 cmpdict["pass"] = False
         else:
             cmpdict["pass"] = True
