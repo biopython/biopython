@@ -76,16 +76,25 @@ this, run::
 Local Testing
 -------------
 
-Please always run the style checks (see above) and the full test suite on
-your local computer before submitting a pull request, e.g.::
+Please always run the full test suite locally before submitting a pull
+request, e.g.::
 
-    $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
     $ python setup.py build
     $ python setup.py test
+    $ git commit ...
 
-If you have multiple versions of Python installed, ideally test them all
-(the Python tool ``tox`` can be helpful here).
+To run a specific test case you can also consider using `pytest <https://docs.pytest.org>`_, eg.::
 
+    $ pytest Tests/test_PDBList.py::TestPBDListGetList
+
+In order to generate the test coverage report, you can run the test suite
+using `coverage <https://coverage.readthedocs.io/>`_, eg.::
+
+    $ coverage run run_tests.py --offline
+    $ pytest --cov Bio/PDB/PDBList.py Tests/test_PDBList.py
+
+It would be possible to run the test suite via tox, but there is no
+configuration provided on the repository.
 
 Continuous Integration
 ----------------------

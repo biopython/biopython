@@ -126,3 +126,6 @@ Doc/api/*.rst
 #Ignore virtual environment file
 .env
 venv/
+
+# Testing
+**/.coverage
