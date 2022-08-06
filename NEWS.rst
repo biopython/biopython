@@ -48,6 +48,9 @@ performance improvement and to much better maintainability. The refactored
 ``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
 that of ``Bio.PDB.Superimposer``.
 
+The ``Bio.PDB.PDBList`` module now allows downloading biological assemblies,
+for one or more entries of the wwPDB.
+
 In the ``Bio.Restriction`` module, each restriction enzyme now includes an `id`
 property giving the numerical identifier for the REBASE database identifier
 from which the enzyme object was created, and a `uri` property with a canonical
