@@ -2275,18 +2275,22 @@ class Alignment:
         a = [-numpy.ones(len(sequence), int) for sequence in self.sequences]
         n, m = self.coordinates.shape
         i = 0
+        j = 0
         for k in range(m - 1):
             step = 0
             starts = self.coordinates[:, k]
             ends = self.coordinates[:, k + 1]
             for row, start, end in zip(a, starts, ends):
                 if start < end:
-                    step = end - start
-                    row[start:end] = range(i, i + step)
+                    j = i + end - start
+                    row[start:end] = range(i, j)
                 elif start > end:
-                    step = start - end
-                    row[end:start][::-1] = range(i, i + step)
-            i += step
+                    j = i + start - end
+                    if end > 0:
+                        row[start - 1 : end - 1 : -1] = range(i, j)
+                    elif start > 0:
+                        row[start - 1 :: -1] = range(i, j)
+            i = j
         return a
 
     def sort(self, key=None, reverse=False):
