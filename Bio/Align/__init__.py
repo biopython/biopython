@@ -2147,6 +2147,76 @@ class Alignment:
                 segments[i, :] = n - segments[i, :]
         return segments
 
+    @property
+    def indices(self):
+        """Return the sequence indices in the printed alignment as a 2D array.
+
+        This property returns a 2D numpy array with the sequence index in each
+        row and column in the printed alignment. The shape of this array is
+        given by `self.shape`. Gaps are indicated by -1.
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+
+        >>> alignments = aligner.align("GAACT", "GAT")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACT
+        ||--|
+        GA--T
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[[0, 1,  2,  3, 4],
+                [0, 1, -1, -1, 2]])
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACT
+        |-|-|
+        G-A-T
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[[0,  1, 2,  3, 4],
+                [0, -1, 1, -1, 2]])
+
+        >>> alignments = aligner.align("GAACT", "ATC", strand="-")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACT
+        ||--|
+        GA--T
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[[0, 1,  2,  3, 4],
+                [2, 1, -1, -1, 0]])
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACT
+        |-|-|
+        G-A-T
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[[0,  1, 2,  3, 4],
+                [2, -1, 1, -1, 0]])
+
+        """
+        n, m = self.shape
+        a = -numpy.ones([n, m], int)
+        n, k = self.coordinates.shape
+        p = 0
+        for j in range(k - 1):
+            starts = self.coordinates[:, j]
+            ends = self.coordinates[:, j + 1]
+            steps = ends - starts
+            for i in range(n):
+                start, end = starts[i], ends[i]
+                if start < end:
+                    a[i, p : p + end - start] = range(start, end)
+                elif start > end:
+                    a[i, p : p + start - end][::-1] = range(end, start)
+            p += max(abs(steps))
+        return a
+
     def sort(self, key=None, reverse=False):
         """Sort the sequences of the alignment in place.
 

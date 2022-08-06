@@ -24,6 +24,16 @@ from Bio.SeqUtils import GC
 
 
 class TestPairwiseAlignment(unittest.TestCase):
+    target = "AACCGGGACCG"
+    query = "ACGGAAC"
+    query_rc = reverse_complement(query)
+    forward_coordinates = numpy.array(
+        [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]]
+    )
+    reverse_coordinates = numpy.array(
+        [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
+    )
+
     def check_indexing_slicing(self, alignment, msg):
         self.assertEqual(
             repr(alignment),
@@ -348,35 +358,26 @@ A-G
         self.assertEqual(alignment, alignment[:])
 
     def test_indexing_slicing(self):
-        target = "AACCGGGACCG"
-        query = "ACGGAAC"
-        query_rc = reverse_complement(query)
-        sequences = (target, query)
-        forward_coordinates = numpy.array(
-            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]]
-        )
-        alignment = Align.Alignment(sequences, forward_coordinates)
+        sequences = (self.target, self.query)
+        alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
         msg = "str, forward strand"
         self.check_indexing_slicing(alignment, msg)
-        sequences = (target, query_rc)
-        reverse_coordinates = numpy.array(
-            [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
-        )
-        alignment = Align.Alignment(sequences, reverse_coordinates)
+        sequences = (self.target, self.query_rc)
+        alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
         msg = "str, reverse strand"
         self.check_indexing_slicing(alignment, msg)
-        target = Seq(target)
-        query = Seq(query)
-        query_rc = Seq(query_rc)
+        target = Seq(self.target)
+        query = Seq(self.query)
+        query_rc = Seq(self.query_rc)
         sequences = (target, query)
-        alignment = Align.Alignment(sequences, forward_coordinates)
+        alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
         msg = "Seq, forward strand"
         self.check_indexing_slicing(alignment, msg)
         sequences = (target, query_rc)
-        alignment = Align.Alignment(sequences, reverse_coordinates)
+        alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
         msg = "Seq, reverse strand"
         self.check_indexing_slicing(alignment, msg)
@@ -384,15 +385,97 @@ A-G
         query = SeqRecord(query)
         query_rc = SeqRecord(query_rc)
         sequences = (target, query)
-        alignment = Align.Alignment(sequences, forward_coordinates)
+        alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
         msg = "SeqRecord, forward strand"
         self.check_indexing_slicing(alignment, msg)
         sequences = (target, query_rc)
-        alignment = Align.Alignment(sequences, reverse_coordinates)
+        alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
         msg = "SeqRecord, reverse strand"
         self.check_indexing_slicing(alignment, msg)
+
+    def test_aligned_indices(self):
+        sequences = (self.target, self.query)
+        alignment = Align.Alignment(sequences, self.forward_coordinates)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[0, 1],
+                              [2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[0, 1],
+                              [1, 2],
+                              [2, 4],
+                              [4, 5],
+                              [6, 7]]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+|-|-||-|-|--
+A-C-GG-AAC--
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        [0, 1, 2, 3, 4, 5, 6, 7, -1, 8, 9, 10],
+                        [0, -1, 1, -1, 2, 3, -1, 4, 5, 6, -1, -1],
+                    ]
+                ),
+            )
+        )
+        sequences = (self.target, self.query_rc)
+        alignment = Align.Alignment(sequences, self.reverse_coordinates)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[0, 1],
+                              [2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[7, 6],
+                              [6, 5],
+                              [5, 3],
+                              [3, 2],
+                              [1, 0]]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+|-|-||-|-|--
+A-C-GG-AAC--
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        [0, 1, 2, 3, 4, 5, 6, 7, -1, 8, 9, 10],
+                        [6, -1, 5, -1, 4, 3, -1, 2, 1, 0, -1, -1],
+                    ]
+                ),
+            )
+        )
 
     def test_sort(self):
         target = Seq("ACTT")
