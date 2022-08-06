@@ -71,12 +71,14 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
-    -   id: do-not-use-assert-in-production-code
-        name: Use Exception instead of assert in the production code.
-        description: Use Exception instead of assert in the production code.
-        entry: 'assert'
-        language: pygrep
-        types: [python]
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+    -   id: bandit
+        name: vulnerability check
+        # Limit check to the usage of assert in the code.
+        # https://bandit.readthedocs.io/en/latest/plugins/b101_assert_used.html
+        args: [-t, "B101"]
         # Update the exclusion list when asserts are deleted from one of these files.
         # See: https://github.com/biopython/biopython/issues/3600
         exclude: |
