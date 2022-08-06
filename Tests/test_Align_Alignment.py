@@ -398,6 +398,14 @@ A-G
     def test_aligned_indices(self):
         sequences = (self.target, self.query)
         alignment = Align.Alignment(sequences, self.forward_coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+|-|-||-|-|--
+A-C-GG-AAC--
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.aligned,
@@ -417,14 +425,6 @@ A-G
                 # fmt: on
             )
         )
-        self.assertEqual(
-            str(alignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
-""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.indices,
@@ -433,7 +433,129 @@ A-C-GG-AAC--
                         # fmt: off
 # flake8: noqa
                         [0,  1, 2,  3, 4, 5,  6, 7, -1, 8,  9, 10],
-                        [0, -1, 1, -1, 2, 3, -1, 4,  5, 6, -1,  -1],
+                        [0, -1, 1, -1, 2, 3, -1, 4,  5, 6, -1, -1],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.forward_coordinates[:, 1:])
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+ -|-||-|-|--
+A-C-GG-AAC--
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[1, 2],
+                              [2, 4],
+                              [4, 5],
+                              [6, 7]]])
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [ 1, 2,  3, 4, 5,  6, 7, -1, 8,  9, 10],
+                        [-1, 1, -1, 2, 3, -1, 4,  5, 6, -1, -1],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.forward_coordinates[:, :-1])
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+|-|-||-|-|
+A-C-GG-AAC
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[0, 1],
+                              [2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[0, 1],
+                              [1, 2],
+                              [2, 4],
+                              [4, 5],
+                              [6, 7]]])
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [0,  1, 2,  3, 4, 5,  6, 7, -1, 8],
+                        [0, -1, 1, -1, 2, 3, -1, 4,  5, 6],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.forward_coordinates[:, 1:-1])
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+ -|-||-|-|
+A-C-GG-AAC
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[1, 2],
+                              [2, 4],
+                              [4, 5],
+                              [6, 7]]])
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [ 1, 2,  3, 4, 5,  6, 7, -1, 8],
+                        [-1, 1, -1, 2, 3, -1, 4,  5, 6],
                         # fmt: on
                     ]
                 ),
@@ -477,6 +599,128 @@ A-C-GG-AAC--
 # flake8: noqa
                         [0,  1, 2,  3, 4, 5,  6, 7, -1, 8,  9, 10],
                         [6, -1, 5, -1, 4, 3, -1, 2,  1, 0, -1, -1],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.reverse_coordinates[:, 1:])
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[6, 5],
+                              [5, 3],
+                              [3, 2],
+                              [1, 0]]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+ -|-||-|-|--
+A-C-GG-AAC--
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [ 1, 2,  3, 4, 5,  6, 7, -1, 8,  9, 10],
+                        [-1, 5, -1, 4, 3, -1, 2,  1, 0, -1, -1],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.reverse_coordinates[:, :-1])
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[0, 1],
+                              [2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[7, 6],
+                              [6, 5],
+                              [5, 3],
+                              [3, 2],
+                              [1, 0]]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+|-|-||-|-|
+A-C-GG-AAC
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [0,  1, 2,  3, 4, 5,  6, 7, -1, 8],
+                        [6, -1, 5, -1, 4, 3, -1, 2,  1, 0],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        alignment = Align.Alignment(sequences, self.reverse_coordinates[:, 1:-1])
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[2, 3],
+                              [4, 6],
+                              [7, 8],
+                              [8, 9]],
+
+                             [[6, 5],
+                              [5, 3],
+                              [3, 2],
+                              [1, 0]]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AACCGGGA-CCG
+ -|-||-|-|
+A-C-GG-AAC
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.indices,
+                numpy.array(
+                    [
+                        # fmt: off
+# flake8: noqa
+                        [ 1, 2,  3, 4, 5,  6, 7, -1, 8],
+                        [-1, 5, -1, 4, 3, -1, 2,  1, 0],
                         # fmt: on
                     ]
                 ),
