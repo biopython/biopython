@@ -2160,46 +2160,47 @@ class Alignment:
 
         >>> from Bio import Align
         >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "local"
 
-        >>> alignments = aligner.align("GAACT", "GAT")
+        >>> alignments = aligner.align("GAACTGG", "AATG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACT
-        ||--|
-        GA--T
+        GAACTGG
+         ||-||
+         AA-TG
         <BLANKLINE>
         >>> alignment.indices
-        array([[ 0,  1,  2,  3,  4],
-               [ 0,  1, -1, -1,  2]])
+        array([[ 1,  2,  3,  4,  5],
+               [ 0,  1, -1,  2,  3]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACT
-        |-|-|
-        G-A-T
+        GAACTGG
+         ||-|-|
+         AA-T-G
         <BLANKLINE>
         >>> alignment.indices
-        array([[ 0,  1,  2,  3,  4],
-               [ 0, -1,  1, -1,  2]])
+        array([[ 1,  2,  3,  4,  5,  6],
+               [ 0,  1, -1,  2, -1,  3]])
 
-        >>> alignments = aligner.align("GAACT", "ATC", strand="-")
+        >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACT
-        ||--|
-        GA--T
+        GAACTGG
+         ||-||
+         AA-TG
         <BLANKLINE>
         >>> alignment.indices
-        array([[ 0,  1,  2,  3,  4],
-               [ 2,  1, -1, -1,  0]])
+        array([[ 1,  2,  3,  4,  5],
+               [ 3,  2, -1,  1,  0]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACT
-        |-|-|
-        G-A-T
+        GAACTGG
+         ||-|-|
+         AA-T-G
         <BLANKLINE>
         >>> alignment.indices
-        array([[ 0,  1,  2,  3,  4],
-               [ 2, -1,  1, -1,  0]])
+        array([[ 1,  2,  3,  4,  5,  6],
+               [ 3,  2, -1,  1, -1,  0]])
 
         """
         a = -numpy.ones(self.shape, int)
