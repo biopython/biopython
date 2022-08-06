@@ -49,6 +49,15 @@ class TestPBDListGetList(unittest.TestCase):
         # was exceeded
         self.assertGreater(len(entries), 3000)
 
+    def test_get_all_assemblies(self):
+        """Tests the Bio.PDB.PDBList.get_all_assemblies method."""
+        # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        pdblist = PDBList(obsolete_pdb="unimportant")
+        entries = pdblist.get_all_assemblies()
+        # As number of obsolete entries constantly grow, test checks if a certain number
+        # was exceeded
+        self.assertGreater(len(entries), 100000)
+
 
 class TestPDBListGetStructure(unittest.TestCase):
     """Test methods responsible for getting structures."""
@@ -63,7 +72,7 @@ class TestPDBListGetStructure(unittest.TestCase):
 
     def check(self, structure, filename, file_format, obsolete=False, pdir=None):
         with self.make_temp_directory(os.getcwd()) as tmp:
-            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            pdblist = PDBList(pdb=tmp)
             path = os.path.join(tmp, filename)
             if pdir:
                 pdir = os.path.join(tmp, pdir)
@@ -71,7 +80,6 @@ class TestPDBListGetStructure(unittest.TestCase):
                 structure, obsolete=obsolete, pdir=pdir, file_format=file_format
             )
             self.assertTrue(os.path.isfile(path))
-            os.remove(path)
 
     def test_retrieve_pdb_file_small_pdb(self):
         """Tests retrieving the small molecule in pdb format."""
@@ -134,11 +142,75 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "127d"
         self.check(structure, os.path.join(structure[1:3], f"{structure}.mmtf"), "mmtf")
 
-    def test_double_retrieve(self):
+    def test_double_retrieve_structure(self):
         """Tests retrieving the same file to different directories."""
         structure = "127d"
         self.check(structure, os.path.join("a", f"{structure}.cif"), "mmCif", pdir="a")
         self.check(structure, os.path.join("b", f"{structure}.cif"), "mmCif", pdir="b")
+
+
+class TestPDBListGetAssembly(unittest.TestCase):
+    """Test methods responsible for getting assemblies."""
+
+    @contextlib.contextmanager
+    def make_temp_directory(self, directory):
+        temp_dir = tempfile.mkdtemp(dir=directory)
+        try:
+            yield temp_dir
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def check(self, structure, assembly_num, filename, file_format, pdir=None):
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp)
+            path = os.path.join(tmp, filename)
+            if pdir:
+                pdir = os.path.join(tmp, pdir)
+            pdblist.retrieve_assembly_file(
+                structure, assembly_num, pdir=pdir, file_format=file_format
+            )
+            self.assertTrue(os.path.isfile(path))
+
+    def test_retrieve_assembly_file_mmcif(self):
+        """Tests retrieving a small assembly in mmCif format."""
+        structure = "127d"
+        assembly_num = "1"
+        self.check(
+            structure,
+            assembly_num,
+            os.path.join(structure[1:3], f"{structure}-assembly{assembly_num}.cif"),
+            "mmCif",
+        )
+
+    def test_retrieve_assembly_file_pdb(self):
+        """Tests retrieving a small assembly in pdb format."""
+        structure = "127d"
+        assembly_num = "1"
+        self.check(
+            structure,
+            assembly_num,
+            os.path.join(structure[1:3], f"{structure}.pdb{assembly_num}"),
+            "pdb",
+        )
+
+    def test_double_retrieve_assembly(self):
+        """Tests retrieving the same file to different directories."""
+        structure = "127d"
+        assembly_num = "1"
+        self.check(
+            structure,
+            assembly_num,
+            os.path.join("a", f"{structure}-assembly{assembly_num}.cif"),
+            "mmCif",
+            pdir="a",
+        )
+        self.check(
+            structure,
+            assembly_num,
+            os.path.join("b", f"{structure}-assembly{assembly_num}.cif"),
+            "mmCif",
+            pdir="b",
+        )
 
 
 if __name__ == "__main__":
