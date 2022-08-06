@@ -2200,21 +2200,21 @@ class Alignment:
                 [2, -1, 1, -1, 0]])
 
         """
-        n, m = self.shape
-        a = -numpy.ones([n, m], int)
-        n, k = self.coordinates.shape
-        p = 0
-        for j in range(k - 1):
-            starts = self.coordinates[:, j]
-            ends = self.coordinates[:, j + 1]
-            steps = ends - starts
-            for i in range(n):
-                start, end = starts[i], ends[i]
+        a = -numpy.ones(self.shape, int)
+        n, m = self.coordinates.shape
+        i = 0
+        j = 0
+        for k in range(m - 1):
+            starts = self.coordinates[:, k]
+            ends = self.coordinates[:, k + 1]
+            for row, start, end in zip(a, starts, ends):
                 if start < end:
-                    a[i, p : p + end - start] = range(start, end)
+                    j = i + end - start
+                    row[i:j] = range(start, end)
                 elif start > end:
-                    a[i, p : p + start - end][::-1] = range(end, start)
-            p += max(abs(steps))
+                    j = i + start - end
+                    row[i:j] = range(start - 1, end - 1, -1)
+            i = j
         return a
 
     def sort(self, key=None, reverse=False):
