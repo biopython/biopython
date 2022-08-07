@@ -15,14 +15,13 @@
 
 """Unit tests for the Bio.PDB.DSSP submodule."""
 
-from distutils.version import StrictVersion
 import re
 import subprocess
 import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy  # noqa: F401
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -31,9 +30,19 @@ except ImportError:
     ) from None
 
 
-from Bio import MissingExternalDependencyError
 from Bio.PDB import PDBParser, MMCIFParser
 from Bio.PDB import DSSP, make_dssp_dict
+
+
+VERSION_2_2_0 = (2, 2, 0)
+
+
+def parse_dssp_version(version_string):
+    """Parse the DSSP version into a tuple from the tool output."""
+    match = re.search(r"\s*([\d.]+)", version_string)
+    if match:
+        version = match.group(1)
+    return tuple(map(int, version.split(".")))
 
 
 def will_it_float(s):  # well played, whoever this was :)
@@ -53,7 +62,7 @@ class DSSP_tool_test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        cls.dssp_version = "0.0.0"
+        cls.dssp_version = (0, 0, 0)
         is_dssp_available = False
         # Check if DSSP is installed
         quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
@@ -63,7 +72,7 @@ class DSSP_tool_test(unittest.TestCase):
                 version_string = subprocess.check_output(
                     ["dssp", "--version"], text=True
                 )
-                cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                cls.dssp_version = parse_dssp_version(version_string)
                 is_dssp_available = True
             except subprocess.CalledProcessError:
                 # Older versions of DSSP
@@ -74,7 +83,7 @@ class DSSP_tool_test(unittest.TestCase):
                 version_string = subprocess.check_output(
                     ["mkdssp", "--version"], text=True
                 )
-                cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                cls.dssp_version = parse_dssp_version(version_string)
                 is_dssp_available = True
             except OSError:
                 pass
@@ -91,33 +100,39 @@ class DSSP_tool_test(unittest.TestCase):
         """Test DSSP generation from PDB."""
         pdbfile = "PDB/2BEG.pdb"
         model = self.pdbparser.get_structure("2BEG", pdbfile)[0]
-        dssp = DSSP(model, pdbfile)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # silence DSSP warnings
+            dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 130)
 
     # Only run mmCIF tests if DSSP version installed supports mmcif
     def test_dssp_with_mmcif_file(self):
         """Test DSSP generation from MMCIF."""
-        if self.dssp_version < StrictVersion("2.2.0"):
+        if self.dssp_version < VERSION_2_2_0:
             self.skipTest("Test requires DSSP version 2.2.0 or greater")
 
-        pdbfile = "PDB/2BEG.cif"
-        model = self.cifparser.get_structure("2BEG", pdbfile)[0]
-        dssp = DSSP(model, pdbfile)
-        self.assertEqual(len(dssp), 130)
+        pdbfile = "PDB/4ZHL.cif"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # silence all warnings
+            model = self.cifparser.get_structure("4ZHL", pdbfile)[0]
+            dssp = DSSP(model, pdbfile)
+        self.assertEqual(len(dssp), 257)
 
     def test_dssp_with_mmcif_file_and_nonstandard_residues(self):
         """Test DSSP generation from MMCIF with non-standard residues."""
-        if self.dssp_version < StrictVersion("2.2.0"):
+        if self.dssp_version < VERSION_2_2_0:
             self.skipTest("Test requires DSSP version 2.2.0 or greater")
 
         pdbfile = "PDB/1AS5.cif"
         model = self.cifparser.get_structure("1AS5", pdbfile)[0]
-        dssp = DSSP(model, pdbfile)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # silence DSSP warnings
+            dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 24)
 
     def test_dssp_with_mmcif_file_and_different_chain_ids(self):
         """Test DSSP generation from MMCIF which has different label and author chain IDs."""
-        if self.dssp_version < StrictVersion("2.2.0"):
+        if self.dssp_version < VERSION_2_2_0:
             self.skipTest("Test requires DSSP version 2.2.0 or greater")
 
         pdbfile = "PDB/1A7G.cif"

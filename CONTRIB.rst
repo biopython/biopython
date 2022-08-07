@@ -74,6 +74,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chenghao Zhu <zhuchcn@gmail.com>
+- Christian Balbin <christian at domain balbin.com>
 - Chris Daley <https://github.com/chebizarro>
 - Chris Jackson <https://github.com/chrisjackson-pellicle>
 - Chris Lasher <chris.lasher at gmail.com>
