@@ -249,7 +249,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp", dssp_version="3.9.9"):
 
     Examples
     --------
-    How dssp_dict_frompdb_file could be used::
+    How dssp_dict_from_pdb_file could be used::
 
         from Bio.PDB.DSSP import dssp_dict_from_pdb_file
         dssp_tuple = dssp_dict_from_pdb_file("/local-pdb/1fat.pdb")
