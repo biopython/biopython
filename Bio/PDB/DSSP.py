@@ -100,7 +100,7 @@ import warnings
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-from Bio.Data.PDBData import protein_letters_3to1, residue_max_acc
+from Bio.Data.PDBData import protein_letters_3to1, residue_sasa_scales
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 # Match C in DSSP
@@ -108,6 +108,7 @@ _dssp_cys = re.compile("[a-z]")
 
 # Maximal ASA of amino acids
 # Used for relative accessibility
+residue_max_acc = residue_sasa_scales
 
 
 def version(version_string):
