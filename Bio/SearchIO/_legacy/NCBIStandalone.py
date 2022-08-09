@@ -22,9 +22,9 @@ preferred. Furthermore, the NCBI themselves regard these command line tools as
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 """
 
+from io import StringIO
 import re
 
-from io import StringIO
 from Bio.SearchIO._legacy.ParserSupport import (
     UndoHandle,
     AbstractParser,
@@ -39,8 +39,6 @@ from Bio.SearchIO._legacy.ParserSupport import (
 )
 from Bio.Blast import Record
 
-from Bio import BiopythonWarning
-import warnings
 
 _score_e_re = re.compile(r"Score +E")
 
@@ -83,15 +81,6 @@ class _Scanner:
      - feed     Feed data into the scanner.
 
     """
-
-    def __init__(self):
-        """Raise warning that this module is outdated."""
-        warnings.warn(
-            "Parsing BLAST plain text output file is not a well supported"
-            " functionality anymore. Consider generating your BLAST output for parsing"
-            " as XML or tabular format instead.",
-            BiopythonWarning,
-        )
 
     def feed(self, handle, consumer):
         """Feed in a BLAST report for scanning.

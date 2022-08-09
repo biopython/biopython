@@ -1004,7 +1004,9 @@ class TestComplement(unittest.TestCase):
 
     def test_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        self.assertRaises(ValueError, Seq.complement, seq)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            self.assertRaises(ValueError, Seq.complement, seq)
 
     def test_complement_of_rna(self):
         seq = "AUGAAACUG"
@@ -1081,7 +1083,9 @@ class TestReverseComplement(unittest.TestCase):
 
     def test_reverse_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        self.assertRaises(ValueError, Seq.reverse_complement, seq)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            self.assertRaises(ValueError, Seq.reverse_complement, seq)
 
     def test_reverse_complement_of_rna(self):
         # old approach
@@ -1463,13 +1467,15 @@ class TestAttributes(unittest.TestCase):
 
 class TestSeqDefined(unittest.TestCase):
     def test_zero_length(self):
-        zero_length_seqs = [
-            Seq.Seq(""),
-            Seq.Seq(None, length=0),
-            Seq.Seq({}, length=0),
-            Seq.UnknownSeq(length=0),
-            Seq.MutableSeq(""),
-        ]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            zero_length_seqs = [
+                Seq.Seq(""),
+                Seq.Seq(None, length=0),
+                Seq.Seq({}, length=0),
+                Seq.UnknownSeq(length=0),
+                Seq.MutableSeq(""),
+            ]
 
         for seq in zero_length_seqs:
             self.assertTrue(seq.defined, msg=repr(seq))
@@ -1482,7 +1488,9 @@ class TestSeqDefined(unittest.TestCase):
         seq = Seq.Seq({3: "ACGT"}, length=10)
         self.assertFalse(seq.defined)
         self.assertEqual(seq.defined_ranges, ((3, 7),))
-        seq = Seq.UnknownSeq(length=1)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            seq = Seq.UnknownSeq(length=1)
         self.assertFalse(seq.defined)
         self.assertEqual(seq.defined_ranges, ())
 

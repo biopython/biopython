@@ -17,10 +17,13 @@ import copy
 import math
 import random
 import sys
+import warnings
 
 from Bio import File
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
 
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
@@ -667,10 +670,24 @@ class Nexus:
 
     def get_original_taxon_order(self):
         """Included for backwards compatibility (DEPRECATED)."""
+        warnings.warn(
+            "The get_original_taxon_order method has been deprecated "
+            "and will likely be removed from Biopython in the near "
+            "future. Please use the original_taxon_order attribute "
+            "instead.",
+            BiopythonDeprecationWarning,
+        )
         return self.taxlabels
 
     def set_original_taxon_order(self, value):
         """Included for backwards compatibility (DEPRECATED)."""
+        warnings.warn(
+            "The set_original_taxon_order method has been deprecated "
+            "and will likely be removed from Biopython in the near "
+            "future. Please use the original_taxon_order attribute "
+            "instead.",
+            BiopythonDeprecationWarning,
+        )
         self.taxlabels = value
 
     original_taxon_order = property(get_original_taxon_order, set_original_taxon_order)

@@ -2147,6 +2147,153 @@ class Alignment:
                 segments[i, :] = n - segments[i, :]
         return segments
 
+    @property
+    def indices(self):
+        """Return the sequence index of each lettter in the alignment.
+
+        This property returns a 2D numpy array with the sequence index of each
+        letter in the alignment. Gaps are indicated by -1.  The array has the
+        same number of rows and columns as the alignment, as given by
+        `self.shape`.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "local"
+
+        >>> alignments = aligner.align("GAACTGG", "AATG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACTGG
+         ||-||
+         AA-TG
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[ 1,  2,  3,  4,  5],
+               [ 0,  1, -1,  2,  3]])
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACTGG
+         ||-|-|
+         AA-T-G
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[ 1,  2,  3,  4,  5,  6],
+               [ 0,  1, -1,  2, -1,  3]])
+
+        >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACTGG
+         ||-||
+         AA-TG
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[ 1,  2,  3,  4,  5],
+               [ 3,  2, -1,  1,  0]])
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACTGG
+         ||-|-|
+         AA-T-G
+        <BLANKLINE>
+        >>> alignment.indices
+        array([[ 1,  2,  3,  4,  5,  6],
+               [ 3,  2, -1,  1, -1,  0]])
+
+        """
+        a = -numpy.ones(self.shape, int)
+        n, m = self.coordinates.shape
+        i = 0
+        j = 0
+        for k in range(m - 1):
+            starts = self.coordinates[:, k]
+            ends = self.coordinates[:, k + 1]
+            for row, start, end in zip(a, starts, ends):
+                if start < end:
+                    j = i + end - start
+                    row[i:j] = range(start, end)
+                elif start > end:
+                    j = i + start - end
+                    row[i:j] = range(start - 1, end - 1, -1)
+            i = j
+        return a
+
+    @property
+    def inverse_indices(self):
+        """Return the alignment column index for each letter in each sequence.
+
+        This property returns a list of 1D numpy arrays; the number of arrays
+        is equal to the number of aligned sequences, and the length of each
+        array is equal to the length of the corresponding sequence. For each
+        letter in each sequence, the array contains the corresponding column
+        index in the alignment. Letters not included in the alignment are
+        indicated by -1.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "local"
+
+        >>> alignments = aligner.align("GAACTGG", "AATG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACTGG
+         ||-||
+         AA-TG
+        <BLANKLINE>
+        >>> alignment.inverse_indices
+        [array([-1,  0,  1,  2,  3,  4, -1]), array([0, 1, 3, 4])]
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACTGG
+         ||-|-|
+         AA-T-G
+        <BLANKLINE>
+        >>> alignment.inverse_indices
+        [array([-1,  0,  1,  2,  3,  4,  5]), array([0, 1, 3, 5])]
+        >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACTGG
+         ||-||
+         AA-TG
+        <BLANKLINE>
+        >>> alignment.inverse_indices
+        [array([-1,  0,  1,  2,  3,  4, -1]), array([4, 3, 1, 0])]
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACTGG
+         ||-|-|
+         AA-T-G
+        <BLANKLINE>
+        >>> alignment.inverse_indices
+        [array([-1,  0,  1,  2,  3,  4,  5]), array([5, 3, 1, 0])]
+
+        """
+        a = [-numpy.ones(len(sequence), int) for sequence in self.sequences]
+        n, m = self.coordinates.shape
+        i = 0
+        j = 0
+        for k in range(m - 1):
+            step = 0
+            starts = self.coordinates[:, k]
+            ends = self.coordinates[:, k + 1]
+            for row, start, end in zip(a, starts, ends):
+                if start < end:
+                    j = i + end - start
+                    row[start:end] = range(i, j)
+                elif start > end:
+                    j = i + start - end
+                    if end > 0:
+                        row[start - 1 : end - 1 : -1] = range(i, j)
+                    elif start > 0:
+                        row[start - 1 :: -1] = range(i, j)
+            i = j
+        return a
+
     def sort(self, key=None, reverse=False):
         """Sort the sequences of the alignment in place.
 

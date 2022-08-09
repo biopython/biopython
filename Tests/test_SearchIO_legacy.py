@@ -13,10 +13,10 @@ from io import StringIO
 
 
 import warnings
-from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 
 with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonWarning)
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
     from Bio.SearchIO._legacy import ParserSupport
 
 
