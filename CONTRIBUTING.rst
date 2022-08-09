@@ -83,18 +83,7 @@ request, e.g.::
     $ python setup.py test
     $ git commit ...
 
-To run a specific test case you can also consider using `pytest <https://docs.pytest.org>`_, eg.::
-
-    $ pytest Tests/test_PDBList.py::TestPBDListGetList
-
-In order to generate the test coverage report, you can run the test suite
-using `coverage <https://coverage.readthedocs.io/>`_, eg.::
-
-    $ coverage run run_tests.py --offline
-    $ pytest --cov Bio/PDB/PDBList.py Tests/test_PDBList.py
-
-It would be possible to run the test suite via tox, but there is no
-configuration provided on the repository.
+Have a look at the `related chapter <http://biopython.org/DIST/docs/tutorial/Tutorial.html#chapter%3Atesting>`_ in the documentation for more details.
 
 Continuous Integration
 ----------------------
