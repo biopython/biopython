@@ -75,6 +75,7 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - Erik  Whiting
 - Fabian Egli
+- Fredric Johansson
 - Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - Jacob Beal (first contribution)
