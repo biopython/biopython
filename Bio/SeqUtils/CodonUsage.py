@@ -165,7 +165,7 @@ class CodonAdaptationIndex:
 
             # iterate over sequence and count all the codons in the FastaFile.
             for record in SeqIO.parse(handle, "fasta"):
-                sequence = record.seq
+                sequence = record.seq.upper()
                 for i in range(0, len(sequence), 3):
                     codon = sequence[i : i + 3]
                     try:
