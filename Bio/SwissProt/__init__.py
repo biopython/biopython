@@ -18,6 +18,7 @@ Functions:
 
 
 import io
+import re
 
 from Bio.SeqFeature import (
     SeqFeature,
@@ -796,32 +797,26 @@ def _read_ft(record, line):
         feature.qualifiers["description"] = description
     else:  # new-style FT line
         value = line[21:].rstrip()
-        if value.startswith("/id="):
-            qualifier_type = "id"
-            value = value[4:]
-            assert value.startswith('"')
-            assert value.endswith('"')
-            feature.id = value[1:-1]
-            return
-        elif value.startswith("/evidence="):
-            value = value[10:]
-            assert value.startswith('"')
-            if value.endswith('"'):
-                value = value[1:-1]
-            else:  # continues on the next line
-                value = value[1:]
-            assert "evidence" not in feature.qualifiers
-            feature.qualifiers["evidence"] = value
-            return
-        elif value.startswith("/note="):
-            value = value[6:]
-            assert value.startswith('"')
-            if value.endswith('"'):
-                value = value[1:-1]
-            else:  # continues on the next line
-                value = value[1:]
-            assert "note" not in feature.qualifiers
-            feature.qualifiers["note"] = value
+        match = re.match(r"^/([a-z_]+)=", value)
+        if match:
+            qualifier_type = match.group(1)
+            value = value[len(match.group(0)) :]
+            if not value.startswith('"'):
+                raise ValueError("Missing starting quote in feature")
+            if qualifier_type == "id":
+                if not value.endswith('"'):
+                    raise ValueError("Missing closing quote for id")
+                feature.id = value[1:-1]
+            else:
+                if value.endswith('"'):
+                    value = value[1:-1]
+                else:  # continues on the next line
+                    value = value[1:]
+                if qualifier_type in feature.qualifiers:
+                    raise ValueError(
+                        f"Feature qualifier '{qualifier_type}' already exists for feature"
+                    )
+                feature.qualifiers[qualifier_type] = value
             return
         # this line is a continuation of the description of the previous feature
         keys = list(feature.qualifiers.keys())
