@@ -52,6 +52,7 @@ import time
 from urllib.request import urlopen
 from urllib.request import urlretrieve
 from urllib.request import urlcleanup
+from urllib.parse import urljoin
 
 from Bio.PDB.PDBExceptions import PDBException
 
@@ -142,7 +143,7 @@ class PDBList:
             pdb_server = server
 
         if pdb_server:
-            return f"ftp://{pdb_server.domain}{pdb_server.pdb_directory}"
+            return f"ftp://{pdb_server.domain}{pdb_server.pdb_directory}/"
 
         raise TypeError(f"Unexpected server (server: {server}).")
 
@@ -191,7 +192,7 @@ class PDBList:
             -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
 
         """
-        url = f"{self.pdb_server}/data/status/latest"
+        url = urljoin(self.pdb_server, "data/status/latest")
 
         # Retrieve the lists
         added = self.get_status_list(f"{url}/added.pdb")
@@ -204,7 +205,7 @@ class PDBList:
 
         Returns a list of PDB codes in the index file.
         """
-        url = f"{self.pdb_server}/derived_data/index/entries.idx"
+        url = urljoin(self.pdb_server, "derived_data/index/entries.idx")
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(urlopen(url)) as handle:
@@ -236,7 +237,7 @@ class PDBList:
             ...
 
         """
-        url = f"{self.pdb_server}/data/status/obsolete.dat"
+        url = urljoin(self.pdb_server, "data/status/obsolete.dat")
         with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to include an assert to check for mis-reading the data.
@@ -324,14 +325,14 @@ class PDBList:
                 if file_format == "mmCif"
                 else "XML"
             )
-            url = (
-                f"{self.pdb_server}/data/structures/"
-                f"{pdb_dir}/{file_type}/{code[1:3]}/{archive_fn}"
+            url = urljoin(
+                self.pdb_server,
+                f"data/structures/{pdb_dir}/{file_type}/{code[1:3]}/{archive_fn}",
             )
         elif file_format == "bundle":
-            url = (
-                f"{self.pdb_server}/compatible/pdb_bundle/"
-                f"{code[1:3]}/{code}/{archive_fn}"
+            url = urljoin(
+                self.pdb_server,
+                f"compatible/pdb_bundle/{code[1:3]}/{code}/{archive_fn}",
             )
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
@@ -581,9 +582,9 @@ class PDBList:
         archive_fn = archive[file_format] % (pdb_code.lower(), int(assembly_num))
 
         if file_format == "mmcif":
-            url = self.pdb_server + "/data/assemblies/mmCIF/all/%s" % archive_fn
+            url = urljoin(self.pdb_server, f"data/assemblies/mmCIF/all/{archive_fn}")
         elif file_format == "pdb":
-            url = self.pdb_server + "/data/biounit/PDB/all/%s" % archive_fn
+            url = urljoin(self.pdb_server, f"data/biounit/PDB/all/{archive_fn}")
         else:  # better safe than sorry
             raise ValueError("file_format '%s' not supported: %s" % file_format)
 
@@ -698,7 +699,7 @@ class PDBList:
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         if self._verbose:
             print("Retrieving sequence file (takes over 110 MB).")
-        url = f"{self.pdb_server}/derived_data/pdb_seqres.txt"
+        url = urljoin(self.pdb_server, "derived_data/pdb_seqres.txt")
         urlretrieve(url, savefile)
 
 
