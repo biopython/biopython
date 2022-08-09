@@ -56,6 +56,15 @@ from urllib.request import urlcleanup
 from Bio.PDB.PDBExceptions import PDBException
 
 
+PDBServer = collections.namedtuple("PDBServer", ["domain", "pdb_directory"])
+
+SERVERS = [
+    PDBServer("ftp.rcsb.org", "/pub/pdb"),
+    PDBServer("ftp.ebi.ac.uk", "/pub/databases/pdb"),
+    PDBServer("ftp.pdbj.org", "/pub/pdb"),
+]
+
+
 class PDBList:
     """Quick access to the structure lists on the PDB or its mirrors.
 
@@ -125,12 +134,12 @@ class PDBList:
         If no server specified, chose the fastest one.
         """
         pdb_server = None
-        if isinstance(server, str):
-            return "{server}/pub/pdb"
+        if server is None:
+            pdb_server = get_fastest_server()
+        elif isinstance(server, str):
+            return f"{server}/pub/pdb"
         elif isinstance(server, PDBServer):
             pdb_server = server
-        elif server is None:
-            pdb_server = get_fastest_server()
 
         if pdb_server:
             return f"ftp://{pdb_server.domain}{pdb_server.pdb_directory}"
@@ -691,15 +700,6 @@ class PDBList:
             print("Retrieving sequence file (takes over 110 MB).")
         url = f"{self.pdb_server}/derived_data/pdb_seqres.txt"
         urlretrieve(url, savefile)
-
-
-PDBServer = collections.namedtuple("PDBServer", ["domain", "pdb_directory"])
-
-SERVERS = [
-    PDBServer("ftp.rcsb.org", "/pub/pdb"),
-    PDBServer("ftp.ebi.ac.uk", "/pub/databases/pdb"),
-    PDBServer("ftp.pdbj.org", "/pub/pdb"),
-]
 
 
 @functools.lru_cache(maxsize=None)
