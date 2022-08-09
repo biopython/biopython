@@ -3536,6 +3536,25 @@ class TestSwissProt(unittest.TestCase):
             "DGTPLPEFYSE -> EGELPKFFSD (in strain: O15:H- / 83/39 / ETEC)",
         )
 
+    def test_Q7Z739(self):
+        """Parsing SwissProt file Q7Z739.txt, which has new qualifiers for ligands from Uniprot version 2022_03."""
+        filename = "Q7Z739.txt"
+        datafile = os.path.join("SwissProt", filename)
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
+        # Check the new ligand feature
+        self.assertEqual(record.features[10].qualifiers["ligand"], "RNA")
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_id"], "ChEBI:CHEBI:33697"
+        )
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_part"],
+            "N(6)-methyladenosine 5'-phosphate residue",
+        )
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_part_id"], "ChEBI:CHEBI:74449"
+        )
+
     def test_ft_line(self):
         """Parsing SwissProt file O23729, which has a new-style FT line."""
         filename = "O23729.txt"
