@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import collections
 import contextlib
+import dataclasses
 import ftplib
 import functools
 import gzip
@@ -53,16 +54,26 @@ from urllib.request import urlopen
 from urllib.request import urlretrieve
 from urllib.request import urlcleanup
 from urllib.parse import urljoin
+from urllib.parse import urlunsplit
 
 from Bio.PDB.PDBExceptions import PDBException
 
 
-PDBServer = collections.namedtuple("PDBServer", ["domain", "pdb_directory"])
+@dataclasses.dataclass
+class PDBServer:
+    """Protein Data Server class.
+
+    In charge of the interactions with the server.
+    """
+
+    domain: str
+    pdb_directory: str
+
 
 SERVERS = [
-    PDBServer("ftp.rcsb.org", "/pub/pdb"),
-    PDBServer("ftp.ebi.ac.uk", "/pub/databases/pdb"),
-    PDBServer("ftp.pdbj.org", "/pub/pdb"),
+    PDBServer("ftp.rcsb.org", "/pub/pdb/"),
+    PDBServer("ftp.ebi.ac.uk", "/pub/databases/pdb/"),
+    PDBServer("ftp.pdbj.org", "/pub/pdb/"),
 ]
 
 
@@ -138,12 +149,14 @@ class PDBList:
         if server is None:
             pdb_server = get_fastest_server()
         elif isinstance(server, str):
-            return f"{server}/pub/pdb"
+            return urljoin(server, "pub/pdb/")
         elif isinstance(server, PDBServer):
             pdb_server = server
 
         if pdb_server:
-            return f"ftp://{pdb_server.domain}{pdb_server.pdb_directory}/"
+            return urlunsplit(
+                ("ftp", pdb_server.domain, pdb_server.pdb_directory, None, None)
+            )
 
         raise TypeError(f"Unexpected server (server: {server}).")
 
