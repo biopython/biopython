@@ -5,9 +5,11 @@
 
 """Tests for PDB PSEA."""
 
+import io
 import os
 import unittest
 from subprocess import getoutput
+import sys
 
 from Bio import MissingExternalDependencyError
 from Bio.PDB import PDBParser
@@ -36,9 +38,21 @@ class TestPDBPSEA(unittest.TestCase):
     def tearDown(self):
         remove_sea_files()
 
-    def test_run_psea(self):
-        psae_run = run_psea("PDB/1A8O.pdb")
+    def test_run_psea_verbose(self):
+        captured_ouput = io.StringIO()
+        sys.stdout = captured_ouput
+        psae_run = run_psea("PDB/1A8O.pdb", verbose=True)
+        sys.stdout = sys.__stdout__
         self.assertEqual(psae_run, "1A8O.sea")
+        self.assertTrue(captured_ouput.getvalue())
+
+    def test_run_psea_quiet(self):
+        captured_ouput = io.StringIO()
+        sys.stdout = captured_ouput
+        psae_run = run_psea("PDB/1A8O.pdb", verbose=False)
+        sys.stdout = sys.__stdout__
+        self.assertEqual(psae_run, "1A8O.sea")
+        self.assertFalse(captured_ouput.getvalue())
 
     def test_psea(self):
         psae_run = psea("PDB/2BEG.pdb")
