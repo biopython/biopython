@@ -36,8 +36,8 @@ def run_psea(fname, verbose=False):
     """
     last = fname.split("/")[-1]
     base = last.split(".")[0]
-
     cmd = ["psea", fname]
+
     p = subprocess.run(cmd, capture_output=True)
 
     if verbose:
