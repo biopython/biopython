@@ -322,7 +322,7 @@ def molecular_weight(
     have a 5' phosphate.
 
     Arguments:
-     - seq: String or Biopython sequence object.
+     - seq: string, Seq, or SeqRecord object.
      - seq_type: The default is to assume DNA; override this with a string
        "DNA", "RNA", or "protein".
      - double_stranded: Calculate the mass for the double stranded molecule?
@@ -344,7 +344,11 @@ def molecular_weight(
     249.29
 
     """
-    seq = seq.upper()  # Do the minimum formatting
+    try:
+        seq = seq.seq
+    except AttributeError:  # not a  SeqRecord object
+        pass
+    seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
 
     if seq_type == "DNA":
         if monoisotopic:
