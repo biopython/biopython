@@ -17,7 +17,7 @@ ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
 import subprocess
-from os.path import exists
+import os
 
 from Bio.PDB.Polypeptide import is_aa
 
@@ -38,12 +38,12 @@ def run_psea(fname, verbose=False):
     base = last.split(".")[0]
     cmd = ["psea", fname]
 
-    p = subprocess.run(cmd, capture_output=True)
+    p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
 
     if verbose:
-        print(p.stdout.decode("utf-8"))
+        print(p.stdout)
 
-    if not p.stderr.decode("utf-8") and exists(base + ".sea"):
+    if not p.stderr.strip() and os.path.exists(base + ".sea"):
         return base + ".sea"
     else:
         raise RuntimeError("stderr not empty")
