@@ -46,7 +46,7 @@ def run_psea(fname, verbose=False):
     if not p.stderr.strip() and os.path.exists(base + ".sea"):
         return base + ".sea"
     else:
-        raise RuntimeError("stderr not empty")
+        raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):
