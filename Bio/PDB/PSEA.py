@@ -17,11 +17,12 @@ ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
 import subprocess
+import os
 
 from Bio.PDB.Polypeptide import is_aa
 
 
-def run_psea(fname):
+def run_psea(fname, verbose=False):
     """Run PSEA and return output filename.
 
     Note that this assumes the P-SEA binary is called "psea" and that it is
@@ -30,12 +31,22 @@ def run_psea(fname):
     Note that P-SEA will write an output file in the current directory using
     the input filename with extension ".sea".
 
-    Note that P-SEA will write output to the terminal while run.
+    Note that P-SEA will not write output to the terminal while run unless
+     verbose is set to True.
     """
-    subprocess.call(["psea", fname])
     last = fname.split("/")[-1]
     base = last.split(".")[0]
-    return base + ".sea"
+    cmd = ["psea", fname]
+
+    p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
+
+    if verbose:
+        print(p.stdout)
+
+    if not p.stderr.strip() and os.path.exists(base + ".sea"):
+        return base + ".sea"
+    else:
+        raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):
