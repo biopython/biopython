@@ -61,9 +61,13 @@ from Bio.PDB.PDBExceptions import PDBException
 
 @dataclasses.dataclass
 class PDBServer:
-    """Protein Data Server class.
+    """Dataclass to store parameters for connecting to PDB server.
 
-    In charge of the interactions with the server.
+    param domain: server domain name.
+    type domain: string
+
+    :param pdb_directory: path to the PDB data directory.
+    :type domain: string
     """
 
     domain: str
@@ -532,11 +536,12 @@ class PDBList:
             ftp = ftplib.FTP(pdb_server.split("/", 1)[0])
         ftp.login()  # anonymous
         pdb_directory = pdb_server.split("/", 1)[1]
+        ftp.cwd(pdb_directory)
         if file_format.lower() == "mmcif":
-            ftp.cwd(f"{pdb_directory}/data/assemblies/mmCIF/all/")
+            ftp.cwd("data/assemblies/mmCIF/all/")
             re_name = re.compile(r"(\d[0-9a-z]{3})-assembly(\d+).cif.gz")
         elif file_format.lower() == "pdb":
-            ftp.cwd(f"{pdb_directory}/data/biounit/PDB/all/")
+            ftp.cwd("data/biounit/PDB/all/")
             re_name = re.compile(r"(\d[0-9a-z]{3}).pdb(\d+).gz")
         else:
             msg = "file_format for assemblies must be 'pdb' or 'mmCif'"
