@@ -1670,7 +1670,7 @@ Alternatively, you can use the \verb+substitution_matrix+ attribute of the \verb
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> substitution_matrices.load()  # doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
 >>> matrix = substitution_matrices.load("BLOSUM62")
 >>> print(matrix)  # doctest: +ELLIPSIS
 #  Matrix made by matblas from blosum62.iij
@@ -3302,7 +3302,7 @@ To get a full list of available substitution matrices, use \verb+load+ without a
 %cont-doctest
 \begin{minted}{pycon}
 >>> substitution_matrices.load()  # doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
 \end{minted}
 
 \hypertarget{codonmatrix}{
