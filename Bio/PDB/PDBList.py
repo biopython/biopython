@@ -66,12 +66,12 @@ class PDBServer:
     param domain: server domain name.
     type domain: string
 
-    :param pdb_directory: path to the PDB data directory.
+    :param pdb_dir_path: path to the PDB data directory.
     :type domain: string
     """
 
     domain: str
-    pdb_directory: str
+    pdb_dir_path: str
 
 
 SERVERS = [
@@ -159,7 +159,7 @@ class PDBList:
 
         if pdb_server:
             return urlunsplit(
-                ("ftp", pdb_server.domain, pdb_server.pdb_directory, None, None)
+                ("ftp", pdb_server.domain, pdb_server.pdb_dir_path, None, None)
             )
 
         raise TypeError(f"Unexpected server (server: {server}).")
@@ -535,8 +535,8 @@ class PDBList:
         else:
             ftp = ftplib.FTP(pdb_server.split("/", 1)[0])
         ftp.login()  # anonymous
-        pdb_directory = pdb_server.split("/", 1)[1]
-        ftp.cwd(pdb_directory)
+        pdb_dir_path = pdb_server.split("/", 1)[1]
+        ftp.cwd(pdb_dir_path)
         if file_format.lower() == "mmcif":
             ftp.cwd("data/assemblies/mmCIF/all/")
             re_name = re.compile(r"(\d[0-9a-z]{3})-assembly(\d+).cif.gz")
