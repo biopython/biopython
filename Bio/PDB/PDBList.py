@@ -162,7 +162,7 @@ class PDBList:
                 ("ftp", pdb_server.domain, pdb_server.pdb_dir_path, None, None)
             )
 
-        raise TypeError(f"Unexpected server (server: {server}).")
+        raise TypeError(f"Unsupported server option: {server}")
 
     @staticmethod
     def _print_default_format_warning(file_format):
