@@ -15,9 +15,9 @@ Comput Appl Biosci 1997 , 13:291-295
 
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
-
-import subprocess
 import os
+import subprocess
+import tempfile
 
 from Bio.PDB.Polypeptide import is_aa
 
@@ -38,15 +38,17 @@ def run_psea(fname, verbose=False):
     base = last.split(".")[0]
     cmd = ["psea", fname]
 
-    p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
-
-    if verbose:
-        print(p.stdout)
-
-    if not p.stderr.strip() and os.path.exists(base + ".sea"):
-        return base + ".sea"
-    else:
-        raise RuntimeError(f"Error running p-sea: {p.stderr}")
+    curdir = os.getcwd()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        os.chdir(tmpdir)
+        p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
+        if verbose:
+            print(p.stdout)
+        if not p.stderr.strip() and os.path.exists(base + ".sea"):
+            os.chdir(curdir)
+            return base + ".sea"
+        else:
+            raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):
