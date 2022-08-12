@@ -54,9 +54,21 @@ class TestPDBPSEA(unittest.TestCase):
         # self.assertEqual(psae_run, "1A8O.sea")
         self.assertFalse(captured_ouput.getvalue())
 
-    def test_psea(self):
-        psae_run = psea("PDB/2BEG.pdb")
+    def test_psea_verbose(self):
+        captured_ouput = io.StringIO()
+        sys.stdout = captured_ouput
+        psae_run = psea("PDB/2BEG.pdb", verbose=True)
+        sys.stdout = sys.__stdout__
         self.assertEqual(psae_run, "ccccbbbbbbbccccbbbbbbbbbbc")
+        self.assertTrue(captured_ouput.getvalue())
+
+    def test_psea_quiet(self):
+        captured_ouput = io.StringIO()
+        sys.stdout = captured_ouput
+        psae_run = psea("PDB/2BEG.pdb", verbose=False)
+        sys.stdout = sys.__stdout__
+        self.assertEqual(psae_run, "ccccbbbbbbbccccbbbbbbbbbbc")
+        self.assertFalse(captured_ouput.getvalue())
 
     def test_psea_2HEC(self):
         seq = psea("PDB/2BEG.pdb")
