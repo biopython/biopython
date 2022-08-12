@@ -1670,7 +1670,7 @@ Alternatively, you can use the \verb+substitution_matrix+ attribute of the \verb
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> substitution_matrices.load()  # doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
 >>> matrix = substitution_matrices.load("BLOSUM62")
 >>> print(matrix)  # doctest: +ELLIPSIS
 #  Matrix made by matblas from blosum62.iij
@@ -1856,6 +1856,52 @@ AATT-
 <BLANKLINE>
 \end{minted}
 
+\subsection{Using a pre-defined substitution matrix and gap scores}
+\label{sec:pairwise-predefined-scoring}
+
+By default, a \verb+PairwiseAligner+ object is initialized with a match score of +1.0, a mismatch score of 0.0, and all gap scores equal to 0.0, While this has the benefit of being a simple scoring scheme, in general it does not give the best performance. Instead, you can use the argument \verb+scoring+ to select a predefined scoring scheme when initializing a \verb+PairwiseAligner+ object. Currently, the provided scoring schemes are \verb+blastn+ and \verb+megablast+, which are suitable for nucleotide alignments, and \verb+blastp+, which is suitable for protein alignments. Selecting these scoring schemes will initialize the \verb+PairwiseAligner+ object to the default scoring parameters used by BLASTN, MegaBLAST, and BLASTP, respectively.
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> aligner = Align.PairwiseAligner(scoring="blastn")
+>>> print(aligner)  # doctest:+ELLIPSIS
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at ...>
+  target_internal_open_gap_score: -7.000000
+  target_internal_extend_gap_score: -2.000000
+  target_left_open_gap_score: -7.000000
+  target_left_extend_gap_score: -2.000000
+  target_right_open_gap_score: -7.000000
+  target_right_extend_gap_score: -2.000000
+  query_internal_open_gap_score: -7.000000
+  query_internal_extend_gap_score: -2.000000
+  query_left_open_gap_score: -7.000000
+  query_left_extend_gap_score: -2.000000
+  query_right_open_gap_score: -7.000000
+  query_right_extend_gap_score: -2.000000
+  mode: global
+<BLANKLINE>
+>>> print(aligner.substitution_matrix[:, :])
+     A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+A  2.0 -3.0 -3.0 -3.0 -3.0 -1.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -2.0
+T -3.0  2.0 -3.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -2.0
+G -3.0 -3.0  2.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0
+C -3.0 -3.0 -3.0  2.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -3.0 -2.0
+S -3.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+W -1.0 -1.0 -3.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+R -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+Y -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+K -3.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -2.0
+M -1.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+B -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+V -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+H -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+D -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
+<BLANKLINE>
+\end{minted}
+
 \subsection{Iterating over alignments}
 
 The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similar to a \verb+tuple+ or \verb+list+ of \verb+Alignment+ objects, they are different in the sense that each \verb+Alignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
@@ -1959,8 +2005,8 @@ The \verb+aligner.align+ method returns \verb+Alignment+ objects, each represent
 >>> query = "GAT"
 >>> alignments = aligner.align(target, query)
 >>> alignment = alignments[0]
->>> alignment  # doctest: +SKIP
-<Alignment object (2 rows x 5 columns) at 0x10204d250>
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (2 rows x 5 columns) at ...>
 \end{minted}
 
 Each alignment stores the alignment score:
@@ -3302,7 +3348,7 @@ To get a full list of available substitution matrices, use \verb+load+ without a
 %cont-doctest
 \begin{minted}{pycon}
 >>> substitution_matrices.load()  # doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
 \end{minted}
 
 \hypertarget{codonmatrix}{

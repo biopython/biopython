@@ -2825,12 +2825,39 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     """
 
-    def __init__(self, **kwargs):
-        """Initialize a new PairwiseAligner with the keyword arguments as attributes.
+    def __init__(self, scoring=None, **kwargs):
+        """Initialize a new PairwiseAligner as specified by the keyword arguments.
 
-        Loops over the keyword arguments and sets them as attributes on the object.
+        If scoring is None, use the default scoring scheme match = 1.0,
+        mismatch = 0.0, gap score = 0.0
+        If scoring is "blastn", "megablast", or "blastp", use the default
+        substitution matrix and gap scores for BLASTN, MEGABLAST, or BLASTP,
+        respectively.
+
+        Loops over the remaining keyword arguments and sets them as attributes
+        on the object.
         """
         super().__init__()
+        if scoring is None:
+            # use default values:
+            # match = 1.0
+            # mismatch = 0.0
+            # gap_score = 0.0
+            pass
+        elif scoring == "blastn":
+            self.substitution_matrix = substitution_matrices.load("BLASTN")
+            self.open_gap_score = -7.0
+            self.extend_gap_score = -2.0
+        elif scoring == "megablast":
+            self.substitution_matrix = substitution_matrices.load("MEGABLAST")
+            self.open_gap_score = -2.5
+            self.extend_gap_score = -2.5
+        elif scoring == "blastp":
+            self.substitution_matrix = substitution_matrices.load("BLASTP")
+            self.open_gap_score = -12.0
+            self.extend_gap_score = -1.0
+        else:
+            raise ValueError("Unknown scoring scheme '%s'" % scoring)
         for name, value in kwargs.items():
             setattr(self, name, value)
 
