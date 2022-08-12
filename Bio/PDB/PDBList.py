@@ -746,23 +746,17 @@ if __name__ == "__main__":
         help="write all assemblies for each PDB entry to local pdb tree",
     )
     mode.add_argument(
-        "-single", help="retrieve single structure - accepts a single PDB code"
-    )
-    mode.add_argument(
-        "-multi",
-        help="retrieve a set of structures - accepts a comma separated list of PDB codes",
+        "-codes",
+        metavar="",
+        help="retrieve structure(s) - accepts a single PDB code or a comma separated list of PDB codes",
     )
 
-    # Add mututally exclusive arguments for format
-    format = parser.add_mutually_exclusive_group()
-    format.add_argument(
-        "-pdb", action="store_true", help="downloads structures in PDB format"
-    )
-    format.add_argument(
-        "-xml", action="store_true", help="downloads structures in PDBML (XML) format"
-    )
-    format.add_argument(
-        "-mmtf", action="store_true", help="downloads structures in mmtf format"
+    # Add optional format argument that select choice
+    parser.add_argument(
+        "-format",
+        choices=("pdb", "xml", "mmtf"),
+        default="mmCif",
+        help="format in which to download structures, defaults to mmCif",
     )
 
     # Add final options
@@ -786,19 +780,10 @@ if __name__ == "__main__":
 
     # Set path
     pdb_path = args.pdb_path
+    file_format = args.format
 
     # Instantiate PDBList class
     pl = PDBList(pdb=pdb_path)
-
-    # Set file format
-    if args.pdb:
-        file_format = "pdb"
-    elif args.xml:
-        file_format = "xml"
-    elif args.mmtf:
-        file_format = "mmtf"
-    else:
-        file_format = "mmCif"
 
     # Set options
     if (args.d) or (args.pdb_path == os.getcwd()):
@@ -827,28 +812,11 @@ if __name__ == "__main__":
         # Get all assembly structures
         pl.download_all_assemblies(file_format=file_format)
 
-    elif args.single:
-        pdb_code = args.single
-        # Get single PDB entry
-        pl.retrieve_pdb_file(
-            pdb_code, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-        )
-        if with_assemblies:
-            # PDB Code might have more than one assembly.
-            assemblies = pl.get_all_assemblies(file_format)
-            for a_pdb_code, assembly_num in assemblies:
-                if a_pdb_code == pdb_code:
-                    pl.retrieve_assembly_file(
-                        pdb_code,
-                        assembly_num,
-                        pdir=pdb_path,
-                        file_format=file_format,
-                        overwrite=overwrite,
-                    )
-
-    elif args.multi:
-        print(args.multi.split(","))
-        pdb_ids = args.multi
+    elif args.codes:
+        if "," in args.codes:
+            pdb_ids = args.codes.split(",")
+        else:
+            pdb_ids = [args.codes]
         for pdb_id in pdb_ids:
             pl.retrieve_pdb_file(
                 pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
