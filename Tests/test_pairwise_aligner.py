@@ -1764,11 +1764,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -1867,11 +1863,7 @@ AT-T
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1938,11 +1930,7 @@ ATT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -2012,11 +2000,7 @@ ATAT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -2117,11 +2101,7 @@ AT-T
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -2190,11 +2170,7 @@ ATT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertEqual(
-            lines[1],
-            "  substitution_matrix: <Array object at %s>"
-            % hex(id(aligner.substitution_matrix)),
-        )
+        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -3592,11 +3568,11 @@ Pairwise sequence aligner with parameters
 class TestPredefinedScoringSchemes(unittest.TestCase):
     def test_blastn(self):
         aligner = Align.PairwiseAligner(scoring="blastn")
-        self.assertEqual(
+        self.assertRegex(
             str(aligner),
             """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at %s>
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
   target_internal_open_gap_score: -7.000000
   target_internal_extend_gap_score: -2.000000
   target_left_open_gap_score: -7.000000
@@ -3610,8 +3586,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -7.000000
   query_right_extend_gap_score: -2.000000
   mode: global
-"""
-            % hex(id(aligner.substitution_matrix)),
+$""",
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -3637,11 +3612,11 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
 
     def test_megablast(self):
         aligner = Align.PairwiseAligner(scoring="megablast")
-        self.assertEqual(
+        self.assertRegex(
             str(aligner),
             """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at %s>
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
   target_internal_open_gap_score: -2.500000
   target_internal_extend_gap_score: -2.500000
   target_left_open_gap_score: -2.500000
@@ -3655,8 +3630,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -2.500000
   query_right_extend_gap_score: -2.500000
   mode: global
-"""
-            % hex(id(aligner.substitution_matrix)),
+$""",
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -3682,11 +3656,11 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
 
     def test_blastp(self):
         aligner = Align.PairwiseAligner(scoring="blastp")
-        self.assertEqual(
+        self.assertRegex(
             str(aligner),
             """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at %s>
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
   target_internal_open_gap_score: -12.000000
   target_internal_extend_gap_score: -1.000000
   target_left_open_gap_score: -12.000000
@@ -3700,8 +3674,7 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -12.000000
   query_right_extend_gap_score: -1.000000
   mode: global
-"""
-            % hex(id(aligner.substitution_matrix)),
+$""",
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
