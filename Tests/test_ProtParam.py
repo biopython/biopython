@@ -78,8 +78,8 @@ class ProtParamTest(unittest.TestCase):
 
     def test_aromaticity(self):
         """Calculate protein aromaticity."""
-        # Old test used a number rounded to two digits, so use the same
         for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
             self.assertAlmostEqual(analysis.aromaticity(), 0.10, 2)
 
     def test_instability_index(self):
@@ -153,8 +153,8 @@ class ProtParamTest(unittest.TestCase):
 
     def test_isoelectric_point(self):
         """Calculate the isoelectric point."""
-        # Old test used a number rounded to two digits, so use the same
         for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
             self.assertAlmostEqual(analysis.isoelectric_point(), 7.72, 2)
 
     def test_charge_at_pH(self):
