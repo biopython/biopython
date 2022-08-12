@@ -1764,12 +1764,11 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -1868,12 +1867,11 @@ AT-T
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1940,12 +1938,11 @@ ATT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -2015,12 +2012,11 @@ ATAT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -2121,12 +2117,11 @@ AT-T
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -2195,12 +2190,11 @@ ATT
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        line = lines[1]
-        prefix = "  substitution_matrix: <Array object at "
-        suffix = ">"
-        self.assertTrue(line.startswith(prefix))
-        self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix) : -len(suffix)], 16)
+        self.assertEqual(
+            lines[1],
+            "  substitution_matrix: <Array object at %s>"
+            % hex(id(aligner.substitution_matrix)),
+        )
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -3591,6 +3585,155 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
+""",
+        )
+
+
+class TestPredefinedScoringSchemes(unittest.TestCase):
+    def test_blastn(self):
+        aligner = Align.PairwiseAligner(scoring="blastn")
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at %s>
+  target_internal_open_gap_score: -7.000000
+  target_internal_extend_gap_score: -2.000000
+  target_left_open_gap_score: -7.000000
+  target_left_extend_gap_score: -2.000000
+  target_right_open_gap_score: -7.000000
+  target_right_extend_gap_score: -2.000000
+  query_internal_open_gap_score: -7.000000
+  query_internal_extend_gap_score: -2.000000
+  query_left_open_gap_score: -7.000000
+  query_left_extend_gap_score: -2.000000
+  query_right_open_gap_score: -7.000000
+  query_right_extend_gap_score: -2.000000
+  mode: global
+"""
+            % hex(id(aligner.substitution_matrix)),
+        )
+        self.assertEqual(
+            str(aligner.substitution_matrix[:, :]),
+            """\
+     A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+A  2.0 -3.0 -3.0 -3.0 -3.0 -1.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -2.0
+T -3.0  2.0 -3.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -2.0
+G -3.0 -3.0  2.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0
+C -3.0 -3.0 -3.0  2.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -3.0 -2.0
+S -3.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+W -1.0 -1.0 -3.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+R -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+Y -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+K -3.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -2.0
+M -1.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+B -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+V -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+H -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+D -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
+""",
+        )
+
+    def test_megablast(self):
+        aligner = Align.PairwiseAligner(scoring="megablast")
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at %s>
+  target_internal_open_gap_score: -2.500000
+  target_internal_extend_gap_score: -2.500000
+  target_left_open_gap_score: -2.500000
+  target_left_extend_gap_score: -2.500000
+  target_right_open_gap_score: -2.500000
+  target_right_extend_gap_score: -2.500000
+  query_internal_open_gap_score: -2.500000
+  query_internal_extend_gap_score: -2.500000
+  query_left_open_gap_score: -2.500000
+  query_left_extend_gap_score: -2.500000
+  query_right_open_gap_score: -2.500000
+  query_right_extend_gap_score: -2.500000
+  mode: global
+"""
+            % hex(id(aligner.substitution_matrix)),
+        )
+        self.assertEqual(
+            str(aligner.substitution_matrix[:, :]),
+            """\
+     A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+A  1.0 -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -2.0 -2.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0
+T -2.0  1.0 -2.0 -2.0 -2.0 -1.0 -2.0 -1.0 -1.0 -2.0 -1.0 -2.0 -1.0 -1.0 -1.0
+G -2.0 -2.0  1.0 -2.0 -1.0 -2.0 -1.0 -2.0 -1.0 -2.0 -1.0 -1.0 -2.0 -1.0 -1.0
+C -2.0 -2.0 -2.0  1.0 -1.0 -2.0 -2.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -2.0 -1.0
+S -2.0 -2.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+W -1.0 -1.0 -2.0 -2.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+R -1.0 -2.0 -1.0 -2.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+Y -2.0 -1.0 -2.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+K -2.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0
+M -1.0 -2.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+B -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+V -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+H -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+D -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+""",
+        )
+
+    def test_blastp(self):
+        aligner = Align.PairwiseAligner(scoring="blastp")
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at %s>
+  target_internal_open_gap_score: -12.000000
+  target_internal_extend_gap_score: -1.000000
+  target_left_open_gap_score: -12.000000
+  target_left_extend_gap_score: -1.000000
+  target_right_open_gap_score: -12.000000
+  target_right_extend_gap_score: -1.000000
+  query_internal_open_gap_score: -12.000000
+  query_internal_extend_gap_score: -1.000000
+  query_left_open_gap_score: -12.000000
+  query_left_extend_gap_score: -1.000000
+  query_right_open_gap_score: -12.000000
+  query_right_extend_gap_score: -1.000000
+  mode: global
+"""
+            % hex(id(aligner.substitution_matrix)),
+        )
+        self.assertEqual(
+            str(aligner.substitution_matrix[:, :]),
+            """\
+     A    B    C    D    E    F    G    H    I    J    K    L    M    N    O    P    Q    R    S    T    U    V    W    X    Y    Z    *
+A  4.0 -2.0  0.0 -2.0 -1.0 -2.0  0.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0 -1.0 -1.0 -1.0 -1.0  1.0  0.0  0.0  0.0 -3.0 -1.0 -2.0 -1.0 -4.0
+B -2.0  4.0 -3.0  4.0  1.0 -3.0 -1.0  0.0 -3.0 -3.0  0.0 -4.0 -3.0  4.0 -1.0 -2.0  0.0 -1.0  0.0 -1.0 -3.0 -3.0 -4.0 -1.0 -3.0  0.0 -4.0
+C  0.0 -3.0  9.0 -3.0 -4.0 -2.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -3.0 -3.0 -1.0 -1.0  9.0 -1.0 -2.0 -1.0 -2.0 -3.0 -4.0
+D -2.0  4.0 -3.0  6.0  2.0 -3.0 -1.0 -1.0 -3.0 -3.0 -1.0 -4.0 -3.0  1.0 -1.0 -1.0  0.0 -2.0  0.0 -1.0 -3.0 -3.0 -4.0 -1.0 -3.0  1.0 -4.0
+E -1.0  1.0 -4.0  2.0  5.0 -3.0 -2.0  0.0 -3.0 -3.0  1.0 -3.0 -2.0  0.0 -1.0 -1.0  2.0  0.0  0.0 -1.0 -4.0 -2.0 -3.0 -1.0 -2.0  4.0 -4.0
+F -2.0 -3.0 -2.0 -3.0 -3.0  6.0 -3.0 -1.0  0.0  0.0 -3.0  0.0  0.0 -3.0 -1.0 -4.0 -3.0 -3.0 -2.0 -2.0 -2.0 -1.0  1.0 -1.0  3.0 -3.0 -4.0
+G  0.0 -1.0 -3.0 -1.0 -2.0 -3.0  6.0 -2.0 -4.0 -4.0 -2.0 -4.0 -3.0  0.0 -1.0 -2.0 -2.0 -2.0  0.0 -2.0 -3.0 -3.0 -2.0 -1.0 -3.0 -2.0 -4.0
+H -2.0  0.0 -3.0 -1.0  0.0 -1.0 -2.0  8.0 -3.0 -3.0 -1.0 -3.0 -2.0  1.0 -1.0 -2.0  0.0  0.0 -1.0 -2.0 -3.0 -3.0 -2.0 -1.0  2.0  0.0 -4.0
+I -1.0 -3.0 -1.0 -3.0 -3.0  0.0 -4.0 -3.0  4.0  3.0 -3.0  2.0  1.0 -3.0 -1.0 -3.0 -3.0 -3.0 -2.0 -1.0 -1.0  3.0 -3.0 -1.0 -1.0 -3.0 -4.0
+J -1.0 -3.0 -1.0 -3.0 -3.0  0.0 -4.0 -3.0  3.0  3.0 -3.0  3.0  2.0 -3.0 -1.0 -3.0 -2.0 -2.0 -2.0 -1.0 -1.0  2.0 -2.0 -1.0 -1.0 -3.0 -4.0
+K -1.0  0.0 -3.0 -1.0  1.0 -3.0 -2.0 -1.0 -3.0 -3.0  5.0 -2.0 -1.0  0.0 -1.0 -1.0  1.0  2.0  0.0 -1.0 -3.0 -2.0 -3.0 -1.0 -2.0  1.0 -4.0
+L -1.0 -4.0 -1.0 -4.0 -3.0  0.0 -4.0 -3.0  2.0  3.0 -2.0  4.0  2.0 -3.0 -1.0 -3.0 -2.0 -2.0 -2.0 -1.0 -1.0  1.0 -2.0 -1.0 -1.0 -3.0 -4.0
+M -1.0 -3.0 -1.0 -3.0 -2.0  0.0 -3.0 -2.0  1.0  2.0 -1.0  2.0  5.0 -2.0 -1.0 -2.0  0.0 -1.0 -1.0 -1.0 -1.0  1.0 -1.0 -1.0 -1.0 -1.0 -4.0
+N -2.0  4.0 -3.0  1.0  0.0 -3.0  0.0  1.0 -3.0 -3.0  0.0 -3.0 -2.0  6.0 -1.0 -2.0  0.0  0.0  1.0  0.0 -3.0 -3.0 -4.0 -1.0 -2.0  0.0 -4.0
+O -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -4.0
+P -1.0 -2.0 -3.0 -1.0 -1.0 -4.0 -2.0 -2.0 -3.0 -3.0 -1.0 -3.0 -2.0 -2.0 -1.0  7.0 -1.0 -2.0 -1.0 -1.0 -3.0 -2.0 -4.0 -1.0 -3.0 -1.0 -4.0
+Q -1.0  0.0 -3.0  0.0  2.0 -3.0 -2.0  0.0 -3.0 -2.0  1.0 -2.0  0.0  0.0 -1.0 -1.0  5.0  1.0  0.0 -1.0 -3.0 -2.0 -2.0 -1.0 -1.0  4.0 -4.0
+R -1.0 -1.0 -3.0 -2.0  0.0 -3.0 -2.0  0.0 -3.0 -2.0  2.0 -2.0 -1.0  0.0 -1.0 -2.0  1.0  5.0 -1.0 -1.0 -3.0 -3.0 -3.0 -1.0 -2.0  0.0 -4.0
+S  1.0  0.0 -1.0  0.0  0.0 -2.0  0.0 -1.0 -2.0 -2.0  0.0 -2.0 -1.0  1.0 -1.0 -1.0  0.0 -1.0  4.0  1.0 -1.0 -2.0 -3.0 -1.0 -2.0  0.0 -4.0
+T  0.0 -1.0 -1.0 -1.0 -1.0 -2.0 -2.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0  0.0 -1.0 -1.0 -1.0 -1.0  1.0  5.0 -1.0  0.0 -2.0 -1.0 -2.0 -1.0 -4.0
+U  0.0 -3.0  9.0 -3.0 -4.0 -2.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -3.0 -3.0 -1.0 -1.0  9.0 -1.0 -2.0 -1.0 -2.0 -3.0 -4.0
+V  0.0 -3.0 -1.0 -3.0 -2.0 -1.0 -3.0 -3.0  3.0  2.0 -2.0  1.0  1.0 -3.0 -1.0 -2.0 -2.0 -3.0 -2.0  0.0 -1.0  4.0 -3.0 -1.0 -1.0 -2.0 -4.0
+W -3.0 -4.0 -2.0 -4.0 -3.0  1.0 -2.0 -2.0 -3.0 -2.0 -3.0 -2.0 -1.0 -4.0 -1.0 -4.0 -2.0 -3.0 -3.0 -2.0 -2.0 -3.0 11.0 -1.0  2.0 -2.0 -4.0
+X -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -4.0
+Y -2.0 -3.0 -2.0 -3.0 -2.0  3.0 -3.0  2.0 -1.0 -1.0 -2.0 -1.0 -1.0 -2.0 -1.0 -3.0 -1.0 -2.0 -2.0 -2.0 -2.0 -1.0  2.0 -1.0  7.0 -2.0 -4.0
+Z -1.0  0.0 -3.0  1.0  4.0 -3.0 -2.0  0.0 -3.0 -3.0  1.0 -3.0 -1.0  0.0 -1.0 -1.0  4.0  0.0  0.0 -1.0 -3.0 -2.0 -2.0 -1.0 -2.0  4.0 -4.0
+* -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0 -4.0  1.0
 """,
         )
 
