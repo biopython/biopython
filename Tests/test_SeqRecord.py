@@ -211,6 +211,11 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         expected = ">TestID TestDescr     with5spaces\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, rec.format("fasta"))
 
+    def test_count(self):
+        self.assertEqual(self.record.count("HIJK"), 1)
+        self.assertRaises(TypeError, SeqRecord(Seq("AC777GT")).count, 7)
+        self.assertRaises(TypeError, SeqRecord(Seq("AC777GT")).count, None)
+
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", self.record.lower().upper().seq)
 

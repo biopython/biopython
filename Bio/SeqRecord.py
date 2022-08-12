@@ -970,6 +970,35 @@ class SeqRecord:
             dbxrefs=self.dbxrefs[:],
         )
 
+    def count(self, sub, start=None, end=None):
+        """Return the number of non-overlapping occurrences of sub in seq[start:end].
+
+        Optional arguments start and end are interpreted as in slice notation.
+
+        Arguments:
+         - sub - a string or Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> my_seq = Seq("AAAATGA")
+        >>> my_record = SeqRecord(my_seq)
+        >>> print(my_record.count("A"))
+        5
+        >>> print(my_record.count("AA"))
+        2
+        >>> print(my_record.count("ATG"))
+        1
+        >>> print(my_record.count(Seq("AT")))
+        1
+        >>> print(my_record.count("AT", 2, -1))
+        1
+        """
+        return self.seq.count(sub, start, end)
+
     def upper(self):
         """Return a copy of the record with an upper case sequence.
 

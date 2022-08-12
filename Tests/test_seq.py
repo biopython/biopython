@@ -306,11 +306,18 @@ class TestSeqStringMethods(unittest.TestCase):
                 self.assertEqual(a.rfind(char, 2, -2), str(a).rfind(str_char, 2, -2))
 
     def test_counting_characters(self):
+        from Bio.SeqRecord import SeqRecord
+
         for a in self.dna + self.rna + self.nuc + self.protein:
+            r = SeqRecord(a)
             for char in self.test_chars:
                 str_char = str(char)
-                self.assertEqual(a.count(char), str(a).count(str_char))
-                self.assertEqual(a.count(char, 2, -2), str(a).count(str_char, 2, -2))
+                n = str(a).count(str_char)
+                self.assertEqual(a.count(char), n)
+                self.assertEqual(r.count(char), n)
+                n = str(a).count(str_char, 2, -2)
+                self.assertEqual(a.count(char, 2, -2), n)
+                self.assertEqual(r.count(char, 2, -2), n)
 
     def test_splits(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
