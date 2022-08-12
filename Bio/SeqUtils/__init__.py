@@ -171,7 +171,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
 
 
 def nt_search(seq, subseq):
-    """Search for a DNA subseq in sequence, return list of [subseq, positions].
+    """Search for a DNA subseq in seq, return list of [subseq, positions].
 
     Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
     searches only on forward strand.
@@ -322,7 +322,7 @@ def molecular_weight(
     have a 5' phosphate.
 
     Arguments:
-     - seq: String or Biopython sequence object.
+     - seq: string, Seq, or SeqRecord object.
      - seq_type: The default is to assume DNA; override this with a string
        "DNA", "RNA", or "protein".
      - double_stranded: Calculate the mass for the double stranded molecule?
@@ -344,8 +344,10 @@ def molecular_weight(
     249.29
 
     """
-    # Rewritten by Markus Piotrowski, 2014
-
+    try:
+        seq = seq.seq
+    except AttributeError:  # not a  SeqRecord object
+        pass
     seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
 
     if seq_type == "DNA":
@@ -377,7 +379,7 @@ def molecular_weight(
             weight -= water
     except KeyError as e:
         raise ValueError(
-            f"{e} is not a valid unambiguous letter for {seq_type}"
+            f"'{e}' is not a valid unambiguous letter for {seq_type}"
         ) from None
 
     if double_stranded:
