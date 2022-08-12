@@ -171,7 +171,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
 
 
 def nt_search(seq, subseq):
-    """Search for a DNA subseq in sequence, return list of [subseq, positions].
+    """Search for a DNA subseq in seq, return list of [subseq, positions].
 
     Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
     searches only on forward strand.
