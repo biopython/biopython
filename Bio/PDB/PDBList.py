@@ -813,21 +813,18 @@ if __name__ == "__main__":
         pl.download_all_assemblies(file_format=file_format)
 
     elif args.codes:
-        if "," in args.codes:
-            pdb_ids = args.codes.split(",")
-        else:
-            pdb_ids = [args.codes]
-        for pdb_id in pdb_ids:
+        pdb_codes = args.codes.split(",")
+        for pdb_code in pdb_codes:
             pl.retrieve_pdb_file(
-                pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                pdb_code, pdir=pdb_path, file_format=file_format, overwrite=overwrite
             )
             if with_assemblies:
                 # PDB Code might have more than one assembly.
                 assemblies = pl.get_all_assemblies(file_format)
                 for a_pdb_code, assembly_num in assemblies:
-                    if a_pdb_code == pdb_id:
+                    if a_pdb_code == pdb_code:
                         pl.retrieve_assembly_file(
-                            pdb_id,
+                            pdb_code,
                             assembly_num,
                             pdir=pdb_path,
                             file_format=file_format,
