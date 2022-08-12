@@ -53,9 +53,9 @@ def run_psea(fname, verbose=False):
             raise RuntimeError(f"Error running p-sea: {p.stdout}")
 
 
-def psea(pname):
+def psea(pname, verbose=False):
     """Parse PSEA output file."""
-    psea_output = run_psea(pname)
+    psea_output = run_psea(pname, verbose)
     start = 0
     ss = ""
     for l in psea_output.splitlines():
