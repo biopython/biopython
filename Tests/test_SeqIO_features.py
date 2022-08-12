@@ -19,7 +19,6 @@ from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import UnknownSeq
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import CompoundLocation
