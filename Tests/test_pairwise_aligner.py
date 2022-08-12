@@ -1761,23 +1761,26 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -0.500000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
+  target_internal_open_gap_score: -0.500000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.500000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.500000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.500000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.500000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.500000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -1860,23 +1863,26 @@ AT-T
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
+  target_internal_open_gap_score: -1.000000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -1.000000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -1927,23 +1933,26 @@ ATT
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
+  target_internal_open_gap_score: -1.000000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -1.000000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -1997,23 +2006,26 @@ ATAT
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -0.500000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
+  target_internal_open_gap_score: -0.500000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.500000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.500000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.500000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.500000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.500000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -2098,23 +2110,26 @@ AT-T
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*
+  target_internal_open_gap_score: -1.000000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -1.000000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -2167,23 +2182,26 @@ ATT
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        lines = str(aligner).splitlines()
-        self.assertEqual(len(lines), 15)
-        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
-        self.assertRegex(lines[1], "^  substitution_matrix: <Array object at .*>$")
-        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
-        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
-        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
-        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
-        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[14], "  mode: local")
+        self.assertRegex(
+            str(aligner),
+            """\
+^Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at .*>
+  target_internal_open_gap_score: -1.000000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -1.000000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+$""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
@@ -3572,7 +3590,7 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
             str(aligner),
             """\
 ^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+  substitution_matrix: <Array object at .*
   target_internal_open_gap_score: -7.000000
   target_internal_extend_gap_score: -2.000000
   target_left_open_gap_score: -7.000000
@@ -3616,7 +3634,7 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
             str(aligner),
             """\
 ^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+  substitution_matrix: <Array object at .*
   target_internal_open_gap_score: -2.500000
   target_internal_extend_gap_score: -2.500000
   target_left_open_gap_score: -2.500000
@@ -3660,7 +3678,7 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
             str(aligner),
             """\
 ^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+  substitution_matrix: <Array object at .*
   target_internal_open_gap_score: -12.000000
   target_internal_extend_gap_score: -1.000000
   target_left_open_gap_score: -12.000000
