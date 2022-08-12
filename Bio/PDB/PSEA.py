@@ -47,9 +47,10 @@ def run_psea(fname, verbose=False):
             print(p.stdout)
         if not p.stderr.strip() and os.path.exists(output_file):
             with open(output_file) as output:
+                os.chdir(curdir)
                 return output.read()
         else:
-            raise RuntimeError(f"Error running p-sea: {p.stderr}")
+            raise RuntimeError(f"Error running p-sea: {p.stdout}")
 
 
 def psea(pname):
@@ -65,7 +66,6 @@ def psea(pname):
             continue
         ss = ss + l
     return ss
-
 
 
 def psea2HEC(pseq):
