@@ -1865,9 +1865,9 @@ By default, a \verb+PairwiseAligner+ object is initialized with a match score of
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner(scoring="blastn")
->>> print(aligner)
+>>> print(aligner)  # doctest:+ELLIPSIS
 Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x114bbf7b0>
+  substitution_matrix: <Array object at 0x...>
   target_internal_open_gap_score: -7.000000
   target_internal_extend_gap_score: -2.000000
   target_left_open_gap_score: -7.000000
