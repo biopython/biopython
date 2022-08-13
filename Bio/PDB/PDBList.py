@@ -264,21 +264,20 @@ class PDBList:
         file_format = self._print_default_format_warning(file_format)
 
         # Get the compressed PDB structure
-        code = pdb_code.lower()
+        pdb_code = pdb_code.lower()
         archive = {
-            "pdb": "pdb%s.ent.gz",
-            "mmCif": "%s.cif.gz",
-            "xml": "%s.xml.gz",
-            "mmtf": "%s",
-            "bundle": "%s-pdb-bundle.tar.gz",
+            "pdb": f"pdb{pdb_code}.ent.gz",
+            "mmCif": f"{pdb_code}.cif.gz",
+            "xml": f"{pdb_code}.xml.gz",
+            "mmtf": f"{pdb_code}",
+            "bundle": f"{pdb_code}-pdb-bundle.tar.gz",
         }
-        archive_fn = archive[file_format] % code
+        archive_fn = archive[file_format]
 
         if file_format not in archive.keys():
             raise (
-                "Specified file_format %s doesn't exists or is not supported. Maybe a "
+                f"Specified file_format {file_format} doesn't exists or is not supported. Maybe a "
                 "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
-                % file_format
             )
 
         if file_format in ("pdb", "mmCif", "xml"):
@@ -290,39 +289,36 @@ class PDBList:
                 if file_format == "mmCif"
                 else "XML"
             )
-            url = self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
-                pdb_dir,
-                file_type,
-                code[1:3],
-                archive_fn,
+            url = (
+                self.pdb_server
+                + f"/pub/pdb/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive_fn}"
             )
         elif file_format == "bundle":
-            url = self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
-                code[1:3],
-                code,
-                archive_fn,
+            url = (
+                self.pdb_server
+                + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive_fn}"
             )
         else:
-            url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
+            url = f"http://mmtf.rcsb.org/v1.0/full/{pdb_code}"
 
         # Where does the final PDB file get saved?
         if pdir is None:
             path = self.local_pdb if not obsolete else self.obsolete_pdb
             if not self.flat_tree:  # Put in PDB-style directory tree
-                path = os.path.join(path, code[1:3])
+                path = os.path.join(path, pdb_code[1:3])
         else:  # Put in specified directory
             path = pdir
         if not os.access(path, os.F_OK):
             os.makedirs(path)
         filename = os.path.join(path, archive_fn)
         final = {
-            "pdb": "pdb%s.ent",
-            "mmCif": "%s.cif",
-            "xml": "%s.xml",
-            "mmtf": "%s.mmtf",
-            "bundle": "%s-pdb-bundle.tar",
+            "pdb": f"pdb{pdb_code}.ent",
+            "mmCif": f"{pdb_code}.cif",
+            "xml": f"{pdb_code}.xml",
+            "mmtf": f"{pdb_code}.mmtf",
+            "bundle": f"{pdb_code}-pdb-bundle.tar",
         }
-        final_file = os.path.join(path, final[file_format] % code)
+        final_file = os.path.join(path, final[file_format])
 
         # Skip download if the file already exists
         if not overwrite:
@@ -531,28 +527,30 @@ class PDBList:
         :rtype : str
         :return: file name of the downloaded assembly file.
         """
+        pdb_code = pdb_code.lower()
+        assembly_num = int(assembly_num)
         archive = {
-            "pdb": "%s.pdb%s.gz",
-            "mmcif": "%s-assembly%s.cif.gz",
+            "pdb": f"{pdb_code}.pdb{assembly_num}.gz",
+            "mmcif": f"{pdb_code}-assembly{assembly_num}.cif.gz",
         }
 
         file_format = self._print_default_format_warning(file_format)
         file_format = file_format.lower()  # we should standardize this.
         if file_format not in archive:
             raise (
-                "Specified file_format '%s' is not supported. Use one of the "
-                "following: 'mmcif' or 'pdb'." % file_format
+                f"Specified file_format '{file_format}' is not supported. Use one of the"
+                " following: 'mmcif' or 'pdb'."
             )
 
         # Get the compressed assembly structure name
-        archive_fn = archive[file_format] % (pdb_code.lower(), int(assembly_num))
+        archive_fn = archive[file_format]
 
         if file_format == "mmcif":
-            url = self.pdb_server + "/pub/pdb/data/assemblies/mmCIF/all/%s" % archive_fn
+            url = self.pdb_server + f"/pub/pdb/data/assemblies/mmCIF/all/{archive_fn}"
         elif file_format == "pdb":
-            url = self.pdb_server + "/pub/pdb/data/biounit/PDB/all/%s" % archive_fn
+            url = self.pdb_server + f"/pub/pdb/data/biounit/PDB/all/{archive_fn}"
         else:  # better safe than sorry
-            raise ValueError("file_format '%s' not supported: %s" % file_format)
+            raise ValueError(f"file_format '{file_format}' not supported")
 
         # Where will the file be saved?
         if pdir is None:
