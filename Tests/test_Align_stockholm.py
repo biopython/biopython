@@ -24,7 +24,7 @@ except ImportError:
     ) from None
 
 
-class TestAlignIO_reading(unittest.TestCase):
+class TestStockholm_reading(unittest.TestCase):
     def test_reading_example(self):
         """Test parsing Pfam record HAT as the docstring example."""
         path = "Stockholm/example.sth"
