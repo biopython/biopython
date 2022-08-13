@@ -8,7 +8,7 @@
 import io
 import os
 import unittest
-from subprocess import getoutput
+import subprocess
 import sys
 
 from Bio import MissingExternalDependencyError
@@ -19,7 +19,7 @@ from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
 os.environ["LANG"] = "C"
 
 
-cmd_output = getoutput("psea -h")
+cmd_output = subprocess.getoutput("psea -h")
 if not cmd_output.startswith("o---"):
     raise MissingExternalDependencyError(
         "Download and install psea from "
@@ -43,7 +43,11 @@ class TestPDBPSEA(unittest.TestCase):
         sys.stdout = captured_ouput
         psae_run = run_psea("PDB/1A8O.pdb", verbose=True)
         sys.stdout = sys.__stdout__
-        # self.assertEqual(psae_run, "1A8O.sea")
+        subprocess.run(["psea", "PDB/1A8O.pdb"])
+        self.assertEqual(
+            psae_run.splitlines()[1:], open("1A8O.sea").read().splitlines()[1:]
+        )
+        remove_sea_files()
         self.assertTrue(captured_ouput.getvalue())
 
     def test_run_psea_quiet(self):
@@ -51,7 +55,11 @@ class TestPDBPSEA(unittest.TestCase):
         sys.stdout = captured_ouput
         psae_run = run_psea("PDB/1A8O.pdb", verbose=False)
         sys.stdout = sys.__stdout__
-        # self.assertEqual(psae_run, "1A8O.sea")
+        subprocess.run(["psea", "PDB/1A8O.pdb"])
+        self.assertEqual(
+            psae_run.splitlines()[1:], open("1A8O.sea").read().splitlines()[1:]
+        )
+        remove_sea_files()
         self.assertFalse(captured_ouput.getvalue())
 
     def test_psea_verbose(self):
