@@ -538,8 +538,8 @@ class PDBList:
         file_format = file_format.lower()  # we should standardize this.
         if file_format not in archive:
             raise (
-                f"Specified file_format '{file_format}' is not supported. Use one of the"
-                " following: 'mmcif' or 'pdb'."
+                f"Specified file_format '{file_format}' is not supported. Use one of the "
+                "following: 'mmcif' or 'pdb'."
             )
 
         # Get the compressed assembly structure name
