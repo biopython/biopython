@@ -14,6 +14,7 @@ class, used in the Bio.AlignIO module.
 """
 
 import sys
+import copy
 import warnings
 import numbers
 from itertools import zip_longest
@@ -1256,7 +1257,7 @@ class Alignment:
 
         self[row]
 
-        where row is an integer.
+        where row is an integer. Return value is a string.
         """
         coordinates = self.coordinates.copy()
         for sequence, row in zip(self.sequences, coordinates):
@@ -1294,7 +1295,7 @@ class Alignment:
 
         self[rows]
 
-        where rows is a slice object.
+        where rows is a slice object. Return value is an Alignment object.
         """
         sequences = self.sequences[key]
         coordinates = self.coordinates[key].copy()
@@ -1318,6 +1319,7 @@ class Alignment:
         self[row, col]
 
         where both row and col are integers.
+        Return value is a string of length 1.
         """
         indices = gaps.cumsum()
         index = indices.searchsorted(col, side="right")
@@ -1338,11 +1340,16 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is a slice object with step 1.
+        Return value is a string.
         """
         sequence_indices = coordinate + steps.cumsum()
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
         j = i + indices[i:].searchsorted(stop_index, side="right")
+        try:
+            sequence = sequence.seq  # stupid SeqRecord
+        except AttributeError:
+            pass
         if i == j:
             length = stop_index - start_index
             if steps[i] == 0:
@@ -1388,7 +1395,12 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is an iterable of integers.
+        Return value is a string.
         """
+        try:
+            sequence = sequence.seq  # stupid SeqRecord
+        except AttributeError:
+            pass
         line = ""
         for step, gap in zip(steps, gaps):
             if step:
@@ -1415,6 +1427,7 @@ class Alignment:
         self[rows, col]
 
         where rows is a slice object, and col is an integer.
+        Return value is a string.
         """
         indices = gaps.cumsum()
         j = indices.searchsorted(col, side="right")
@@ -1439,7 +1452,7 @@ class Alignment:
 
         where rows is an arbitrary slice object, and cols is a slice object
         with step 1, allowing the alignment sequences to be reused in the
-        subalignment.
+        subalignment. Return value is an Alignment object.
         """
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
@@ -1485,17 +1498,21 @@ class Alignment:
 
         where rows is a slice object and cols is an iterable of integers.
         This method will create new sequences for use by the subalignment
-        object.
+        object. Return value is an Alignment object.
         """
         indices = tuple(col)
         lines = []
         for i, sequence in enumerate(sequences):
+            try:
+                s = sequence.seq  # stupid SeqRecord
+            except AttributeError:
+                s = sequence
             line = ""
             k = coordinates[i, 0]
             for step, gap in zip(steps[i], gaps):
                 if step:
                     j = k + step
-                    line += str(sequence[k:j])
+                    line += str(s[k:j])
                     k = j
                 else:
                     line += "-" * gap
@@ -1508,7 +1525,16 @@ class Alignment:
                     "second index must be an integer, slice, or iterable of integers"
                 ) from None
             lines.append(line)
-        sequences = [line.replace("-", "") for line in lines]
+            line = line.replace("-", "")
+            s = s.__class__(line)
+            try:
+                sequence.seq  # stupid SeqRecord
+            except AttributeError:
+                sequence = s
+            else:
+                sequence = copy.deepcopy(sequence)
+                sequence.seq = s
+            sequences[i] = sequence
         coordinates = self.infer_coordinates(lines)
         alignment = Alignment(sequences, coordinates)
         try:
@@ -1633,10 +1659,6 @@ class Alignment:
         sequences = list(self.sequences)
         coordinates = self.coordinates.copy()
         for i, sequence in enumerate(sequences):
-            try:
-                sequence = sequence.seq  # SeqRecord confusion
-            except AttributeError:
-                pass
             if coordinates[i, 0] > coordinates[i, -1]:  # reverse strand
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 sequence = reverse_complement(sequence, inplace=False)

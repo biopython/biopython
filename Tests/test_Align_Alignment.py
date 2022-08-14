@@ -34,7 +34,8 @@ class TestPairwiseAlignment(unittest.TestCase):
         [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
     )
 
-    def check_indexing_slicing(self, alignment, msg):
+    def check_indexing_slicing(self, alignment, cls, strand):
+        msg = "%s, %s strand" % (cls.__name__, strand)
         self.assertEqual(
             repr(alignment),
             "<Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment),
@@ -51,6 +52,8 @@ A-C-GG-AAC--
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 12))
+        self.assertIsInstance(alignment.sequences[0], cls)
+        self.assertIsInstance(alignment.sequences[1], cls)
         self.assertEqual(alignment[0], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[-2], "AACCGGGA-CCG", msg=msg)
@@ -117,7 +120,8 @@ A-C-GG-AAC--
         self.assertEqual(alignment[0, (1, 4, 9)], "AGC", msg=msg)
         self.assertEqual(alignment[1, (1, 4, 9)], "-GC", msg=msg)
         self.assertEqual(alignment[0, range(0, 12, 2)], "ACGG-C", msg=msg)
-        self.assertAlmostEqual(alignment[:, :].score, 6.0, msg=msg)
+        subalignment = alignment[:, :]
+        self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
         self.assertEqual(
             str(alignment[:, :]),
             """\
@@ -127,13 +131,16 @@ A-C-GG-AAC--
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
         self.assertEqual(alignment[0, 0:12], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1, 0:12], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[0, 0:], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1, 0:], "A-C-GG-AAC--", msg=msg)
-        self.assertAlmostEqual(alignment[:, 0:].score, 6.0, msg=msg)
+        subalignment = alignment[:, 0:]
+        self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
         self.assertEqual(
-            str(alignment[:, 0:]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-|--
@@ -141,6 +148,8 @@ A-C-GG-AAC--
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
         self.assertEqual(alignment[0, :12], "AACCGGGA-CCG", msg=msg)
         self.assertEqual(alignment[1, :12], "A-C-GG-AAC--", msg=msg)
         self.assertEqual(alignment[0, 1:], "ACCGGGA-CCG", msg=msg)
@@ -181,9 +190,10 @@ A-C-GG-AAC--
         self.assertEqual(alignment[1, 2:-1], "C-GG-AAC-", msg=msg)
         self.assertEqual(alignment[0, 2:-2], "CCGGGA-C", msg=msg)
         self.assertEqual(alignment[1, 2:-2], "C-GG-AAC", msg=msg)
-        self.assertAlmostEqual(alignment[:, :12].score, 6.0, msg=msg)
+        subalignment = alignment[:, :12]
+        self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
         self.assertEqual(
-            str(alignment[:, :12]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-|--
@@ -191,9 +201,12 @@ A-C-GG-AAC--
 """,
             msg=msg,
         )
-        self.assertAlmostEqual(alignment[:, 0:12].score, 6.0, msg=msg)
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 0:12]
+        self.assertAlmostEqual(alignment.score, 6.0, msg=msg)
         self.assertEqual(
-            str(alignment[:, 0:12]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-|--
@@ -201,8 +214,11 @@ A-C-GG-AAC--
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 1:]
         self.assertEqual(
-            str(alignment[:, 1:]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
  -|-||-|-|--
@@ -210,8 +226,11 @@ A-C-GG-AAC--
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 2:]
         self.assertEqual(
-            str(alignment[:, 2:]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
   |-||-|-|--
@@ -219,8 +238,11 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 3:]
         self.assertEqual(
-            str(alignment[:, 3:]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
    -||-|-|--
@@ -228,8 +250,11 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 4:]
         self.assertEqual(
-            str(alignment[:, 4:]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
     ||-|-|--
@@ -237,8 +262,11 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, :-1]
         self.assertEqual(
-            str(alignment[:, :-1]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-|-
@@ -246,8 +274,11 @@ A-C-GG-AAC-
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, :-2]
         self.assertEqual(
-            str(alignment[:, :-2]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-|
@@ -255,8 +286,11 @@ A-C-GG-AAC
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, :-3]
         self.assertEqual(
-            str(alignment[:, :-3]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
 |-|-||-|-
@@ -264,8 +298,11 @@ A-C-GG-AAC
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 1:-1]
         self.assertEqual(
-            str(alignment[:, 1:-1]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
  -|-||-|-|-
@@ -273,8 +310,11 @@ A-C-GG-AAC-
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 1:-2]
         self.assertEqual(
-            str(alignment[:, 1:-2]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
  -|-||-|-|
@@ -282,8 +322,11 @@ A-C-GG-AAC
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 2:-1]
         self.assertEqual(
-            str(alignment[:, 2:-1]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
   |-||-|-|-
@@ -291,8 +334,11 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, 2:-2]
         self.assertEqual(
-            str(alignment[:, 2:-2]),
+            str(subalignment),
             """\
 AACCGGGA-CCG
   |-||-|-|
@@ -300,8 +346,11 @@ AACCGGGA-CCG
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, ::2]
         self.assertEqual(
-            str(alignment[:, ::2]),
+            str(subalignment),
             """\
 ACGG-C
 |||---
@@ -309,8 +358,11 @@ ACG-A-
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, range(0, 12, 2)]
         self.assertEqual(
-            str(alignment[:, range(0, 12, 2)]),
+            str(subalignment),
             """\
 ACGG-C
 |||---
@@ -318,8 +370,11 @@ ACG-A-
 """,
             msg=msg,
         )
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
+        subalignment = alignment[:, (1, 8, 5)]
         self.assertEqual(
-            str(alignment[:, (1, 8, 5)]),
+            str(subalignment),
             """\
 A-G
 --|
@@ -330,6 +385,7 @@ A-G
         subalignment = alignment[:1]
         self.assertEqual(len(subalignment.sequences), 1)
         sequence = subalignment.sequences[0]
+        self.assertIsInstance(sequence, cls)
         try:
             sequence = sequence.seq
         except AttributeError:
@@ -344,6 +400,7 @@ A-G
         subalignment = alignment[:1, :]
         self.assertEqual(len(subalignment.sequences), 1)
         sequence = subalignment.sequences[0]
+        self.assertIsInstance(sequence, cls)
         try:
             sequence = sequence.seq
         except AttributeError:
@@ -355,45 +412,42 @@ A-G
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
-        self.assertEqual(alignment, alignment[:])
+        subalignment = alignment[:]
+        self.assertEqual(alignment, subalignment)
+        self.assertIsInstance(subalignment.sequences[0], cls)
+        self.assertIsInstance(subalignment.sequences[1], cls)
 
     def test_indexing_slicing(self):
         sequences = (self.target, self.query)
         alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
-        msg = "str, forward strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, str, "forward")
         sequences = (self.target, self.query_rc)
         alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
-        msg = "str, reverse strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, str, "reverse")
         target = Seq(self.target)
         query = Seq(self.query)
         query_rc = Seq(self.query_rc)
         sequences = (target, query)
         alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
-        msg = "Seq, forward strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, Seq, "forward")
         sequences = (target, query_rc)
         alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
-        msg = "Seq, reverse strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, Seq, "reverse")
         target = SeqRecord(target)
         query = SeqRecord(query)
         query_rc = SeqRecord(query_rc)
         sequences = (target, query)
         alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
-        msg = "SeqRecord, forward strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, SeqRecord, "forward")
         sequences = (target, query_rc)
         alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
-        msg = "SeqRecord, reverse strand"
-        self.check_indexing_slicing(alignment, msg)
+        self.check_indexing_slicing(alignment, SeqRecord, "reverse")
 
     def test_aligned_indices(self):
         sequences = (self.target, self.query)
