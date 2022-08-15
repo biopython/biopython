@@ -3395,7 +3395,7 @@ def _translate_str(
     >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'AAA' found.
+    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
     """
     try:
         table_id = int(table)
