@@ -57,6 +57,9 @@ class TestAlign_dna_rna(unittest.TestCase):
         """Test parsing dna_rna.bb."""
         path = "Blat/dna_rna.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets["chr3"].id, "chr3")
+        self.assertEqual(len(alignments.targets["chr3"]), 198295559)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))

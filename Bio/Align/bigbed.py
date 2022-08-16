@@ -26,6 +26,11 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 import numpy
+import io
+import sys
+import zlib
+import struct
+from collections import namedtuple
 
 
 from Bio.Align import Alignment
@@ -40,6 +45,64 @@ warnings.warn(
     "Bio.Align.bed is an experimental module which may undergo "
     "significant changes prior to its future official release.",
     BiopythonExperimentalWarning,
+)
+
+
+BptFile = namedtuple(
+    "BptFile",
+    (
+        "blockSize",  # 4 bytes
+        "keySize",  # 4 bytes
+        "valSize",  # 4 bytes
+        "itemCount",  # 8 bytes
+        "rootOffset",  # 8 bytes
+    ),
+)
+
+BbiFile = namedtuple(
+    "BbiFile",
+    (
+        "chromBpt",  # BptFile
+        "version",  # 2 bytes
+        "zoomLevels",  # 2 bytes
+        "chromTreeOffset",  # 8 bytes
+        "unzoomedDataOffset",  # 8 bytes
+        "unzoomedIndexOffset",  # 8 bytes
+        "fieldCount",  # 2 bytes
+        "definedFieldCount",  # 2 bytes
+        "asOffset",  # 8 bytes
+        "totalSummaryOffset",  # 8 bytes
+        "uncompressBufSize",  # 4 bytes
+        "extensionOffset",  # 8 bytes
+        "unzoomedCir",  # CirTreeFile
+        "extensionSize",  # 2 bytes
+        "extraIndexCount",  # 2 bytes
+        "extraIndexListOffset",  # 8 bytes
+    ),
+)
+
+CirTreeFile = namedtuple(
+    "CirTreeFile",
+    (
+        "rootOffset",  # 8 bytes
+        "blockSize",  # 4 bytes
+        "itemCount",  # 8 bytes
+        "startChromIx",  # 4 bytes
+        "startBase",  # 4 bytes
+        "endChromIx",  # 4 bytes
+        "endBase",  # 4 bytes
+        "fileSize",  # 8 bytes
+        "itemsPerSlot",  # 4 bytes
+    ),
+)
+
+BbiChromInfo = namedtuple(
+    "BbiChromInfo",
+    (
+        "name",  # str
+        "id",  # 4 bytes
+        "size",  # 4 bytes
+    ),
 )
 
 
@@ -151,11 +214,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
-    """Alignment iterator for Browser Extensible Data (BED) files.
+    """Alignment iterator bigBed files.
 
-    Each line in the file contains one pairwise alignment, which are loaded
-    and returned incrementally.  Additional alignment information is stored as
-    attributes of each alignment.
+    The pairwise alignments stored in the bigBed file are loaded and returned
+    incrementally.  Additional alignment information is stored as attributes
+    of each alignment.
     """
 
     def __init__(self, source):
@@ -165,7 +228,108 @@ class AlignmentIterator(interfaces.AlignmentIterator):
          - source   - input data or file name
 
         """
-        super().__init__(source, mode="t", fmt="BED")
+        super().__init__(source, mode="b", fmt="bigBed")
+
+    def _read_header(self, stream):
+        signature = 0x8789F2EB
+        magic = stream.read(4)
+        for byteorder, byteorder_character in zip(("little", "big"), "<>"):
+            if int.from_bytes(magic, byteorder=byteorder) == signature:
+                self._byteorder = byteorder
+                self._byteorder_character = byteorder_character
+                break
+        else:
+            raise ValueError("not a bigBed file")
+        (
+            version,
+            zoomLevels,
+            chromTreeOffset,
+            unzoomedDataOffset,
+            unzoomedIndexOffset,
+            fieldCount,
+            definedFieldCount,
+            asOffset,
+            totalSummaryOffset,
+            uncompressBufSize,
+            extensionOffset,
+        ) = struct.unpack(byteorder_character + "hhqqqhhqqiq", stream.read(60))
+
+        if extensionOffset != 0:
+            stream.seek(extensionOffset)
+            extensionSize, extraIndexCount, extraIndexListOffset = struct.unpack(
+                byteorder_character + "iii", stream.read(12)
+            )
+
+        signature = 0x78CA8C91
+        stream.seek(chromTreeOffset)
+        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
+        assert magic == signature
+        blockSize, keySize, valSize, itemCount = struct.unpack(
+            byteorder_character + "iiiqxxxxxxxx", stream.read(28)
+        )
+        rootOffset = stream.tell()
+        chromBpt = BptFile(blockSize, keySize, valSize, itemCount, rootOffset)
+
+        signature = 0x2468ACE0
+        stream.seek(unzoomedIndexOffset)
+        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
+        assert magic == signature
+        (
+            blockSize,
+            itemCount,
+            startChromIx,
+            startBase,
+            endChromIx,
+            endBase,
+            fileSize,
+            itemsPerSlot,
+        ) = struct.unpack(byteorder_character + "iqiiiiqixxxx", stream.read(44))
+
+        rootOffset = stream.tell()
+        unzoomedCir = CirTreeFile(
+            rootOffset,
+            blockSize,
+            itemCount,
+            startChromIx,
+            startBase,
+            endChromIx,
+            endBase,
+            fileSize,
+            itemsPerSlot,
+        )
+
+        bbi = BbiFile(
+            chromBpt,
+            version,
+            zoomLevels,
+            chromTreeOffset,
+            unzoomedDataOffset,
+            unzoomedIndexOffset,
+            fieldCount,
+            definedFieldCount,
+            asOffset,
+            totalSummaryOffset,
+            uncompressBufSize,
+            extensionOffset,
+            unzoomedCir,
+            extensionSize,
+            extraIndexCount,
+            extraIndexListOffset,
+        )
+
+        chromList = []
+        bpt = bbi.chromBpt
+        self._rTraverse(stream, bpt, bpt.rootOffset, chromList)
+        targets = {}
+
+        for item in sorted(chromList, key=lambda item: item.id):
+            name = item.name.decode()
+            length = item.size
+            sequence = Seq(None, length=length)
+            target = SeqRecord(sequence, id=name)
+            targets[name] = target
+
+        self.targets = targets
 
     def _read_next_alignment(self, stream):
         try:
@@ -263,201 +427,40 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment.itemRgb = words[8]
         return alignment
 
+    def _rTraverse(self, stream, bpt, blockStart, chromList):
+        byteorder = self._byteorder
+        byteorder_character = self._byteorder_character
+        stream.seek(blockStart)
+        isLeaf, childCount = struct.unpack(byteorder_character + "?xh", stream.read(4))
+        keySize = bpt.keySize
+        valSize = bpt.valSize
+        fmt = byteorder_character + "II"
+        if isLeaf:
+            for i in range(childCount):
+                key = stream.read(keySize)
+                val = stream.read(valSize)
+                name = key.split(b"\x00", 1).pop(0)
+                chromId, chromSize = struct.unpack(fmt, val)
+                info = BbiChromInfo(name, chromId, chromSize)
+                chromList.append(info)
+        else:
+            fileOffsets = numpy.empty(childCount, "i8")
+            for i in range(childCount):
+                key = stream.read(keySize)
+                fileOffsets[i] = int.from_bytes(stream.read(8), byteorder)
+            for i in range(childCount):
+                self._rTraverse(stream, bpt, fileOffsets[i], chromList)
+
 
 code = """\
-import numpy
-import io
-import sys
-import zlib
-import struct
-from collections import namedtuple
-
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-# filename = "test.bigBed"
-filename = "knownGene.bb"
 clChrom = sys.argv[1]
 clStart = int(sys.argv[2])
 clEnd = int(sys.argv[3])
 
 
-Level = namedtuple(
-    "Level",
-    (
-        "reductionLevel",  # 4 bytes
-        "reserved",  # 4 bytes
-        "dataOffset",  # 8 bytes
-        "indexOffset",  # 8 bytes
-    ),
-)
-
-CirTreeFile = namedtuple(
-    "CirTreeFile",
-    (
-        "rootOffset",  # 8 bytes
-        "blockSize",  # 4 bytes
-        "itemCount",  # 8 bytes
-        "startChromIx",  # 4 bytes
-        "startBase",  # 4 bytes
-        "endChromIx",  # 4 bytes
-        "endBase",  # 4 bytes
-        "fileSize",  # 8 bytes
-        "itemsPerSlot",  # 4 bytes
-    ),
-)
-
-BbiChromInfo = namedtuple(
-    "BbiChromInfo",
-    (
-        "name",  # str
-        "id",  # 4 bytes
-        "size",  # 4 bytes
-    ),
-)
-
-BbiFile = namedtuple(
-    "BbiFile",
-    (
-        "chromBpt",  # BptFile
-        "version",  # 2 bytes
-        "zoomLevels",  # 2 bytes
-        "chromTreeOffset",  # 8 bytes
-        "unzoomedDataOffset",  # 8 bytes
-        "unzoomedIndexOffset",  # 8 bytes
-        "fieldCount",  # 2 bytes
-        "definedFieldCount",  # 2 bytes
-        "asOffset",  # 8 bytes
-        "totalSummaryOffset",  # 8 bytes
-        "uncompressBufSize",  # 4 bytes
-        "extensionOffset",  # 8 bytes
-        "unzoomedCir",  # CirTreeFile
-        "extensionSize",  # 2 bytes
-        "extraIndexCount",  # 2 bytes
-        "extraIndexListOffset",  # 8 bytes
-    ),
-)
-
-BptFile = namedtuple(
-    "BptFile",
-    (
-        "blockSize",  # 4 bytes
-        "keySize",  # 4 bytes
-        "valSize",  # 4 bytes
-        "itemCount",  # 8 bytes
-        "rootOffset",  # 8 bytes
-    ),
-)
 
 Block = namedtuple("Block", ("offset", "size"))
 
-
-def bigBedFileOpen(stream, byteorder):
-    (
-        version,
-        zoomLevels,
-        chromTreeOffset,
-        unzoomedDataOffset,
-        unzoomedIndexOffset,
-        fieldCount,
-        definedFieldCount,
-        asOffset,
-        totalSummaryOffset,
-        uncompressBufSize,
-        extensionOffset,
-    ) = struct.unpack("<hhqqqhhqqiq", stream.read(60))
-    levels = [
-        Level(*struct.unpack("<iiqq", stream.read(24))) for i in range(zoomLevels)
-    ]
-    if extensionOffset != 0:
-        stream.seek(extensionOffset)
-        extensionSize, extraIndexCount, extraIndexListOffset = struct.unpack(
-            "<iii", stream.read(12)
-        )
-
-    signature = 0x78CA8C91
-    stream.seek(chromTreeOffset)
-    magic = int.from_bytes(stream.read(4), byteorder=byteorder)
-    assert magic == signature
-    blockSize, keySize, valSize, itemCount = struct.unpack(
-        "<iiiqxxxxxxxx", stream.read(28)
-    )
-    rootOffset = stream.tell()
-    chromBpt = BptFile(blockSize, keySize, valSize, itemCount, rootOffset)
-
-    signature = 0x2468ACE0
-    stream.seek(unzoomedIndexOffset)
-    magic = int.from_bytes(stream.read(4), byteorder=byteorder)
-    assert magic == signature
-    (
-        blockSize,
-        itemCount,
-        startChromIx,
-        startBase,
-        endChromIx,
-        endBase,
-        fileSize,
-        itemsPerSlot,
-    ) = struct.unpack("<iqiiiiqixxxx", stream.read(44))
-    rootOffset = stream.tell()
-    unzoomedCir = CirTreeFile(
-        rootOffset,
-        blockSize,
-        itemCount,
-        startChromIx,
-        startBase,
-        endChromIx,
-        endBase,
-        fileSize,
-        itemsPerSlot,
-    )
-
-    bbi = BbiFile(
-        chromBpt,
-        version,
-        zoomLevels,
-        chromTreeOffset,
-        unzoomedDataOffset,
-        unzoomedIndexOffset,
-        fieldCount,
-        definedFieldCount,
-        asOffset,
-        totalSummaryOffset,
-        uncompressBufSize,
-        extensionOffset,
-        unzoomedCir,
-        extensionSize,
-        extraIndexCount,
-        extraIndexListOffset,
-    )
-
-    return bbi
-
-
-def rTraverse(bpt, blockStart, chromList):
-    if byteorder == "little":
-        fmt = "<II"
-    elif byteorder == "big":
-        fmt = ">II"
-    stream.seek(blockStart)
-    isLeaf, childCount = struct.unpack("<?xh", stream.read(4))
-    keySize = bpt.keySize
-    valSize = bpt.valSize
-    if isLeaf:
-        for i in range(childCount):
-            key = stream.read(keySize)
-            val = stream.read(valSize)
-            name = key.split(b"\x00", 1).pop(0)
-            chromId, chromSize = struct.unpack(fmt, val)
-            info = BbiChromInfo(name, chromId, chromSize)
-            chromList.append(info)
-    else:
-        fileOffsets = numpy.empty(childCount, "i8")
-        for i in range(childCount):
-            key = stream.read(keySize)
-            fileOffsets[i] = int.from_bytes(stream.read(8), byteorder)
-        for i in range(childCount):
-            rTraverse(bpt, fileOffsets[i], chromList)
 
 
 def rFind(bpt, blockStart, name):
@@ -596,35 +599,6 @@ def bigBedIntervalQuery(bbi, chromName, start, end):
                     interval = (chromId, s, e, rest)
                     intervals.append(interval)
     return intervals
-
-
-stream = open(filename, "rb")
-
-signature = 0x8789F2EB
-magic = stream.read(4)
-for byteorder in ("little", "big"):
-    if int.from_bytes(magic, byteorder=byteorder) == signature:
-        break
-else:
-    raise ValueError("%s is not a bigBed file" % filename)
-
-bbi = bigBedFileOpen(stream, byteorder)
-chromList = []
-bpt = bbi.chromBpt
-rTraverse(bpt, bpt.rootOffset, chromList)
-targets = {}
-
-start = 0
-chromName = None
-for item in sorted(chromList, key=lambda item: item.id):
-    name = item.name.decode()
-    length = item.size
-    sequence = Seq(None, length=length)
-    target = SeqRecord(sequence, id=name)
-    targets[name] = target
-    if name == clChrom:
-        chromName = item.name
-        end = length
 
 if clStart > 0:
     start = clStart
