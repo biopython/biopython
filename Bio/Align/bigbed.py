@@ -4,33 +4,29 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.Align support for BED (Browser Extensible Data) files.
+"""Bio.Align support for alignment files in the bigBed format.
 
-The Browser Extensible Data (BED) format, stores a series of pairwise
-alignments in a single file. Typically they are used for transcript to genome
-alignments. BED files store the alignment positions and alignment scores, but
-not the aligned sequences.
+The bigBed format stores a series of pairwise alignments in a single indexed
+binary file. Typically they are used for transcript to genome alignments. As
+in the BED format, the alignment positions and alignment scores are stored,
+but the aligned sequences are not.
 
-See http://genome.ucsc.edu/FAQ/FAQformat.html#format1
+See http://genome.ucsc.edu/goldenPath/help/bigBed.html for more information.
 
 You are expected to use this module via the Bio.Align functions.
-
-Coordinates in the BED format are defined in terms of zero-based start
-positions (like Python) and aligning region sizes.
-
-A minimal aligned region of length one and starting at first position in the
-source sequence would have ``start == 0`` and ``size == 1``.
-
-As we can see in this example, ``start + size`` will give one more than the
-zero-based end position. We can therefore manipulate ``start`` and
-``start + size`` as python list slice boundaries.
 """
+
+# This parser was written based on the description of the bigBed file format in
+# W. J. Kent, A. S. Zweig,* G. Barber, A. S. Hinrichs, and D. Karolchik:
+# "BigWig and BigBed: enabling browsing of large distributed datasets:
+# Bioinformatics 26(17): 2204–2207 (2010)
+# in particular the tables in the supplemental materials listing the contents
+# of a bigBed file byte-by-byte.
+
+
 import numpy
-import io
-import sys
 import zlib
 import struct
-from collections import namedtuple
 
 
 from Bio.Align import Alignment
@@ -42,117 +38,10 @@ from Bio import BiopythonExperimentalWarning
 import warnings
 
 warnings.warn(
-    "Bio.Align.bed is an experimental module which may undergo "
+    "Bio.Align.bigbed is an experimental module which may undergo "
     "significant changes prior to its future official release.",
     BiopythonExperimentalWarning,
 )
-
-
-class AlignmentWriter(interfaces.AlignmentWriter):
-    """Alignment file writer for the Browser Extensible Data (BED) file format."""
-
-    def __init__(self, target, bedN=12):
-        """Create an AlignmentWriter object.
-
-        Arguments:
-         - target    - output stream or file name
-         - bedN      - number of columns in the BED file.
-                       This must be between 3 and 12; default value is 12.
-
-        """
-        if bedN < 3 or bedN > 12:
-            raise ValueError("bedN must be between 3 and 12")
-        super().__init__(target, mode="w")
-        self.bedN = bedN
-
-    def format_alignment(self, alignment):
-        """Return a string with one alignment formatted as a BED line."""
-        if not isinstance(alignment, Alignment):
-            raise TypeError("Expected an Alignment object")
-        coordinates = alignment.coordinates
-        if not coordinates.size:  # alignment consists of gaps only
-            return ""
-        bedN = self.bedN
-        target, query = alignment.sequences
-        try:
-            chrom = target.id
-        except AttributeError:
-            chrom = "target"
-        assert coordinates[0, 0] < coordinates[0, -1]
-        if coordinates[1, 0] > coordinates[1, -1]:
-            # DNA/RNA mapped to reverse strand of DNA/RNA
-            strand = "-"
-        else:
-            # mapped to forward strand
-            strand = "+"
-        # variable names follow those in the BED file format specification
-        blockSizes = []
-        blockStarts = []
-        tStart, qStart = coordinates[:, 0]
-        for tEnd, qEnd in coordinates[:, 1:].transpose():
-            if tStart == tEnd:
-                qStart = qEnd
-            elif qStart == qEnd:
-                tStart = tEnd
-            else:
-                blockSize = tEnd - tStart
-                blockStarts.append(tStart)
-                blockSizes.append(blockSize)
-                tStart = tEnd
-                qStart = qEnd
-        chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
-        fields = [chrom, str(chromStart), str(chromEnd)]
-        if bedN == 3:
-            return "\t".join(fields) + "\n"
-        try:
-            name = query.id
-        except AttributeError:
-            name = "query"
-        fields.append(name)
-        if bedN == 4:
-            return "\t".join(fields) + "\n"
-        try:
-            score = alignment.score
-        except AttributeError:
-            score = 0
-        fields.append(str(score))
-        if bedN == 5:
-            return "\t".join(fields) + "\n"
-        fields.append(strand)
-        if bedN == 6:
-            return "\t".join(fields) + "\n"
-        try:
-            thickStart = alignment.thickStart
-        except AttributeError:
-            thickStart = chromStart
-        fields.append(str(thickStart))
-        if bedN == 7:
-            return "\t".join(fields) + "\n"
-        try:
-            thickEnd = alignment.thickEnd
-        except AttributeError:
-            thickEnd = chromEnd
-        fields.append(str(thickEnd))
-        if bedN == 8:
-            return "\t".join(fields) + "\n"
-        try:
-            itemRgb = alignment.itemRgb
-        except AttributeError:
-            itemRgb = "0"
-        fields.append(str(itemRgb))
-        if bedN == 9:
-            return "\t".join(fields) + "\n"
-        blockCount = len(blockSizes)
-        fields.append(str(blockCount))
-        if bedN == 10:
-            return "\t".join(fields) + "\n"
-        fields.append(",".join(map(str, blockSizes)) + ",")
-        if bedN == 11:
-            return "\t".join(fields) + "\n"
-        blockStarts -= chromStart
-        fields.append(",".join(map(str, blockStarts)) + ",")
-        return "\t".join(fields) + "\n"
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -207,6 +96,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             totalSummaryOffset,
             uncompressBufSize,
         ) = struct.unpack("<hhqqqhhqqixxxxxxxx", stream.read(60))
+        if definedFieldCount < 3 or definedFieldCount > 12:
+            raise ValueError(
+                "expected between 3 and 12 columns, found %d" % definedFieldCount
+            )
+        self.bedN = definedFieldCount
 
         stream.seek(fullDataOffset)
         dataCount = int.from_bytes(stream.read(8), byteorder=byteorder)
@@ -253,7 +147,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif byteorder == "big":
             fmt = ">II"
 
-        targets = {}
+        targets = []
 
         while True:
             for i in range(count):
@@ -267,7 +161,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 chromName = chromName.decode()
                 sequence = Seq(None, length=chromSize)
                 target = SeqRecord(sequence, id=chromName)
-                targets[chromName] = target
+                targets.append(target)
             if chromId + 1 == itemCount:
                 break
             # Supplemental Table 9: Chromosome B+ tree node
@@ -304,7 +198,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         ) = struct.unpack("<iqiiiiqixxxx", stream.read(44))
 
         self.targets = targets
-        self._names = list(targets.keys())
         self._index = 0
         self._length = dataCount
         self._cache = ("", 0)
@@ -358,19 +251,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         chromId, chromStart, chromEnd = struct.unpack("<III", data[:12])
         rest, data = data[12:].split(b"\00", 1)
         words = rest.decode().split("\t")
-        bedN = len(words) + 3
-        if bedN < 3 or bedN > 12:
-            raise ValueError("expected between 3 and 12 columns, found %d" % bedN)
-        chrom = self._names[chromId]
-        if bedN > 3:
+        target_record = self.targets[chromId]
+        if self.bedN > 3:
             name = words[0]
         else:
             name = None
-        if bedN > 5:
+        if self.bedN > 5:
             strand = words[2]
         else:
             strand = "+"
-        if bedN > 9:
+        if self.bedN > 9:
             blockCount = int(words[6])
             blockSizes = [
                 int(blockSize) for blockSize in words[7].rstrip(",").split(",")
@@ -409,7 +299,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates[0, :] += chromStart
         query_sequence = Seq(None, length=qSize)
         query_record = SeqRecord(query_sequence, id=name)
-        target_record = SeqRecord(None, id=chrom)
         records = [target_record, query_record]
         if strand == "-":
             coordinates[1, :] = qSize - coordinates[1, :]
@@ -426,7 +315,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = Alignment(records, coordinates)
         self._index += 1
         self._cache = (data, count)
-        if bedN <= 4:
+        if self.bedN <= 4:
             return alignment
         score = words[1]
         try:
@@ -437,13 +326,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if score.is_integer():
                 score = int(score)
         alignment.score = score
-        if bedN <= 6:
+        if self.bedN <= 6:
             return alignment
         alignment.thickStart = int(words[3])
-        if bedN <= 7:
+        if self.bedN <= 7:
             return alignment
         alignment.thickEnd = int(words[4])
-        if bedN <= 8:
+        if self.bedN <= 8:
             return alignment
         alignment.itemRgb = words[5]
         return alignment

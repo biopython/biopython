@@ -215,7 +215,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -235,7 +235,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -255,7 +255,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1158,7 +1158,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1178,7 +1178,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1198,7 +1198,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
-        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1909,7 +1909,7 @@ class TestAlign_bed12(unittest.TestCase):
             if bedN >= 7:
                 self.assertEqual(alignment.thickStart, 1200, msg=filename)
             if bedN >= 8:
-                self.assertEqual(alignment.thickEnd, 5900, msg=filename)
+                self.assertEqual(alignment.thickEnd, 4900, msg=filename)
             if bedN >= 9:
                 self.assertEqual(alignment.itemRgb, "255,0,0", msg=filename)
             alignment = next(alignments)
