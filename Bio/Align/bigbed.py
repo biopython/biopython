@@ -27,6 +27,7 @@ You are expected to use this module via the Bio.Align functions.
 import numpy
 import zlib
 import struct
+from collections import namedtuple
 
 
 from Bio.Align import Alignment
@@ -84,6 +85,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("not a bigBed file")
 
+        self.byteorder = byteorder
+        self._byteorder_char = byteorder_char
+
         (
             version,
             zoomLevels,
@@ -110,63 +114,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             self._compressed = False
 
-        # Supplemental Table 8: Chromosome B+ tree header
-        # magic     4 bytes
-        # blockSize 4 bytes
-        # keySize   4 bytes
-        # valSize   4 bytes
-        # itemCOunt 8 bytes
-        # reserved  8 bytes
-        signature = 0x78CA8C91
-        stream.seek(chromosomeTreeOffset)
-        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
-        assert magic == signature
-        blockSize, keySize, valSize, itemCount = struct.unpack(
-            byteorder_char + "iiiqxxxxxxxx", stream.read(28)
-        )
-        assert valSize == 8
-
-        while True:
-            # Supplemental Table 9: Chromosome B+ tree node
-            # isLeaf    1 byte
-            # reserved  1 byte
-            # count     2 bytes
-            isLeaf, count = struct.unpack(byteorder_char + "?xh", stream.read(4))
-            if isLeaf:
-                break
-            assert count > 0
-            # Supplemental Table 11: Chromosome B+ tree non-leaf item
-            # key          keySize bytes
-            # childOffset  8 bytes
-            key = stream.read(keySize)
-            childOffset = int.from_bytes(stream.read(8), byteorder)
-            stream.seek(childOffset)
-
-        targets = []
-
-        while True:
-            for i in range(count):
-                # Supplemental Table 10: Chromosome B+ tree leaf item format
-                # key        keySize bytes
-                # chromId    4 bytes
-                # chromSize  4 bytes
-                key = stream.read(keySize)
-                chromName = key.split(b"\x00", 1).pop(0)
-                chromId, chromSize = struct.unpack(
-                    byteorder_char + "II", stream.read(8)
-                )
-                chromName = chromName.decode()
-                sequence = Seq(None, length=chromSize)
-                target = SeqRecord(sequence, id=chromName)
-                targets.append(target)
-            if chromId + 1 == itemCount:
-                break
-            # Supplemental Table 9: Chromosome B+ tree node
-            # isLeaf    1 byte
-            # reserved  1 byte
-            # count     2 bytes
-            isLeaf, count = struct.unpack(byteorder_char + "?xh", stream.read(4))
-            assert isLeaf
+        self.targets = self._read_chromosomes(stream, chromosomeTreeOffset)
 
         # Supplemental Table 14: R tree index header
         # magic            4 bytes
@@ -194,11 +142,74 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             itemsPerSlot,
         ) = struct.unpack(byteorder_char + "iqiiiiqixxxx", stream.read(44))
 
-        self.targets = targets
         self._index = 0
         self._length = dataCount
         self._cache = ("", 0)
-        self._byteorder_char = byteorder_char
+
+    def _read_chromosomes(self, stream, pos):
+        # Supplemental Table 8: Chromosome B+ tree header
+        # magic     4 bytes
+        # blockSize 4 bytes
+        # keySize   4 bytes
+        # valSize   4 bytes
+        # itemCOunt 8 bytes
+        # reserved  8 bytes
+        byteorder = self.byteorder
+        byteorder_char = self._byteorder_char
+        stream.seek(pos)
+        signature = 0x78CA8C91
+        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
+        assert magic == signature
+        blockSize, keySize, valSize, itemCount = struct.unpack(
+            byteorder_char + "iiiqxxxxxxxx", stream.read(28)
+        )
+        assert valSize == 8
+
+        Node = namedtuple("Node", ["parent", "children"])
+        targets = []
+        node = None
+        while True:
+            # Supplemental Table 9: Chromosome B+ tree node
+            # isLeaf    1 byte
+            # reserved  1 byte
+            # count     2 bytes
+            isLeaf, count = struct.unpack(byteorder_char + "?xh", stream.read(4))
+            if isLeaf:
+                for i in range(count):
+                    # Supplemental Table 10: Chromosome B+ tree leaf item format
+                    # key        keySize bytes
+                    # chromId    4 bytes
+                    # chromSize  4 bytes
+                    key = stream.read(keySize)
+                    name = key.rstrip(b"\x00").decode()
+                    chromId, chromSize = struct.unpack("<II", stream.read(valSize))
+                    assert chromId == len(targets)
+                    sequence = Seq(None, length=chromSize)
+                    record = SeqRecord(sequence, id=name)
+                    targets.append(record)
+            else:
+                children = []
+                for i in range(count):
+                    # Supplemental Table 11: Chromosome B+ tree non-leaf item
+                    # key          keySize bytes
+                    # childOffset  8 bytes
+                    key = stream.read(keySize)
+                    pos = int.from_bytes(stream.read(8), byteorder)
+                    children.append(pos)
+                parent = node
+                node = Node(parent, children)
+            while True:
+                if node is None:
+                    assert len(targets) == itemCount
+                    return targets
+                children = node.children
+                try:
+                    pos = children.pop(0)
+                except IndexError:
+                    node = node.parent
+                else:
+                    break
+            stream.seek(pos)
 
     def _read_next_alignment(self, stream):
         if self._index == self._length:
