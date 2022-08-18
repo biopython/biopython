@@ -78,7 +78,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # reserved               8 bytes
         signature = 0x8789F2EB
         magic = stream.read(4)
-        for byteorder in ("little", "big"):
+        for byteorder, byteorder_char in (("little", "<"), ("big", ">")):
             if int.from_bytes(magic, byteorder=byteorder) == signature:
                 break
         else:
@@ -95,7 +95,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             autoSqlOffset,
             totalSummaryOffset,
             uncompressBufSize,
-        ) = struct.unpack("<hhqqqhhqqixxxxxxxx", stream.read(60))
+        ) = struct.unpack(byteorder_char + "hhqqqhhqqixxxxxxxx", stream.read(60))
         if definedFieldCount < 3 or definedFieldCount > 12:
             raise ValueError(
                 "expected between 3 and 12 columns, found %d" % definedFieldCount
@@ -122,7 +122,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         magic = int.from_bytes(stream.read(4), byteorder=byteorder)
         assert magic == signature
         blockSize, keySize, valSize, itemCount = struct.unpack(
-            "<iiiqxxxxxxxx", stream.read(28)
+            byteorder_char + "iiiqxxxxxxxx", stream.read(28)
         )
         assert valSize == 8
 
@@ -131,7 +131,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # isLeaf    1 byte
             # reserved  1 byte
             # count     2 bytes
-            isLeaf, count = struct.unpack("<?xh", stream.read(4))
+            isLeaf, count = struct.unpack(byteorder_char + "?xh", stream.read(4))
             if isLeaf:
                 break
             assert count > 0
@@ -141,11 +141,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             key = stream.read(keySize)
             childOffset = int.from_bytes(stream.read(8), byteorder)
             stream.seek(childOffset)
-
-        if byteorder == "little":
-            fmt = "<II"
-        elif byteorder == "big":
-            fmt = ">II"
 
         targets = []
 
@@ -157,7 +152,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # chromSize  4 bytes
                 key = stream.read(keySize)
                 chromName = key.split(b"\x00", 1).pop(0)
-                chromId, chromSize = struct.unpack(fmt, stream.read(8))
+                chromId, chromSize = struct.unpack(
+                    byteorder_char + "II", stream.read(8)
+                )
                 chromName = chromName.decode()
                 sequence = Seq(None, length=chromSize)
                 target = SeqRecord(sequence, id=chromName)
@@ -168,7 +165,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # isLeaf    1 byte
             # reserved  1 byte
             # count     2 bytes
-            isLeaf, count = struct.unpack("<?xh", stream.read(4))
+            isLeaf, count = struct.unpack(byteorder_char + "?xh", stream.read(4))
             assert isLeaf
 
         # Supplemental Table 14: R tree index header
@@ -195,16 +192,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             endBase,
             endFileOffset,
             itemsPerSlot,
-        ) = struct.unpack("<iqiiiiqixxxx", stream.read(44))
+        ) = struct.unpack(byteorder_char + "iqiiiiqixxxx", stream.read(44))
 
         self.targets = targets
         self._index = 0
         self._length = dataCount
         self._cache = ("", 0)
+        self._byteorder_char = byteorder_char
 
     def _read_next_alignment(self, stream):
         if self._index == self._length:
             return
+        byteorder_char = self._byteorder_char
         data, count = self._cache
         if not data:
             if not count:
@@ -213,7 +212,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     # isLeaf     1 byte
                     # reserved   1 byte
                     # count      2 bytes
-                    isLeaf, count = struct.unpack("<?xh", stream.read(4))
+                    isLeaf, count = struct.unpack(
+                        byteorder_char + "?xh", stream.read(4)
+                    )
                     if isLeaf:
                         assert count > 0
                         break
@@ -233,7 +234,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 endBase,
                 dataOffset,
                 dataSize,
-            ) = struct.unpack("<iiiiqq", stream.read(32))
+            ) = struct.unpack(byteorder_char + "iiiiqq", stream.read(32))
             assert startChromIx == endChromIx
             filepos = stream.tell()
             stream.seek(dataOffset)
@@ -248,7 +249,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # chromStart  4 bytes
         # chromEnd    4 bytes
         # rest        zero-terminated string in tab-separated format
-        chromId, chromStart, chromEnd = struct.unpack("<III", data[:12])
+        chromId, chromStart, chromEnd = struct.unpack(byteorder_char + "III", data[:12])
         rest, data = data[12:].split(b"\00", 1)
         words = rest.decode().split("\t")
         target_record = self.targets[chromId]
@@ -336,3 +337,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             return alignment
         alignment.itemRgb = words[5]
         return alignment
+
+    def __len__(self):
+        return self._length
