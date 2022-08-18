@@ -62,6 +62,71 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(len(alignments.targets["chr3"]), 198295559)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[42530895, 42530958, 42532020,
+                              42532095, 42532563, 42532606],
+                             [     181,      118,      118,
+                                    43,       43,        0]])
+                # fmt: on
+            )
+        )
+        alignment.target.seq = self.dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
+# flake8: noqa
+            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ])
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        # The modified RNAs have gaps in their sequence. As this information is
+        # not stored in a BED file, we cannot calculate the substitution matrix.
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 978)
+        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[42530895, 42530922, 42530958, 42532020, 42532037,
+                              42532039, 42532095, 42532563, 42532606],
+                             [     179,      152,      116,      116,       99,
+                                    99,       43,       43,        0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -102,47 +167,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
-        self.assertEqual(alignment.shape, (2, 1711))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530958, 42532020,
-                              42532095, 42532563, 42532606],
-                             [     181,      118,      118,
-                                    43,       43,        0]])
-                # fmt: on
-            )
-        )
-        alignment.target.seq = self.dna
-        alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                        ])
-            )
-        )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        alignment = next(alignments)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -161,30 +185,6 @@ class TestAlign_dna_rna(unittest.TestCase):
                               48665716, 48665722, 48669098, 48669174],
                              [       0,       28,       28,       45,       45,
                                    121,      127,      127,      203]])
-                # fmt: on
-            )
-        )
-        # The modified RNAs have gaps in their sequence. As this information is
-        # not stored in a BED file, we cannot calculate the substitution matrix.
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 978)
-        self.assertEqual(alignment.shape, (2, 1711))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530922, 42530958, 42532020, 42532037,
-                              42532039, 42532095, 42532563, 42532606],
-                             [     179,      152,      116,      116,       99,
-                                    99,       43,       43,        0]])
                 # fmt: on
             )
         )
