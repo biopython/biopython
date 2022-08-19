@@ -84,10 +84,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 fields.append("%s:%s" % (key, value))
             line = "\t".join(fields) + "\n"
             self.stream.write(line)
-        for rname, record in targets.items():
-            assert rname == record.id
+        for record in targets:
             fields = ["@SQ"]
-            fields.append("SN:%s" % rname)
+            fields.append("SN:%s" % record.id)
             length = len(record.seq)
             fields.append("LN:%d" % length)
             for key, value in record.annotations.items():
@@ -403,7 +402,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_header(self, stream):
         self.metadata = {}
-        self.targets = {}
+        self.targets = []
         for line in stream:
             if not line.startswith("@"):
                 self._line = line
@@ -440,12 +439,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         annotations["URI"] = value
                     else:
                         annotations[key] = value
-                assert rname not in self.targets
                 sequence = Seq(None, length=length)
                 record = SeqRecord(sequence, id=rname, annotations=annotations)
                 if description is not None:
                     record.description = description
-                self.targets[rname] = record
+                self.targets.append(record)
             else:
                 for field in fields[1:]:
                     key, value = field.split(":", 1)
@@ -457,6 +455,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if tag not in self.metadata:
                         self.metadata[tag] = []
                     self.metadata[tag].append(values)
+        self._target_indices = {
+            record.id: index for index, record in enumerate(self.targets)
+        }
 
     def _read_next_alignment(self, stream):
         try:
@@ -584,11 +585,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     coordinates.append([target_pos, query_pos])
                     operations.append(ord(letter))
                     number = ""
-                target = self.targets.get(rname)
-                if target is None:
+                index = self._target_indices.get(rname)
+                if index is None:
                     if self.targets:
                         raise ValueError(f"Found target {rname} missing from header")
                     target = SeqRecord(None, id=rname)
+                else:
+                    target = self.targets[index]
             else:
                 query_pos = 0
                 coordinates = [[target_pos, query_pos]]
@@ -697,7 +700,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     number = int(number)
                     target += seq[:number]
                 seq = target
-                target = copy.deepcopy(self.targets[rname])
+                index = self._target_indices[rname]
+                target = copy.deepcopy(self.targets[index])
                 length = len(target.seq)
                 data = {}
                 index = 0
