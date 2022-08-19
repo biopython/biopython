@@ -319,8 +319,10 @@ def _parse_pdb_header_list(header):
                                 1
                             ]
         else:
-            # print(key)
-            pass
+            if key not in pdbh_dict:
+                pdbh_dict[key]=list()
+            pdbh_dict[key].append(h[6:].strip())
+            
     if pdbh_dict["structure_method"] == "unknown":
         res = pdbh_dict["resolution"]
         if res is not None and res > 0.0:
