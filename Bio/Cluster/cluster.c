@@ -1208,7 +1208,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
             }
         }
     }
-    if (!tweight) return 0; /* usually due to empty clusters */
+    if (tweight == 0) return 0; /* usually due to empty clusters */
     result /= tweight;
     return result;
 }
@@ -1289,7 +1289,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
             }
         }
     }
-    if (!tweight) return 0; /* usually due to empty clusters */
+    if (tweight == 0) return 0; /* usually due to empty clusters */
     result /= tweight;
     return result;
 }
@@ -1388,7 +1388,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
             }
         }
     }
-    if (!tweight) return 0; /* usually due to empty clusters */
+    if (tweight == 0) return 0; /* usually due to empty clusters */
     result -= sum1 * sum2 / tweight;
     denom1 -= sum1 * sum1 / tweight;
     denom2 -= sum2 * sum2 / tweight;
@@ -1492,7 +1492,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
             }
         }
     }
-    if (!tweight) return 0; /* usually due to empty clusters */
+    if (tweight == 0) return 0; /* usually due to empty clusters */
     result -= sum1 * sum2 / tweight;
     denom1 -= sum1 * sum1 / tweight;
     denom2 -= sum2 * sum2 / tweight;
@@ -1827,7 +1827,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
      */
     free(rank1);
     free(rank2);
-    if (!totalweight) return 0; /* usually due to empty clusters */
+    if (totalweight == 0) return 0; /* usually due to empty clusters */
     result -= sum1 * sum2 / totalweight;
     denom1 -= sum1 * sum1 / totalweight;
     denom2 -= sum2 * sum2 / totalweight;
