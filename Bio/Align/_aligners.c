@@ -145,7 +145,7 @@ PathGenerator_create_path(PathGenerator* self, int i, int j) {
                         value = PyLong_FromLong(i);
                         if (!value) break;
                         PyTuple_SET_ITEM(target_row, k, value);
-                        value = PyLong_FromLong(nB-j);
+                        value = PyLong_FromSsize_t(nB-j);
                         if (!value) break;
                         PyTuple_SET_ITEM(query_row, k, value);
                         k++;
@@ -748,8 +748,8 @@ PathGenerator_dealloc(PathGenerator* self)
 
 static PyObject* PathGenerator_next_needlemanwunsch(PathGenerator* self)
 {
-    int i = 0;
-    int j = 0;
+    Py_ssize_t i = 0;
+    Py_ssize_t j = 0;
     int path;
     int trace = 0;
     const Py_ssize_t nA = self->nA;
@@ -900,8 +900,8 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
 
 static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
 {
-    int i = 0;
-    int j = 0;
+    Py_ssize_t i = 0;
+    Py_ssize_t j = 0;
     int m;
     int path;
     int trace = 0;
@@ -1164,7 +1164,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
 static PyObject*
 PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
 {
-    int i = 0, j = 0;
+    Py_ssize_t i = 0, j = 0;
     int iA, iB;
     int trace;
     int* gapM;
@@ -6351,8 +6351,8 @@ Aligner_watermansmithbeyer_local_align_compare(Aligner* self,
     const double match = self->match;
     const double mismatch = self->mismatch;
     const int wildcard = self->wildcard;
-    int im = nA;
-    int jm = nB;
+    Py_ssize_t im = nA;
+    Py_ssize_t jm = nB;
     double maximum = 0;
     WATERMANSMITHBEYER_ENTER_ALIGN(Local);
     switch (strand) {
@@ -6376,8 +6376,8 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
-    int im = nA;
-    int jm = nB;
+    Py_ssize_t im = nA;
+    Py_ssize_t jm = nB;
     double maximum = 0;
     WATERMANSMITHBEYER_ENTER_ALIGN(Local);
     switch (strand) {
@@ -6429,7 +6429,7 @@ convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[
 static int*
 convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
 {
-    unsigned char c;
+    Py_UCS2 c;
     Py_ssize_t i;
     int index;
     int* indices;
@@ -6525,7 +6525,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
             obj2 = PySequence_Fast_GET_ITEM(alphabet, j);
             equal = PyObject_RichCompareBool(obj1, obj2, Py_EQ);
             if (equal == 1) /* obj1 == obj2 */ {
-                indices[i] = j;
+                indices[i] = (int)j;
                 break;
             }
             else if (equal == -1) /* error */ {
