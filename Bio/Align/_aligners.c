@@ -66,8 +66,8 @@ typedef struct {
     Trace** M;
     union { TraceGapsGotoh** gotoh;
             TraceGapsWatermanSmithBeyer** waterman_smith_beyer; } gaps;
-    int nA;
-    int nB;
+    Py_ssize_t nA;
+    Py_ssize_t nB;
     int iA;
     int iB;
     Mode mode;
