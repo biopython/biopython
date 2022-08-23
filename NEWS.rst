@@ -63,6 +63,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Andrius Merkys
+- Arup Ghosh (first contribution)
 - Aziz Khan
 - Alex Morehead
 - Chenghao Zhu
