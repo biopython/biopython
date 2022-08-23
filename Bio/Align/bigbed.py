@@ -25,8 +25,8 @@ You are expected to use this module via the Bio.Align functions.
 
 
 import numpy
-import zlib
 import struct
+import zlib
 from collections import namedtuple
 
 
@@ -123,7 +123,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         self.tree = self._read_index(stream, fullIndexOffset)
 
-        self._data = self._search_index(stream)
+        self._data = self._iterate_index(stream)
 
     def _read_chromosomes(self, stream, pos):
         byteorder = self.byteorder
@@ -331,7 +331,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             pos = dataOffsets.pop(id(node))
             stream.seek(pos)
 
-    def _search_index(self, stream):
+    def _iterate_index(self, stream):
         byteorder = self.byteorder
         if byteorder == "little":
             byteorder_char = "<"
@@ -377,8 +377,69 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 node = children[0]
 
+    def _search_index(self, stream, chromIx, start, end):
+        byteorder = self.byteorder
+        if byteorder == "little":
+            byteorder_char = "<"
+        elif byteorder == "big":
+            byteorder_char = ">"
+        else:
+            raise ValueError("Unexpected byteorder '%s'" % byteorder)
+        node = self.tree
+        while True:
+            try:
+                children = node.children
+            except AttributeError:
+                stream.seek(node.dataOffset)
+                data = stream.read(node.dataSize)
+                if self._compressed > 0:
+                    data = zlib.decompress(data)
+                while data:
+                    # Supplemental Table 12: Binary BED-data format
+                    # chromId     4 bytes
+                    # chromStart  4 bytes
+                    # chromEnd    4 bytes
+                    # rest        zero-terminated string in tab-separated format
+                    child_chromIx, child_chromStart, child_chromEnd = struct.unpack(
+                        byteorder_char + "III", data[:12]
+                    )
+                    rest, data = data[12:].split(b"\00", 1)
+                    if child_chromIx != chromIx:
+                        continue
+                    yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+            else:
+                visit_child = False
+                for child in children:
+                    if chromIx < child.startChromIx:
+                        continue
+                    if chromIx > child.endChromIx:
+                        continue
+                    visit_child = True
+                    break
+                if visit_child:
+                    node = child
+                    continue
+            while True:
+                parent = node.parent
+                if parent is None:
+                    return
+                for index, child in enumerate(parent.children):
+                    if id(node) == id(child):
+                        break
+                else:
+                    raise RuntimeError("Failed to find child node")
+                try:
+                    node = parent.children[index + 1]
+                except IndexError:
+                    node = parent
+                else:
+                    break
+
     def _read_next_alignment(self, stream):
         chunk = next(self._data)
+        return self._create_alignment(chunk)
+
+    def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
         words = rest.decode().split("\t")
         target_record = self.targets[chromId]
@@ -467,3 +528,40 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def __len__(self):
         return self._length
+
+    def search(self, chromosome=None, start=None, end=None):
+        """Iterate over alignments overlapping the specified chromosome region..
+
+        This method searches the index to find alignments to the specified
+        chromosome that fully or partially overlap the chromosome region
+        between start and end.
+
+        Arguments:
+         - chromosome - chromosome name. If None (default value), include all
+           alignments.
+         - start      - starting position on the chromosome. If None (default
+           value), use 0 as the starting position.
+         - end        - end position on the chromosome. If None (default value),
+           use the length of the chromosome as the end position.
+
+        """
+        stream = self._stream
+        if chromosome is None:
+            if start is not None or end is not None:
+                raise ValueError(
+                    "start and end must both be None if chromosome is None"
+                )
+        else:
+            for chromIx, target in enumerate(self.targets):
+                if target.id == chromosome:
+                    break
+            else:
+                raise ValueError("Failed to find %s in alignments" % chromosome)
+            if start is None:
+                start = 0
+            if end is None:
+                end = len(target)
+        data = self._search_index(stream, chromIx, start, end)
+        for chunk in data:
+            alignment = self._create_alignment(chunk)
+            yield alignment
