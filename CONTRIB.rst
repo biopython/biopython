@@ -41,6 +41,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Artemi Bendandi <https://github.com/artbendandi>
+- Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
 - Aziz Khan <https://github.com/asntech>
 - Barbara Mühlemann <https://github.com/bamueh>
