@@ -1943,14 +1943,14 @@ class TestAlign_searching(unittest.TestCase):
     # chr3      0       0     name8   7       -
 
     def test_search_chromosome(self):
-        path = "blat/bigbedtest.bb"
+        path = "Blat/bigbedtest.bb"
         alignments = bigbed.AlignmentIterator(path)
         selected_alignments = alignments.search("chr2", 0, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
 
     def test_search_region(self):
-        path = "blat/bigbedtest.bb"
+        path = "Blat/bigbedtest.bb"
         alignments = bigbed.AlignmentIterator(path)
         selected_alignments = alignments.search("chr2", 105, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
@@ -1976,7 +1976,7 @@ class TestAlign_searching(unittest.TestCase):
 
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
-        path = "blat/bigbedtest.bb"
+        path = "Blat/bigbedtest.bb"
         alignments1 = bigbed.AlignmentIterator(path)
         alignments2 = alignments1.search("chr2")
         alignments3 = alignments1.search("chr2", 110, 1000)
