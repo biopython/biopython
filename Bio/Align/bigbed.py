@@ -385,6 +385,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             byteorder_char = ">"
         else:
             raise ValueError("Unexpected byteorder '%s'" % byteorder)
+        padded_start = start - 1
+        padded_end = end + 1
         node = self.tree
         while True:
             try:
@@ -406,13 +408,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     rest, data = data[12:].split(b"\00", 1)
                     if child_chromIx != chromIx:
                         continue
+                    if end <= child_chromStart or child_chromEnd <= start:
+                        if child_chromStart != child_chromEnd:
+                            continue
+                        if child_chromStart != end and child_chromEnd != start:
+                            continue
                     yield (child_chromIx, child_chromStart, child_chromEnd, rest)
             else:
                 visit_child = False
                 for child in children:
-                    if chromIx < child.startChromIx:
+                    if (child.endChromIx, child.endBase) < (chromIx, padded_start):
                         continue
-                    if chromIx > child.endChromIx:
+                    if (chromIx, padded_end) < (child.startChromIx, child.startBase):
                         continue
                     visit_child = True
                     break
