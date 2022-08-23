@@ -6429,7 +6429,7 @@ convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[
 static int*
 convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
 {
-    unsigned char c;
+    Py_UCS2 c;
     Py_ssize_t i;
     int index;
     int* indices;
@@ -6514,6 +6514,10 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     alphabet = PySequence_Fast(alphabet, NULL); /* should never fail */
     n = PySequence_Size(sequence);
     m = PySequence_Size(alphabet);
+    if (m != (int)m) {
+        PyErr_SetString(PyExc_ValueError, "alphabet is too long");
+        goto exit;
+    }
     indices = PyMem_Malloc(n*sizeof(int));
     if (!indices) {
         PyErr_NoMemory();
@@ -6525,7 +6529,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
             obj2 = PySequence_Fast_GET_ITEM(alphabet, j);
             equal = PyObject_RichCompareBool(obj1, obj2, Py_EQ);
             if (equal == 1) /* obj1 == obj2 */ {
-                indices[i] = j;
+                indices[i] = (int)j;
                 break;
             }
             else if (equal == -1) /* error */ {
