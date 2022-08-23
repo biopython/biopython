@@ -521,14 +521,14 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Examples
     --------
-    >>> from Bio.SeqUtils import MeltingTemp as mt
-    >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
+    >>> from Bio.SeqUtils.MeltingTemp import salt_correction
+    >>> print('%0.2f' % salt_correction(Na=50, method=1))
     -21.60
-    >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
+    >>> print('%0.2f' % salt_correction(Na=50, method=2))
     -21.85
-    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
+    >>> print('%0.2f' % salt_correction(Na=100, Tris=20, method=2))
     -16.45
-    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
+    >>> print('%0.2f' % salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
     -10.99
 
     """
@@ -536,8 +536,6 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         raise ValueError(
             "sequence is missing (is needed to calculate GC content or sequence length)."
         )
-    if seq:
-        seq = str(seq)
     corr = 0
     if not method:
         return corr
