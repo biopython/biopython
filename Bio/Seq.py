@@ -159,6 +159,7 @@ class SequenceDataAbstractBaseClass(ABC):
         """Return the number of non-overlapping occurrences of sub in data[start:end].
 
         Optional arguments start and end are interpreted as in slice notation.
+        This method behaves as the count method of Python strings.
         """
         return bytes(self).count(sub, start, end)
 

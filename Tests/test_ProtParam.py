@@ -28,20 +28,23 @@ class ProtParamTest(unittest.TestCase):
         self.text = text
         self.sequences = (text, seq, record)
         self.analyses = (analysis_text, analysis_seq, analysis_record)
-        self.analysis = ProtParam.ProteinAnalysis(text)
 
     def test_count_amino_acids(self):
         """Calculate amino acid counts."""
-        count_dict = self.analysis.count_amino_acids()
-        for i in count_dict:
-            self.assertEqual(count_dict[i], self.text.count(i))
+        for analysis in self.analyses:
+            count_dict = analysis.count_amino_acids()
+            for i in count_dict:
+                self.assertEqual(count_dict[i], self.text.count(i))
 
     def test_get_amino_acids_percent(self):
         """Calculate amino acid percentages."""
-        percent_dict = self.analysis.get_amino_acids_percent()
-        seq_len = len(self.text)
-        for i in percent_dict:
-            self.assertAlmostEqual(percent_dict[i], self.text.count(i) / float(seq_len))
+        for analysis in self.analyses:
+            percent_dict = analysis.get_amino_acids_percent()
+            seq_len = len(self.text)
+            for i in percent_dict:
+                self.assertAlmostEqual(
+                    percent_dict[i], self.text.count(i) / float(seq_len)
+                )
 
     def test_get_molecular_weight(self):
         """Calculate protein molecular weight."""
@@ -75,8 +78,9 @@ class ProtParamTest(unittest.TestCase):
 
     def test_aromaticity(self):
         """Calculate protein aromaticity."""
-        # Old test used a number rounded to two digits, so use the same
-        self.assertAlmostEqual(self.analysis.aromaticity(), 0.10, 2)
+        for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
+            self.assertAlmostEqual(analysis.aromaticity(), 0.10, 2)
 
     def test_instability_index(self):
         """Calculate protein instability index."""
@@ -149,20 +153,23 @@ class ProtParamTest(unittest.TestCase):
 
     def test_isoelectric_point(self):
         """Calculate the isoelectric point."""
-        # Old test used a number rounded to two digits, so use the same
-        self.assertAlmostEqual(self.analysis.isoelectric_point(), 7.72, 2)
+        for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
+            self.assertAlmostEqual(analysis.isoelectric_point(), 7.72, 2)
 
     def test_charge_at_pH(self):
         """Test charge_at_pH function."""
-        self.assertAlmostEqual(self.analysis.charge_at_pH(7.72), 0.00, 2)
+        for analysis in self.analyses:
+            self.assertAlmostEqual(analysis.charge_at_pH(7.72), 0.00, 2)
 
     def test_secondary_structure_fraction(self):
         """Calculate secondary structure fractions."""
-        helix, turn, sheet = self.analysis.secondary_structure_fraction()
-        # Old test used numbers rounded to two digits, so use the same
-        self.assertAlmostEqual(helix, 0.28, 2)
-        self.assertAlmostEqual(turn, 0.26, 2)
-        self.assertAlmostEqual(sheet, 0.25, 2)
+        for analysis in self.analyses:
+            helix, turn, sheet = analysis.secondary_structure_fraction()
+            # Old test used numbers rounded to two digits, so use the same
+            self.assertAlmostEqual(helix, 0.28, 2)
+            self.assertAlmostEqual(turn, 0.26, 2)
+            self.assertAlmostEqual(sheet, 0.25, 2)
 
     def test_protein_scale(self):
         """Calculate the Kite Doolittle scale."""
@@ -236,12 +243,13 @@ class ProtParamTest(unittest.TestCase):
 
     def test_molar_extinction_coefficient(self):
         """Molar extinction coefficient."""
-        self.assertAlmostEqual(
-            self.analysis.molar_extinction_coefficient()[0], 17420, places=5
-        )
-        self.assertAlmostEqual(
-            self.analysis.molar_extinction_coefficient()[1], 17545, places=5
-        )
+        for analysis in self.analyses:
+            self.assertAlmostEqual(
+                analysis.molar_extinction_coefficient()[0], 17420, places=5
+            )
+            self.assertAlmostEqual(
+                analysis.molar_extinction_coefficient()[1], 17545, places=5
+            )
 
 
 if __name__ == "__main__":

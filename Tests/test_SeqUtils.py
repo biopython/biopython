@@ -341,12 +341,20 @@ TTT	0.886
         )
 
     def test_GC(self):
-        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        s = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        seq = Seq(s)
+        record = SeqRecord(seq)
+        self.assertEqual(GC(s), 56.25)
         self.assertEqual(GC(seq), 56.25)
+        self.assertEqual(GC(record), 56.25)
 
     def test_GC_skew(self):
-        seq = "A" * 50
+        s = "A" * 50
+        seq = Seq(s)
+        record = SeqRecord(seq)
+        self.assertEqual(GC_skew(s)[0], 0)
         self.assertEqual(GC_skew(seq)[0], 0)
+        self.assertEqual(GC_skew(record)[0], 0)
 
     def test_seq1_seq3(self):
         s3 = "MetAlaTyrtrpcysthrLYSLEUILEGlYPrOGlNaSnaLapRoTyRLySSeRHisTrpLysThr"
@@ -432,12 +440,24 @@ TTT	0.886
         self.assertAlmostEqual(X.index["TTT"], 0.457, places=3)
 
     def test_lcc_simp(self):
-        s1 = "ACGATAGC"
-        self.assertAlmostEqual(lcc_simp(s1), 0.9528, places=4)
+        s = "ACGATAGC"
+        seq = Seq(s)
+        record = SeqRecord(seq)
+        self.assertAlmostEqual(lcc_simp(s), 0.9528, places=4)
+        self.assertAlmostEqual(lcc_simp(seq), 0.9528, places=4)
+        self.assertAlmostEqual(lcc_simp(record), 0.9528, places=4)
 
     def test_lcc_mult(self):
-        s1 = "ACGATAGC"
-        llc_lst = lcc_mult(s1, len(s1))
+        s = "ACGATAGC"
+        seq = Seq(s)
+        record = SeqRecord(seq)
+        llc_lst = lcc_mult(s, len(s))
+        self.assertEqual(len(llc_lst), 1)
+        self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+        llc_lst = lcc_mult(seq, len(seq))
+        self.assertEqual(len(llc_lst), 1)
+        self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+        llc_lst = lcc_mult(record, len(record))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
 
