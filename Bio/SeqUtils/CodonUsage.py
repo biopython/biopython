@@ -6,8 +6,11 @@
 """Methods for codon usage calculations."""
 
 import math
+import warnings
 from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
+from Bio import BiopythonDeprecationWarning
+
 
 # Turn black code style off
 # fmt: off
@@ -161,25 +164,32 @@ class CodonAdaptationIndex:
             self.codon_count = CodonsDict.copy()
 
             # iterate over sequence and count all the codons in the FastaFile.
-            for cur_record in SeqIO.parse(handle, "fasta"):
-                # make sure the sequence is lower case
-                if str(cur_record.seq).islower():
-                    dna_sequence = str(cur_record.seq).upper()
-                else:
-                    dna_sequence = str(cur_record.seq)
-                for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i : i + 3]
-                    if codon in self.codon_count:
+            for record in SeqIO.parse(handle, "fasta"):
+                sequence = record.seq.upper()
+                for i in range(0, len(sequence), 3):
+                    codon = sequence[i : i + 3]
+                    try:
                         self.codon_count[codon] += 1
-                    else:
-                        raise TypeError(
-                            f"illegal codon {codon} in gene: {cur_record.id}"
-                        )
+                    except KeyError:
+                        raise ValueError(
+                            f"illegal codon '{codon}' in gene: {record.id}"
+                        ) from None
+
+    def __str__(self):
+        lines = []
+        for i in sorted(self.index):
+            line = f"{i}\t{self.index[i]:.3f}"
+            lines.append(line)
+        return "\n".join(lines) + "\n"
 
     def print_index(self):
         """Print out the index used.
 
         This just gives the index when the objects is printed.
         """
-        for i in sorted(self.index):
-            print(f"{i}\t{self.index[i]:.3f}")
+        warnings.warn(
+            "The print_index method is deprecated; instead of "
+            "self.print_index(), please use print(self).",
+            BiopythonDeprecationWarning,
+        )
+        print(self)
