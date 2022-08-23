@@ -503,7 +503,7 @@ class Motif:
             alpha = "auto"
 
         frequencies = format(self, "transfac")
-        url = "http://weblogo.threeplusone.com/create.cgi"
+        url = "https://weblogo.threeplusone.com/create.cgi"
         values = {
             "sequences": frequencies,
             "format": fmt.lower(),
