@@ -1492,7 +1492,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
             }
         }
     }
-    if (tweight == 0.) return 0; /* usually due to empty clusters */
+    if (tweight == (double)0.) return 0; /* usually due to empty clusters */
     result -= sum1 * sum2 / tweight;
     denom1 -= sum1 * sum1 / tweight;
     denom2 -= sum2 * sum2 / tweight;
