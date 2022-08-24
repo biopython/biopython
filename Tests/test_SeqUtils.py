@@ -342,30 +342,30 @@ TTT	0.886
 
     def test_gc_content(self):
         """Tests gc_content function."""
-        self.assertAlmostEqual(gc_content(""), 0, places=3)
-        self.assertAlmostEqual(gc_content("", "count"), 0, places=3)
+        self.assertAlmostEqual(gc_content("", "ignore"), 0, places=3)
+        self.assertAlmostEqual(gc_content("", "weighted"), 0, places=3)
         self.assertAlmostEqual(gc_content("", "remove"), 0, places=3)
 
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
-        self.assertAlmostEqual(gc_content(seq), 0.5625, places=3)
-        self.assertAlmostEqual(gc_content(seq, "count"), 0.5625, places=3)
+        self.assertAlmostEqual(gc_content(seq, "ignore"), 0.5625, places=3)
+        self.assertAlmostEqual(gc_content(seq, "weighted"), 0.5625, places=3)
         self.assertAlmostEqual(gc_content(seq, "remove"), 0.5625, places=3)
 
         seq = "ACTGSSSS"
-        self.assertAlmostEqual(gc_content(seq), 0.75, places=3)
-        self.assertAlmostEqual(gc_content(seq, "count"), 0.75, places=3)
+        self.assertAlmostEqual(gc_content(seq, "ignore"), 0.75, places=3)
+        self.assertAlmostEqual(gc_content(seq, "weighted"), 0.75, places=3)
         self.assertAlmostEqual(gc_content(seq, "remove"), 0.75, places=3)
 
         # Test ambiguous nucleotide behaviour
 
         seq = "CCTGNN"
-        self.assertAlmostEqual(gc_content(seq), 0.5, places=3)
-        self.assertAlmostEqual(gc_content(seq, "count"), 0.667, places=3)
+        self.assertAlmostEqual(gc_content(seq, "ignore"), 0.5, places=3)
+        self.assertAlmostEqual(gc_content(seq, "weighted"), 0.667, places=3)
         self.assertAlmostEqual(gc_content(seq, "remove"), 0.75, places=3)
 
         seq = "GDVV"
-        self.assertAlmostEqual(gc_content(seq), 0.25, places=3)
-        self.assertAlmostEqual(gc_content(seq, "count"), 0.6667, places=3)
+        self.assertAlmostEqual(gc_content(seq, "ignore"), 0.25, places=3)
+        self.assertAlmostEqual(gc_content(seq, "weighted"), 0.6667, places=3)
         self.assertAlmostEqual(gc_content(seq, "remove"), 1.00, places=3)
 
         with self.assertRaises(ValueError):
