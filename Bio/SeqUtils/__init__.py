@@ -506,10 +506,8 @@ def molecular_weight(
 
 def six_frame_translations(seq, genetic_code=1):
     """Return pretty string showing the 6 frame translations and GC content.
-
     Nice looking 6 frame translation with GC content - code from xbbtools
     similar to DNA Striders six-frame translation
-
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
     GC_Frame: a:5 t:0 g:8 c:5
@@ -527,11 +525,13 @@ def six_frame_translations(seq, genetic_code=1):
       P  W  Q  L  P  G  S
     <BLANKLINE>
     <BLANKLINE>
-
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, translate
+    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
-    anti = reverse_complement(seq)
+    if "u" in seq.lower():
+        anti = reverse_complement_rna(seq)
+    else:
+        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
     comp = anti[::-1]
     length = len(seq)
     frames = {}
@@ -545,9 +545,9 @@ def six_frame_translations(seq, genetic_code=1):
         short = f"{seq[:10]} ... {seq[-10:]}"
     else:
         short = seq
-    header = "GC_Frame: "
+    header = "GC_Frame:"
     for nt in ["a", "t", "g", "c"]:
-        header += "%s:%d " % (nt, seq.count(nt.upper()))
+        header += " %s:%d" % (nt, seq.count(nt.upper()))
 
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
@@ -560,12 +560,12 @@ def six_frame_translations(seq, genetic_code=1):
         subseq = seq[i : i + 60]
         csubseq = comp[i : i + 60]
         p = i // 3
-        res += f"{i+1}/{int(i / 3 + 1)}\n"
+        res += "%d/%d\n" % (i + 1, i / 3 + 1)
         res += "  " + "  ".join(frames[3][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + f"{int(GC(subseq)):5d} %\n"
+        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
