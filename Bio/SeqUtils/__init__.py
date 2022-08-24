@@ -506,8 +506,10 @@ def molecular_weight(
 
 def six_frame_translations(seq, genetic_code=1):
     """Return pretty string showing the 6 frame translations and GC content.
+
     Nice looking 6 frame translation with GC content - code from xbbtools
     similar to DNA Striders six-frame translation
+
     >>> from Bio.SeqUtils import six_frame_translations
     >>> print(six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA"))
     GC_Frame: a:5 t:0 g:8 c:5
@@ -525,6 +527,7 @@ def six_frame_translations(seq, genetic_code=1):
       P  W  Q  L  P  G  S
     <BLANKLINE>
     <BLANKLINE>
+
     """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, reverse_complement_rna, translate
 
