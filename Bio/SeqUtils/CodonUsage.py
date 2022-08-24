@@ -141,8 +141,7 @@ class CodonAdaptationIndex:
         if self.index == {}:
             self.set_cai_index(SharpEcoliIndex)
 
-        if dna_sequence.islower():
-            dna_sequence = dna_sequence.upper()
+        dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i : i + 3]
