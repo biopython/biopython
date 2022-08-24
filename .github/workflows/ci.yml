@@ -248,7 +248,7 @@ jobs:
   test_windows:
     timeout-minutes: 15
     needs: [style, build, build_wheels]
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
