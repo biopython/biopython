@@ -57,6 +57,27 @@ class TestAlign_dna_rna(unittest.TestCase):
         """Test parsing dna_rna.bb."""
         path = "Blat/dna_rna.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "chr3")
         self.assertEqual(len(alignments.targets[0]), 198295559)
@@ -203,6 +224,27 @@ class TestAlign_dna(unittest.TestCase):
 
         path = "Blat/psl_34_001.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -677,6 +719,27 @@ class TestAlign_dna(unittest.TestCase):
 
         path = "Blat/psl_34_003.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 3)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -757,6 +820,27 @@ class TestAlign_dna(unittest.TestCase):
 
         path = "Blat/psl_34_004.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -1165,6 +1249,27 @@ class TestAlign_dna(unittest.TestCase):
         """Test parsing psl_34_005.bb."""
         path = "Blat/psl_34_005.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -1640,6 +1745,27 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
         path = "Blat/psl_35_001.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+        )
         self.assertEqual(len(alignments.targets), 2)
         self.assertEqual(alignments.targets[0].id, "chr13")
         self.assertEqual(len(alignments.targets[0]), 114364328)
@@ -1813,12 +1939,149 @@ class TestAlign_bed12(unittest.TestCase):
     # bedToBigBed bed9.bed hg19.chrom.sizes bed9.bb
     # bedToBigBed bed12.bed hg19.chrom.sizes bed12.bb
 
+    def check_autosql(self, declaration, bedN):
+        if bedN == 3:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string chrom;         "Reference sequence chromosome or scaffold"
+   uint   chromStart;    "Start position in chromosome"
+   uint   chromEnd;      "End position in chromosome"
+   )
+""",
+            )
+        elif bedN == 4:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string chrom;         "Reference sequence chromosome or scaffold"
+   uint   chromStart;    "Start position in chromosome"
+   uint   chromEnd;      "End position in chromosome"
+   string name;          "Name of item."
+   )
+""",
+            )
+        elif bedN == 5:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string chrom;         "Reference sequence chromosome or scaffold"
+   uint   chromStart;    "Start position in chromosome"
+   uint   chromEnd;      "End position in chromosome"
+   string name;          "Name of item."
+   uint   score;         "Score (0-1000)"
+   )
+""",
+            )
+        elif bedN == 6:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+   )
+""",
+            )
+        elif bedN == 7:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Start of where display should be thick (start codon)"
+   )
+""",
+            )
+        elif bedN == 8:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Start of where display should be thick (start codon)"
+   uint    thickEnd;      "End of where display should be thick (stop codon)"
+   )
+""",
+            )
+        elif bedN == 9:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Start of where display should be thick (start codon)"
+   uint    thickEnd;      "End of where display should be thick (stop codon)"
+   uint    reserved;      "Used as itemRgb as of 2004-11-22"
+   )
+""",
+            )
+        elif bedN == 12:
+            self.assertEqual(
+                str(declaration),
+                """\
+table bed
+"Browser Extensible Data"
+   (
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   )
+""",
+            )
+
     def test_reading(self):
         """Test parsing alignments in file formats BED3 through BED12."""
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.bb" % bedN
             path = os.path.join("Blat", filename)
             alignments = bigbed.AlignmentIterator(path)
+            self.check_autosql(alignments.declaration, bedN)
             self.assertEqual(len(alignments), 2)
             alignment = next(alignments)
             if bedN >= 5:
@@ -1945,6 +2208,21 @@ class TestAlign_searching(unittest.TestCase):
     def test_search_chromosome(self):
         path = "Blat/bigbedtest.bb"
         alignments = bigbed.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+   )
+""",
+        )
         selected_alignments = alignments.search("chr2", 0, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
