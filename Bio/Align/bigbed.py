@@ -75,9 +75,10 @@ class AutoSQLTable:
             while text:
                 i = text.index('"')
                 j = text.index('"', i + 1)
+                field_comment = text[i + 1 : j]
                 definition = text[:i].strip()
                 assert definition.endswith(";")
-                field_type, field_name = definition.rsplit(None, 1)
+                field_type, field_name = definition[:-1].rsplit(None, 1)
                 if field_type.endswith("]"):
                     i = field_type.index("[")
                     data_type = field_type[:i]
@@ -95,11 +96,26 @@ class AutoSQLTable:
                     "string",
                     "lstring",
                 )
-                field_comment = text[i + 1 : j]
                 field = Field(field_type, field_name, field_comment)
                 fields.append(field)
                 text = text[j + 1 :].strip()
             self.fields = fields
+
+    def __str__(self):
+        type_width = max(len(str(field.type)) for field in self.fields)
+        name_width = max(len(field.name) for field in self.fields) + 1
+        lines = []
+        lines.append("table %s\n" % self.name)
+        lines.append('"%s"\n' % self.comment)
+        lines.append("   (\n")
+        for field in self.fields:
+            name = field.name + ";"
+            lines.append(
+                '   %s %s    "%s"\n'
+                % (field.type.ljust(type_width), name.ljust(name_width), field.comment)
+            )
+        lines.append("   )\n")
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -162,14 +178,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             uncompressBufSize,
         ) = struct.unpack(byteorder_char + "hhqqqhhqqixxxxxxxx", stream.read(60))
 
-        autoSqlSize = totalSummaryOffset - autoSqlOffset
-        self.declaration = self._read_autosql(stream, autoSqlOffset, autoSqlSize)
-
         if definedFieldCount < 3 or definedFieldCount > 12:
             raise ValueError(
                 "expected between 3 and 12 columns, found %d" % definedFieldCount
             )
         self.bedN = definedFieldCount
+
+        autoSqlSize = totalSummaryOffset - autoSqlOffset
+        self.declaration = self._read_autosql(stream, autoSqlOffset, autoSqlSize)
 
         stream.seek(fullDataOffset)
         dataCount = int.from_bytes(stream.read(8), byteorder=byteorder)
@@ -189,7 +205,29 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def _read_autosql(self, stream, pos, size):
         stream.seek(pos)
         data = stream.read(size)
-        return AutoSQLTable(data.decode())
+        declaration = AutoSQLTable(data.decode())
+        fields = declaration.fields
+        names = (
+            "chrom",
+            "chromStart",
+            "chromEnd",
+            "name",
+            "score",
+            "strand",
+            "thickStart",
+            "thickEnd",
+            "reserved",
+            "blockCount",
+            "blockSizes",
+            "chromStarts",
+        )
+        for i in range(self.bedN):
+            name = fields[i].name
+            if name != names[i]:
+                raise ValueError(
+                    "Expected field name '%s'; found '%s'" % (names[i], name)
+                )
+        return declaration
 
     def _read_chromosomes(self, stream, pos):
         byteorder = self.byteorder
