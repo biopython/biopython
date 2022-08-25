@@ -45,6 +45,63 @@ warnings.warn(
 )
 
 
+Field = namedtuple("Field", ("type", "name", "comment"))
+
+
+class AutoSQLTable:
+    """AutoSQL table describing the columns of an (possibly extended) BED format."""
+
+    def __init__(self, text=None):
+        """Create an AutoSQL table describing the columns of an (extended) BED format."""
+        if text is None:
+            self.name = None
+            self.comment = None
+            self.fields = []
+        else:
+            assert text.endswith(chr(0))  # NULL-terminated string
+            word, text = text[:-1].split(None, 1)
+            assert word == "table"
+            name, text = text.split(None, 1)
+            assert len(name.split()) == 1
+            self.name = name
+            assert text.startswith('"')
+            i = text.find('"', 1)
+            self.comment = text[1:i]
+            text = text[i + 1 :].strip()
+            assert text.startswith("(")
+            assert text.endswith(")")
+            text = text[1:-1].strip()
+            fields = []
+            while text:
+                i = text.index('"')
+                j = text.index('"', i + 1)
+                definition = text[:i].strip()
+                assert definition.endswith(";")
+                field_type, field_name = definition.rsplit(None, 1)
+                if field_type.endswith("]"):
+                    i = field_type.index("[")
+                    data_type = field_type[:i]
+                else:
+                    data_type = field_type
+                assert data_type in (
+                    "int",
+                    "uint",
+                    "short",
+                    "ushort",
+                    "byte",
+                    "ubyte",
+                    "float",
+                    "char",
+                    "string",
+                    "lstring",
+                )
+                field_comment = text[i + 1 : j]
+                field = Field(field_type, field_name, field_comment)
+                fields.append(field)
+                text = text[j + 1 :].strip()
+            self.fields = fields
+
+
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator bigBed files.
 
@@ -104,6 +161,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             totalSummaryOffset,
             uncompressBufSize,
         ) = struct.unpack(byteorder_char + "hhqqqhhqqixxxxxxxx", stream.read(60))
+
+        autoSqlSize = totalSummaryOffset - autoSqlOffset
+        self.declaration = self._read_autosql(stream, autoSqlOffset, autoSqlSize)
+
         if definedFieldCount < 3 or definedFieldCount > 12:
             raise ValueError(
                 "expected between 3 and 12 columns, found %d" % definedFieldCount
@@ -124,6 +185,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.tree = self._read_index(stream, fullIndexOffset)
 
         self._data = self._iterate_index(stream)
+
+    def _read_autosql(self, stream, pos, size):
+        stream.seek(pos)
+        data = stream.read(size)
+        return AutoSQLTable(data.decode())
 
     def _read_chromosomes(self, stream, pos):
         byteorder = self.byteorder
