@@ -835,13 +835,13 @@ class MultipleSeqAlignment:
         As an example using a different sort order, you could sort on the
         GC content of each sequence.
 
-        >>> from Bio.SeqUtils import GC
+        >>> from Bio.SeqUtils import gc_fraction
         >>> print(align1)
         Alignment with 3 rows and 4 columns
         ACGC Chicken
         ACGT Human
         ACGG Mouse
-        >>> align1.sort(key = lambda record: GC(record.seq))
+        >>> align1.sort(key = lambda record: gc_fraction(record.seq))
         >>> print(align1)
         Alignment with 3 rows and 4 columns
         ACGT Human

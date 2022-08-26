@@ -11,7 +11,7 @@ from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC
+from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
@@ -340,13 +340,36 @@ TTT	0.886
             ),
         )
 
-    def test_GC(self):
-        s = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
-        seq = Seq(s)
-        record = SeqRecord(seq)
-        self.assertEqual(GC(s), 56.25)
-        self.assertEqual(GC(seq), 56.25)
-        self.assertEqual(GC(record), 56.25)
+    def test_gc_fraction(self):
+        """Tests gc_fraction function."""
+        self.assertAlmostEqual(gc_fraction("", "ignore"), 0, places=3)
+        self.assertAlmostEqual(gc_fraction("", "weighted"), 0, places=3)
+        self.assertAlmostEqual(gc_fraction("", "remove"), 0, places=3)
+
+        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        self.assertAlmostEqual(gc_fraction(seq, "ignore"), 0.5625, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.5625, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "remove"), 0.5625, places=3)
+
+        seq = "ACTGSSSS"
+        self.assertAlmostEqual(gc_fraction(seq, "ignore"), 0.75, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.75, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "remove"), 0.75, places=3)
+
+        # Test ambiguous nucleotide behaviour
+
+        seq = "CCTGNN"
+        self.assertAlmostEqual(gc_fraction(seq, "ignore"), 0.5, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.667, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "remove"), 0.75, places=3)
+
+        seq = "GDVV"
+        self.assertAlmostEqual(gc_fraction(seq, "ignore"), 0.25, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.6667, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "remove"), 1.00, places=3)
+
+        with self.assertRaises(ValueError):
+            gc_fraction(seq, "other string")
 
     def test_GC_skew(self):
         s = "A" * 50

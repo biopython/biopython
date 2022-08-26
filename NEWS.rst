@@ -59,6 +59,9 @@ from which the enzyme object was created, and a `uri` property with a canonical
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
+Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
+deprecation.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -66,6 +69,7 @@ possible, especially the following contributors:
 - Arup Ghosh (first contribution)
 - Aziz Khan
 - Alex Morehead
+- Caio Fontes
 - Chenghao Zhu
 - Christian Brueffer
 - Damien Goutte-Gattat
