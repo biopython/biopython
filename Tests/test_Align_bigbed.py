@@ -2193,6 +2193,248 @@ table bed
                 self.fail(f"More than two alignments reported in {filename}")
 
 
+class TestAlign_extended_bed(unittest.TestCase):
+
+    # The bigBed file bigbed_extended.bb is a BED9+2 file, with nine predefined
+    # BED fields and 2 extra (custom) fields. It was created by running
+    #
+    # bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes bigbed_extended.bb
+    #
+    # where bedExample2.bed contains 10 lines selected from the example BED9+2
+    # file bedExample2.bed, and bedExample2.as the associated autoSql file from
+    # UCSC declaring the nine predefined BED fields and the two extra fields.
+
+    def test_reading(self):
+        """Test parsing bigbed_extended.bb."""
+        path = "Blat/bigbed_extended.bb"
+        alignments = bigbed.AlignmentIterator(path)
+        self.maxDiff = None
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table hg18KGchr7
+"UCSC Genes for chr7 with color plus GeneSymbol and SwissProtID"
+   (
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position of feature on chromosome"
+   uint    chromEnd;      "End position of feature on chromosome"
+   string  name;          "Name of gene"
+   uint    score;         "Score"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Coding region start"
+   uint    thickEnd;      "Coding region end"
+   uint    reserved;      "Green on + strand, Red on - strand"
+   string  geneSymbol;    "Gene Symbol"
+   string  spID;          "SWISS-PROT protein Accession number"
+   )
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr7")
+        self.assertEqual(len(alignments.targets[0]), 158821424)
+        self.assertEqual(len(alignments), 10)
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 60328)
+        self.assertEqual(alignment.thickEnd, 60328)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 1241))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc010krx.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[60328, 61569], [1241, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], ".")
+        self.assertEqual(alignment.annotations["spID"], "PDGFA")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 506606)
+        self.assertEqual(alignment.thickEnd, 525164)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 22585))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003sir.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[503422, 526007], [22585, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
+        self.assertEqual(alignment.annotations["spID"], "P04085")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 504726)
+        self.assertEqual(alignment.thickEnd, 525164)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 22585))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003sis.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[503422, 526007], [22585, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
+        self.assertEqual(alignment.annotations["spID"], "P04085-2")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 507195)
+        self.assertEqual(alignment.thickEnd, 518820)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 12690))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003sit.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[506940, 519630], [12690, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
+        self.assertEqual(alignment.annotations["spID"], "Q32M96")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 556592)
+        self.assertEqual(alignment.thickEnd, 717668)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 162747))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003siu.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[555912, 718659], [162747, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
+        self.assertEqual(alignment.annotations["spID"], "Q8N422")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 556592)
+        self.assertEqual(alignment.thickEnd, 717668)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 163357))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003siv.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[555912, 719269], [163357, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
+        self.assertEqual(alignment.annotations["spID"], "Q8N422")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 556592)
+        self.assertEqual(alignment.thickEnd, 717668)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 177901))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003siw.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[555912, 733813], [177901, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
+        self.assertEqual(alignment.annotations["spID"], "Q8N422")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 585418)
+        self.assertEqual(alignment.thickEnd, 585418)
+        self.assertEqual(alignment.itemRgb, "255,0,0")
+        self.assertEqual(alignment.shape, (2, 22329))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003six.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[585418, 607747], [22329, 0]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], ".")
+        self.assertEqual(alignment.annotations["spID"], "PRKAR1B")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 733217)
+        self.assertEqual(alignment.thickEnd, 791816)
+        self.assertEqual(alignment.itemRgb, "0,255,0")
+        self.assertEqual(alignment.shape, (2, 59779))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc003siz.2")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[732863, 792642], [0, 59779]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], ".")
+        self.assertEqual(alignment.annotations["spID"], "DKFZp762F1415")
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 0)
+        self.assertEqual(alignment.thickStart, 732883)
+        self.assertEqual(alignment.thickEnd, 791816)
+        self.assertEqual(alignment.itemRgb, "0,255,0")
+        self.assertEqual(alignment.shape, (2, 59779))
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr7")
+        self.assertEqual(alignment.query.id, "uc010krz.1")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[732863, 792642], [0, 59779]])
+            )
+        )
+        self.assertEqual(alignment.annotations["geneSymbol"], "HEATR2")
+        self.assertEqual(alignment.annotations["spID"], "Q86Y56")
+
+
 class TestAlign_searching(unittest.TestCase):
 
     # The bigBed file bigbedbigbedtest.bb contains the following data:
