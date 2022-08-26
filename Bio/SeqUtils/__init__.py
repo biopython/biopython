@@ -21,25 +21,25 @@ from Bio import BiopythonDeprecationWarning
 ######################################
 # DNA
 ######################
-# {{{
+# {
 
-_ambiguous_gc_values = {
-    "A": 0,
-    "C": 1.0,
-    "T": 0,
-    "G": 1.0,
-    "S": 1.0,
-    "V": 2 / 3,
-    "B": 2 / 3,
-    "M": 0.5,
-    "R": 0.5,
-    "Y": 0.5,
-    "K": 0.5,
-    "X": 0.5,
-    "N": 0.5,
-    "H": 1 / 3,
-    "D": 1 / 3,
-    "W": 0,
+_gc_values = {
+    "G": 1.000,
+    "C": 1.000,
+    "A": 0.000,
+    "T": 0.000,
+    "S": 1.000,  # Strong interaction (3 H bonds) (G or C)
+    "W": 0.000,  # Weak interaction (2 H bonds) (A or T)
+    "M": 0.500,  # Amino (A or C)
+    "R": 0.500,  # Purine (A or G)
+    "Y": 0.500,  # Pyrimidine (T or C)
+    "K": 0.500,  # Keto (G or T)
+    "V": 2 / 3,  # Not T or U (A or C or G)
+    "B": 2 / 3,  # Not A (C or G or T)
+    "H": 1 / 3,  # Not G (A or C or T)
+    "D": 1 / 3,  # Not C (A or G or T)
+    "X": 0.500,  # Any nucleotide (A or C or G or T)
+    "N": 0.500,  # Any nucleotide (A or C or G or T)
 }
 
 
@@ -47,20 +47,21 @@ def gc_fraction(seq, ambiguous="remove"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
     Copes with mixed case sequences. Ambiguous Nucleotides in this context are
-    those different from ATCGSW.
+    those different from ATCGSW (S is G or C, and W is A or T).
 
-    If ambiguous equals "remove" (default), will only count GCS towards the
-    percentage, but will also only count ACTGSW towards the length of the sequence.
-    Equivalent to gc_fraction(seq.replace('N','')) but replacing all nucleotides
-    that are ambiguous between GC or AT (VBMRYKXNHD).
+    If ambiguous equals "remove" (default), will only count GCS and will only
+    include ACTGSW when calculating the sequence length. Equivalent to removing
+    all characters in the set BDHKMNRVXY before calculating the GC content, as
+    each of these ambiguous nucleotides can either be in (A,T) or in (C,G).
 
-    If ambiguous equals "ignore", it will treat only unambiguous
-    nucleotides (GCS) as counting towards the GC percentage.
+    If ambiguous equals "ignore", it will treat only unambiguous nucleotides (GCS)
+    as counting towards the GC percentage, but will include all ambiguous and
+    unambiguous nucleotides when calculating the sequence length.
 
     If ambiguous equals "weighted", will use a "mean" value when counting the
-    ambiguous characters, for example, G and C will still be counted as 1, N
-    and X will be counted as 0.5, D will be counted as 0.33 etc. See
-    Bio.SeqUtils._ambiguous_gc_values for a full list.
+    ambiguous characters, for example, G and C will be counted as 1, N and X will
+    be counted as 0.5, D will be counted as 0.33 etc. See Bio.SeqUtils._gc_values
+    for a full list.
 
     Will raise a ValueError for any other value of the ambiguous parameter.
 
@@ -70,7 +71,7 @@ def gc_fraction(seq, ambiguous="remove"):
     >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
     GC content of ACTG : 0.50
 
-    S and W are not considered ambiguous.
+    S and W are ambiguous for the purposes of calculating the GC content.
 
     >>> seq = "ACTGSSSS"
     >>> gc = gc_fraction(seq, "remove")
@@ -124,8 +125,7 @@ def gc_fraction(seq, ambiguous="remove"):
 
     if ambiguous == "weighted":
         gc += sum(
-            (seq.count(x) + seq.count(x.lower())) * _ambiguous_gc_values[x]
-            for x in "BDHKMNRVXY"
+            (seq.count(x) + seq.count(x.lower())) * _gc_values[x] for x in "BDHKMNRVXY"
         )
 
     if l == 0:
