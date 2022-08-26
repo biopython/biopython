@@ -178,14 +178,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             uncompressBufSize,
         ) = struct.unpack(byteorder_char + "hhqqqhhqqixxxxxxxx", stream.read(60))
 
-        if definedFieldCount < 3 or definedFieldCount > 12:
-            raise ValueError(
-                "expected between 3 and 12 columns, found %d" % definedFieldCount
-            )
-        self.bedN = definedFieldCount
-
         autoSqlSize = totalSummaryOffset - autoSqlOffset
-        self.declaration = self._read_autosql(stream, autoSqlOffset, autoSqlSize)
+        self.declaration = self._read_autosql(
+            stream, autoSqlOffset, autoSqlSize, fieldCount, definedFieldCount
+        )
 
         stream.seek(fullDataOffset)
         dataCount = int.from_bytes(stream.read(8), byteorder=byteorder)
@@ -202,7 +198,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         self._data = self._iterate_index(stream)
 
-    def _read_autosql(self, stream, pos, size):
+    def _read_autosql(self, stream, pos, size, fieldCount, definedFieldCount):
+        if definedFieldCount < 3 or definedFieldCount > 12:
+            raise ValueError(
+                "expected between 3 and 12 columns, found %d" % definedFieldCount
+            )
+        self.bedN = definedFieldCount
         stream.seek(pos)
         data = stream.read(size)
         declaration = AutoSQLTable(data.decode())
@@ -227,6 +228,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError(
                     "Expected field name '%s'; found '%s'" % (names[i], name)
                 )
+        if fieldCount > definedFieldCount:
+            self._custom_fields = []
+        for i in range(definedFieldCount, fieldCount):
+            field_name = fields[i].name
+            field_type = fields[i].type
+            if "[" in field_type and "]" in field_type:
+                make_array = True
+                field_type, _ = field_type.split("[")
+                field_type = field_type.strip()
+            else:
+                make_array = False
+            if field_type in ("int", "uint", "short", "ushort"):
+                converter = int
+            elif field_type in ("byte", "ubyte"):
+                converter = bytes
+            elif field_type == "float":
+                converter = float
+            elif field_type in ("float", "char", "string", "lstring"):
+                converter = str
+            else:
+                raise Exception("Unknown field type %s" % field_type)
+            if make_array:
+                item_converter = converter
+
+                def converter(data, item_converter=item_converter):
+                    values = data.rstrip(",").split(",")
+                    return [item_converter(value) for value in values]
+
+            self._custom_fields.append([field_name, converter])
         return declaration
 
     def _read_chromosomes(self, stream, pos):
@@ -242,7 +272,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # blockSize 4 bytes
         # keySize   4 bytes
         # valSize   4 bytes
-        # itemCOunt 8 bytes
+        # itemCount 8 bytes
         # reserved  8 bytes
         stream.seek(pos)
         signature = 0x78CA8C91
@@ -552,7 +582,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
-        words = rest.decode().split("\t")
+        if rest:
+            words = rest.decode().split("\t")
+        else:
+            words = []
         target_record = self.targets[chromId]
         if self.bedN > 3:
             name = words[0]
@@ -615,6 +648,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 % (chromEnd, coordinates[0, -1])
             )
         alignment = Alignment(records, coordinates)
+        if len(words) > self.bedN - 3:
+            alignment.annotations = {}
+            for word, custom_field in zip(words[self.bedN - 3 :], self._custom_fields):
+                name, converter = custom_field
+                alignment.annotations[name] = converter(word)
         if self.bedN <= 4:
             return alignment
         score = words[1]
