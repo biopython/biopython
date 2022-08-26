@@ -43,7 +43,7 @@ _ambiguous_gc_values = {
 }
 
 
-def gc_content(seq, ambiguous="remove"):
+def gc_fraction(seq, ambiguous="remove"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
     Copes with mixed case sequences. Ambiguous Nucleotides in this context are
@@ -51,7 +51,7 @@ def gc_content(seq, ambiguous="remove"):
 
     If ambiguous equals "remove" (default), will only count GCS towards the
     percentage, but will also only count ACTGSW towards the length of the sequence.
-    Equivalent to gc_content(seq.replace('N','')) but replacing all nucleotides
+    Equivalent to gc_fraction(seq.replace('N','')) but replacing all nucleotides
     that are ambiguous between GC or AT (VBMRYKXNHD).
 
     If ambiguous equals "ignore", it will treat only unambiguous
@@ -65,47 +65,47 @@ def gc_content(seq, ambiguous="remove"):
     Will raise a ValueError for any other value of the ambiguous parameter.
 
 
-    >>> from Bio.SeqUtils import gc_content
+    >>> from Bio.SeqUtils import gc_fraction
     >>> seq = "ACTG"
-    >>> print(f"GC content of {seq} : {gc_content(seq):.2f}")
+    >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
     GC content of ACTG : 0.50
 
     S and W are not considered ambiguous.
 
     >>> seq = "ACTGSSSS"
-    >>> gc = gc_content(seq, "remove")
+    >>> gc = gc_fraction(seq, "remove")
     >>> print(f"GC content of {seq} : {gc:.2f}")
     GC content of ACTGSSSS : 0.75
-    >>> gc = gc_content(seq, "ignore")
+    >>> gc = gc_fraction(seq, "ignore")
     >>> print(f"GC content of {seq} : {gc:.2f}")
     GC content of ACTGSSSS : 0.75
-    >>> gc = gc_content(seq, "weighted")
+    >>> gc = gc_fraction(seq, "weighted")
     >>> print(f"GC content with ambiguous counting: {gc:.2f}")
     GC content with ambiguous counting: 0.75
 
     Some examples with ambiguous nucleotides.
 
     >>> seq = "ACTGN"
-    >>> gc = gc_content(seq, "ignore")
+    >>> gc = gc_fraction(seq, "ignore")
     >>> print(f"GC content of {seq} : {gc:.2f}")
     GC content of ACTGN : 0.40
-    >>> gc = gc_content(seq, "weighted")
+    >>> gc = gc_fraction(seq, "weighted")
     >>> print(f"GC content with ambiguous counting: {gc:.2f}")
     GC content with ambiguous counting: 0.50
-    >>> gc = gc_content(seq, "remove")
+    >>> gc = gc_fraction(seq, "remove")
     >>> print(f"GC content with ambiguous removing: {gc:.2f}")
     GC content with ambiguous removing: 0.50
 
     Ambiguous nucleotides are also removed from the length of the sequence.
 
     >>> seq = "GDVV"
-    >>> gc = gc_content(seq, "ignore")
+    >>> gc = gc_fraction(seq, "ignore")
     >>> print(f"GC content of {seq} : {gc:.2f}")
     GC content of GDVV : 0.25
-    >>> gc = gc_content(seq, "weighted")
+    >>> gc = gc_fraction(seq, "weighted")
     >>> print(f"GC content with ambiguous counting: {gc:.4f}")
     GC content with ambiguous counting: 0.6667
-    >>> gc = gc_content(seq, "remove")
+    >>> gc = gc_fraction(seq, "remove")
     >>> print(f"GC content with ambiguous removing: {gc:.2f}")
     GC content with ambiguous removing: 1.00
 
@@ -137,10 +137,10 @@ def gc_content(seq, ambiguous="remove"):
 def GC(seq):
     """Calculate G+C content (DEPRECATED).
 
-    Use Bio.SeqUtils.gc_content instead.
+    Use Bio.SeqUtils.gc_fraction instead.
     """
     warnings.warn(
-        "GC is deprecated; please use gc_content instead.",
+        "GC is deprecated; please use gc_fraction instead.",
         BiopythonDeprecationWarning,
     )
 

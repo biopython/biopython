@@ -20,7 +20,7 @@ except ImportError:
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import gc_content
+from Bio.SeqUtils import gc_fraction
 
 
 class TestPairwiseAlignment(unittest.TestCase):
@@ -993,7 +993,7 @@ ACCT
 ACTT
 """,
         )
-        alignment.sort(key=gc_content)
+        alignment.sort(key=gc_fraction)
         self.assertEqual(
             str(alignment),
             """\
@@ -1002,7 +1002,7 @@ ACTT
 ACCT
 """,
         )
-        alignment.sort(key=gc_content, reverse=True)
+        alignment.sort(key=gc_fraction, reverse=True)
         self.assertEqual(
             str(alignment),
             """\
@@ -1613,7 +1613,7 @@ AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
             tuple(sequence.id for sequence in alignment.sequences),
             ("seq7", "seq6", "seq5", "seq4", "seq3", "seq2", "seq1"),
         )
-        alignment.sort(key=lambda record: gc_content(record.seq))
+        alignment.sort(key=lambda record: gc_fraction(record.seq))
         self.assertEqual(
             "\n".join(row for row in alignment),  # str(alignment),
             """\
@@ -1629,7 +1629,7 @@ AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
             tuple(sequence.id for sequence in alignment.sequences),
             ("seq3", "seq7", "seq4", "seq5", "seq1", "seq6", "seq2"),
         )
-        alignment.sort(key=lambda record: gc_content(record.seq), reverse=True)
+        alignment.sort(key=lambda record: gc_fraction(record.seq), reverse=True)
         self.assertEqual(
             "\n".join(row for row in alignment),  # str(alignment),
             """\

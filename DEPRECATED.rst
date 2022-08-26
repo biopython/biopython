@@ -594,7 +594,7 @@ Bio.SeqUtils.CodonUsage was deprecated in Release 1.80. Instead of
 self.print_index(), please use print(self).
 
 Function 'GC' in Bio.SeqUtils was deprecated in Release 1.80. Instead use
-function 'gc_content'.
+function 'gc_fraction'.
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 ------------------------------------------------------------------
