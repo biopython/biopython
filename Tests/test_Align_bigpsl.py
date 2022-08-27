@@ -2,9 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for Align.bigbed module."""
+"""Tests for Align.bigpsl module."""
 import unittest
-import os
 import warnings
 from io import StringIO
 
@@ -12,12 +11,13 @@ from io import StringIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bigbed
+    from Bio.Align import bigpsl
 
 
 try:
@@ -26,16 +26,15 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.bigbed."
+        "Install numpy if you want to use Bio.Align.bigpsl."
     ) from None
 
 
 class TestAlign_dna_rna(unittest.TestCase):
 
-    # The bigBed file dna_rna.bb was generated using the commands
-    # sort -k1,1 -k2,2n dna_rna.bed > dna_rna.sorted.bed
-    # twoBitInfo hg38.2bit hg38.chrom.sizes
-    # bedToBigBed dna_rna.sorted.bed hg38.chrom.sizes dna_rna.bb
+    # The bigPsl file dna_rna.psl.bb was generated using these commands:
+    # pslToBigPsl dna_rna.psl stdout | sort -k1,1 -k2,2n > dna_rna.bigPslInput
+    # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as dna_rna.bigPslInput hg38.chrom.sizes dna_rna.psl.bb
 
     def setUp(self):
         data = {}
@@ -49,32 +48,45 @@ class TestAlign_dna_rna(unittest.TestCase):
             sequence = str(record.seq)
             assert len(sequence) == end - start
             data[start] = sequence
-        self.dna = Seq(data, length=198295559)  # hg38 chr3
+        self.dna = data
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
 
     def test_reading(self):
-        """Test parsing dna_rna.bb."""
-        path = "Blat/dna_rna.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        """Test parsing dna_rna.psl.bb."""
+        path = "Blat/dna_rna.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table bed
-"Browser Extensible Data"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
@@ -83,7 +95,14 @@ table bed
         self.assertEqual(len(alignments.targets[0]), 198295559)
         self.assertEqual(len(alignments), 4)
         alignment = next(alignments)
+        self.assertEqual(alignment.matches, 175)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.thickStart, 42530895)
+        self.assertEqual(alignment.thickEnd, 42532606)
+        self.assertEqual(alignment.itemRgb, "0")
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -92,19 +111,20 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 181)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530958, 42532020,
-                              42532095, 42532563, 42532606],
-                             [     181,      118,      118,
-                                    43,       43,        0]])
+                numpy.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+                             [     181,      118,      118,       43,       43,        0]])
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
@@ -123,11 +143,25 @@ table bed
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        # The modified RNAs have gaps in their sequence. As this information is
-        # not stored in a BED file, we cannot calculate the substitution matrix.
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 978)
-        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertEqual(alignment.matches, 172)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.thickStart, 42530895)
+        self.assertEqual(alignment.thickEnd, 42532606)
+        self.assertEqual(alignment.itemRgb, "0")
+        self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -135,20 +169,60 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 190)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530922, 42530958, 42532020, 42532037,
-                              42532039, 42532095, 42532563, 42532606],
-                             [     179,      152,      116,      116,       99,
-                                    99,       43,       43,        0]])
+                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
+                              42532037, 42532039, 42532095, 42532563, 42532606],
+                             [     185,      158,      155,      119,      119,
+                                   102,      102,       46,       46,        3],
+                            ])
                 # fmt: on
             )
         )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
+# flake8: noqa
+            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ]),
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
+        self.assertEqual(alignment.matches, 165)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 39)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.thickStart, 48663767)
+        self.assertEqual(alignment.thickEnd, 48669174)
+        self.assertEqual(alignment.itemRgb, "0")
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -157,19 +231,20 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 216)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48663767, 48663813, 48665640,
-                              48665722, 48669098, 48669174],
-                             [       0,       46,       46,
-                                   128,      128,      204]])
+                numpy.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+                              [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
             )
         )
-        alignment.target.seq = self.dna
+        dna = Seq(self.dna, length=len(alignment.target.seq))
+        alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
             numpy.array_equal(
@@ -188,9 +263,25 @@ table bed
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 972)
-        self.assertEqual(alignment.shape, (2, 5407))
+        self.assertEqual(alignment.matches, 162)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 39)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.thickStart, 48663767)
+        self.assertEqual(alignment.thickEnd, 48669174)
+        self.assertEqual(alignment.itemRgb, "0")
+        self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -198,50 +289,100 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 220)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
-                              48665716, 48665722, 48669098, 48669174],
-                             [       0,       28,       28,       45,       45,
-                                   121,      127,      127,      203]])
+                              48665716, 48665716, 48665722, 48669098, 48669174],
+                             [       3,       31,       31,       48,       48,
+                                   124,      126,      132,      132,      208]
+                            ])
                 # fmt: on
             )
         )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
+# flake8: noqa
+            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
+                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
+                        ]),
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
         self.assertRaises(StopIteration, next, alignments)
 
 
 class TestAlign_dna(unittest.TestCase):
+
+    queries = {
+        record.id: record.seq for record in SeqIO.parse("Blat/fasta_34.fa", "fasta")
+    }
+
     def test_reading_psl_34_001(self):
-        """Test parsing psl_34_001.bb."""
+        """Test parsing psl_34_001.psl.bb."""
 
-        # The bigBed file psl_34_001.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_001.bed > psl_34_001.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_001.sorted.bed hg19.chrom.sizes psl_34_001.bb
+        # The bigPsl file psl_34_001.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=fasta_34.fa psl_34_001.psl stdout | sort -k1,1 -k2,2n > psl_34_001.bigPslInput
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_001.bigPslInput hg19.chrom.sizes psl_34_001.psl.bb
 
-        path = "Blat/psl_34_001.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        path = "Blat/psl_34_001.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table bed
-"Browser Extensible Data"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
@@ -268,7 +409,10 @@ table bed
         self.assertEqual(len(alignments.targets[9]), 141213431)
         self.assertEqual(len(alignments), 22)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 50)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -277,6 +421,9 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -288,7 +435,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -296,7 +446,10 @@ table bed
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
-        self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -308,7 +461,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -317,18 +473,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[39368490, 39368526],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 824)
+        self.assertEqual(alignment.matches, 31)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -337,18 +499,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61700837, 61700871],
-                             [       0,       34]]),
+                             [       1,       35]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 942)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -357,18 +525,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[220325687, 220325721],
-                             [       34,         0]]),
+                             [       47,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -377,18 +551,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[99388555, 99388591],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 920)
+        self.assertEqual(alignment.matches, 24)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -397,19 +577,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[112178171, 112178196],
-                             [       25,         0]]),
+                             [       35,        10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 912)
-        self.assertEqual(alignment.shape, (2, 51))
+        self.assertEqual(alignment.matches, 44)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -417,18 +603,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 115169878)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
-                             [       0,        7,        7,       45]]),
+                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                             [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -437,18 +629,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[23891310, 23891349],
-                             [       0,       39]]),
+                             [      10,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 930)
+        self.assertEqual(alignment.matches, 27)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -457,18 +655,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[43252217, 43252245],
-                             [       0,       28]]),
+                             [      21,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 848)
+        self.assertEqual(alignment.matches, 36)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -477,18 +681,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[553742, 553781],
-                             [    39,      0]]),
+                             [    49,     10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 890)
+        self.assertEqual(alignment.matches, 34)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -497,18 +707,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [       0,       25,       25,       36]]),
+                             [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -517,18 +733,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[54017130, 54017169],
-                             [      39,        0]]),
+                             [      49,       10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 17)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -536,19 +758,25 @@ table bed
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
-        self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[53575980, 53575997],
-                             [      17,        0]]),
+                             [      25,        8]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -557,19 +785,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[120641740, 120641776],
-                             [       36,         0]]),
+                             [       49,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 682)
-        self.assertEqual(alignment.shape, (2, 44))
+        self.assertEqual(alignment.matches, 43)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -577,18 +811,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
-                             [        0,         6,        44]]),
+                numpy.array([[183925984, 183925990, 183925990, 183926028],
+                             [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -597,18 +837,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[42144400, 42144436],
-                             [       0,       36]]),
+                             [      11,       47]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 892)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -617,19 +863,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[48997405, 48997442],
-                             [      37,        0]]),
+                             [      49,       12]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 572)
-        self.assertEqual(alignment.shape, (2, 34))
+        self.assertEqual(alignment.matches, 28)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -637,18 +889,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
-                             [      28,       18,       18,        0]]),
+                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                             [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 16)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -656,19 +914,25 @@ table bed
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
-        self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61646095, 61646111],
-                             [       0,       16]]),
+                             [      11,       27]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 41)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -677,18 +941,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 146364022)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[95160479, 95160520],
-                             [       0,       41]]),
+                             [       8,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 854)
+        self.assertEqual(alignment.matches, 38)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -697,46 +967,61 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 141213431)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[85737865, 85737906],
-                             [       0,       41]]),
+                             [       9,       50]]),
                 # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
-        """Test parsing psl_34_003.bb."""
+        """Test parsing psl_34_003.psl.bb."""
 
-        # The bigBed file psl_34_003.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_003.bed > psl_34_003.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_003.sorted.bed hg19.chrom.sizes psl_34_003.bb
+        # The bigPsl file psl_34_003.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=fasta_34.fa psl_34_003.psl stdout | sort -k1,1 -k2,2n > psl_34_003.bigPslInput
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_003.bigPslInput hg19.chrom.sizes psl_34_003.psl.bb
 
-        path = "Blat/psl_34_003.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        path = "Blat/psl_34_003.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table bed
-"Browser Extensible Data"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
@@ -749,7 +1034,10 @@ table bed
         self.assertEqual(len(alignments.targets[2]), 191154276)
         self.assertEqual(len(alignments), 3)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -758,6 +1046,9 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -769,7 +1060,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 17)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -778,18 +1072,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[53575980, 53575997],
-                             [      17,        0]]),
+                             [      25,        8]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 16)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -798,46 +1098,61 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61646095, 61646111],
-                             [       0,       16]]),
+                             [      11,       27]]),
                 # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
-        """Test parsing psl_34_004.bb."""
+        """Test parsing psl_34_004.psl.bb."""
 
-        # The bigBed file psl_34_004.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_004.bed > psl_34_004.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_004.sorted.bed hg19.chrom.sizes psl_34_004.bb
+        # The bigPsl file psl_34_004.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=fasta_34.fa psl_34_004.psl stdout | sort -k1,1 -k2,2n > psl_34_004.bigPslInput
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_004.bigPslInput hg19.chrom.sizes psl_34_004.psl.bb
 
-        path = "Blat/psl_34_004.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        path = "Blat/psl_34_004.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table bed
-"Browser Extensible Data"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
@@ -864,7 +1179,10 @@ table bed
         self.assertEqual(len(alignments.targets[9]), 141213431)
         self.assertEqual(len(alignments), 19)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 50)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -873,6 +1191,9 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -884,7 +1205,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -893,18 +1217,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[39368490, 39368526],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 824)
+        self.assertEqual(alignment.matches, 31)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -913,18 +1243,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61700837, 61700871],
-                             [       0,       34]]),
+                             [       1,       35]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 942)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -933,18 +1269,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[220325687, 220325721],
-                             [       34,         0]]),
+                             [       47,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -953,18 +1295,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[99388555, 99388591],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 920)
+        self.assertEqual(alignment.matches, 24)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -973,19 +1321,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[112178171, 112178196],
-                             [       25,         0]]),
+                             [       35,        10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 912)
-        self.assertEqual(alignment.shape, (2, 51))
+        self.assertEqual(alignment.matches, 44)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -993,18 +1347,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 115169878)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
-                             [       0,        7,        7,       45]]),
+                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                             [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1013,18 +1373,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[23891310, 23891349],
-                             [       0,       39]]),
+                             [      10,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 930)
+        self.assertEqual(alignment.matches, 27)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1033,18 +1399,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[43252217, 43252245],
-                             [       0,       28]]),
+                             [      21,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 848)
+        self.assertEqual(alignment.matches, 36)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1053,18 +1425,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[553742, 553781],
-                             [    39,      0]]),
+                             [    49,     10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 890)
+        self.assertEqual(alignment.matches, 34)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1073,18 +1451,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [       0,       25,       25,       36]]),
+                             [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1093,18 +1477,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[54017130, 54017169],
-                             [      39,        0]]),
+                             [      49,       10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1113,19 +1503,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[120641740, 120641776],
-                             [       36,         0]]),
+                             [       49,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 682)
-        self.assertEqual(alignment.shape, (2, 44))
+        self.assertEqual(alignment.matches, 43)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1133,18 +1529,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
-                             [        0,         6,        44]]),
+                numpy.array([[183925984, 183925990, 183925990, 183926028],
+                             [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1153,18 +1555,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[42144400, 42144436],
-                             [       0,       36]]),
+                             [      11,       47]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 892)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1173,19 +1581,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[48997405, 48997442],
-                             [      37,        0]]),
+                             [      49,       12]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 572)
-        self.assertEqual(alignment.shape, (2, 34))
+        self.assertEqual(alignment.matches, 28)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1193,18 +1607,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
-                             [      28,       18,       18,        0]]),
+                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                             [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 41)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1213,18 +1633,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 146364022)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[95160479, 95160520],
-                             [       0,       41]]),
+                             [       8,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 854)
+        self.assertEqual(alignment.matches, 38)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1233,67 +1659,35 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 141213431)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[85737865, 85737906],
-                             [       0,       41]]),
+                             [       9,       50]]),
                 # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_005(self):
-        """Test parsing psl_34_005.bb."""
-        path = "Blat/psl_34_005.bb"
-        alignments = bigbed.AlignmentIterator(path)
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bed
-"Browser Extensible Data"
-(
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
-)
-""",
-        )
-        self.assertEqual(len(alignments.targets), 10)
-        self.assertEqual(alignments.targets[0].id, "chr1")
-        self.assertEqual(len(alignments.targets[0]), 249250621)
-        self.assertEqual(alignments.targets[1].id, "chr10")
-        self.assertEqual(len(alignments.targets[1]), 135534747)
-        self.assertEqual(alignments.targets[2].id, "chr13")
-        self.assertEqual(len(alignments.targets[2]), 115169878)
-        self.assertEqual(alignments.targets[3].id, "chr18")
-        self.assertEqual(len(alignments.targets[3]), 78077248)
-        self.assertEqual(alignments.targets[4].id, "chr19")
-        self.assertEqual(len(alignments.targets[4]), 59128983)
-        self.assertEqual(alignments.targets[5].id, "chr2")
-        self.assertEqual(len(alignments.targets[5]), 243199373)
-        self.assertEqual(alignments.targets[6].id, "chr22")
-        self.assertEqual(len(alignments.targets[6]), 51304566)
-        self.assertEqual(alignments.targets[7].id, "chr4")
-        self.assertEqual(len(alignments.targets[7]), 191154276)
-        self.assertEqual(alignments.targets[8].id, "chr8")
-        self.assertEqual(len(alignments.targets[8]), 146364022)
-        self.assertEqual(alignments.targets[9].id, "chr9")
-        self.assertEqual(len(alignments.targets[9]), 141213431)
-        self.assertEqual(len(alignments), 22)
+        """Test parsing psl_34_005.psl.bb."""
+
+        # The bigPsl file psl_34_005.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=fasta_34.fa psl_34_005.psl stdout | sort -k1,1 -k2,2n > psl_34_005.bigPslInput
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_005.bigPslInput hg19.chrom.sizes psl_34_005.psl.bb
+
+        path = "Blat/psl_34_005.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 50)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1302,6 +1696,9 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1313,7 +1710,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1322,6 +1722,9 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1333,7 +1736,10 @@ table bed
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1342,17 +1748,23 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
                 numpy.array([[39368490, 39368526],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 824)
+        self.assertEqual(alignment.matches, 31)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1361,18 +1773,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61700837, 61700871],
-                             [       0,       34]]),
+                             [       1,       35]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 942)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1381,18 +1799,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 249250621)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[220325687, 220325721],
-                             [       34,         0]]),
+                             [       47,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1401,18 +1825,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[99388555, 99388591],
-                             [      36,        0]]),
+                             [      49,       13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 920)
+        self.assertEqual(alignment.matches, 24)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1421,19 +1851,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 135534747)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[112178171, 112178196],
-                             [       25,         0]]),
+                             [       35,        10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 912)
-        self.assertEqual(alignment.shape, (2, 51))
+        self.assertEqual(alignment.matches, 44)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 54))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1441,18 +1877,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 115169878)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
-                             [       0,        7,        7,       45]]),
+                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                             [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1461,18 +1903,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[23891310, 23891349],
-                             [       0,       39]]),
+                             [      10,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 930)
+        self.assertEqual(alignment.matches, 27)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1481,18 +1929,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 78077248)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[43252217, 43252245],
-                             [       0,       28]]),
+                             [      21,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 848)
+        self.assertEqual(alignment.matches, 36)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1501,18 +1955,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[553742, 553781],
-                             [    39,      0]]),
+                             [    49,     10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 890)
+        self.assertEqual(alignment.matches, 34)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1521,18 +1981,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [       0,       25,       25,       36]]),
+                             [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 39)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1541,18 +2007,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 59128983)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[54017130, 54017169],
-                             [      39,        0]]),
+                             [      49,       10]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 17)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1561,18 +2033,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[53575980, 53575997],
-                             [      17,        0]]),
+                             [      25,        8]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 946)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1581,19 +2059,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[120641740, 120641776],
-                             [       36,         0]]),
+                             [       49,        13]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 682)
-        self.assertEqual(alignment.shape, (2, 44))
+        self.assertEqual(alignment.matches, 43)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1601,18 +2085,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 243199373)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
-                             [        0,         6,        44]]),
+                numpy.array([[183925984, 183925990, 183925990, 183926028],
+                             [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 834)
+        self.assertEqual(alignment.matches, 33)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1621,18 +2111,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[42144400, 42144436],
-                             [       0,       36]]),
+                             [      11,       47]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 892)
+        self.assertEqual(alignment.matches, 35)
+        self.assertEqual(alignment.misMatches, 2)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1641,19 +2137,25 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 51304566)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[48997405, 48997442],
-                             [      37,        0]]),
+                             [      49,       12]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 572)
-        self.assertEqual(alignment.shape, (2, 34))
+        self.assertEqual(alignment.matches, 28)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 44))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1661,18 +2163,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
-                             [      28,       18,       18,        0]]),
+                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                             [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 16)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1681,18 +2189,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg18_dna")
+        self.assertEqual(len(alignment.target.seq), 191154276)
+        self.assertEqual(len(alignment.query.seq), 33)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[61646095, 61646111],
-                             [       0,       16]]),
+                             [      11,       27]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 41)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1701,18 +2215,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 146364022)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[95160479, 95160520],
-                             [       0,       41]]),
+                             [       8,       49]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 854)
+        self.assertEqual(alignment.matches, 38)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1721,13 +2241,16 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
+        self.assertEqual(len(alignment.target.seq), 141213431)
+        self.assertEqual(len(alignment.query.seq), 50)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[85737865, 85737906],
-                             [       0,       41]]),
+                             [       9,       50]]),
                 # fmt: on
             )
         )
@@ -1735,34 +2258,52 @@ table bed
 
 
 class TestAlign_dnax_prot(unittest.TestCase):
+
+    queries = {
+        record.id: record.seq
+        for record in SeqIO.parse("Blat/CAG33136.1.fasta", "fasta")
+    }
+
     def test_reading_psl_35_001(self):
-        """Test parsing psl_35_001.bb."""
+        """Test parsing psl_35_001.psl.bb."""
 
-        # The bigBed file psl_35_001.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_35_001.bed > psl_35_001.sorted.bed
-        # twoBitInfo hg38.2bit hg38.chrom.sizes
-        # bedToBigBed psl_35_001.sorted.bed hg38.chrom.sizes psl_35_001.bb
+        # The bigPsl file psl_35_001.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=CAG33136.1.fasta psl_35_001.psl stdout | sort -k1,1 -k2,2n > psl_35_001.bigPslInput
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_001.bigPslInput hg38.chrom.sizes psl_35_001.psl.bb
 
-        path = "Blat/psl_35_001.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        path = "Blat/psl_35_001.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table bed
-"Browser Extensible Data"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
@@ -1773,7 +2314,10 @@ table bed
         self.assertEqual(len(alignments.targets[1]), 190214555)
         self.assertEqual(len(alignments), 8)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 986)
+        self.assertEqual(alignment.matches, 44)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1781,18 +2325,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75549820, 75549865, 75567225, 75567312],
-                             [       0,       45,       45,      132]]),
+                numpy.array([[75549820, 75549865, 75567225, 75567225, 75567312],
+                             [       0,       15,       15,      113,      142]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 44)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1800,18 +2350,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[75560749, 75560881],
-                             [       0,      132]]),
+                             [      17,       61]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 52)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1819,18 +2375,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[75566694, 75566850],
-                             [       0,      156]]),
+                             [      61,      113]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 16)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1838,18 +2400,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[75569459, 75569507],
-                             [       0,       48]]),
+                             [     142,      158]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 25)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1857,18 +2425,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[75594914, 75594989],
-                             [       0,       75]]),
+                             [     158,      183]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1000)
+        self.assertEqual(alignment.matches, 47)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1876,18 +2450,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 114364328)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[75604767, 75604827, 75605728, 75605809],
-                             [       0,       60,       60,      141]]),
+                             [     183,      203,      203,      230]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 166)
+        self.assertEqual(alignment.matches, 37)
+        self.assertEqual(alignment.misMatches, 26)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1895,18 +2475,24 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 190214555)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[41257605, 41257731, 41263227, 41263290],
-                             [       0,      126,      126,      189]]),
+                numpy.array([[41257605, 41257731, 41263227, 41263227, 41263290],
+                             [      17,       59,       59,      162,      183]]),
                 # fmt: on
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 530)
+        self.assertEqual(alignment.matches, 26)
+        self.assertEqual(alignment.misMatches, 8)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
@@ -1914,623 +2500,133 @@ table bed
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 190214555)
+        self.assertEqual(len(alignment.query.seq), 230)
+        self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[41260685, 41260787],
-                             [       0,      102]]),
+                             [      76,      110]]),
                 # fmt: on
             )
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_35_002(self):
+        """Test parsing psl_35_002.psl.bb."""
 
-class TestAlign_bed12(unittest.TestCase):
+        # The bigPsl file psl_35_002.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=CAG33136.1.fasta psl_35_002.psl stdout | grep -v KI538594 | sort -k1,1 -k2,2n > psl_35_002.bigPslInput
+        # (where we excluded KI538594 because its alignment has a negative gap)
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_002.bigPslInput balAcu1.chrom.sizes psl_35_002.psl.bb
 
-    # The bigBed files were generated using the commands
-    # twoBitInfo hg19.2bit hg19.chrom.sizes
-    # bedToBigBed bed4.bed hg19.chrom.sizes bed4.bb
-    # bedToBigBed bed5.bed hg19.chrom.sizes bed5.bb
-    # bedToBigBed bed6.bed hg19.chrom.sizes bed6.bb
-    # bedToBigBed bed7.bed hg19.chrom.sizes bed7.bb
-    # bedToBigBed bed8.bed hg19.chrom.sizes bed8.bb
-    # bedToBigBed bed9.bed hg19.chrom.sizes bed9.bb
-    # bedToBigBed bed12.bed hg19.chrom.sizes bed12.bb
-
-    def check_autosql(self, declaration, bedN):
-        if bedN == 3:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string chrom;         "Reference sequence chromosome or scaffold"
-   uint   chromStart;    "Start position in chromosome"
-   uint   chromEnd;      "End position in chromosome"
-)
-""",
-            )
-        elif bedN == 4:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string chrom;         "Reference sequence chromosome or scaffold"
-   uint   chromStart;    "Start position in chromosome"
-   uint   chromEnd;      "End position in chromosome"
-   string name;          "Name of item."
-)
-""",
-            )
-        elif bedN == 5:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string chrom;         "Reference sequence chromosome or scaffold"
-   uint   chromStart;    "Start position in chromosome"
-   uint   chromEnd;      "End position in chromosome"
-   string name;          "Name of item."
-   uint   score;         "Score (0-1000)"
-)
-""",
-            )
-        elif bedN == 6:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   string  name;          "Name of item."
-   uint    score;         "Score (0-1000)"
-   char[1] strand;        "+ or - for strand"
-)
-""",
-            )
-        elif bedN == 7:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   string  name;          "Name of item."
-   uint    score;         "Score (0-1000)"
-   char[1] strand;        "+ or - for strand"
-   uint    thickStart;    "Start of where display should be thick (start codon)"
-)
-""",
-            )
-        elif bedN == 8:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   string  name;          "Name of item."
-   uint    score;         "Score (0-1000)"
-   char[1] strand;        "+ or - for strand"
-   uint    thickStart;    "Start of where display should be thick (start codon)"
-   uint    thickEnd;      "End of where display should be thick (stop codon)"
-)
-""",
-            )
-        elif bedN == 9:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   string  name;          "Name of item."
-   uint    score;         "Score (0-1000)"
-   char[1] strand;        "+ or - for strand"
-   uint    thickStart;    "Start of where display should be thick (start codon)"
-   uint    thickEnd;      "End of where display should be thick (stop codon)"
-   uint    reserved;      "Used as itemRgb as of 2004-11-22"
-)
-""",
-            )
-        elif bedN == 12:
-            self.assertEqual(
-                str(declaration),
-                """\
-table bed
-"Browser Extensible Data"
-(
-   string          chrom;          "Reference sequence chromosome or scaffold"
-   uint            chromStart;     "Start position in chromosome"
-   uint            chromEnd;       "End position in chromosome"
-   string          name;           "Name of item."
-   uint            score;          "Score (0-1000)"
-   char[1]         strand;         "+ or - for strand"
-   uint            thickStart;     "Start of where display should be thick (start codon)"
-   uint            thickEnd;       "End of where display should be thick (stop codon)"
-   uint            reserved;       "Used as itemRgb as of 2004-11-22"
-   int             blockCount;     "Number of blocks"
-   int[blockCount] blockSizes;     "Comma separated list of block sizes"
-   int[blockCount] chromStarts;    "Start positions relative to chromStart"
-)
-""",
-            )
-
-    def test_reading(self):
-        """Test parsing alignments in file formats BED3 through BED12."""
-        for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
-            filename = "bed%d.bb" % bedN
-            path = os.path.join("Blat", filename)
-            alignments = bigbed.AlignmentIterator(path)
-            self.check_autosql(alignments.declaration, bedN)
-            self.assertEqual(len(alignments), 2)
-            alignment = next(alignments)
-            if bedN >= 5:
-                self.assertEqual(alignment.score, 960, msg=filename)
-            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(
-                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
-            )
-            self.assertLess(
-                alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename
-            )
-            self.assertEqual(len(alignment), 2, msg=filename)
-            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
-            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
-            self.assertEqual(alignment.target.id, "chr22", msg=filename)
-            if bedN >= 4:
-                self.assertEqual(alignment.query.id, "mRNA1", msg=filename)
-            else:
-                self.assertIsNone(alignment.query.id, msg=filename)
-            if bedN == 12:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        # fmt: off
-# flake8: noqa
-                        numpy.array([[1000, 1567, 4512, 5000],
-                                     [   0,  567,  567, 1055]]),
-                        # fmt: on
-                    ),
-                    msg=filename,
-                )
-            else:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[1000, 5000], [0, 4000]]),
-                    ),
-                    msg=filename,
-                )
-            if bedN >= 7:
-                self.assertEqual(alignment.thickStart, 1200, msg=filename)
-            if bedN >= 8:
-                self.assertEqual(alignment.thickEnd, 4900, msg=filename)
-            if bedN >= 9:
-                self.assertEqual(alignment.itemRgb, "255,0,0", msg=filename)
-            alignment = next(alignments)
-            if bedN >= 5:
-                self.assertEqual(alignment.score, 900, msg=filename)
-            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(
-                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
-            )
-            if bedN >= 6:
-                self.assertGreater(
-                    alignment.coordinates[1, 0],
-                    alignment.coordinates[1, -1],
-                    msg=filename,
-                )
-            else:
-                self.assertLess(
-                    alignment.coordinates[1, 0],
-                    alignment.coordinates[1, -1],
-                    msg=filename,
-                )
-            self.assertEqual(len(alignment), 2, msg=filename)
-            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
-            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
-            self.assertEqual(alignment.target.id, "chr22", msg=filename)
-            if bedN >= 4:
-                self.assertEqual(alignment.query.id, "mRNA2", msg=filename)
-            else:
-                self.assertIsNone(alignment.query.id, msg=filename)
-            if bedN == 12:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        # fmt: off
-# flake8: noqa
-                        numpy.array([[2000, 2433, 5601, 6000],
-                                     [ 832,  399,  399,    0]])
-                        # fmt: on
-                    ),
-                    msg=filename,
-                )
-            elif bedN >= 6:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[2000, 6000], [4000, 0]]),
-                    ),
-                    msg=filename,
-                )
-            else:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[2000, 6000], [0, 4000]]),
-                    ),
-                    msg=filename,
-                )
-            if bedN >= 7:
-                self.assertEqual(alignment.thickStart, 2300, msg=filename)
-            if bedN >= 8:
-                self.assertEqual(alignment.thickEnd, 5960, msg=filename)
-            if bedN >= 9:
-                self.assertEqual(alignment.itemRgb, "0,255,0", msg=filename)
-            with self.assertRaises(StopIteration) as cm:
-                next(alignments)
-                self.fail(f"More than two alignments reported in {filename}")
-
-
-class TestAlign_extended_bed(unittest.TestCase):
-
-    # The bigBed file bigbed_extended.bb is a BED9+2 file, with nine predefined
-    # BED fields and 2 extra (custom) fields. It was created by running
-    #
-    # bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes bigbed_extended.bb
-    #
-    # where bedExample2.bed contains 10 lines selected from the example BED9+2
-    # file bedExample2.bed, and bedExample2.as the associated autoSql file from
-    # UCSC declaring the nine predefined BED fields and the two extra fields.
-
-    def test_reading(self):
-        """Test parsing bigbed_extended.bb."""
-        path = "Blat/bigbed_extended.bb"
-        alignments = bigbed.AlignmentIterator(path)
-        self.maxDiff = None
+        # See below for a description of the file balAcu1.fa.
+        # We use this file here so we can check the SeqFeatures.
+        records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
+        self.dna = {}
+        for record in records:
+            name, start_end = record.id.split(":")
+            start, end = start_end.split("-")
+            start = int(start)
+            end = int(end)
+            sequence = str(record.seq)
+            self.dna[name] = Seq({start: sequence}, length=end)
+        path = "Blat/psl_35_002.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
         self.assertEqual(
             str(alignments.declaration),
             """\
-table hg18KGchr7
-"UCSC Genes for chr7 with color plus GeneSymbol and SwissProtID"
+table bigPsl
+"bigPsl pairwise alignment"
 (
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position of feature on chromosome"
-   uint    chromEnd;      "End position of feature on chromosome"
-   string  name;          "Name of gene"
-   uint    score;         "Score"
-   char[1] strand;        "+ or - for strand"
-   uint    thickStart;    "Coding region start"
-   uint    thickEnd;      "Coding region end"
-   uint    reserved;      "Green on + strand, Red on - strand"
-   string  geneSymbol;    "Gene Symbol"
-   string  spID;          "SWISS-PROT protein Accession number"
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
         )
-        self.assertEqual(len(alignments.targets), 1)
-        self.assertEqual(alignments.targets[0].id, "chr7")
-        self.assertEqual(len(alignments.targets[0]), 158821424)
-        self.assertEqual(len(alignments), 10)
+        self.assertEqual(len(alignments.targets), 2)
+        self.assertEqual(alignments.targets[0].id, "KI537194")
+        self.assertEqual(len(alignments.targets[0]), 37111980)
+        self.assertEqual(alignments.targets[1].id, "KI537979")
+        self.assertEqual(len(alignments.targets[1]), 14052872)
+        self.assertEqual(len(alignments), 2)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 60328)
-        self.assertEqual(alignment.thickEnd, 60328)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 1241))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(alignment.matches, 204)
+        self.assertEqual(alignment.misMatches, 6)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc010krx.1")
+        self.assertEqual(alignment.target.id, "KI537194")
+        self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 37111980)
+        self.assertEqual(len(alignment.query.seq), 230)
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates, numpy.array([[60328, 61569], [1241, 0]])
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[20873021, 20872472, 20872471, 20872471, 20872390],
+                             [       0,      183,      183,      203,      230]]),
+                # fmt: on
             )
         )
-        self.assertEqual(alignment.annotations["geneSymbol"], ".")
-        self.assertEqual(alignment.annotations["spID"], "PDGFA")
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 506606)
-        self.assertEqual(alignment.thickEnd, 525164)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 22585))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003sir.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[503422, 526007], [22585, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
-        self.assertEqual(alignment.annotations["spID"], "P04085")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 504726)
-        self.assertEqual(alignment.thickEnd, 525164)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 22585))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003sis.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[503422, 526007], [22585, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
-        self.assertEqual(alignment.annotations["spID"], "P04085-2")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 507195)
-        self.assertEqual(alignment.thickEnd, 518820)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 12690))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003sit.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[506940, 519630], [12690, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
-        self.assertEqual(alignment.annotations["spID"], "Q32M96")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 556592)
-        self.assertEqual(alignment.thickEnd, 717668)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 162747))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003siu.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[555912, 718659], [162747, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
-        self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 556592)
-        self.assertEqual(alignment.thickEnd, 717668)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 163357))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003siv.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[555912, 719269], [163357, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
-        self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 556592)
-        self.assertEqual(alignment.thickEnd, 717668)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 177901))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003siw.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[555912, 733813], [177901, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
-        self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 585418)
-        self.assertEqual(alignment.thickEnd, 585418)
-        self.assertEqual(alignment.itemRgb, "255,0,0")
-        self.assertEqual(alignment.shape, (2, 22329))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003six.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[585418, 607747], [22329, 0]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], ".")
-        self.assertEqual(alignment.annotations["spID"], "PRKAR1B")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 733217)
-        self.assertEqual(alignment.thickEnd, 791816)
-        self.assertEqual(alignment.itemRgb, "0,255,0")
-        self.assertEqual(alignment.shape, (2, 59779))
+        self.assertEqual(alignment.matches, 210)
+        self.assertEqual(alignment.misMatches, 3)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc003siz.2")
+        self.assertEqual(alignment.target.id, "KI537979")
+        self.assertEqual(alignment.query.id, "CAG33136.1")
+        self.assertEqual(len(alignment.target.seq), 14052872)
+        self.assertEqual(len(alignment.query.seq), 230)
         self.assertTrue(
             numpy.array_equal(
-                alignment.coordinates, numpy.array([[732863, 792642], [0, 59779]])
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
+                              9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
+                             [     17,      61,      61,     113,     113,     142,     142,
+                                  158,     158,     183,     183,     203,     203,     230]]),
+                # fmt: on
             )
         )
-        self.assertEqual(alignment.annotations["geneSymbol"], ".")
-        self.assertEqual(alignment.annotations["spID"], "DKFZp762F1415")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
-        self.assertEqual(alignment.thickStart, 732883)
-        self.assertEqual(alignment.thickEnd, 791816)
-        self.assertEqual(alignment.itemRgb, "0,255,0")
-        self.assertEqual(alignment.shape, (2, 59779))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr7")
-        self.assertEqual(alignment.query.id, "uc010krz.1")
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[732863, 792642], [0, 59779]])
-            )
-        )
-        self.assertEqual(alignment.annotations["geneSymbol"], "HEATR2")
-        self.assertEqual(alignment.annotations["spID"], "Q86Y56")
-
-
-class TestAlign_searching(unittest.TestCase):
-
-    # The bigBed file bigbedbigbedtest.bb contains the following data:
-    # chr1     10     100     name1   1       +
-    # chr1     29      39     name2   2       -
-    # chr1    200     300     name3   3       +
-    # chr2     50      50     name4   6       +
-    # chr2    100     110     name5   4       +
-    # chr2    200     210     name6   5       +
-    # chr2    220     220     name7   6       +
-    # chr3      0       0     name8   7       -
-
-    def test_search_chromosome(self):
-        path = "Blat/bigbedtest.bb"
-        alignments = bigbed.AlignmentIterator(path)
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bed
-"Browser Extensible Data"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   string  name;          "Name of item."
-   uint    score;         "Score (0-1000)"
-   char[1] strand;        "+ or - for strand"
-)
-""",
-        )
-        selected_alignments = alignments.search("chr2", 0, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4", "name5", "name6", "name7"])
-
-    def test_search_region(self):
-        path = "Blat/bigbedtest.bb"
-        alignments = bigbed.AlignmentIterator(path)
-        selected_alignments = alignments.search("chr2", 105, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name5", "name6", "name7"])
-        selected_alignments = alignments.search("chr2", 110, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 40, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 200)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4", "name5"])
-        selected_alignments = alignments.search("chr2", 200, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 220, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name7"])
-
-    def test_three_iterators(self):
-        """Create three iterators and use them concurrently."""
-        path = "Blat/bigbedtest.bb"
-        alignments1 = bigbed.AlignmentIterator(path)
-        alignments2 = alignments1.search("chr2")
-        alignments3 = alignments1.search("chr2", 110, 1000)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name1")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name2")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name4")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name7")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name3")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name4")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments2)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name6")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments3)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name8")
-        self.assertRaises(StopIteration, next, alignments1)
+        self.assertRaises(StopIteration, next, alignments)
 
 
 if __name__ == "__main__":

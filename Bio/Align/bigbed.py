@@ -107,19 +107,19 @@ class AutoSQLTable:
         lines = []
         lines.append("table %s\n" % self.name)
         lines.append('"%s"\n' % self.comment)
-        lines.append("   (\n")
+        lines.append("(\n")
         for field in self.fields:
             name = field.name + ";"
             lines.append(
                 '   %s %s    "%s"\n'
                 % (field.type.ljust(type_width), name.ljust(name_width), field.comment)
             )
-        lines.append("   )\n")
+        lines.append(")\n")
         return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
-    """Alignment iterator bigBed files.
+    """Alignment iterator for bigBed files.
 
     The pairwise alignments stored in the bigBed file are loaded and returned
     incrementally.  Additional alignment information is stored as attributes
@@ -207,7 +207,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         stream.seek(pos)
         data = stream.read(size)
         declaration = AutoSQLTable(data.decode())
-        fields = declaration.fields
+        self._analyze_fields(declaration.fields, fieldCount, definedFieldCount)
+        return declaration
+
+    def _analyze_fields(self, fields, fieldCount, definedFieldCount):
         names = (
             "chrom",
             "chromStart",
@@ -257,7 +260,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     return [item_converter(value) for value in values]
 
             self._custom_fields.append([field_name, converter])
-        return declaration
 
     def _read_chromosomes(self, stream, pos):
         byteorder = self.byteorder

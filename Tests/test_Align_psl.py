@@ -325,8 +325,8 @@ class TestAlign_dna_rna(unittest.TestCase):
 class TestAlign_dna(unittest.TestCase):
 
     queries = {
-        "hg18_dna": "atgagcttccaaggtaaactgccttcaagattc",
-        "hg19_dna": "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
+        record.id: str(record.seq)
+        for record in SeqIO.parse("Blat/fasta_34.fa", "fasta")
     }
 
     def test_reading_psl_34_001(self):
