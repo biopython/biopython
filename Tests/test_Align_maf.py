@@ -34,6 +34,8 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
@@ -75,6 +77,9 @@ class TestAlign_reading(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def test_reading_ucsc_mm9_chr10(self):
         """Test parsing MAF file ucsc_mm9_chr10.maf."""
@@ -6928,6 +6933,9 @@ class TestAlign_reading(unittest.TestCase):
                 ),
             )
         )
+        self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def test_reading_missing_signature(self):
         """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
@@ -7168,6 +7176,8 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
 
 class TestAlign_writing(unittest.TestCase):
