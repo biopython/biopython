@@ -130,6 +130,9 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                     % (len(query_sequence), qSize)
                 )
         query_record = SeqRecord(query_sequence, id=qName)
+        cds = words[15]
+        if cds and cds != "n/a":
+            query_record.annotations["CDS"] = cds
         seqType = words[21]
         if seqType == "0":
             qBlockSizes = tBlockSizes

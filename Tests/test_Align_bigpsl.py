@@ -2629,6 +2629,1109 @@ table bigPsl
         self.assertRaises(StopIteration, next, alignments)
 
 
+class TestAlign_bigpsl(unittest.TestCase):
+
+    # The bigPsl file bigPsl.bb was generated from the UCSC example files using these commands:
+    # pslToBigPsl bigPsl.psl -cds=bigPsl.cds stdout | sort -k1,1 -k2,2n > bigPsl.txt
+    # bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt hg38.chrom.sizes bigPsl.bb
+    # (see https://genome.ucsc.edu/goldenPath/help/bigPsl.html)
+
+    def test_reading_bigpsl(self):
+        """Test parsing bigPsl.bb."""
+        path = "Blat/bigPsl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bigPsl
+"bigPsl pairwise alignment"
+(
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr1")
+        self.assertEqual(len(alignments.targets[0]), 248956422)
+        self.assertEqual(len(alignments), 100)
+        alignment = next(alignments)
+        self.assertEqual(alignment.matches, 1579)
+        self.assertEqual(alignment.misMatches, 25)
+        self.assertEqual(alignment.repMatches, 0)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
+        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "mAM992877")
+        self.assertEqual(len(alignment.target.seq), 248956422)
+        self.assertEqual(len(alignment.query.seq), 1604)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 14361],
+                             [    0,   354,   354,   463,   463,  1604]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992881")
+        self.assertEqual(alignment.query.annotations["CDS"], "383..718")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12594, 12721, 13402, 14361],
+                                 [0,   354,   354,   481,   481,  1440]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992878")
+        self.assertEqual(alignment.query.annotations["CDS"], "734..1003")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12645, 12697, 13220, 13656, 13658, 13957, 13958, 14362],
+                             [    0,   354,   354,   406,   406,   842,   842,  1141,  1141,  1545]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992879")
+        self.assertEqual(alignment.query.annotations["CDS"], "365..502")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 14362],
+                             [    0,   354,   354,   463,   463,  1605]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992871")
+        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 14409],
+                             [    0,   354,   354,   463,   463,  1652]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992872")
+        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 14409],
+                             [    0,   354,   354,   463,   463,  1652]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992875")
+        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 14409],
+                             [    0,   354,   354,   463,   463,  1652]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992880")
+        self.assertEqual(alignment.query.annotations["CDS"], "317..718")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12594, 12721, 13402, 14409],
+                             [    0,   354,   354,   481,   481,  1488]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC032353")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[11873, 12227, 12612, 12721, 13220, 13957, 13958, 14258, 14270, 14409],
+                             [    0,   354,   354,   463,   463,  1200,  1200,  1500,  1500,  1639]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAM992873")
+        self.assertEqual(alignment.query.annotations["CDS"], "<437..706")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[12612, 12721, 13220, 13656, 13658, 13957, 13958, 14362],
+                             [    0,   109,   109,   545,   545,   844,   844,  1248]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD190877")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[12993, 13016], [0, 23]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD167845")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13001, 13024], [0, 23]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD469098")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13003, 13024], [2, 23]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD485136")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13087, 13107], [0, 20]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC070227")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[13420, 13957, 13958, 14259, 14271, 14407],
+                             [    0,   537,   537,   838,   838,   974]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD282506")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13721, 13745], [0, 24]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD192765")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13877, 13909], [0, 32]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD191631")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13932, 13964], [0, 32]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD135207")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[13939, 13971], [0, 32]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD157229")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14002, 14023], [0, 21]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD199172")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14241, 14265], [0, 24]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD422311")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14246, 14278], [0, 32]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD108953")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14322, 14354], [0, 32]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD227419")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14378, 14407], [1, 30]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC063555")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16765, 16857,
+                              17055, 17232, 17742, 17914, 18061, 18267, 18369,
+                              18500, 18554, 18912, 19236],
+                             [ 2146,  2095,  2090,  1716,  1716,  1647,  1647,
+                               1537,  1537,  1535,  1494,  1494,  1335,  1335,
+                               1137,  1137,   627,   627,   480,   480,   378,
+                                378,   324,   324,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC063893")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14511, 14513, 14829, 14969, 15038, 15795,
+                              15903, 15903, 15947, 16606, 16765, 16857, 17055,
+                              17232, 17358, 17361, 17742, 17914, 18061, 18267,
+                              18366, 18912, 19720],
+                             [ 2563,  2456,  2456,  2140,  2140,  2071,  2071,
+                               1963,  1962,  1918,  1918,  1759,  1759,  1561,
+                               1561,  1435,  1435,  1054,  1054,   907,   907,
+                                808,   808,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC053987")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16765, 16857,
+                              17055, 17232, 17368, 17605, 17742, 17914, 18061,
+                              18267, 18366, 18912, 19763],
+                             [ 2379,  2328,  2323,  1949,  1949,  1880,  1880,
+                               1770,  1770,  1768,  1727,  1727,  1568,  1568,
+                               1370,  1370,  1234,  1234,  1097,  1097,   950,
+                                950,   851,   851,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAL137714")
+        self.assertEqual(
+            alignment.query.annotations["CDS"],
+            "join(169..318,312..704,941..1273,3006..3209)",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 14404,  14511,  14513,  14829,  14969,  15250, 185765,
+                              186064, 186064, 186623, 186626, 187287, 187379, 187577,
+                              187754, 188266, 188438, 188485, 188485, 188584, 188790,
+                              188889, 195262, 195416, 199836, 199999],
+                             [  3498,   3391,   3391,   3075,   3075,   2794,   2794,
+                                2495,   2493,   1934,   1934,   1273,   1273,   1075,
+                                1075,    563,    563,    516,    515,    416,    416,
+                                 317,    317,    163,    163,      0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC048328")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795, 15905,
+                              15906, 15906, 15947, 16606, 16722, 16722, 16768, 16856,
+                              17055, 17232, 17368, 17605, 17742, 17914, 18061, 18267,
+                              18379, 24737, 24891],
+                             [ 1720,  1669,  1664,  1290,  1290,  1221,  1221,  1111,
+                               1111,  1109,  1068,  1068,   952,   943,   897,   897,
+                                698,   698,   562,   562,   425,   425,   278,   278,
+                                166,   166,    12]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC063470")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14455, 14455, 14829, 15795, 15905, 15906,
+                              15906, 15947, 16606, 16765, 16857, 17055, 17605,
+                              18061, 24737, 24891, 29320, 29346],
+                             [ 1576,  1525,  1520,  1146,  1146,  1036,  1036,
+                               1034,   993,   993,   834,   834,   636,   636,
+                                180,   180,    26,    26,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBX537637")
+        self.assertEqual(
+            alignment.query.annotations["CDS"], "join(241..432,432..1166,1166..1591)"
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14404, 14495, 14559, 14571, 15004, 15038, 15795, 15903,
+                              15903, 15947, 16606, 16765, 16857, 17055, 17232, 17368,
+                              17605, 17742, 17914, 18061, 18267, 18366, 24737, 24891,
+                              29533, 29809],
+                             [ 1597,  1506,  1506,  1494,  1494,  1460,  1460,  1352,
+                               1351,  1307,  1307,  1148,  1148,   950,   950,   814,
+                                814,   677,   677,   530,   530,   431,   431,   277,
+                                277,     1]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK024481")
+        self.assertEqual(alignment.query.annotations["CDS"], "<1346..1897")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14406, 15905, 15906, 15906, 16765, 16857, 18733],
+                             [ 4236,  2737,  2737,  2735,  1876,  1876,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK057951")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 14406,  14829,  14969,  15038,  15795,  15903,  15903,
+                               15947,  16606,  16768,  16856,  17055,  17232,  17368,
+                               17605,  17745,  18036,  18061,  18267,  18366,  24737,
+                               24893, 188471, 188485, 188485, 188584, 188790, 188889,
+                              195262, 195416, 199836, 199861],
+                             [  1954,   1531,   1531,   1462,   1462,   1354,   1353,
+                                1309,   1309,   1147,   1147,    948,    948,    812,
+                                 812,    672,    672,    647,    647,    548,    548,
+                                 392,    392,    378,    377,    278,    278,    179,
+                                 179,     25,     25,      0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK092583")
+        self.assertEqual(alignment.query.annotations["CDS"], "73..555")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14406, 14455, 14455, 15905, 15906, 15906, 16765,
+                              16857, 17055, 17232, 17368, 17605, 17742, 17914,
+                              18061, 24737, 24891, 29320, 29344],
+                             [ 3161,  3112,  3107,  1657,  1657,  1655,   796,
+                                796,   598,   598,   462,   462,   325,   325,
+                                178,   178,    24,    24,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAX747611")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14406, 14455, 14455, 15905, 15906, 15906, 16765,
+                              16857, 17055, 17232, 17368, 17605, 17742, 17914,
+                              18061, 24737, 24891, 29320, 29344],
+                             [ 3161,  3112,  3107,  1657,  1657,  1655,   796,
+                                796,   598,   598,   462,   462,   325,   325,
+                                178,   178,    24,    24,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK056232")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14406, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16768, 16856,
+                              17055, 17232, 17368, 17605, 17742, 17914, 18061,
+                              18267, 18366, 24737, 24891, 29320, 29902, 29912,
+                              30000],
+                             [ 2354,  2305,  2300,  1926,  1926,  1857,  1857,
+                               1747,  1747,  1745,  1704,  1704,  1542,  1542,
+                               1343,  1343,  1207,  1207,  1070,  1070,   923,
+                               923,    824,   824,   670,   670,    88,    88,
+                               0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC094698")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16765, 16857,
+                              17055, 17232, 17742, 17914, 18061, 18267, 19108],
+                             [ 2504,  2456,  2451,  2077,  2077,  2008,  2008,
+                               1898,  1898,  1896,  1855,  1855,  1696,  1696,
+                               1498,  1498,   988,   988,   841,   841,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mBC041177")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16722, 16731,
+                              16768, 16856, 17055, 17232, 17368, 17605, 17742,
+                              17914, 18061, 18267, 18379, 18912, 19190, 19191,
+                              19716],
+                             [ 2336,  2288,  2283,  1909,  1909,  1840,  1840,
+                               1730,  1730,  1728,  1687,  1687,  1571,  1571,
+                               1534,  1534,  1335,  1335,  1199,  1199,  1062,
+                               1062,   915,   915,   803,   803,   525,   525,
+                                  0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAY217347")
+        self.assertEqual(alignment.query.annotations["CDS"], "1304..2089")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
+                              15905, 15906, 15906, 15947, 16606, 16722, 16731,
+                              16768, 16856, 17055, 17232, 17368, 17605, 17742,
+                              17914, 18061, 18267, 18379, 18912, 19759],
+                             [ 2382,  2334,  2329,  1955,  1955,  1886,  1886,
+                               1776,  1776,  1774,  1733,  1733,  1617,  1617,
+                               1580,  1580,  1381,  1381,  1245,  1245,  1108,
+                               1108,   961,   961,   849,   849,     2]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD043865")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14423, 14455], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD464022")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14453, 14485], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD464023")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14455, 14485], [30, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD426250")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14496, 14528], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD319762")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14537, 14569], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD439184")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14538, 14570], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK289708")
+        self.assertEqual(alignment.query.annotations["CDS"], "147..1553")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[14570, 14829, 14969, 15038, 15795, 15905, 15906,
+                              15906, 15947, 16606, 16722, 16722, 16768, 16856,
+                              17055, 17232, 17368, 17605, 17742, 17914, 18061,
+                              18267, 18379, 24737, 24891, 29823, 29961],
+                             [ 1678,  1419,  1419,  1350,  1350,  1240,  1240,
+                               1238,  1197,  1197,  1081,  1072,  1026,  1026,
+                                827,   827,   691,   691,   554,   554,   407,
+                                407,   295,   295,   141,   141,     3]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mDQ588205")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14629, 14657], [0, 28]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD033185")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14643, 14667], [0, 24]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD386972")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14643, 14667], [24, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD469492")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14673, 14705], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD371043")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[14702, 14717, 14720, 14737], [32, 17, 17, 0]]),
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD186991")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[14703, 14717, 14720, 14738], [32, 18, 18, 0]]),
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD178321")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14704, 14725], [21, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD371044")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14705, 14737], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD492409")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14739, 14771], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD248147")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14746, 14770], [24, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD044295")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14785, 14817], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD433165")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14810, 14842], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD055458")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14823, 14855], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD131561")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14828, 14853], [25, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD129847")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14936, 14956], [20, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD219312")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[14950, 14971], [21, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD546847")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15086, 15118], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD218460")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15097, 15129], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mKJ806766")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array([[15118, 15122, 15122, 15654], [9, 13, 14, 546]]),
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD131237")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15187, 15219], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD128091")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15209, 15241], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD422546")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15274, 15305], [31, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD153435")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15292, 15324], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD367640")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15461, 15493], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD487131")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15468, 15500], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD493181")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15480, 15512], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD205712")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15558, 15590], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD425846")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15584, 15616], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD219639")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15603, 15634], [32, 1]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD078677")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15603, 15635], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD078676")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15614, 15635], [21, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD253503")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15643, 15675], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD253504")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15644, 15675], [31, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD159284")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15664, 15687], [23, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD115871")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15675, 15707], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD456634")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15677, 15709], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD487879")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15741, 15772], [32, 1]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD080014")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15741, 15773], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD336830")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15760, 15792], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD444008")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15761, 15793], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD460507")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15812, 15836], [24, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mAK308574")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[15870, 15903, 15903, 16027, 16606, 16765, 16857,
+                              17055, 17232, 17364, 17521, 17742, 17914, 18061,
+                              18267, 18366, 29320, 29359],
+                             [ 1153,  1120,  1119,   995,   995,   836,   836,
+                                638,   638,   506,   506,   285,   285,   138,
+                                138,    39,    39,     0]])
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD389037")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15906, 15936], [30, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD521711")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15947, 15979], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD383617")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15972, 16004], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD491045")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15982, 16014], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD318660")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[15985, 16017], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD341280")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16118, 16150], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD220623")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16157, 16189], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD465423")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16165, 16197], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD515432")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16176, 16208], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD542452")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16184, 16216], [32, 0]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD507246")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16201, 16230], [30, 1]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.query.id, "mJD102852")
+        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[16253, 16274], [21, 0]])
+            )
+        )
+        self.assertRaises(StopIteration, next, alignments)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
