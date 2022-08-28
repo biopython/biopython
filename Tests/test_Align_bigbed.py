@@ -2437,7 +2437,7 @@ table hg18KGchr7
 
 class TestAlign_searching(unittest.TestCase):
 
-    # The bigBed file bigbedbigbedtest.bb contains the following data:
+    # The bigBed file bigbedtest.bb contains the following data:
     # chr1     10     100     name1   1       +
     # chr1     29      39     name2   2       -
     # chr1    200     300     name3   3       +

@@ -3732,6 +3732,133 @@ table bigPsl
         self.assertRaises(StopIteration, next, alignments)
 
 
+class TestAlign_searching(unittest.TestCase):
+
+    # The BED file bigbedtest.bed contains the following data:
+    # chr1     10     100     name1   1       +
+    # chr1     29      39     name2   2       -
+    # chr1    200     300     name3   3       +
+    # chr2     50      50     name4   6       +
+    # chr2    100     110     name5   4       +
+    # chr2    200     210     name6   5       +
+    # chr2    220     220     name7   6       +
+    # chr3      0       0     name8   7       -
+
+    # with chromosome sizes in bigbedtest.chrom.sizes:
+    # chr1 1000
+    # chr2 2000
+    # chr3 1000
+
+    # The bigPsl file bigbedtest.psl.bb was generated using these commands:
+    # bedToPsl bigbedtest.chrom.sizes bigbedtest.bed bigbedtest.psl
+    # pslToBigPsl bigbedtest.psl stdout | sort -k1,1 -k2,2n > bigbedtest.bigPslInput
+    # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as bigbedtest.bigPslInput bigbedtest.chrom.sizes bigbedtest.psl.bb
+
+    def test_search_chromosome(self):
+        path = "Blat/bigbedtest.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bigPsl
+"bigPsl pairwise alignment"
+(
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        " Number of bases that don't match "
+   uint            repMatch;        " Number of bases that match but are part of repeats "
+   uint            nCount;          " Number of 'N' bases "
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
+)
+""",
+        )
+        selected_alignments = alignments.search("chr2", 0, 1000)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name4", "name5", "name6", "name7"])
+
+    def test_search_region(self):
+        path = "Blat/bigbedtest.psl.bb"
+        alignments = bigpsl.AlignmentIterator(path)
+        selected_alignments = alignments.search("chr2", 105, 1000)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name5", "name6", "name7"])
+        selected_alignments = alignments.search("chr2", 110, 1000)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name6", "name7"])
+        selected_alignments = alignments.search("chr2", 40, 50)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name4"])
+        selected_alignments = alignments.search("chr2", 50, 50)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name4"])
+        selected_alignments = alignments.search("chr2", 50, 200)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name4", "name5"])
+        selected_alignments = alignments.search("chr2", 200, 220)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name6", "name7"])
+        selected_alignments = alignments.search("chr2", 220, 220)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name7"])
+
+    def test_three_iterators(self):
+        """Create three iterators and use them concurrently."""
+        path = "Blat/bigbedtest.psl.bb"
+        alignments1 = bigpsl.AlignmentIterator(path)
+        alignments2 = alignments1.search("chr2")
+        alignments3 = alignments1.search("chr2", 110, 1000)
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name1")
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name2")
+        alignment2 = next(alignments2)
+        self.assertEqual(alignment2.query.id, "name4")
+        alignment2 = next(alignments2)
+        self.assertEqual(alignment2.query.id, "name5")
+        alignment2 = next(alignments2)
+        self.assertEqual(alignment2.query.id, "name6")
+        alignment3 = next(alignments3)
+        self.assertEqual(alignment3.query.id, "name6")
+        alignment3 = next(alignments3)
+        self.assertEqual(alignment3.query.id, "name7")
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name3")
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name4")
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name5")
+        alignment2 = next(alignments2)
+        self.assertEqual(alignment2.query.id, "name7")
+        self.assertRaises(StopIteration, next, alignments2)
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name6")
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name7")
+        self.assertRaises(StopIteration, next, alignments3)
+        alignment1 = next(alignments1)
+        self.assertEqual(alignment1.query.id, "name8")
+        self.assertRaises(StopIteration, next, alignments1)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
