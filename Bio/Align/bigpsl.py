@@ -52,28 +52,28 @@ class AlignmentIterator(bigbed.AlignmentIterator):
             "chrom",
             "chromStart",
             "chromEnd",
-            "name",  # 0  # 1
-            "score",  # 1  # 1
-            "strand",  # 2  # 1
-            "thickStart",  # 3  # 1
-            "thickEnd",  # 4  # 1
-            "reserved",  # 5  # 1
-            "blockCount",  # 6  # 1
-            "blockSizes",  # 7  # 1
-            "chromStarts",  # 8  # 1
-            "oChromStart",  # 9  # 1
-            "oChromEnd",  # 10  # 1
-            "oStrand",  # 11  # 1
-            "oChromSize",  # 12  # 1
-            "oChromStarts",  # 13  # 1
-            "oSequence",  # 14  # 1
+            "name",  # 0
+            "score",  # 1
+            "strand",  # 2
+            "thickStart",  # 3
+            "thickEnd",  # 4
+            "reserved",  # 5
+            "blockCount",  # 6
+            "blockSizes",  # 7
+            "chromStarts",  # 8
+            "oChromStart",  # 9
+            "oChromEnd",  # 10
+            "oStrand",  # 11
+            "oChromSize",  # 12
+            "oChromStarts",  # 13
+            "oSequence",  # 14
             "oCDS",  # 15
-            "chromSize",  # 16  # 1
-            "match",  # 17  # 1
-            "misMatch",  # 18  # 1
-            "repMatch",  # 19  # 1
-            "nCount",  # 20  # 1
-            "seqType",  # 21 # 1
+            "chromSize",  # 16
+            "match",  # 17
+            "misMatch",  # 18
+            "repMatch",  # 19
+            "nCount",  # 20
+            "seqType",  # 21
         )
         for i, name in enumerate(names):
             if name != fields[i].name:
@@ -144,20 +144,16 @@ class AlignmentIterator(bigbed.AlignmentIterator):
             qBlockSizes = tBlockSizes // 3
         else:
             raise ValueError("Unexpected sequence type '%s'" % seqType)
+        tStarts += tStart
         qStrand = words[11]
-        if seqType == "2":
-            if qStrand != strand:
-                raise Exception(
-                    "found different strand '%s' and oStrand '%s'" % (strand, qStrand)
-                )
-            if qStrand == "-" and strand == "-":
-                qStarts = (qSize - qStarts - qBlockSizes)[::-1]
-                tStarts = (tSize - tStart - tStarts - tBlockSizes)[::-1]
-                qBlockSizes = qBlockSizes[::-1]
-                tBlockSizes = tBlockSizes[::-1]
-        else:
-            if qStrand != "+":
-                raise Exception("found oStrand %s; expected '+'" % qStrand)
+        if qStrand == "-" and strand == "-":
+            tStart, tEnd = tEnd, tStart
+            qStarts = qSize - qStarts - qBlockSizes
+            tStarts = tSize - tStarts - tBlockSizes
+            qStarts = qStarts[::-1]
+            tStarts = tStarts[::-1]
+            qBlockSizes = qBlockSizes[::-1]
+            tBlockSizes = tBlockSizes[::-1]
         qPosition = qStarts[0]
         tPosition = tStarts[0]
         coordinates = [[tPosition, qPosition]]
@@ -174,18 +170,12 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         coordinates = numpy.array(coordinates).transpose()
         qStart = int(words[9])
         qEnd = int(words[10])
-        if seqType in "01":
-            coordinates[0, :] += tStart
-            if strand == "-":
-                qStart, qEnd = qEnd, qStart
-                coordinates[1, :] = qSize - coordinates[1, :]
-        elif seqType in "2":
-            qStrand = words[11]
-            if qStrand == "-" and strand == "-":
-                tStart, tEnd = tEnd, tStart
+        if strand == "-":
+            if qStrand == "-":
                 coordinates[0, :] = tSize - coordinates[0, :]
             else:
-                coordinates[0, :] += tStart
+                qStart, qEnd = qEnd, qStart
+                coordinates[1, :] = qSize - coordinates[1, :]
         if tStart != coordinates[0, 0]:
             raise ValueError(
                 "Inconsistent tStart found (%d, expected %d)"
