@@ -35,10 +35,27 @@ class TestAlign_reading(unittest.TestCase):
 
         path = "MAF/bundle_without_target.bb"
         alignments = bigmaf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(len(alignments.targets[0]), 129959148)
+        self.assertEqual(len(alignments), 1)
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
@@ -90,8 +107,23 @@ class TestAlign_reading(unittest.TestCase):
 
         path = "MAF/ucsc_mm9_chr10.bb"
         alignments = bigmaf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(len(alignments.targets[0]), 129993255)
+        self.assertEqual(len(alignments), 48)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6938,6 +6970,9 @@ class TestAlign_reading(unittest.TestCase):
                 ),
             )
         )
+        self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def test_reading_ucsc_test(self):
         """Test parsing ucsc_test.bb."""
@@ -6948,30 +6983,23 @@ class TestAlign_reading(unittest.TestCase):
 
         path = "MAF/ucsc_test.bb"
         alignments = bigmaf.AlignmentIterator(path)
-        self.assertEqual(len(alignments.metadata), 9)
-        self.assertEqual(alignments.metadata["name"], "euArc")
-        self.assertEqual(alignments.metadata["visibility"], "pack")
-        self.assertEqual(alignments.metadata["mafDot"], "off")
-        self.assertEqual(alignments.metadata["frames"], "multiz28wayFrames")
         self.assertEqual(
-            alignments.metadata["speciesOrder"],
-            ["hg16", "panTro1", "baboon", "mm4", "rn3"],
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
         )
-        self.assertEqual(alignments.metadata["description"], "A sample alignment")
-        self.check_ucsc_test(alignments)
-
-    def check_ucsc_test(self, alignments):
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "tba.v8")
-        self.assertEqual(
-            alignments.metadata["Comments"],
-            [
-                "tba.v8 (((human chimp) baboon) (mouse rat))",
-                "multiz.v7",
-                "maf_project.v5 _tba_right.maf3 mouse _tba_C",
-                "single_cov2.v4 single_cov2 /dev/stdin",
-            ],
-        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr7")
+        self.assertEqual(len(alignments.targets[0]), 158545518)
+        self.assertEqual(len(alignments), 3)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 23262)
         self.assertEqual(len(alignment.sequences), 5)
@@ -7108,6 +7136,8 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
 
 if __name__ == "__main__":
