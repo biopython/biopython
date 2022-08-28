@@ -62,7 +62,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -75,7 +75,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 1)
@@ -229,7 +229,7 @@ class TestAlign_dna(unittest.TestCase):
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -242,7 +242,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 10)
@@ -724,7 +724,7 @@ table bed
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -737,7 +737,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 3)
@@ -825,7 +825,7 @@ table bed
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -838,7 +838,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 10)
@@ -1254,7 +1254,7 @@ table bed
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -1267,7 +1267,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 10)
@@ -1750,7 +1750,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -1763,7 +1763,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 2)
@@ -1946,11 +1946,11 @@ class TestAlign_bed12(unittest.TestCase):
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string chrom;         "Reference sequence chromosome or scaffold"
    uint   chromStart;    "Start position in chromosome"
    uint   chromEnd;      "End position in chromosome"
-   )
+)
 """,
             )
         elif bedN == 4:
@@ -1959,12 +1959,12 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string chrom;         "Reference sequence chromosome or scaffold"
    uint   chromStart;    "Start position in chromosome"
    uint   chromEnd;      "End position in chromosome"
    string name;          "Name of item."
-   )
+)
 """,
             )
         elif bedN == 5:
@@ -1973,13 +1973,13 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string chrom;         "Reference sequence chromosome or scaffold"
    uint   chromStart;    "Start position in chromosome"
    uint   chromEnd;      "End position in chromosome"
    string name;          "Name of item."
    uint   score;         "Score (0-1000)"
-   )
+)
 """,
             )
         elif bedN == 6:
@@ -1988,14 +1988,14 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position in chromosome"
    uint    chromEnd;      "End position in chromosome"
    string  name;          "Name of item."
    uint    score;         "Score (0-1000)"
    char[1] strand;        "+ or - for strand"
-   )
+)
 """,
             )
         elif bedN == 7:
@@ -2004,7 +2004,7 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position in chromosome"
    uint    chromEnd;      "End position in chromosome"
@@ -2012,7 +2012,7 @@ table bed
    uint    score;         "Score (0-1000)"
    char[1] strand;        "+ or - for strand"
    uint    thickStart;    "Start of where display should be thick (start codon)"
-   )
+)
 """,
             )
         elif bedN == 8:
@@ -2021,7 +2021,7 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position in chromosome"
    uint    chromEnd;      "End position in chromosome"
@@ -2030,7 +2030,7 @@ table bed
    char[1] strand;        "+ or - for strand"
    uint    thickStart;    "Start of where display should be thick (start codon)"
    uint    thickEnd;      "End of where display should be thick (stop codon)"
-   )
+)
 """,
             )
         elif bedN == 9:
@@ -2039,7 +2039,7 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position in chromosome"
    uint    chromEnd;      "End position in chromosome"
@@ -2049,7 +2049,7 @@ table bed
    uint    thickStart;    "Start of where display should be thick (start codon)"
    uint    thickEnd;      "End of where display should be thick (stop codon)"
    uint    reserved;      "Used as itemRgb as of 2004-11-22"
-   )
+)
 """,
             )
         elif bedN == 12:
@@ -2058,7 +2058,7 @@ table bed
                 """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string          chrom;          "Reference sequence chromosome or scaffold"
    uint            chromStart;     "Start position in chromosome"
    uint            chromEnd;       "End position in chromosome"
@@ -2071,7 +2071,7 @@ table bed
    int             blockCount;     "Number of blocks"
    int[blockCount] blockSizes;     "Comma separated list of block sizes"
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
-   )
+)
 """,
             )
 
@@ -2214,7 +2214,7 @@ class TestAlign_extended_bed(unittest.TestCase):
             """\
 table hg18KGchr7
 "UCSC Genes for chr7 with color plus GeneSymbol and SwissProtID"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position of feature on chromosome"
    uint    chromEnd;      "End position of feature on chromosome"
@@ -2226,7 +2226,7 @@ table hg18KGchr7
    uint    reserved;      "Green on + strand, Red on - strand"
    string  geneSymbol;    "Gene Symbol"
    string  spID;          "SWISS-PROT protein Accession number"
-   )
+)
 """,
         )
         self.assertEqual(len(alignments.targets), 1)
@@ -2437,7 +2437,7 @@ table hg18KGchr7
 
 class TestAlign_searching(unittest.TestCase):
 
-    # The bigBed file bigbedbigbedtest.bb contains the following data:
+    # The bigBed file bigbedtest.bb contains the following data:
     # chr1     10     100     name1   1       +
     # chr1     29      39     name2   2       -
     # chr1    200     300     name3   3       +
@@ -2455,14 +2455,14 @@ class TestAlign_searching(unittest.TestCase):
             """\
 table bed
 "Browser Extensible Data"
-   (
+(
    string  chrom;         "Reference sequence chromosome or scaffold"
    uint    chromStart;    "Start position in chromosome"
    uint    chromEnd;      "End position in chromosome"
    string  name;          "Name of item."
    uint    score;         "Score (0-1000)"
    char[1] strand;        "+ or - for strand"
-   )
+)
 """,
         )
         selected_alignments = alignments.search("chr2", 0, 1000)
