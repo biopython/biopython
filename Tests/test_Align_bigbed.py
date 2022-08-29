@@ -2465,7 +2465,7 @@ table bed
 )
 """,
         )
-        selected_alignments = alignments.search("chr2", 0, 1000)
+        selected_alignments = alignments.search("chr2")
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
 
@@ -2493,6 +2493,13 @@ table bed
         selected_alignments = alignments.search("chr2", 220, 220)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name7"])
+
+    def test_search_position(self):
+        path = "Blat/bigbedtest.bb"
+        alignments = bigbed.AlignmentIterator(path)
+        selected_alignments = alignments.search("chr1", 250)
+        names = [alignment.query.id for alignment in selected_alignments]
+        self.assertEqual(names, ["name3"])
 
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""

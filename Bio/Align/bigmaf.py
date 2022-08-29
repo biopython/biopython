@@ -12,15 +12,10 @@ indexed as a bigBed file.
 
 See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 """
-import shlex
-import itertools
 from io import StringIO
 
 
-from Bio.Align import Alignment
 from Bio.Align import interfaces, bigbed, maf
-from Bio.Seq import Seq, reverse_complement
-from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonExperimentalWarning
 
 
@@ -58,8 +53,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         """
         interfaces.AlignmentIterator.__init__(self, source, mode="b", fmt="bigMaf")
 
-    def _read_next_alignment(self, stream):
-        chromId, chromStart, chromEnd, rest = next(self._data)
+    def _create_alignment(self, chunk):
+        chromId, chromStart, chromEnd, rest = chunk
         data = rest.decode().replace(";", "\n")
         stream = StringIO()
         stream.write(data)

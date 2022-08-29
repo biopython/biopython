@@ -56,7 +56,7 @@ table bedMaf
         self.assertRaises(StopIteration, next, alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
-        self.assertEqual(alignment.score, 6441)
+        self.assertAlmostEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
         self.assertEqual(alignment.sequences[1].id, "oryCun1.scaffold_133159")
@@ -125,7 +125,7 @@ table bedMaf
         self.assertEqual(len(alignments.targets[0]), 129993255)
         self.assertEqual(len(alignments), 48)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 6441)
+        self.assertAlmostEqual(alignment.score, 6441)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -167,7 +167,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 103072)
+        self.assertAlmostEqual(alignment.score, 103072)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -265,7 +265,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 49128)
+        self.assertAlmostEqual(alignment.score, 49128)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -363,7 +363,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 117109)
+        self.assertAlmostEqual(alignment.score, 117109)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -499,7 +499,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 128047)
+        self.assertAlmostEqual(alignment.score, 128047)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -651,7 +651,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 98097)
+        self.assertAlmostEqual(alignment.score, 98097)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -830,7 +830,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -883,7 +883,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 40604)
+        self.assertAlmostEqual(alignment.score, 40604)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -975,7 +975,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1028,7 +1028,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 19159)
+        self.assertAlmostEqual(alignment.score, 19159)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1145,7 +1145,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 40840)
+        self.assertAlmostEqual(alignment.score, 40840)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1269,7 +1269,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 411)
+        self.assertAlmostEqual(alignment.score, 411)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1362,7 +1362,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1423,7 +1423,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -12243)
+        self.assertAlmostEqual(alignment.score, -12243)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1608,7 +1608,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 320596)
+        self.assertAlmostEqual(alignment.score, 320596)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1864,7 +1864,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -36127)
+        self.assertAlmostEqual(alignment.score, -36127)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2019,7 +2019,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2090,7 +2090,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 12170)
+        self.assertAlmostEqual(alignment.score, 12170)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2191,7 +2191,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2262,7 +2262,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 22499)
+        self.assertAlmostEqual(alignment.score, 22499)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2372,7 +2372,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 4781)
+        self.assertAlmostEqual(alignment.score, 4781)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2476,7 +2476,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 61520)
+        self.assertAlmostEqual(alignment.score, 61520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2609,7 +2609,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2680,7 +2680,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1520)
+        self.assertAlmostEqual(alignment.score, 1520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2782,7 +2782,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1986)
+        self.assertAlmostEqual(alignment.score, 1986)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2882,7 +2882,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2959,7 +2959,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 228)
+        self.assertAlmostEqual(alignment.score, 228)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3059,7 +3059,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 10938)
+        self.assertAlmostEqual(alignment.score, 10938)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3179,7 +3179,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 36924)
+        self.assertAlmostEqual(alignment.score, 36924)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3321,7 +3321,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 20303)
+        self.assertAlmostEqual(alignment.score, 20303)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3466,7 +3466,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3549,7 +3549,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 45)
+        self.assertAlmostEqual(alignment.score, 45)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3651,7 +3651,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -16865)
+        self.assertAlmostEqual(alignment.score, -16865)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3814,7 +3814,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 367532)
+        self.assertAlmostEqual(alignment.score, 367532)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4076,7 +4076,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4165,7 +4165,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 8951)
+        self.assertAlmostEqual(alignment.score, 8951)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4289,7 +4289,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4378,7 +4378,7 @@ table bedMaf
             numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 85471)
+        self.assertAlmostEqual(alignment.score, 85471)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4585,7 +4585,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 105724)
+        self.assertAlmostEqual(alignment.score, 105724)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4760,7 +4760,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 115790)
+        self.assertAlmostEqual(alignment.score, 115790)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4992,7 +4992,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 44222)
+        self.assertAlmostEqual(alignment.score, 44222)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5195,7 +5195,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 43757)
+        self.assertAlmostEqual(alignment.score, 43757)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5487,7 +5487,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 32886)
+        self.assertAlmostEqual(alignment.score, 32886)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5742,7 +5742,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 309116)
+        self.assertAlmostEqual(alignment.score, 309116)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6057,7 +6057,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 891219)
+        self.assertAlmostEqual(alignment.score, 891219)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6368,7 +6368,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 30254)
+        self.assertAlmostEqual(alignment.score, 30254)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6678,7 +6678,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -9167)
+        self.assertAlmostEqual(alignment.score, -9167)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6839,7 +6839,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 15763)
+        self.assertAlmostEqual(alignment.score, 15763)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -7001,7 +7001,7 @@ table bedMaf
         self.assertEqual(len(alignments.targets[0]), 158545518)
         self.assertEqual(len(alignments), 3)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 23262)
+        self.assertAlmostEqual(alignment.score, 23262)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7055,7 +7055,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 5062.0)
+        self.assertAlmostEqual(alignment.score, 5062.0)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7094,7 +7094,7 @@ table bedMaf
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 6636.0)
+        self.assertAlmostEqual(alignment.score, 6636.0)
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7138,6 +7138,72 @@ table bedMaf
         self.assertRaises(StopIteration, next, alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
+
+
+class TestAlign_searching(unittest.TestCase):
+    def test_search_chromosome(self):
+        path = "MAF/ucsc_test.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        selected_alignments = alignments.search("chr7")
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27578828)
+        self.assertEqual(alignment.coordinates[0, -1], 27578866)
+        self.assertAlmostEqual(alignment.score, 23262.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27699739)
+        self.assertEqual(alignment.coordinates[0, -1], 27699745)
+        self.assertAlmostEqual(alignment.score, 5062.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27707221)
+        self.assertEqual(alignment.coordinates[0, -1], 27707234)
+        self.assertAlmostEqual(alignment.score, 6636.0)
+        self.assertRaises(StopIteration, next, selected_alignments)
+
+    def test_search_region(self):
+        path = "MAF/ucsc_mm9_chr10.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(len(alignments), 48)
+        selected_alignments = alignments.search("chr10", 3014000, 3015000)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3013603)
+        self.assertEqual(alignment.coordinates[0, -1], 3014644)
+        self.assertAlmostEqual(alignment.score, 0.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3014644)
+        self.assertEqual(alignment.coordinates[0, -1], 3014689)
+        self.assertAlmostEqual(alignment.score, 19159.0)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 40840.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014689)
+        self.assertEqual(alignment.coordinates[0, -1], 3014742)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 411.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014742)
+        self.assertEqual(alignment.coordinates[0, -1], 3014778)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 0.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014778)
+        self.assertEqual(alignment.coordinates[0, -1], 3014795)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, -12243.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014795)
+        self.assertEqual(alignment.coordinates[0, -1], 3014842)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 320596.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014842)
+        self.assertEqual(alignment.coordinates[0, -1], 3015028)
+        self.assertRaises(StopIteration, next, selected_alignments)
+
+    def test_search_position(self):
+        path = "MAF/ucsc_mm9_chr10.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(len(alignments), 48)
+        selected_alignments = alignments.search("chr10", 3015000)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3014842)
+        self.assertEqual(alignment.coordinates[0, -1], 3015028)
+        self.assertAlmostEqual(alignment.score, 320596.0)
+        self.assertRaises(StopIteration, next, selected_alignments)
 
 
 if __name__ == "__main__":
