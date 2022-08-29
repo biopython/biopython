@@ -15,6 +15,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   # Style Checking: Linux and Python version only.
   style:
