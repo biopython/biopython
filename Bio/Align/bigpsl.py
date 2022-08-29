@@ -83,10 +83,11 @@ class AlignmentIterator(bigbed.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, tStart, tEnd, rest = chunk
-        if rest:
-            words = rest.decode().split("\t")
-        else:
-            words = []
+        words = rest.decode().split("\t")
+        if len(words) != 22:
+            raise ValueError(
+                "Unexpected number of fields (%d, expected 22)" % len(words)
+            )
         target_record = self.targets[chromId]
         tSize = int(words[16])
         if len(target_record) != tSize:

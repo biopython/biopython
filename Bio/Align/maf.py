@@ -29,6 +29,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 import shlex
+import itertools
 
 
 from Bio.Align import Alignment
@@ -334,13 +335,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.metadata = metadata
 
     def _read_next_alignment(self, stream):
+        line = self._line
+        if line is None:
+            return
+        lines = itertools.chain([line], stream)
+        alignment = self._create_alignment(lines)
+        return alignment
+
+    def _create_alignment(self, lines):
         records = []
         strands = []
         column_annotations = {}
         aligned_sequences = []
         annotations = {}
-
-        line = self._line
+        line = next(lines)
         assert line.startswith("a")
         words = line[1:].split()
         for word in words:
@@ -355,7 +363,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Unknown annotation variable '%s'" % key)
 
-        for line in stream:
+        for line in lines:
             if line.startswith("a"):
                 self._line = line
                 break
@@ -437,7 +445,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         else:
-            self._close()
+            self._line = None
         coordinates = Alignment.infer_coordinates(aligned_sequences)
         for record, strand, row in zip(records, strands, coordinates):
             if strand == "-":

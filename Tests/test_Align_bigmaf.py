@@ -1,8 +1,8 @@
-# Copyright 2021 by Michiel de Hoon.  All rights reserved.
+# Copyright 2022 by Michiel de Hoon.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for Align.maf module."""
+"""Tests for Align.bigmaf module."""
 import unittest
 import warnings
 from io import StringIO
@@ -12,7 +12,7 @@ from Bio import BiopythonExperimentalWarning
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import maf
+    from Bio.Align import bigmaf
 
 
 try:
@@ -21,22 +21,42 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.maf."
+        "Install numpy if you want to use Bio.Align.bigmaf."
     ) from None
 
 
 class TestAlign_reading(unittest.TestCase):
     def test_reading_bundle_without_target(self):
-        """Test parsing bundle_without_target.maf."""
-        path = "MAF/bundle_without_target.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
+        """Test parsing bundle_without_target.bb."""
+
+        # BigMaf file bundle_without_target.bb was created using the commands
+        # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
+        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
+
+        path = "MAF/bundle_without_target.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(len(alignments.targets[0]), 129959148)
+        self.assertEqual(len(alignments), 1)
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
-        self.assertEqual(alignment.score, 6441)
+        self.assertAlmostEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
         self.assertEqual(alignment.sequences[1].id, "oryCun1.scaffold_133159")
@@ -77,18 +97,35 @@ class TestAlign_reading(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
     def test_reading_ucsc_mm9_chr10(self):
-        """Test parsing MAF file ucsc_mm9_chr10.maf."""
-        path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
+        """Test parsing MAF file ucsc_mm9_chr10.bb."""
+
+        # BigMaf file ucsc_mm9_chr10.bb was created using the commands
+        # mafToBigMaf mm9 ucsc_mm9_chr10.maf stdout | sort -k1,1 -k2,2n > ucsc_mm9_chr10.txt
+        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb
+
+        path = "MAF/ucsc_mm9_chr10.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(len(alignments.targets[0]), 129993255)
+        self.assertEqual(len(alignments), 48)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 6441)
+        self.assertAlmostEqual(alignment.score, 6441)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -130,7 +167,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 103072)
+        self.assertAlmostEqual(alignment.score, 103072)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -228,7 +265,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 49128)
+        self.assertAlmostEqual(alignment.score, 49128)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -326,7 +363,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 117109)
+        self.assertAlmostEqual(alignment.score, 117109)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -462,7 +499,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 128047)
+        self.assertAlmostEqual(alignment.score, 128047)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -614,7 +651,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 98097)
+        self.assertAlmostEqual(alignment.score, 98097)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -793,7 +830,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -846,7 +883,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 40604)
+        self.assertAlmostEqual(alignment.score, 40604)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -938,7 +975,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -991,7 +1028,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 19159)
+        self.assertAlmostEqual(alignment.score, 19159)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1108,7 +1145,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 40840)
+        self.assertAlmostEqual(alignment.score, 40840)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1232,7 +1269,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 411)
+        self.assertAlmostEqual(alignment.score, 411)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1325,7 +1362,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1386,7 +1423,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -12243)
+        self.assertAlmostEqual(alignment.score, -12243)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1571,7 +1608,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 320596)
+        self.assertAlmostEqual(alignment.score, 320596)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1827,7 +1864,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -36127)
+        self.assertAlmostEqual(alignment.score, -36127)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -1982,7 +2019,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2053,7 +2090,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 12170)
+        self.assertAlmostEqual(alignment.score, 12170)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2154,7 +2191,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2225,7 +2262,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 22499)
+        self.assertAlmostEqual(alignment.score, 22499)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2335,7 +2372,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 4781)
+        self.assertAlmostEqual(alignment.score, 4781)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2439,7 +2476,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 61520)
+        self.assertAlmostEqual(alignment.score, 61520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2572,7 +2609,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2643,7 +2680,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1520)
+        self.assertAlmostEqual(alignment.score, 1520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2745,7 +2782,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 1986)
+        self.assertAlmostEqual(alignment.score, 1986)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2845,7 +2882,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -2922,7 +2959,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 228)
+        self.assertAlmostEqual(alignment.score, 228)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3022,7 +3059,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 10938)
+        self.assertAlmostEqual(alignment.score, 10938)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3142,7 +3179,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 36924)
+        self.assertAlmostEqual(alignment.score, 36924)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3284,7 +3321,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 20303)
+        self.assertAlmostEqual(alignment.score, 20303)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3429,7 +3466,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3512,7 +3549,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 45)
+        self.assertAlmostEqual(alignment.score, 45)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3614,7 +3651,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -16865)
+        self.assertAlmostEqual(alignment.score, -16865)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -3777,7 +3814,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 367532)
+        self.assertAlmostEqual(alignment.score, 367532)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4039,7 +4076,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4128,7 +4165,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 8951)
+        self.assertAlmostEqual(alignment.score, 8951)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4252,7 +4289,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 0)
+        self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4341,7 +4378,7 @@ class TestAlign_reading(unittest.TestCase):
             numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 85471)
+        self.assertAlmostEqual(alignment.score, 85471)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4548,7 +4585,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 105724)
+        self.assertAlmostEqual(alignment.score, 105724)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4723,7 +4760,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 115790)
+        self.assertAlmostEqual(alignment.score, 115790)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -4955,7 +4992,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 44222)
+        self.assertAlmostEqual(alignment.score, 44222)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5158,7 +5195,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 43757)
+        self.assertAlmostEqual(alignment.score, 43757)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5450,7 +5487,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 32886)
+        self.assertAlmostEqual(alignment.score, 32886)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -5705,7 +5742,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 309116)
+        self.assertAlmostEqual(alignment.score, 309116)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6020,7 +6057,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 891219)
+        self.assertAlmostEqual(alignment.score, 891219)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6331,7 +6368,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 30254)
+        self.assertAlmostEqual(alignment.score, 30254)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6641,7 +6678,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, -9167)
+        self.assertAlmostEqual(alignment.score, -9167)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6802,7 +6839,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 15763)
+        self.assertAlmostEqual(alignment.score, 15763)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
         self.assertEqual(len(alignment.sequences[0].seq), 129993255)
         self.assertEqual(
@@ -6937,111 +6974,34 @@ class TestAlign_reading(unittest.TestCase):
         with self.assertRaises(AttributeError):
             alignments._stream
 
-    def test_reading_missing_signature(self):
-        """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
-        path = "MAF/ucsc_mm9_chr10_big.maf"
-        with self.assertRaises(ValueError) as cm:
-            maf.AlignmentIterator(path)
-        self.assertEqual(str(cm.exception), "header line does not start with ##maf")
-
-    def test_reading_ucsc_mm9_chr10_bad(self):
-        """Test parsing MAF file ucsc_mm9_chr10_bad.maf with incorrect sequence size."""
-        path = "MAF/ucsc_mm9_chr10_bad.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
-        next(alignments)
-        next(alignments)
-        next(alignments)
-        next(alignments)
-        next(alignments)
-        next(alignments)
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
-        self.assertEqual(
-            str(cm.exception), "sequence size is incorrect (found 219, expected 319)"
-        )
-
-    def test_reading_length_coords_mismatch(self):
-        """Test parsing inconsistent MAF file length_coords_mismatch.maf."""
-        path = "MAF/length_coords_mismatch.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
-        alignment = next(alignments)
-        self.assertEqual(alignment.score, 6441)
-        self.assertEqual(len(alignment.sequences), 2)
-        self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
-        self.assertEqual(len(alignment.sequences[0]), 129993255)
-        self.assertEqual(
-            alignment.sequences[0].seq[3009319 : 3009319 + 162],
-            "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACCCCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT",
-        )
-        self.assertEqual(
-            alignment[0],
-            "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT",
-        )
-        self.assertEqual(alignment.sequences[1].id, "oryCun1.scaffold_133159")
-        self.assertEqual(len(alignment.sequences[1]), 13221)
-        self.assertEqual(
-            alignment.sequences[1].seq[11087 : 11087 + 164],
-            "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT",
-        )
-        self.assertEqual(
-            alignment[1],
-            "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT",
-        )
-        self.assertEqual(
-            alignment.sequences[1].annotations["quality"],
-            "99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999",
-        )
-        self.assertEqual(alignment.sequences[1].annotations["leftStatus"], "N")
-        self.assertEqual(alignment.sequences[1].annotations["leftCount"], 0)
-        self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
-        self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
-        self.assertEqual(
-            str(cm.exception), "sequence size is incorrect (found 219, expected 319)"
-        )
-
-    def test_reading_bug2453(self):
-        """Test parsing bug2453.maf."""
-        path = "MAF/bug2453.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(len(alignments.metadata), 3)
-        self.check_ucsc_test(alignments)
-
     def test_reading_ucsc_test(self):
-        """Test parsing ucsc_test.maf."""
-        path = "MAF/ucsc_test.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(len(alignments.metadata), 9)
-        self.assertEqual(alignments.metadata["name"], "euArc")
-        self.assertEqual(alignments.metadata["visibility"], "pack")
-        self.assertEqual(alignments.metadata["mafDot"], "off")
-        self.assertEqual(alignments.metadata["frames"], "multiz28wayFrames")
-        self.assertEqual(
-            alignments.metadata["speciesOrder"],
-            ["hg16", "panTro1", "baboon", "mm4", "rn3"],
-        )
-        self.assertEqual(alignments.metadata["description"], "A sample alignment")
-        self.check_ucsc_test(alignments)
+        """Test parsing ucsc_test.bb."""
 
-    def check_ucsc_test(self, alignments):
-        self.assertEqual(alignments.metadata["MAF Version"], "1")
-        self.assertEqual(alignments.metadata["Scoring"], "tba.v8")
+        # BigMaf file ucsc_test.bb was created using the commands
+        # tail -n +2 ucsc_test.maf | mafToBigMaf hg16 stdin stdout | sort -k1,1 -k2,2n > ucsc_test.txt
+        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
+
+        path = "MAF/ucsc_test.bb"
+        alignments = bigmaf.AlignmentIterator(path)
         self.assertEqual(
-            alignments.metadata["Comments"],
-            [
-                "tba.v8 (((human chimp) baboon) (mouse rat))",
-                "multiz.v7",
-                "maf_project.v5 _tba_right.maf3 mouse _tba_C",
-                "single_cov2.v4 single_cov2 /dev/stdin",
-            ],
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
         )
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "chr7")
+        self.assertEqual(len(alignments.targets[0]), 158545518)
+        self.assertEqual(len(alignments), 3)
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 23262)
+        self.assertAlmostEqual(alignment.score, 23262)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7095,7 +7055,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 5062.0)
+        self.assertAlmostEqual(alignment.score, 5062.0)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7134,7 +7094,7 @@ class TestAlign_reading(unittest.TestCase):
             )
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.score, 6636.0)
+        self.assertAlmostEqual(alignment.score, 6636.0)
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
         self.assertEqual(len(alignment.sequences[0]), 158545518)
@@ -7180,115 +7140,70 @@ class TestAlign_reading(unittest.TestCase):
             alignments._stream
 
 
-class TestAlign_writing(unittest.TestCase):
-    def test_writing_ucsc_test(self):
-        """Test reading and writing ucsc_test.maf."""
-        path = "MAF/ucsc_test.maf"
-        alignments = maf.AlignmentIterator(path)
-        output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
-        output.seek(0)
-        with open(path) as stream:
-            line1 = next(output)
-            line2 = next(stream)
-            self.assertEqual(
-                line1,
-                'track name=euArc visibility=pack mafDot=off frames=multiz28wayFrames speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"\n',
-            )
-            self.assertEqual(
-                line2,
-                'track name=euArc visibility=pack mafDot=off frames="multiz28wayFrames" speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"\n',
-            )
-            for line1, line2 in zip(output, stream):
-                if line1.startswith("a score="):
-                    prefix1, score1 = line1.split("=")
-                    prefix2, score2 = line2.split("=")
-                    self.assertEqual(prefix1, prefix2)
-                    self.assertAlmostEqual(float(score1), float(score2))
-                else:
-                    self.assertEqual(line1.strip(), line2.strip())
+class TestAlign_searching(unittest.TestCase):
+    def test_search_chromosome(self):
+        path = "MAF/ucsc_test.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        selected_alignments = alignments.search("chr7")
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27578828)
+        self.assertEqual(alignment.coordinates[0, -1], 27578866)
+        self.assertAlmostEqual(alignment.score, 23262.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27699739)
+        self.assertEqual(alignment.coordinates[0, -1], 27699745)
+        self.assertAlmostEqual(alignment.score, 5062.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 27707221)
+        self.assertEqual(alignment.coordinates[0, -1], 27707234)
+        self.assertAlmostEqual(alignment.score, 6636.0)
+        self.assertRaises(StopIteration, next, selected_alignments)
 
-    def test_writing_bug2453(self):
-        """Test reading and writing bug2453.maf."""
-        path = "MAF/bug2453.maf"
-        alignments = maf.AlignmentIterator(path)
-        output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
-        output.seek(0)
-        with open(path) as stream:
-            for line1, line2 in zip(output, stream):
-                if line1.startswith("a score="):
-                    prefix1, score1 = line1.split("=")
-                    prefix2, score2 = line2.split("=")
-                    self.assertEqual(prefix1, prefix2)
-                    self.assertAlmostEqual(float(score1), float(score2))
-                else:
-                    self.assertEqual(line1.strip(), line2.strip())
+    def test_search_region(self):
+        path = "MAF/ucsc_mm9_chr10.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(len(alignments), 48)
+        selected_alignments = alignments.search("chr10", 3014000, 3015000)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3013603)
+        self.assertEqual(alignment.coordinates[0, -1], 3014644)
+        self.assertAlmostEqual(alignment.score, 0.0)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3014644)
+        self.assertEqual(alignment.coordinates[0, -1], 3014689)
+        self.assertAlmostEqual(alignment.score, 19159.0)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 40840.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014689)
+        self.assertEqual(alignment.coordinates[0, -1], 3014742)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 411.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014742)
+        self.assertEqual(alignment.coordinates[0, -1], 3014778)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 0.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014778)
+        self.assertEqual(alignment.coordinates[0, -1], 3014795)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, -12243.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014795)
+        self.assertEqual(alignment.coordinates[0, -1], 3014842)
+        alignment = next(selected_alignments)
+        self.assertAlmostEqual(alignment.score, 320596.0)
+        self.assertEqual(alignment.coordinates[0, 0], 3014842)
+        self.assertEqual(alignment.coordinates[0, -1], 3015028)
+        self.assertRaises(StopIteration, next, selected_alignments)
 
-    def test_writing_bundle_without_target(self):
-        """Test reading and writing bundle_without_target.maf."""
-        path = "MAF/bundle_without_target.maf"
-        alignments = maf.AlignmentIterator(path)
-        output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
-        output.seek(0)
-        with open(path) as stream:
-            for line1, line2 in zip(output, stream):
-                self.assertEqual(line1, line2)
-
-    def test_writing_ucsc_mm9_chr10(self):
-        """Test reading and writing ucsc_mm9_chr10.maf."""
-        path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = maf.AlignmentIterator(path)
-        output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
-        output.seek(0)
-        with open(path) as stream:
-            for line1, line2 in zip(output, stream):
-                words1 = line1.split()
-                words2 = line2.split()
-                if line1.startswith("e "):
-                    (
-                        prefix1,
-                        name1,
-                        start1,
-                        size1,
-                        strand1,
-                        length1,
-                        status1,
-                    ) = line1.split()
-                    (
-                        prefix2,
-                        name2,
-                        start2,
-                        size2,
-                        strand2,
-                        length2,
-                        status2,
-                    ) = line2.split()
-                    size1 = int(size1)
-                    size2 = int(size2)
-                    if size1 == 0 and strand1 != strand2:
-                        start1 = int(start1)
-                        start2 = int(start2)
-                        size1 = int(size1)
-                        size2 = int(size2)
-                        length1 = int(length1)
-                        length2 = int(length2)
-                        self.assertEqual(prefix1, "e")
-                        self.assertEqual(prefix2, "e")
-                        self.assertEqual(name1, name2)
-                        self.assertEqual(status1, status2)
-                        self.assertEqual(size1, size2)
-                        self.assertEqual(length1, length2)
-                        self.assertEqual(start1, length2 - start2 - size2)
-                        self.assertEqual(start2, length1 - start1 - size1)
-                        continue
-                self.assertEqual(words1, words2)
+    def test_search_position(self):
+        path = "MAF/ucsc_mm9_chr10.bb"
+        alignments = bigmaf.AlignmentIterator(path)
+        self.assertEqual(len(alignments), 48)
+        selected_alignments = alignments.search("chr10", 3015000)
+        alignment = next(selected_alignments)
+        self.assertEqual(alignment.coordinates[0, 0], 3014842)
+        self.assertEqual(alignment.coordinates[0, -1], 3015028)
+        self.assertAlmostEqual(alignment.score, 320596.0)
+        self.assertRaises(StopIteration, next, selected_alignments)
 
 
 if __name__ == "__main__":

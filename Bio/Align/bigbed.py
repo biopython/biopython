@@ -709,9 +709,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Failed to find %s in alignments" % chromosome)
             if start is None:
-                start = 0
-            if end is None:
-                end = len(target)
+                if end is None:
+                    start = 0
+                    end = len(target)
+                else:
+                    raise ValueError("end must be None if start is None")
+            elif end is None:
+                end = start + 1
         data = self._search_index(stream, chromIx, start, end)
         for chunk in data:
             alignment = self._create_alignment(chunk)
