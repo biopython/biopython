@@ -68,27 +68,19 @@ _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
 _between_location = r"\d+\^\d+"
 
 _within_position = r"\(\d+\.\d+\)"
-_re_within_position = re.compile(_within_position)
 _within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
     _within_position,
     _within_position,
 )
-assert _re_within_position.match("(3.9)")
 assert re.compile(_within_location).match("(3.9)..10")
 assert re.compile(_within_location).match("26..(30.33)")
 assert re.compile(_within_location).match("(13.19)..(20.28)")
 
 _oneof_position = r"one\-of\(\d+(,\d+)+\)"
-_re_oneof_position = re.compile(_oneof_position)
 _oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
-assert _re_oneof_position.match("one-of(6,9)")
 assert re.compile(_oneof_location).match("one-of(6,9)..101")
 assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
 assert re.compile(_oneof_location).match("6..one-of(101,104)")
-
-assert not _re_oneof_position.match("one-of(3)")
-assert _re_oneof_position.match("one-of(3,6)")
-assert _re_oneof_position.match("one-of(3,6,9)")
 
 
 _simple_location = r"\d+\.\.\d+"
@@ -180,95 +172,6 @@ assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
 
 
-def _pos(pos_str, offset=0):
-    """Build a Position object (PRIVATE).
-
-    For an end position, leave offset as zero (default):
-
-    >>> _pos("5")
-    ExactPosition(5)
-
-    For a start position, set offset to minus one (for Python counting):
-
-    >>> _pos("5", -1)
-    ExactPosition(4)
-
-    This also covers fuzzy positions:
-
-    >>> p = _pos("<5")
-    >>> p
-    BeforePosition(5)
-    >>> print(p)
-    <5
-    >>> int(p)
-    5
-
-    >>> _pos(">5")
-    AfterPosition(5)
-
-    By default assumes an end position, so note the integer behaviour:
-
-    >>> p = _pos("one-of(5,8,11)")
-    >>> p
-    OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])
-    >>> print(p)
-    one-of(5,8,11)
-    >>> int(p)
-    11
-
-    >>> _pos("(8.10)")
-    WithinPosition(10, left=8, right=10)
-
-    Fuzzy start positions:
-
-    >>> p = _pos("<5", -1)
-    >>> p
-    BeforePosition(4)
-    >>> print(p)
-    <4
-    >>> int(p)
-    4
-
-    Notice how the integer behaviour changes too!
-
-    >>> p = _pos("one-of(5,8,11)", -1)
-    >>> p
-    OneOfPosition(4, choices=[ExactPosition(4), ExactPosition(7), ExactPosition(10)])
-    >>> print(p)
-    one-of(4,7,10)
-    >>> int(p)
-    4
-
-    """
-    if pos_str.startswith("<"):
-        return SeqFeature.BeforePosition(int(pos_str[1:]) + offset)
-    elif pos_str.startswith(">"):
-        return SeqFeature.AfterPosition(int(pos_str[1:]) + offset)
-    elif _re_within_position.match(pos_str):
-        s, e = pos_str[1:-1].split(".")
-        s = int(s) + offset
-        e = int(e) + offset
-        if offset == -1:
-            default = s
-        else:
-            default = e
-        return SeqFeature.WithinPosition(default, left=s, right=e)
-    elif _re_oneof_position.match(pos_str):
-        assert pos_str.startswith("one-of(")
-        assert pos_str[-1] == ")"
-        parts = [
-            SeqFeature.ExactPosition(int(pos) + offset)
-            for pos in pos_str[7:-1].split(",")
-        ]
-        if offset == -1:
-            default = min(int(pos) for pos in parts)
-        else:
-            default = max(int(pos) for pos in parts)
-        return SeqFeature.OneOfPosition(default, choices=parts)
-    else:
-        return SeqFeature.ExactPosition(int(pos_str) + offset)
-
-
 def _loc(loc_str, expected_seq_length, strand, is_circular=False):
     """Make FeatureLocation from non-compound non-complement location (PRIVATE).
 
@@ -333,9 +236,9 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
             # is just "3".  Similarly, "2^5" is just "3..4"
             s, e = loc_str.split("^")
             if int(s) + 1 == int(e):
-                pos = _pos(s)
+                pos = SeqFeature.Position.fromstring(s)
             elif int(s) == expected_seq_length and e == "1":
-                pos = _pos(s)
+                pos = SeqFeature.Position.fromstring(s)
             else:
                 raise ValueError(f"Invalid between location {loc_str!r}") from None
             return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
@@ -345,8 +248,8 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
             e = loc_str
 
     # Attempt to fix features that span the origin
-    s_pos = _pos(s, -1)
-    e_pos = _pos(e)
+    s_pos = SeqFeature.Position.fromstring(s, -1)
+    e_pos = SeqFeature.Position.fromstring(e)
     if int(s_pos) > int(e_pos):
         if not is_circular:
             warnings.warn(
@@ -373,7 +276,10 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
         else:
             return f1 + f2
 
-    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
+    start = SeqFeature.Position.fromstring(s, -1)
+    end = SeqFeature.Position.fromstring(e)
+
+    return SeqFeature.FeatureLocation(start, end, strand, ref=ref)
 
 
 def _split_compound_loc(compound_loc):

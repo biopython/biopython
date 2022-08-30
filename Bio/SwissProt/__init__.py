@@ -20,15 +20,7 @@ Functions:
 import io
 import re
 
-from Bio.SeqFeature import (
-    SeqFeature,
-    FeatureLocation,
-    ExactPosition,
-    BeforePosition,
-    AfterPosition,
-    UncertainPosition,
-    UnknownPosition,
-)
+from Bio.SeqFeature import SeqFeature, FeatureLocation, Position
 
 
 class SwissProtParserError(ValueError):
@@ -725,31 +717,11 @@ def _read_ft(record, line):
             isoform_id = None
             description = line[34:75].rstrip()
             qualifiers = {"description": description}
-        if from_res == "?":
-            from_res = UnknownPosition()
-        elif from_res.startswith("?"):
-            position = int(from_res[1:]) - 1  # Python zero-based counting
-            from_res = UncertainPosition(position)
-        elif from_res.startswith("<"):
-            position = int(from_res[1:]) - 1  # Python zero-based counting
-            from_res = BeforePosition(position)
-        else:
-            position = int(from_res) - 1  # Python zero-based counting
-            from_res = ExactPosition(position)
+        from_res = Position.fromstring(from_res, -1)
         if to_res == "":
-            position = from_res + 1
-            to_res = ExactPosition(position)
-        elif to_res == "?":
-            to_res = UnknownPosition()
-        elif to_res.startswith("?"):
-            position = int(to_res[1:])
-            to_res = UncertainPosition(position)
-        elif to_res.startswith(">"):
-            position = int(to_res[1:])
-            to_res = AfterPosition(position)
+            to_res = from_res + 1
         else:
-            position = int(to_res)
-            to_res = ExactPosition(position)
+            to_res = Position.fromstring(to_res)
         location = FeatureLocation(from_res, to_res, ref=isoform_id)
         feature = FeatureTable(
             location=location, type=name, id=None, qualifiers=qualifiers
