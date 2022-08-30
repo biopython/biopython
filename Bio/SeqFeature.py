@@ -1632,6 +1632,7 @@ class Position(ABC):
         )
         return 0
 
+    @staticmethod
     def fromstring(text, offset=0):
         """Build a Position object from the text string.
 
