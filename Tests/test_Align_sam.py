@@ -12,11 +12,7 @@ from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import sam, psl
+from Bio import Align
 
 
 try:
@@ -512,15 +508,15 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_reading(self):
         """Test parsing dna_rna.sam."""
         path = "Blat/dna_rna.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         self.check_alignments(alignments)
 
     def test_reading_psl_comparising(self):
         """Test parsing dna_rna.sam and comparing to dna_rna.psl."""
         path = "Blat/dna_rna.sam"
-        sam_alignments = sam.AlignmentIterator(path)
+        sam_alignments = Align.parse(path, "sam")
         path = "Blat/dna_rna.psl"
-        psl_alignments = psl.AlignmentIterator(path)
+        psl_alignments = Align.parse(path, "psl")
         for sam_alignment, psl_alignment in zip(sam_alignments, psl_alignments):
             self.assertEqual(sam_alignment.target.id, psl_alignment.target.id)
             self.assertEqual(sam_alignment.query.id, psl_alignment.query.id)
@@ -531,13 +527,12 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_writing(self):
         """Test writing the alignments in dna_rna.sam."""
         path = "Blat/dna_rna.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream, md=True)
-        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        n = Align.write(alignments, stream, "sam", md=True)
         self.assertEqual(n, 4)
         stream.seek(0)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         self.check_alignments(alignments)
         stream.close()
 
@@ -1087,19 +1082,18 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.sam."""
         path = "Blat/psl_34_001.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         self.check_alignments_psl_34_001(alignments)
 
     def test_writing_psl_34_001(self):
         """Test writing the alignments in psl_34_001.sam."""
         path = "Blat/psl_34_001.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 22)
         stream.seek(0)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         self.check_alignments_psl_34_001(alignments)
         stream.close()
 
@@ -1236,19 +1230,18 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.sam."""
         path = "Blat/psl_34_003.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         self.check_alignments_psl_34_003(alignments)
 
     def test_writing_psl_34_003(self):
         """Test writing the alignments in psl_34_003.sam."""
         path = "Blat/psl_34_003.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 3)
         stream.seek(0)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         self.check_alignments_psl_34_003(alignments)
         stream.close()
 
@@ -1721,19 +1714,18 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.sam."""
         path = "Blat/psl_34_004.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         self.check_alignments_psl_34_004(alignments)
 
     def test_writing_psl_34_004(self):
         """Test writing the alignments in psl_34_004.sam."""
         path = "Blat/psl_34_004.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=19, maxcount=19)
+        n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 19)
         stream.seek(0)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         self.check_alignments_psl_34_004(alignments)
         stream.close()
 
@@ -2268,26 +2260,25 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.sam."""
         path = "Blat/psl_34_005.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         self.check_alignments_psl_34_005(alignments)
 
     def test_writing_psl_34_005(self):
         """Test writing the alignments in psl_34_005.sam."""
         path = "Blat/psl_34_005.sam"
-        alignments = sam.AlignmentIterator(path)
+        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        writer = sam.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 22)
         stream.seek(0)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         self.check_alignments_psl_34_005(alignments)
         stream.close()
 
 
 class TestAlign_sambam(unittest.TestCase):
     def test_ex1(self):
-        alignments = sam.AlignmentIterator("SamBam/ex1.sam")
+        alignments = Align.parse("SamBam/ex1.sam", "sam")
         n = 0
         for alignment in alignments:
             n += 1
@@ -2320,7 +2311,7 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.annotations["H1"], 1)
 
     def test_ex1_header(self):
-        alignments = sam.AlignmentIterator("SamBam/ex1_header.sam")
+        alignments = Align.parse("SamBam/ex1_header.sam", "sam")
         self.assertEqual(alignments.metadata["HD"], {"VN": "1.3", "SO": "coordinate"})
         self.assertEqual(len(alignments.targets), 2)
         self.assertEqual(alignments.targets[0].id, "chr1")
@@ -2360,7 +2351,7 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.annotations["H1"], 1)
 
     def test_sam1(self):
-        alignments = sam.AlignmentIterator("SamBam/sam1.sam")
+        alignments = Align.parse("SamBam/sam1.sam", "sam")
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "1")
         self.assertEqual(len(alignments.targets[0].seq), 239940)
@@ -2393,7 +2384,7 @@ class TestAlign_sambam(unittest.TestCase):
         )
 
     def test_sam2(self):
-        alignments = sam.AlignmentIterator("SamBam/sam2.sam")
+        alignments = Align.parse("SamBam/sam2.sam", "sam")
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "1")
         self.assertEqual(len(alignments.targets[0].seq), 239940)
@@ -2609,7 +2600,7 @@ AAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2639,7 +2630,7 @@ AAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "8D6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2669,7 +2660,7 @@ GGGGAAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "8D6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2701,7 +2692,7 @@ AAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "8I6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2733,7 +2724,7 @@ GGGG--------CCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "8I6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2765,7 +2756,7 @@ AAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "8S6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2797,7 +2788,7 @@ GGGG--------CCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "4S8D6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2829,7 +2820,7 @@ GGGG--------CCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "4I8D6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2861,7 +2852,7 @@ AAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "4S6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2893,7 +2884,7 @@ GGGG--------CCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "4D8I6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -2925,7 +2916,7 @@ GGGGAAAAAAAACCCCCC
         cigar = fields[5]
         self.assertEqual(cigar, "4S8I6M")
         stream = StringIO(line)
-        alignments = sam.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "sam")
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))

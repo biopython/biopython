@@ -5,14 +5,10 @@
 # as part of this package.
 """Tests for Bio.Align.nexus module."""
 import unittest
-import warnings
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
+from Bio import Align
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.nexus import AlignmentIterator, AlignmentWriter
 
 try:
     import numpy
@@ -26,16 +22,15 @@ except ImportError:
 
 class TestNexusReading(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "nexus")
         stream = StringIO()
-        writer = AlignmentWriter(stream)
-        n = writer.write_file(alignments)
+        n = Align.write(alignments, stream, "nexus")
         self.assertEqual(n, 1)
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "nexus")
         alignments = list(alignments)
         alignment = alignments[0]
         stream.seek(0)
-        saved_alignments = AlignmentIterator(stream)
+        saved_alignments = Align.parse(stream, "nexus")
         saved_alignments = list(saved_alignments)
         self.assertEqual(len(alignments), len(saved_alignments))
         saved_alignment = saved_alignments[0]
@@ -52,7 +47,7 @@ class TestNexusReading(unittest.TestCase):
 
     def test_nexus1(self):
         path = "Nexus/test_Nexus_input.nex"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "nexus")
         alignment = next(alignments)
         self.assertEqual(len(alignment), 9)
         self.assertEqual(alignment.shape, (9, 46))
@@ -153,7 +148,7 @@ class TestNexusReading(unittest.TestCase):
 
     def test_nexus2(self):
         path = "Nexus/codonposset.nex"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "nexus")
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 22))
@@ -179,7 +174,7 @@ class TestNexusBasic(unittest.TestCase):
 
         stream = io.StringIO()
         with self.assertRaisesRegex(ValueError, "Empty file."):
-            AlignmentIterator(stream)
+            Align.parse(stream, "nexus")
 
 
 if __name__ == "__main__":

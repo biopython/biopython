@@ -19,24 +19,12 @@ You are expected to use this module via the Bio.Align functions.
 """
 
 import numpy
-import struct
-import zlib
-from collections import namedtuple
 
 
 from Bio.Align import Alignment
 from Bio.Align import bigbed
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.bigpsl is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):

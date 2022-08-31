@@ -16,16 +16,6 @@ from io import StringIO
 
 
 from Bio.Align import interfaces, bigbed, maf
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.bigmaf is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):

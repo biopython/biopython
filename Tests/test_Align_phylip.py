@@ -5,16 +5,10 @@
 # as part of this package.
 """Tests for Bio.Align.phylip module."""
 import unittest
-import warnings
 
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.phylip import AlignmentIterator
-    from Bio.Align.phylip import AlignmentWriter
+from Bio import Align
 
 
 try:
@@ -29,15 +23,14 @@ except ImportError:
 
 class TestPhylipReading(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "phylip")
         stream = StringIO()
-        writer = AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignments, stream, "phylip")
         self.assertEqual(n, 1)
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "phylip")
         alignment = next(alignments)
         stream.seek(0)
-        saved_alignments = AlignmentIterator(stream)
+        saved_alignments = Align.parse(stream, "phylip")
         saved_alignment = next(saved_alignments)
         with self.assertRaises(StopIteration):
             next(saved_alignments)
@@ -55,7 +48,7 @@ class TestPhylipReading(unittest.TestCase):
     def test_one(self):
         path = "Phylip/one.dat"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "phylip")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -528,7 +521,7 @@ class TestPhylipReading(unittest.TestCase):
         # derived from http://atgc.lirmm.fr/phyml/usersguide.html
         for path in paths:
             with open(path) as stream:
-                alignments = AlignmentIterator(stream)
+                alignments = Align.parse(stream, "phylip")
                 alignment = next(alignments)
                 with self.assertRaises(StopIteration):
                     next(alignments)
@@ -596,7 +589,7 @@ class TestPhylipReading(unittest.TestCase):
         # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         # Note the lack of any white space between names 2 and 3 and their seqs.
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "phylip")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -643,7 +636,7 @@ class TestPhylipReading(unittest.TestCase):
         # http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         for path in paths:
             with open(path) as stream:
-                alignments = AlignmentIterator(stream)
+                alignments = Align.parse(stream, "phylip")
                 alignment = next(alignments)
                 with self.assertRaises(StopIteration):
                     next(alignments)

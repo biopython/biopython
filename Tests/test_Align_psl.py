@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Align.psl module."""
 import unittest
-import warnings
 from io import StringIO
 
 
@@ -13,11 +12,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import psl
+from Bio import Align
 
 
 try:
@@ -54,7 +49,7 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_reading(self):
         """Test parsing dna_rna.psl."""
         path = "Blat/dna_rna.psl"
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
@@ -287,10 +282,9 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 4)
         stream.seek(0)
         written_data = stream.read()
@@ -303,7 +297,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         # from the sequence data and the alignment, and store those values in
         # the PSL file.
         alignments = []
-        for alignment in psl.AlignmentIterator(path):
+        for alignment in Align.parse(path, "psl"):
             del alignment.matches
             del alignment.misMatches
             del alignment.repMatches
@@ -313,8 +307,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignment.query.seq = self.rna[alignment.sequences[1].id]
             alignments.append(alignment)
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream, mask="lower")
-        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        n = Align.write(alignments, stream, "psl", mask="lower")
         self.assertEqual(n, 4)
         stream.seek(0)
         written_data = stream.read()
@@ -337,7 +330,7 @@ class TestAlign_dna(unittest.TestCase):
     def check_reading_psl_34_001(self, fmt):
         """Check parsing psl_34_001.psl or pslx_34_001.pslx."""
         path = "Blat/%s_34_001.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -1075,10 +1068,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_001.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -1094,7 +1086,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def check_reading_psl_34_002(self, path):
         """Check parsing psl_34_002.psl or pslx_34_002.pslx."""
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1103,10 +1095,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_002.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=0, maxcount=0)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 0)
         stream.seek(0)
         written_data = stream.read()
@@ -1121,7 +1112,7 @@ class TestAlign_dna(unittest.TestCase):
     def check_reading_psl_34_003(self, fmt):
         """Check parsing psl_34_003.psl or pslx_34_003.pslx."""
         path = "Blat/%s_34_003.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -1225,10 +1216,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_003.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -1243,7 +1233,7 @@ class TestAlign_dna(unittest.TestCase):
     def check_reading_psl_34_004(self, fmt):
         """Check parsing psl_34_004.psl or pslx_34_004.pslx."""
         path = "Blat/%s_34_004.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
@@ -1886,10 +1876,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_004.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=19, maxcount=19)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 19)
         stream.seek(0)
         written_data = stream.read()
@@ -1904,7 +1893,7 @@ class TestAlign_dna(unittest.TestCase):
     def check_reading_psl_34_005(self, fmt):
         """Check parsing psl_34_005.psl or pslx_34_005.pslx."""
         path = "Blat/%s_34_005.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2640,10 +2629,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_005.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream, header=False)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "psl", header=False)
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -2660,7 +2648,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
     def check_reading_psl_35_001(self, fmt):
         """Check parsing psl_35_001.psl or pslx_35_001.pslx."""
         path = "Blat/%s_35_001.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 52)
@@ -3042,10 +3030,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
         path = "Blat/psl_35_001.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=8, maxcount=8)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 8)
         stream.seek(0)
         written_data = stream.read()
@@ -3070,7 +3057,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
         # Load the protein sequence:
         protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
             records = SeqIO.parse("Blat/hg38.fa", "fasta")
             for record in records:
@@ -3187,13 +3174,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 )
         # Write the protein alignments to a PSL file:
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream, wildcard="X")
-        n = writer.write_file(protein_alignments, mincount=8, maxcount=8)
+        n = Align.write(protein_alignments, stream, "psl", wildcard="X")
         self.assertEqual(n, 8)
         # Read the alignments back in:
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream.seek(0)
-        protein_alignments = psl.AlignmentIterator(stream)
+        protein_alignments = Align.parse(stream, "psl")
         for alignment, protein_alignment in zip(alignments, protein_alignments):
             # Confirm that the recalculated values for matches, misMatches,
             # repMatches, and nCount are correct:
@@ -3221,7 +3207,7 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
     def check_reading_psl_35_002(self, fmt):
         """Check parsing psl_35_002.psl or pslx_35_002.pslx."""
         path = "Blat/%s_35_002.%s" % (fmt, fmt)
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 210)
@@ -3420,10 +3406,9 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         path = "Blat/psl_35_002.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -3449,7 +3434,7 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
         # Load the protein sequence:
         protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
             records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
             for record in records:
@@ -3532,13 +3517,12 @@ MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQDV
                 )
         # Write the protein alignments to a PSL file:
         stream = StringIO()
-        writer = psl.AlignmentWriter(stream, wildcard="X")
-        n = writer.write_file(protein_alignments, mincount=3, maxcount=3)
+        n = Align.write(protein_alignments, stream, "psl", wildcard="X")
         self.assertEqual(n, 3)
         # Read the alignments back in:
-        alignments = psl.AlignmentIterator(path)
+        alignments = Align.parse(path, "psl")
         stream.seek(0)
-        protein_alignments = psl.AlignmentIterator(stream)
+        protein_alignments = Align.parse(stream, "psl")
         for alignment, protein_alignment in zip(alignments, protein_alignments):
             # Confirm that the recalculated values for matches, misMatches,
             # repMatches, and nCount are correct:

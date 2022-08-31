@@ -177,55 +177,28 @@ class AlignmentWriter:
         # You MUST implement this method in the subclass. #
         ###################################################
 
-    def write_alignments(self, alignments, maxcount=None):
+    def write_alignments(self, alignments):
         """Write alignments to the output file, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
-        maxcount - The maximum number of alignments allowed by the
-        file format, or None if there is no maximum.
         """
         count = 0
-        if maxcount is None:
-            for alignment in alignments:
-                line = self.format_alignment(alignment)
-                self.stream.write(line)
-                count += 1
-        else:
-            for alignment in alignments:
-                if count == maxcount:
-                    if maxcount == 1:
-                        raise ValueError("More than one alignment found")
-                    else:
-                        raise ValueError(
-                            "Number of alignments is larger than %d" % maxcount
-                        )
-                line = self.format_alignment(alignment)
-                self.stream.write(line)
-                count += 1
+        for alignment in alignments:
+            line = self.format_alignment(alignment)
+            self.stream.write(line)
+            count += 1
         return count
 
-    def write_file(self, alignments, mincount=0, maxcount=None):
+    def write_file(self, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
         try:
             self.write_header(alignments)
-            count = self.write_alignments(alignments, maxcount)
+            count = self.write_alignments(alignments)
             self.write_footer()
         finally:
             if self.stream is not self._target:
                 self.stream.close()
-        if count < mincount:
-            if mincount == 1:  # Common case
-                raise ValueError("Must have one alignment")
-            elif mincount == maxcount:
-                raise ValueError(
-                    "Number of alignments is %d (expected %d)" % (count, mincount)
-                )
-            else:
-                raise ValueError(
-                    "Number of alignments is %d (expected at least %d)"
-                    % (count, mincount)
-                )
         return count

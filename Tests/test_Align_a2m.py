@@ -5,29 +5,22 @@
 # as part of this package.
 """Tests for Bio.Align.a2m module."""
 import unittest
-import warnings
 
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.a2m import AlignmentIterator
-    from Bio.Align.a2m import AlignmentWriter
+from Bio import Align
 
 
 class TestA2MReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "a2m")
         stream = StringIO()
-        writer = AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignments, stream, "a2m")
         self.assertEqual(n, 1)
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "a2m")
         alignment = next(alignments)
         stream.seek(0)
-        saved_alignments = AlignmentIterator(stream)
+        saved_alignments = Align.parse(stream, "a2m")
         saved_alignment = next(saved_alignments)
         with self.assertRaises(StopIteration):
             next(saved_alignments)
@@ -42,7 +35,7 @@ class TestA2MReadingWriting(unittest.TestCase):
     def test_clustalw(self):
         path = "Clustalw/clustalw.a2m"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "a2m")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -81,7 +74,7 @@ class TestA2MReadingWriting(unittest.TestCase):
         # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
         # and converted to A2M format.
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "a2m")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -172,7 +165,7 @@ class TestA2MReadingWriting(unittest.TestCase):
     def test_muscle(self):
         path = "Clustalw/muscle.a2m"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "a2m")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -217,7 +210,7 @@ class TestA2MReadingWriting(unittest.TestCase):
     def test_kalign(self):
         path = "Clustalw/kalign.a2m"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "a2m")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -243,7 +236,7 @@ class TestA2MReadingWriting(unittest.TestCase):
         # example taken from the PROBCONS documentation,
         # and converted to aligned A2M format.
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "a2m")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -306,7 +299,7 @@ class TestA2MReadingWriting(unittest.TestCase):
     def test_empty(self):
         """Checking empty file."""
         stream = StringIO()
-        alignments = AlignmentIterator(stream)
+        alignments = Align.parse(stream, "a2m")
         with self.assertRaises(ValueError):
             next(alignments)
 

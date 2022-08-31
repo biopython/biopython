@@ -5,19 +5,15 @@
 """Tests for Align.bed module."""
 import unittest
 import os
-import warnings
 from io import StringIO
 
 
+from Bio import Align
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bed
 
 
 try:
@@ -54,7 +50,7 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_reading(self):
         """Test parsing dna_rna.bed."""
         path = "Blat/dna_rna.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -190,10 +186,9 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=4, maxcount=4)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 4)
         stream.seek(0)
         written_data = stream.read()
@@ -205,7 +200,7 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.bed."""
         path = "Blat/psl_34_001.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -653,10 +648,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_001.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -666,7 +660,7 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.bed."""
         path = "Blat/psl_34_003.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -734,10 +728,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_003.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -747,7 +740,7 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.bed."""
         path = "Blat/psl_34_004.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1135,10 +1128,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_004.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=19, maxcount=19)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 19)
         stream.seek(0)
         written_data = stream.read()
@@ -1148,7 +1140,7 @@ class TestAlign_dna(unittest.TestCase):
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.bed."""
         path = "Blat/psl_34_005.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -1595,10 +1587,9 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_005.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=22, maxcount=22)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -1610,7 +1601,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.bed."""
         path = "Blat/psl_35_001.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1770,10 +1761,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
         path = "Blat/psl_35_001.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=8, maxcount=8)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 8)
         stream.seek(0)
         written_data = stream.read()
@@ -1783,7 +1773,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.bed."""
         path = "Blat/psl_35_002.bed"
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 972)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1850,10 +1840,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
         path = "Blat/psl_35_002.bed"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = bed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bed")
         stream = StringIO()
-        writer = bed.AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=3, maxcount=3)
+        n = Align.write(alignments, stream, "bed")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -1867,7 +1856,7 @@ class TestAlign_bed12(unittest.TestCase):
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.bed" % bedN
             path = os.path.join("Blat", filename)
-            alignments = bed.AlignmentIterator(path)
+            alignments = Align.parse(path, "bed")
             alignment = next(alignments)
             if bedN >= 5:
                 self.assertEqual(alignment.score, 960, msg=filename)
@@ -1984,10 +1973,9 @@ class TestAlign_bed12(unittest.TestCase):
             path = os.path.join("Blat", filename)
             with open(path) as stream:
                 original_data = stream.read()
-            alignments = bed.AlignmentIterator(path)
+            alignments = Align.parse(path, "bed")
             stream = StringIO()
-            writer = bed.AlignmentWriter(stream, bedN=bedN)
-            n = writer.write_file(alignments, mincount=2, maxcount=2)
+            n = Align.write(alignments, stream, "bed", bedN=bedN)
             self.assertEqual(n, 2, msg=filename)
             stream.seek(0)
             written_data = stream.read()

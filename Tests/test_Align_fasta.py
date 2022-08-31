@@ -5,29 +5,22 @@
 # as part of this package.
 """Tests for Bio.Align.fasta module."""
 import unittest
-import warnings
 
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.fasta import AlignmentIterator
-    from Bio.Align.fasta import AlignmentWriter
+from Bio import Align
 
 
 class TestFASTAReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "fasta")
         stream = StringIO()
-        writer = AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignments, stream, "fasta")
         self.assertEqual(n, 1)
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "fasta")
         alignment = next(alignments)
         stream.seek(0)
-        saved_alignments = AlignmentIterator(stream)
+        saved_alignments = Align.parse(stream, "fasta")
         saved_alignment = next(saved_alignments)
         with self.assertRaises(StopIteration):
             next(saved_alignments)
@@ -42,7 +35,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
     def test_clustalw(self):
         path = "Clustalw/clustalw.fa"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "fasta")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -77,7 +70,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
         # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
         # and converted to aligned FASTA format.
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "fasta")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -164,7 +157,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
     def test_muscle(self):
         path = "Clustalw/muscle.fa"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "fasta")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -205,7 +198,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
     def test_kalign(self):
         path = "Clustalw/kalign.fa"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "fasta")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -227,7 +220,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
         # example taken from the PROBCONS documentation,
         # and converted to aligned FASTA format.
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "fasta")
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
@@ -286,7 +279,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
     def test_empty(self):
         """Checking empty file."""
         stream = StringIO()
-        alignments = AlignmentIterator(stream)
+        alignments = Align.parse(stream, "fasta")
         with self.assertRaises(ValueError):
             next(alignments)
 

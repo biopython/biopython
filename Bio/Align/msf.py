@@ -7,27 +7,19 @@
 # package.
 """Bio.Align support for GCG MSF format.
 
-The file format was produced by the GCG PileUp and and LocalPileUp tools,
-and later tools such as T-COFFEE and MUSCLE support it as an optional
-output format.
+The file format was produced by the GCG PileUp and LocalPileUp tools, and later
+tools such as T-COFFEE and MUSCLE support it as an optional output format.
 
 You are expected to use this module via the Bio.Align functions.
 """
+import warnings
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from Bio import BiopythonParserWarning
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.bed is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
