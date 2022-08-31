@@ -1693,6 +1693,10 @@ class Position(ABC):
         4
 
         """
+        if offset != 0 and offset != -1:
+            raise ValueError(
+                "To convert one-based indices to zero-based indices, offset must be either 0 (for end positions) or -1 (for start positions)."
+            )
         if text == "?":
             return UnknownPosition()
         if text.startswith("?"):
