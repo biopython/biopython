@@ -38,15 +38,6 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.sam is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -160,7 +151,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             rName = "target"
         else:
             target = target.seq
-        tSize = len(target)
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand
@@ -267,7 +257,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         # insertion to the reference
                         qStart = qEnd
                     elif qCount == 0:
-                        length = tCount
                         if True:
                             # deletion from the reference
                             if number:
@@ -297,7 +286,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         # insertion to the reference
                         qStart = qEnd
                     elif qCount == 0:
-                        length = tCount
                         if operation != ord("N"):
                             # deletion from the reference
                             if number:
@@ -351,14 +339,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif isinstance(value, numpy.array):
                     datatype = "B"
                     if numpy.issubdtype(value.dtype, numpy.integer):
-                        letter = "i"
+                        pass
                     elif numpy.issubdtype(value.dtype, float):
-                        letter = "f"
+                        pass
                     else:
                         raise ValueError(
                             f"Array of incompatible data type {value.dtype} in annotation '{key}'"
                         )
-                    value = ",".join(map(str, value))
+                    value = "".join(map(str, value))
                 field = f"{key}:{datatype}:{value}"
                 fields.append(field)
         line = "\t".join(fields) + "\n"
@@ -487,7 +475,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             md = None
             score = None
             annotations = {}
-            column_annotations = {}
             for field in fields[11:]:
                 tag, datatype, value = field.split(":", 2)
                 if tag == "AS":

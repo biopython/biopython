@@ -9,11 +9,7 @@ import warnings
 
 
 from Bio import BiopythonParserWarning
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.msf import AlignmentIterator
+from Bio import Align
 
 
 try:
@@ -29,7 +25,7 @@ except ImportError:
 class TestMSF(unittest.TestCase):
     def test_protein1(self):
         path = "msf/W_prot.msf"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "msf")
         alignment = next(alignments)
         self.assertEqual(len(alignment), 11)
         self.assertEqual(alignment.shape, (11, 99))
@@ -159,7 +155,7 @@ class TestMSF(unittest.TestCase):
     def test_protein2(self):
         path = "msf/DOA_prot.msf"
 
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "msf")
         with warnings.catch_warnings(record=True) as w:
             alignment = next(alignments)
         self.assertEqual(len(w), 1)

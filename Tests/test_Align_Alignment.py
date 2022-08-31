@@ -1114,7 +1114,7 @@ class TestMultipleAlignment(unittest.TestCase):
 
         path = "Clustalw/opuntia.aln"
         with open(path) as stream:
-            alignments = clustal.AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.alignment = next(alignments)
 
     def tearDown(self):

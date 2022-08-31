@@ -5,15 +5,10 @@
 # as part of this package.
 """Tests for Bio.Align.emboss module."""
 import unittest
-import warnings
 
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.emboss import AlignmentIterator
+from Bio import Align
 
 
 try:
@@ -31,7 +26,7 @@ class TestEmboss(unittest.TestCase):
         # Alignment file obtained from EMBOSS:
         # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
         path = "Emboss/water.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "water")
         self.assertEqual(alignments.metadata["Rundate"], "Wed Jan 16 17:23:19 2002")
         self.assertEqual(alignments.metadata["Report_file"], "stdout")
@@ -79,7 +74,7 @@ class TestEmboss(unittest.TestCase):
     def test_local_water2(self):
         """Test parsing a local alignment."""
         path = "Emboss/water2.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "water")
         self.assertEqual(alignments.metadata["Rundate"], "Sat Apr 04 2009 22:08:44")
         self.assertEqual(
@@ -121,7 +116,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_matcher_simple(self):
         path = "Emboss/matcher_simple.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "matcher")
         self.assertEqual(alignments.metadata["Rundate"], "Tue  8 Dec 2009 11:48:35")
         self.assertEqual(
@@ -165,7 +160,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_matcher_pair(self):
         path = "Emboss/matcher_pair.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "matcher")
         self.assertEqual(alignments.metadata["Rundate"], "Tue  8 Dec 2009 12:01:34")
         self.assertEqual(
@@ -351,7 +346,7 @@ class TestEmboss(unittest.TestCase):
         # if we include 3 sequences to align against, and we use the -nobrief
         # command line option.
         path = "Emboss/needle_nobrief_multiple.pair"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "needle")
         self.assertEqual(alignments.metadata["Rundate"], "Fri 23 Jul 2021 22:45:41")
         self.assertEqual(
@@ -493,7 +488,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_pair_example2(self):
         path = "Emboss/needle.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "needle")
         self.assertEqual(alignments.metadata["Rundate"], "Sun 27 Apr 2007 17:20:35")
         self.assertEqual(
@@ -710,7 +705,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_pair_example3(self):
         path = "Emboss/needle_overhang.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "needle")
         self.assertEqual(alignments.metadata["Rundate"], "Mon 14 Jul 2008 11:45:42")
         self.assertEqual(
@@ -774,7 +769,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_needle_asis(self):
         path = "Emboss/needle_asis.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "needle")
         self.assertEqual(alignments.metadata["Rundate"], "Mon 14 Jul 2008 11:37:15")
         self.assertEqual(
@@ -862,7 +857,7 @@ class TestEmboss(unittest.TestCase):
 
     def test_pair_aln_full_blank_line(self):
         path = "Emboss/emboss_pair_aln_full_blank_line.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "emboss")
         self.assertEqual(alignments.metadata["Program"], "stretcher")
         self.assertEqual(alignments.metadata["Rundate"], "Tue 15 May 2018 17:01:31")
         self.assertEqual(

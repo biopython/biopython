@@ -4,20 +4,14 @@
 # as part of this package.
 """Tests for Align.bigpsl module."""
 import unittest
-import warnings
 from io import StringIO
 
 
-from Bio.Align import Alignment
+from Bio import Align
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bigpsl
 
 
 try:
@@ -55,7 +49,7 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_reading(self):
         """Test parsing dna_rna.psl.bb."""
         path = "Blat/dna_rna.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -351,7 +345,7 @@ class TestAlign_dna(unittest.TestCase):
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_001.bigPslInput hg19.chrom.sizes psl_34_001.psl.bb
 
         path = "Blat/psl_34_001.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1078,7 +1072,7 @@ table bigPsl
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_003.bigPslInput hg19.chrom.sizes psl_34_003.psl.bb
 
         path = "Blat/psl_34_003.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1221,7 +1215,7 @@ table bigPsl
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_004.bigPslInput hg19.chrom.sizes psl_34_004.psl.bb
 
         path = "Blat/psl_34_004.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1858,7 +1852,7 @@ table bigPsl
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_005.bigPslInput hg19.chrom.sizes psl_34_005.psl.bb
 
         path = "Blat/psl_34_005.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2592,7 +2586,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_001.bigPslInput hg38.chrom.sizes psl_35_001.psl.bb
 
         path = "Blat/psl_35_001.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2887,7 +2881,7 @@ table bigPsl
             sequence = str(record.seq)
             self.dna[name] = Seq({start: sequence}, length=end)
         path = "Blat/psl_35_002.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2999,7 +2993,7 @@ class TestAlign_bigpsl(unittest.TestCase):
     def test_reading_bigpsl(self):
         """Test parsing bigPsl.bb."""
         path = "Blat/bigPsl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -4120,7 +4114,7 @@ class TestAlign_searching(unittest.TestCase):
 
     def test_search_chromosome(self):
         path = "Blat/bigbedtest.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -4161,7 +4155,7 @@ table bigPsl
 
     def test_search_region(self):
         path = "Blat/bigbedtest.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         selected_alignments = alignments.search("chr2", 105, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name5", "name6", "name7"])
@@ -4186,7 +4180,7 @@ table bigPsl
 
     def test_search_position(self):
         path = "Blat/bigbedtest.psl.bb"
-        alignments = bigpsl.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigpsl")
         selected_alignments = alignments.search("chr1", 250)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name3"])
@@ -4194,7 +4188,7 @@ table bigPsl
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
         path = "Blat/bigbedtest.psl.bb"
-        alignments1 = bigpsl.AlignmentIterator(path)
+        alignments1 = Align.parse(path, "bigpsl")
         alignments2 = alignments1.search("chr2")
         alignments3 = alignments1.search("chr2", 110, 1000)
         alignment1 = next(alignments1)

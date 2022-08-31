@@ -34,15 +34,6 @@ from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, ExactPosition, FeatureLocation, CompoundLocation
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.psl is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):

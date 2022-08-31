@@ -8,12 +8,7 @@ import warnings
 from io import StringIO
 
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bigmaf
-
+from Bio import Align
 
 try:
     import numpy
@@ -34,7 +29,7 @@ class TestAlign_reading(unittest.TestCase):
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
 
         path = "MAF/bundle_without_target.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -106,7 +101,7 @@ table bedMaf
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb
 
         path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -6982,7 +6977,7 @@ table bedMaf
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
 
         path = "MAF/ucsc_test.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -7143,7 +7138,7 @@ table bedMaf
 class TestAlign_searching(unittest.TestCase):
     def test_search_chromosome(self):
         path = "MAF/ucsc_test.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         selected_alignments = alignments.search("chr7")
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 27578828)
@@ -7161,7 +7156,7 @@ class TestAlign_searching(unittest.TestCase):
 
     def test_search_region(self):
         path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         self.assertEqual(len(alignments), 48)
         selected_alignments = alignments.search("chr10", 3014000, 3015000)
         alignment = next(selected_alignments)
@@ -7196,7 +7191,7 @@ class TestAlign_searching(unittest.TestCase):
 
     def test_search_position(self):
         path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = bigmaf.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigmaf")
         self.assertEqual(len(alignments), 48)
         selected_alignments = alignments.search("chr10", 3015000)
         alignment = next(selected_alignments)

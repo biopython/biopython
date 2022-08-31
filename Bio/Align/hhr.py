@@ -11,24 +11,10 @@ HHsearch or HHblits in HH-suite.
 
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy
-
-
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-from collections import defaultdict
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.hhr is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

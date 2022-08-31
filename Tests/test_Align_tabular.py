@@ -5,16 +5,11 @@
 # as part of this package.
 """Tests for Bio.Align.tabular module."""
 import unittest
-import warnings
 import os
 
 from Bio.Seq import Seq
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.tabular import AlignmentIterator
+from Bio import Align
 
 
 try:
@@ -42,7 +37,7 @@ class TestFastaProtein(unittest.TestCase):
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CB.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "tabular")
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg",
@@ -468,7 +463,7 @@ class TestFastaProtein(unittest.TestCase):
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CC.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "tabular")
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg",
@@ -908,7 +903,7 @@ class TestFastaNucleotide(unittest.TestCase):
         # fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CB.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "tabular")
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
@@ -1320,7 +1315,7 @@ class TestFastaNucleotide(unittest.TestCase):
         # fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CC.txt"
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "tabular")
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
@@ -1734,7 +1729,7 @@ class TestFastaBasic(unittest.TestCase):
 
         stream = io.StringIO()
         with self.assertRaisesRegex(ValueError, "Empty file."):
-            AlignmentIterator(stream)
+            Align.parse(stream, "tabular")
 
 
 class TestBlast(unittest.TestCase):
@@ -1742,30 +1737,30 @@ class TestBlast(unittest.TestCase):
         path = "Blast/tab_2226_tblastn_001.txt"
         with open(path) as stream:
             with self.assertRaisesRegex(ValueError, "Missing header."):
-                AlignmentIterator(stream)
+                Align.parse(stream, "tabular")
 
     def test_2226_tblastn_002(self):
         path = "Blast/tab_2226_tblastn_002.txt"
         with open(path) as stream:
             with self.assertRaisesRegex(ValueError, "Empty file."):
-                AlignmentIterator(stream)
+                Align.parse(stream, "tabular")
 
     def test_2226_tblastn_003(self):
         path = "Blast/tab_2226_tblastn_003.txt"
         with open(path) as stream:
             with self.assertRaisesRegex(ValueError, "Missing header."):
-                AlignmentIterator(stream)
+                Align.parse(stream, "tabular")
 
     def test_2226_tblastn_004(self):
         path = "Blast/tab_2226_tblastn_004.txt"
         with open(path) as stream:
             with self.assertRaisesRegex(ValueError, "Missing header."):
-                AlignmentIterator(stream)
+                Align.parse(stream, "tabular")
 
     def test_2226_tblastn_005(self):
         path = "Blast/tab_2226_tblastn_005.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["Database"], "db/minirefseq_mrna")
@@ -1940,7 +1935,7 @@ class TestBlast(unittest.TestCase):
     def test_2226_tblastn_007(self):
         path = "Blast/tab_2226_tblastn_007.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["Database"], "db/minirefseq_mrna")
@@ -2001,7 +1996,7 @@ class TestBlast(unittest.TestCase):
     def test_2226_tblastn_008(self):
         path = "Blast/tab_2226_tblastn_008.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["Database"], "db/minirefseq_mrna")
@@ -2139,12 +2134,12 @@ class TestBlast(unittest.TestCase):
         path = "Blast/tab_2226_tblastn_009.txt"
         with open(path) as stream:
             with self.assertRaisesRegex(ValueError, "Missing header."):
-                AlignmentIterator(stream)
+                Align.parse(stream, "tabular")
 
     def test_2226_tblastn_010(self):
         path = "Blast/tab_2226_tblastn_010.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["Database"], "db/minirefseq_mrna")
@@ -2215,7 +2210,7 @@ class TestBlast(unittest.TestCase):
     def test_2226_tblastn_011(self):
         path = "Blast/tab_2226_tblastn_011.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["Database"], "db/minirefseq_mrna")
@@ -2901,7 +2896,7 @@ class TestBlast(unittest.TestCase):
     def test_2226_tblastn_012(self):
         path = "Blast/tab_2226_tblastn_012.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.26+")
             self.assertEqual(alignments.metadata["RID"], "X76FDCG9016")
@@ -3078,7 +3073,7 @@ class TestBlast(unittest.TestCase):
     def test_2228_tblastn_001(self):
         path = "Blast/tab_2228_tblastn_001.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTN")
             self.assertEqual(alignments.metadata["Version"], "2.2.28+")
             self.assertEqual(alignments.metadata["RID"], "M6BMVNA2015")
@@ -3161,7 +3156,7 @@ class TestBlast(unittest.TestCase):
     def test_2228_tblastx_001(self):
         path = "Blast/tab_2228_tblastx_001.txt"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "tabular")
             self.assertEqual(alignments.metadata["Program"], "TBLASTX")
             self.assertEqual(alignments.metadata["Version"], "2.2.28+")
             self.assertEqual(alignments.metadata["RID"], "P06P5RN0015")

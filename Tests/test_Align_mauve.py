@@ -6,17 +6,12 @@
 """Tests for Bio.Align.mauve module."""
 import os
 import unittest
-import warnings
 
 from io import StringIO
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.mauve import AlignmentIterator, AlignmentWriter
+from Bio import Align
 
 
 try:
@@ -42,7 +37,7 @@ class TestCombinedFile(unittest.TestCase):
         path = os.path.join("Mauve", "combined.xmfa")
         saved_alignments = []
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "mauve")
             self.assertEqual(len(alignments.metadata), 3)
             self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
             self.assertEqual(alignments.metadata["File"], "combined.fa")
@@ -213,7 +208,6 @@ class TestCombinedFile(unittest.TestCase):
                     start, end = end, start
                 sequences[index][start:end] = record.seq[start:end]
         # Confirm that the fully defined sequences agree with the Fasta file:
-        filename = "combined.fa"
         for index, sequence in enumerate(sequences):
             sequences[index] = Seq(sequence)
             key = str(index)
@@ -267,11 +261,9 @@ class TestCombinedFile(unittest.TestCase):
         stream = StringIO()
         stream.write(data)
         stream.seek(0)
-        alignments = AlignmentIterator(stream)
+        alignments = Align.parse(stream, "mauve")
         output = StringIO()
-        writer = AlignmentWriter(output)
-
-        n = writer.write_file(alignments)
+        n = Align.write(alignments, output, "mauve")
         self.assertEqual(n, 6)
         output.seek(0)
         self.assertEqual(output.read(), data)
@@ -290,7 +282,7 @@ class TestSeparateFiles(unittest.TestCase):
         path = os.path.join("Mauve", "separate.xmfa")
         saved_alignments = []
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "mauve")
             self.assertEqual(len(alignments.metadata), 2)
             self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
             self.assertEqual(
@@ -460,11 +452,9 @@ class TestSeparateFiles(unittest.TestCase):
         stream = StringIO()
         stream.write(data)
         stream.seek(0)
-        alignments = AlignmentIterator(stream)
+        alignments = Align.parse(stream, "mauve")
         output = StringIO()
-        writer = AlignmentWriter(output)
-
-        n = writer.write_file(alignments)
+        n = Align.write(alignments, output, "mauve")
         self.assertEqual(n, 4)
         output.seek(0)
         self.assertEqual(output.read(), data)
@@ -474,7 +464,7 @@ class TestMauveBasic(unittest.TestCase):
     def test_empty(self):
         stream = StringIO()
         with self.assertRaisesRegex(ValueError, "Empty file."):
-            AlignmentIterator(stream)
+            Align.parse(stream, "mauve")
 
 
 if __name__ == "__main__":

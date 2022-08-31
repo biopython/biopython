@@ -9,7 +9,7 @@ import warnings
 from io import StringIO
 
 
-from Bio.Align import Alignment
+from Bio import Align
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -56,7 +56,7 @@ class TestAlign_dna_rna(unittest.TestCase):
     def test_reading(self):
         """Test parsing dna_rna.bb."""
         path = "Blat/dna_rna.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -223,7 +223,7 @@ class TestAlign_dna(unittest.TestCase):
         # bedToBigBed psl_34_001.sorted.bed hg19.chrom.sizes psl_34_001.bb
 
         path = "Blat/psl_34_001.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -718,7 +718,7 @@ table bed
         # bedToBigBed psl_34_003.sorted.bed hg19.chrom.sizes psl_34_003.bb
 
         path = "Blat/psl_34_003.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -819,7 +819,7 @@ table bed
         # bedToBigBed psl_34_004.sorted.bed hg19.chrom.sizes psl_34_004.bb
 
         path = "Blat/psl_34_004.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1248,7 +1248,7 @@ table bed
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.bb."""
         path = "Blat/psl_34_005.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1744,7 +1744,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
         # bedToBigBed psl_35_001.sorted.bed hg38.chrom.sizes psl_35_001.bb
 
         path = "Blat/psl_35_001.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2080,7 +2080,7 @@ table bed
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.bb" % bedN
             path = os.path.join("Blat", filename)
-            alignments = bigbed.AlignmentIterator(path)
+            alignments = Align.parse(path, "bigbed")
             self.check_autosql(alignments.declaration, bedN)
             self.assertEqual(len(alignments), 2)
             alignment = next(alignments)
@@ -2207,7 +2207,7 @@ class TestAlign_extended_bed(unittest.TestCase):
     def test_reading(self):
         """Test parsing bigbed_extended.bb."""
         path = "Blat/bigbed_extended.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.maxDiff = None
         self.assertEqual(
             str(alignments.declaration),
@@ -2449,7 +2449,7 @@ class TestAlign_searching(unittest.TestCase):
 
     def test_search_chromosome(self):
         path = "Blat/bigbedtest.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2471,7 +2471,7 @@ table bed
 
     def test_search_region(self):
         path = "Blat/bigbedtest.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         selected_alignments = alignments.search("chr2", 105, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name5", "name6", "name7"])
@@ -2496,7 +2496,7 @@ table bed
 
     def test_search_position(self):
         path = "Blat/bigbedtest.bb"
-        alignments = bigbed.AlignmentIterator(path)
+        alignments = Align.parse(path, "bigbed")
         selected_alignments = alignments.search("chr1", 250)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name3"])
@@ -2504,7 +2504,7 @@ table bed
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
         path = "Blat/bigbedtest.bb"
-        alignments1 = bigbed.AlignmentIterator(path)
+        alignments1 = Align.parse(path, "bigbed")
         alignments2 = alignments1.search("chr2")
         alignments3 = alignments1.search("chr2", 110, 1000)
         alignment1 = next(alignments1)

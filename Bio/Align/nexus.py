@@ -15,21 +15,10 @@ sequences as SeqRecord objects.
 """
 from io import StringIO
 
-import Bio
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.nexus is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -46,7 +35,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         alignments - A list or iterator returning Alignment objects
         """
-        count = super().write_file(alignments, mincount=1, maxcount=1)
+        count = super().write_file(alignments)
+        if count != 1:
+            raise ValueError("Expected to write 1 alignment; wrote %d" % count)
         return count
 
     def write_header(self, alignments):

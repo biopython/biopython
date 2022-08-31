@@ -5,14 +5,10 @@
 """Tests for Bio.Align.hhr module."""
 import os
 import unittest
-import warnings
 
 
-from Bio import BiopythonExperimentalWarning
+from Bio import Align
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import hhr
 
 try:
     import numpy
@@ -28,7 +24,7 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 34)
@@ -1762,7 +1758,7 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 32)
 
@@ -1771,7 +1767,7 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhsearch.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 4))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
@@ -3520,7 +3516,7 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 32)
 
@@ -3529,7 +3525,7 @@ class Align_hhr_allx(unittest.TestCase):
     path = os.path.join("HHsuite", "allx.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 1))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
@@ -3982,7 +3978,7 @@ class Align_hhr_allx(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 10)
 
@@ -3991,7 +3987,7 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4p79_hhsearch_server_NOssm.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (110, 1051))
         self.assertAlmostEqual(alignments.metadata["Neff"], 10.453)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
@@ -4484,7 +4480,7 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 8)
 
@@ -4493,7 +4489,7 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4y9h_hhsearch_server_NOssm.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (141, 1242))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.55177)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
@@ -6289,7 +6285,7 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 29)
 
@@ -6298,7 +6294,7 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
     path = os.path.join("HHsuite", "hhpred_9590198.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (157, 584))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.82639)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 64707)
@@ -8202,7 +8198,7 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 34)
 
@@ -8211,7 +8207,7 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
     path = os.path.join("HHsuite", "hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["No_of_seqs"], (149, 573))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.62119)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 16712)
@@ -9079,7 +9075,7 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 16)
 
@@ -9088,7 +9084,7 @@ class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits_emptytable.hhr")
 
     def test_reading(self):
-        alignments = hhr.AlignmentIterator(self.path)
+        alignments = Align.parse(self.path, "hhr")
         self.assertEqual(alignments.metadata["Match_columns"], 171)
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
@@ -9100,7 +9096,7 @@ class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
     def test_length(self):
         """Test getting the number of alignments without parsing the file."""
         stream = open(self.path)
-        alignments = hhr.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "hhr")
         stream.close()
         self.assertEqual(len(alignments), 0)
 
@@ -9110,7 +9106,7 @@ class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
 
     def test_reading(self):
         with self.assertRaises(ValueError) as cm:
-            alignments = hhr.AlignmentIterator(self.path)
+            alignments = Align.parse(self.path, "hhr")
         self.assertEqual(str(cm.exception), "Truncated file.")
 
 

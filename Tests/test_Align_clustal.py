@@ -4,29 +4,22 @@
 # as part of this package.
 """Tests for Bio.Align.clustal module."""
 import unittest
-import warnings
 
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align.clustal import AlignmentIterator
-    from Bio.Align.clustal import AlignmentWriter
+from Bio import Align
 
 
 class TestClustalReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "clustal")
         stream = StringIO()
-        writer = AlignmentWriter(stream)
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignments, stream, "clustal")
         self.assertEqual(n, 1)
-        alignments = AlignmentIterator(path)
+        alignments = Align.parse(path, "clustal")
         alignment = next(alignments)
         stream.seek(0)
-        saved_alignments = AlignmentIterator(stream)
+        saved_alignments = Align.parse(stream, "clustal")
         self.assertEqual(saved_alignments.metadata, alignments.metadata)
         saved_alignment = next(saved_alignments)
         with self.assertRaises(StopIteration):
@@ -43,7 +36,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         path = "Clustalw/clustalw.aln"
         # includes the sequence length on the right hand side of each line
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
             self.assertEqual(alignments.metadata["Version"], "1.81")
             alignment = next(alignments)
@@ -79,7 +72,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         # This example was obtained from
         # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.assertEqual(alignments.metadata["Program"], "MSAPROBS")
             self.assertEqual(alignments.metadata["Version"], "0.9.7")
             alignment = next(alignments)
@@ -173,7 +166,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         path = "Clustalw/muscle.aln"
         # includes the sequence length on the right hand side of each line
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.assertEqual(alignments.metadata["Program"], "MUSCLE")
             self.assertEqual(alignments.metadata["Version"], "3.8")
             alignment = next(alignments)
@@ -221,7 +214,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         """Make sure we can parse the Kalign header."""
         path = "Clustalw/kalign.aln"
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.assertEqual(alignments.metadata["Program"], "Kalign")
             self.assertEqual(alignments.metadata["Version"], "2.0")
             alignment = next(alignments)
@@ -244,7 +237,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         path = "Clustalw/probcons.aln"
         # example taken from the PROBCONS documentation
         with open(path) as stream:
-            alignments = AlignmentIterator(stream)
+            alignments = Align.parse(stream, "clustal")
             self.assertEqual(alignments.metadata["Program"], "PROBCONS")
             self.assertEqual(alignments.metadata["Version"], "1.12")
             alignment = next(alignments)
@@ -310,7 +303,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         """Checking empty file."""
         stream = StringIO()
         with self.assertRaises(ValueError):
-            AlignmentIterator(stream)
+            Align.parse(stream, "clustal")
 
 
 if __name__ == "__main__":

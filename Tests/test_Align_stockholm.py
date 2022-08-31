@@ -4,14 +4,9 @@
 # as part of this package.
 """Tests for Align.stockholm module."""
 import unittest
-import warnings
 from io import StringIO
 
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import stockholm
+from Bio import Align
 
 
 try:
@@ -28,7 +23,7 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_example(self):
         """Test parsing Pfam record HAT as the docstring example."""
         path = "Stockholm/example.sth"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["identifier"], "HAT")
         self.assertEqual(alignment.annotations["accession"], "PF02184.18")
@@ -3804,17 +3799,15 @@ class TestStockholm_reading(unittest.TestCase):
         # hmmalign -o globins45.ali globins4.hmm globins45.fa
         # in the HMMER 3.3.2 tutorial
         path = "Stockholm/globins45.ali"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_globins45(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_globins45(alignment)
@@ -3822,17 +3815,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam1(self):
         """Test parsing Pfam record 120_Rick_ant."""
         path = "Stockholm/pfam1.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam1(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam1(alignment)
@@ -3840,17 +3831,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam2(self):
         """Test parsing Pfam record 7kD_DNA_binding."""
         path = "Stockholm/pfam2.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam2(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam2(alignment)
@@ -3858,17 +3847,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam3(self):
         """Test parsing Pfam record 12TM_1."""
         path = "Stockholm/pfam3.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam3(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam3(alignment)
@@ -3878,17 +3865,15 @@ class TestStockholm_reading(unittest.TestCase):
         path = "Stockholm/pfam4.seed.txt"
         with open(path, encoding="UTF-8") as stream:
             # encoding depends on locale by default
-            alignments = stockholm.AlignmentIterator(stream)
+            alignments = Align.parse(stream, "stockholm")
             alignment = next(alignments)
             self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam4(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam4(alignment)
@@ -3896,17 +3881,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam5(self):
         """Test parsing Pfam record ArsP_1."""
         path = "Stockholm/pfam5.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam5(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam5(alignment)
@@ -3914,17 +3897,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam6(self):
         """Test parsing Pfam record COX2_TM."""
         path = "Stockholm/pfam6.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam6(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam6(alignment)
@@ -3932,17 +3913,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam7(self):
         """Test parsing Pfam record Alpha_E1_glycop."""
         path = "Stockholm/pfam7.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam7(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam7(alignment)
@@ -3950,17 +3929,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam8(self):
         """Test parsing Pfam record Cyclin_N."""
         path = "Stockholm/pfam8.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam8(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam8(alignment)
@@ -3968,17 +3945,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_pfam9(self):
         """Test parsing Pfam record SH3_11."""
         path = "Stockholm/pfam9.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam9(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_pfam9(alignment)
@@ -3987,17 +3962,15 @@ class TestStockholm_reading(unittest.TestCase):
         """Test parsing Rfam record BTnc005."""
         path = "Stockholm/rfam1.seed.txt"
         with open(path, encoding="UTF-8") as stream:
-            alignments = stockholm.AlignmentIterator(stream)
+            alignments = Align.parse(stream, "stockholm")
             alignment = next(alignments)
             self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam1(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_rfam1(alignment)
@@ -4005,17 +3978,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_rfam2(self):
         """Test parsing Rfam record SraC_RyeA."""
         path = "Stockholm/rfam2.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam2(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_rfam2(alignment)
@@ -4023,17 +3994,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_rfam3(self):
         """Test parsing Rfam record McaS."""
         path = "Stockholm/rfam3.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam3(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_rfam3(alignment)
@@ -4041,17 +4010,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_rfam4(self):
         """Test parsing Rfam record IRES_KSHV."""
         path = "Stockholm/rfam4.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam4(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_rfam4(alignment)
@@ -4059,17 +4026,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_writing_alignments_rfam5(self):
         """Test parsing Rfam record BMV3_UPD-PK3."""
         path = "Stockholm/rfam5.seed.txt"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam5(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_rfam5(alignment)
@@ -4077,17 +4042,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_alignments_cath1(self):
         """Test parsing CATH record 3.30.160.60/FF/004774."""
         path = "Stockholm/cath1.sth"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_cath1(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_cath1(alignment)
@@ -4095,17 +4058,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_alignments_cath2(self):
         """Test parsing CATH record 2.105.10.10/FF/000002."""
         path = "Stockholm/cath2.sth"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_cath2(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_cath2(alignment)
@@ -4113,17 +4074,15 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_alignments_cath3(self):
         """Test parsing CATH record 1.10.275.10/FF/000026."""
         path = "Stockholm/cath3.sth"
-        alignments = stockholm.AlignmentIterator(path)
+        alignments = Align.parse(path, "stockholm")
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_cath3(alignment)
         stream = StringIO()
-        writer = stockholm.AlignmentWriter(stream)
-        alignments = [alignment]
-        n = writer.write_file(alignments, mincount=1, maxcount=1)
+        n = Align.write(alignment, stream, "stockholm")
         self.assertEqual(n, 1)
         stream.seek(0)
-        alignments = stockholm.AlignmentIterator(stream)
+        alignments = Align.parse(stream, "stockholm")
         alignment = next(alignments)
         stream.close()
         self.check_alignment_cath3(alignment)

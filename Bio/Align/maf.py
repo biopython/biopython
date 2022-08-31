@@ -36,16 +36,6 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.maf is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
