@@ -1758,7 +1758,7 @@ class Alignment:
 
         Arguments:
          - fmt       - File format. Acceptable values are an empty string to
-                       creat a human-readable representation of the alignment,
+                       create a human-readable representation of the alignment,
                        or any of the alignment file formats supported by
                        `Bio.Align` (some have not yet been implemented).
 
