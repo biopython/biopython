@@ -454,6 +454,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
 
+        try:
+            alignment_annotations = alignment.annotations
+        except AttributeError:
+            alignment_annotations = {}
         lines = []
         lines.append("# STOCKHOLM 1.0\n")
         # #=GF Above the alignment; alignment.annotations
@@ -461,7 +465,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if key == "comment":
                 # write this last
                 continue
-            value = alignment.annotations.get(key)
+            value = alignment_annotations.get(key)
             if value is not None:
                 feature = self.gf_mapping[key]
                 if key in ("author", "wikipedia"):
@@ -469,7 +473,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         lines.append(f"#=GF {feature}   {item}\n")
                 else:
                     lines.append(f"#=GF {feature}   {value}\n")
-        nested_domains = alignment.annotations.get("nested domains")
+        nested_domains = alignment_annotations.get("nested domains")
         if nested_domains is not None:
             for nested_domain in nested_domains:
                 accession = nested_domain.get("accession")
@@ -478,7 +482,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 location = nested_domain.get("location")
                 if location is not None:
                     lines.append(f"#=GF NL   {location}\n")
-        references = alignment.annotations.get("references")
+        references = alignment_annotations.get("references")
         if references is not None:
             for reference in references:
                 comment = reference.get("comment")
@@ -489,7 +493,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 lines.append(AlignmentWriter._format_long_text("#=GF RT   ", title))
                 lines.append(f"#=GF RA   {reference['author']}\n")
                 lines.append(f"#=GF RL   {reference['location']}\n")
-        database_references = alignment.annotations.get("database references")
+        database_references = alignment_annotations.get("database references")
         if database_references is not None:
             for database_reference in database_references:
                 lines.append(f"#=GF DR   {database_reference['reference']}\n")
@@ -497,11 +501,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 if comment is not None:
                     lines.append(f"#=GF DC   {comment}\n")
         key = "comment"
-        value = alignment.annotations.get(key)
+        value = alignment_annotations.get(key)
         if value is not None:
             prefix = "#=GF %s   " % self.gf_mapping[key]
             lines.append(AlignmentWriter._format_long_text(prefix, value))
-        for key in alignment.annotations:
+        for key in alignment_annotations:
             if key in self.gf_mapping:
                 continue
             if key == "nested domains":
