@@ -18,10 +18,22 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
+    def __init__(self, target, metadata=None):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target    - output stream or file name
+         - metadata  - metadata to be included in the output. If metadata is
+                       None, then the alignments object to be written must have
+                       an attribute `metadata`.
+        """
+        super().__init__(target, mode="w")
+        self._metadata = metadata
+
     def write_header(self, alignments):
         """Write the file header to the output file."""
         stream = self.stream
-        metadata = alignments.metadata
+        metadata = self._metadata
         format_version = metadata.get("FormatVersion", "Mauve1")
         line = f"#FormatVersion {format_version}\n"
         stream.write(line)
@@ -59,22 +71,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         alignments - A Bio.Align.mauve.AlignmentIterator object.
         """
-
-        class ListWithAttributes(list):
-            pass
-
-        try:
-            metadata = alignments.metadata
-        except AttributeError:
-            metadata = {}
-        alignments = ListWithAttributes(alignments)
-        alignments.metadata = metadata
-        self._filename = metadata.get("File")
+        metadata = self._metadata
+        if metadata is None:
+            try:
+                metadata = alignments.metadata
+            except AttributeError:
+                raise ValueError("alignments do not have a metadata attribute")
+            else:
+                self._metadata = metadata
+        alignments = list(alignments)
         count = interfaces.AlignmentWriter.write_file(self, alignments)
         return count
 
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Mauve format."""
+        metadata = self._metadata
         n, m = alignment.shape
 
         if n == 0:
@@ -82,7 +93,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if m == 0:
             raise ValueError("Non-empty sequences are required")
 
-        filename = self._filename
+        filename = metadata.get("File")
         lines = []
         for i in range(n):
             identifier = alignment.sequences[i].id

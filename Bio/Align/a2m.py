@@ -45,7 +45,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     else:
                         s += c.lower()
             lines.append(s)
-        return "\n".join(lines)
+        return "\n".join(lines) + "\n"
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

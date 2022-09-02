@@ -36,7 +36,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for sequence, line in zip(alignment.sequences, alignment):
             lines.append(f">{sequence.id} {sequence.description}")
             lines.append(line)
-        return "\n".join(lines)
+        return "\n".join(lines) + "\n"
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

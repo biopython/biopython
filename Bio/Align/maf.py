@@ -114,10 +114,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             line = "a"
         else:
             line = f"a score={score:.6f}"
-        if annotations is not None:
-            value = annotations.get("pass")
-            if value is not None:
-                line += f" pass={value}"
+        value = annotations.get("pass")
+        if value is not None:
+            line += f" pass={value}"
         return line + "\n"
 
     def format_alignment(self, alignment):
@@ -127,7 +126,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         try:
             alignment_annotations = alignment.annotations
         except AttributeError:
-            alignment_annotations = None
+            alignment_annotations = {}
         lines = []
         line = self._format_score_line(alignment, alignment_annotations)
         lines.append(line)
