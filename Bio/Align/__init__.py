@@ -1972,6 +1972,11 @@ class Alignment:
         >>> alignment  # doctest:+ELLIPSIS
         <Alignment object (2 rows x 5 columns) at 0x...>
         """
+        if self.coordinates is None:
+            return "<%s object at 0x%x>" % (
+                self.__class__.__name__,
+                id(self),
+            )
         n, m = self.shape
         return "<%s object (%i rows x %i columns) at 0x%x>" % (
             self.__class__.__name__,
