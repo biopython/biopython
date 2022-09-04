@@ -58,15 +58,32 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _parse_header(self, stream, line):
         metadata = {}
-        if line[2:].startswith("TBLASTN ") or line[2:].startswith("TBLASTX "):
-            metadata["Program"], metadata["Version"] = line[2:].split(None, 1)
-            self._final_prefix = "# BLAST processed "
-        else:
+        blast_programs = (
+            "BLASTN",
+            "BLASTP",
+            "BLASTX",
+            "TBLASTN",
+            "TBLASTX",
+            "DELTABLAST",
+            "PSIBLAST",
+            "RPSBLAST",
+            "RPSTBLASTN",
+        )
+        try:
+            program, version = line[2:].split(None, 1)
+            if program not in blast_programs:
+                raise ValueError("Not a BLAST program")
+        except ValueError:
+            # FASTA
             metadata["Command line"] = line[2:]
             line = next(stream)
             assert line.startswith("# ")
             metadata["Program"], metadata["Version"] = line[2:].rstrip().split(None, 1)
             self._final_prefix = "# FASTA processed "
+        else:
+            # BLAST
+            metadata["Program"], metadata["Version"] = program, version
+            self._final_prefix = "# BLAST processed "
         for line in stream:
             line = line.strip()
             assert line.startswith("# ")
