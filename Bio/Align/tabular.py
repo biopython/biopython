@@ -188,6 +188,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_annotations["acc."] = column
             elif field == "query acc.ver":
                 query_annotations["acc.ver"] = column
+                if query_id is None:
+                    query_id = column
             elif field == "query length":
                 if query_size is None:
                     query_size = int(column)
@@ -223,6 +225,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_annotations["% coverage"] = float(column)
             elif field == "subject acc.ver":
                 target_annotations["acc.ver"] = column
+                if target_id is None:
+                    target_id = column
             elif field == "subject length":
                 target_length = int(column)
             elif field == "query seq":
