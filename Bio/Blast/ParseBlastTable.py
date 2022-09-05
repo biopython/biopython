@@ -10,6 +10,23 @@ Currently only supports the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "Bio.Blast.ParseBlastTable.py has been deprecated, and will be removed\n"
+    "in a future version of Biopython.  To parse tabular output from BLAST\n"
+    "programs, please use the Bio.Align module:"
+    "\n"
+    "from Bio import Align\n"
+    "alignments = Align.parse('myblastoutputfile.txt', 'tabular')\n"
+    "\n"
+    "and iterate over the alignments.",
+    BiopythonDeprecationWarning,
+)
+
 
 class BlastTableEntry:
     """Container for Blast Table Entry, the field values from the table."""
