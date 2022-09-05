@@ -16,9 +16,9 @@ from Bio import BiopythonDeprecationWarning
 
 
 warnings.warn(
-    "Bio.Blast.ParseBlastTable.py has been deprecated, and will be removed\n"
-    "in a future version of Biopython.  To parse tabular output from BLAST\n"
-    "programs, please use the Bio.Align module:"
+    "Bio.Blast.ParseBlastTable.py has been deprecated, and will be removed "
+    "in a future version of Biopython.  To parse tabular output from BLAST "
+    "programs, please use the Bio.Align module:\n"
     "\n"
     "from Bio import Align\n"
     "alignments = Align.parse('myblastoutputfile.txt', 'tabular')\n"
