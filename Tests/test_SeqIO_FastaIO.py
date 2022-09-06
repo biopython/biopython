@@ -8,6 +8,7 @@ import unittest
 
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.SeqIO.FastaIO import FastaTwoLineParser
@@ -87,8 +88,10 @@ class TitleFunctions(unittest.TestCase):
         msg = f"Test failure parsing file {filename}"
         title, seq = read_title_and_seq(filename)  # crude parser
         idn, name, descr = title_to_ids(title)
-        # First check using Bio.SeqIO.FastaIO directly with title function.
-        records = FastaIterator(filename, title2ids=title_to_ids)
+        # First check using Bio.SeqIO.FastaIO directly with title2ids function.
+        # (DEPRECATED)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            records = FastaIterator(filename, title2ids=title_to_ids)
         record = next(records)
         with self.assertRaises(StopIteration):
             next(records)
@@ -108,7 +111,9 @@ class TitleFunctions(unittest.TestCase):
     def multi_check(self, filename):
         """Test parsing multi-record FASTA files."""
         msg = f"Test failure parsing file {filename}"
-        re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
+        # title2ids is deprecated
+        with self.assertWarns(BiopythonDeprecationWarning):
+            re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
         default = list(SeqIO.parse(filename, "fasta"))
         self.assertEqual(len(re_titled), len(default), msg=msg)
         for old, new in zip(default, re_titled):
