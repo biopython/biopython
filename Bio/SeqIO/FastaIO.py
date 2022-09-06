@@ -146,7 +146,7 @@ class FastaIterator(SequenceIterator):
         Arguments:
          - source - input stream opened in text mode, or a path to a file
          - alphabet - optional alphabet, not used. Leave as None.
-         - title2ids (DEPRECAATED) - A function that, when given the title of
+         - title2ids (DEPRECATED) - A function that, when given the title of
            the FASTA file (without the beginning >), will return the id, name
            and description (in that order) for the record as a tuple of strings.
            If this is not given, then the entire title line will be used
