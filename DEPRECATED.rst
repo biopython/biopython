@@ -586,6 +586,10 @@ deprecated in Release 1.64, and removed in Release 1.67. Use function
 list(SimpleFastaParser(handle)) from Bio.SeqIO.FastaIO instead (but
 ideally convert your code to using an iterator approach).
 
+The 'title2ids' argument to FastaIterator in Bio.SeqIO.FastaIO and
+FastqPhredIterator in Bio.SeqIO.QualityIO was deprecated in Release 1.80.
+Please use a generator function to modify the records returned by the parser.
+
 Function Tm_staluc in Bio.SeqUtils.MeltingTemp was deprecated in Release 1.78,
 and removed in Release 1.80.
 
