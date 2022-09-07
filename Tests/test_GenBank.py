@@ -27,6 +27,7 @@ from Bio.Seq import Seq, UndefinedSequenceError
 
 # GenBank stuff to test:
 from Bio import GenBank
+from Bio.SeqFeature import SeqFeature, FeatureLocation
 
 
 class TestBasics(unittest.TestCase):
@@ -7741,6 +7742,34 @@ KEYWORDS    """,
             "coastal water body [ENVO:02000049], "
             "coastal water [ENVO:00002150]",
         )
+
+    def test_multiline_qualifier_values(self):
+        """Multiline qualififer value writing and parsing."""
+        multiline_qualifiers = {
+            "notes": ["This is a multiline qualiifier value\nThis is the second line\nAnd the third!"],
+            "label": ["Averyveryveryveryveryveryveryveryveyrveryveryveryevyerlongvalue which will\nbe line broken"],
+        }
+
+        record = SeqRecord(
+            Seq("ACTGATCG"),
+            annotations={"molecule_type": "DNA"},
+            features=[
+                SeqFeature(
+                    FeatureLocation(1, 4),
+                    type="misc-feature",
+                    qualifiers=multiline_qualifiers,
+                )
+            ],
+        )
+
+        # Now write to a handle...
+        tmp_file = "temp.gbk"
+        with open(tmp_file, "w") as f:
+            SeqIO.write(record, f, "gb")
+        # Now read them back...
+        new_record = next(SeqIO.parse(tmp_file, "gb"))
+        for k, v in multiline_qualifiers.items():
+            self.assertEqual(v, new_record.features[0].qualifiers[k])
 
     def test_malformed_structured_comment_parsing(self):
         """Test malformed structured comment gives warning.
