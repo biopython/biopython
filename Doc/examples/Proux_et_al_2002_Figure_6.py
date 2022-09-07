@@ -20,7 +20,7 @@ from Bio.Graphics import GenomeDiagram
 from Bio.Graphics.GenomeDiagram import CrossLink
 
 from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 
 name = "Proux Fig 6"
 
@@ -182,13 +182,13 @@ for X, Y, X_vs_Y in [
         border = colors.lightgrey
         f_x = get_feature(features_X, x)
         F_x = set_X.add_feature(
-            SeqFeature(FeatureLocation(f_x.location.start, f_x.location.end, strand=0)),
+            SeqFeature(SimpleLocation(f_x.location.start, f_x.location.end, strand=0)),
             color=color,
             border=border,
         )
         f_y = get_feature(features_Y, y)
         F_y = set_Y.add_feature(
-            SeqFeature(FeatureLocation(f_y.location.start, f_y.location.end, strand=0)),
+            SeqFeature(SimpleLocation(f_y.location.start, f_y.location.end, strand=0)),
             color=color,
             border=border,
         )

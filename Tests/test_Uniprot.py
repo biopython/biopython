@@ -45,7 +45,7 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(
             repr(seq_record.features[0]),
-            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', qualifiers=...)",
+            "SeqFeature(SimpleLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', qualifiers=...)",
         )
 
         self.assertEqual(
@@ -434,7 +434,7 @@ class TestUniprot(SeqRecordTestBaseClass):
 
         self.assertEqual(
             repr(seq_record.features[1]),
-            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', qualifiers=...)",
+            "SeqFeature(SimpleLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', qualifiers=...)",
         )
 
         self.assertEqual(

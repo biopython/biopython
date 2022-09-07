@@ -333,11 +333,11 @@ clarify the terminology we're using:
 
 I just mention this because sometimes I get confused between the two.
 
-\subsubsection{FeatureLocation object}
+\subsubsection{SimpleLocation object}
 
 Unless you work with eukaryotic genes, most \verb|SeqFeature| locations are
 extremely simple - you just need start and end coordinates and a strand.
-That's essentially all the basic \verb|FeatureLocation| object does.
+That's essentially all the basic \verb|SimpleLocation| object does.
 
 %TODO -- add example here
 
@@ -408,7 +408,7 @@ Here's an example where we create a location with fuzzy end points:
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
 >>> end_pos = SeqFeature.BetweenPosition(9, left=8, right=9)
->>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
+>>> my_location = SeqFeature.SimpleLocation(start_pos, end_pos)
 \end{minted}
 
 Note that the details of some of the fuzzy-locations changed in Biopython 1.59,
@@ -417,7 +417,7 @@ which integer position should be used for slicing etc. For a start position this
 is generally the lower (left) value, while for an end position this would generally
 be the higher (right) value.
 
-If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
+If you print out a \verb|SimpleLocation| object, you can get a nice representation of the information:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -454,7 +454,7 @@ Similarly, to make it easy to create a position without worrying about fuzzy pos
 
 %cont-doctest
 \begin{minted}{pycon}
->>> exact_location = SeqFeature.FeatureLocation(5, 9)
+>>> exact_location = SeqFeature.SimpleLocation(5, 9)
 >>> print(exact_location)
 [5:9]
 >>> exact_location.start
@@ -504,9 +504,9 @@ A \verb|SeqFeature| or location object doesn't directly contain a sequence, inst
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+>>> from Bio.SeqFeature import SeqFeature, SimpleLocation
 >>> seq = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
->>> feature = SeqFeature(FeatureLocation(5, 18, strand=-1), type="gene")
+>>> feature = SeqFeature(SimpleLocation(5, 18, strand=-1), type="gene")
 \end{minted}
 
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
@@ -541,7 +541,7 @@ that of the region of sequence it describes.
 13
 \end{minted}
 
-For simple \verb|FeatureLocation| objects the length is just
+For simple \verb|SimpleLocation| objects the length is just
 the difference between the start and end positions. However,
 for a \verb|CompoundLocation| the length is the sum of the
 constituent regions.
