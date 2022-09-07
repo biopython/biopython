@@ -405,15 +405,21 @@ class _InsdcWriter(SequenceWriter):
             if len(line) <= self.MAX_WIDTH:
                 self.handle.write(line + "\n")
                 return
-            # Insert line break...
-            for index in range(
-                min(len(line) - 1, self.MAX_WIDTH), self.QUALIFIER_INDENT + 1, -1
-            ):
-                if line[index] == " ":
-                    break
-            if line[index] != " ":
-                # No nice place to break...
-                index = self.MAX_WIDTH
+            
+            max_index = min(len(line) - 1, self.MAX_WIDTH)
+            # Find a line break in the line if it exists
+            index = line[:max_index + 1].find("\n")
+            
+            if index == -1:
+                # Insert line break...
+                for index in range(
+                    max_index, self.QUALIFIER_INDENT + 1, -1
+                ):
+                    if line[index] == " ":
+                        break
+                if line[index] != " ":
+                    # No nice place to break...
+                    index = self.MAX_WIDTH
             assert index <= self.MAX_WIDTH
             self.handle.write(line[:index] + "\n")
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
