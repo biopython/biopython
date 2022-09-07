@@ -402,10 +402,12 @@ class _InsdcWriter(SequenceWriter):
             self.handle.write(line + "\n")
             return
         while line.lstrip():
-            if len(line) <= self.MAX_WIDTH:
+
+            if len(line) <= self.MAX_WIDTH and "\n" not in line:
                 self.handle.write(line + "\n")
                 return
-            
+
+            found_newline_in_line = False
             max_index = min(len(line) - 1, self.MAX_WIDTH)
             # Find a line break in the line if it exists
             index = line[:max_index].find("\n")
@@ -420,8 +422,15 @@ class _InsdcWriter(SequenceWriter):
                 if line[index] != " ":
                     # No nice place to break...
                     index = self.MAX_WIDTH
+            else:
+                # In this case, we've found a newline character so make a note of it
+                found_newline_in_line = True
+
             assert index <= self.MAX_WIDTH
             self.handle.write(line[:index] + "\n")
+            if found_newline_in_line:
+                # Now write the newline with the required indent
+                self.handle.write(self.QUALIFIER_INDENT_STR + "\n")
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
     def _wrap_location(self, location):
