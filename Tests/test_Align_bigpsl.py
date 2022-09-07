@@ -11,7 +11,7 @@ from io import StringIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
+from Bio.SeqFeature import SimpleLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 

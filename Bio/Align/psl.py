@@ -33,7 +33,7 @@ from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, ExactPosition, FeatureLocation, CompoundLocation
+from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation, CompoundLocation
 from Bio import BiopythonExperimentalWarning
 
 import warnings
@@ -484,7 +484,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         locations = []
                         for tEnd, qEnd in coordinates[:, 1:].transpose():
                             if qStart < qEnd and tStart < tEnd:
-                                location = FeatureLocation(
+                                location = SimpleLocation(
                                     ExactPosition(tStart),
                                     ExactPosition(tEnd),
                                     strand=+1,
@@ -504,7 +504,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         locations = []
                         for tStart, qEnd in coordinates[:, 1:].transpose():
                             if qStart < qEnd and tStart < tEnd:
-                                location = FeatureLocation(
+                                location = SimpleLocation(
                                     ExactPosition(tStart),
                                     ExactPosition(tEnd),
                                     strand=-1,

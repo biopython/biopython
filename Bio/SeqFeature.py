@@ -39,8 +39,8 @@ This has the advantages of allowing us to handle fuzzy stuff in case anyone
 needs it, and also be compatible with BioPerl etc and BioSQL.
 
 Classes:
- - FeatureLocation - Specify the start and end location of a feature.
- - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
+ - SimpleLocation - Specify the start and end location of a feature.
+ - CompoundLocation - Collection of SimpleLocation objects (for joins etc).
  - ExactPosition - Specify the position as being exact.
  - WithinPosition - Specify a position occurring within some range.
  - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
@@ -78,7 +78,7 @@ class SeqFeature:
     """Represent a Sequence Feature on an object.
 
     Attributes:
-     - location - the location of the feature on the sequence (FeatureLocation)
+     - location - the location of the feature on the sequence (SimpleLocation)
      - type - the specified type of the feature (ie. CDS, exon, repeat...)
      - location_operator - a string specifying how this SeqFeature may
        be related to others. For example, in the example GenBank feature
@@ -117,39 +117,39 @@ class SeqFeature:
     ):
         """Initialize a SeqFeature on a sequence.
 
-        location can either be a FeatureLocation (with strand argument also
+        location can either be a SimpleLocation (with strand argument also
         given if required), or None.
 
         e.g. With no strand, on the forward strand, and on the reverse strand:
 
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f1 = SeqFeature(FeatureLocation(5, 10), type="domain")
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
+        >>> f1 = SeqFeature(SimpleLocation(5, 10), type="domain")
         >>> f1.strand == f1.location.strand == None
         True
-        >>> f2 = SeqFeature(FeatureLocation(7, 110, strand=1), type="CDS")
+        >>> f2 = SeqFeature(SimpleLocation(7, 110, strand=1), type="CDS")
         >>> f2.strand == f2.location.strand == +1
         True
-        >>> f3 = SeqFeature(FeatureLocation(9, 108, strand=-1), type="CDS")
+        >>> f3 = SeqFeature(SimpleLocation(9, 108, strand=-1), type="CDS")
         >>> f3.strand == f3.location.strand == -1
         True
 
         An invalid strand will trigger an exception:
 
-        >>> f4 = SeqFeature(FeatureLocation(50, 60, strand=2))
+        >>> f4 = SeqFeature(SimpleLocation(50, 60, strand=2))
         Traceback (most recent call last):
            ...
         ValueError: Strand should be +1, -1, 0 or None, not 2
 
-        Similarly if set via the FeatureLocation directly:
+        Similarly if set via the SimpleLocation directly:
 
-        >>> loc4 = FeatureLocation(50, 60, strand=2)
+        >>> loc4 = SimpleLocation(50, 60, strand=2)
         Traceback (most recent call last):
            ...
         ValueError: Strand should be +1, -1, 0 or None, not 2
 
         For exact start/end positions, an integer can be used (as shown above)
         as shorthand for the ExactPosition object. For non-exact locations, the
-        FeatureLocation must be specified via the appropriate position objects.
+        SimpleLocation must be specified via the appropriate position objects.
 
         Note that the strand, ref and ref_db arguments to the SeqFeature are
         now deprecated and will later be removed. Set them via the location
@@ -160,11 +160,11 @@ class SeqFeature:
         """
         if (
             location is not None
-            and not isinstance(location, FeatureLocation)
+            and not isinstance(location, SimpleLocation)
             and not isinstance(location, CompoundLocation)
         ):
             raise TypeError(
-                "FeatureLocation, CompoundLocation (or None) required for the location"
+                "SimpleLocation, CompoundLocation (or None) required for the location"
             )
         self.location = location
         self.type = type
@@ -187,7 +187,7 @@ class SeqFeature:
         if qualifiers is not None:
             self.qualifiers.update(qualifiers)
         if sub_features is not None:
-            raise TypeError("Rather than sub_features, use a CompoundFeatureLocation")
+            raise TypeError("Rather than sub_features, use a CompoundSimpleLocation")
         if ref is not None:
             warnings.warn(
                 "Using the ref argument is deprecated, and will be removed in a future release. "
@@ -382,13 +382,13 @@ class SeqFeature:
         optional dictionary references.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
-        >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
+        >>> f = SeqFeature(SimpleLocation(8, 15), type="domain")
         >>> f.extract(seq)
         Seq('VALIVIC')
 
-        If the FeatureLocation is None, e.g. when parsing invalid locus
+        If the SimpleLocation is None, e.g. when parsing invalid locus
         locations in the GenBank parser, extract() will raise a ValueError.
 
         >>> from Bio.Seq import Seq
@@ -448,13 +448,13 @@ class SeqFeature:
            Will override a codon_start qualifier
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
-        >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
+        >>> f = SeqFeature(SimpleLocation(0, 30), type="CDS")
         >>> f.qualifiers['transl_table'] = [11]
 
         Note that features of type CDS are subject to the usual
-        checks at translation. But you can override this behaviour
+        checks at translation. But you can override this behavior
         by giving explicit arguments:
 
         >>> f.translate(seq, cds=False)
@@ -507,14 +507,14 @@ class SeqFeature:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
-        This behaviour is for backwards compatibility, since until the
+        This behavior is for backwards compatibility, since until the
         __len__ method was added, a SeqFeature always evaluated as True.
 
         Note that in comparison, Seq objects, strings, lists, etc, will all
         evaluate to False if they have length zero.
 
         WARNING: The SeqFeature may in future evaluate to False when its
-        length is zero (in order to better match normal python behaviour)!
+        length is zero (in order to better match normal python behavior)!
         """
         return True
 
@@ -522,9 +522,9 @@ class SeqFeature:
         """Return the length of the region where the feature is located.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
-        >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
+        >>> f = SeqFeature(SimpleLocation(8, 15), type="domain")
         >>> len(f)
         7
         >>> f.extract(seq)
@@ -552,8 +552,8 @@ class SeqFeature:
         The iteration order is strand aware, and can be thought of as moving
         along the feature using the parent sequence coordinates:
 
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5, 10, strand=-1), type="domain")
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
+        >>> f = SeqFeature(SimpleLocation(5, 10, strand=-1), type="domain")
         >>> len(f)
         5
         >>> for i in f: print(i)
@@ -575,8 +575,8 @@ class SeqFeature:
     def __contains__(self, value):
         """Check if an integer position is within the feature.
 
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f = SeqFeature(FeatureLocation(5, 10, strand=-1), type="domain")
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
+        >>> f = SeqFeature(SimpleLocation(5, 10, strand=-1), type="domain")
         >>> len(f)
         5
         >>> [i for i in range(15) if i in f]
@@ -609,9 +609,9 @@ class SeqFeature:
         Note that additional care may be required with fuzzy locations, for
         example just before a BeforePosition:
 
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> from Bio.SeqFeature import BeforePosition
-        >>> f = SeqFeature(FeatureLocation(BeforePosition(3), 8), type="domain")
+        >>> f = SeqFeature(SimpleLocation(BeforePosition(3), 8), type="domain")
         >>> len(f)
         5
         >>> [i for i in range(10) if i in f]
@@ -681,7 +681,7 @@ class Reference:
         """Check if two Reference objects should be considered equal.
 
         Note prior to Biopython 1.70 the location was not compared, as
-        until then __eq__ for the FeatureLocation class was not defined.
+        until then __eq__ for the SimpleLocation class was not defined.
         """
         return (
             self.authors == other.authors
@@ -698,10 +698,10 @@ class Reference:
 # --- Handling feature locations
 
 
-class FeatureLocation:
+class SimpleLocation:
     """Specify the location of a feature along a sequence.
 
-    The FeatureLocation is used for simple continuous features, which can
+    The SimpleLocation is used for simple continuous features, which can
     be described as running from a start position to and end position
     (optionally with a strand and reference information).  More complex
     locations made up from several non-continuous parts (e.g. a coding
@@ -712,8 +712,8 @@ class FeatureLocation:
     thus a GenBank entry of 123..150 (one based counting) becomes a location
     of [122:150] (zero based counting).
 
-    >>> from Bio.SeqFeature import FeatureLocation
-    >>> f = FeatureLocation(122, 150)
+    >>> from Bio.SeqFeature import SimpleLocation
+    >>> f = SimpleLocation(122, 150)
     >>> print(f)
     [122:150]
     >>> print(f.start)
@@ -726,21 +726,21 @@ class FeatureLocation:
     Note the strand defaults to None. If you are working with nucleotide
     sequences you'd want to be explicit if it is the forward strand:
 
-    >>> from Bio.SeqFeature import FeatureLocation
-    >>> f = FeatureLocation(122, 150, strand=+1)
+    >>> from Bio.SeqFeature import SimpleLocation
+    >>> f = SimpleLocation(122, 150, strand=+1)
     >>> print(f)
     [122:150](+)
     >>> print(f.strand)
     1
 
-    Note that for a parent sequence of length n, the FeatureLocation
+    Note that for a parent sequence of length n, the SimpleLocation
     start and end must satisfy the inequality 0 <= start <= end <= n.
     This means even for features on the reverse strand of a nucleotide
     sequence, we expect the 'start' coordinate to be less than the
     'end'.
 
-    >>> from Bio.SeqFeature import FeatureLocation
-    >>> r = FeatureLocation(122, 150, strand=-1)
+    >>> from Bio.SeqFeature import SimpleLocation
+    >>> r = SimpleLocation(122, 150, strand=-1)
     >>> print(r)
     [122:150](-)
     >>> print(r.start)
@@ -774,23 +774,23 @@ class FeatureLocation:
 
         i.e. Short form:
 
-        >>> from Bio.SeqFeature import FeatureLocation
-        >>> loc = FeatureLocation(5, 10, strand=-1)
+        >>> from Bio.SeqFeature import SimpleLocation
+        >>> loc = SimpleLocation(5, 10, strand=-1)
         >>> print(loc)
         [5:10](-)
 
         Explicit form:
 
-        >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
-        >>> loc = FeatureLocation(ExactPosition(5), ExactPosition(10), strand=-1)
+        >>> from Bio.SeqFeature import SimpleLocation, ExactPosition
+        >>> loc = SimpleLocation(ExactPosition(5), ExactPosition(10), strand=-1)
         >>> print(loc)
         [5:10](-)
 
         Other fuzzy positions are used similarly,
 
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc2 = FeatureLocation(BeforePosition(5), AfterPosition(10), strand=-1)
+        >>> loc2 = SimpleLocation(BeforePosition(5), AfterPosition(10), strand=-1)
         >>> print(loc2)
         [<5:>10](-)
 
@@ -800,7 +800,7 @@ class FeatureLocation:
         when the strand does not apply (dot in GFF3), e.g. features on
         proteins.
 
-        >>> loc = FeatureLocation(5, 10, strand=+1)
+        >>> loc = SimpleLocation(5, 10, strand=+1)
         >>> print(loc)
         [5:10](+)
         >>> print(loc.strand)
@@ -810,7 +810,7 @@ class FeatureLocation:
         sequence you are working with, but an explicit accession can
         be given with the optional ref and db_ref strings:
 
-        >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9", strand=1)
+        >>> loc = SimpleLocation(105172, 108462, ref="AL391218.9", strand=1)
         >>> print(loc)
         AL391218.9[105172:108462](+)
         >>> print(loc.ref)
@@ -860,7 +860,7 @@ class FeatureLocation:
     )
 
     def __str__(self):
-        """Return a representation of the FeatureLocation object (with python counting).
+        """Return a representation of the SimpleLocation object (with python counting).
 
         For the simple case this uses the python splicing syntax, [122:150]
         (zero based counting) which GenBank would call 123..150 (one based
@@ -883,7 +883,7 @@ class FeatureLocation:
             return answer + "(?)"
 
     def __repr__(self):
-        """Represent the FeatureLocation object as a string for debugging."""
+        """Represent the SimpleLocation object as a string for debugging."""
         optional = ""
         if self.strand is not None:
             optional += f", strand={self.strand!r}"
@@ -894,13 +894,13 @@ class FeatureLocation:
         return f"{self.__class__.__name__}({self.start!r}, {self.end!r}{optional})"
 
     def __add__(self, other):
-        """Combine location with another FeatureLocation object, or shift it.
+        """Combine location with another SimpleLocation object, or shift it.
 
         You can add two feature locations to make a join CompoundLocation:
 
-        >>> from Bio.SeqFeature import FeatureLocation
-        >>> f1 = FeatureLocation(5, 10)
-        >>> f2 = FeatureLocation(20, 30)
+        >>> from Bio.SeqFeature import SimpleLocation
+        >>> f1 = SimpleLocation(5, 10)
+        >>> f2 = SimpleLocation(20, 30)
         >>> combined = f1 + f2
         >>> print(combined)
         join{[5:10], [20:30]}
@@ -918,10 +918,10 @@ class FeatureLocation:
         >>> print(join)
         join{[5:10], [20:30]}
 
-        Furthermore, you can combine a FeatureLocation with a CompoundLocation
+        Furthermore, you can combine a SimpleLocation with a CompoundLocation
         in this way.
 
-        Separately, adding an integer will give a new FeatureLocation with
+        Separately, adding an integer will give a new SimpleLocation with
         its start and end offset by that amount. For example:
 
         >>> print(f1)
@@ -933,7 +933,7 @@ class FeatureLocation:
 
         This can be useful when editing annotation.
         """
-        if isinstance(other, FeatureLocation):
+        if isinstance(other, SimpleLocation):
             return CompoundLocation([self, other])
         elif isinstance(other, int):
             return self._shift(other)
@@ -942,7 +942,7 @@ class FeatureLocation:
             return NotImplemented
 
     def __radd__(self, other):
-        """Return a FeatureLocation object by shifting the location by an integer amount."""
+        """Return a SimpleLocation object by shifting the location by an integer amount."""
         if isinstance(other, int):
             return self._shift(other)
         else:
@@ -951,38 +951,38 @@ class FeatureLocation:
     def __nonzero__(self):
         """Return True regardless of the length of the feature.
 
-        This behaviour is for backwards compatibility, since until the
-        __len__ method was added, a FeatureLocation always evaluated as True.
+        This behavior is for backwards compatibility, since until the
+        __len__ method was added, a SimpleLocation always evaluated as True.
 
         Note that in comparison, Seq objects, strings, lists, etc, will all
         evaluate to False if they have length zero.
 
-        WARNING: The FeatureLocation may in future evaluate to False when its
-        length is zero (in order to better match normal python behaviour)!
+        WARNING: The SimpleLocation may in future evaluate to False when its
+        length is zero (in order to better match normal python behavior)!
         """
         return True
 
     def __len__(self):
-        """Return the length of the region described by the FeatureLocation object.
+        """Return the length of the region described by the SimpleLocation object.
 
         Note that extra care may be needed for fuzzy locations, e.g.
 
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
+        >>> loc = SimpleLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         """
         return int(self._end) - int(self._start)
 
     def __contains__(self, value):
-        """Check if an integer position is within the FeatureLocation object.
+        """Check if an integer position is within the SimpleLocation object.
 
         Note that extra care may be needed for fuzzy locations, e.g.
 
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
+        >>> loc = SimpleLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         >>> [i for i in range(15) if i in loc]
@@ -991,7 +991,7 @@ class FeatureLocation:
         if not isinstance(value, int):
             raise ValueError(
                 "Currently we only support checking for integer "
-                "positions being within a FeatureLocation."
+                "positions being within a SimpleLocation."
             )
         if value < self._start or value >= self._end:
             return False
@@ -999,11 +999,11 @@ class FeatureLocation:
             return True
 
     def __iter__(self):
-        """Iterate over the parent positions within the FeatureLocation object.
+        """Iterate over the parent positions within the SimpleLocation object.
 
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10))
+        >>> loc = SimpleLocation(BeforePosition(5), AfterPosition(10))
         >>> len(loc)
         5
         >>> for i in loc: print(i)
@@ -1019,7 +1019,7 @@ class FeatureLocation:
 
         Note this is strand aware:
 
-        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10), strand = -1)
+        >>> loc = SimpleLocation(BeforePosition(5), AfterPosition(10), strand = -1)
         >>> list(loc)
         [9, 8, 7, 6, 5]
         """
@@ -1030,7 +1030,7 @@ class FeatureLocation:
 
     def __eq__(self, other):
         """Implement equality by comparing all the location attributes."""
-        if not isinstance(other, FeatureLocation):
+        if not isinstance(other, SimpleLocation):
             return False
         return (
             self._start == other.start
@@ -1041,14 +1041,14 @@ class FeatureLocation:
         )
 
     def _shift(self, offset):
-        """Return a copy of the FeatureLocation shifted by an offset (PRIVATE).
+        """Return a copy of the SimpleLocation shifted by an offset (PRIVATE).
 
         Returns self when location is relative to an external reference.
         """
         # TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
             return self
-        return FeatureLocation(
+        return SimpleLocation(
             start=self._start + offset,
             end=self._end + offset,
             strand=self.strand,
@@ -1069,7 +1069,7 @@ class FeatureLocation:
         else:
             # 0 or None
             flip_strand = self.strand
-        return FeatureLocation(
+        return SimpleLocation(
             start=self._end._flip(length),
             end=self._start._flip(length),
             strand=flip_strand,
@@ -1077,10 +1077,10 @@ class FeatureLocation:
 
     @property
     def parts(self):
-        """Read only list of sections (always one, the FeatureLocation object).
+        """Read only list of sections (always one, the SimpleLocation object).
 
         This is a convenience property allowing you to write code handling
-        both simple FeatureLocation objects (with one part) and more complex
+        both simple SimpleLocation objects (with one part) and more complex
         CompoundLocation objects (with multiple parts) interchangeably.
         """
         return [self]
@@ -1142,7 +1142,7 @@ class FeatureLocation:
             raise
 
     def extract(self, parent_sequence, references=None):
-        """Extract the sequence from supplied parent sequence using the FeatureLocation object.
+        """Extract the sequence from supplied parent sequence using the SimpleLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
@@ -1151,9 +1151,9 @@ class FeatureLocation:
         in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
-        >>> feature_loc = FeatureLocation(8, 15)
+        >>> feature_loc = SimpleLocation(8, 15)
         >>> feature_loc.extract(seq)
         Seq('VALIVIC')
 
@@ -1181,15 +1181,18 @@ class FeatureLocation:
         return f_seq
 
 
+FeatureLocation = SimpleLocation  # OBSOLETE; for backward compatability only.
+
+
 class CompoundLocation:
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):
         """Initialize the class.
 
-        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> f1 = FeatureLocation(10, 40, strand=+1)
-        >>> f2 = FeatureLocation(50, 59, strand=+1)
+        >>> from Bio.SeqFeature import SimpleLocation, CompoundLocation
+        >>> f1 = SimpleLocation(10, 40, strand=+1)
+        >>> f2 = SimpleLocation(50, 59, strand=+1)
         >>> f = CompoundLocation([f1, f2])
         >>> len(f) == len(f1) + len(f2) == 39 == len(list(f))
         True
@@ -1206,8 +1209,8 @@ class CompoundLocation:
         automatically - in the case of mixed strands on the sub-locations
         the overall strand is set to None.
 
-        >>> f = CompoundLocation([FeatureLocation(3, 6, strand=+1),
-        ...                       FeatureLocation(10, 13, strand=-1)])
+        >>> f = CompoundLocation([SimpleLocation(3, 6, strand=+1),
+        ...                       SimpleLocation(10, 13, strand=-1)])
         >>> print(f.strand)
         None
         >>> len(f)
@@ -1232,7 +1235,7 @@ class CompoundLocation:
         >>> f.end == max(f) + 1
         True
 
-        This is consistent with the behaviour of the simple FeatureLocation for
+        This is consistent with the behavior of the simple SimpleLocation for
         a single region, where again the 'start' and 'end' do not necessarily
         give the biological start and end, but rather the 'minimal' and 'maximal'
         coordinate boundaries.
@@ -1240,7 +1243,7 @@ class CompoundLocation:
         Note that adding locations provides a more intuitive method of
         construction:
 
-        >>> f = FeatureLocation(3, 6, strand=+1) + FeatureLocation(10, 13, strand=-1)
+        >>> f = SimpleLocation(3, 6, strand=+1) + SimpleLocation(10, 13, strand=-1)
         >>> len(f)
         6
         >>> list(f)
@@ -1249,10 +1252,10 @@ class CompoundLocation:
         self.operator = operator
         self.parts = list(parts)
         for loc in self.parts:
-            if not isinstance(loc, FeatureLocation):
+            if not isinstance(loc, SimpleLocation):
                 raise ValueError(
                     "CompoundLocation should be given a list of "
-                    "FeatureLocation objects, not %s" % loc.__class__
+                    "SimpleLocation objects, not %s" % loc.__class__
                 )
         if len(parts) < 2:
             raise ValueError(
@@ -1294,9 +1297,9 @@ class CompoundLocation:
         If all the parts have the same strand, that is returned. Otherwise
         for mixed strands, this returns None.
 
-        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> f1 = FeatureLocation(15, 17, strand=1)
-        >>> f2 = FeatureLocation(20, 30, strand=-1)
+        >>> from Bio.SeqFeature import SimpleLocation, CompoundLocation
+        >>> f1 = SimpleLocation(15, 17, strand=1)
+        >>> f2 = SimpleLocation(20, 30, strand=-1)
         >>> f = f1 + f2
         >>> f1.strand
         1
@@ -1323,27 +1326,27 @@ class CompoundLocation:
     def __add__(self, other):
         """Combine locations, or shift the location by an integer offset.
 
-        >>> from Bio.SeqFeature import FeatureLocation
-        >>> f1 = FeatureLocation(15, 17) + FeatureLocation(20, 30)
+        >>> from Bio.SeqFeature import SimpleLocation
+        >>> f1 = SimpleLocation(15, 17) + SimpleLocation(20, 30)
         >>> print(f1)
         join{[15:17], [20:30]}
 
-        You can add another FeatureLocation:
+        You can add another SimpleLocation:
 
-        >>> print(f1 + FeatureLocation(40, 50))
+        >>> print(f1 + SimpleLocation(40, 50))
         join{[15:17], [20:30], [40:50]}
-        >>> print(FeatureLocation(5, 10) + f1)
+        >>> print(SimpleLocation(5, 10) + f1)
         join{[5:10], [15:17], [20:30]}
 
         You can also add another CompoundLocation:
 
-        >>> f2 = FeatureLocation(40, 50) + FeatureLocation(60, 70)
+        >>> f2 = SimpleLocation(40, 50) + SimpleLocation(60, 70)
         >>> print(f2)
         join{[40:50], [60:70]}
         >>> print(f1 + f2)
         join{[15:17], [20:30], [40:50], [60:70]}
 
-        Also, as with the FeatureLocation, adding an integer shifts the
+        Also, as with the SimpleLocation, adding an integer shifts the
         location's coordinates by that offset:
 
         >>> print(f1 + 100)
@@ -1353,7 +1356,7 @@ class CompoundLocation:
         >>> print(f1 + (-5))
         join{[10:12], [15:25]}
         """
-        if isinstance(other, FeatureLocation):
+        if isinstance(other, SimpleLocation):
             return CompoundLocation(self.parts + [other], self.operator)
         elif isinstance(other, CompoundLocation):
             if self.operator != other.operator:
@@ -1369,7 +1372,7 @@ class CompoundLocation:
 
     def __radd__(self, other):
         """Add a feature to the left."""
-        if isinstance(other, FeatureLocation):
+        if isinstance(other, SimpleLocation):
             return CompoundLocation([other] + self.parts, self.operator)
         elif isinstance(other, int):
             return self._shift(other)
@@ -1386,14 +1389,14 @@ class CompoundLocation:
     def __nonzero__(self):
         """Return True regardless of the length of the feature.
 
-        This behaviour is for backwards compatibility, since until the
-        __len__ method was added, a FeatureLocation always evaluated as True.
+        This behavior is for backwards compatibility, since until the
+        __len__ method was added, a SimpleLocation always evaluated as True.
 
         Note that in comparison, Seq objects, strings, lists, etc, will all
         evaluate to False if they have length zero.
 
-        WARNING: The FeatureLocation may in future evaluate to False when its
-        length is zero (in order to better match normal python behaviour)!
+        WARNING: The SimpleLocation may in future evaluate to False when its
+        length is zero (in order to better match normal python behavior)!
         """
         return True
 
@@ -1438,10 +1441,10 @@ class CompoundLocation:
         case regions and the lower case runs of n are not used:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import SimpleLocation
         >>> dna = Seq("nnnnnAGCATCCTGCTGTACnnnnnnnnGAGAMTGCCATGCCCCTGGAGTGAnnnnn")
-        >>> small = FeatureLocation(5, 20, strand=1)
-        >>> large = FeatureLocation(28, 52, strand=1)
+        >>> small = SimpleLocation(5, 20, strand=1)
+        >>> large = SimpleLocation(28, 52, strand=1)
         >>> location = small + large
         >>> print(small)
         [5:20](+)
@@ -1584,10 +1587,10 @@ class CompoundLocation:
         in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> from Bio.SeqFeature import SimpleLocation, CompoundLocation
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
-        >>> fl1 = FeatureLocation(2, 8)
-        >>> fl2 = FeatureLocation(10, 15)
+        >>> fl1 = SimpleLocation(2, 8)
+        >>> fl2 = SimpleLocation(10, 15)
         >>> fl3 = CompoundLocation([fl1,fl2])
         >>> fl3.extract(seq)
         Seq('QHKAMILIVIC')
@@ -1885,7 +1888,7 @@ class WithinPosition(int, Position):
     True
 
     Note this also applies for comparison to other position objects,
-    where again the integer behaviour is used:
+    where again the integer behavior is used:
 
     >>> p == 10
     True
@@ -2024,7 +2027,7 @@ class BetweenPosition(int, Position):
     >>> p2 == 123
     True
 
-    Note this potentially surprising behaviour:
+    Note this potentially surprising behavior:
 
     >>> BetweenPosition(123, left=123, right=456) == ExactPosition(123)
     True
@@ -2123,7 +2126,7 @@ class BeforePosition(int, Position):
     >>> p + 10
     BeforePosition(15)
 
-    Note this potentially surprising behaviour:
+    Note this potentially surprising behavior:
 
     >>> p == ExactPosition(5)
     True
@@ -2187,7 +2190,7 @@ class AfterPosition(int, Position):
     >>> isinstance(p, int)
     True
 
-    Note this potentially surprising behaviour:
+    Note this potentially surprising behavior:
 
     >>> p == ExactPosition(7)
     True
@@ -2261,7 +2264,7 @@ class OneOfPosition(int, Position):
         choices is a list of Position derived objects, specifying possible
         locations.
 
-        position is an integer specifying the default behaviour.
+        position is an integer specifying the default behavior.
         """
         if position not in choices:
             raise ValueError(

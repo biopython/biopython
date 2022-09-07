@@ -21,7 +21,7 @@ import warnings
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonWarning
 
@@ -1141,7 +1141,7 @@ class ProteinDomain(PhyloElement):
 
     def to_seqfeature(self):
         """Create a SeqFeature from the ProteinDomain Object."""
-        feat = SeqFeature(location=FeatureLocation(self.start, self.end), id=self.value)
+        feat = SeqFeature(location=SimpleLocation(self.start, self.end), id=self.value)
         try:
             confidence = self.confidence
         except AttributeError:

@@ -31,7 +31,7 @@ except ImportError:
     ) from None
 
 # local stuff
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.Graphics import BasicChromosome
 from Bio.Graphics.DisplayRepresentation import ChromosomeCounts
 
@@ -342,7 +342,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 # Features as SeqFeatures
                 features = [
                     SeqFeature(
-                        FeatureLocation(start, end, strand),
+                        SimpleLocation(start, end, strand),
                         qualifiers={"name": [label], "color": [color]},
                     )
                     for (start, end, strand, label) in features

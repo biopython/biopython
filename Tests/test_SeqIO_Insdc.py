@@ -9,7 +9,7 @@ from io import StringIO
 
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 from seq_tests_common import SeqRecordTestBaseClass
@@ -59,7 +59,7 @@ class TestEmbl(unittest.TestCase):
 
     def test_writing_empty_qualifiers(self):
         f = SeqFeature(
-            FeatureLocation(5, 20, strand=+1),
+            SimpleLocation(5, 20, strand=+1),
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )

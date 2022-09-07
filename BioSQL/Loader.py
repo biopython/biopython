@@ -946,7 +946,7 @@ class DatabaseLoader:
                 % feature.location_operator,
                 BiopythonWarning,
             )
-        # This will be a list of length one for simple FeatureLocation:
+        # This will be a list of length one for simple SimpleLocation:
         parts = feature.location.parts
         if parts and {loc.strand for loc in parts} == {-1}:
             # To mimic prior behaviour of Biopython+BioSQL, reverse order
@@ -956,7 +956,7 @@ class DatabaseLoader:
             self._insert_location(loc, rank + 1, seqfeature_id)
 
     def _insert_location(self, location, rank, seqfeature_id):
-        """Add SeqFeatue location to seqfeature_location table (PRIVATE).
+        """Add SeqFeature location to seqfeature_location table (PRIVATE).
 
         TODO - Add location operator to location_qualifier_value?
         """

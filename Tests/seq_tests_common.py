@@ -9,7 +9,7 @@ import unittest
 from Bio.Seq import UnknownSeq, UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
-from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
+from Bio.SeqFeature import SimpleLocation, CompoundLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 from test_SeqIO import SeqIOTestBaseClass
@@ -50,8 +50,8 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         else:
             # BioSQL can only store ONE location!
             # TODO - Check BioPerl with a GenBank file with multiple ref locations
-            self.assertIsInstance(r1.location[0], FeatureLocation)
-            self.assertIsInstance(r2.location[0], FeatureLocation)
+            self.assertIsInstance(r1.location[0], SimpleLocation)
+            self.assertIsInstance(r2.location[0], SimpleLocation)
             self.assertEqual(r1.location[0].start, r2.location[0].start)
             self.assertEqual(r1.location[0].end, r2.location[0].end)
 
@@ -99,7 +99,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
 
         self.assertEqual(len(old_f.location.parts), len(new_f.location.parts))
         for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
-            # These are FeatureLocation objects
+            # These are SimpleLocation objects
             # Note UnknownPosition != UnknownPosition (just like NaN != NaN)
             if isinstance(old_sub.start, UnknownPosition):
                 self.assertIsInstance(new_sub.start, UnknownPosition)

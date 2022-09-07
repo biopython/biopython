@@ -275,7 +275,7 @@ def _retrieve_features(adaptor, primary_id):
                 adaptor, location_id
             )
             dbname, version = lookup.get(location_id, (None, None))
-            feature.location = SeqFeature.FeatureLocation(start, end)
+            feature.location = SeqFeature.SimpleLocation(start, end)
             feature.strand = strand
             feature.ref_db = dbname
             feature.ref = version
@@ -285,7 +285,7 @@ def _retrieve_features(adaptor, primary_id):
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
                 locs.append(
-                    SeqFeature.FeatureLocation(
+                    SeqFeature.SimpleLocation(
                         start, end, strand=strand, ref=version, ref_db=dbname
                     )
                 )
@@ -393,7 +393,7 @@ def _retrieve_reference(adaptor, primary_id):
         if (start is not None) or (end is not None):
             if start is not None:
                 start -= 1  # python counting
-            reference.location = [SeqFeature.FeatureLocation(start, end)]
+            reference.location = [SeqFeature.SimpleLocation(start, end)]
         # Don't replace the default "" with None.
         if authors:
             reference.authors = authors
