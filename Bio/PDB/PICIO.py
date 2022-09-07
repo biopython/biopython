@@ -24,7 +24,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBException
 
-from Bio.PDB.Polypeptide import one_to_three
+from Bio.Data.PDBData import protein_letters_1to3
 
 from Bio.PDB.internal_coords import (
     IC_Residue,
@@ -848,7 +848,9 @@ def read_PIC_seq(
 
     ndx = 1
     for r in seqRec.seq:
-        output += f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {one_to_three(r)}\n"
+        output += (
+            f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {protein_letters_1to3[r]}\n"
+        )
         ndx += 1
 
     sp = StringIO()
