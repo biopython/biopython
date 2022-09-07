@@ -58,7 +58,9 @@ class InsdcScanner:
     FEATURE_QUALIFIER_INDENT = 0
     FEATURE_QUALIFIER_SPACER = ""
     SEQUENCE_HEADERS = ["XXX"]  # with right hand side spaces removed
-    FEATURE_QUALIFIER_MAX_LINE_LEN = 80 - 21 # _InsdcWriter.MAX_WIDTH - _InsdcWriter.QUALIFIER_INDENT
+    FEATURE_QUALIFIER_MAX_LINE_LEN = (
+        80 - 21
+    )  # _InsdcWriter.MAX_WIDTH - _InsdcWriter.QUALIFIER_INDENT
 
     def __init__(self, debug=0):
         """Initialize the class."""
@@ -228,7 +230,11 @@ class InsdcScanner:
                     # white space (e.g. out of spec files with too much indentation)
 
                     # Always add the first character (handles the edge case that it's a line break)
-                    feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT] + line[self.FEATURE_QUALIFIER_INDENT + 1:].strip())
+                    if len(line) >= self.FEATURE_QUALIFIER_INDENT:
+                        feature_lines.append(
+                            line[self.FEATURE_QUALIFIER_INDENT]
+                            + line[self.FEATURE_QUALIFIER_INDENT + 1 :].strip()
+                        )
 
                     line = self.handle.readline()
                 features.append(self.parse_feature(feature_key, feature_lines))
@@ -350,7 +356,11 @@ class InsdcScanner:
                         while value_list[-1][-1] != '"':
                             prev_line = line
                             line = next(iterator)
-                            if prev_line != "\n" and line != "\n" and len(prev_line) < self.FEATURE_QUALIFIER_MAX_LINE_LEN:
+                            if (
+                                prev_line != "\n"
+                                and line != "\n"
+                                and len(prev_line) < self.FEATURE_QUALIFIER_MAX_LINE_LEN
+                            ):
                                 # If the previous line spanned the max width, a line break was added to make the line
                                 # fit the max width. In the case that it didn't span the max width, add a space to
                                 # the previous line to continue the sentence

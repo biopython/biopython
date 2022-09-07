@@ -411,12 +411,10 @@ class _InsdcWriter(SequenceWriter):
             max_index = min(len(line) - 1, self.MAX_WIDTH)
             # Find a line break in the line if it exists
             index = line[:max_index].find("\n")
-            
+
             if index == -1:
                 # Insert line break...
-                for index in range(
-                    max_index, self.QUALIFIER_INDENT + 1, -1
-                ):
+                for index in range(max_index, self.QUALIFIER_INDENT + 1, -1):
                     if line[index] == " ":
                         break
                 if line[index] != " ":

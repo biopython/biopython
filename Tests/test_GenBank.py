@@ -7746,8 +7746,12 @@ KEYWORDS    """,
     def test_multiline_qualifier_values(self):
         """Multiline qualififer value writing and parsing."""
         multiline_qualifiers = {
-            "notes": ["This is a multiline qualiifier value\nThis is the second line\nAnd the third!"],
-            "label": ["Averyveryveryveryveryveryveryveryveyrveryveryveryevyerlongvalue which will\nbe line broken"],
+            "notes": [
+                "This is a multiline qualiifier value\nThis is the second line\nAnd the third!"
+            ],
+            "label": [
+                "Averyveryveryveryveryveryveryveryveyrveryveryveryevyerlongvalue which will\nbe line broken"
+            ],
         }
 
         record = SeqRecord(
