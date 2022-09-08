@@ -946,7 +946,7 @@ class DatabaseLoader:
                 % feature.location_operator,
                 BiopythonWarning,
             )
-        # This will be a list of length one for simple SimpleLocation:
+        # This will be a list of length one for a SimpleLocation:
         parts = feature.location.parts
         if parts and {loc.strand for loc in parts} == {-1}:
             # To mimic prior behaviour of Biopython+BioSQL, reverse order

@@ -583,19 +583,20 @@ class _BaseGenBankConsumer:
         return new_start, new_end
 
 
-def fromstring(location_line, length, circular=False, seq_type=""):
+def fromstring(location_line, length, circular=False, stranded=True):
     """Create a Location object from a string."""
-    # Handle top level complement here for speed
-    if location_line.startswith("complement("):
-        assert location_line.endswith(")")
-        location_line = location_line[11:-1]
-        strand = -1
-    elif "PROTEIN" in seq_type.upper():
-        strand = None
+    if stranded:
+        # Handle top level complement here for speed
+        if location_line.startswith("complement("):
+            assert location_line.endswith(")")
+            location_line = location_line[11:-1]
+            strand = -1
+        else:
+            # Assume nucleotide otherwise feature strand for
+            # GenBank files with bad LOCUS lines set to None
+            strand = 1
     else:
-        # Assume nucleotide otherwise feature strand for
-        # GenBank files with bad LOCUS lines set to None
-        strand = 1
+        strand = None
 
     # Special case handling of the most common cases for speed
     if _re_simple_location.match(location_line):
@@ -604,7 +605,7 @@ def fromstring(location_line, length, circular=False, seq_type=""):
         try:
             location = SeqFeature.SimpleLocation(int(s) - 1, int(e), strand)
         except ValueError:
-            # Could be non-integers, more likely bad origin wrapping
+            # Could be bad origin wrapping
             location = _loc(location_line, length, strand, is_circular=circular)
         return strand, location_line, location
 
@@ -644,7 +645,7 @@ def fromstring(location_line, length, circular=False, seq_type=""):
                 # a CompoundLocation. CompoundLocation.parts returns a
                 # list of the SimpleLocation objects inside the
                 # CompoundLocation.
-                locs.extend(_loc(part, length, strand, seq_type.lower()).parts)
+                locs.extend(_loc(part, length, strand, circular).parts)
 
         if len(locs) < 2:
             # The CompoundLocation will raise a ValueError here!
@@ -1154,12 +1155,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Check if the sequence is circular for features that span the origin
         is_circular = "circular" in self.data.annotations.get("topology", "").lower()
 
-        seq_type = self._seq_type
+        stranded = "PROTEIN" not in self._seq_type.upper()
         expected_size = self._expected_size
 
         # --------------------
         strand, location_line, location = fromstring(
-            location_line, expected_size, is_circular, seq_type
+            location_line, expected_size, is_circular, stranded
         )
         cur_feature.location = location
 

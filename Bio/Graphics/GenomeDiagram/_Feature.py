@@ -129,7 +129,7 @@ class Feature:
         """Examine wrapped feature and set some properties accordingly (PRIVATE)."""
         self.locations = []
         bounds = []
-        # This will be a list of length one for simple SimpleLocation:
+        # This will be a list of length one for SimpleLocation:
         for location in self._feature.location.parts:
             start = int(location.start)
             end = int(location.end)

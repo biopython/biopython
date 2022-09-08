@@ -133,20 +133,6 @@ class SeqFeature:
         >>> f3.strand == f3.location.strand == -1
         True
 
-        An invalid strand will trigger an exception:
-
-        >>> f4 = SeqFeature(SimpleLocation(50, 60, strand=2))
-        Traceback (most recent call last):
-           ...
-        ValueError: Strand should be +1, -1, 0 or None, not 2
-
-        Similarly if set via the SimpleLocation directly:
-
-        >>> loc4 = SimpleLocation(50, 60, strand=2)
-        Traceback (most recent call last):
-           ...
-        ValueError: Strand should be +1, -1, 0 or None, not 2
-
         For exact start/end positions, an integer can be used (as shown above)
         as shorthand for the ExactPosition object. For non-exact locations, the
         SimpleLocation must be specified via the appropriate position objects.
@@ -187,7 +173,7 @@ class SeqFeature:
         if qualifiers is not None:
             self.qualifiers.update(qualifiers)
         if sub_features is not None:
-            raise TypeError("Rather than sub_features, use a CompoundSimpleLocation")
+            raise TypeError("Rather than sub_features, use a CompoundLocation")
         if ref is not None:
             warnings.warn(
                 "Using the ref argument is deprecated, and will be removed in a future release. "
@@ -1080,7 +1066,7 @@ class SimpleLocation:
         """Read only list of sections (always one, the SimpleLocation object).
 
         This is a convenience property allowing you to write code handling
-        both simple SimpleLocation objects (with one part) and more complex
+        both SimpleLocation objects (with one part) and more complex
         CompoundLocation objects (with multiple parts) interchangeably.
         """
         return [self]
@@ -1235,9 +1221,9 @@ class CompoundLocation:
         >>> f.end == max(f) + 1
         True
 
-        This is consistent with the behavior of the simple SimpleLocation for
-        a single region, where again the 'start' and 'end' do not necessarily
-        give the biological start and end, but rather the 'minimal' and 'maximal'
+        This is consistent with the behavior of the SimpleLocation for a single
+        region, where again the 'start' and 'end' do not necessarily give the
+        biological start and end, but rather the 'minimal' and 'maximal'
         coordinate boundaries.
 
         Note that adding locations provides a more intuitive method of
