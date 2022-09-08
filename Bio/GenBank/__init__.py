@@ -83,11 +83,12 @@ assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
 assert re.compile(_oneof_location).match("6..one-of(101,104)")
 
 
-_simple_location = r"\d+\.\.\d+"
+_simple_location = r"(\d+)\.\.(\d+)"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(
-    r"^(join|order|bond)\(%s(,%s)*\)$" % (_simple_location, _simple_location)
+    r"^(?P<operator>join|order|bond)\((?P<parts>\d+\.\.\d+(?:,\d+\.\.\d+)*)\)$"
 )
+
 _complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" % (
     _pair_location,
     _solo_location,
@@ -599,15 +600,35 @@ def fromstring(location_line, length, circular=False, stranded=True):
         strand = None
 
     # Special case handling of the most common cases for speed
-    if _re_simple_location.match(location_line):
-        # e.g. "123..456"
-        s, e = location_line.split("..")
-        try:
-            location = SeqFeature.SimpleLocation(int(s) - 1, int(e), strand)
-        except ValueError:
-            # Could be bad origin wrapping
-            location = _loc(location_line, length, strand, is_circular=circular)
-        return strand, location_line, location
+    m = _re_simple_location.match(location_line)  # e.g. "123..456"
+    if m is not None:
+        s, e = m.groups()
+        s = int(s) - 1
+        e = int(e)
+        if s <= e:
+            return SeqFeature.SimpleLocation(s, e, strand)
+        if not circular:
+            warnings.warn(
+                "It appears that %r is a feature that spans "
+                "the origin, but the sequence topology is "
+                "undefined. Skipping feature." % location_line,
+                BiopythonParserWarning,
+            )
+            return None
+        warnings.warn(
+            "Attempting to fix invalid location %r as "
+            "it looks like incorrect origin wrapping. "
+            "Please fix input file, this could have "
+            "unintended behavior." % location_line,
+            BiopythonParserWarning,
+        )
+        f1 = SeqFeature.SimpleLocation(s, length, strand)
+        f2 = SeqFeature.SimpleLocation(0, e, strand)
+        if strand == -1:
+            # For complementary features spanning the origin
+            return f2 + f1
+        else:
+            return f1 + f2
 
     if ",)" in location_line:
         warnings.warn(
@@ -627,13 +648,13 @@ def fromstring(location_line, length, circular=False, stranded=True):
             x = x.group()
             location_line = location_line.replace(x, x[5:-1])
 
-    if _re_simple_compound.match(location_line):
-        # e.g. join(<123..456,480..>500)
-        i = location_line.find("(")
-        # cur_feature.location_operator = location_line[:i]
+    m = _re_simple_compound.match(location_line)
+    if m is not None:
+        # e.g. join(123..456,480..500)
+        parts = m.group("parts").split(",")
         # we can split on the comma because these are simple locations
         locs = []
-        for part in location_line[i + 1 : -1].split(","):
+        for part in parts:
             s, e = part.split("..")
 
             try:
@@ -653,22 +674,18 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 "Should have at least 2 parts for compound location",
                 BiopythonParserWarning,
             )
-            location = None
-            return strand, location_line, location
+            return None
 
         if strand == -1:
-            location = SeqFeature.CompoundLocation(
-                locs[::-1], operator=location_line[:i]
-            )
-        else:
-            location = SeqFeature.CompoundLocation(locs, operator=location_line[:i])
-        return strand, location_line, location
+            locs = locs[::-1]
+
+        return SeqFeature.CompoundLocation(locs, operator=m.group("operator"))
 
     # Handle the general case with more complex regular expressions
     if _re_complex_location.match(location_line):
         # e.g. "AL121804.2:41..610"
         location = _loc(location_line, length, strand, is_circular=circular)
-        return strand, location_line, location
+        return location
 
     if _re_complex_compound.match(location_line):
         i = location_line.find("(")
@@ -713,7 +730,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
             )
         else:
             location = SeqFeature.CompoundLocation(locs, operator=location_line[:i])
-        return strand, location_line, location
+        return location
 
     # Not recognised
     if "order" in location_line and "join" in location_line:
@@ -727,7 +744,6 @@ def fromstring(location_line, length, circular=False, stranded=True):
     warnings.warn(
         BiopythonParserWarning(f"Couldn't parse feature location: {location_line!r}")
     )
-    return strand, location_line, None
 
 
 class _FeatureConsumer(_BaseGenBankConsumer):
@@ -1150,19 +1166,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             comma_pos = location_line.find(",")
             location_line = location_line[8:comma_pos]
 
-        cur_feature = self._cur_feature
-
+        length = self._expected_size
         # Check if the sequence is circular for features that span the origin
         is_circular = "circular" in self.data.annotations.get("topology", "").lower()
-
         stranded = "PROTEIN" not in self._seq_type.upper()
-        expected_size = self._expected_size
 
-        # --------------------
-        strand, location_line, location = fromstring(
-            location_line, expected_size, is_circular, stranded
+        self._cur_feature.location = fromstring(
+            location_line, length, is_circular, stranded
         )
-        cur_feature.location = location
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.
