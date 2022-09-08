@@ -258,8 +258,8 @@ include when installing Biopython from source due to a dependency on flex.
 
 Bio.PDB.Residue
 ---------------
-The ``sort`` and ``get_atom`` methods of the ``Residue`` class were removed in
-Release 1.79.
+The ``get_atom`` and ``sort`` methods of the ``Residue`` class were deprecated
+in Release 1.71 and 1.70 respectively, and removed in Release 1.79.
 
 Bio.PDB.ResidueDepth
 --------------------
