@@ -225,7 +225,7 @@ minimal \verb|SeqFeature| object, but this is easy:
 \begin{minted}{python}
 from Bio.SeqFeature import SeqFeature, SimpleLocation
 
-my_seq_feature = SeqFeature(SimpleLocation(50, 100), strand=+1)
+my_seq_feature = SeqFeature(SimpleLocation(50, 100, strand=+1))
 \end{minted}
 
 For strand, use \texttt{+1} for the forward strand, \texttt{-1} for the
@@ -242,11 +242,11 @@ gdt_features = gdd.new_track(1, greytrack=False)
 gds_features = gdt_features.new_set()
 
 # Add three features to show the strand options,
-feature = SeqFeature(SimpleLocation(25, 125), strand=+1)
+feature = SeqFeature(SimpleLocation(25, 125, strand=+1))
 gds_features.add_feature(feature, name="Forward", label=True)
-feature = SeqFeature(SimpleLocation(150, 250), strand=None)
+feature = SeqFeature(SimpleLocation(150, 250, strand=None))
 gds_features.add_feature(feature, name="Strandless", label=True)
-feature = SeqFeature(SimpleLocation(275, 375), strand=-1)
+feature = SeqFeature(SimpleLocation(275, 375, strand=-1))
 gds_features.add_feature(feature, name="Reverse", label=True)
 
 gdd.draw(format="linear", pagesize=(15 * cm, 4 * cm), fragments=1, start=0, end=400)

@@ -367,7 +367,7 @@ class SeqFeatureExtractionWritingReading(SeqIOFeatureTestBaseClass):
     def test_simple_dna_strand_none(self):
         """Feature on DNA (simple, strand None)."""
         s = Seq("GATCRYWSMKHBVDN")
-        f = SeqFeature(SimpleLocation(5, 10), strand=None)
+        f = SeqFeature(SimpleLocation(5, 10, strand=None))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
