@@ -120,7 +120,7 @@ _re_possibly_complemented_complex_location = re.compile(
     _possibly_complemented_complex_location
 )
 _re_complex_compound = re.compile(
-    r"^(join|order|bond)\((?P<location>%s(?:,%s)*)\)$"
+    r"^(?P<operator>join|order|bond)\((?P<location>%s(?:,%s)*)\)$"
     % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
 )
 
@@ -149,6 +149,46 @@ _possibly_complemented_complex_location = r"((?:%s)|(?:complement\((?:%s)\)))" %
 _re_complex_locations = re.compile(
     r"(?:,)?%s" % _possibly_complemented_complex_location
 )
+
+assert _re_complex_locations.split("123..145")[1::2] == ["123..145"]
+assert _re_complex_locations.split("123..145,200..209")[1::2] == [
+    "123..145",
+    "200..209",
+]
+assert _re_complex_locations.split("one-of(200,203)..300")[1::2] == [
+    "one-of(200,203)..300"
+]
+assert _re_complex_locations.split("complement(123..145),200..209")[1::2] == [
+    "complement(123..145)",
+    "200..209",
+]
+assert _re_complex_locations.split("123..145,one-of(200,203)..209")[1::2] == [
+    "123..145",
+    "one-of(200,203)..209",
+]
+assert _re_complex_locations.split("123..145,one-of(200,203)..one-of(209,211),300")[
+    1::2
+] == ["123..145", "one-of(200,203)..one-of(209,211)", "300"]
+assert _re_complex_locations.split(
+    "123..145,complement(one-of(200,203)..one-of(209,211)),300"
+)[1::2] == ["123..145", "complement(one-of(200,203)..one-of(209,211))", "300"]
+assert _re_complex_locations.split("123..145,200..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+    "300",
+]
+assert _re_complex_locations.split("123..145,200..one-of(209,211)")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+]
+assert _re_complex_locations.split(
+    "complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"
+)[1::2] == [
+    "complement(149815..150200)",
+    "complement(293787..295573)",
+    "NC_016402.1:6618..6676",
+    "181647..181905",
+]
 
 assert _re_simple_location.match("104..160")
 assert not _re_simple_location.match("68451760..68452073^68452074")
@@ -323,67 +363,6 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
     end = SeqFeature.Position.fromstring(e)
 
     return SeqFeature.SimpleLocation(start, end, strand, ref=ref)
-
-
-def _split_compound_loc(compound_loc):
-    """Split a tricky compound location string (PRIVATE).
-
-    >>> list(_split_compound_loc("123..145"))
-    ['123..145']
-    >>> list(_split_compound_loc("123..145,200..209"))
-    ['123..145', '200..209']
-    >>> list(_split_compound_loc("one-of(200,203)..300"))
-    ['one-of(200,203)..300']
-    >>> list(_split_compound_loc("complement(123..145),200..209"))
-    ['complement(123..145)', '200..209']
-    >>> list(_split_compound_loc("123..145,one-of(200,203)..209"))
-    ['123..145', 'one-of(200,203)..209']
-    >>> list(_split_compound_loc("123..145,one-of(200,203)..one-of(209,211),300"))
-    ['123..145', 'one-of(200,203)..one-of(209,211)', '300']
-    >>> list(_split_compound_loc("123..145,complement(one-of(200,203)..one-of(209,211)),300"))
-    ['123..145', 'complement(one-of(200,203)..one-of(209,211))', '300']
-    >>> list(_split_compound_loc("123..145,200..one-of(209,211),300"))
-    ['123..145', '200..one-of(209,211)', '300']
-    >>> list(_split_compound_loc("123..145,200..one-of(209,211)"))
-    ['123..145', '200..one-of(209,211)']
-    >>> list(_split_compound_loc("complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"))
-    ['complement(149815..150200)', 'complement(293787..295573)', 'NC_016402.1:6618..6676', '181647..181905']
-    """
-    if "one-of(" in compound_loc:
-        # Hard case
-        while "," in compound_loc:
-            assert compound_loc[0] != ","
-            assert compound_loc[0:2] != ".."
-            i = compound_loc.find(",")
-            part = compound_loc[:i]
-            compound_loc = compound_loc[i:]  # includes the comma
-            while part.count("(") > part.count(")"):
-                assert "one-of(" in part, (part, compound_loc)
-                i = compound_loc.find(")")
-                part += compound_loc[: i + 1]
-                compound_loc = compound_loc[i + 1 :]
-            if compound_loc.startswith(".."):
-                i = compound_loc.find(",")
-                if i == -1:
-                    part += compound_loc
-                    compound_loc = ""
-                else:
-                    part += compound_loc[:i]
-                    compound_loc = compound_loc[i:]  # includes the comma
-            while part.count("(") > part.count(")"):
-                assert part.count("one-of(") == 2
-                i = compound_loc.find(")")
-                part += compound_loc[: i + 1]
-                compound_loc = compound_loc[i + 1 :]
-            if compound_loc.startswith(","):
-                compound_loc = compound_loc[1:]
-            assert part
-            yield part
-        if compound_loc:
-            yield compound_loc
-    else:
-        # Easy case
-        yield from compound_loc.split(",")
 
 
 class Iterator:
@@ -780,17 +759,9 @@ def fromstring(location_line, length, circular=False, stranded=True):
 
     m = _re_complex_compound.match(location_line)
     if m is not None:
-        parts2 = _re_complex_locations.split(m.group("location"))
-        i = location_line.find("(")
-        # cur_feature.location_operator = location_line[:i]
-        # Can't split on the comma because of positions like one-of(1,2,3)
         locs = []
-        parts = _split_compound_loc(location_line[i + 1 : -1])
-        parts = list(parts)
-        if parts != parts2[1::2]:
-            raise Exception("%s\n%s\n%s" % (location_line, parts, parts2))
-        parts = _split_compound_loc(location_line[i + 1 : -1])
-        for part in parts:
+        parts = _re_complex_locations.split(m.group("location"))
+        for part in parts[1::2]:
             if part.startswith("complement("):
                 assert part[-1] == ")"
                 part = part[11:-1]
@@ -824,10 +795,10 @@ def fromstring(location_line, length, circular=False, stranded=True):
             # Reverse the backwards order used in GenBank files
             # with complement(join(...))
             location = SeqFeature.CompoundLocation(
-                locs[::-1], operator=location_line[:i]
+                locs[::-1], operator=m.group("operator")
             )
         else:
-            location = SeqFeature.CompoundLocation(locs, operator=location_line[:i])
+            location = SeqFeature.CompoundLocation(locs, operator=m.group("operator"))
         return location
 
     # Not recognised
