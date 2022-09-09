@@ -64,23 +64,28 @@ FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 
 # Regular expressions for location parsing
 _solo_location = r"[<>]?\d+"
+_re_solo_location = re.compile("^%s$" % _solo_location)
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
+_re_pair_location = re.compile(r"^([<>]?\d+)\.\.([<>]?\d+)$")
 _between_location = r"\d+\^\d+"
+_re_between_location = re.compile(r"^(\d+)\^(\d+)$")
 
 _within_position = r"\(\d+\.\d+\)"
 _within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
     _within_position,
     _within_position,
 )
-assert re.compile(_within_location).match("(3.9)..10")
-assert re.compile(_within_location).match("26..(30.33)")
-assert re.compile(_within_location).match("(13.19)..(20.28)")
+_re_within_location = re.compile(_within_location)
+assert _re_within_location.match("(3.9)..10")
+assert _re_within_location.match("26..(30.33)")
+assert _re_within_location.match("(13.19)..(20.28)")
 
-_oneof_position = r"one\-of\(\d+(,\d+)+\)"
+_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
 _oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
-assert re.compile(_oneof_location).match("one-of(6,9)..101")
-assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
-assert re.compile(_oneof_location).match("6..one-of(101,104)")
+_re_oneof_location = re.compile(_oneof_location)
+assert _re_oneof_location.match("one-of(6,9)..101")
+assert _re_oneof_location.match("one-of(6,9)..one-of(101,104)")
+assert _re_oneof_location.match("6..one-of(101,104)")
 
 
 _simple_location = r"(\d+)\.\.(\d+)"
@@ -89,23 +94,61 @@ _re_simple_compound = re.compile(
     r"^(?P<operator>join|order|bond)\((?P<parts>\d+\.\.\d+(?:,\d+\.\.\d+)*)\)$"
 )
 
-_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" % (
+_complex_location = (
+    r"(?:(?P<ref>[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?)\:)?(?P<location>%s|%s|%s|%s|%s)"
+    % (
+        _pair_location,
+        _solo_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+    )
+)
+_re_complex_location = re.compile(r"^%s$" % _complex_location)
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" % (
     _pair_location,
     _solo_location,
     _between_location,
     _within_location,
     _oneof_location,
 )
-_re_complex_location = re.compile(r"^%s$" % _complex_location)
-_possibly_complemented_complex_location = r"(%s|complement\(%s\))" % (
+_possibly_complemented_complex_location = r"(?:%s|complement\(%s\))" % (
     _complex_location,
     _complex_location,
 )
+_re_possibly_complemented_complex_location = re.compile(
+    _possibly_complemented_complex_location
+)
 _re_complex_compound = re.compile(
-    r"^(join|order|bond)\(%s(,%s)*\)$"
+    r"^(join|order|bond)\((?P<location>%s(?:,%s)*)\)$"
     % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
 )
 
+_solo_location = r"[<>]?\d+"
+_pair_location = r"[<>]?\d+\.\.[<>]?\d+"
+_between_location = r"\d+\^\d+"
+_within_location = r"(?:(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s))" % (
+    _within_position,
+    _within_position,
+)
+_oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
+    _oneof_position,
+    _oneof_position,
+)
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s" % (
+    _pair_location,
+    _between_location,
+    _within_location,
+    _oneof_location,
+    _solo_location,
+)
+_possibly_complemented_complex_location = r"((?:%s)|(?:complement\((?:%s)\)))" % (
+    _complex_location,
+    _complex_location,
+)
+_re_complex_locations = re.compile(
+    r"(?:,)?%s" % _possibly_complemented_complex_location
+)
 
 assert _re_simple_location.match("104..160")
 assert not _re_simple_location.match("68451760..68452073^68452074")
@@ -143,7 +186,6 @@ assert _re_complex_compound.match(
 assert not _re_simple_compound.match(
     "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
 )
-assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
 assert _re_complex_compound.match(
     "join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))"
 )
@@ -682,17 +724,73 @@ def fromstring(location_line, length, circular=False, stranded=True):
         return SeqFeature.CompoundLocation(locs, operator=m.group("operator"))
 
     # Handle the general case with more complex regular expressions
-    if _re_complex_location.match(location_line):
-        # e.g. "AL121804.2:41..610"
-        location = _loc(location_line, length, strand, is_circular=circular)
-        return location
+    m = _re_complex_location.match(location_line)  # e.g. "AL121804.2:41..610"
+    if m is not None:
+        ref = m.group("ref")
+        location = m.group("location")
+        m = _re_pair_location.match(location)
+        if m is None:
+            m = _re_within_location.match(location)
+        if m is None:
+            m = _re_oneof_location.match(location)
+        if m is not None:
+            s, e = m.groups()
+            s = SeqFeature.Position.fromstring(s, -1)
+            e = SeqFeature.Position.fromstring(e)
+            if s > e:
+                if not circular:
+                    warnings.warn(
+                        "It appears that %r is a feature that spans "
+                        "the origin, but the sequence topology is "
+                        "undefined. Skipping feature." % location_line,
+                        BiopythonParserWarning,
+                    )
+                    return None
+                else:
+                    warnings.warn(
+                        "Attempting to fix invalid location %r as "
+                        "it looks like incorrect origin wrapping. "
+                        "Please fix input file, this could have "
+                        "unintended behavior." % location_line,
+                        BiopythonParserWarning,
+                    )
 
-    if _re_complex_compound.match(location_line):
+                    f1 = SeqFeature.SimpleLocation(s, length, strand)
+                    f2 = SeqFeature.SimpleLocation(0, e, strand)
+
+                    if strand == -1:
+                        # For complementary features spanning the origin
+                        return f2 + f1
+                    else:
+                        return f1 + f2
+            else:
+                return SeqFeature.SimpleLocation(s, e, strand, ref=ref)
+        m = _re_solo_location.match(location)
+        if m is not None:
+            position = m.group()
+            start = SeqFeature.Position.fromstring(position, -1)
+            end = SeqFeature.Position.fromstring(position)
+            return SeqFeature.SimpleLocation(start, end, strand, ref=ref)
+        m = _re_between_location.match(location)
+        if m is not None:
+            s, e = map(int, m.groups())
+            if s + 1 == e or (s == length and e == 1):
+                return SeqFeature.SimpleLocation(s, s, strand, ref=ref)
+            raise ValueError(f"Invalid between location {location_line!r}")
+
+    m = _re_complex_compound.match(location_line)
+    if m is not None:
+        parts2 = _re_complex_locations.split(m.group("location"))
         i = location_line.find("(")
         # cur_feature.location_operator = location_line[:i]
         # Can't split on the comma because of positions like one-of(1,2,3)
         locs = []
-        for part in _split_compound_loc(location_line[i + 1 : -1]):
+        parts = _split_compound_loc(location_line[i + 1 : -1])
+        parts = list(parts)
+        if parts != parts2[1::2]:
+            raise Exception("%s\n%s\n%s" % (location_line, parts, parts2))
+        parts = _split_compound_loc(location_line[i + 1 : -1])
+        for part in parts:
             if part.startswith("complement("):
                 assert part[-1] == ")"
                 part = part[11:-1]
