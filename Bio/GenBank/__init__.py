@@ -105,24 +105,30 @@ _complex_location = (
     )
 )
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
-_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" % (
-    _pair_location,
-    _solo_location,
-    _between_location,
-    _within_location,
-    _oneof_location,
+_solo_bond = r"bond\(%s\)" % _solo_location
+_complex_location = (
+    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s|%s)"
+    % (
+        _pair_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+        _solo_bond,
+        _solo_location,
+    )
 )
 _possibly_complemented_complex_location = r"(?:%s|complement\(%s\))" % (
     _complex_location,
     _complex_location,
 )
-_re_possibly_complemented_complex_location = re.compile(
-    _possibly_complemented_complex_location
-)
-_re_complex_compound = re.compile(
-    r"^(?:(?P<operator>join|order|bond)\()?(?P<location>%s(?:,%s)*)\)?$"
+
+_complex_compound = (
+    r"(?:(?P<operator>join|order|bond)\((?P<locations>%s(?:,%s)*)\))"
     % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
 )
+
+_any_location = r"^(?:%s)|(?:%s)$" % (_complex_location, _complex_compound)
+_re_any_location = re.compile(_any_location)
 
 _solo_location = r"[<>]?\d+"
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
@@ -135,11 +141,12 @@ _oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
     _oneof_position,
     _oneof_position,
 )
-_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s" % (
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s|%s" % (
     _pair_location,
     _between_location,
     _within_location,
     _oneof_location,
+    _solo_bond,
     _solo_location,
 )
 _possibly_complemented_complex_location = r"((?:%s)|(?:complement\((?:%s)\)))" % (
@@ -220,22 +227,22 @@ assert _re_complex_location.match(
     "AL358792.24.1.166931:3274..3461"
 )  # lots of dots in external reference
 assert _re_complex_location.match("one-of(3,6)..101")
-assert _re_complex_compound.match(
-    "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
-)
+# assert _re_complex_compound.match(
+# "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
+# )
 assert not _re_simple_compound.match(
     "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
 )
-assert _re_complex_compound.match(
-    "join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))"
-)
+# assert _re_complex_compound.match(
+# "join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))"
+# )
 
 # Trans-spliced example from NC_016406, note underscore in reference name:
 assert _re_complex_location.match("NC_016402.1:6618..6676")
 assert _re_complex_location.match("181647..181905")
-assert _re_complex_compound.match(
-    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-)
+# assert _re_complex_compound.match(
+# "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+# )
 assert not _re_complex_location.match(
     "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
 )
@@ -253,6 +260,7 @@ _solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
 assert _solo_bond.match("bond(196)")
 assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
+del _solo_bond
 
 
 def _loc(loc_str, expected_seq_length, strand, is_circular=False):
@@ -325,6 +333,14 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
             else:
                 raise ValueError(f"Invalid between location {loc_str!r}") from None
             return SeqFeature.SimpleLocation(pos, pos, strand, ref=ref)
+        elif loc_str.startswith("bond(") and loc_str.endswith(")"):
+            # e.g. bond(196)
+            # e.g. join(bond(284),bond(305),bond(309),bond(305))
+            warnings.warn(
+                "Dropping bond qualifier in feature location", BiopythonParserWarning
+            )
+            s = loc_str[5:-1]
+            e = loc_str[5:-1]
         else:
             # e.g. "123"
             s = loc_str
@@ -620,19 +636,8 @@ def fromstring(location_line, length, circular=False, stranded=True):
     else:
         strand = None
 
-    if _solo_bond.search(location_line):
-        # e.g. bond(196)
-        # e.g. join(bond(284),bond(305),bond(309),bond(305))
-        warnings.warn(
-            "Dropping bond qualifier in feature location", BiopythonParserWarning
-        )
-        # There ought to be a better way to do this...
-        for x in _solo_bond.finditer(location_line):
-            x = x.group()
-            location_line = location_line.replace(x, x[5:-1])
-
     # Handle the general case with more complex regular expressions
-    m = _re_complex_compound.match(location_line)
+    m = _re_any_location.match(location_line)
     if m is None:
         # Not recognised
         if "order" in location_line and "join" in location_line:
@@ -658,11 +663,12 @@ def fromstring(location_line, length, circular=False, stranded=True):
             )
         )
         return
+
     operator = m.group("operator")
     if operator is None:
         parts = [location_line]
     else:
-        parts = _re_complex_locations.split(m.group("location"))[1::2]
+        parts = _re_complex_locations.split(m.group("locations"))[1::2]
     locs = []
     for part in parts:
         if part.startswith("complement("):
