@@ -620,44 +620,6 @@ def fromstring(location_line, length, circular=False, stranded=True):
     else:
         strand = None
 
-    # Special case handling of the most common cases for speed
-    m = _re_simple_location.match(location_line)  # e.g. "123..456"
-    if m is not None:
-        s, e = m.groups()
-        s = int(s) - 1
-        e = int(e)
-        if s <= e:
-            return SeqFeature.SimpleLocation(s, e, strand)
-        if not circular:
-            warnings.warn(
-                "It appears that %r is a feature that spans "
-                "the origin, but the sequence topology is "
-                "undefined. Skipping feature." % location_line,
-                BiopythonParserWarning,
-            )
-            return None
-        warnings.warn(
-            "Attempting to fix invalid location %r as "
-            "it looks like incorrect origin wrapping. "
-            "Please fix input file, this could have "
-            "unintended behavior." % location_line,
-            BiopythonParserWarning,
-        )
-        f1 = SeqFeature.SimpleLocation(s, length, strand)
-        f2 = SeqFeature.SimpleLocation(0, e, strand)
-        if strand == -1:
-            # For complementary features spanning the origin
-            return f2 + f1
-        else:
-            return f1 + f2
-
-    if ",)" in location_line:
-        warnings.warn(
-            "Dropping trailing comma in malformed feature location",
-            BiopythonParserWarning,
-        )
-        location_line = location_line.replace(",)", ")")
-
     if _solo_bond.search(location_line):
         # e.g. bond(196)
         # e.g. join(bond(284),bond(305),bond(309),bond(305))
@@ -809,6 +771,15 @@ def fromstring(location_line, length, circular=False, stranded=True):
             "location (nested operators) are illegal:\n" + location_line
         )
         raise LocationParserError(msg)
+
+    # See issue #937. Note that NCBI has already fixed this record.
+    if ",)" in location_line:
+        warnings.warn(
+            "Dropping trailing comma in malformed feature location",
+            BiopythonParserWarning,
+        )
+        location_line = location_line.replace(",)", ")")
+        return fromstring(location_line)
     # This used to be an error....
     warnings.warn(
         BiopythonParserWarning(f"Couldn't parse feature location: {location_line!r}")
