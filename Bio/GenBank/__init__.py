@@ -660,61 +660,11 @@ def fromstring(location_line, length, circular=False, stranded=True):
         return
     operator = m.group("operator")
     if operator is None:
-        m = _re_complex_location.match(location_line)  # e.g. "AL121804.2:41..610"
-        ref = m.group("ref")
-        location = m.group("location")
-        m = _re_pair_location.match(location)
-        if m is None:
-            m = _re_within_location.match(location)
-        if m is None:
-            m = _re_oneof_location.match(location)
-        if m is not None:
-            s, e = m.groups()
-            s = SeqFeature.Position.fromstring(s, -1)
-            e = SeqFeature.Position.fromstring(e)
-            if s > e:
-                if not circular:
-                    warnings.warn(
-                        "It appears that %r is a feature that spans "
-                        "the origin, but the sequence topology is "
-                        "undefined. Skipping feature." % location_line,
-                        BiopythonParserWarning,
-                    )
-                    return None
-                else:
-                    warnings.warn(
-                        "Attempting to fix invalid location %r as "
-                        "it looks like incorrect origin wrapping. "
-                        "Please fix input file, this could have "
-                        "unintended behavior." % location_line,
-                        BiopythonParserWarning,
-                    )
-
-                    f1 = SeqFeature.SimpleLocation(s, length, strand)
-                    f2 = SeqFeature.SimpleLocation(0, e, strand)
-
-                    if strand == -1:
-                        # For complementary features spanning the origin
-                        return f2 + f1
-                    else:
-                        return f1 + f2
-            else:
-                return SeqFeature.SimpleLocation(s, e, strand, ref=ref)
-        m = _re_solo_location.match(location)
-        if m is not None:
-            position = m.group()
-            start = SeqFeature.Position.fromstring(position, -1)
-            end = SeqFeature.Position.fromstring(position)
-            return SeqFeature.SimpleLocation(start, end, strand, ref=ref)
-        m = _re_between_location.match(location)
-        if m is not None:
-            s, e = map(int, m.groups())
-            if s + 1 == e or (s == length and e == 1):
-                return SeqFeature.SimpleLocation(s, s, strand, ref=ref)
-            raise ValueError(f"Invalid between location {location_line!r}")
+        parts = [location_line]
+    else:
+        parts = _re_complex_locations.split(m.group("location"))[1::2]
     locs = []
-    parts = _re_complex_locations.split(m.group("location"))
-    for part in parts[1::2]:
+    for part in parts:
         if part.startswith("complement("):
             assert part[-1] == ")"
             part = part[11:-1]
@@ -727,14 +677,16 @@ def fromstring(location_line, length, circular=False, stranded=True):
             # Using _loc to return a CompoundLocation of the
             # wrapped feature and returning the two SimpleLocation
             # objects to extend to the list of feature locations.
-            loc = _loc(part, length, part_strand, is_circular=circular).parts
+            loc = _loc(part, length, part_strand, is_circular=circular)
 
         except ValueError:
             print(location_line)
             print(part)
             raise
+        if operator is None:
+            return loc
         # loc will be a list of one or two SimpleLocation items.
-        locs.extend(loc)
+        locs.extend(loc.parts)
     # Historically a join on the reverse strand has been represented
     # in Biopython with both the parent SeqFeature and its children
     # (the exons for a CDS) all given a strand of -1.  Likewise, for
