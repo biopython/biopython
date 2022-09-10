@@ -63,6 +63,10 @@ FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 
 # Regular expressions for location parsing
+
+
+_re_complemented = re.compile(r"^complement\((?P<inner>\S*)\)$")
+
 _solo_location = r"[<>]?\d+"
 _re_solo_location = re.compile("^%s$" % _solo_location)
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
@@ -625,14 +629,14 @@ def fromstring(location_line, length, circular=False, stranded=True):
     """Create a Location object from a string."""
     if stranded:
         # Handle top level complement here for speed
-        if location_line.startswith("complement("):
-            assert location_line.endswith(")")
-            location_line = location_line[11:-1]
-            strand = -1
-        else:
+        m = _re_complemented.match(location_line)
+        if m is None:
             # Assume nucleotide otherwise feature strand for
             # GenBank files with bad LOCUS lines set to None
             strand = 1
+        else:
+            location_line = m.group("inner")
+            strand = -1
     else:
         strand = None
 
@@ -671,13 +675,13 @@ def fromstring(location_line, length, circular=False, stranded=True):
         parts = _re_complex_locations.split(m.group("locations"))[1::2]
     locs = []
     for part in parts:
-        if part.startswith("complement("):
-            assert part[-1] == ")"
-            part = part[11:-1]
+        m = _re_complemented.match(part)
+        if m is None:
+            part_strand = strand
+        else:
+            part = m.group("inner")
             assert strand != -1, "Double complement?"
             part_strand = -1
-        else:
-            part_strand = strand
         try:
             # There is likely a problem with origin wrapping.
             # Using _loc to return a CompoundLocation of the
