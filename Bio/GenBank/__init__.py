@@ -69,6 +69,68 @@ _re_complemented = re.compile(r"^complement\((?P<inner>\S*)\)$")
 
 _re_compounded = re.compile(r"^(?P<operator>join|order|bond)\((?P<locations>\S+)\)$")
 
+
+reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
+_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
+
+_oneof_location = r"[<>]?(?:\d+|%s)\.\.[<>]?(?:\d+|%s)" % (
+    _oneof_position,
+    _oneof_position,
+)
+_any_location = r"%s|[^,]+" % _oneof_location
+
+_possibly_complemented_complex_location = (
+    r"(%s?%s|complement\(%s\)|%s|complement\(%s\))"
+    % (reference, _oneof_location, _oneof_location, "[^,]+", "[^,]+")
+)
+
+pattern = re.compile(_possibly_complemented_complex_location)
+
+_split = pattern.split
+
+assert _split("123..145")[1::2] == ["123..145"]
+assert _split("123..145,200..209")[1::2] == [
+    "123..145",
+    "200..209",
+]
+assert _split("one-of(200,203)..300")[1::2] == ["one-of(200,203)..300"]
+assert _split("complement(123..145),200..209")[1::2] == [
+    "complement(123..145)",
+    "200..209",
+]
+assert _split("123..145,one-of(200,203)..209")[1::2] == [
+    "123..145",
+    "one-of(200,203)..209",
+]
+assert _split("123..145,one-of(200,203)..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "one-of(200,203)..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,complement(one-of(200,203)..one-of(209,211)),300")[1::2] == [
+    "123..145",
+    "complement(one-of(200,203)..one-of(209,211))",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211)")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+]
+assert _split(
+    "complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"
+)[1::2] == [
+    "complement(149815..150200)",
+    "complement(293787..295573)",
+    "NC_016402.1:6618..6676",
+    "181647..181905",
+]
+
+
 _solo_location = r"[<>]?\d+"
 _re_solo_location = re.compile("^%s$" % _solo_location)
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
@@ -144,6 +206,7 @@ _oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
     _oneof_position,
     _oneof_position,
 )
+
 _complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,.+)|%s|%s|%s" % (
     _within_location,
     _solo_bond,
@@ -162,9 +225,6 @@ _possibly_complemented_complex_location = (
         _complex_location,
     )
 )
-_re_complex_locations = re.compile(
-    r"(?:,)?%s" % _possibly_complemented_complex_location
-)
 
 _complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s|%s" % (
     _pair_location,
@@ -175,46 +235,6 @@ _complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s
     _solo_location,
 )
 
-
-assert _re_complex_locations.split("123..145")[1::2] == ["123..145"]
-assert _re_complex_locations.split("123..145,200..209")[1::2] == [
-    "123..145",
-    "200..209",
-]
-assert _re_complex_locations.split("one-of(200,203)..300")[1::2] == [
-    "one-of(200,203)..300"
-]
-assert _re_complex_locations.split("complement(123..145),200..209")[1::2] == [
-    "complement(123..145)",
-    "200..209",
-]
-assert _re_complex_locations.split("123..145,one-of(200,203)..209")[1::2] == [
-    "123..145",
-    "one-of(200,203)..209",
-]
-assert _re_complex_locations.split("123..145,one-of(200,203)..one-of(209,211),300")[
-    1::2
-] == ["123..145", "one-of(200,203)..one-of(209,211)", "300"]
-assert _re_complex_locations.split(
-    "123..145,complement(one-of(200,203)..one-of(209,211)),300"
-)[1::2] == ["123..145", "complement(one-of(200,203)..one-of(209,211))", "300"]
-assert _re_complex_locations.split("123..145,200..one-of(209,211),300")[1::2] == [
-    "123..145",
-    "200..one-of(209,211)",
-    "300",
-]
-assert _re_complex_locations.split("123..145,200..one-of(209,211)")[1::2] == [
-    "123..145",
-    "200..one-of(209,211)",
-]
-assert _re_complex_locations.split(
-    "complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"
-)[1::2] == [
-    "complement(149815..150200)",
-    "complement(293787..295573)",
-    "NC_016402.1:6618..6676",
-    "181647..181905",
-]
 
 assert _re_simple_location.match("104..160")
 assert not _re_simple_location.match("68451760..68452073^68452074")
@@ -676,7 +696,8 @@ def fromstring(location_line, length, circular=False, stranded=True):
         parts = [location_line]
     else:
         operator = m.group("operator")
-        parts = _re_complex_locations.split(m.group("locations"))[1::2]
+        # parts = _re_complex_locations.split(m.group("locations"))[1::2]
+        parts = _split(m.group("locations"))[1::2]
     locs = []
     for part in parts:
         m = _re_complemented.match(part)
