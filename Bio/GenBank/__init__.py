@@ -144,15 +144,10 @@ _oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
     _oneof_position,
     _oneof_position,
 )
-_complex_location = (
-    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,+)|%s|%s|%s|%s|%s"
-    % (
-        _pair_location,
-        _between_location,
-        _within_location,
-        _solo_bond,
-        _solo_location,
-    )
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,.+)|%s|%s|%s" % (
+    _within_location,
+    _solo_bond,
+    _solo_location,
 )
 _ref_oneof_location = (
     r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s" % _oneof_location
