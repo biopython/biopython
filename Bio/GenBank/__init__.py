@@ -67,6 +67,8 @@ FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 
 _re_complemented = re.compile(r"^complement\((?P<inner>\S*)\)$")
 
+_re_compounded = re.compile(r"^(?P<operator>join|order|bond)\((?P<locations>\S+)\)$")
+
 _solo_location = r"[<>]?\d+"
 _re_solo_location = re.compile("^%s$" % _solo_location)
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
@@ -130,9 +132,6 @@ _complex_compound = (
     r"(?:(?P<operator>join|order|bond)\((?P<locations>%s(?:,%s)*)\))"
     % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
 )
-
-_any_location = r"^(?:%s)|(?:%s)$" % (_complex_location, _complex_compound)
-_re_any_location = re.compile(_any_location)
 
 _solo_location = r"[<>]?\d+"
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
@@ -264,7 +263,6 @@ _solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
 assert _solo_bond.match("bond(196)")
 assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
-del _solo_bond
 
 
 def _loc(loc_str, expected_seq_length, strand, is_circular=False):
@@ -317,6 +315,18 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
         ref, loc_str = loc_str.split(":")
     else:
         ref = None
+
+    if _solo_bond.search(loc_str):
+        # e.g. bond(196)
+        # e.g. join(bond(284),bond(305),bond(309),bond(305))
+        warnings.warn(
+            "Dropping bond qualifier in feature location", BiopythonParserWarning
+        )
+        # There ought to be a better way to do this...
+        for x in _solo_bond.finditer(loc_str):
+            x = x.group()
+            loc_str = loc_str.replace(x, x[5:-1])
+
     try:
         s, e = loc_str.split("..")
     except ValueError:
@@ -381,6 +391,9 @@ def _loc(loc_str, expected_seq_length, strand, is_circular=False):
 
     start = SeqFeature.Position.fromstring(s, -1)
     end = SeqFeature.Position.fromstring(e)
+
+    if start < 0:
+        raise ValueError
 
     return SeqFeature.SimpleLocation(start, end, strand, ref=ref)
 
@@ -640,38 +653,13 @@ def fromstring(location_line, length, circular=False, stranded=True):
     else:
         strand = None
 
-    # Handle the general case with more complex regular expressions
-    m = _re_any_location.match(location_line)
+    # Determine if we have a simple location or a compound location
+    m = _re_compounded.match(location_line)
     if m is None:
-        # Not recognised
-        if "order" in location_line and "join" in location_line:
-            # See Bug 3197
-            msg = (
-                'Combinations of "join" and "order" within the same '
-                "location (nested operators) are illegal:\n" + location_line
-            )
-            raise LocationParserError(msg)
-
-        # See issue #937. Note that NCBI has already fixed this record.
-        if ",)" in location_line:
-            warnings.warn(
-                "Dropping trailing comma in malformed feature location",
-                BiopythonParserWarning,
-            )
-            location_line = location_line.replace(",)", ")")
-            return fromstring(location_line)
-        # This used to be an error....
-        warnings.warn(
-            BiopythonParserWarning(
-                f"Couldn't parse feature location: {location_line!r}"
-            )
-        )
-        return
-
-    operator = m.group("operator")
-    if operator is None:
+        operator = None
         parts = [location_line]
     else:
+        operator = m.group("operator")
         parts = _re_complex_locations.split(m.group("locations"))[1::2]
     locs = []
     for part in parts:
@@ -690,29 +678,49 @@ def fromstring(location_line, length, circular=False, stranded=True):
             loc = _loc(part, length, part_strand, is_circular=circular)
 
         except ValueError:
-            print(location_line)
-            print(part)
-            raise
+            break
         if operator is None:
             return loc
         # loc will be a list of one or two SimpleLocation items.
         locs.extend(loc.parts)
-    # Historically a join on the reverse strand has been represented
-    # in Biopython with both the parent SeqFeature and its children
-    # (the exons for a CDS) all given a strand of -1.  Likewise, for
-    # a join feature on the forward strand they all have strand +1.
-    # However, we must also consider evil mixed strand examples like
-    # this, join(complement(69611..69724),139856..140087,140625..140650)
-    if strand == -1:
-        # Whole thing was wrapped in complement(...)
-        for l in locs:
-            assert l.strand == -1
-        # Reverse the backwards order used in GenBank files
-        # with complement(join(...))
-        location = SeqFeature.CompoundLocation(locs[::-1], operator=operator)
     else:
-        location = SeqFeature.CompoundLocation(locs, operator=operator)
-    return location
+        # Historically a join on the reverse strand has been represented
+        # in Biopython with both the parent SeqFeature and its children
+        # (the exons for a CDS) all given a strand of -1.  Likewise, for
+        # a join feature on the forward strand they all have strand +1.
+        # However, we must also consider evil mixed strand examples like
+        # this, join(complement(69611..69724),139856..140087,140625..140650)
+        if strand == -1:
+            # Whole thing was wrapped in complement(...)
+            for l in locs:
+                assert l.strand == -1
+            # Reverse the backwards order used in GenBank files
+            # with complement(join(...))
+            locs = locs[::-1]
+        if len(locs) == 1:  # bond
+            return locs[0]
+        return SeqFeature.CompoundLocation(locs, operator=operator)
+    # Not recognised
+    if "order" in location_line and "join" in location_line:
+        # See Bug 3197
+        msg = (
+            'Combinations of "join" and "order" within the same '
+            "location (nested operators) are illegal:\n" + location_line
+        )
+        raise LocationParserError(msg)
+
+    # See issue #937. Note that NCBI has already fixed this record.
+    if ",)" in location_line:
+        warnings.warn(
+            "Dropping trailing comma in malformed feature location",
+            BiopythonParserWarning,
+        )
+        location_line = location_line.replace(",)", ")")
+        return fromstring(location_line)
+    # This used to be an error....
+    warnings.warn(
+        BiopythonParserWarning(f"Couldn't parse feature location: {location_line!r}")
+    )
 
 
 class _FeatureConsumer(_BaseGenBankConsumer):
