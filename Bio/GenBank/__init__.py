@@ -144,6 +144,33 @@ _oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
     _oneof_position,
     _oneof_position,
 )
+_complex_location = (
+    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,+)|%s|%s|%s|%s|%s"
+    % (
+        _pair_location,
+        _between_location,
+        _within_location,
+        _solo_bond,
+        _solo_location,
+    )
+)
+_ref_oneof_location = (
+    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s" % _oneof_location
+)
+
+_possibly_complemented_complex_location = (
+    r"((?:%s)|(?:complement\((?:%s)\))|(?:%s)|(?:complement\((?:%s)\)))"
+    % (
+        _ref_oneof_location,
+        _ref_oneof_location,
+        _complex_location,
+        _complex_location,
+    )
+)
+_re_complex_locations = re.compile(
+    r"(?:,)?%s" % _possibly_complemented_complex_location
+)
+
 _complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s|%s" % (
     _pair_location,
     _between_location,
@@ -152,13 +179,7 @@ _complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s
     _solo_bond,
     _solo_location,
 )
-_possibly_complemented_complex_location = r"((?:%s)|(?:complement\((?:%s)\)))" % (
-    _complex_location,
-    _complex_location,
-)
-_re_complex_locations = re.compile(
-    r"(?:,)?%s" % _possibly_complemented_complex_location
-)
+
 
 assert _re_complex_locations.split("123..145")[1::2] == ["123..145"]
 assert _re_complex_locations.split("123..145,200..209")[1::2] == [
