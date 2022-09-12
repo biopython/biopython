@@ -291,139 +291,6 @@ assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
 
 
-def _loc(loc_str, expected_seq_length, strand, is_circular=False):
-    """Make SimpleLocation from non-compound non-complement location (PRIVATE).
-
-    This is also invoked to 'automatically' fix ambiguous formatting of features
-    that span the origin of a circular sequence.
-
-    Simple examples,
-
-    >>> _loc("123..456", 1000, +1)
-    SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
-    >>> _loc("<123..>456", 1000, strand = -1)
-    SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
-
-    A more complex location using within positions,
-
-    >>> _loc("(9.10)..(20.25)", 1000, 1)
-    SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
-
-    Notice how that will act as though it has overall start 8 and end 25.
-
-    Zero length between feature,
-
-    >>> _loc("123^124", 1000, 0)
-    SimpleLocation(ExactPosition(123), ExactPosition(123), strand=0)
-
-    The expected sequence length is needed for a special case, a between
-    position at the start/end of a circular genome:
-
-    >>> _loc("1000^1", 1000, 1)
-    SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
-
-    Apart from this special case, between positions P^Q must have P+1==Q,
-
-    >>> _loc("123^456", 1000, 1)
-    Traceback (most recent call last):
-       ...
-    ValueError: Invalid between location '123^456'
-
-    You can optionally provide a reference name:
-
-    >>> _loc("AL391218.9:105173..108462", 2000000, 1)
-    SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
-
-    >>> _loc("<2644..159", 2868, 1, "circular")
-    CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
-    """
-    if ":" in loc_str:
-        ref, loc_str = loc_str.split(":")
-    else:
-        ref = None
-
-    if _solo_bond.search(loc_str):
-        # e.g. bond(196)
-        # e.g. join(bond(284),bond(305),bond(309),bond(305))
-        warnings.warn(
-            "Dropping bond qualifier in feature location", BiopythonParserWarning
-        )
-        # There ought to be a better way to do this...
-        for x in _solo_bond.finditer(loc_str):
-            x = x.group()
-            loc_str = loc_str.replace(x, x[5:-1])
-
-    try:
-        s, e = loc_str.split("..")
-    except ValueError:
-        assert ".." not in loc_str
-        if "^" in loc_str:
-            # A between location like "67^68" (one based counting) is a
-            # special case (note it has zero length). In python slice
-            # notation this is 67:67, a zero length slice.  See Bug 2622
-            # Further more, on a circular genome of length N you can have
-            # a location N^1 meaning the junction at the origin. See Bug 3098.
-            # NOTE - We can imagine between locations like "2^4", but this
-            # is just "3".  Similarly, "2^5" is just "3..4"
-            s, e = loc_str.split("^")
-            if int(s) + 1 == int(e):
-                pos = SeqFeature.Position.fromstring(s)
-            elif int(s) == expected_seq_length and e == "1":
-                pos = SeqFeature.Position.fromstring(s)
-            else:
-                raise ValueError(f"Invalid between location {loc_str!r}") from None
-            return SeqFeature.SimpleLocation(pos, pos, strand, ref=ref)
-        elif loc_str.startswith("bond(") and loc_str.endswith(")"):
-            # e.g. bond(196)
-            # e.g. join(bond(284),bond(305),bond(309),bond(305))
-            warnings.warn(
-                "Dropping bond qualifier in feature location", BiopythonParserWarning
-            )
-            s = loc_str[5:-1]
-            e = loc_str[5:-1]
-        else:
-            # e.g. "123"
-            s = loc_str
-            e = loc_str
-
-    # Attempt to fix features that span the origin
-    s_pos = SeqFeature.Position.fromstring(s, -1)
-    e_pos = SeqFeature.Position.fromstring(e)
-    if int(s_pos) > int(e_pos):
-        if not is_circular:
-            warnings.warn(
-                "It appears that %r is a feature that spans "
-                "the origin, but the sequence topology is "
-                "undefined. Skipping feature." % loc_str,
-                BiopythonParserWarning,
-            )
-            return None
-        warnings.warn(
-            "Attempting to fix invalid location %r as "
-            "it looks like incorrect origin wrapping. "
-            "Please fix input file, this could have "
-            "unintended behavior." % loc_str,
-            BiopythonParserWarning,
-        )
-
-        f1 = SeqFeature.SimpleLocation(s_pos, expected_seq_length, strand)
-        f2 = SeqFeature.SimpleLocation(0, int(e_pos), strand)
-
-        if strand == -1:
-            # For complementary features spanning the origin
-            return f2 + f1
-        else:
-            return f1 + f2
-
-    start = SeqFeature.Position.fromstring(s, -1)
-    end = SeqFeature.Position.fromstring(e)
-
-    if start < 0:
-        raise ValueError
-
-    return SeqFeature.SimpleLocation(start, end, strand, ref=ref)
-
-
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
 
@@ -665,7 +532,49 @@ class _BaseGenBankConsumer:
 
 
 def fromstring(location_line, length, circular=False, stranded=True):
-    """Create a Location object from a string."""
+    """Create a Location object from a string.
+
+    Simple examples:
+
+    >>> fromstring("123..456", 1000)
+    SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
+    >>> fromstring("complement(<123..>456)", 1000)
+    SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
+
+    A more complex location using within positions,
+
+    >>> fromstring("(9.10)..(20.25)", 1000)
+    SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
+
+    Notice how that will act as though it has overall start 8 and end 25.
+
+    Zero length between feature,
+
+    >>> fromstring("123^124", 1000)
+    SimpleLocation(ExactPosition(123), ExactPosition(123), strand=1)
+
+    The expected sequence length is needed for a special case, a between
+    position at the start/end of a circular genome:
+
+    >>> fromstring("1000^1", 1000)
+    SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
+
+    Apart from this special case, between positions P^Q must have P+1==Q,
+
+    >>> fromstring("123^456", 1000)
+    Traceback (most recent call last):
+       ...
+    ValueError: Invalid between location '123^456'
+
+    You can optionally provide a reference name:
+
+    >>> fromstring("AL391218.9:105173..108462", 2000000)
+    SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
+    >>> fromstring("<2644..159", 2868, "circular")
+    CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
+    """
+    loc = None
     if stranded:
         # Handle top level complement here for speed
         m = _re_complemented.match(location_line)
@@ -698,13 +607,106 @@ def fromstring(location_line, length, circular=False, stranded=True):
             assert strand != -1, "Double complement?"
             part_strand = -1
         try:
+            ref, part = part.split(":")
+        except ValueError:
+            ref = None
+        if _solo_bond.search(part):
+            # e.g. bond(196)
+            # e.g. join(bond(284),bond(305),bond(309),bond(305))
+            warnings.warn(
+                "Dropping bond qualifier in feature location", BiopythonParserWarning
+            )
+            # There ought to be a better way to do this...
+            for x in _solo_bond.finditer(part):
+                x = x.group()
+                part = part.replace(x, x[5:-1])
+        try:
             # There is likely a problem with origin wrapping.
             # Using _loc to return a CompoundLocation of the
             # wrapped feature and returning the two SimpleLocation
             # objects to extend to the list of feature locations.
-            loc = _loc(part, length, part_strand, is_circular=circular)
+            # loc = _loc(part, length, part_strand, is_circular=circular, ref=ref)
 
-        except ValueError:
+            loc = None
+            try:
+                s, e = part.split("..")
+            except ValueError:
+                assert ".." not in part
+                if "^" in part:
+                    # A between location like "67^68" (one based counting) is a
+                    # special case (note it has zero length). In python slice
+                    # notation this is 67:67, a zero length slice.  See Bug 2622
+                    # Further more, on a circular genome of length N you can have
+                    # a location N^1 meaning the junction at the origin. See Bug 3098.
+                    # NOTE - We can imagine between locations like "2^4", but this
+                    # is just "3".  Similarly, "2^5" is just "3..4"
+                    s, e = part.split("^")
+                    if int(s) + 1 == int(e):
+                        pos = SeqFeature.Position.fromstring(s)
+                    elif int(s) == length and e == "1":
+                        pos = SeqFeature.Position.fromstring(s)
+                    else:
+                        raise ValueError(f"Invalid between location {part!r}") from None
+                    loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
+                elif part.startswith("bond(") and part.endswith(")"):
+                    # e.g. bond(196)
+                    # e.g. join(bond(284),bond(305),bond(309),bond(305))
+                    warnings.warn(
+                        "Dropping bond qualifier in feature location",
+                        BiopythonParserWarning,
+                    )
+                    s = part[5:-1]
+                    e = part[5:-1]
+                else:
+                    # e.g. "123"
+                    s = part
+                    e = part
+
+            if loc is None:
+                # Attempt to fix features that span the origin
+                s_pos = SeqFeature.Position.fromstring(s, -1)
+                e_pos = SeqFeature.Position.fromstring(e)
+                if int(s_pos) > int(e_pos):
+                    if not circular:
+                        warnings.warn(
+                            "It appears that %r is a feature that spans "
+                            "the origin, but the sequence topology is "
+                            "undefined. Skipping feature." % part,
+                            BiopythonParserWarning,
+                        )
+                        loc = "None"
+                    else:
+                        warnings.warn(
+                            "Attempting to fix invalid location %r as "
+                            "it looks like incorrect origin wrapping. "
+                            "Please fix input file, this could have "
+                            "unintended behavior." % part,
+                            BiopythonParserWarning,
+                        )
+
+                        f1 = SeqFeature.SimpleLocation(s_pos, length, part_strand)
+                        f2 = SeqFeature.SimpleLocation(0, int(e_pos), part_strand)
+
+                        if part_strand == -1:
+                            # For complementary features spanning the origin
+                            loc = f2 + f1
+                        else:
+                            loc = f1 + f2
+
+            if loc is None:
+                start = SeqFeature.Position.fromstring(s, -1)
+                end = SeqFeature.Position.fromstring(e)
+
+                if start < 0:
+                    raise ValueError
+
+                loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            if loc == "None":
+                loc = None
+
+        except ValueError as e:
+            if str(e).startswith("Invalid between location "):
+                raise
             break
         if operator is None:
             return loc
