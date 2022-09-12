@@ -661,7 +661,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 s = part
                 e = part
 
-        if loc is None:
+        else:
             # Attempt to fix features that span the origin
             s_pos = SeqFeature.Position.fromstring(s, -1)
             e_pos = SeqFeature.Position.fromstring(e)
@@ -673,7 +673,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
                         "undefined. Skipping feature." % part,
                         BiopythonParserWarning,
                     )
-                    continue
+                    return
                 warnings.warn(
                     "Attempting to fix invalid location %r as "
                     "it looks like incorrect origin wrapping. "
@@ -705,7 +705,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
         # loc will be a list of one or two SimpleLocation items.
         locs.extend(loc.parts)
     else:
-        if len(locs) <= 1:  # bond, or origin-spanning feature but not circular
+        if len(locs) == 1:  # bond
             return loc
         # Historically a join on the reverse strand has been represented
         # in Biopython with both the parent SeqFeature and its children
