@@ -609,7 +609,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
     else:
         operator = m.group("operator")
         parts = _split(m.group("locations"))[1::2]
-        # assert parts[0] == "" and parts[-11] == ""
+        # assert parts[0] == "" and parts[-1] == ""
     locs = []
     for part in parts:
         m = _re_complemented.match(part)
@@ -629,6 +629,13 @@ def fromstring(location_line, length, circular=False, stranded=True):
             if value is not None:
                 break
         assert value == part
+        if key == "bond":
+            # e.g. bond(196)
+            warnings.warn(
+                "Dropping bond qualifier in feature location",
+                BiopythonParserWarning,
+            )
+            part = part[5:-1]
         if key in ("pair", "within", "oneof"):
             s, e = part.split("..")
             # Attempt to fix features that span the origin
@@ -636,7 +643,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
             e_pos = SeqFeature.Position.fromstring(e)
             if int(s_pos) > int(e_pos):
                 # There is likely a problem with origin wrapping.
-                # Create a CompoundLocation of the # wrapped feature,
+                # Create a CompoundLocation of the wrapped feature,
                 # consisting of two SimpleLocation objects to extend to
                 # the list of feature locations.
                 if not circular:
@@ -663,17 +670,17 @@ def fromstring(location_line, length, circular=False, stranded=True):
                     loc = f2 + f1
                 else:
                     loc = f1 + f2
+                if operator is None:
+                    return loc
+                # loc will be a list of one or two SimpleLocation items.
+                locs.extend(loc.parts)
             else:
                 start = SeqFeature.Position.fromstring(s, -1)
                 end = SeqFeature.Position.fromstring(e)
                 if start < 0:
                     break
                 loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
-            if operator is None:
-                return loc
-            # loc will be a list of one or two SimpleLocation items.
-            locs.extend(loc.parts)
-            continue
+                locs.append(loc)
         elif key == "between":
             # A between location like "67^68" (one based counting) is a
             # special case (note it has zero length). In python slice
@@ -690,39 +697,15 @@ def fromstring(location_line, length, circular=False, stranded=True):
             else:
                 raise ValueError(f"Invalid between location {part!r}") from None
             loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
-            if operator is None:
-                return loc
-            # loc will be a list of one or two SimpleLocation items.
-            locs.extend(loc.parts)
-            continue
-        elif key == "bond":
-            # e.g. bond(196)
-            warnings.warn(
-                "Dropping bond qualifier in feature location",
-                BiopythonParserWarning,
-            )
-            s = part[5:-1]
-            e = part[5:-1]
-            start = SeqFeature.Position.fromstring(s, -1)
-            end = SeqFeature.Position.fromstring(e)
-            if start < 0:
-                break
-            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
-            if operator is None:
-                return loc
-            # loc will be a list of one or two SimpleLocation items.
-            locs.extend(loc.parts)
-        elif key == "solo":
+            locs.append(loc)
+        elif key in ("bond", "solo"):
             # e.g. "123"
             start = SeqFeature.Position.fromstring(part, -1)
             end = SeqFeature.Position.fromstring(part)
             if start < 0:
                 break
             loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
-            if operator is None:
-                return loc
-            # loc will be a list of one or two SimpleLocation items.
-            locs.extend(loc.parts)
+            locs.append(loc)
     else:
         if len(locs) == 1:  # bond
             return loc
