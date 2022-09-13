@@ -622,22 +622,6 @@ def fromstring(location_line, length, circular=False, stranded=True):
             ref, part = part.split(":")
         except ValueError:
             ref = None
-        if _solo_bond.search(part):
-            # e.g. bond(196)
-            # e.g. join(bond(284),bond(305),bond(309),bond(305))
-            warnings.warn(
-                "Dropping bond qualifier in feature location", BiopythonParserWarning
-            )
-            # There ought to be a better way to do this...
-            for x in _solo_bond.finditer(part):
-                x = x.group()
-                part = part.replace(x, x[5:-1])
-        # There is likely a problem with origin wrapping.
-        # Using _loc to return a CompoundLocation of the
-        # wrapped feature and returning the two SimpleLocation
-        # objects to extend to the list of feature locations.
-        # loc = _loc(part, length, part_strand, is_circular=circular, ref=ref)
-
         m = _re_location_category.match(part)
         if m is not None:
             for key, value in m.groupdict().items():
@@ -650,6 +634,10 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 s_pos = SeqFeature.Position.fromstring(s, -1)
                 e_pos = SeqFeature.Position.fromstring(e)
                 if int(s_pos) > int(e_pos):
+                    # There is likely a problem with origin wrapping.
+                    # Create a CompoundLocation of the # wrapped feature,
+                    # consisting of two SimpleLocation objects to extend to
+                    # the list of feature locations.
                     if not circular:
                         warnings.warn(
                             "It appears that %r is a feature that spans "
