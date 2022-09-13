@@ -123,7 +123,7 @@ assert _split(
 
 _solo_location = r"[<>]?\d+"
 _re_solo_location = re.compile("^%s$" % _solo_location)
-_pair_location = r"[<>]?\d+\.\.[<>]?\d+"
+_pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
 _re_pair_location = re.compile(r"^([<>]?\d+)\.\.([<>]?\d+)$")
 _between_location = r"\d+\^\d+"
 _re_between_location = re.compile(r"^(\d+)\^(\d+)$")
@@ -146,12 +146,12 @@ assert _re_oneof_location.match("one-of(6,9)..one-of(101,104)")
 assert _re_oneof_location.match("6..one-of(101,104)")
 
 _re_location_category = re.compile(
-    r"^(?P<pair>%s)|(?P<between>%s)$"
+    r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)$"
     % (
         _pair_location,
         _between_location,
-        # _within_location,
-        # _oneof_location,
+        _within_location,
+        _oneof_location,
         # _solo_bond,
         # _solo_location,
     )
@@ -644,7 +644,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 if value is not None:
                     break
             assert value == part
-            if key == "pair":
+            if key in ("pair", "within", "oneof"):
                 s, e = part.split("..")
                 # Attempt to fix features that span the origin
                 s_pos = SeqFeature.Position.fromstring(s, -1)
@@ -706,62 +706,27 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 # loc will be a list of one or two SimpleLocation items.
                 locs.extend(loc.parts)
                 continue
-        loc = None
-        try:
-            s, e = part.split("..")
-        except ValueError:
-            if part.startswith("bond(") and part.endswith(")"):
-                # e.g. bond(196)
-                # e.g. join(bond(284),bond(305),bond(309),bond(305))
-                warnings.warn(
-                    "Dropping bond qualifier in feature location",
-                    BiopythonParserWarning,
-                )
-                s = part[5:-1]
-                e = part[5:-1]
-            else:
-                # e.g. "123"
-                s = part
-                e = part
-
+        if part.startswith("bond(") and part.endswith(")"):
+            # e.g. bond(196)
+            # e.g. join(bond(284),bond(305),bond(309),bond(305))
+            warnings.warn(
+                "Dropping bond qualifier in feature location",
+                BiopythonParserWarning,
+            )
+            s = part[5:-1]
+            e = part[5:-1]
         else:
-            # Attempt to fix features that span the origin
-            s_pos = SeqFeature.Position.fromstring(s, -1)
-            e_pos = SeqFeature.Position.fromstring(e)
-            if int(s_pos) > int(e_pos):
-                if not circular:
-                    warnings.warn(
-                        "It appears that %r is a feature that spans "
-                        "the origin, but the sequence topology is "
-                        "undefined. Skipping feature." % part,
-                        BiopythonParserWarning,
-                    )
-                    return
-                warnings.warn(
-                    "Attempting to fix invalid location %r as "
-                    "it looks like incorrect origin wrapping. "
-                    "Please fix input file, this could have "
-                    "unintended behavior." % part,
-                    BiopythonParserWarning,
-                )
+            # e.g. "123"
+            s = part
+            e = part
 
-                f1 = SeqFeature.SimpleLocation(s_pos, length, part_strand)
-                f2 = SeqFeature.SimpleLocation(0, int(e_pos), part_strand)
+        start = SeqFeature.Position.fromstring(s, -1)
+        end = SeqFeature.Position.fromstring(e)
 
-                if part_strand == -1:
-                    # For complementary features spanning the origin
-                    loc = f2 + f1
-                else:
-                    loc = f1 + f2
+        if start < 0:
+            break
 
-        if loc is None:
-            start = SeqFeature.Position.fromstring(s, -1)
-            end = SeqFeature.Position.fromstring(e)
-
-            if start < 0:
-                break
-
-            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+        loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
 
         if operator is None:
             return loc
