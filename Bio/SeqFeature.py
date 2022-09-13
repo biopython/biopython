@@ -1065,9 +1065,9 @@ class SimpleLocation:
     def parts(self):
         """Read only list of sections (always one, the SimpleLocation object).
 
-        This is a convenience property allowing you to write code handling
-        both simple SimpleLocation objects (with one part) and more complex
-        CompoundLocation objects (with multiple parts) interchangeably.
+        This is a convenience property allowing you to write code handling both
+        SimpleLocation objects (with one part) and more complex CompoundLocation
+        objects (with multiple parts) interchangeably.
         """
         return [self]
 
@@ -1221,10 +1221,10 @@ class CompoundLocation:
         >>> f.end == max(f) + 1
         True
 
-        This is consistent with the behavior of the simple SimpleLocation for
-        a single region, where again the 'start' and 'end' do not necessarily
-        give the biological start and end, but rather the 'minimal' and 'maximal'
-        coordinate boundaries.
+        This is consistent with the behavior of the SimpleLocation for a
+        simple region, where again the 'start' and 'end' do not necessarily
+        give the biological start and end, but rather the 'minimal' and
+        'maximal' coordinate boundaries.
 
         Note that adding locations provides a more intuitive method of
         construction:
