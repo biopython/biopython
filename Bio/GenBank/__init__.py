@@ -145,15 +145,17 @@ assert _re_oneof_location.match("one-of(6,9)..101")
 assert _re_oneof_location.match("one-of(6,9)..one-of(101,104)")
 assert _re_oneof_location.match("6..one-of(101,104)")
 
+_solo_bond = r"bond\(%s\)" % _solo_location
+
 _re_location_category = re.compile(
-    r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)$"
+    r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)|(?P<bond>%s)|(?P<solo>%s)$"
     % (
         _pair_location,
         _between_location,
         _within_location,
         _oneof_location,
-        # _solo_bond,
-        # _solo_location,
+        _solo_bond,
+        _solo_location,
     )
 )
 
@@ -175,7 +177,6 @@ _complex_location = (
     )
 )
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
-_solo_bond = r"bond\(%s\)" % _solo_location
 _complex_location = (
     r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s|%s)"
     % (
@@ -623,103 +624,105 @@ def fromstring(location_line, length, circular=False, stranded=True):
         except ValueError:
             ref = None
         m = _re_location_category.match(part)
-        if m is not None:
-            for key, value in m.groupdict().items():
-                if value is not None:
-                    break
-            assert value == part
-            if key in ("pair", "within", "oneof"):
-                s, e = part.split("..")
-                # Attempt to fix features that span the origin
-                s_pos = SeqFeature.Position.fromstring(s, -1)
-                e_pos = SeqFeature.Position.fromstring(e)
-                if int(s_pos) > int(e_pos):
-                    # There is likely a problem with origin wrapping.
-                    # Create a CompoundLocation of the # wrapped feature,
-                    # consisting of two SimpleLocation objects to extend to
-                    # the list of feature locations.
-                    if not circular:
-                        warnings.warn(
-                            "It appears that %r is a feature that spans "
-                            "the origin, but the sequence topology is "
-                            "undefined. Skipping feature." % part,
-                            BiopythonParserWarning,
-                        )
-                        return
+        assert m is not None
+        for key, value in m.groupdict().items():
+            if value is not None:
+                break
+        assert value == part
+        if key in ("pair", "within", "oneof"):
+            s, e = part.split("..")
+            # Attempt to fix features that span the origin
+            s_pos = SeqFeature.Position.fromstring(s, -1)
+            e_pos = SeqFeature.Position.fromstring(e)
+            if int(s_pos) > int(e_pos):
+                # There is likely a problem with origin wrapping.
+                # Create a CompoundLocation of the # wrapped feature,
+                # consisting of two SimpleLocation objects to extend to
+                # the list of feature locations.
+                if not circular:
                     warnings.warn(
-                        "Attempting to fix invalid location %r as "
-                        "it looks like incorrect origin wrapping. "
-                        "Please fix input file, this could have "
-                        "unintended behavior." % part,
+                        "It appears that %r is a feature that spans "
+                        "the origin, but the sequence topology is "
+                        "undefined. Skipping feature." % part,
                         BiopythonParserWarning,
                     )
+                    return
+                warnings.warn(
+                    "Attempting to fix invalid location %r as "
+                    "it looks like incorrect origin wrapping. "
+                    "Please fix input file, this could have "
+                    "unintended behavior." % part,
+                    BiopythonParserWarning,
+                )
 
-                    f1 = SeqFeature.SimpleLocation(s_pos, length, part_strand)
-                    f2 = SeqFeature.SimpleLocation(0, int(e_pos), part_strand)
+                f1 = SeqFeature.SimpleLocation(s_pos, length, part_strand)
+                f2 = SeqFeature.SimpleLocation(0, int(e_pos), part_strand)
 
-                    if part_strand == -1:
-                        # For complementary features spanning the origin
-                        loc = f2 + f1
-                    else:
-                        loc = f1 + f2
+                if part_strand == -1:
+                    # For complementary features spanning the origin
+                    loc = f2 + f1
                 else:
-                    start = SeqFeature.Position.fromstring(s, -1)
-                    end = SeqFeature.Position.fromstring(e)
-                    if start < 0:
-                        break
-                    loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
-                if operator is None:
-                    return loc
-                # loc will be a list of one or two SimpleLocation items.
-                locs.extend(loc.parts)
-                continue
-            elif key == "between":
-                # A between location like "67^68" (one based counting) is a
-                # special case (note it has zero length). In python slice
-                # notation this is 67:67, a zero length slice.  See Bug 2622
-                # Further more, on a circular genome of length N you can have
-                # a location N^1 meaning the junction at the origin. See Bug 3098.
-                # NOTE - We can imagine between locations like "2^4", but this
-                # is just "3".  Similarly, "2^5" is just "3..4"
-                s, e = part.split("^")
-                if int(s) + 1 == int(e):
-                    pos = SeqFeature.Position.fromstring(s)
-                elif int(s) == length and e == "1":
-                    pos = SeqFeature.Position.fromstring(s)
-                else:
-                    raise ValueError(f"Invalid between location {part!r}") from None
-                loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
-                if operator is None:
-                    return loc
-                # loc will be a list of one or two SimpleLocation items.
-                locs.extend(loc.parts)
-                continue
-        if part.startswith("bond(") and part.endswith(")"):
+                    loc = f1 + f2
+            else:
+                start = SeqFeature.Position.fromstring(s, -1)
+                end = SeqFeature.Position.fromstring(e)
+                if start < 0:
+                    break
+                loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            if operator is None:
+                return loc
+            # loc will be a list of one or two SimpleLocation items.
+            locs.extend(loc.parts)
+            continue
+        elif key == "between":
+            # A between location like "67^68" (one based counting) is a
+            # special case (note it has zero length). In python slice
+            # notation this is 67:67, a zero length slice.  See Bug 2622
+            # Further more, on a circular genome of length N you can have
+            # a location N^1 meaning the junction at the origin. See Bug 3098.
+            # NOTE - We can imagine between locations like "2^4", but this
+            # is just "3".  Similarly, "2^5" is just "3..4"
+            s, e = part.split("^")
+            if int(s) + 1 == int(e):
+                pos = SeqFeature.Position.fromstring(s)
+            elif int(s) == length and e == "1":
+                pos = SeqFeature.Position.fromstring(s)
+            else:
+                raise ValueError(f"Invalid between location {part!r}") from None
+            loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
+            if operator is None:
+                return loc
+            # loc will be a list of one or two SimpleLocation items.
+            locs.extend(loc.parts)
+            continue
+        elif key == "bond":
             # e.g. bond(196)
-            # e.g. join(bond(284),bond(305),bond(309),bond(305))
             warnings.warn(
                 "Dropping bond qualifier in feature location",
                 BiopythonParserWarning,
             )
             s = part[5:-1]
             e = part[5:-1]
-        else:
+            start = SeqFeature.Position.fromstring(s, -1)
+            end = SeqFeature.Position.fromstring(e)
+            if start < 0:
+                break
+            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            if operator is None:
+                return loc
+            # loc will be a list of one or two SimpleLocation items.
+            locs.extend(loc.parts)
+        elif key == "solo":
             # e.g. "123"
-            s = part
-            e = part
-
-        start = SeqFeature.Position.fromstring(s, -1)
-        end = SeqFeature.Position.fromstring(e)
-
-        if start < 0:
-            break
-
-        loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
-
-        if operator is None:
-            return loc
-        # loc will be a list of one or two SimpleLocation items.
-        locs.extend(loc.parts)
+            start = SeqFeature.Position.fromstring(part, -1)
+            end = SeqFeature.Position.fromstring(part)
+            if start < 0:
+                break
+            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            if operator is None:
+                return loc
+            # loc will be a list of one or two SimpleLocation items.
+            locs.extend(loc.parts)
     else:
         if len(locs) == 1:  # bond
             return loc
