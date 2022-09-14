@@ -65,8 +65,6 @@ FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 # Regular expressions for location parsing
 
 
-_re_complemented = re.compile(r"^complement\((?P<inner>\S*)\)$")
-
 _re_compounded = re.compile(r"^(?P<operator>join|order|bond)\((?P<locations>\S+)\)$")
 
 _reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
@@ -544,7 +542,7 @@ class _BaseGenBankConsumer:
         return new_start, new_end
 
 
-def fromstring(location_line, length, circular=False, stranded=True):
+def fromstring(location_line, length=None, circular=False, stranded=True):
     """Create a Location object from a string.
 
     Simple examples:
@@ -587,38 +585,52 @@ def fromstring(location_line, length, circular=False, stranded=True):
     >>> fromstring("<2644..159", 2868, "circular")
     CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
     """
-    loc = None
-    if stranded:
-        # Handle top level complement here for speed
-        m = _re_complemented.match(location_line)
-        if m is None:
-            # Assume nucleotide otherwise feature strand for
-            # GenBank files with bad LOCUS lines set to None
-            strand = 1
-        else:
-            location_line = m.group("inner")
-            strand = -1
+    if location_line.startswith("complement"):
+        location_line = location_line[11:-1]
+        strand = -1
+    elif stranded:
+        strand = 1
     else:
         strand = None
 
     # Determine if we have a simple location or a compound location
-    m = _re_compounded.match(location_line)
-    if m is None:
+    if location_line.startswith("join("):
+        operator = "join"
+        parts = _split(location_line[5:-1])[1::2]
+        # assert parts[0] == "" and parts[-1] == ""
+    elif location_line.startswith("order("):
+        operator = "order"
+        parts = _split(location_line[6:-1])[1::2]
+        # assert parts[0] == "" and parts[-1] == ""
+    elif location_line.startswith("bond("):
+        operator = "bond"
+        parts = _split(location_line[5:-1])[1::2]
+        # assert parts[0] == "" and parts[-1] == ""
+    else:
         operator = None
         parts = [location_line]
-    else:
-        operator = m.group("operator")
-        parts = _split(m.group("locations"))[1::2]
-        # assert parts[0] == "" and parts[-1] == ""
+    loc = None
     locs = []
     for part in parts:
-        m = _re_complemented.match(part)
-        if m is None:
-            part_strand = strand
-        else:
-            part = m.group("inner")
+        if part.startswith("complement("):
+            part = part[11:-1]
             assert strand != -1, "Double complement?"
             part_strand = -1
+        else:
+            part_strand = strand
+        # Try simple cases first for speed
+        try:
+            s, e = part.split("..")
+            s = int(s) - 1
+            e = int(e)
+        except ValueError:
+            pass
+        else:
+            if 0 <= s <= e:
+                loc = SeqFeature.SimpleLocation(s, e, part_strand)
+                locs.append(loc)
+                continue
+        # Try general case
         try:
             ref, part = part.split(":")
         except ValueError:
@@ -636,11 +648,12 @@ def fromstring(location_line, length, circular=False, stranded=True):
                 BiopythonParserWarning,
             )
             part = part[5:-1]
-        if key in ("pair", "within", "oneof"):
+        elif key in ("pair", "within", "oneof"):
             s, e = part.split("..")
             # Attempt to fix features that span the origin
             s_pos = SeqFeature.Position.fromstring(s, -1)
             e_pos = SeqFeature.Position.fromstring(e)
+        if key in ("pair", "within", "oneof"):
             if int(s_pos) > int(e_pos):
                 # There is likely a problem with origin wrapping.
                 # Create a CompoundLocation of the wrapped feature,
@@ -707,7 +720,7 @@ def fromstring(location_line, length, circular=False, stranded=True):
             loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
             locs.append(loc)
     else:
-        if len(locs) == 1:  # bond
+        if len(locs) == 1:
             return loc
         # Historically a join on the reverse strand has been represented
         # in Biopython with both the parent SeqFeature and its children
