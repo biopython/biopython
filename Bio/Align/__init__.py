@@ -1779,7 +1779,7 @@ class Alignment:
                        the alignment and include it in the output. If False
                        (default), do not include the MD tag in the output.
         """
-        if fmt != "a2m" and len(self.sequences) > 2:
+        if fmt not in ("a2m", "clustal") and len(self.sequences) > 2:
             raise NotImplementedError(
                 "format is currently implemented for pairwise alignments only"
             )
