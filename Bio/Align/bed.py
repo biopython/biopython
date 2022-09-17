@@ -64,6 +64,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chrom = target.id
         except AttributeError:
             chrom = "target"
+        else:
+            if chrom is None:
+                chrom = "target"
         assert coordinates[0, 0] < coordinates[0, -1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
@@ -95,6 +98,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = query.id
         except AttributeError:
             name = "query"
+        else:
+            if name is None:
+                name = "query"
         fields.append(name)
         if bedN == 4:
             return "\t".join(fields) + "\n"
