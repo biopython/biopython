@@ -38,12 +38,12 @@ class TestCombinedFile(unittest.TestCase):
         saved_alignments = []
         with open(path) as stream:
             alignments = Align.parse(stream, "mauve")
-            self.assertEqual(len(alignments.metadata), 3)
-            self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
-            self.assertEqual(alignments.metadata["File"], "combined.fa")
-            self.assertEqual(
-                alignments.metadata["BackboneFile"], "combined.xmfa.bbcols"
-            )
+            metadata = alignments.metadata
+            self.assertEqual(len(metadata), 3)
+            self.assertEqual(metadata["FormatVersion"], "Mauve1")
+            self.assertEqual(metadata["File"], "combined.fa")
+            self.assertEqual(metadata["BackboneFile"], "combined.xmfa.bbcols")
+            identifiers = alignments.identifiers
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 3)
@@ -97,6 +97,18 @@ class TestCombinedFile(unittest.TestCase):
                     ),
                 )
             )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 1:2-49 - combined.fa
+AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT
+> 2:0-0 + combined.fa
+-------------------------------------------------
+> 3:2-48 + combined.fa
+AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
+=
+""",
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -110,6 +122,14 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment[0], "G")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
+            )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 1:1-1 + combined.fa
+G
+=
+""",
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -127,6 +147,14 @@ class TestCombinedFile(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
             )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 1:50-50 + combined.fa
+A
+=
+""",
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -143,6 +171,14 @@ class TestCombinedFile(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
             )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 2:1-41 + combined.fa
+GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
+=
+""",
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -156,6 +192,14 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment[0], "C")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
+            )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 3:1-1 + combined.fa
+C
+=
+""",
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -172,6 +216,14 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(alignment[0], "C")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
+            )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 3:49-49 + combined.fa
+C
+=
+""",
             )
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
@@ -269,7 +321,7 @@ class TestCombinedFile(unittest.TestCase):
         self.assertEqual(output.read(), data)
 
 
-class TestSeparateFiles(unittest.TestCase):
+class TestDSeparateFiles(unittest.TestCase):
     def setUp(self):
         self.sequences = {}
         for species in ("equCab1", "canFam2", "mm9"):
@@ -283,11 +335,11 @@ class TestSeparateFiles(unittest.TestCase):
         saved_alignments = []
         with open(path) as stream:
             alignments = Align.parse(stream, "mauve")
-            self.assertEqual(len(alignments.metadata), 2)
-            self.assertEqual(alignments.metadata["FormatVersion"], "Mauve1")
-            self.assertEqual(
-                alignments.metadata["BackboneFile"], "separate.xmfa.bbcols"
-            )
+            metadata = alignments.metadata
+            self.assertEqual(len(metadata), 2)
+            self.assertEqual(metadata["FormatVersion"], "Mauve1")
+            self.assertEqual(metadata["BackboneFile"], "separate.xmfa.bbcols")
+            identifiers = alignments.identifiers
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 3)
@@ -327,6 +379,18 @@ class TestSeparateFiles(unittest.TestCase):
                     numpy.array([[0, 0], [25, 49], [24, 0]]),
                 )
             )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 1:0-0 + equCab1.fa
+------------------------
+> 2:26-49 + canFam2.fa
+GTCCCGGGCCCTGCTTTCCTTTTC
+> 3:1-24 - mm9.fa
+GCCAGGGATCTACTTTTCCTCTTC
+=
+""",
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -346,6 +410,14 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
             )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 1:1-50 + equCab1.fa
+GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
+=
+""",
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -359,6 +431,14 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
+            )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 2:1-25 + canFam2.fa
+CAAGCCCTGCGCGCTCAGCCGGAGT
+=
+""",
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -378,6 +458,14 @@ class TestSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
+            )
+            self.assertEqual(
+                alignment.format("mauve", metadata, identifiers),
+                """\
+> 3:25-41 + mm9.fa
+GTCCGGAGCTGGGACGT
+=
+""",
             )
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA

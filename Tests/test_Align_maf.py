@@ -73,9 +73,17 @@ class TestAlign_reading(unittest.TestCase):
                 # fmt: on
             )
         )
-        self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6441.000000
+s mm8.chr10               3009319 162 + 129993255 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT
+s oryCun1.scaffold_133159   11087 164 +     13221 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT
+q oryCun1.scaffold_133159                         99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999
+i oryCun1.scaffold_133159 N 0 N 0
+
+""",
+        )
 
     def test_reading_ucsc_mm9_chr10(self):
         """Test parsing MAF file ucsc_mm9_chr10.maf."""
@@ -8124,6 +8132,32 @@ e oryCun1.scaffold_156751              1033  2345 -      4726 I
                 ),
             )
         )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=15763.000000
+s mm9.chr10                         3021494    42 + 129993255 TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt
+s ponAbe2.chr6                     16173516    46 - 174210431 TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+i ponAbe2.chr6                     I 9 I 943
+s panTro2.chr6                     16393864    46 - 173908612 TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+q panTro2.chr6                                                9999999999999999999999999999999999999999999999
+i panTro2.chr6                     I 9 I 10
+s hg18.chr6                        15875298    46 - 170899992 TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+i hg18.chr6                        I 9 I 931
+s canFam2.chr1                     78072287    46 - 125616256 TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT
+q canFam2.chr1                                                9999999999999999999999999999999999999999999999
+i canFam2.chr1                     I 13 I 1
+s ornAna1.chr2                     14757144    36 -  54797317 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----
+i ornAna1.chr2                     C 0 C 0
+e dasNov1.scaffold_56749               3634   904 -     10470 I
+e felCat3.scaffold_205680             73725 34165 -    119354 I
+e calJac1.Contig6394                  11090   701 +    133105 I
+e tupBel1.scaffold_114895.1-498454   175248 10695 -    498454 I
+e otoGar1.scaffold_334.1-359464      188429  6280 -    359464 I
+e oryCun1.scaffold_156751              1033  2345 -      4726 I
+
+""",
+        )
         self.assertRaises(StopIteration, next, alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
@@ -8389,6 +8423,17 @@ s rn3.chr4     81444246 6 + 187371129 taagga
                     ]
                 ),
             )
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6636.000000
+s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+s baboon         249182 13 +   4622798 gcagctgaaaaca
+s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
+
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
         with self.assertRaises(AttributeError):

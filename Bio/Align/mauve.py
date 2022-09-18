@@ -18,17 +18,23 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
-    def __init__(self, target, metadata=None):
+    def __init__(self, target, metadata=None, identifiers=None):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target    - output stream or file name
-         - metadata  - metadata to be included in the output. If metadata is
-                       None, then the alignments object to be written must have
-                       an attribute `metadata`.
+         - target       - output stream or file name
+         - metadata     - metadata to be included in the output. If metadata
+                          is None, then the alignments object to be written
+                          must have an attribute `metadata`.
+         - identifiers  - list of the IDs of the sequences included in the
+                          alignment. Sequences will be numbered according to
+                          their index in this list. If identifiers is None,
+                          then the alignments object to be written must have
+                          an attribute `identifiers`.
         """
         super().__init__(target, mode="w")
         self._metadata = metadata
+        self._identifiers = identifiers
 
     def write_header(self, alignments):
         """Write the file header to the output file."""
@@ -37,9 +43,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         format_version = metadata.get("FormatVersion", "Mauve1")
         line = f"#FormatVersion {format_version}\n"
         stream.write(line)
-        alignment = alignments[0]
-        # first alignment always seems to contain all sequences
-        identifiers = [sequence.id for sequence in alignment.sequences]
+        identifiers = self._identifiers
         filename = metadata.get("File")
         if filename is None:
             # sequences came from separate files
@@ -49,7 +53,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(line)
                 line = f"#Sequence{number}Format\tFastA\n"
                 stream.write(line)
-            self._filenames = identifiers
         else:
             # sequences came from one combined file
             for number, identifier in enumerate(identifiers):
@@ -76,10 +79,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 metadata = alignments.metadata
             except AttributeError:
-                raise ValueError("alignments do not have a metadata attribute")
+                raise ValueError("alignments do not have an attribute `metadata`")
             else:
                 self._metadata = metadata
-        alignments = list(alignments)
+        identifiers = self._identifiers
+        if identifiers is None:
+            try:
+                identifiers = alignments.identifiers
+            except AttributeError:
+                raise ValueError("alignments do not have an attribute `identifiers`")
+            else:
+                self._identifiers = identifiers
         count = interfaces.AlignmentWriter.write_file(self, alignments)
         return count
 
@@ -111,7 +121,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             sequence = alignment[i]
             if filename is None:
                 number = (
-                    self._filenames.index(identifier) + 1
+                    self._identifiers.index(identifier) + 1
                 )  # Switch to 1-based counting
                 line = f"> {number}:{start}-{end} {strand} {identifier}\n"
             else:
@@ -168,12 +178,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # A single file containing all sequences was provided as input;
             # store the file name once, and use the entry number as ID
             metadata["File"] = id_info["File"][0]
-            self._identifiers = [str(entry) for entry in id_info["Entry"]]
+            self.identifiers = [str(entry) for entry in id_info["Entry"]]
         else:
             assert len(set(id_info["File"])) == len(id_info["File"])
             # Separate files for each of the sequences were provided as input;
             # use the sequence file as ID
-            self._identifiers = id_info["File"]
+            self.identifiers = id_info["File"]
         self.metadata = metadata
 
     def _parse_description(self, line):
@@ -181,7 +191,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         locus, strand, comments = line[1:].split(None, 2)
         seq_num, start_end = locus.split(":")
         seq_num = int(seq_num) - 1  # python counting
-        identifier = self._identifiers[seq_num]
+        identifier = self.identifiers[seq_num]
         assert strand in "+-"
         start, end = start_end.split("-")
         start = int(start)
@@ -242,4 +252,3 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seqs.append("")
             else:
                 seqs[-1] += line
-        del self._identifiers
