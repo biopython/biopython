@@ -105,6 +105,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 175)
         self.assertEqual(alignment.misMatches, 0)
@@ -159,6 +165,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 162)
         self.assertEqual(alignment.misMatches, 2)
@@ -217,6 +229,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 172)
         self.assertEqual(alignment.misMatches, 1)
@@ -275,6 +293,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+""",
+        )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing(self):
@@ -364,6 +388,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -394,6 +424,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
@@ -426,6 +462,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      25,        8]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
@@ -460,6 +502,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -493,6 +541,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -525,6 +579,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      11,       47]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
@@ -563,6 +623,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -595,6 +661,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      10,       35,       35,       46]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
@@ -629,6 +701,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -660,6 +738,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      21,       49]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
@@ -698,6 +782,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -728,6 +818,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
@@ -761,6 +857,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       1,       35]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
@@ -798,6 +900,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -830,6 +938,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       12]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -864,6 +978,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -896,6 +1016,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
@@ -930,6 +1056,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -963,6 +1095,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -994,6 +1132,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       35,        10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -1028,6 +1172,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -1060,6 +1210,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       47,        13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1146,6 +1302,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -1176,6 +1338,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
@@ -1208,6 +1376,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      25,        8]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1268,6 +1442,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -1301,6 +1481,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1333,6 +1519,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      11,       47]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
@@ -1371,6 +1563,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -1403,6 +1601,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      10,       35,       35,       46]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
@@ -1437,6 +1641,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -1468,6 +1678,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      21,       49]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
@@ -1506,6 +1722,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -1536,6 +1758,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
@@ -1569,6 +1797,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       1,       35]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
@@ -1606,6 +1840,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -1638,6 +1878,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       12]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -1672,6 +1918,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -1704,6 +1956,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
@@ -1738,6 +1996,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1771,6 +2035,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -1802,6 +2072,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       35,        10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -1836,6 +2112,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -1868,6 +2150,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       47,        13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1926,6 +2214,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -1956,6 +2250,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
@@ -1988,6 +2288,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      25,        8]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
@@ -2022,6 +2328,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -2055,6 +2367,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -2087,6 +2405,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      11,       47]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
@@ -2125,6 +2449,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -2157,6 +2487,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      10,       35,       35,       46]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
@@ -2191,6 +2527,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -2222,6 +2564,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      21,       49]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
@@ -2260,6 +2608,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -2290,6 +2644,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
@@ -2323,6 +2683,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       1,       35]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
@@ -2360,6 +2726,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -2392,6 +2764,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       12]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -2426,6 +2804,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -2458,6 +2842,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
@@ -2492,6 +2882,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -2525,6 +2921,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -2556,6 +2958,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       35,        10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
@@ -2589,6 +2997,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -2621,6 +3035,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       47,        13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -2695,6 +3115,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+52	0	0	0	0	0	0	0	++	CAG33136.1	230	61	113	chr13	114364328	75566694	75566850	1	52,	61,	75566694,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 0)
@@ -2739,6 +3165,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [      17,       61]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+44	0	0	0	0	0	0	0	++	CAG33136.1	230	17	61	chr13	114364328	75560749	75560881	1	44,	17,	75560749,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
@@ -2793,6 +3225,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+44	0	0	0	1	98	1	17360	++	CAG33136.1	230	0	142	chr13	114364328	75549820	75567312	2	15,29,	0,113,	75549820,75567225,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 47)
         self.assertEqual(alignment.misMatches, 0)
@@ -2846,6 +3284,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+47	0	0	0	0	0	1	901	++	CAG33136.1	230	183	230	chr13	114364328	75604767	75605809	2	20,27,	183,203,	75604767,75605728,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 25)
         self.assertEqual(alignment.misMatches, 0)
@@ -2887,6 +3331,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+25	0	0	0	0	0	0	0	++	CAG33136.1	230	158	183	chr13	114364328	75594914	75594989	1	25,	158,	75594914,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2925,6 +3375,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [     142,      158]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+16	0	0	0	0	0	0	0	++	CAG33136.1	230	142	158	chr13	114364328	75569459	75569507	1	16,	142,	75569459,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 26)
@@ -2969,6 +3425,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [      76,      110]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+26	8	0	0	0	0	0	0	++	CAG33136.1	230	76	110	chr4	190214555	41260685	41260787	1	34,	76,	41260685,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 37)
@@ -3022,6 +3484,12 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [      17,       59,       59,      162,      183]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+37	26	0	0	1	103	1	5496	++	CAG33136.1	230	17	183	chr4	190214555	41257605	41263290	2	42,21,	17,162,	41257605,41263227,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -3283,6 +3751,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+210	3	0	0	0	0	6	31299	++	CAG33136.1	230	17	230	KI537979	14052872	9712654	9744592	7	44,52,29,16,25,20,27,	17,61,113,142,158,183,203,	9712654,9715941,9716445,9718374,9739264,9743706,9744511,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 207)
         self.assertEqual(alignment.misMatches, 22)
@@ -3341,6 +3815,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+207	22	0	0	1	1	1	-1	++	CAG33136.1	230	0	230	KI538594	7819582	2103463	2104149	2	20,209,	0,21,	2103463,2103522,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 204)
         self.assertEqual(alignment.misMatches, 6)
@@ -3398,6 +3878,12 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                              [       0,      183,      183,      203,      230]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+204	6	0	0	1	20	1	1	+-	CAG33136.1	230	0	230	KI537194	37111980	20872390	20873021	2	183,27,	0,203,	16238959,16239509,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
