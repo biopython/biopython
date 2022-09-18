@@ -1780,7 +1780,7 @@ class Alignment:
                        (default), do not include the MD tag in the output.
         """
         if (
-            fmt not in ("a2m", "clustal", "fasta", "maf", "mauve")
+            fmt not in ("a2m", "clustal", "fasta", "maf", "mauve", "nexus")
             and len(self.sequences) > 2
         ):
             raise NotImplementedError(
