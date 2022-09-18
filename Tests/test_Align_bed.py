@@ -92,6 +92,13 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873,5331,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 1711))
@@ -133,6 +140,13 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr3	42530895	42532606	NR_046654.1	1000	-	42530895	42532606	0	3	63,75,43,	0,1125,1668,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -157,6 +171,13 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         # The modified RNAs have gaps in their sequence. As this information is
         # not stored in a BED file, we cannot calculate the substitution matrix.
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.shape, (2, 1711))
@@ -178,6 +199,13 @@ class TestAlign_dna_rna(unittest.TestCase):
                                     99,       43,       43,        0]])
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17,56,43,	0,27,1125,1144,1668,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -221,6 +249,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -240,6 +275,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -261,6 +303,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -280,6 +329,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       41]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -301,6 +357,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -320,6 +383,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       36]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
@@ -341,6 +411,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -360,6 +437,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       25,       25,       36]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -381,6 +465,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -400,6 +491,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       28]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
@@ -421,6 +519,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -440,6 +545,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
@@ -461,6 +573,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -480,6 +599,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      28,       18,       18,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
@@ -501,6 +627,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -520,6 +653,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       36,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -541,6 +681,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -560,6 +707,13 @@ class TestAlign_dna(unittest.TestCase):
                              [    39,      0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
@@ -581,6 +735,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -600,6 +761,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       25,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
@@ -621,6 +789,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -640,6 +815,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       34,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -681,6 +863,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	61646095	61646111	hg18_dna	1000	+	61646095	61646111	0	1	16,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -701,6 +890,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	10271783	10271816	hg18_dna	1000	+	10271783	10271816	0	1	33,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -720,6 +916,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      17,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	53575980	53575997	hg18_dna	1000	-	53575980	53575997	0	1	17,	0,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -761,6 +964,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -780,6 +990,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       41]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
@@ -801,6 +1018,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -820,6 +1044,13 @@ class TestAlign_dna(unittest.TestCase):
                              [        0,         6,        44]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
@@ -841,6 +1072,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -860,6 +1098,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       39]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
@@ -881,6 +1126,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -900,6 +1152,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,        7,        7,       45]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -921,6 +1180,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -940,6 +1206,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       34]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
@@ -961,6 +1234,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -980,6 +1260,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      37,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
@@ -1001,6 +1288,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1020,6 +1314,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      39,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
@@ -1041,6 +1342,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1060,6 +1368,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      36,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
@@ -1081,6 +1396,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1101,6 +1423,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1120,6 +1449,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       34,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1161,6 +1497,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -1180,6 +1523,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -1201,6 +1551,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1220,6 +1577,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       41]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -1241,6 +1605,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1260,6 +1631,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       36]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
@@ -1281,6 +1659,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -1300,6 +1685,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       25,       25,       36]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -1321,6 +1713,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -1340,6 +1739,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       28]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
@@ -1361,6 +1767,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -1380,6 +1793,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
@@ -1401,6 +1821,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1420,6 +1847,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      28,       18,       18,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
@@ -1441,6 +1875,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1460,6 +1901,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       36,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -1481,6 +1929,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1500,6 +1955,13 @@ class TestAlign_dna(unittest.TestCase):
                              [    39,      0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
@@ -1521,6 +1983,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1541,6 +2010,13 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1559,6 +2035,13 @@ class TestAlign_dna(unittest.TestCase):
                              [      36,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
@@ -1579,6 +2062,13 @@ class TestAlign_dna(unittest.TestCase):
                              [       34,         0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1621,6 +2111,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75566694	75566850	CAG33136.1	1000	+	75566694	75566850	0	1	156,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1639,6 +2136,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [       0,      132]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75560749	75560881	CAG33136.1	1000	+	75560749	75560881	0	1	132,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 986)
@@ -1659,6 +2163,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75549820	75567312	CAG33136.1	986	+	75549820	75567312	0	2	45,87,	0,17405,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1677,6 +2188,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [       0,       60,       60,      141]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75604767	75605809	CAG33136.1	1000	+	75604767	75605809	0	2	60,81,	0,961,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
@@ -1697,6 +2215,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75594914	75594989	CAG33136.1	1000	+	75594914	75594989	0	1	75,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1715,6 +2240,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [       0,       48]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr13	75569459	75569507	CAG33136.1	1000	+	75569459	75569507	0	1	48,	0,
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 530)
@@ -1735,6 +2267,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	41260685	41260787	CAG33136.1	530	+	41260685	41260787	0	1	102,	0,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 166)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1753,6 +2292,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [       0,      126,      126,      189]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+chr4	41257605	41263290	CAG33136.1	166	+	41257605	41263290	0	2	126,63,	0,5622,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1795,6 +2341,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+KI537979	9712654	9744592	CAG33136.1	972	+	9712654	9744592	0	7	132,156,87,48,75,60,81,	0,3287,3791,5720,26610,31052,31857,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 792)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1814,6 +2367,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+KI538594	2103463	2104149	CAG33136.1	792	+	2103463	2104149	0	2	60,627,	0,59,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 902)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1832,6 +2392,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
                              [     630,      549,      549,        0]]),
                 # fmt: on
             )
+        )
+
+        self.assertEqual(
+            format(alignment, "bed"),
+            """\
+KI537194	20872390	20873021	CAG33136.1	902	-	20872390	20873021	0	2	81,549,	0,82,
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1901,6 +2468,23 @@ class TestAlign_bed12(unittest.TestCase):
                 self.assertEqual(alignment.thickEnd, 4900, msg=filename)
             if bedN >= 9:
                 self.assertEqual(alignment.itemRgb, "255,0,0", msg=filename)
+            words = [
+                "chr22",
+                "1000",
+                "5000",
+                "mRNA1",
+                "960",
+                "+",
+                "1200",
+                "4900",
+                "255,0,0",
+                "2",
+                "567,488,",
+                "0,3512,",
+            ]
+            self.assertEqual(
+                alignment.format("bed", bedN), "\t".join(words[:bedN]) + "\n"
+            )
             alignment = next(alignments)
             if bedN >= 5:
                 self.assertEqual(alignment.score, 900, msg=filename)
@@ -1962,6 +2546,23 @@ class TestAlign_bed12(unittest.TestCase):
                 self.assertEqual(alignment.thickEnd, 5960, msg=filename)
             if bedN >= 9:
                 self.assertEqual(alignment.itemRgb, "0,255,0", msg=filename)
+            words = [
+                "chr22",
+                "2000",
+                "6000",
+                "mRNA2",
+                "900",
+                "-",
+                "2300",
+                "5960",
+                "0,255,0",
+                "2",
+                "433,399,",
+                "0,3601,",
+            ]
+            self.assertEqual(
+                alignment.format("bed", bedN), "\t".join(words[:bedN]) + "\n"
+            )
             with self.assertRaises(StopIteration) as cm:
                 next(alignments)
                 self.fail(f"More than two alignments reported in {filename}")

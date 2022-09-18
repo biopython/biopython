@@ -1779,11 +1779,11 @@ class Alignment:
                        the alignment and include it in the output. If False
                        (default), do not include the MD tag in the output.
         """
-        if len(self.sequences) > 2:
-            raise NotImplementedError(
-                "format is currently implemented for pairwise alignments only"
-            )
         if fmt == "":
+            if len(self.sequences) > 2:
+                raise NotImplementedError(
+                    "printing an alignment is currently implemented for pairwise alignments only"
+                )
             return self._format_pretty()
         module = _load(fmt)
         try:

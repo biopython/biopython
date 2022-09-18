@@ -142,6 +142,27 @@ class TestNexusReading(unittest.TestCase):
         self.assertEqual(alignment[6], "A?C-GgTgggggggggggg-g-g??--?gggggggggggggg-g-g")
         self.assertEqual(alignment[7], "AtCtGtTtttttttttttt-?-?ttttttttttttttttttt-?-?")
         self.assertEqual(alignment[8], "cccccccccccccccccccNc-ccccccccccccccccccccNc-c")
+        self.assertEqual(
+            format(alignment, "nexus"),
+            """\
+#NEXUS
+begin data;
+dimensions ntax=9 nchar=46;
+format datatype=dna missing=? gap=-;
+matrix
+t1                                    A-C-G-Tcgtgtgtgctct-t-t------acgtgtgtgctct-t-t
+'t2 the name'                         A-C-GcTcgtg-----tct-t-t----acacgtg-----tct-t-t
+'isn''that [a] strange name?'         A-CcGcTcgtgtgtgct--------acacacgtgtgtgct------
+'one should be punished, for (that)!' A-C-G-T---------------------------------------
+t5                                    A-C?G-T?-acgt??-???-???--??---?-acgt??-???-???
+t6                                    AcCaGtTc?--aaaaaaaa-a-aacgactac?--aaaaaaaa-a-a
+t7                                    A?C-GgTgggggggggggg-g-g??--?gggggggggggggg-g-g
+t8                                    AtCtGtTtttttttttttt-?-?ttttttttttttttttttt-?-?
+t9                                    cccccccccccccccccccNc-ccccccccccccccccccccNc-c
+;
+end;
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
         self.check_reading_writing(path)
@@ -163,6 +184,20 @@ class TestNexusReading(unittest.TestCase):
         )
         self.assertEqual(alignment[0], "AAAAAGGCATTGTGGTGGGAAT")
         self.assertEqual(alignment[1], "?????????TTGTGGTGGGAAT")
+        self.assertEqual(
+            format(alignment, "nexus"),
+            """\
+#NEXUS
+begin data;
+dimensions ntax=2 nchar=22;
+format datatype=dna missing=? gap=-;
+matrix
+Aegotheles AAAAAGGCATTGTGGTGGGAAT
+Aerodramus ?????????TTGTGGTGGGAAT
+;
+end;
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
         self.check_reading_writing(path)

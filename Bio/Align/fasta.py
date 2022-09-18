@@ -34,7 +34,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise TypeError("Expected an Alignment object")
         lines = []
         for sequence, line in zip(alignment.sequences, alignment):
-            lines.append(f">{sequence.id} {sequence.description}")
+            if sequence.description:
+                lines.append(f">{sequence.id} {sequence.description}")
+            else:
+                lines.append(f">{sequence.id}")
             lines.append(line)
         return "\n".join(lines) + "\n"
 
@@ -67,7 +70,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     name, description = parts
                 except ValueError:
                     name = parts[0]
-                    description = None
+                    description = ""
                 names.append(name)
                 descriptions.append(description)
                 lines.append("")
@@ -80,10 +83,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for name, description, line in zip(names, descriptions, lines):
             line = line.replace("-", "")
             sequence = Seq(line)
-            if description is None:
-                record = SeqRecord(sequence, name)
-            else:
-                record = SeqRecord(sequence, name, description=description)
+            record = SeqRecord(sequence, name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
         self._close()

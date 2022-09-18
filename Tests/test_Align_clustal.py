@@ -10,6 +10,9 @@ from io import StringIO
 from Bio import Align
 
 
+# flake8: noqa
+
+
 class TestClustalReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
         alignments = Align.parse(path, "clustal")
@@ -64,6 +67,64 @@ class TestClustalReadingWriting(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD---",
+        )
+        self.assertEqual(
+            format(alignment, "clustal"),
+            """\
+gi|4959044|gb|AAD34209.1|AF069      MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN
+gi|671626|emb|CAA85685.1|           ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFR
+                                              * *: ::    :.   :*  :  :. : . :*  ::   .
+
+gi|4959044|gb|AAD34209.1|AF069      LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW
+gi|671626|emb|CAA85685.1|           VTPQPG-----------------VPPEEAGAAVAAESSTGT---------
+                                    :   **                  **:...   *.*** ..         
+
+gi|4959044|gb|AAD34209.1|AF069      LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT
+gi|671626|emb|CAA85685.1|           WTTVWTDGLTSLDRYKG-----RCYHIEPVPG------------------
+                                     .:*   * *: .* :*        : :* .*                  
+
+gi|4959044|gb|AAD34209.1|AF069      SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE
+gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIP
+                                     *::.  .    .:: :*..*  :* .*   .. .  :    .  :    
+
+gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRRAPTLEQSSEN
+gi|671626|emb|CAA85685.1|           VAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYE
+                                    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :
+
+gi|4959044|gb|AAD34209.1|AF069      EPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+gi|671626|emb|CAA85685.1|           CLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLN
+                                      .*.    :.    :. .  .  .* **.*..  :..  *.. .    .
+
+gi|4959044|gb|AAD34209.1|AF069      ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYE
+gi|671626|emb|CAA85685.1|           ATAG-----------------------TCEEMIKRAIFARELGVPIVMHD
+                                     ::*                         :.: .*:    :     * ::
+
+gi|4959044|gb|AAD34209.1|AF069      SERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLR
+gi|671626|emb|CAA85685.1|           YLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKAL
+                                       ***  . * :. .  .  :  *: .:: :::   ..   . : :   
+
+gi|4959044|gb|AAD34209.1|AF069      QIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGS
+gi|671626|emb|CAA85685.1|           RLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDW
+                                    ::  *    *  : .. :.* . ::.  :: * :  :   * *   :.. 
+
+gi|4959044|gb|AAD34209.1|AF069      SSSSSPSPSSSGESSESSSKMFEGSSEGGSSGPSRKDGRHRAPVTFDESG
+gi|671626|emb|CAA85685.1|           VSLPGVIPVASG-----------------------------GIHVWHMPA
+                                     * ..  * :**                             .  .:. ..
+
+gi|4959044|gb|AAD34209.1|AF069      SLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCI
+gi|671626|emb|CAA85685.1|           LTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACV
+                                       :*.  ..: :. .  .:* * :   : * .             ..*:
+
+gi|4959044|gb|AAD34209.1|AF069      TEYTEGDKLRKLPCSHEFHVHCIDRWLSE-NSTCPICRRAVLSSGNRESV
+gi|671626|emb|CAA85685.1|           KARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD--
+                                    .  .**   *.*... :  ::   :* .*  ::* : :.  :.    :  
+
+gi|4959044|gb|AAD34209.1|AF069      V
+gi|671626|emb|CAA85685.1|           -
+                                     
+
+
+""",
         )
         self.check_reading_writing(path)
 
@@ -160,6 +221,72 @@ class TestClustalReadingWriting(unittest.TestCase):
             alignment.column_annotations["clustal_consensus"],
             "**                       .  ::             *. *:          : :.      **    .  .:  *::::.   : :.   .        ..:   *.: . *        :  *     *:           .  ..        .: *:  .    :               .:            :   * :    .        .:                           : .::    :   .: .:  :: :** . :  ::*. :       ",
         )
+        self.assertEqual(
+            format(alignment, "clustal"),
+            """\
+V_Harveyi_PATH                      MKNW--------IKV----AVAAI-A--LSAA------------------
+B_subtilis_YXEM                     MKMKKW------TVL----VVAALLA-VLSACGN------------G-NS
+FLIY_ECOLI                          MKLAHLGRQALMGVM----AVALVAG--MSVKSF---------ADEG-LL
+Deinococcus_radiodurans             MKKSLL------SLKLSGLLVPSVLALSLSACSS---------------P
+B_subtilis_GlnH_homo_YCKK           MKKALL------ALF----MVVSIAA--LAACGAGNDNQSKDNAKDGDLW
+YA80_HAEIN                          MKKLLF------TTA----LLTGAIA--FSTFS-----------HAGEIA
+E_coli_GlnH                         MKSVL-------KVS----LAALTLA--FAVSSH---------A------
+HISJ_E_COLI                         MKKLVL------SLS----LV---LA--FSSATA---------------A
+                                    **                       .  ::             *. *:  
+
+V_Harveyi_PATH                      -TVQAATEVKVGMSGRYFPFTFVK--QDKLQGFEVDMWDEIGKRNDYKIE
+B_subtilis_YXEM                     SSKEDDNVLHVGATGQSYPFAYKE--NGKLTGFDVEVMEAVAKKIDMKLD
+FLIY_ECOLI                          NKVKERGTLLVGLEGTYPPFSFQGD-DGKLTGFEVEFAQQLAKHLGVEAS
+Deinococcus_radiodurans             SSTLNQGTLKIAMEGTYPPFTSKNE-QGELVGFDVDIAKAVAQKLNLKPE
+B_subtilis_GlnH_homo_YCKK           ASIKKKGVLTVGTEGTYEPFTYHDKDTDKLTGYDVEVITEVAKRLGLKVD
+YA80_HAEIN                          DRVEKTKTLLVGTEGTYAPFTFHDK-SGKLTGFDVEVIRKVAEKLGLKVE
+E_coli_GlnH                         ----ADKKLVVATDTAFVPFEFKQ--GDKYVGFDVDLWAAIAKELKLDYE
+HISJ_E_COLI                         -FAAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCT
+                                            : :.      **    .  .:  *::::.   : :.   .  
+
+V_Harveyi_PATH                      YVTANFSGLFGLLETGRIDTISNQITMTDARKAKYLFADPYVVDGAQITV
+B_subtilis_YXEM                     WKLLEFSGLMGELQTGKLDTISNQVAVTDERKETYNFTKPYAYAGTQIVV
+FLIY_ECOLI                          LKPTKWDGMLASLDSKRIDVVINQVTISDERKKKYDFSTPYTISGIQALV
+Deinococcus_radiodurans             FVLTEWSGILAGLQANKYDVIVNQVGITPERQNSIGFSQPYAYSRPEIIV
+B_subtilis_GlnH_homo_YCKK           FKETQWGSMFAGLNSKRFDVVANQVGKTD-REDKYDFSDKYTTSRAVVVT
+YA80_HAEIN                          FKETQWDAMYAGLNAKRFDVIANQTNPSPERLKKYSFTTPYNYSGGVIVT
+E_coli_GlnH                         LKPMDFSGIIPALQTKNVDLALAGITITDERKKAIDFSDGYYKSGLLVMV
+HISJ_E_COLI                         FVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVV
+                                          ..:   *.: . *        :  *     *:           .
+
+V_Harveyi_PATH                      RK-GNDSIQGVEDLAGKTVAVNLGSNFEQLLRDYDKDGKINIKTYDT--G
+B_subtilis_YXEM                     KK-DNTDIKSVDDLKGKTVAAVLGSNHAKNLESKDPDKKINIKTYETQEG
+FLIY_ECOLI                          KKGNEGTIKTADDLKGKKVGVGLGTNYEEWLRQN--VQGVDVRTYDDDPT
+Deinococcus_radiodurans             AKNNTFNPQSLADLKGKRVGSTLGSNYEKQLI-D--TGDIKIVTYPGAPE
+B_subtilis_GlnH_homo_YCKK           KK-DNNDIKSEADVKGKTSAQSLTSNYNKLAT-N--A-GAKVEGVEGMAQ
+YA80_HAEIN                          KS-SDNSIKSFEDLKGRKSAQSATSNWGKDAK-A--A-GAQILVVDGLAQ
+E_coli_GlnH                         KAN-NNDVKSVKDLDGKVVAVKSGTGSVDYAKAN--IKTKDLRQFPNIDN
+HISJ_E_COLI                         AK-NSDIQPTVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDN
+                                      ..        .: *:  .    :               .:        
+
+V_Harveyi_PATH                      IEHDVALGRADAFIMDRLSALE-LIKKTG-LPLQLAGEPFE-----TIQN
+B_subtilis_YXEM                     TLKDVAYGRVDAYVNSRTVLIA-QIKKTG-LPLKLAGDPIV-----YEQV
+FLIY_ECOLI                          KYQDLRVGRIDAILVDRLAALD-LVKKTN-DTLAVTGEAFS-----RQES
+Deinococcus_radiodurans             ILADLVAGRIDAAYNDRLVVNY-IIND-QKLPVRGAGQIGD-----AAPV
+B_subtilis_GlnH_homo_YCKK           ALQMIQQARVDMTYNDKLAVLN-YLKTSGNKNVKIAFETGE-----PQST
+YA80_HAEIN                          SLELIKQGRAEATINDKLAVLD-YFKQHPNSGLKIAYDRGD-----KTPT
+E_coli_GlnH                         AYMELGTNRADAVLHDTPNILY-FIKTAGNGQFKAVGDSLE-----AQQY
+HISJ_E_COLI                         IYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGT
+                                        :   * :    .        .:                        
+
+V_Harveyi_PATH                      AWPFVDNEKGRKLQAEVNKALAEMRADGTVEKISVKWFGADITK----
+B_subtilis_YXEM                     AFPFAKDDAHDKLRKKVNKALDELRKDGTLKKLSEKYFNEDITVEQKH
+FLIY_ECOLI                          GVALRK--GNEDLLKAVNDAIAEMQKDGTLQALSEKWFGADVTK----
+Deinococcus_radiodurans             GIALKK--GNSALKDQIDKALTEMRSDGTFEKISQKWFGQDVGQ---P
+B_subtilis_GlnH_homo_YCKK           YFTFRK--GSGEVVDQVNKALKEMKEDGTLSKISKKWFGEDVSK----
+YA80_HAEIN                          AFAFLQ--GEDALITKFNQVLEALRQDGTLKQISIEWFGYDITQ----
+E_coli_GlnH                         GIAFPK--GSDELRDKVNGALKTLRENGTYNEIYKKWFGTEP-K----
+HISJ_E_COLI                         GMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG---G
+                                       : .::    :   .: .:  :: :** . :  ::*. :       
+
+
+""",
+        )
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -208,6 +335,82 @@ class TestClustalReadingWriting(unittest.TestCase):
             alignment.column_annotations["clustal_consensus"],
             "                                                                                                                                                                                                                                                                                      ***** *** **   *  ** *                               ********                                                                                                                                                                             *********************************** **   * ****  ******************************************************************************* ********************************************  ",
         )
+        self.assertEqual(
+            format(alignment, "clustal"),
+            """\
+Test1seq                            --------------------------------------------------
+AT3G20900.1-SEQ                     ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            ---------------AGTTACAATAACTGACGAAGCTAAGTAGGCTACTA
+AT3G20900.1-SEQ                     CTCAATCCACATCAAAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            ATTAACGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGTAAGA
+AT3G20900.1-SEQ                     ATTAAAGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGCAAGA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            AAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATC
+AT3G20900.1-SEQ                     AAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            GTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAA
+AT3G20900.1-SEQ                     GTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            ATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACA
+AT3G20900.1-SEQ                     ATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAA
+AT3G20900.1-CDS                     ----------------------------ATGAACAAAGTAGCGAGGAAGA
+                                                                ***** *** **   *  ** *
+
+Test1seq                            AAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACT
+AT3G20900.1-SEQ                     CAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACT
+AT3G20900.1-CDS                     A------------------------------CAAAACATC----------
+                                                                   ********           
+
+Test1seq                            CTTCGTTATTGTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTA
+AT3G20900.1-SEQ                     CTTCGTTATTGTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            ATACTACTTTCTGTATTGATCCTATATCAACGTAAACAAAGATACTAATA
+AT3G20900.1-SEQ                     ATACTACTTTCTGTATTGATCCTATATCAAAAAAAAAAAAGATACTAATA
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            ATTAACTAAAAGTACGTTCATCGATCGTGTTCGTTGACGAAGAAGAGCTC
+AT3G20900.1-SEQ                     ATTAACTAAAAGTACGTTCATCGATCGTGTGCGTTGACGAAGAAGAGCTC
+AT3G20900.1-CDS                     --------------------------------------------------
+                                                                                      
+
+Test1seq                            TATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACGGT
+AT3G20900.1-SEQ                     TATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGT
+AT3G20900.1-CDS                     ------------AGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGT
+                                                *********************************** **
+
+Test1seq                            CGCTAGAGAAACTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-SEQ                     TTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+AT3G20900.1-CDS                     TTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCC
+                                       * ****  ***************************************
+
+Test1seq                            GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCGTGGTGACGT
+AT3G20900.1-SEQ                     GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGT
+AT3G20900.1-CDS                     GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGT
+                                    **************************************** *********
+
+Test1seq                            CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
+AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
+                                    ***********************************  
+
+
+""",
+        )
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -231,6 +434,15 @@ class TestClustalReadingWriting(unittest.TestCase):
         self.assertEqual(alignment.sequences[1].seq, "GCTGGGGATGGAGAGGGAACAGAGTAG")
         self.assertEqual(alignment[0], "GCTGGGGATGGAGAGGGAACAGAGT-T")
         self.assertEqual(alignment[1], "GCTGGGGATGGAGAGGGAACAGAGTAG")
+        self.assertEqual(
+            format(alignment, "clustal"),
+            """\
+Test1seq                            GCTGGGGATGGAGAGGGAACAGAGT-T
+AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
+
+
+""",
+        )
         self.check_reading_writing(path)
 
     def test_probcons(self):
@@ -296,6 +508,33 @@ class TestClustalReadingWriting(unittest.TestCase):
         self.assertEqual(
             alignment[4],
             "VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---PGVYGVKCTPHYGMGMVGVVEV",
+        )
+        self.assertEqual(
+            format(alignment, "clustal"),
+            """\
+plas_horvu                          D-VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG-
+plas_chlre                          --VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG-
+plas_anava                          --VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKS
+plas_proho                          VQIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG-
+azup_achcy                          VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-
+                                     ::    .     : *  :.: .*:*: *  .    **:       *   
+
+plas_horvu                          VD-VSKISQEEYLTAPGETFSVTLTV---PGTYGFYCEPHAGAGMVGKVT
+plas_chlre                          VN-ADAISRDDYLNAPGETYSVKLTA---AGEYGYYCEPHQGAGMVGKII
+plas_anava                          ADLAKSLSHKQLLMSPGQSTSTTFPADAPAGEYTFYCEPHRGAGMVGKIT
+plas_proho                          ES-APALSNTKLRIAPGSFYSVTLGT---PGTYSFYCTPHRGAGMVGTIT
+azup_achcy                          AE-A-------FKSKINENYKVTFTA---PGVYGVKCTPHYGMGMVGVVE
+                                     . .  :*. .     ..  ...: .   .* *   * ** * **** : 
+
+plas_horvu                          V
+plas_chlre                          V
+plas_anava                          V
+plas_proho                          V
+azup_achcy                          V
+                                    *
+
+
+""",
         )
         self.check_reading_writing(path)
 
