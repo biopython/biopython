@@ -355,6 +355,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
         self.assertEqual(alignment.operations, bytearray(b"MNMNM"))
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -405,6 +411,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertNotIn("hard_clip_right", alignment.query.annotations)
         self.assertEqual(alignment.operations, bytearray(b"MNMNM"))
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+NR_046654.1	16	chr3	42530896	0	63M1062N75M468N43M	*	0	0	CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCCAGGCAGTTCTTCCTTGAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGACCTAGCATCCTTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG	*	AS:i:1000	NM:i:0
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -454,6 +466,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertEqual(alignment.query.annotations["hard_clip_right"], 12)
         self.assertEqual(alignment.operations, bytearray(b"MDMNMIMNM"))
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+NR_111921.1_modified	0	chr3	48663768	0	3S28M1D17M1827N76M2I6M3376N76M12H	*	0	0	AAACACGAGAGGAGCGGAGGCGAGGGGTGAAGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGCCCGGCAGATGGAGCGATCAGAAGCCACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:972	NM:i:5
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -503,6 +521,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertNotIn("hard_clip_left", alignment.query.annotations)
         self.assertNotIn("hard_clip_right", alignment.query.annotations)
         self.assertEqual(alignment.operations, bytearray(b"MIMNMDMNM"))
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	AAAAACGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCCAGGCAGTTCTTCCTTGAGCGAGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGACCTAGCATCCTTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAGAAA	*	AS:i:978	NM:i:6
+""",
+        )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):
@@ -511,7 +535,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         alignments = Align.parse(path, "sam")
         self.check_alignments(alignments)
 
-    def test_reading_psl_comparising(self):
+    def test_reading_psl_comparison(self):
         """Test parsing dna_rna.sam and comparing to dna_rna.psl."""
         path = "Blat/dna_rna.sam"
         sam_alignments = Align.parse(path, "sam")
@@ -638,6 +662,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -658,6 +688,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
@@ -680,6 +716,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -700,6 +742,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       41]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
@@ -722,6 +770,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -743,6 +797,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
+""",
+        )
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -762,6 +822,12 @@ class TestAlign_dna(unittest.TestCase):
                              [        0,         6,        10,        48]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
@@ -784,6 +850,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -804,6 +876,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       39]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
@@ -826,6 +904,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -846,6 +930,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       10,       10,       48]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
@@ -868,6 +958,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -888,6 +984,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       34]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
@@ -910,6 +1012,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
+""",
+        )
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -929,6 +1037,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      37,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
@@ -951,6 +1065,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -971,6 +1091,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      39,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
@@ -993,6 +1119,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1013,6 +1145,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      36,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1035,6 +1173,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1056,6 +1200,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1076,6 +1226,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       34,         0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1183,6 +1339,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1204,6 +1366,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1224,6 +1392,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      17,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
@@ -1331,6 +1505,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1351,6 +1531,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       41]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1373,6 +1559,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1393,6 +1585,12 @@ class TestAlign_dna(unittest.TestCase):
                              [        0,         6,        10,        48]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
@@ -1415,6 +1613,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1435,6 +1639,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       39]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
@@ -1457,6 +1667,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1477,6 +1693,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       10,       10,       48]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
@@ -1499,6 +1721,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1519,6 +1747,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       34]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
@@ -1541,6 +1775,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1561,6 +1801,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      37,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1583,6 +1829,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1603,6 +1855,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      39,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1625,6 +1883,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1645,6 +1909,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      36,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1667,6 +1937,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1687,6 +1963,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      36,        0]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1709,6 +1991,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
+""",
+        )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
@@ -1730,7 +2018,7 @@ class TestAlign_dna(unittest.TestCase):
         stream.close()
 
     def check_alignments_psl_34_005(self, alignments):
-        """Check the alignments for psl_34_005/sam."""
+        """Check the alignments for psl_34_005.sam."""
         self.assertEqual(list(alignments.metadata), ["PG"])
         self.assertEqual(len(alignments.targets), 25)
         self.assertEqual(alignments.targets[0].id, "chr1")
@@ -1815,6 +2103,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr4	61646096	0	11S16M6S	*	0	0	*	*	AS:i:16
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1835,6 +2129,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       0,       33]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
@@ -1857,6 +2157,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg18_dna	16	chr2	53575981	0	8S17M8S	*	0	0	*	*	AS:i:17
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1877,6 +2183,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       9,       50]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr9	85737866	0	9S41M	*	0	0	*	*	AS:i:29
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1899,6 +2211,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr8	95160480	0	8S41M1S	*	0	0	*	*	AS:i:41
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1919,6 +2237,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      11,       47]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr22	42144401	0	11S36M3S	*	0	0	*	*	AS:i:24
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
@@ -1941,6 +2265,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr2	183925985	0	1S6M4I38M1S	*	0	0	*	*	AS:i:27
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1961,6 +2291,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      10,       35,       35,       46]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr19	35483341	0	10S25M134D11M4S	*	0	0	*	*	AS:i:0
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1983,6 +2319,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	23891311	0	10S39M1S	*	0	0	*	*	AS:i:39
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2003,6 +2345,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      21,       49]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr18	43252218	0	21S28M1S	*	0	0	*	*	AS:i:24
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
@@ -2025,6 +2373,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr13	52759148	0	1S10M3D38M1S	*	0	0	*	*	AS:i:30
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2045,6 +2399,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      0,      50]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
@@ -2067,6 +2427,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	0	chr1	61700838	0	1S34M15S	*	0	0	*	*	AS:i:22
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2087,6 +2453,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       33,       29,       11]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr4	37558158	0	1S16M4I18M11S	*	0	0	*	*	AS:i:15
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
@@ -2109,6 +2481,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr22	48997406	0	1S37M12S	*	0	0	*	*	AS:i:29
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2129,6 +2507,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       49,        13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr2	120641741	0	1S36M13S	*	0	0	*	*	AS:i:32
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
@@ -2151,6 +2535,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	54017131	0	1S39M10S	*	0	0	*	*	AS:i:39
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2171,6 +2561,12 @@ class TestAlign_dna(unittest.TestCase):
                              [    49,     10]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr19	553743	0	1S39M10S	*	0	0	*	*	AS:i:27
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2193,6 +2589,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	99388556	0	1S36M13S	*	0	0	*	*	AS:i:24
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2214,6 +2616,12 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr10	112178172	0	15S25M10S	*	0	0	*	*	AS:i:21
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2233,6 +2641,12 @@ class TestAlign_dna(unittest.TestCase):
                              [      49,       13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	39368491	0	1S36M13S	*	0	0	*	*	AS:i:32
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
@@ -2254,6 +2668,12 @@ class TestAlign_dna(unittest.TestCase):
                              [       47,        13]]),
                 # fmt: on
             )
+        )
+        self.assertEqual(
+            format(alignment, "sam"),
+            """\
+hg19_dna	16	chr1	220325688	0	3S34M13S	*	0	0	*	*	AS:i:30
+""",
         )
         self.assertRaises(StopIteration, next, alignments)
 
