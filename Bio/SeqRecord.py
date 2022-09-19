@@ -1058,6 +1058,20 @@ class SeqRecord:
             letter_annotations=self.letter_annotations.copy(),
         )
 
+    def isupper(self):
+        """Return True if all ASCII characters in the record's sequence are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self.seq.isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in the record's sequence are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self.seq.islower()
+
     def reverse_complement(
         self,
         id=False,
