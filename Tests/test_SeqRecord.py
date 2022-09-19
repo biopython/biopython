@@ -222,6 +222,14 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
     def test_lower(self):
         self.assertEqual("abcdefghijklmnopqrstuvwzyx", self.record.lower().seq)
 
+    def test_isupper(self):
+        self.assertTrue(self.record.isupper())
+        self.assertFalse(self.record.lower().isupper())
+
+    def test_islower(self):
+        self.assertFalse(self.record.islower())
+        self.assertTrue(self.record.lower().islower())
+
     def test_slicing(self):
         self.assertEqual("B", self.record[1])
         self.assertEqual("BC", self.record[1:3].seq)
