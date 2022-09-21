@@ -117,6 +117,7 @@ TTT	0.296
 
     def test_codon_usage_custom(self):
         """Test Codon Adaptation Index (CAI) using FASTA file for background."""
+        self.maxDiff = None
         # We need a FASTA file of CDS sequences to count the codon usage...
         dna_fasta_filename = "fasta.tmp"
         dna_genbank_filename = "GenBank/NC_005816.gb"
