@@ -12,6 +12,17 @@ from Bio import SeqIO  # To parse a FASTA file
 from Bio import BiopythonDeprecationWarning
 
 
+warnings.warn(
+    "This module has been DEPRECATED. Please use the CodonAdaptationIndex "
+    "class in Bio.SeqUtils instead. Note that this class has been updated "
+    "to use modern Python, and may give slightly different results from the "
+    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage as codons with a "
+    "zero frequency are handled differently. The CodonAdaptationIndex class "
+    "in Bio.SeqUtils.CodonUsage has remained unchanged.",
+    BiopythonDeprecationWarning,
+)
+
+
 # Turn black code style off
 # fmt: off
 

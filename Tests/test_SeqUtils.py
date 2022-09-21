@@ -19,10 +19,17 @@ from Bio.SeqUtils.CheckSum import crc32
 from Bio.SeqUtils.CheckSum import crc64
 from Bio.SeqUtils.CheckSum import gcg
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex as OldCodonAdaptationIndex
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
+
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex as OldCodonAdaptationIndex
 
 
 class SeqUtilsTests(unittest.TestCase):
