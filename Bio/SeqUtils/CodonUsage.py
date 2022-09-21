@@ -174,6 +174,10 @@ class CodonAdaptationIndex:
                             f"illegal codon '{codon}' in gene: {record.id}"
                         ) from None
 
+        # Following the description in the original paper, we use a value
+        # of 0.5 for codons that do not appear in the reference sequences.
+        self.codon_count = {c: n if n else 0.5 for c, n in self.codon_count.items()}
+
     def __str__(self):
         lines = []
         for i in sorted(self.index):
