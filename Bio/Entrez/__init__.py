@@ -253,6 +253,13 @@ def elink(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
+    Note that ELink treats the "id" parameter differently than the other tools.
+    If you are querying more than one UID, you should generally pass them as a
+    list of strings or integers. This will provide a "one-to-one" mapping
+    from source database UIDs to destination database UIDs in the result. If
+    multiple source UIDs are passed as a comma-delimited string all destination
+    UIDs will be mixed together in the result.
+
     This example finds articles related to the Biopython application
     note's entry in the PubMed database:
 
