@@ -693,7 +693,7 @@ class CodonAdaptationIndex(dict):
             else:
                 cai_length += 1
 
-        return exp(cai_value / (cai_length - 1.0))
+        return exp(cai_value / cai_length)
 
     def __str__(self):
         lines = []
