@@ -604,11 +604,12 @@ The method 'print_index' of the CodonAdaptationIndex class in
 Bio.SeqUtils.CodonUsage was deprecated in Release 1.80. Instead of
 self.print_index(), please use print(self).
 
-The module Bio.SeqUtils.CodonUsage was deprecated in Release 1.80. Please use
-the new CodonAdaptationIndex class in Bio.SeqUtils instead. Note that this
-class has been updated to use modern Python, and may give slightly different
-results from the CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage, as
-codons with a zero frequency are handled differently.
+The modules Bio.SeqUtils.CodonUsage and Bio.SeqUtils.CodonUsageIndices were
+deprecated in Release 1.80. Please use the new CodonAdaptationIndex class in
+Bio.SeqUtils instead. Note that this class has been updated to use modern
+Python, and may give slightly different results from the CodonAdaptationIndex
+class in Bio.SeqUtils.CodonUsage, as the calculation was updated to be
+consistent with the calculated values by Sharp & Li.
 
 Function 'GC' in Bio.SeqUtils was deprecated in Release 1.80. Instead use
 function 'gc_fraction'.

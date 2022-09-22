@@ -14,11 +14,12 @@ from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
     "This module has been DEPRECATED. Please use the CodonAdaptationIndex "
-    "class in Bio.SeqUtils instead. Note that this class has been updated "
-    "to use modern Python, and may give slightly different results from the "
-    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage as codons with a "
-    "zero frequency are handled differently. The CodonAdaptationIndex class "
-    "in Bio.SeqUtils.CodonUsage has remained unchanged.",
+    "class in Bio.SeqUtils instead. Note that this class has been updated to "
+    "use modern Python, and may give slightly different results from the "
+    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage, as the code was "
+    "changed to be consistent with the published paper by Sharp and Li. The "
+    "code in the old CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage was "
+    "not changed.",
     BiopythonDeprecationWarning,
 )
 
