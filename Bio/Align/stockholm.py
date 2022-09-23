@@ -545,8 +545,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for value in record.dbxrefs:
                 lines.append(f"#=GS {name}  DR {value}\n")
 
-        operations = alignment.operations
-        assert len(operations) == columns
+        try:
+            operations = alignment.operations
+        except AttributeError:
+            operations = bytes(b"M" * columns)
+        else:
+            assert len(operations) == columns
         for aligned_sequence, record in zip(alignment, alignment.sequences):
             aligned_sequence = "".join(
                 "." if letter == "-" and operation == ord("I") else letter
