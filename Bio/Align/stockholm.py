@@ -318,6 +318,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 )
                 skipped_columns = set(skipped_columns)
                 alignment = Alignment(records, coordinates)
+                for index in sorted(skipped_columns, reverse=True):
+                    del operations[index]  # noqa: F821
+                alignment.operations = operations  # noqa: F821
                 alignment.annotations = {}
                 if references:
                     alignment.annotations["references"] = []
@@ -354,10 +357,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     ) from None
                 if length is None:
                     length = len(aligned_sequence)
+                    operations = bytearray(b"M" * length)
                 elif length != len(aligned_sequence):
                     raise ValueError(
                         f"Aligned sequence {seqname} consists of {len(aligned_sequence)} letters, expected {length} letters)"
                     )
+                for i, letter in enumerate(aligned_sequence):
+                    if letter == "-":
+                        assert operations[i] != ord("I")
+                        operations[i] = ord("D")  # deletion
+                    elif letter == ".":
+                        assert operations[i] != ord("D")
+                        operations[i] = ord("I")  # insertion
                 aligned_sequence = aligned_sequence.replace(".", "-")
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
@@ -533,7 +544,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 lines.append(f"#=GS {name}  DE {record.description}\n")
             for value in record.dbxrefs:
                 lines.append(f"#=GS {name}  DR {value}\n")
+
+        try:
+            operations = alignment.operations
+        except AttributeError:
+            operations = bytes(b"M" * columns)
+        else:
+            assert len(operations) == columns
         for aligned_sequence, record in zip(alignment, alignment.sequences):
+            aligned_sequence = "".join(
+                "." if letter == "-" and operation == ord("I") else letter
+                for operation, letter in zip(operations, aligned_sequence)
+            )
             lines.extend(
                 AlignmentWriter._format_record(width, start, aligned_sequence, record)
             )
@@ -569,9 +591,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         name = record.id.ljust(start)
         line = name + aligned_sequence + "\n"
         yield line
+        indices = [
+            index for index, letter in enumerate(aligned_sequence) if letter in ".-"
+        ]
+        indices.reverse()
         name = record.id.ljust(width)
         for key, value in record.letter_annotations.items():
             feature = AlignmentWriter.gr_mapping[key]
+            j = 0
+            values = bytearray(b"." * len(aligned_sequence))
+            for i, letter in enumerate(aligned_sequence):
+                if letter not in ".-":
+                    values[i] = ord(value[j])
+                    j += 1
+            value = values.decode()
             line = f"#=GR {name}  {feature}".ljust(start) + value + "\n"
             yield line
 
