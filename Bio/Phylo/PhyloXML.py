@@ -23,7 +23,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonWarning, BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 
 from Bio.Phylo import BaseTree
 
@@ -638,10 +638,6 @@ class Confidence(float, PhyloElement):
     @property
     def value(self):
         """Return the float value of the Confidence object."""
-        warnings.warn(
-            "The ``value`` attribute is deprecated; please use ``float(self)`` instead.",
-            BiopythonDeprecationWarning,
-        )
         return float(self)
 
 

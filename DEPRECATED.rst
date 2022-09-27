@@ -148,12 +148,6 @@ Bio.Phylo.CDAOIO.CDAOError
 This exception was deprecated as of Release 1.70 as it was no longer used
 within Biopython, and removed in Release 1.75.
 
-Bio.Phylo,PhyloXML
-------------------
-The ``value`` attribute of the ``Confidence`` class was deprecated in release
-1.80, as ``Confidence`` now inherits from ``float``. Please use ``float(self)``
-instead.
-
 Bio.DocSQL
 ----------
 This was deprecated in Biopython 1.69, and removed in Release 1.71.
