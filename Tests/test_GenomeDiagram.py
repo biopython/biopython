@@ -130,8 +130,7 @@ def calc_gc_content(sequence):
 
     if gc == 0:
         return 0
-    # print(gc*100.0/(d['A'] +d['T'] + gc))
-    return gc * 1.0 / (d["A"] + d["T"] + gc)
+    return gc / (d["A"] + d["T"] + gc)
 
 
 def calc_at_content(sequence):
@@ -150,7 +149,7 @@ def calc_at_content(sequence):
 
     if at == 0:
         return 0
-    return at * 1.0 / (d["G"] + d["G"] + at)
+    return at / (d["G"] + d["G"] + at)
 
 
 def calc_gc_skew(sequence):

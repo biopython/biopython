@@ -816,7 +816,7 @@ def Tm_GC(
     if valueset > 8:
         raise ValueError("allowed values for parameter 'valueset' are 0-8.")
 
-    melting_temp = A + B * percent_gc - C / (len(seq) * 1.0)
+    melting_temp = A + B * percent_gc - C / len(seq)
     if saltcorr:
         melting_temp += salt_correction(
             Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs, seq=seq, method=saltcorr

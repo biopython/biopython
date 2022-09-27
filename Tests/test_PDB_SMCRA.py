@@ -427,7 +427,7 @@ class TransformTests(unittest.TestCase):
     def get_pos(self, o):
         """Average atom position in an entity."""
         pos, count = self.get_total_pos(o)
-        return 1.0 * pos / count
+        return pos / count
 
     def test_transform(self):
         """Transform entities (rotation and translation)."""
