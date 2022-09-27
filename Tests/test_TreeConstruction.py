@@ -145,19 +145,19 @@ class DistanceCalculatorTest(unittest.TestCase):
 
         calculator = DistanceCalculator("identity")
         dm = calculator.get_distance(aln)
-        self.assertEqual(dm["Alpha", "Beta"], 1 - (10 * 1.0 / 13))
+        self.assertEqual(dm["Alpha", "Beta"], 1 - 10 / 13)
 
         calculator = DistanceCalculator("blastn")
         dm = calculator.get_distance(aln)
-        self.assertEqual(dm["Alpha", "Beta"], 1 - (38 * 1.0 / 65))
+        self.assertEqual(dm["Alpha", "Beta"], 1 - 38 / 65)
 
         calculator = DistanceCalculator("trans")
         dm = calculator.get_distance(aln)
-        self.assertEqual(dm["Alpha", "Beta"], 1 - (54 * 1.0 / 65))
+        self.assertEqual(dm["Alpha", "Beta"], 1 - 54 / 65)
 
         calculator = DistanceCalculator("blosum62")
         dm = calculator.get_distance(aln)
-        self.assertEqual(dm["Alpha", "Beta"], 1 - (53 * 1.0 / 84))
+        self.assertEqual(dm["Alpha", "Beta"], 1 - 53 / 84)
 
     def test_nonmatching_seqs(self):
         aln = AlignIO.read(StringIO(">Alpha\nA-A--\n>Gamma\n-Y-Y-"), "fasta")

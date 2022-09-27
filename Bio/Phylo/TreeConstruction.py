@@ -512,7 +512,7 @@ class DistanceCalculator:
             max_score = max(max_score1, max_score2)
         if max_score == 0:
             return 1  # max possible scaled distance
-        return 1 - (score * 1.0 / max_score)
+        return 1 - (score / max_score)
 
     def get_distance(self, msa):
         """Return a DistanceMatrix for MSA object.
@@ -674,14 +674,14 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade2)
             # assign branch length
             if clade1.is_terminal():
-                clade1.branch_length = min_dist * 1.0 / 2
+                clade1.branch_length = min_dist / 2
             else:
-                clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
+                clade1.branch_length = min_dist / 2 - self._height_of(clade1)
 
             if clade2.is_terminal():
-                clade2.branch_length = min_dist * 1.0 / 2
+                clade2.branch_length = min_dist / 2
             else:
-                clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
+                clade2.branch_length = min_dist / 2 - self._height_of(clade2)
 
             # update node list
             clades[min_j] = inner_clade
@@ -691,7 +691,7 @@ class DistanceTreeConstructor(TreeConstructor):
             # set the distances of new node at the index of min_j
             for k in range(0, len(dm)):
                 if k != min_i and k != min_j:
-                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) * 1.0 / 2
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) / 2
 
             dm.names[min_j] = "Inner" + str(inner_count)
 
