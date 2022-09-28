@@ -196,13 +196,13 @@ def _augment_blast_hsp(hsp, attr):
 
     # if the attr is a percent value, calculate it
     if attr == "ident_pct":
-        hsp.ident_pct = hsp.ident_num / float(hsp.aln_span) * 100
+        hsp.ident_pct = hsp.ident_num / hsp.aln_span * 100
 
     elif attr == "pos_pct":
-        hsp.pos_pct = hsp.pos_num / float(hsp.aln_span) * 100
+        hsp.pos_pct = hsp.pos_num / hsp.aln_span * 100
 
     elif attr == "gap_pct":
-        hsp.gap_pct = hsp.gap_num / float(hsp.aln_span) * 100
+        hsp.gap_pct = hsp.gap_num / hsp.aln_span * 100
 
 
 class BlastTabParser:
