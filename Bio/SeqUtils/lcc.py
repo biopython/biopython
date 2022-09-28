@@ -29,9 +29,7 @@ def lcc_mult(seq, wsize):
     compone = [0]
     lccsal = []
     for i in range(wsize):
-        compone.append(
-            ((i + 1) / float(wsize)) * ((math.log((i + 1) / float(wsize))) / l4)
-        )
+        compone.append(((i + 1) / wsize) * math.log((i + 1) / wsize) / l4)
     window = seq[0:wsize]
     cant_a = window.count("A")
     cant_c = window.count("C")
@@ -138,25 +136,17 @@ def lcc_simp(seq):
     if "A" not in seq:
         term_a = 0
     else:
-        term_a = ((seq.count("A")) / float(wsize)) * (
-            (math.log((seq.count("A")) / float(wsize))) / l4
-        )
+        term_a = (seq.count("A") / wsize) * math.log(seq.count("A") / wsize) / l4
     if "C" not in seq:
         term_c = 0
     else:
-        term_c = ((seq.count("C")) / float(wsize)) * (
-            (math.log((seq.count("C")) / float(wsize))) / l4
-        )
+        term_c = (seq.count("C") / wsize) * math.log(seq.count("C") / wsize) / l4
     if "T" not in seq:
         term_t = 0
     else:
-        term_t = ((seq.count("T")) / float(wsize)) * (
-            (math.log((seq.count("T")) / float(wsize))) / l4
-        )
+        term_t = (seq.count("T") / wsize) * math.log(seq.count("T") / wsize) / l4
     if "G" not in seq:
         term_g = 0
     else:
-        term_g = ((seq.count("G")) / float(wsize)) * (
-            (math.log((seq.count("G")) / float(wsize))) / l4
-        )
+        term_g = (seq.count("G") / wsize) * math.log(seq.count("G") / wsize) / l4
     return -(term_a + term_c + term_t + term_g)
