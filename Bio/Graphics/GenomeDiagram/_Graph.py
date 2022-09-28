@@ -136,10 +136,7 @@ class GraphData:
     def mean(self):
         """Return the mean value for the data points (float)."""
         data = list(self.data.values())
-        sum = 0.0
-        for item in data:
-            sum += float(item)
-        return sum / len(data)
+        return sum(data) / len(data)
 
     def stdev(self):
         """Return the sample standard deviation for the data (float)."""
@@ -147,7 +144,7 @@ class GraphData:
         m = self.mean()
         runtotal = 0.0
         for entry in data:
-            runtotal += float((entry - m) ** 2)
+            runtotal += (entry - m) ** 2
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
         return sqrt(runtotal / (len(data) - 1))

@@ -538,7 +538,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
             "Data %f to %f out of bounds (%f to %f)"
             % (min(desired), max(desired), minimum, maximum)
         )
-    equal_step = float(maximum - minimum) / (count - 1)
+    equal_step = (maximum - minimum) / (count - 1)
 
     if equal_step < gap:
         import warnings
