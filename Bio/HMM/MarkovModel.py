@@ -225,17 +225,17 @@ class MarkovModelBuilder:
         each set of transitions adds up to 1.
         """
         # set initial state probabilities
-        new_initial_prob = float(1) / float(len(self.transition_prob))
+        new_initial_prob = 1.0 / len(self.transition_prob)
         for state in self._state_alphabet:
             self.initial_prob[state] = new_initial_prob
 
         # set the transitions
-        new_trans_prob = float(1) / float(len(self.transition_prob))
+        new_trans_prob = 1.0 / len(self.transition_prob)
         for key in self.transition_prob:
             self.transition_prob[key] = new_trans_prob
 
         # set the emissions
-        new_emission_prob = float(1) / float(len(self.emission_prob))
+        new_emission_prob = 1.0 / len(self.emission_prob)
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
 

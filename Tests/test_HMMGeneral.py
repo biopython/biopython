@@ -397,12 +397,12 @@ class AbstractTrainerTest(unittest.TestCase):
 
         # now make sure we are getting back the right thing
         result_tests = []
-        result_tests.append([("A", "A"), float(10) / float(45)])
-        result_tests.append([("A", "B"), float(20) / float(45)])
-        result_tests.append([("A", "C"), float(15) / float(45)])
-        result_tests.append([("B", "B"), float(5) / float(5)])
-        result_tests.append([("C", "A"), float(15) / float(25)])
-        result_tests.append([("C", "C"), float(10) / float(25)])
+        result_tests.append([("A", "A"), 10 / 45])
+        result_tests.append([("A", "B"), 20 / 45])
+        result_tests.append([("A", "C"), 15 / 45])
+        result_tests.append([("B", "B"), 5 / 5])
+        result_tests.append([("C", "A"), 15 / 25])
+        result_tests.append([("C", "C"), 10 / 25])
 
         for test_result in result_tests:
             self.assertEqual(results[test_result[0]], test_result[1])
