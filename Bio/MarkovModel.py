@@ -614,11 +614,11 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 def _normalize(matrix):
     """Normalize matrix object (PRIVATE)."""
     if len(matrix.shape) == 1:
-        matrix /= sum(matrix)
+        matrix = matrix / sum(matrix)
     elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):
-            matrix[i, :] /= sum(matrix[i, :])
+            matrix[i, :] = matrix[i, :] / sum(matrix[i, :])
     else:
         raise ValueError("I cannot handle matrixes of that shape")
     return matrix
