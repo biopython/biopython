@@ -29,7 +29,7 @@ def lcc_mult(seq, wsize):
     compone = [0]
     lccsal = []
     for i in range(wsize):
-        compone.append(((i + 1) / wsize) * ((math.log((i + 1) / wsize)) / l4))
+        compone.append(((i + 1) / wsize) * math.log((i + 1) / wsize) / l4)
     window = seq[0:wsize]
     cant_a = window.count("A")
     cant_c = window.count("C")
