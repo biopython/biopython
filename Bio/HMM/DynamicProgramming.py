@@ -243,9 +243,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         seq_letter = self._seq.emissions[sequence_pos]
         cur_emission_prob = self._mm.emission_prob[(cur_state, seq_letter)]
         # divide by the scaling value
-        scale_emission_prob = float(cur_emission_prob) / float(
-            self._s_values[sequence_pos]
-        )
+        scale_emission_prob = cur_emission_prob / self._s_values[sequence_pos]
 
         # loop over all of the possible states at the position
         state_pos_sum = 0
@@ -305,7 +303,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
         # if we have a probability for a transition, return it
         if have_transition:
-            return state_pos_sum / float(self._s_values[sequence_pos])
+            return state_pos_sum / self._s_values[sequence_pos]
         # otherwise we have no probability (ie. we can't do this transition)
         # and return None
         else:
