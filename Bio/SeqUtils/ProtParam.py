@@ -109,9 +109,7 @@ class ProteinAnalysis:
         if self.amino_acids_percent is None:
             aa_counts = self.count_amino_acids()
 
-            percentages = {}
-            for aa in aa_counts:
-                percentages[aa] = aa_counts[aa] / float(self.length)
+            percentages = {aa: count / self.length for aa, count in aa_counts.items()}
 
             self.amino_acids_percent = percentages
 

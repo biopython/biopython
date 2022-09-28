@@ -210,7 +210,7 @@ def GC_skew(seq, window=100):
         g = s.count("G") + s.count("g")
         c = s.count("C") + s.count("c")
         try:
-            skew = (g - c) / float(g + c)
+            skew = (g - c) / (g + c)
         except ZeroDivisionError:
             skew = 0.0
         values.append(skew)

@@ -120,7 +120,7 @@ class CodonAdaptationIndex:
 
             # calculate the RSCU value for each of the codons
             for codon in codons:
-                denominator = float(total) / len(codons)
+                denominator = total / len(codons)
                 rcsu.append(self.codon_count[codon] / denominator)
 
             # now generate the index W=RCSUi/RCSUmax:
