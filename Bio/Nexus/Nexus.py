@@ -220,7 +220,7 @@ class StepMatrix:
         total = self.sum()
         if total != 0:
             for k in self.data:
-                self.data[k] = self.data[k] / float(total)
+                self.data[k] /= total
         return self
 
     def weighting(self):
