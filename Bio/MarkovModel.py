@@ -614,7 +614,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 def _normalize(matrix):
     """Normalize matrix object (PRIVATE)."""
     if len(matrix.shape) == 1:
-        matrix = matrix / float(sum(matrix))
+        matrix = matrix / sum(matrix)
     elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):
