@@ -27,7 +27,10 @@ class StructureAlignment:
            correspond to the structures
 
         """
-        length = fasta_align.get_alignment_length()
+        try:  # MultipleSeqAlignment object
+            ncolumns = fasta_align.get_alignment_length()
+        except AttributeError:  # Alignment object
+            nrows, ncolumns = fasta_align.shape
         # Get the residues in the models
         rl1 = Selection.unfold_entities(m1, "R")
         rl2 = Selection.unfold_entities(m2, "R")
@@ -39,7 +42,7 @@ class StructureAlignment:
         map21 = {}
         # List of residue pairs (None if -)
         duos = []
-        for i in range(length):
+        for i in range(ncolumns):
             column = fasta_align[:, i]
             aa1 = column[si]
             aa2 = column[sj]
