@@ -196,7 +196,7 @@ class GenericPositionMatrix(dict):
         for i in range(self.length):
 
             def get(nucleotide):
-                return self[nucleotide][i]
+                return self[nucleotide][i]  # noqa: B023
 
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
@@ -280,7 +280,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
         """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
-            total = sum(float(self[letter][i]) for letter in alphabet)
+            total = sum(self[letter][i] for letter in alphabet)
             for letter in alphabet:
                 self[letter][i] /= total
         for letter in alphabet:
