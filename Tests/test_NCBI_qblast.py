@@ -288,7 +288,8 @@ class TestQblast(unittest.TestCase):
             )
 
         # Check the recorded input parameters agree with those requested
-        self.assertEqual(float(record.expect), e_value)
+        print("BUH!!", record.expect, type(record.expect), e_value, type(e_value))
+        self.assertEqual(record.expect, e_value)
         self.assertEqual(record.application.lower(), program)
         self.assertLessEqual(len(record.alignments), 10)
         self.assertLessEqual(len(record.descriptions), 10)
