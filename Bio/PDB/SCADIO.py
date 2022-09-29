@@ -145,7 +145,7 @@ def write_SCAD(
     """
     if maxPeptideBond is not None:
         mpbStash = IC_Chain.MaxPeptideBond
-        IC_Chain.MaxPeptideBond = float(maxPeptideBond)
+        IC_Chain.MaxPeptideBond = maxPeptideBond
 
     # step one need IC_Residue atom_coords loaded in order to scale
     # so if no internal_coords, initialise from Atom coordinates
