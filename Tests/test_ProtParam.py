@@ -42,9 +42,7 @@ class ProtParamTest(unittest.TestCase):
             percent_dict = analysis.get_amino_acids_percent()
             seq_len = len(self.text)
             for i in percent_dict:
-                self.assertAlmostEqual(
-                    percent_dict[i], self.text.count(i) / float(seq_len)
-                )
+                self.assertAlmostEqual(percent_dict[i], self.text.count(i) / seq_len)
 
     def test_get_molecular_weight(self):
         """Calculate protein molecular weight."""

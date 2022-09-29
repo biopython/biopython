@@ -26,7 +26,7 @@ class CompassTest(unittest.TestCase):
 
         self.assertEqual("60456.blo.gz.aln", com_record.query)
         self.assertEqual("60456.blo.gz.aln", com_record.hit)
-        self.assertEqual(0.5, com_record.gap_threshold)
+        self.assertAlmostEqual(0.5, com_record.gap_threshold)
 
         self.assertEqual(388, com_record.query_length)
         self.assertEqual(386, com_record.query_filtered_length)
@@ -34,12 +34,12 @@ class CompassTest(unittest.TestCase):
         self.assertEqual(386, com_record.hit_filtered_length)
 
         self.assertEqual(399, com_record.query_nseqs)
-        self.assertEqual(12.972, com_record.query_neffseqs)
+        self.assertAlmostEqual(12.972, com_record.query_neffseqs)
         self.assertEqual(399, com_record.hit_nseqs)
-        self.assertEqual(12.972, com_record.hit_neffseqs)
+        self.assertAlmostEqual(12.972, com_record.hit_neffseqs)
 
         self.assertEqual(2759, com_record.sw_score)
-        self.assertEqual(float("0.00e+00"), com_record.evalue)
+        self.assertAlmostEqual(0.0, com_record.evalue)
 
     def testCompassParser(self):
         with open(self.test_files[0]) as handle:
@@ -60,15 +60,15 @@ class CompassTest(unittest.TestCase):
 
             com_record = next(records)
             self.assertEqual("allscop//14982.blo.gz.aln", com_record.hit)
-            self.assertEqual(float("1.01e+03"), com_record.evalue)
+            self.assertAlmostEqual(1.01e03, com_record.evalue)
 
             com_record = next(records)
             self.assertEqual("allscop//14983.blo.gz.aln", com_record.hit)
-            self.assertEqual(float("1.01e+03"), com_record.evalue)
+            self.assertAlmostEqual(1.01e03, com_record.evalue)
 
             com_record = next(records)
             self.assertEqual("allscop//14984.blo.gz.aln", com_record.hit)
-            self.assertEqual(float("5.75e+02"), com_record.evalue)
+            self.assertAlmostEqual(5.75e02, com_record.evalue)
 
     def testAlignmentParsingOne(self):
         with open(self.test_files[1]) as handle:
