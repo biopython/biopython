@@ -19,33 +19,36 @@ from Bio.SeqUtils.CheckSum import crc32
 from Bio.SeqUtils.CheckSum import crc64
 from Bio.SeqUtils.CheckSum import gcg
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
 
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex as OldCodonAdaptationIndex
+
+
 class SeqUtilsTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        # Example of crc64 collision from Sebastian Bassi using the
-        # immunoglobulin lambda light chain variable region from Homo sapiens
-        # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
-        cls.str_light_chain_one = (
-            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
-            "SNRFSGSKSGNTASLTISGLQAEDEADYYCSSYAGSSTLVFGGGTKLTVL"
-        )
-        cls.str_light_chain_two = (
-            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
-            "SNRFSGSKSGNTASLTISGLQAEDEADYYCCSYAGSSTWVFGGGTKLTVL"
-        )
-        X = CodonAdaptationIndex()
-        path = os.path.join("CodonUsage", "HighlyExpressedGenes.txt")
-        X.generate_index(path)
-        cls.X = X
+
+    # Example of crc64 collision from Sebastian Bassi using the
+    # immunoglobulin lambda light chain variable region from Homo sapiens
+    # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
+    str_light_chain_one = (
+        "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+        "SNRFSGSKSGNTASLTISGLQAEDEADYYCSSYAGSSTLVFGGGTKLTVL"
+    )
+    str_light_chain_two = (
+        "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+        "SNRFSGSKSGNTASLTISGLQAEDEADYYCCSYAGSSTWVFGGGTKLTVL"
+    )
 
     def test_codon_usage_ecoli(self):
         """Test Codon Adaptation Index (CAI) using default E. coli data."""
-        CAI = CodonAdaptationIndex()
+        CAI = OldCodonAdaptationIndex()
         value = CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
         self.assertAlmostEqual(value, 0.09978, places=5)
         self.assertEqual(
@@ -115,7 +118,7 @@ TTT	0.296
 """,
         )
 
-    def test_codon_usage_custom(self):
+    def test_codon_usage_custom_old(self):
         """Test Codon Adaptation Index (CAI) using FASTA file for background."""
         # We need a FASTA file of CDS sequences to count the codon usage...
         dna_fasta_filename = "fasta.tmp"
@@ -147,7 +150,7 @@ TTT	0.296
         with open(dna_fasta_filename, "w") as handle:
             SeqIO.write(records, handle, "fasta")
 
-        CAI = CodonAdaptationIndex()
+        CAI = OldCodonAdaptationIndex()
         # Note - this needs a FASTA file which containing non-ambiguous DNA coding
         # sequences - which should each be a whole number of codons.
         CAI.generate_index(dna_fasta_filename)
@@ -227,6 +230,197 @@ TTT	0.886
 """,
         )
         os.remove(dna_fasta_filename)
+
+    def test_codon_adaptation_index_initialization(self):
+        """Test Codon Adaptation Index (CAI) initialization from sequences."""
+        # We need CDS sequences to count the codon usage...
+        dna_filename = "GenBank/NC_005816.gb"
+        record = SeqIO.read(dna_filename, "genbank")
+        records = []
+        for feature in record.features:
+            if feature.type == "CDS" and len(feature.location.parts) == 1:
+                start = feature.location.start
+                end = feature.location.end
+                table = int(feature.qualifiers["transl_table"][0])
+                if feature.strand == -1:
+                    seq = record.seq[start:end].reverse_complement()
+                else:
+                    seq = record.seq[start:end]
+                # Double check we have the CDS sequence expected
+                # TODO - Use any cds_start option if/when added to deal with the met
+                a = "M" + seq[3:].translate(table)
+                b = feature.qualifiers["translation"][0] + "*"
+                self.assertEqual(a, b)
+                records.append(
+                    SeqRecord(
+                        seq,
+                        id=feature.qualifiers["protein_id"][0],
+                        description=feature.qualifiers["product"][0],
+                    )
+                )
+
+        cai = CodonAdaptationIndex(records)
+        # Now check codon usage index (CAI) using this species
+        self.assertEqual(
+            record.annotations["source"], "Yersinia pestis biovar Microtus str. 91001"
+        )
+        value = cai.calculate("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
+        self.assertAlmostEqual(value, 0.70246, places=5)
+        self.maxDiff = None
+        self.assertEqual(
+            str(cai),
+            """\
+AAA	1.000
+AAC	0.385
+AAG	0.344
+AAT	1.000
+ACA	1.000
+ACC	0.553
+ACG	0.319
+ACT	0.447
+AGA	0.595
+AGC	0.967
+AGG	0.297
+AGT	1.000
+ATA	0.581
+ATC	0.930
+ATG	1.000
+ATT	1.000
+CAA	0.381
+CAC	0.581
+CAG	1.000
+CAT	1.000
+CCA	0.500
+CCC	0.500
+CCG	1.000
+CCT	0.767
+CGA	0.568
+CGC	0.919
+CGG	0.514
+CGT	1.000
+CTA	0.106
+CTC	0.379
+CTG	1.000
+CTT	0.424
+GAA	1.000
+GAC	0.633
+GAG	0.506
+GAT	1.000
+GCA	1.000
+GCC	0.617
+GCG	0.532
+GCT	0.809
+GGA	1.000
+GGC	0.525
+GGG	0.575
+GGT	0.950
+GTA	0.500
+GTC	0.618
+GTG	0.971
+GTT	1.000
+TAA	1.000
+TAC	0.434
+TAG	0.062
+TAT	1.000
+TCA	1.000
+TCC	0.533
+TCG	0.233
+TCT	0.967
+TGA	0.250
+TGC	1.000
+TGG	1.000
+TGT	0.750
+TTA	0.455
+TTC	1.000
+TTG	0.212
+TTT	0.886
+""",
+        )
+
+    def test_codon_adaptation_index_calculation(self):
+        """Test Codon Adaptation Index (CAI) calculation for an mRNA."""
+        cai = CodonAdaptationIndex([])
+        # Use the Codon Adaption Index for E. coli, precalculated by
+        # Sharp and Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95), Table 1.
+        cai["TTT"] = 0.296  # Phe
+        cai["TTC"] = 1.000  # Phe
+        cai["TTA"] = 0.020  # Leu
+        cai["TTG"] = 0.020  # Leu
+        cai["CTT"] = 0.042  # Leu
+        cai["CTC"] = 0.037  # Leu
+        cai["CTA"] = 0.007  # Leu
+        cai["CTG"] = 1.000  # Leu
+        cai["ATT"] = 0.185  # Ile
+        cai["ATC"] = 1.000  # Ile
+        cai["ATA"] = 0.003  # Ile
+        cai["ATG"] = 1.000  # Met
+        cai["GTT"] = 1.000  # Val
+        cai["GTC"] = 0.066  # Val
+        cai["GTA"] = 0.495  # Val
+        cai["GTG"] = 0.221  # Val
+        cai["TAT"] = 0.239  # Tyr
+        cai["TAC"] = 1.000  # Tyr
+        cai["CAT"] = 0.291  # His
+        cai["CAC"] = 1.000  # His
+        cai["CAA"] = 0.124  # Gln
+        cai["CAG"] = 1.000  # Gln
+        cai["AAT"] = 0.051  # Asn
+        cai["AAC"] = 1.000  # Asn
+        cai["AAA"] = 1.000  # Lys
+        cai["AAG"] = 0.253  # Lys
+        cai["GAT"] = 0.434  # Asp
+        cai["GAC"] = 1.000  # Asp
+        cai["GAA"] = 1.000  # Glu
+        cai["GAG"] = 0.259  # Glu
+        cai["TCT"] = 1.000  # Ser
+        cai["TCC"] = 0.744  # Ser
+        cai["TCA"] = 0.077  # Ser
+        cai["TCG"] = 0.017  # Ser
+        cai["CCT"] = 0.070  # Pro
+        cai["CCC"] = 0.012  # Pro
+        cai["CCA"] = 0.135  # Pro
+        cai["CCG"] = 1.000  # Pro
+        cai["ACT"] = 0.965  # Thr
+        cai["ACC"] = 1.000  # Thr
+        cai["ACA"] = 0.076  # Thr
+        cai["ACG"] = 0.099  # Thr
+        cai["GCT"] = 1.000  # Ala
+        cai["GCC"] = 0.122  # Ala
+        cai["GCA"] = 0.586  # Ala
+        cai["GCG"] = 0.424  # Ala
+        cai["TGT"] = 0.500  # Cys
+        cai["TGC"] = 1.000  # Cys
+        cai["TGG"] = 1.000  # Trp
+        cai["CGT"] = 1.000  # Arg
+        cai["CGC"] = 0.356  # Arg
+        cai["CGA"] = 0.004  # Arg
+        cai["CGG"] = 0.004  # Arg
+        cai["AGT"] = 0.085  # Ser
+        cai["AGC"] = 0.410  # Ser
+        cai["AGA"] = 0.004  # Arg
+        cai["AGG"] = 0.002  # Arg
+        cai["GGT"] = 1.000  # Gly
+        cai["GGC"] = 0.724  # Gly
+        cai["GGA"] = 0.010  # Gly
+        cai["GGG"] = 0.019  # Gly
+        # Now calculate the CAI for the genes listed in Table 2 of
+        # Sharp and Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
+        rpsU = Seq(
+            "CCGGTAATTAAAGTACGTGAAAACGAGCCGTTCGACGTAGCTCTGCGTCGCTTCAAGCGTTCCTGCGAAAAAGCAGGTGTTCTGGCGGAAGTTCGTCGTCGTGAGTTCTATGAAAAACCGACTACCGAACGTAAGCGCGCTAAAGCTTCTGCAGTGAAACGTCACGCGAAGAAACTGGCTCGCGAAAACGCACGCCGCACTCGTCTGTAC"
+        )
+        self.assertAlmostEqual(cai.calculate(rpsU), 0.726, places=3)
+        rpoD = Seq(
+            "ATGGAGCAAAACCCGCAGTCACAGCTGAAACTTCTTGTCACCCGTGGTAAGGAGCAAGGCTATCTGACCTATGCCGAGGTCAATGACCATCTGCCGGAAGATATCGTCGATTCAGATCAGATCGAAGACATCATCCAAATGATCAACGACATGGGCATTCAGGTGATGGAAGAAGCACCGGATGCCGATGATCTGATGCTGGCTGAAAACACCGCGGACGAAGATGCTGCCGAAGCCGCCGCGCAGGTGCTTTCCAGCGTGGAATCTGAAATCGGGCGCACGACTGACCCGGTACGCATGTACATGCGTGAAATGGGCACCGTTGAACTGTTGACCCGCGAAGGCGAAATTGACATCGCTAAGCGTATTGAAGACGGGATCAACCAGGTTCAATGCTCCGTTGCTGAATATCCGGAAGCGATCACCTATCTGCTGGAACAGTACGATCGTGTTGAAGCAGAAGAAGCGCGTCTGTCCGATCTGATCACCGGCTTTGTTGACCCGAACGCAGAAGAAGATCTGGCACCTACCGCCACTCACGTCGGTTCTGAGCTTTCCCAGGAAGATCTGGACGATGACGAAGATGAAGACGAAGAAGATGGCGATGACGACAGCGCCGATGATGACAACAGCATCGACCCGGAACTGGCTCGCGAAAAATTTGCGGAACTACGCGCTCAGTACGTTGTAACGCGTGACACCATCAAAGCGAAAGGTCGCAGTCACGCTACCGCTCAGGAAGAGATCCTGAAACTGTCTGAAGTATTCAAACAGTTCCGCCTGGTGCCGAAGCAGTTTGACTACCTGGTCAACAGCATGCGCGTCATGATGGACCGCGTTCGTACGCAAGAACGTCTGATCATGAAGCTCTGCGTTGAGCAGTGCAAAATGCCGAAGAAAAACTTCATTACCCTGTTTACCGGCAACGAAACCAGCGATACCTGGTTCAACGCGGCAATTGCGATGAACAAGCCGTGGTCGGAAAAACTGCACGATGTCTCTGAAGAAGTGCATCGCGCCCTGCAAAAACTGCAGCAGATTGAAGAAGAAACCGGCCTGACCATCGAGCAGGTTAAAGATATCAACCGTCGTATGTCCATCGGTGAAGCGAAAGCCCGCCGTGCGAAGAAAGAGATGGTTGAAGCGAACTTACGTCTGGTTATTTCTATCGCTAAGAAATACACCAACCGTGGCTTGCAGTTCCTTGACCTGATTCAGGAAGGCAACATCGGTCTGATGAAAGCGGTTGATAAATTCGAATACCGCCGTGGTTACAAGTTCTCCACCTACGCAACCTGGTGGATCCGTCAGGCGATCACCCGCTCTATCGCGGATCAGGCGCGCACCATCCGTATTCCGGTGCATATGATTGAGACCATCAACAAGCTCAACCGTATTTCTCGCCAGATGCTGCAAGAGATGGGCCGTGAACCGACGCCGGAAGAACTGGCTGAACGTATGCTGATGCCGGAAGACAAGATCCGCAAAGTGCTGAAGATCGCCAAAGAGCCAATCTCCATGGAAACGCCGATCGGTGATGATGAAGATTCGCATCTGGGGGATTTCATCGAGGATACCACCCTCGAGCTGCCGCTGGATTCTGCGACCACCGAAAGCCTGCGTGCGGCAACGCACGACGTGCTGGCTGGCCTGACCGCGCGTGAAGCAAAAGTTCTGCGTATGCGTTTCGGTATCGATATGAACACCGACTACACGCTGGAAGAAGTGGGTAAACAGTTCGACGTTACCCGCGAACGTATCCGTCAGATCGAAGCGAAGGCGCTGCGCAAACTGCGTCACCCGAGCCGTTCTGAAGTGCTGCGTAGCTTCCTGGACGAT"
+        )
+        self.assertAlmostEqual(cai.calculate(rpoD), 0.582, places=2)
+        dnaG = "ATGGCTGGACGAATCCCACGCGTATTCATTAATGATCTGCTGGCACGCACTGACATCGTCGATCTGATCGATGCCCGTGTGAAGCTGAAAAAGCAGGGCAAGAATTTCCACGCGTGTTGTCCATTCCACAACGAGAAAACCCCGTCCTTCACCGTTAACGGTGAGAAACAGTTTTACCACTGCTTTGGATGTGGCGCGCACGGCAACGCGATCGACTTCCTGATGAACTACGACAAGCTCGAGTTCGTCGAAACGGTCGAAGAGCTGGCAGCAATGCACAATCTTGAAGTGCCATTTGAAGCAGGCAGCGGCCCCAGCCAGATCGAGCGCCATCAGAGGCAAACGCTTTATCAGTTGATGGACGGTCTGAATACGTTTTACCAACAATCTTTACAACAACCTGTTGCCACGTCTGCGCGCCAGTATCTGGAAAAACGCGGATTAAGCCACGAGGTTATCGCTCGCTTTGCGATTGGTTTTGCGCCCCCCGGCTGGGACAACGTCCTGAAGCGGTTTGGCGGCAATCCAGAAAATCGCCAGTCATTGATTGATGCGGGGATGTTGGTCACTAACGATCAGGGACGCAGTTACGATCGTTTCCGCGAGCGGGTGATGTTCCCCATTCGCGATAAACGCGGTCGGGTGATTGGTTTTGGCGGGCGCGTGCTGGGCAACGATACCCCCAAATACCTGAACTCGCCGGAAACAGACATTTTCCATAAAGGCCGCCAGCTTTACGGTCTTTATGAAGCGCAGCAGGATAACGCTGAACCCAATCGTCTGCTTGTGGTCGAAGGCTATATGGACGTGGTGGCGCTGGCGCAATACGGCATTAATTACGCCGTTGCGTCGTTAGGTACGTCAACCACCGCCGATCACATACAACTGTTGTTCCGCGCGACCAACAATGTCATTTGCTGTTATGACGGCGACCGTGCAGGCCGCGATGCCGCCTGGCGAGCGCTGGAAACGGCGCTGCCTTACATGACAGACGGCCGTCAGCTACGCTTTATGTTTTTGCCTGATGGCGAAGACCCTGACACGCTAGTACGAAAAGAAGGTAAAGAAGCGTTTGAAGCGCGGATGGAGCAGGCGATGCCACTCTCCGCATTTCTGTTTAACAGTCTGATGCCGCAAGTTGATCTGAGTACCCCTGACGGGCGCGCACGTTTGAGTACGCTGGCACTACCATTGATATCGCAAGTGCCGGGCGAAACGCTGCGAATATATCTTCGTCAGGAATTAGGCAACAAATTAGGCATACTTGATGACAGCCAGCTTGAACGATTAATGCCAAAAGCGGCAGAGAGCGGCGTTTCTCGCCCTGTTCCGCAGCTAAAACGCACGACCATGCGTATACTTATAGGGTTGCTGGTGCAAAATCCAGAATTAGCGACGTTGGTCCCGCCGCTTGAGAATCTGGATGAAAATAAGCTCCCTGGACTTGGCTTATTCAGAGAACTGGTCAACACTTGTCTCTCCCAGCCAGGTCTGACCACCGGGCAACTTTTAGAGCACTATCGTGGTACAAATAATGCTGCCACCCTTGAAAAACTGTCGATGTGGGACGATATAGCAGATAAGAATATTGCTGAGCAAACCTTCACCGACTCACTCAACCATATGTTTGATTCGCTGCTTGAACTGCGCCAGGAAGAGTTAATCGCTCGTGAGCGCACGCATGGTTTAAGCAACGAAGAACGCCTGGAGCTCTGGACATTAAACCAGGAGCTGGCGAAAAAG"
+        self.assertAlmostEqual(cai.calculate(dnaG), 0.271, places=3)
+        lacI = "GTGAAACCAGTAACGTTATACGATGTCGCAGAGTATGCCGGTGTCTCTTATCAGACCGTTTCCCGCGTGGTGAACCAGGCCAGCCACGTTTCTGCGAAAACGCGGGAAAAAGTGGAAGCGGCGATGGCGGAGCTGAATTACATTCCCAACCGCGTGGCACAACAACTGGCGGGCAAACAGTCGTTGCTGATTGGCGTTGCCACCTCCAGTCTGGCCCTGCACGCGCCGTCGCAAATTGTCGCGGCGATTAAATCTCGCGCCGATCAACTGGGTGCCAGCGTGGTGGTGTCGATGGTAGAACGAAGCGGCGTCGAAGCCTGTAAAGCGGCGGTGCACAATCTTCTCGCGCAACGCGTCAGTGGGCTGATCATTAACTATCCGCTGGATGACCAGGATGCCATTGCTGTGGAAGCTGCCTGCACTAATGTTCCGGCGTTATTTCTTGATGTCTCTGACCAGACACCCATCAACAGTATTATTTTCTCCCATGAAGACGGTACGCGACTGGGCGTGGAGCATCTGGTCGCATTGGGTCACCAGCAAATCGCGCTGTTAGCGGGCCCATTAAGTTCTGTCTCGGCGCGTCTGCGTCTGGCTGGCTGGCATAAATATCTCACTCGCAATCAAATTCAGCCGATAGCGGAACGGGAAGGCGACTGGAGTGCCATGTCCGGTTTTCAACAAACCATGCAAATGCTGAATGAGGGCATCGTTCCCACTGCGATGCTGGTTGCCAACGATCAGATGGCGCTGGGCGCAATGCGCGCCATTACCGAGTCCGGGCTGCGCGTTGGTGCGGATATCTCGGTAGTGGGATACGACGATACCGAAGACAGCTCATGTTATATCCCGCCGTTAACCACCATCAAACAGGATTTTCGCCTGCTGGGGCAAACCAGCGTGGACCGCTTGCTGCAACTCTCTCAGGGCCAGGCGGTGAAGGGCAATCAGCTGTTGCCCGTCTCACTGGTGAAAAGAAAAACCACCCTGGCGCCCAATACGCAAACCGCCTCTCCCCGCGCGTTGGCCGATTCATTAATGCAGCTGGCACGACAGGTTTCCCGACTGGAAAGCGGGCAG"
+        self.assertAlmostEqual(cai.calculate(lacI), 0.296, places=2)
+        trpR = "ATGGCCCAACAATCACCCTATTCAGCAGCGATGGCAGAACAGCGTCACCAGGAGTGGTTACGTTTTGTCGACCTGCTTAAGAATGCCTACCAAAACGATCTCCATTTACCGTTGTTAAACCTGATGCTGACGCCAGATGAGCGCGAAGCGTTGGGGACTCGCGTGCGTATTGTCGAAGAGCTGTTGCGCGGCGAAATGAGCCAGCGTGAGTTAAAAAATGAACTCGGCGCAGGCATCGCGACGATTACGCGTGGATCTAACAGCCTGAAAGCCGCGCCCGTCGAGCTGCGCCAGTGGCTGGAAGAGGTGTTGCTGAAAAGCGAT"
+        self.assertAlmostEqual(cai.calculate(trpR), 0.267, places=2)
+        lpp = "ATGAAAGCTACTAAACTGGTACTGGGCGCGGTAATCCTGGGTTCTACTCTGCTGGCAGGTTGCTCCAGCAACGCTAAAATCGATCAGCTGTCTTCTGACGTTCAGACTCTGAACGCTAAAGTTGACCAGCTGAGCAACGACGTGAACGCAATGCGTTCCGACGTTCAGGCTGCTAAAGATGACGCAGCTCGTGCTAACCAGCGTCTGGACAACATGGCTACTAAATACCGCAAG"
+        self.assertAlmostEqual(cai.calculate(lpp), 0.849, places=3)
 
     def test_crc_checksum_collision(self):
         # Explicit testing of crc64 collision:
@@ -388,14 +582,9 @@ TTT	0.886
         self.assertEqual(seq3(seq1(s3)).upper(), s3.upper())
 
     def test_codon_adaptation_index(self):
-        X = self.X
-        cai = X.cai_for_gene(
-            "ATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGA"
-        )
-        self.assertAlmostEqual(cai, 0.6723, places=3)
-
-    def test_index(self):
-        X = self.X
+        X = OldCodonAdaptationIndex()
+        path = os.path.join("CodonUsage", "HighlyExpressedGenes.txt")
+        X.generate_index(path)
         self.assertEqual(len(X.index), 64)
         self.assertAlmostEqual(X.index["AAA"], 1.000, places=3)
         self.assertAlmostEqual(X.index["AAC"], 1.000, places=3)
@@ -461,6 +650,10 @@ TTT	0.886
         self.assertAlmostEqual(X.index["TTC"], 1.000, places=3)
         self.assertAlmostEqual(X.index["TTG"], 0.072, places=3)
         self.assertAlmostEqual(X.index["TTT"], 0.457, places=3)
+        cai = X.cai_for_gene(
+            "ATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGA"
+        )
+        self.assertAlmostEqual(cai, 0.6723, places=3)
 
     def test_lcc_simp(self):
         s = "ACGATAGC"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2002 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
+# Copyright 2003 Yair Benita.
 # Revisions copyright 2014 by Markus Piotrowski.
 # Revisions copyright 2014-2016 by Peter Cock.
 # All rights reserved.
@@ -12,10 +13,11 @@
 
 import re
 import warnings
-from math import pi, sin, cos
+from math import pi, sin, cos, log, exp
 
 from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
+from Bio.Data.CodonTable import standard_dna_table
 from Bio import BiopythonDeprecationWarning
 
 ######################################
@@ -575,6 +577,111 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res
+
+
+class CodonAdaptationIndex(dict):
+    """A codon adaptation index (CAI) implementation.
+
+    Implements the codon adaptation index (CAI) described by Sharp and
+    Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
+    """
+
+    def __init__(self, sequences, table=standard_dna_table):
+        """Generate a codon adaptiveness table from the coding DNA sequences.
+
+        This calculates the relative adaptiveness of each codon (w_ij) as
+        defined by Sharp & Li (Nucleic Acids Research 15(3): 1281-1295 (1987))
+        from the provided codon DNA sequences.
+
+        Arguments:
+         - sequences: An iterable over DNA sequences, which may be plain
+                      strings, Seq objects, MutableSeq objects, or SeqRecord
+                      objects.
+         - table:     A Bio.Data.CodonTable.CodonTable object defining the
+                      genetic code. By default, the standard genetic code is
+                      used.
+        """
+        codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
+        for codon, aminoacid in table.forward_table.items():
+            codons[aminoacid].append(codon)
+        synonymous_codons = tuple(list(codons.values()) + [table.stop_codons])
+
+        # count codon occurrences in the sequences.
+        counts = {c1 + c2 + c3: 0 for c1 in "ACGT" for c2 in "ACGT" for c3 in "ACGT"}
+        self.update(counts)  # just to ensure that the dictionary is sorted
+
+        # iterate over sequence and count the codons
+        for sequence in sequences:
+            try:  # SeqRecord
+                name = sequence.id
+                sequence = sequence.seq
+            except AttributeError:  # str, Seq, or MutableSeq
+                name = None
+            sequence = sequence.upper()
+            for i in range(0, len(sequence), 3):
+                codon = sequence[i : i + 3]
+                try:
+                    counts[codon] += 1
+                except KeyError:
+                    if name is None:
+                        message = f"illegal codon '{codon}'"
+                    else:
+                        message = f"illegal codon '{codon}' in gene {name}"
+                    raise ValueError(message) from None
+
+        # Following the description in the original paper, we use a value
+        # of 0.5 for codons that do not appear in the reference sequences.
+        for codon, count in counts.items():
+            if count == 0:
+                counts[codon] = 0.5
+
+        # now to calculate the index we first need to sum the number of times
+        # synonymous codons were used all together.
+        for codons in synonymous_codons:
+            total = sum(counts[codon] for codon in codons)
+            # calculate the RSCU value for each of the codons
+            denominator = total / len(codons)
+            rcsu = [counts[codon] / denominator for codon in codons]
+
+            # now calculate the relative adaptiveness of each codon
+            # w_ij = RCSU_ij / RCSU_i,max
+            rcsu_max = max(rcsu)
+            for codon, rcsu_value in zip(codons, rcsu):
+                self[codon] = rcsu_value / rcsu_max
+
+    def calculate(self, sequence):
+        """Calculate and return the CAI (float) for the provided DNA sequence."""
+        cai_value, cai_length = 0, 0
+
+        try:
+            sequence = sequence.seq  # SeqRecord
+        except AttributeError:
+            pass  # str, Seq, or MutableSeq
+        sequence = sequence.upper()
+
+        for i in range(0, len(sequence), 3):
+            codon = sequence[i : i + 3]
+            if codon in ["ATG", "TGG"]:
+                # Exclude these two codons as their index is always one.
+                continue
+            try:
+                cai_value += log(self[codon])
+            except KeyError:
+                if codon in ["TGA", "TAA", "TAG"]:
+                    # Stop codon, which is valid but may be missing from the index.
+                    continue
+                raise TypeError(f"illegal codon in sequence: {codon}") from None
+            else:
+                cai_length += 1
+
+        return exp(cai_value / cai_length)
+
+    def __str__(self):
+        lines = []
+        for codon, value in self.items():
+            line = f"{codon}\t{value:.3f}"
+            lines.append(line)
+        return "\n".join(lines) + "\n"
 
 
 if __name__ == "__main__":
