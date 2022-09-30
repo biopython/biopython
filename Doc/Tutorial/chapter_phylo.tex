@@ -232,7 +232,7 @@ will show up there, too.
 \begin{minted}{pycon}
 >>> import sys
 >>> n = Phylo.write(tree, sys.stdout, "phyloxml")  # doctest:+ELLIPSIS
-<phyloxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phyloxml.org" xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd">
+<phyloxml ...>
   <phylogeny rooted="true">
     <clade>
       <color>
@@ -248,7 +248,20 @@ will show up there, too.
           <clade>
             <name>B</name>
           </clade>
-        ...
+        </clade>
+        <clade>
+          <color>
+            <red>0</red>
+            <green>0</green>
+            <blue>255</blue>
+          </color>
+          <clade>
+            <name>C</name>
+          </clade>
+          ...
+    </clade>
+  </phylogeny>
+</phyloxml>
 >>> n
 1
 \end{minted}
