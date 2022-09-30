@@ -250,7 +250,7 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex
-        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.nwk"]
+        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.xml"]
         for file in delete_phylo_tutorial:
             if os.path.exists(os.path.join(tutorial_base, file)):
                 os.remove(os.path.join(tutorial_base, file))
