@@ -17,6 +17,7 @@ from math import pi, sin, cos, log, exp
 
 from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
+from Bio.Data.CodonTable import standard_dna_table
 from Bio import BiopythonDeprecationWarning
 
 ######################################
@@ -583,37 +584,9 @@ class CodonAdaptationIndex(dict):
 
     Implements the codon adaptation index (CAI) described by Sharp and
     Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
-
-    NOTE - This implementation does not currently cope with alternative genetic
-    codes: only the synonymous codons in the standard table are considered.
     """
 
-    # each tuple consists of codons encoding the same amino acid
-    synonymous_codons = (
-        ("TGT", "TGC"),  # CYS
-        ("GAT", "GAC"),  # ASP
-        ("TCT", "TCG", "TCA", "TCC", "AGC", "AGT"),  # SER
-        ("CAA", "CAG"),  # GLN
-        ("ATG",),  # MET
-        ("AAC", "AAT"),  # ASN
-        ("CCT", "CCG", "CCA", "CCC"),  # PRO
-        ("AAG", "AAA"),  # LYS
-        ("TAG", "TGA", "TAA"),  # STOP
-        ("ACC", "ACA", "ACG", "ACT"),  # THR
-        ("TTT", "TTC"),  # PHE
-        ("GCA", "GCC", "GCG", "GCT"),  # ALA
-        ("GGT", "GGG", "GGA", "GGC"),  # GLY
-        ("ATC", "ATA", "ATT"),  # ILE
-        ("TTA", "TTG", "CTC", "CTT", "CTG", "CTA"),  # LEU
-        ("CAT", "CAC"),  # HIS
-        ("CGA", "CGC", "CGG", "CGT", "AGG", "AGA"),  # ARG
-        ("TGG",),  # TRP
-        ("GTA", "GTC", "GTG", "GTT"),  # VAL
-        ("GAG", "GAA"),  # GLU
-        ("TAT", "TAC"),  # TYR
-    )
-
-    def __init__(self, sequences):
+    def __init__(self, sequences, table=standard_dna_table):
         """Generate a codon adaptiveness table from the coding DNA sequences.
 
         This calculates the relative adaptiveness of each codon (w_ij) as
@@ -624,7 +597,15 @@ class CodonAdaptationIndex(dict):
          - sequences: An iterable over DNA sequences, which may be plain
                       strings, Seq objects, MutableSeq objects, or SeqRecord
                       objects.
+         - table:     A Bio.Data.CodonTable.CodonTable object defining the
+                      genetic code. By default, the standard genetic code is
+                      used.
         """
+        codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
+        for codon, aminoacid in table.forward_table.items():
+            codons[aminoacid].append(codon)
+        synonymous_codons = tuple(list(codons.values()) + [table.stop_codons])
+
         # count codon occurrences in the sequences.
         counts = {c1 + c2 + c3: 0 for c1 in "ACGT" for c2 in "ACGT" for c3 in "ACGT"}
         self.update(counts)  # just to ensure that the dictionary is sorted
@@ -656,7 +637,7 @@ class CodonAdaptationIndex(dict):
 
         # now to calculate the index we first need to sum the number of times
         # synonymous codons were used all together.
-        for codons in self.synonymous_codons:
+        for codons in synonymous_codons:
             total = sum(counts[codon] for codon in codons)
             # calculate the RSCU value for each of the codons
             denominator = total / len(codons)
