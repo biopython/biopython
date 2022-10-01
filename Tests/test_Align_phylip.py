@@ -129,6 +129,17 @@ class TestPhylipReading(unittest.TestCase):
             alignment[7],
             "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---",
         )
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['-' '-' 'M' ... '-' '-' '-']
+ ['M' 'K' 'M' ... 'Q' 'K' 'H']
+ ['M' 'K' 'K' ... '-' '-' '-']
+ ...
+ ['-' '-' 'M' ... '-' '-' '-']
+ ['-' 'M' 'K' ... '-' '-' '-']
+ ['M' 'K' 'K' ... '-' '-' '-']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -191,6 +202,17 @@ E_coli_Gln--MKSVLKVSLAALTLAFAVS------------------SHAADKKLVVATDTAFVPFEFKQG--DKYVG
 Deinococcu-MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIAMEGTYPPFTSKNE-QGELVGFDVDIAKAVAQKLNLKPEFVLTEWSGILAGLQANKYDVIVNQVGITPERQNSIGFSQPYAYSRPEIIVAKNNTFNPQSLADLKGKRVGSTLGSNYEKQLIDTG---DIKIVTYPGAPEILADLVAGRIDAAYNDRLVVNY-IINDQ-KLPVRGAGQIGDAA-----PVGIALKKGN--SALKDQIDKALTEMRSDGTFEKISQKWFGQDVGQP---
 HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---
 """,
+        )
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['-' '-' 'M' ... '-' '-' '-']
+ ['M' 'K' 'M' ... 'Q' 'K' 'H']
+ ['M' 'K' 'K' ... '-' '-' '-']
+ ...
+ ['-' '-' 'M' ... '-' '-' '-']
+ ['-' 'M' 'K' ... '-' '-' '-']
+ ['M' 'K' 'K' ... '-' '-' '-']]""",
         )
         self.check_reading_writing(path)
 
@@ -312,7 +334,45 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
         self.assertEqual(alignment[2], "ACCGGTTGGCCGTTCAGGGTACAGGTTGGCCGTTCAGGGTAA")
         self.assertEqual(alignment[3], "AAACCCTTGCCGTTACGCTTAAACCGAGGCCGGGACACTCAT")
         self.assertEqual(alignment[4], "AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA")
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' 'A' 'G' 'C' 'T' 'N' 'G' 'G' 'G' 'C' 'A' 'T' 'T' 'T' 'C' 'A' 'G' 'G'
+  'G' 'T' 'G' 'A' 'G' 'C' 'C' 'C' 'G' 'G' 'G' 'C' 'A' 'A' 'T' 'A' 'C' 'A'
+  'G' 'G' 'G' 'T' 'A' 'T']
+ ['A' 'A' 'G' 'C' 'C' 'T' 'T' 'G' 'G' 'C' 'A' 'G' 'T' 'G' 'C' 'A' 'G' 'G'
+  'G' 'T' 'G' 'A' 'G' 'C' 'C' 'G' 'T' 'G' 'G' 'C' 'C' 'G' 'G' 'G' 'C' 'A'
+  'C' 'G' 'G' 'T' 'A' 'T']
+ ['A' 'C' 'C' 'G' 'G' 'T' 'T' 'G' 'G' 'C' 'C' 'G' 'T' 'T' 'C' 'A' 'G' 'G'
+  'G' 'T' 'A' 'C' 'A' 'G' 'G' 'T' 'T' 'G' 'G' 'C' 'C' 'G' 'T' 'T' 'C' 'A'
+  'G' 'G' 'G' 'T' 'A' 'A']
+ ['A' 'A' 'A' 'C' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'G' 'T' 'T' 'A' 'C' 'G' 'C'
+  'T' 'T' 'A' 'A' 'A' 'C' 'C' 'G' 'A' 'G' 'G' 'C' 'C' 'G' 'G' 'G' 'A' 'C'
+  'A' 'C' 'T' 'C' 'A' 'T']
+ ['A' 'A' 'A' 'C' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'G' 'G' 'T' 'A' 'C' 'G' 'C'
+  'T' 'T' 'A' 'A' 'A' 'C' 'C' 'A' 'T' 'T' 'G' 'C' 'C' 'G' 'G' 'T' 'A' 'C'
+  'G' 'C' 'T' 'T' 'A' 'A']]""",
+        )
         self.check_reading_writing(path)
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' 'A' 'G' 'C' 'T' 'N' 'G' 'G' 'G' 'C' 'A' 'T' 'T' 'T' 'C' 'A' 'G' 'G'
+  'G' 'T' 'G' 'A' 'G' 'C' 'C' 'C' 'G' 'G' 'G' 'C' 'A' 'A' 'T' 'A' 'C' 'A'
+  'G' 'G' 'G' 'T' 'A' 'T']
+ ['A' 'A' 'G' 'C' 'C' 'T' 'T' 'G' 'G' 'C' 'A' 'G' 'T' 'G' 'C' 'A' 'G' 'G'
+  'G' 'T' 'G' 'A' 'G' 'C' 'C' 'G' 'T' 'G' 'G' 'C' 'C' 'G' 'G' 'G' 'C' 'A'
+  'C' 'G' 'G' 'T' 'A' 'T']
+ ['A' 'C' 'C' 'G' 'G' 'T' 'T' 'G' 'G' 'C' 'C' 'G' 'T' 'T' 'C' 'A' 'G' 'G'
+  'G' 'T' 'A' 'C' 'A' 'G' 'G' 'T' 'T' 'G' 'G' 'C' 'C' 'G' 'T' 'T' 'C' 'A'
+  'G' 'G' 'G' 'T' 'A' 'A']
+ ['A' 'A' 'A' 'C' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'G' 'T' 'T' 'A' 'C' 'G' 'C'
+  'T' 'T' 'A' 'A' 'A' 'C' 'C' 'G' 'A' 'G' 'G' 'C' 'C' 'G' 'G' 'G' 'A' 'C'
+  'A' 'C' 'T' 'C' 'A' 'T']
+ ['A' 'A' 'A' 'C' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'G' 'G' 'T' 'A' 'C' 'G' 'C'
+  'T' 'T' 'A' 'A' 'A' 'C' 'C' 'A' 'T' 'T' 'G' 'C' 'C' 'G' 'G' 'T' 'A' 'C'
+  'G' 'C' 'T' 'T' 'A' 'A']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,

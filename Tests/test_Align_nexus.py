@@ -92,6 +92,37 @@ class TestNexusReading(unittest.TestCase):
         self.assertEqual(
             alignment.sequences[8].seq, "cccccccccccccccccccNcccccccccccccccccccccNcc"
         )
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' '-' 'C' '-' 'G' '-' 'T' 'c' 'g' 't' 'g' 't' 'g' 't' 'g' 'c' 't' 'c'
+  't' '-' 't' '-' 't' '-' '-' '-' '-' '-' '-' 'a' 'c' 'g' 't' 'g' 't' 'g'
+  't' 'g' 'c' 't' 'c' 't' '-' 't' '-' 't']
+ ['A' '-' 'C' '-' 'G' 'c' 'T' 'c' 'g' 't' 'g' '-' '-' '-' '-' '-' 't' 'c'
+  't' '-' 't' '-' 't' '-' '-' '-' '-' 'a' 'c' 'a' 'c' 'g' 't' 'g' '-' '-'
+  '-' '-' '-' 't' 'c' 't' '-' 't' '-' 't']
+ ['A' '-' 'C' 'c' 'G' 'c' 'T' 'c' 'g' 't' 'g' 't' 'g' 't' 'g' 'c' 't' '-'
+  '-' '-' '-' '-' '-' '-' '-' 'a' 'c' 'a' 'c' 'a' 'c' 'g' 't' 'g' 't' 'g'
+  't' 'g' 'c' 't' '-' '-' '-' '-' '-' '-']
+ ['A' '-' 'C' '-' 'G' '-' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
+  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
+  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
+ ['A' '-' 'C' '?' 'G' '-' 'T' '?' '-' 'a' 'c' 'g' 't' '?' '?' '-' '?' '?'
+  '?' '-' '?' '?' '?' '-' '-' '?' '?' '-' '-' '-' '?' '-' 'a' 'c' 'g' 't'
+  '?' '?' '-' '?' '?' '?' '-' '?' '?' '?']
+ ['A' 'c' 'C' 'a' 'G' 't' 'T' 'c' '?' '-' '-' 'a' 'a' 'a' 'a' 'a' 'a' 'a'
+  'a' '-' 'a' '-' 'a' 'a' 'c' 'g' 'a' 'c' 't' 'a' 'c' '?' '-' '-' 'a' 'a'
+  'a' 'a' 'a' 'a' 'a' 'a' '-' 'a' '-' 'a']
+ ['A' '?' 'C' '-' 'G' 'g' 'T' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g'
+  'g' '-' 'g' '-' 'g' '?' '?' '-' '-' '?' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g'
+  'g' 'g' 'g' 'g' 'g' 'g' '-' 'g' '-' 'g']
+ ['A' 't' 'C' 't' 'G' 't' 'T' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't'
+  't' '-' '?' '-' '?' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't'
+  't' 't' 't' 't' 't' 't' '-' '?' '-' '?']
+ ['c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c'
+  'c' 'N' 'c' '-' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c'
+  'c' 'c' 'c' 'c' 'c' 'c' 'N' 'c' '-' 'c']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -165,6 +196,37 @@ end;
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' '-' 'C' '-' 'G' '-' 'T' 'c' 'g' 't' 'g' 't' 'g' 't' 'g' 'c' 't' 'c'
+  't' '-' 't' '-' 't' '-' '-' '-' '-' '-' '-' 'a' 'c' 'g' 't' 'g' 't' 'g'
+  't' 'g' 'c' 't' 'c' 't' '-' 't' '-' 't']
+ ['A' '-' 'C' '-' 'G' 'c' 'T' 'c' 'g' 't' 'g' '-' '-' '-' '-' '-' 't' 'c'
+  't' '-' 't' '-' 't' '-' '-' '-' '-' 'a' 'c' 'a' 'c' 'g' 't' 'g' '-' '-'
+  '-' '-' '-' 't' 'c' 't' '-' 't' '-' 't']
+ ['A' '-' 'C' 'c' 'G' 'c' 'T' 'c' 'g' 't' 'g' 't' 'g' 't' 'g' 'c' 't' '-'
+  '-' '-' '-' '-' '-' '-' '-' 'a' 'c' 'a' 'c' 'a' 'c' 'g' 't' 'g' 't' 'g'
+  't' 'g' 'c' 't' '-' '-' '-' '-' '-' '-']
+ ['A' '-' 'C' '-' 'G' '-' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
+  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
+  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
+ ['A' '-' 'C' '?' 'G' '-' 'T' '?' '-' 'a' 'c' 'g' 't' '?' '?' '-' '?' '?'
+  '?' '-' '?' '?' '?' '-' '-' '?' '?' '-' '-' '-' '?' '-' 'a' 'c' 'g' 't'
+  '?' '?' '-' '?' '?' '?' '-' '?' '?' '?']
+ ['A' 'c' 'C' 'a' 'G' 't' 'T' 'c' '?' '-' '-' 'a' 'a' 'a' 'a' 'a' 'a' 'a'
+  'a' '-' 'a' '-' 'a' 'a' 'c' 'g' 'a' 'c' 't' 'a' 'c' '?' '-' '-' 'a' 'a'
+  'a' 'a' 'a' 'a' 'a' 'a' '-' 'a' '-' 'a']
+ ['A' '?' 'C' '-' 'G' 'g' 'T' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g'
+  'g' '-' 'g' '-' 'g' '?' '?' '-' '-' '?' 'g' 'g' 'g' 'g' 'g' 'g' 'g' 'g'
+  'g' 'g' 'g' 'g' 'g' 'g' '-' 'g' '-' 'g']
+ ['A' 't' 'C' 't' 'G' 't' 'T' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't'
+  't' '-' '?' '-' '?' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't'
+  't' 't' 't' 't' 't' 't' '-' '?' '-' '?']
+ ['c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c'
+  'c' 'N' 'c' '-' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c'
+  'c' 'c' 'c' 'c' 'c' 'c' 'N' 'c' '-' 'c']]""",
+        )
         self.check_reading_writing(path)
 
     def test_nexus2(self):
@@ -179,6 +241,14 @@ end;
         self.assertEqual(alignment.sequences[1].annotations, {"molecule_type": "DNA"})
         self.assertEqual(alignment.sequences[0].seq, "AAAAAGGCATTGTGGTGGGAAT")
         self.assertEqual(alignment.sequences[1].seq, "?????????TTGTGGTGGGAAT")
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' 'A' 'A' 'A' 'A' 'G' 'G' 'C' 'A' 'T' 'T' 'G' 'T' 'G' 'G' 'T' 'G' 'G'
+  'G' 'A' 'A' 'T']
+ ['?' '?' '?' '?' '?' '?' '?' '?' '?' 'T' 'T' 'G' 'T' 'G' 'G' 'T' 'G' 'G'
+  'G' 'A' 'A' 'T']]""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[0, 22], [0, 22]]))
         )
@@ -200,6 +270,14 @@ end;
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['A' 'A' 'A' 'A' 'A' 'G' 'G' 'C' 'A' 'T' 'T' 'G' 'T' 'G' 'G' 'T' 'G' 'G'
+  'G' 'A' 'A' 'T']
+ ['?' '?' '?' '?' '?' '?' '?' '?' '?' 'T' 'T' 'G' 'T' 'G' 'G' 'T' 'G' 'G'
+  'G' 'A' 'A' 'T']]""",
+        )
         self.check_reading_writing(path)
 
 
