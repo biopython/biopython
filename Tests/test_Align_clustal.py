@@ -14,7 +14,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.a2m."
+        "Install numpy if you want to use Bio.Align.clustal."
     ) from None
 
 
