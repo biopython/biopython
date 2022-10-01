@@ -79,6 +79,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         dna = Seq(self.dna, length=len(alignment.target.seq))
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'A' 'C' ... 'A' 'A' 'A']
+ ['C' 'A' 'C' ... 'A' 'A' 'A']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -139,6 +145,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'G' 'G' ... 'g' 'a' 'g']
+ ['C' 'G' 'G' ... 'G' 'A' 'G']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -202,6 +214,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'A' 'C' ... 'A' 'A' 'A']
+ ['C' 'A' 'C' ... 'A' 'A' 'A']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -266,6 +284,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         dna = Seq(self.dna, length=len(alignment.target))
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'G' 'G' ... 'g' 'a' 'g']
+ ['C' 'G' 'G' ... 'G' 'A' 'G']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -378,6 +402,12 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']
+ ['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -415,6 +445,14 @@ class TestAlign_dna(unittest.TestCase):
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']
+ ['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -452,6 +490,12 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']
+ ['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -492,6 +536,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 'c' 'a'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']
+ ['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -531,6 +585,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']
+ ['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -569,6 +633,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'a' 'g' 'c' 't' 'c' 'a' 't' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']
+ ['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -691,6 +763,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']
+ ['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -728,6 +810,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']
+ ['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -809,6 +899,16 @@ class TestAlign_dna(unittest.TestCase):
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']
+ ['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -847,6 +947,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'a' 'a' 't' 'g' 'a' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 'c' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']
+ ['a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -929,6 +1037,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 'g' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -967,6 +1085,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1007,6 +1133,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1045,6 +1181,16 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 'g' 'a' 'c' 'a' 'g' 'g' 'g' 'g' 't' 'g' 'a' 'g'
+  'g' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1085,6 +1231,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 't' 'a' 'g' 'g' 'c' 'a' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1122,6 +1276,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'a' 'g' 't' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']
+ ['t' 'g' 'a' 'g' 'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1162,6 +1324,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1200,6 +1370,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1292,6 +1470,12 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']
+ ['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1329,6 +1513,14 @@ class TestAlign_dna(unittest.TestCase):
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']
+ ['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1366,6 +1558,12 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']
+ ['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1432,6 +1630,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 'c' 'a'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']
+ ['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1471,6 +1679,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']
+ ['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1509,6 +1727,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'a' 'g' 'c' 't' 'c' 'a' 't' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']
+ ['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1631,6 +1857,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']
+ ['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1668,6 +1904,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']
+ ['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1749,6 +1993,16 @@ class TestAlign_dna(unittest.TestCase):
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']
+ ['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1787,6 +2041,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'a' 'a' 't' 'g' 'a' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 'c' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']
+ ['a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1869,6 +2131,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 'g' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1907,6 +2179,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1947,6 +2227,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1985,6 +2275,16 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 'g' 'a' 'c' 'a' 'g' 'g' 'g' 'g' 't' 'g' 'a' 'g'
+  'g' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2025,6 +2325,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 't' 'a' 'g' 'g' 'c' 'a' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2062,6 +2370,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'a' 'g' 't' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']
+ ['t' 'g' 'a' 'g' 'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2102,6 +2418,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2140,6 +2464,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2204,6 +2536,12 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']
+ ['a' 'g' 'g' 't' 'a' 'a' 'a' 'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2241,6 +2579,14 @@ class TestAlign_dna(unittest.TestCase):
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']
+ ['a' 't' 'g' 'a' 'g' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 'g' 't' 'a' 'a' 'a'
+  'c' 't' 'g' 'c' 'c' 't' 't' 'c' 'a' 'a' 'g' 'a' 't' 't' 'c']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2278,6 +2624,12 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']
+ ['a' 'a' 'g' 'g' 'c' 'a' 'g' 't' 't' 't' 'a' 'c' 'c' 't' 't' 'g' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2318,6 +2670,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[9:], self.queries[alignment.query.id][9:]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 'c' 'a'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']
+ ['a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g'
+  'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't'
+  'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2357,6 +2719,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']
+ ['c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't'
+  'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a'
+  't' 'c' 'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2395,6 +2767,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'a' 'g' 'c' 't' 'c' 'a' 't' 'g' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']
+ ['a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't'
+  'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2517,6 +2897,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']
+ ['c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g'
+  't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c'
+  'c' 'c' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2554,6 +2944,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'g' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']
+ ['g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c' 'a' 'c' 'c'
+  't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2635,6 +3033,16 @@ class TestAlign_dna(unittest.TestCase):
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']
+ ['c' 'a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g'
+  'c' 't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a' 'c'
+  'a' 'c' 'c' 't' 'g' 't' 'a' 'a' 't' 'c' 'c' 'c' 'a' 'a']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2673,6 +3081,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['a' 'a' 'a' 'a' 'a' 't' 'g' 'a' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 'c' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']
+ ['a' 'a' 'a' 'a' 'a' 't' 't' 'c' 'a' 'c' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'c'
+  't' 'g' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 't' 'c' 'a']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2755,6 +3171,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 'g' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2793,6 +3219,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2833,6 +3267,16 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2871,6 +3315,16 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 'g' 'a' 'c' 'a' 'g' 'g' 'g' 'g' 't' 'g' 'a' 'g'
+  'g' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't'
+  't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2911,6 +3365,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 't' 'a' 'g' 'g' 'c' 'a' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2948,6 +3410,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'a' 'g' 't' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']
+ ['t' 'g' 'a' 'g' 'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c'
+  'c' 'c' 'c' 't' 't' 't' 'g']]""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2988,6 +3458,14 @@ class TestAlign_dna(unittest.TestCase):
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
             )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['t' 'g' 'g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g'
+  'c' 'c' 'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3025,6 +3503,14 @@ class TestAlign_dna(unittest.TestCase):
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(numpy.array(alignment, "U")),
+                """\
+[['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']
+ ['g' 'g' 'a' 't' 't' 'a' 'c' 'a' 'g' 'g' 't' 'g' 't' 'g' 'a' 'g' 'c' 'c'
+  'a' 'c' 'c' 'a' 'c' 'g' 'c' 'c' 'c' 'a' 'g' 'c' 'c' 'c' 'c' 't']]""",
             )
         self.assertTrue(
             numpy.array_equal(
