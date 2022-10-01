@@ -922,8 +922,9 @@ def FastqGeneralIterator(source):
         if handle.read(0) != "":
             raise StreamModeError("Fastq files must be opened in text mode") from None
     try:
+        handle_iter = iter(handle)
         try:
-            line = next(handle)
+            line = next(handle_iter)
         except StopIteration:
             return  # Premature end of file, or just empty?
 
@@ -936,7 +937,7 @@ def FastqGeneralIterator(source):
             seq_string = ""
             # There will now be one or more sequence lines; keep going until we
             # find the "+" marking the quality line:
-            for line in handle:
+            for line in handle_iter:
                 if line[0] == "+":
                     break
                 seq_string += line.rstrip()
@@ -959,7 +960,7 @@ def FastqGeneralIterator(source):
             # another sequence, or EOF
             line = None
             quality_string = ""
-            for line in handle:
+            for line in handle_iter:
                 if line[0] == "@":
                     # This COULD be the start of a new sequence. However, it MAY just
                     # be a line of quality data which starts with a "@" character.  We
