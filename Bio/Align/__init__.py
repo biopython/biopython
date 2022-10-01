@@ -1053,6 +1053,10 @@ class Alignment:
                 coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
+    def __array__(self, dtype=None):
+        data = [list(row) for row in self]
+        return numpy.array(data, dtype)
+
     @property
     def target(self):
         """Return self.sequences[0] for a pairwise alignment."""

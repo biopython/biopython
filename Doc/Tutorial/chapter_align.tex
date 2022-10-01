@@ -840,16 +840,17 @@ object into an array of letters -- and you can do this with NumPy:
 >>> import numpy as np
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> align_array = np.array([list(rec) for rec in alignment], np.character)
+>>> align_array = np.array(alignment)
 >>> print("Array shape %i by %i" % align_array.shape)
 Array shape 7 by 52
-\end{minted}
-
-If you will be working heavily with the columns, you can tell NumPy to store
-the array by column (as in Fortran) rather than its default of by row (as in C):
-
-\begin{minted}{pycon}
->>> align_array = np.array([list(rec) for rec in alignment], np.character, order="F")
+>>> align_array[:, :10]
+array([['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
+       ['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
+       ['D', 'G', 'T', 'S', 'T', 'A', 'T', 'S', 'Y', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['F', 'A', 'A', 'D', 'D', 'A', 'T', 'S', 'Q', 'A']], dtype='<U1')
 \end{minted}
 
 Note that this leaves the original Biopython alignment object and the NumPy array
