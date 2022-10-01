@@ -106,6 +106,12 @@ table bed
         )
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'G' 'G' ... 'g' 'a' 'g']
+ ['C' 'G' 'G' ... 'G' 'A' 'G']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -171,6 +177,12 @@ table bed
         )
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'A' 'C' ... 'A' 'A' 'A']
+ ['C' 'A' 'C' ... 'A' 'A' 'A']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,

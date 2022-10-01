@@ -8,7 +8,16 @@ import unittest
 
 from io import StringIO
 
-import numpy
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install numpy if you want to use Bio.Align.a2m."
+    ) from None
+
+
 from Bio import Align
 
 

@@ -75,6 +75,12 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'A' 'C' ... 'A' 'A' 'A']
+ ['C' 'A' 'C' ... 'A' 'A' 'A']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
@@ -123,6 +129,12 @@ chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873
         )
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
+        self.assertEqual(
+            str(numpy.array(alignment, "U")),
+            """\
+[['C' 'G' 'G' ... 'g' 'a' 'g']
+ ['C' 'G' 'G' ... 'G' 'A' 'G']]""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.substitutions,
