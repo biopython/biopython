@@ -16,14 +16,7 @@ from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.bed."
-    ) from None
+import numpy
 
 
 class TestAlign_dna_rna(unittest.TestCase):
