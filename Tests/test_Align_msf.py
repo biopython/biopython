@@ -85,17 +85,6 @@ class TestMSF(unittest.TestCase):
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
 
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'L' 'T' ... 'P' 'H' 'L']
- ['G' 'L' 'T' ... 'P' 'H' 'L']
- ['G' 'L' 'T' ... 'P' 'H' 'L']
- ...
- ['G' 'L' 'T' ... '-' '-' '-']
- ['G' 'L' 'T' ... '-' '-' '-']
- ['G' 'L' 'T' ... 'P' 'H' 'L']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -235,17 +224,6 @@ class TestMSF(unittest.TestCase):
         self.assertEqual(
             alignment.sequences[11].seq,
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['M' 'A' 'L' ... 'V' 'P' 'R']
- ['M' 'A' 'L' ... 'V' 'P' 'R']
- ['M' 'A' 'L' ... 'V' 'P' 'R']
- ...
- ['M' 'A' 'L' ... 'V' 'P' 'R']
- ['M' 'A' 'L' ... 'V' 'P' 'R']
- ['M' 'A' 'L' ... '-' '-' '-']]""",
         )
         self.assertTrue(
             numpy.array_equal(

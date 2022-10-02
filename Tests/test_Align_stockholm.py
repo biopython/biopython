@@ -107,17 +107,6 @@ class TestStockholm_reading(unittest.TestCase):
 
     def check_alignment_globins45(self, alignment):
         """Check the alignment obtained by parsing hmmalign output."""
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' '-' 'V' ... 'f' 'q' 'g']
- ['g' '-' '-' ... 'f' 'q' 'g']
- ['g' '-' '-' ... 'f' 'q' 'g']
- ...
- ['v' '-' 'H' ... '-' '-' '-']
- ['v' '-' 'H' ... '-' '-' '-']
- ['-' 'V' 'H' ... '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -734,38 +723,6 @@ HBB2_TRICR                      .VHLTAEDRKEIAAILGKV--NVDSLGGQCLARLIVVNPWSRRYFHDF
             alignment.annotations["comment"],
             "This domain family is found in bacteria, and is approximately 40 amino acids in length. This family is a Rickettsia surface antigen of 120 KDa which may be used as an antigen for immune response against the bacterial species.",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['L' 'A' 'E' 'Q' 'I' 'A' 'K' 'E' '-' '-' '-' '-' '-' 'E' 'D' 'D' 'R' 'K'
-  'F' 'R' 'A' 'F' 'L' 'S' 'N' 'Q' 'D' 'N' 'Y' 'A' 'L' 'I' 'N' 'K' 'A' 'F'
-  'E' 'D' 'T' 'K' 'T' 'K' 'K' 'N' 'L' 'E' 'K' 'A' 'E' 'I' 'V' 'G' 'Y' 'K'
-  'N' 'V' 'L' 'S' 'T' 'Y' 'S' 'V' 'A' 'N' 'G' 'Y' 'Q' 'G' 'G' 'F' 'Q' 'P'
-  'V' 'Q' 'W' 'E' 'N' 'Q' 'V' 'S' 'A' 'S' 'D' 'L' 'R' 'S' 'T' 'V' 'V' 'K'
-  'N' 'D' 'E' 'G' 'E' 'E' 'L' 'C' 'T' 'L' 'N' 'E' 'T' 'T' 'V' 'K' 'T' 'K'
-  'D' 'L' 'I' 'V' 'A' 'K' 'Q' 'D' 'G' 'T' 'Q' 'V' 'Q' 'I' 'N' 'S' 'Y' 'R'
-  'E' 'I' 'N' 'F' 'P' 'I' 'K' 'L' 'D' 'K' 'A' 'N' 'G' 'S' 'M' 'H' 'L' 'S'
-  'M' 'V' 'A' 'L' 'K' 'A' 'D' 'G' 'T' 'K' 'P' 'A' 'K' 'D' 'K' 'A' 'V' 'Y'
-  'F' 'T' 'A' 'H' 'Y' 'E' 'E' 'G' 'P' 'N' 'G' 'K' 'P' 'Q' 'L' 'K' 'E' 'I'
-  'S' 'S' 'P' 'Q' 'P' 'L' 'K' 'F' 'V' 'G' 'T' 'G' 'D' 'D' 'A' 'V' 'A' 'Y'
-  'I' 'E' 'H' 'G' 'G' 'E' 'I' 'Y' 'T' 'L' 'A' 'V' 'T' 'R' 'G' 'K' 'Y' 'K'
-  'E' 'M' 'M' 'K' 'E' 'V' 'A' 'L' 'N' 'H' 'G' 'Q' 'S' 'V' 'A' 'L' 'S' 'Q'
-  'T' 'I' 'A' 'E' 'D' 'L']
- ['L' 'A' 'E' 'Q' 'K' 'R' 'K' 'E' 'I' 'E' 'E' 'E' 'K' 'E' 'K' 'D' 'K' 'T'
-  'L' 'S' 'T' 'F' 'F' 'G' 'N' 'P' 'A' 'N' 'R' 'E' 'F' 'I' 'D' 'K' 'A' 'L'
-  'E' 'N' 'P' 'E' 'L' 'K' 'K' 'K' 'L' 'E' 'S' 'I' 'E' 'I' 'A' 'G' 'Y' 'K'
-  'N' 'V' 'H' 'N' 'T' 'F' 'S' 'A' 'A' 'S' 'G' 'Y' 'P' 'G' 'G' 'F' 'K' 'P'
-  'V' 'Q' 'W' 'E' 'N' 'Q' 'V' 'S' 'A' 'N' 'D' 'L' 'R' 'A' 'T' 'V' 'V' 'K'
-  'N' 'D' 'A' 'G' 'D' 'E' 'L' 'C' 'T' 'L' 'N' 'E' 'T' 'T' 'V' 'K' 'T' 'K'
-  'P' 'F' 'T' 'V' 'A' 'K' 'Q' 'D' 'G' 'T' 'Q' 'V' 'Q' 'I' 'S' 'S' 'Y' 'R'
-  'E' 'I' 'D' 'F' 'P' 'I' 'K' 'L' 'D' 'K' 'A' 'D' 'G' 'S' 'M' 'H' 'L' 'S'
-  'M' 'V' 'A' 'L' 'K' 'A' 'D' 'G' 'T' 'K' 'P' 'S' 'K' 'D' 'K' 'A' 'V' 'Y'
-  'F' 'T' 'A' 'H' 'Y' 'E' 'E' 'G' 'P' 'N' 'G' 'K' 'P' 'Q' 'L' 'K' 'E' 'I'
-  'S' 'S' 'P' 'K' 'P' 'L' 'K' 'F' 'A' 'G' 'T' 'G' 'D' 'D' 'A' 'I' 'A' 'Y'
-  'I' 'E' 'H' 'G' 'G' 'E' 'I' 'Y' 'T' 'L' 'A' 'V' 'T' 'R' 'G' 'K' 'Y' 'K'
-  'E' 'M' 'M' 'K' 'E' 'V' 'E' 'L' 'N' 'Q' 'G' 'Q' 'S' 'V' 'D' 'L' 'S' 'Q'
-  '-' '-' 'A' 'E' 'D' 'I']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -936,22 +893,6 @@ H8K5G2_RICAG/113-350            LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESI
             alignment.column_annotations["consensus sequence"],
             "KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['K' 'I' 'K' 'F' 'K' 'Y' 'K' 'G' 'Q' 'D' 'L' 'E' 'V' 'D' 'I' 'S' 'K' 'V'
-  'K' 'K' 'V' 'W' 'K' 'V' 'G' 'K' 'M' 'V' 'S' 'F' 'T' 'Y' 'D' 'D' '-' 'N'
-  'G' 'K' 'T' 'G' 'R' 'G' 'A' 'V' 'S' 'E' 'K' 'D' 'A' 'P' 'K' 'E' 'L' 'L'
-  'N' 'M' 'I' 'G' 'K']
- ['T' 'V' 'K' 'F' 'K' 'Y' 'K' 'G' 'E' 'E' 'K' 'Q' 'V' 'D' 'I' 'S' 'K' 'I'
-  'K' 'K' 'V' 'W' 'R' 'V' 'G' 'K' 'M' 'I' 'S' 'F' 'T' 'Y' 'D' 'E' 'G' 'G'
-  'G' 'K' 'T' 'G' 'R' 'G' 'A' 'V' 'S' 'E' 'K' 'D' 'A' 'P' 'K' 'E' 'L' 'L'
-  'Q' 'M' 'L' 'E' 'K']
- ['K' 'V' 'R' 'F' 'K' 'Y' 'K' 'G' 'E' 'E' 'K' 'E' 'V' 'D' 'T' 'S' 'K' 'I'
-  'K' 'K' 'V' 'W' 'R' 'V' 'G' 'K' 'M' 'V' 'S' 'F' 'T' 'Y' 'D' 'D' '-' 'N'
-  'G' 'K' 'T' 'G' 'R' 'G' 'A' 'V' 'S' 'E' 'K' 'D' 'A' 'P' 'K' 'E' 'L' 'M'
-  'D' 'M' 'L' 'A' 'R']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1121,17 +1062,6 @@ DN7E_SULAC/3-60                 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKD
         self.assertEqual(
             alignment.column_annotations["consensus sequence"],
             "slhhthhhpphhahhhulhlsssuhhscphs....hhSohhhL.Flhshahsshsshhhhss....clhcPLhsLPlp.tschhulhhhI.shsshsFhs....hltshhlhs.hsulLsLLauhhsllhG.aslshhlhhhhGthhsuRhuhspslh+.hGhllhhh.lhulahl..h.........hhh.pl.thh.hlhP........hhh.sI.t...t..hlluhlYh.hhhhhhahhshp+Lhhpl....h.cspuphppthplphtu..huhhhKDh+hhhRps.sLshllhPlhhsl..lhs.h............hhlhhlthh.shSslhl.hhhhlEssuh.......hlpuLPlscpphhhuKhhhhhlI.hhhuh.hshhshhhph.tpshhhlhhlssshhsshluhhhshpp.......su-slph..h.uhlshIshhllshlhhulssh.shhLs..hu......hlloss.hl....lhhLlhhc+",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['W' 'I' 'R' ... 'R' 'R' 'K']
- ['S' 'L' 'R' ... 'F' 'E' 'K']
- ['N' 'I' 'I' ... 'S' 'K' 'L']
- ...
- ['N' 'A' 'V' ... 'Y' 'K' 'K']
- ['Y' 'V' 'N' ... 'V' 'F' 'R']
- ['T' 'I' 'L' ... 'I' 'K' 'K']]""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1350,17 +1280,6 @@ Q6L2L5_PICTO/38-510             TILLYYISNSLSFLFFSIVLNGIYYVKGNTN....DISSFGIILFMYI
             "lVTGGuGFlGppIlptLlptcp.lpElRVhD......lchssphh-chppsslts...hlpGDlpDpsplccAlcGssVlIHsAulsDVtG.hhsp-pIhcVNlpGTpNlL-AClpsGVphllYTSSh-VlGPN.hucsllsGcEpp.apss..atcsYscSKphAEchVLpANG..h+NGu.cLhTCALRPsuIYGEGsphlhshlppshKpG.thaphucssshpshVYVGNVAWAHILAA+uLp-Ph.....poslsGpsYFloDsoPsppYcsFNhpLhKshGhchsu.h...sLPl",
         )
 
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['V' 'V' 'T' ... 'L' 'P' 'L']
- ['A' 'V' 'T' ... 'L' 'P' 'R']
- ['A' 'V' 'T' ... '-' '-' '-']
- ...
- ['V' 'V' 'T' ... 'F' 'A' 'L']
- ['V' 'V' 'L' ... 'L' 'P' 'V']
- ['L' 'I' 'I' ... 'L' 'K' 'R']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1596,17 +1515,6 @@ ERG26_YEAST/8-280               LIIGGSGFLGLHLIQQFFDINP.KPDIHIFD......VRDLPEKLSKQ
         self.assertEqual(
             alignment.column_annotations["reference coordinate annotation"],
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxx..xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx................................................xxxxxxxx...xxxx..xxxxxxxxx.xxxx.......xxxxxxxxxxxxxxxxx.xxxxxxxxx..xxxxxx.......xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['H' 'L' 'G' ... 'F' 'N' 'L']
- ['H' 'L' 'A' ... 'F' 'N' 'F']
- ['I' 'L' 'N' ... 'Y' 'G' 'V']
- ...
- ['-' 'W' 'M' ... 'L' 'Q' 'F']
- ['Q' 'L' 'H' ... 'H' 'S' 'Y']
- ['E' 'F' 'N' ... 'T' 'N' 'Y']]""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1869,17 +1777,6 @@ P73433_SYNY3/6-329              EFNLFLDLLGSALLLSLPWLLLGIIISSTFLIWTDEQKWVANF..PRN
             alignment.column_annotations["consensus sequence"],
             "hssshsls...FQDuuSP.MEtlhclHDahhhhLshIhhhVhalLshhlhpa..ptpslsp+.hhHGph.lElIWTllPAlILlhIAhPShpL",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'P' 'S' ... 'F' 'K' 'L']
- ['V' 'P' 'T' ... 'F' 'I' 'L']
- ['A' 'P' 'S' ... 'F' 'K' 'L']
- ...
- ['M' 'G' 'T' ... 'L' 'Q' 'L']
- ['V' 'S' 'L' ... 'F' 'E' 'V']
- ['-' 'P' 'V' ... 'L' 'P' 'I']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2083,12 +1980,6 @@ A1BA41_PARDP/42-128             .PVNGGMN...FQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLIC
         self.assertEqual(
             alignment.column_annotations["consensus sequence"],
             ".pA+AAohtEshsYLWsppQsLFWLphhhPlAslllls.CLR.l.CCCKoLuFLslhSlG.tTspAYEHsTVhPNsVGhPYKshlpRPGYSPhsLpMpllpsoLEPTLsL-YITCEYKTVlPSPYVKCCGsuECpsKphPDYpCKVaTGVYPFMWGGAYCFCDuENTQLSEAaV-+S-sC+p-aASAY+AHTAShpAKlRVhYtssN.TVssYsNGDHAVTltsspFIhGPhSSAWTPFDNKIVVYKs-VaN.DaPPaGuGpPGpFGDIQSRTsESpDlYANTtLhLtRPusGhVHVPYoQsPSGFKYWLKE+GsuLpppAPFGCQItTNPVRAMNCAVGNhPlShslPDuAFTRlV-APolhDhoCpVssCTHSSDFGGVhhlpYtssKpGcCuVHShoNssTlpEAphcVcssuplplpFSTA.ASspFhVplCSspspCuApCcPPKDHIVsYsASHoslsh.DhSuTAhSWVQKIoGGlGhhshsAhLlLlVVhCluhpR",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['P' 'R' 'A' ... 'L' 'R' 'R']
- ['R' 'T' 'A' ... 'F' 'S' 'R']]""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3260,17 +3151,6 @@ POLS_CHIKS/744-1247             RTAKAATYQEAAVYLWNEQQPLFWLQALIPLAALIVLCNCLRLLPCCC
             alignment.column_annotations["consensus sequence"],
             "-IapahpptEt..phhsp.sYh..ppps-...ls..pMRsILlDW...Ll-VppcacLhtETLaLulshlDRFLu.tp.sls+s......cLQLlGlsulhlAuKa.......................EElh..sPplp-hshlo..............Ds..saopcpllpMEphlLpsLpasls",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'I' 'F' ... 'D' 'L' 'G']
- ['D' 'I' 'F' ... 'D' 'I' 'G']
- ['D' 'I' 'F' ... 'D' 'L' 'G']
- ...
- ['D' 'V' 'W' ... 'C' 'L' 'S']
- ['E' 'V' 'W' ... 'D' 'L' 'T']
- ['K' 'V' 'W' ... 'S' 'L' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3713,14 +3593,6 @@ CCNE_CAEEL/232-360                  KVWSLMVKRDE..IPRATRFLL..GNHPD...MDD.EKRRILID
             alignment.column_annotations["consensus sequence"],
             "RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGNNRTVSIDNLKPTSHQ",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['R' 'S' 'W' 'S' 'P' 'V' 'V' 'G' 'Q' 'L' 'V' 'Q' 'E' 'R' 'V' 'A' 'R' 'P'
-  'A' 'S' 'L' 'R' 'P' 'R' 'W' 'H' 'K' 'P' 'S' 'T' 'V' 'L' 'E' 'V' 'L' 'N'
-  'P' 'R' 'T' 'V' 'V' 'I' 'L' 'D' 'H' 'L' 'G' 'N' 'N' 'R' 'T' 'V' 'S' 'I'
-  'D' 'N' 'L' 'K' 'P' 'T' 'S' 'H' 'Q']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[0, 63]]))
         )
@@ -3860,46 +3732,6 @@ POL_SFVCP/1064-1126             RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGN
         self.assertEqual(
             alignment.column_annotations["reference coordinate annotation"],
             "guAAGUAAaAGuGuaaCAGGAAGAAAGuugCaGCAUAUAuGCGGUGAauuaugCgGuguCAUAGgaaUuGAGgauuuauGUAAGaugCuGauaauGaGuaaGGaaccUuAAAGUUAAUCGuuCCCugUCuCUCCGCuGaACuaaCuGGAcAaAAcuGgacAauaAauaGaCAAAacCCcgcaaaucaau.gauuugcgGGguUUUU",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'U' 'A' 'A' 'G' 'U' 'A' 'A' 'A' 'A' 'G' 'U' 'G' 'U' 'A' 'A' 'C' 'A'
-  'G' 'G' 'A' 'A' 'G' 'A' 'A' 'A' 'G' 'U' 'U' 'G' 'C' 'A' 'G' 'C' 'A' 'U'
-  'A' 'U' 'A' 'U' 'G' 'C' 'G' 'G' 'U' 'G' 'A' 'A' 'U' 'U' 'A' 'U' 'G' 'C'
-  'G' 'G' 'U' 'G' 'U' 'C' 'A' 'U' 'A' 'G' 'G' 'A' 'A' 'U' 'U' 'G' 'A' 'G'
-  'G' 'A' 'U' 'U' 'U' 'A' 'U' 'G' 'U' 'A' 'A' 'G' 'A' 'U' 'G' 'C' 'U' 'G'
-  'A' 'U' 'A' 'A' 'U' 'G' 'A' 'G' 'U' 'A' 'A' 'G' 'G' 'A' 'A' 'C' 'C' 'U'
-  'U' 'A' 'A' 'A' 'G' 'U' 'U' 'A' 'A' 'U' 'C' 'G' 'U' 'U' 'C' 'C' 'C' 'U'
-  'G' 'U' 'C' 'U' 'C' 'U' 'C' 'C' 'G' 'C' 'A' 'G' 'A' 'A' 'C' 'C' 'U' 'A'
-  'C' 'U' 'G' 'G' 'A' 'C' 'A' 'A' 'A' 'A' 'C' 'A' 'G' 'G' 'A' 'C' 'A' 'G'
-  'U' 'A' 'A' 'G' 'U' 'G' 'G' 'A' 'C' 'A' 'A' 'A' 'A' 'A' 'C' 'C' 'U' 'A'
-  'C' 'A' 'A' 'A' 'U' 'C' 'A' 'G' 'C' '-' 'G' 'A' 'U' 'U' 'U' 'G' 'U' 'A'
-  'G' 'G' 'U' 'U' 'U' 'U' 'U' 'U']
- ['A' 'A' 'A' 'A' 'G' 'U' 'A' 'A' 'G' 'A' 'G' 'U' 'G' 'U' 'A' 'A' 'C' 'A'
-  'G' 'G' 'A' 'A' 'G' 'A' 'A' 'A' 'G' 'U' 'U' 'G' 'C' 'A' 'G' 'C' 'A' 'U'
-  'A' 'U' 'A' 'C' 'G' 'C' 'G' 'G' 'U' 'G' 'A' 'A' 'U' 'U' 'A' 'U' 'U' 'C'
-  'G' 'G' 'U' 'G' 'U' 'C' 'A' 'U' 'A' 'G' 'G' 'A' 'G' 'U' 'A' 'G' 'A' 'G'
-  'U' 'C' 'U' 'U' 'U' 'U' 'G' 'G' 'U' 'A' 'A' 'G' 'A' 'U' 'G' 'C' 'U' 'G'
-  'A' 'U' 'A' 'A' 'U' 'G' 'A' 'G' 'U' 'A' 'G' 'G' 'G' 'G' 'A' 'G' 'A' 'U'
-  'G' 'A' 'A' 'A' 'G' 'U' 'U' 'A' 'A' 'U' 'C' 'G' 'U' 'U' 'C' 'C' 'C' 'U'
-  'G' 'U' 'C' 'U' 'C' 'U' 'C' 'C' 'G' 'C' 'U' 'G' 'G' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' 'A' 'A' 'A' 'G' 'A' 'A' 'U' 'U' 'G' 'C' 'A' 'A' 'A' 'A'
-  'C' 'A' 'A' '-' '-' 'A' 'G' 'A' '-' 'A' 'A' 'A' 'U' 'C' 'C' 'C' 'U' 'G'
-  'U' 'A' 'A' 'A' 'U' 'U' 'A' 'A' 'U' '-' 'A' 'C' 'U' 'U' 'U' 'A' 'C' 'G'
-  'G' 'G' 'G' 'A' 'U' 'U' 'U' 'U']
- ['G' 'U' 'A' 'A' 'G' 'U' 'A' 'A' 'A' 'A' 'G' 'U' 'G' 'U' 'A' 'A' 'C' 'A'
-  'G' 'G' 'A' 'A' 'G' 'A' 'A' 'A' 'G' 'U' 'U' 'G' 'C' 'A' 'G' 'C' 'A' 'U'
-  'A' 'U' 'A' 'U' 'G' 'C' 'G' 'G' 'U' 'G' 'A' 'A' 'U' 'U' 'A' 'U' 'G' 'C'
-  'G' 'G' 'U' 'G' 'U' 'C' 'A' 'U' 'A' 'G' 'G' 'A' 'A' 'U' 'U' 'G' 'A' 'G'
-  'G' 'A' 'U' 'U' 'U' 'A' 'U' 'G' 'U' 'A' 'A' 'G' 'A' 'U' 'G' 'C' 'U' 'G'
-  'A' 'U' 'A' 'A' 'U' 'G' 'A' 'G' 'U' 'A' 'A' 'G' 'G' 'A' 'A' 'C' 'C' 'U'
-  'U' 'A' 'A' 'A' 'G' 'U' 'U' 'A' 'A' 'U' 'C' 'G' 'U' 'U' 'C' 'C' 'C' 'U'
-  'G' 'U' 'C' 'U' 'C' 'U' 'C' 'C' 'G' 'C' 'U' 'G' 'A' 'A' 'C' 'U' 'A' 'U'
-  'C' 'C' 'G' 'G' 'A' 'C' 'A' 'A' 'A' 'A' 'C' 'C' 'G' 'G' 'G' 'C' 'A' 'A'
-  'U' 'G' 'A' 'A' 'C' 'A' 'G' 'U' 'C' 'A' 'A' 'A' '-' 'U' 'C' 'C' 'C' 'A'
-  'C' 'A' 'A' 'A' 'U' 'U' 'C' 'A' 'A' 'U' 'G' 'A' 'U' 'U' 'U' 'G' 'U' 'G'
-  'G' 'G' 'A' 'C' 'U' 'U' 'U' 'U']]""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4144,17 +3976,6 @@ FP929033.1/4930704-4930908            GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGC
             alignment.column_annotations["reference coordinate annotation"],
             "AauUAAAAAaAGaCCGaauacGAUUCCUg.uauuCGGuCuAGGGAAauGGCuCuUGGGAgaGaGCCguGCGCUAAAAGUUGGCAUUAAu....GuAGGCUuAuU.c.GCCuuaCucuUUAAGaaUAGuuGAguA.CgucaguUUuuCcAauUU",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'A' 'U' ... 'U' 'U' 'U']
- ['A' 'G' 'A' ... 'U' 'C' 'C']
- ['A' 'A' 'U' ... 'C' 'U' 'U']
- ...
- ['A' 'G' 'A' ... 'C' 'U' 'U']
- ['A' 'A' 'U' ... 'C' 'U' 'U']
- ['A' 'G' 'U' ... 'C' 'U' 'U']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4379,34 +4200,6 @@ AALE02000013.1/38-183                   AGUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCU
             alignment.column_annotations["reference coordinate annotation"],
             "ACCgGccaaaaGGAaacaaggCcGGAuuuaAgaCgcgGAUgcACUGCugcGuGUACUguaGaGuCuGGCGGAUGUCGACaGaCuCuauUUUUUUAU",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'C' 'C' 'G' 'G' 'C' 'G' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'C' 'A'
-  'A' 'U' 'G' 'C' 'C' 'G' 'G' 'A' 'C' 'U' 'U' 'A' 'A' 'G' 'A' 'C' 'G' 'C'
-  'G' 'G' 'A' 'U' 'G' 'C' 'A' 'C' 'U' 'G' 'C' 'U' 'G' 'U' 'G' 'U' 'G' 'U'
-  'A' 'C' 'U' 'G' 'U' 'A' 'G' 'A' 'G' 'U' 'C' 'U' 'G' 'G' 'C' 'G' 'G' 'A'
-  'U' 'G' 'U' 'C' 'G' 'A' 'C' 'A' 'G' 'A' 'C' 'U' 'C' 'U' 'A' 'U' 'U' 'U'
-  'U' 'U' 'U' 'U' 'A' 'U']
- ['A' 'C' 'C' 'G' 'G' 'C' 'G' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'C' 'A'
-  'A' 'U' 'G' 'C' 'C' 'G' 'G' 'A' 'U' 'U' 'U' 'A' 'A' 'G' 'A' 'C' 'G' 'C'
-  'G' 'G' 'A' 'U' 'G' 'C' 'A' 'C' 'U' 'G' 'C' 'U' 'G' 'U' 'G' 'U' 'G' 'U'
-  'A' 'C' 'U' 'G' 'U' 'A' 'G' 'A' 'G' 'U' 'C' 'U' 'G' 'G' 'C' 'G' 'G' 'A'
-  'U' 'G' 'U' 'C' 'G' 'A' 'C' 'A' 'G' 'A' 'C' 'U' 'C' 'U' 'A' 'U' 'U' 'U'
-  'U' 'U' 'U' 'U' 'A' 'U']
- ['A' 'C' 'C' 'G' 'G' 'U' 'C' 'A' 'C' 'C' 'A' 'G' 'G' 'A' 'C' 'C' 'C' 'C'
-  'A' 'G' 'G' 'C' 'C' 'G' 'G' 'A' 'U' 'U' 'U' 'A' 'A' 'G' 'A' 'C' 'G' 'A'
-  'G' 'G' 'A' 'U' 'G' 'C' 'A' 'C' 'U' 'G' 'C' 'U' 'G' 'U' 'G' 'U' 'G' 'U'
-  'A' 'C' 'U' 'G' 'U' 'A' 'G' 'A' 'G' 'U' 'C' 'U' 'G' 'G' 'C' 'G' 'G' 'A'
-  'U' 'G' 'U' 'C' 'G' 'A' 'C' 'A' 'G' 'G' 'C' 'U' 'C' 'U' 'A' 'U' 'U' 'U'
-  'U' 'U' 'U' 'U' 'A' 'U']
- ['A' 'C' 'C' 'C' 'G' 'C' 'C' 'A' 'C' 'A' 'C' 'G' 'G' 'A' 'A' 'U' 'A' 'A'
-  'U' 'A' 'A' 'C' 'G' 'G' 'G' 'A' 'A' 'C' 'A' 'C' 'A' 'U' 'G' '-' 'A' 'A'
-  'G' 'G' 'A' 'U' 'A' 'A' 'A' 'C' 'U' 'G' 'C' 'U' 'G' 'U' 'G' 'U' 'G' 'U'
-  'A' 'C' 'U' 'G' 'U' 'A' 'G' 'A' 'G' 'U' 'C' 'U' 'G' 'G' 'C' 'G' 'G' 'A'
-  'U' 'G' 'U' 'C' 'G' 'A' 'C' 'A' 'G' 'G' 'C' 'U' 'C' 'U' 'A' 'U' 'U' 'U'
-  'U' 'U' 'U' 'U' 'A' 'U']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4611,15 +4404,6 @@ CP011132.1/1732716-1732810            ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAA
             alignment.column_annotations["reference coordinate annotation"],
             "UUGCUAUGCCGCGGCaGaCuCCucuUCCCGCCaAGaaCuuAUAGACCaGGaGAAAGAACuCCuUGAGaaGuuGGCGuGGCGAACagaGGCaGuCuUAGCGACGGaCGUaACUuCCUUCUUGUUACUUAAAUUGcuGgGgGGCUCCCaaCACCUGGACuuuuGGCACCACgAGGuCaACaCCCcGAUUACaaaaGCCUUAGuuGACCCAAAGACUGGcUCAUUgCCCGCCcCcAUUAUCagCGCUGCAG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['U' 'U' 'G' ... 'C' 'A' 'G']
- ['U' 'U' 'G' ... 'C' 'A' 'G']
- ['U' 'U' 'G' ... 'C' 'A' 'G']
- ['U' 'U' 'G' ... 'C' 'A' 'G']
- ['U' 'U' 'G' ... 'C' 'A' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4752,14 +4536,6 @@ U75698.1/123214-122967              UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAG
             alignment.column_annotations["reference coordinate annotation"],
             "ACUUUGGCUAAGuUUAAAAGCUU",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'C' 'U' 'U' 'U' 'G' 'G' 'C' 'U' 'A' 'A' 'G' 'U' 'U' 'U' 'A' 'A' 'A'
-  'A' 'G' 'C' 'U' 'U']
- ['A' 'C' 'U' 'U' 'U' 'G' 'G' 'C' 'U' 'A' 'A' 'G' 'G' 'U' 'U' 'A' 'A' 'A'
-  'A' 'G' 'C' 'U' 'U']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[0, 23], [0, 23]]))
         )
@@ -4841,11 +4617,6 @@ X58459.1/659-681                ACUUUGGCUAAGGUUAAAAGCUU
         self.assertEqual(
             alignment.column_annotations["consensus score 90"], "_________________"
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'E' 'K' 'P' 'Y' 'E' 'C' 'L' 'E' 'C' 'G' 'K' 'R' 'F' 'T' 'A' 'R']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[0, 17]]))
         )
@@ -4918,14 +4689,6 @@ L7MZX4/382-398                  GEKPYECLECGKRFTAR
         self.assertEqual(
             alignment.column_annotations["consensus score 90"],
             "_______________________________________________________________",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'N' 'F' 'N' 'V' 'P' 'K' 'L' 'G' 'V' 'F' 'P' 'V' 'A' 'A' 'V' 'F' 'D'
-  'I' 'D' 'N' 'V' 'P' 'E' 'D' 'S' 'S' 'A' 'T' 'G' 'S' 'R' 'W' 'L' 'P' 'S'
-  'I' 'Y' 'Q' 'G' 'G' 'N' 'Y' 'W' 'G' 'G' 'G' 'P' 'Q' 'A' 'L' 'H' 'A' 'Q'
-  'V' 'S' 'N' 'F' 'D' 'S' 'S' 'N' 'R']]""",
         )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[0, 63]]))
@@ -5071,34 +4834,6 @@ P27378/2-64                     ANFNVPKLGVFPVAAVFDIDNVPEDSSATGSRWLPSIYQGGNYWGGGP
         self.assertEqual(
             alignment.column_annotations["consensus score 90"],
             "___________________________________________________________________________________________",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['V' 'E' 'R' 'Y' 'S' 'L' 'S' 'P' 'M' 'K' 'D' 'L' 'W' 'T' 'E' 'E' 'A' 'K'
-  'Y' 'R' 'R' 'W' 'L' 'E' 'V' 'E' 'L' 'A' 'V' 'T' 'R' 'A' 'Y' 'E' 'E' 'L'
-  'G' 'M' 'I' 'P' 'K' 'G' 'V' 'T' 'E' 'R' 'I' 'R' 'N' 'N' 'A' 'K' 'I' 'D'
-  'V' 'E' 'L' 'F' 'K' 'K' 'I' 'E' 'E' 'K' 'T' 'N' 'H' 'D' 'V' 'V' 'A' 'F'
-  'V' 'E' 'G' 'I' 'G' 'S' 'M' 'I' 'G' 'E' 'D' 'S' 'R' 'F' 'F' 'H' 'Y' 'G'
-  'L']
- ['V' 'E' 'R' 'Y' 'S' 'L' 'S' 'P' 'M' 'K' 'D' 'L' 'W' 'T' 'E' 'E' 'A' 'K'
-  'Y' 'R' 'R' 'W' 'L' 'E' 'V' 'E' 'L' 'A' 'V' 'T' 'R' 'A' 'Y' 'E' 'E' 'L'
-  'G' 'M' 'I' 'P' 'K' 'G' 'V' 'T' 'E' 'R' 'I' 'R' 'N' 'N' 'A' 'K' 'I' 'D'
-  'V' 'E' 'L' 'F' 'K' 'K' 'I' 'E' 'E' 'K' 'T' 'N' 'H' 'D' 'V' 'V' 'A' 'F'
-  'V' 'E' 'G' 'I' 'G' 'S' 'M' 'I' 'G' 'E' 'D' 'S' 'R' 'F' 'F' 'H' 'Y' 'G'
-  'L']
- ['V' 'E' 'R' 'Y' 'S' 'L' 'S' 'P' 'M' 'K' 'D' 'L' 'W' 'T' 'E' 'E' 'A' 'K'
-  'Y' 'R' 'R' 'W' 'L' 'E' 'V' 'E' 'L' 'A' 'V' 'T' 'R' 'A' 'Y' 'E' 'E' 'L'
-  'G' 'M' 'I' 'P' 'K' 'G' 'V' 'T' 'E' 'R' 'I' 'R' 'N' 'N' 'A' 'K' 'I' 'D'
-  'V' 'E' 'L' 'F' 'K' 'K' 'I' 'E' 'E' 'K' 'T' 'N' 'H' 'D' 'V' 'V' 'A' 'F'
-  'V' 'E' 'G' 'I' 'G' 'S' 'M' 'I' 'G' 'E' 'D' 'S' 'R' 'F' 'F' 'H' 'Y' 'G'
-  'L']
- ['V' 'E' 'R' 'Y' 'S' 'L' 'S' 'P' 'M' 'K' 'D' 'L' 'W' 'T' 'E' 'E' 'A' 'K'
-  'Y' 'R' 'R' 'W' 'L' 'E' 'V' 'E' 'L' 'A' 'V' 'T' 'R' 'A' 'Y' 'E' 'E' 'L'
-  'G' 'M' 'I' 'P' 'K' 'G' 'V' 'T' 'E' 'R' 'I' 'R' 'N' 'N' 'A' 'K' 'I' 'D'
-  'V' 'E' 'L' 'F' 'K' 'K' 'I' 'E' 'E' 'K' 'T' 'N' 'H' 'D' 'V' 'V' 'A' 'F'
-  'V' 'E' 'G' 'I' 'G' 'S' 'M' 'I' 'G' 'E' 'D' 'S' 'R' 'F' 'F' 'H' 'Y' 'G'
-  'L']]""",
         )
         self.assertTrue(
             numpy.array_equal(

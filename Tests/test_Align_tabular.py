@@ -79,36 +79,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['M' 'P' 'M' 'I' 'L' 'G' 'Y' 'W' 'D' 'I' 'R' 'G' 'L' 'A' 'H' 'A' 'I' 'R'
-  'L' 'L' 'L' 'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'E' 'E' 'K' 'K' 'Y' 'T' 'M' 'G'
-  'D' 'A' 'P' 'D' 'Y' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G'
-  'L' 'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'A' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'C' 'Y' 'I' 'A' 'R' 'K' 'H' 'N' 'L' 'C' 'G' 'E' 'T'
-  'E' 'E' 'E' 'K' 'I' 'R' 'V' 'D' 'I' 'L' 'E' 'N' 'Q' 'T' 'M' 'D' 'N' 'H'
-  'M' 'Q' 'L' 'G' 'M' 'I' 'C' 'Y' 'N' 'P' 'E' 'F' 'E' 'K' 'L' 'K' 'P' 'K'
-  'Y' 'L' 'E' 'E' 'L' 'P' 'E' 'K' 'L' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K'
-  'R' 'P' 'W' 'F' 'A' 'G' 'N' 'K' 'I' 'T' 'F' 'V' 'D' 'F' 'L' 'V' 'Y' 'D'
-  'V' 'L' 'D' 'L' 'H' 'R' 'I' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N'
-  'L' 'K' 'D' 'F' 'I' 'S' 'R' 'F' 'E' 'G' 'L' 'E' 'K' 'I' 'S' 'A' 'Y' 'M'
-  'K' 'S' 'S' 'R' 'F' 'L' 'P' 'R' 'P' 'V' 'F' 'S' 'K' 'M' 'A' 'V' 'W' 'G'
-  'N' 'K']
- ['M' 'P' 'M' 'I' 'L' 'G' 'Y' 'W' 'N' 'V' 'R' 'G' 'L' 'T' 'H' 'P' 'I' 'R'
-  'M' 'L' 'L' 'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'D' 'E' 'K' 'R' 'Y' 'T' 'M' 'G'
-  'D' 'A' 'P' 'D' 'F' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G'
-  'L' 'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R'
-  'M' 'Q' 'L' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P' 'E'
-  'F' 'L' 'K' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K'
-  'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D'
-  'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N'
-  'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K' 'I' 'S' 'A' 'Y' 'M'
-  'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K' 'M' 'A' 'H' 'W' 'S'
-  'N' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -149,36 +119,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "ILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKL--GLDFPNLPYL-IDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMD-TRMQLIMLCYNPDFEKQKPEFLK--TIPEKMKLYSEFLGK--RPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['V' 'L' 'H' 'Y' 'F' 'N' 'A' 'R' 'G' 'R' 'M' 'E' 'C' 'I' 'R' 'W' 'L' 'L'
-  'A' 'A' 'A' 'G' 'V' 'E' 'F' 'D' 'E' 'K' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'F' 'I' 'Q' 'S' 'P' 'E' 'D' 'L' 'E' 'K' 'L' 'K' 'K' 'D' 'G' 'N' 'L'
-  'M' 'F' 'D' 'Q' 'V' 'P' 'M' 'V' 'E' 'I' 'D' 'G' '-' 'M' 'K' 'L' 'A' 'Q'
-  'T' 'R' 'A' 'I' 'L' 'N' 'Y' 'I' 'A' 'T' 'K' 'Y' 'D' 'L' 'Y' 'G' 'K' 'D'
-  'M' 'K' 'E' 'R' 'A' 'L' 'I' 'D' 'M' 'Y' 'T' 'E' 'G' 'I' 'L' 'D' 'L' 'T'
-  'E' 'M' 'I' 'M' 'Q' 'L' 'V' 'I' 'C' 'P' 'P' 'D' 'Q' 'K' 'E' 'A' 'K' 'T'
-  'A' 'L' 'A' 'K' 'D' 'R' 'T' 'K' 'N' 'R' 'Y' 'L' 'P' 'A' 'F' 'E' 'K' 'V'
-  'L' 'K' 'S' 'H' 'G' 'Q' 'D' 'Y' 'L' 'V' 'G' 'N' 'R' 'L' 'T' 'R' 'V' 'D'
-  'I' 'H' 'L' 'L' 'E' 'L' 'L' 'L' 'Y' 'V' 'E' 'E' 'F' 'D' 'A' 'S' 'L' 'L'
-  'T' 'S' 'F' 'P' 'L' 'L' 'K' 'A' 'F' 'K' 'S' 'R' 'I' 'S' 'S' 'L' 'P' 'N'
-  'V' 'K' 'K' 'F' 'L' 'Q' 'P' 'G' 'S' 'Q' 'R' 'K' 'L' 'P' 'V' 'D' 'A' 'K'
-  'Q' 'I' 'E' 'E' 'A' 'R' 'K']
- ['I' 'L' 'G' 'Y' 'W' 'N' 'V' 'R' 'G' 'L' 'T' 'H' 'P' 'I' 'R' 'M' 'L' 'L'
-  'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'D' 'E' 'K' 'R' 'Y' 'T' 'M' 'G' 'D' 'A' 'P'
-  'D' 'F' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' '-' '-' 'G' 'L'
-  'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' '-' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' '-' 'T'
-  'R' 'M' 'Q' 'L' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P'
-  'E' 'F' 'L' 'K' '-' '-' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F'
-  'L' 'G' 'K' '-' '-' 'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D'
-  'F' 'L' 'A' 'Y' 'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L'
-  'D' 'A' 'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K'
-  'I' 'S' 'A' 'Y' 'M' 'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K'
-  'M' 'A' 'H' 'W' 'S' 'N' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -211,16 +151,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['S' 'F' 'P' 'T' 'T' 'K' 'T' 'Y' 'F' 'P' 'H' 'F' 'D' '-' 'L' 'S' 'H' 'G'
-  'S' 'A' 'Q' 'V' 'K' 'G' 'H' 'G' 'K' 'K' 'V' 'A' 'D' 'A' 'L' 'T' 'N' 'A'
-  'V' 'A' 'H']
- ['A' 'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K' 'I'
-  'S' 'A' 'Y' 'M' 'K' 'S' '-' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K'
-  'M' 'A' 'H']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -259,18 +189,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['I' 'Y' 'E' 'M' 'A' 'A' 'G' 'Y' 'P' 'P' 'F' 'F' 'A' 'D' 'Q' 'P' 'I' 'Q'
-  'I' 'Y' 'E' 'K' 'I' 'V' 'S' 'G' 'K' 'V' 'R' 'F' 'P' 'S' 'H' 'F' 'S' 'S'
-  'D' 'L' 'K' 'D' 'L' 'L' 'R' 'N' 'L' 'L' 'Q' 'V' 'D' 'L' 'T' 'K' 'R' 'F'
-  'G' 'N' 'L' 'K' 'N' 'G' 'V' 'N' 'D' 'I' 'K' 'N' 'H' 'K' 'W' 'F' 'A' 'T']
- ['L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K' 'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T'
-  'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P'
-  'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N' 'L' 'R' '-' '-' 'D' 'F' 'L' 'A' 'R' 'F'
-  'E' 'G' 'L' 'K' 'K' 'I' 'S' 'A' 'Y' 'M' 'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -296,12 +214,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['Y' 'W' 'D' 'L' 'W' 'G' 'L']
- ['Y' 'W' 'N' 'V' 'R' 'G' 'L']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -339,16 +251,6 @@ class TestFastaProtein(unittest.TestCase):
         )
         self.assertEqual(
             alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'D' 'R' 'V' 'T' 'I' 'T' 'C' 'Q' 'A' 'S' 'Q' 'D' 'I' 'N' 'H' 'Y' 'L'
-  'N' 'W' 'Y' 'Q' 'Q' 'G' 'P' 'K' 'K' 'A' 'P' 'K' 'I' 'L' 'I' 'Y' 'D' 'A'
-  '-' 'S' 'N' 'L' 'E' 'T' 'G' 'V' 'P' 'S' 'R' 'F' 'S' 'G']
- ['G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D' 'I' '-' '-' '-' 'L'
-  'D' 'Q' 'Y' 'R' 'M' 'F' 'E' '-' '-' '-' 'P' 'K' 'C' 'L' '-' '-' 'D' 'A'
-  'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' '-' 'A' 'R' 'F' 'E' 'G']]""",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = next(alignments)
@@ -390,18 +292,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['K' 'T' 'G' 'P' 'N' 'L' 'H' 'G' 'L' 'F' 'G' 'R' 'K' 'T' 'G' 'Q' 'A' 'P'
-  'G' 'Y' 'S' 'Y' 'T' 'A' 'A' 'N' 'K' 'N' 'K' 'G' 'I' '-' 'I' 'W' 'G' 'E'
-  'D' 'T' 'L' 'M' 'E' 'Y' '-' 'L' 'E' 'N' 'P' 'K' '-' '-' 'K' 'Y' 'I' 'P'
-  'G' 'T' 'K' 'M' 'I' '-' '-' '-' 'F' 'V' 'G' 'I' 'K' 'K']
- ['K' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K' 'R' 'P'
-  'W' 'F' '-' '-' '-' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y'
-  'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P'
-  'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -439,16 +329,6 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(
             alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['S' 'E' 'E' 'M' 'I' 'A' 'E' 'F' 'K' 'A' 'A' 'F' 'D' 'M' '-' '-' '-' '-'
-  'F' 'D' 'A' 'D' 'G' 'G' 'G' 'D' 'I' 'S' 'V' 'K' 'E' 'L' 'G' 'T' 'V' 'M'
-  'R' 'M' 'L' 'G' 'Q' 'T' 'P' 'T' 'K' 'E' 'E' 'L' 'D' 'A' 'I' 'I' 'E' 'E']
- ['S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G' 'L' 'D' 'F' 'P' 'N' 'L' 'P'
-  'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' '-' '-' 'Q' 'S' 'N' 'A' 'I' 'L'
-  'R' 'Y' 'L' 'A' 'R' '-' '-' '-' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T' 'E' 'E']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -481,12 +361,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' '-' 'N' 'P' 'H' '-' 'P' 'K' 'Q' 'R' 'P']
- ['C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -515,12 +389,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['K' 'P' 'E' 'C']
- ['E' 'P' 'K' 'C']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -549,16 +417,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['N' 'R' 'V' 'I' 'E' 'K' 'T' 'N' 'E' 'K' 'F' 'H' 'Q' 'I' 'E' 'K' 'E' 'F'
-  'S' 'E' 'V' 'E' 'G' 'R' 'I' 'Q' 'D' 'L' 'E' 'K' 'Y' 'V' 'E' 'D' 'T' 'K'
-  'I' 'D' 'L']
- ['N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' '-' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R'
-  'M' 'Q' 'L']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -596,18 +454,6 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['P' 'S' 'D' 'E' 'Q' 'L' 'K' 'S' 'G' 'T' 'A' 'S' 'V' 'V' 'C' 'L' 'L' 'N'
-  'N' 'F' 'Y' 'P' 'R' 'E' 'A' 'K' 'V' 'Q' 'W' 'K' 'V' 'D' 'N' 'A' 'L' 'Q'
-  'S' 'G' 'N' 'S' 'Q' 'E' 'S' 'V' 'T' 'E' 'Q' 'D' 'S' 'K' 'D' 'S' 'T' 'Y'
-  'S' 'L' 'S' 'S' 'T' 'L' 'T' 'L' 'S' 'K' 'A' 'D' 'Y' 'E' 'K' 'H' 'K']
- ['P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' '-' '-' 'Q' 'S'
-  'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T' 'E'
-  'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R' 'M'
-  'Q' 'L' '-' '-' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K']]""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -659,36 +505,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "MPMILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFPNLPYLIDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQLIMLCYNPDFEKQKPEFLKTIPEKMKLYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['M' 'P' 'M' 'I' 'L' 'G' 'Y' 'W' 'D' 'I' 'R' 'G' 'L' 'A' 'H' 'A' 'I' 'R'
-  'L' 'L' 'L' 'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'E' 'E' 'K' 'K' 'Y' 'T' 'M' 'G'
-  'D' 'A' 'P' 'D' 'Y' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G'
-  'L' 'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'A' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'C' 'Y' 'I' 'A' 'R' 'K' 'H' 'N' 'L' 'C' 'G' 'E' 'T'
-  'E' 'E' 'E' 'K' 'I' 'R' 'V' 'D' 'I' 'L' 'E' 'N' 'Q' 'T' 'M' 'D' 'N' 'H'
-  'M' 'Q' 'L' 'G' 'M' 'I' 'C' 'Y' 'N' 'P' 'E' 'F' 'E' 'K' 'L' 'K' 'P' 'K'
-  'Y' 'L' 'E' 'E' 'L' 'P' 'E' 'K' 'L' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K'
-  'R' 'P' 'W' 'F' 'A' 'G' 'N' 'K' 'I' 'T' 'F' 'V' 'D' 'F' 'L' 'V' 'Y' 'D'
-  'V' 'L' 'D' 'L' 'H' 'R' 'I' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N'
-  'L' 'K' 'D' 'F' 'I' 'S' 'R' 'F' 'E' 'G' 'L' 'E' 'K' 'I' 'S' 'A' 'Y' 'M'
-  'K' 'S' 'S' 'R' 'F' 'L' 'P' 'R' 'P' 'V' 'F' 'S' 'K' 'M' 'A' 'V' 'W' 'G'
-  'N' 'K']
- ['M' 'P' 'M' 'I' 'L' 'G' 'Y' 'W' 'N' 'V' 'R' 'G' 'L' 'T' 'H' 'P' 'I' 'R'
-  'M' 'L' 'L' 'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'D' 'E' 'K' 'R' 'Y' 'T' 'M' 'G'
-  'D' 'A' 'P' 'D' 'F' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G'
-  'L' 'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R'
-  'M' 'Q' 'L' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P' 'E'
-  'F' 'L' 'K' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K'
-  'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D'
-  'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N'
-  'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K' 'I' 'S' 'A' 'Y' 'M'
-  'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K' 'M' 'A' 'H' 'W' 'S'
-  'N' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -729,36 +545,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "ILGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKL--GLDFPNLPYL-IDGSHKITQSNAILRYLARKHHLDGETEEERIRADIVENQVMD-TRMQLIMLCYNPDFEKQKPEFLK--TIPEKMKLYSEFLGK--RPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKKISAYMKSSRYIATPIFSKMAHWSNK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['V' 'L' 'H' 'Y' 'F' 'N' 'A' 'R' 'G' 'R' 'M' 'E' 'C' 'I' 'R' 'W' 'L' 'L'
-  'A' 'A' 'A' 'G' 'V' 'E' 'F' 'D' 'E' 'K' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'F' 'I' 'Q' 'S' 'P' 'E' 'D' 'L' 'E' 'K' 'L' 'K' 'K' 'D' 'G' 'N' 'L'
-  'M' 'F' 'D' 'Q' 'V' 'P' 'M' 'V' 'E' 'I' 'D' 'G' '-' 'M' 'K' 'L' 'A' 'Q'
-  'T' 'R' 'A' 'I' 'L' 'N' 'Y' 'I' 'A' 'T' 'K' 'Y' 'D' 'L' 'Y' 'G' 'K' 'D'
-  'M' 'K' 'E' 'R' 'A' 'L' 'I' 'D' 'M' 'Y' 'T' 'E' 'G' 'I' 'L' 'D' 'L' 'T'
-  'E' 'M' 'I' 'M' 'Q' 'L' 'V' 'I' 'C' 'P' 'P' 'D' 'Q' 'K' 'E' 'A' 'K' 'T'
-  'A' 'L' 'A' 'K' 'D' 'R' 'T' 'K' 'N' 'R' 'Y' 'L' 'P' 'A' 'F' 'E' 'K' 'V'
-  'L' 'K' 'S' 'H' 'G' 'Q' 'D' 'Y' 'L' 'V' 'G' 'N' 'R' 'L' 'T' 'R' 'V' 'D'
-  'I' 'H' 'L' 'L' 'E' 'L' 'L' 'L' 'Y' 'V' 'E' 'E' 'F' 'D' 'A' 'S' 'L' 'L'
-  'T' 'S' 'F' 'P' 'L' 'L' 'K' 'A' 'F' 'K' 'S' 'R' 'I' 'S' 'S' 'L' 'P' 'N'
-  'V' 'K' 'K' 'F' 'L' 'Q' 'P' 'G' 'S' 'Q' 'R' 'K' 'L' 'P' 'V' 'D' 'A' 'K'
-  'Q' 'I' 'E' 'E' 'A' 'R' 'K']
- ['I' 'L' 'G' 'Y' 'W' 'N' 'V' 'R' 'G' 'L' 'T' 'H' 'P' 'I' 'R' 'M' 'L' 'L'
-  'E' 'Y' 'T' 'D' 'S' 'S' 'Y' 'D' 'E' 'K' 'R' 'Y' 'T' 'M' 'G' 'D' 'A' 'P'
-  'D' 'F' 'D' 'R' 'S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' '-' '-' 'G' 'L'
-  'D' 'F' 'P' 'N' 'L' 'P' 'Y' 'L' '-' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' 'Q'
-  'S' 'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' '-' 'T'
-  'R' 'M' 'Q' 'L' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P'
-  'E' 'F' 'L' 'K' '-' '-' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F'
-  'L' 'G' 'K' '-' '-' 'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D'
-  'F' 'L' 'A' 'Y' 'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L'
-  'D' 'A' 'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K'
-  'I' 'S' 'A' 'Y' 'M' 'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K'
-  'M' 'A' 'H' 'W' 'S' 'N' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -791,16 +577,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "SFPTTKTYFPHFD-LSHGSAQVKGHGKKVADALTNAVAH")
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['S' 'F' 'P' 'T' 'T' 'K' 'T' 'Y' 'F' 'P' 'H' 'F' 'D' '-' 'L' 'S' 'H' 'G'
-  'S' 'A' 'Q' 'V' 'K' 'G' 'H' 'G' 'K' 'K' 'V' 'A' 'D' 'A' 'L' 'T' 'N' 'A'
-  'V' 'A' 'H']
- ['A' 'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K' 'I'
-  'S' 'A' 'Y' 'M' 'K' 'S' '-' 'S' 'R' 'Y' 'I' 'A' 'T' 'P' 'I' 'F' 'S' 'K'
-  'M' 'A' 'H']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -839,18 +615,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "LYSEFLGKRPWFAGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLR--DFLARFEGLKKISAYMKSSRYIAT",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['I' 'Y' 'E' 'M' 'A' 'A' 'G' 'Y' 'P' 'P' 'F' 'F' 'A' 'D' 'Q' 'P' 'I' 'Q'
-  'I' 'Y' 'E' 'K' 'I' 'V' 'S' 'G' 'K' 'V' 'R' 'F' 'P' 'S' 'H' 'F' 'S' 'S'
-  'D' 'L' 'K' 'D' 'L' 'L' 'R' 'N' 'L' 'L' 'Q' 'V' 'D' 'L' 'T' 'K' 'R' 'F'
-  'G' 'N' 'L' 'K' 'N' 'G' 'V' 'N' 'D' 'I' 'K' 'N' 'H' 'K' 'W' 'F' 'A' 'T']
- ['L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K' 'R' 'P' 'W' 'F' 'A' 'G' 'D' 'K' 'V' 'T'
-  'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P'
-  'K' 'C' 'L' 'D' 'A' 'F' 'P' 'N' 'L' 'R' '-' '-' 'D' 'F' 'L' 'A' 'R' 'F'
-  'E' 'G' 'L' 'K' 'K' 'I' 'S' 'A' 'Y' 'M' 'K' 'S' 'S' 'R' 'Y' 'I' 'A' 'T']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -876,12 +640,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "YWDLWGL")
         self.assertEqual(alignment[1], "YWNVRGL")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['Y' 'W' 'D' 'L' 'W' 'G' 'L']
- ['Y' 'W' 'N' 'V' 'R' 'G' 'L']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -919,16 +677,6 @@ class TestFastaProtein(unittest.TestCase):
         )
         self.assertEqual(
             alignment[1], "GDKVTYVDFLAYDI---LDQYRMFE---PKCL--DAFPNLRDFL-ARFEG"
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'D' 'R' 'V' 'T' 'I' 'T' 'C' 'Q' 'A' 'S' 'Q' 'D' 'I' 'N' 'H' 'Y' 'L'
-  'N' 'W' 'Y' 'Q' 'Q' 'G' 'P' 'K' 'K' 'A' 'P' 'K' 'I' 'L' 'I' 'Y' 'D' 'A'
-  '-' 'S' 'N' 'L' 'E' 'T' 'G' 'V' 'P' 'S' 'R' 'F' 'S' 'G']
- ['G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y' 'D' 'I' '-' '-' '-' 'L'
-  'D' 'Q' 'Y' 'R' 'M' 'F' 'E' '-' '-' '-' 'P' 'K' 'C' 'L' '-' '-' 'D' 'A'
-  'F' 'P' 'N' 'L' 'R' 'D' 'F' 'L' '-' 'A' 'R' 'F' 'E' 'G']]""",
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         alignment = next(alignments)
@@ -970,18 +718,6 @@ class TestFastaProtein(unittest.TestCase):
             alignment[1],
             "KTIPEKMKLYSEFLGKRPWF---AGDKVTYVDFLAYDILDQYRMFEPKCLDAFPNLRDFLARFEGLKK",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['K' 'T' 'G' 'P' 'N' 'L' 'H' 'G' 'L' 'F' 'G' 'R' 'K' 'T' 'G' 'Q' 'A' 'P'
-  'G' 'Y' 'S' 'Y' 'T' 'A' 'A' 'N' 'K' 'N' 'K' 'G' 'I' '-' 'I' 'W' 'G' 'E'
-  'D' 'T' 'L' 'M' 'E' 'Y' '-' 'L' 'E' 'N' 'P' 'K' '-' '-' 'K' 'Y' 'I' 'P'
-  'G' 'T' 'K' 'M' 'I' '-' '-' '-' 'F' 'V' 'G' 'I' 'K' 'K']
- ['K' 'T' 'I' 'P' 'E' 'K' 'M' 'K' 'L' 'Y' 'S' 'E' 'F' 'L' 'G' 'K' 'R' 'P'
-  'W' 'F' '-' '-' '-' 'A' 'G' 'D' 'K' 'V' 'T' 'Y' 'V' 'D' 'F' 'L' 'A' 'Y'
-  'D' 'I' 'L' 'D' 'Q' 'Y' 'R' 'M' 'F' 'E' 'P' 'K' 'C' 'L' 'D' 'A' 'F' 'P'
-  'N' 'L' 'R' 'D' 'F' 'L' 'A' 'R' 'F' 'E' 'G' 'L' 'K' 'K']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1018,16 +754,6 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(
             alignment[1], "SQWLNEKFKLGLDFPNLPYLIDGSHKIT--QSNAILRYLAR---KHHLDGETEE"
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['S' 'E' 'E' 'M' 'I' 'A' 'E' 'F' 'K' 'A' 'A' 'F' 'D' 'M' '-' '-' '-' '-'
-  'F' 'D' 'A' 'D' 'G' 'G' 'G' 'D' 'I' 'S' 'V' 'K' 'E' 'L' 'G' 'T' 'V' 'M'
-  'R' 'M' 'L' 'G' 'Q' 'T' 'P' 'T' 'K' 'E' 'E' 'L' 'D' 'A' 'I' 'I' 'E' 'E']
- ['S' 'Q' 'W' 'L' 'N' 'E' 'K' 'F' 'K' 'L' 'G' 'L' 'D' 'F' 'P' 'N' 'L' 'P'
-  'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' '-' '-' 'Q' 'S' 'N' 'A' 'I' 'L'
-  'R' 'Y' 'L' 'A' 'R' '-' '-' '-' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T' 'E' 'E']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1060,12 +786,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "C-NPH-PKQRP")
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' '-' 'N' 'P' 'H' '-' 'P' 'K' 'Q' 'R' 'P']
- ['C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K' 'P']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1098,16 +818,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "NRVIEKTNEKFHQIEKEFSEVEGRIQDLEKYVEDTKIDL")
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['N' 'R' 'V' 'I' 'E' 'K' 'T' 'N' 'E' 'K' 'F' 'H' 'Q' 'I' 'E' 'K' 'E' 'F'
-  'S' 'E' 'V' 'E' 'G' 'R' 'I' 'Q' 'D' 'L' 'E' 'K' 'Y' 'V' 'E' 'D' 'T' 'K'
-  'I' 'D' 'L']
- ['N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' '-' 'H' 'H' 'L' 'D' 'G' 'E' 'T'
-  'E' 'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R'
-  'M' 'Q' 'L']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1136,12 +846,6 @@ class TestFastaProtein(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "KPEC")
         self.assertEqual(alignment[1], "EPKC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['K' 'P' 'E' 'C']
- ['E' 'P' 'K' 'C']]""",
-        )
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1179,18 +883,6 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['P' 'S' 'D' 'E' 'Q' 'L' 'K' 'S' 'G' 'T' 'A' 'S' 'V' 'V' 'C' 'L' 'L' 'N'
-  'N' 'F' 'Y' 'P' 'R' 'E' 'A' 'K' 'V' 'Q' 'W' 'K' 'V' 'D' 'N' 'A' 'L' 'Q'
-  'S' 'G' 'N' 'S' 'Q' 'E' 'S' 'V' 'T' 'E' 'Q' 'D' 'S' 'K' 'D' 'S' 'T' 'Y'
-  'S' 'L' 'S' 'S' 'T' 'L' 'T' 'L' 'S' 'K' 'A' 'D' 'Y' 'E' 'K' 'H' 'K']
- ['P' 'N' 'L' 'P' 'Y' 'L' 'I' 'D' 'G' 'S' 'H' 'K' 'I' 'T' '-' '-' 'Q' 'S'
-  'N' 'A' 'I' 'L' 'R' 'Y' 'L' 'A' 'R' 'K' 'H' 'H' 'L' 'D' 'G' 'E' 'T' 'E'
-  'E' 'E' 'R' 'I' 'R' 'A' 'D' 'I' 'V' 'E' 'N' 'Q' 'V' 'M' 'D' 'T' 'R' 'M'
-  'Q' 'L' '-' '-' 'I' 'M' 'L' 'C' 'Y' 'N' 'P' 'D' 'F' 'E' 'K' 'Q' 'K']]""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -1253,12 +945,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'T' 'G' ... 'T' 'A' 'G']
- ['A' 'T' 'G' ... 'T' 'A' 'G']]""",
-        )
         # pGT875   RABGLTR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1292,12 +978,6 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'T' 'G' ... 'G' 'G' 'A']
- ['A' 'T' 'G' ... 'G' 'G' 'A']]""",
         )
         # pGT875   BTGST
         alignment = next(alignments)
@@ -1339,60 +1019,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'C' 'T' 'C' 'C' 'C' 'C' 'A' 'A' 'G' 'T' 'T' 'C' 'C' 'A' 'G' 'G'
-  'A' 'C' 'G' 'G' 'A' 'G' 'A' 'C' 'C' 'T' 'C' 'A' 'C' 'G' 'C' 'T' 'G' 'T'
-  'A' 'C' 'C' 'A' 'G' 'T' 'C' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T' 'C' 'C'
-  'T' 'G' 'C' 'G' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'C' 'G' 'C' 'A'
-  'C' 'C' 'C' 'T' 'C' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'A' 'T' 'G' 'G' 'G' 'A'
-  'A' 'G' 'G' 'A' 'C' 'C' 'A' 'G' 'C' 'A' 'G' 'G' 'A' 'G' 'G' 'C' 'G' 'G'
-  'C' 'C' 'C' 'T' 'G' 'G' 'T' 'G' 'G' 'A' 'C' 'A' 'T' 'G' 'G' 'T' 'G' 'A'
-  'A' 'T' 'G' 'A' 'C' 'G' 'G' 'T' 'G' 'T' 'A' 'G' 'A' 'G' 'G' 'A' 'C' 'C'
-  'T' 'T' 'C' 'G' 'C' '-' 'T' 'G' 'C' 'A' 'A' 'A' 'T' 'A' 'C' 'G' 'T' 'C'
-  'T' 'C' 'C' 'C' 'T' 'C' 'A' 'T' 'T' 'T' 'A' 'C' 'A' '-' '-' '-' 'C' 'C'
-  'A' 'A' 'C' 'T' 'A' 'C' 'G' 'A' 'G' 'G' 'C' 'G' 'G' 'G' 'C' 'A' 'A' 'G'
-  'G' 'A' 'G' 'G' 'A' 'C' 'T' 'A' 'T' 'G' 'T' 'G' 'A' 'A' 'G' 'G' 'C' 'G'
-  'C' 'T' 'G' 'C' 'C' 'C' 'C' 'A' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'A' 'A' 'G'
-  'C' 'C' 'T' 'T' 'T' 'C' 'G' 'A' 'G' 'A' 'C' 'C' 'C' 'T' 'G' 'C' 'T' 'G'
-  'T' 'C' 'C' 'C' 'A' 'G' 'A' 'A' 'C' 'A' 'A' 'G' 'G' 'G' 'T' 'G' 'G' 'C'
-  'C' 'A' 'G' 'G' 'C' 'C' 'T' 'T' 'C' 'A' 'T' 'C' 'G' 'T' 'G' 'G' 'G' 'C'
-  'G' 'A' 'C' 'C' 'A' 'G' 'A' 'T' 'C' 'T' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'G'
-  'G' 'A' 'C' 'T' 'A' 'C' 'A' 'A' 'C' 'C' 'T' 'G' 'C' 'T' '-' '-' 'G' 'G'
-  'A' 'C' 'C' 'T' 'G' 'C' 'T' 'T' 'C' 'G' 'G' 'A' 'T' 'T' 'C' 'A' 'C' 'C'
-  'A' 'G' 'G' 'T' 'C' 'C' 'T' 'G' 'G' 'C' 'C' 'C' 'C' 'C' 'A' 'G' 'C' 'T'
-  'G' 'T' 'C' 'T' 'G' 'G' 'A' 'C' 'T' 'C' 'C' 'T' 'T' 'C' 'C' 'C' 'C' 'C'
-  'T' 'G' 'C' 'T' 'C' 'T' 'C' 'A' 'G' 'C' 'C' 'T' 'A' 'C' 'G' 'T' 'G' 'G'
-  'C' 'C' 'C' 'G' 'T' 'C' 'T' 'C' 'A' 'A' 'C' 'T' 'C' 'C' 'C' 'G' 'G' 'C'
-  'C' 'C' 'A' 'A' 'G' 'C' 'T' 'C' 'A' 'A' 'G' 'G' 'C' 'C' 'T' 'T' 'C' 'C'
-  'T' 'G']
- ['A' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'T' 'A' 'C' 'T' 'T' 'G' 'A' 'T' 'C' 'G'
-  'A' 'T' 'G' 'G' 'A' 'T' 'C' 'A' 'C' 'A' 'C' 'A' 'A' 'G' 'A' 'T' 'C' 'A'
-  'C' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T' 'C' 'C'
-  'T' 'G' 'C' 'G' 'C' 'T' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G' 'A' 'A'
-  'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'G'
-  'A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A'
-  'T' 'C' 'C' 'G' 'T' 'G' 'C' 'A' 'G' 'A' 'C' 'A' 'T' 'T' 'G' 'T' 'G' 'G'
-  'A' 'G' 'A' 'A' 'C' 'C' 'A' 'G' 'G' 'T' 'C' 'A' 'T' 'G' 'G' 'A' 'C' 'A'
-  'C' 'C' 'C' 'G' 'C' 'A' 'T' 'G' 'C' 'A' 'G' 'C' 'T' '-' 'C' 'A' 'T' 'C'
-  'A' 'T' 'G' 'C' 'T' 'C' 'T' 'G' 'T' 'T' 'A' 'C' 'A' 'A' 'C' 'C' 'C' 'T'
-  'G' 'A' 'C' 'T' 'T' 'T' 'G' 'A' 'G' 'A' 'A' 'G' 'C' 'A' 'G' 'A' 'A' 'G'
-  'C' 'C' 'A' 'G' 'A' 'G' 'T' 'T' 'C' 'T' 'T' 'G' 'A' 'A' 'G' 'A' 'C' 'C'
-  'A' 'T' 'C' 'C' 'C' 'T' 'G' 'A' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'A' 'A' 'G'
-  'C' 'T' 'C' 'T' '-' '-' '-' '-' '-' 'A' 'C' 'T' 'C' 'T' 'G' '-' 'A' 'G'
-  'T' 'T' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'A' 'A' '-' '-' 'G' 'A' 'G' 'G' 'C'
-  'C' 'A' 'T' 'G' 'G' 'T' 'T' 'T' '-' '-' '-' '-' 'G' 'C' 'A' 'G' 'G' 'G'
-  'G' 'A' 'C' 'A' 'A' 'G' 'G' 'T' 'C' 'A' 'C' 'C' 'T' 'A' 'T' 'G' 'T' 'G'
-  'G' 'A' 'T' 'T' 'T' 'C' '-' '-' 'C' 'T' 'T' 'G' 'C' 'T' 'T' 'A' 'T' 'G'
-  'A' 'C' 'A' 'T' 'T' 'C' 'T' 'T' 'G' 'A' 'C' 'C' 'A' 'G' 'T' 'A' 'C' 'C'
-  'G' 'T' 'A' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'G' 'C' 'C' 'C' 'A' 'A' 'G' 'T'
-  'G' 'C' 'C' 'T' 'G' 'G' 'A' 'C' 'G' 'C' 'C' 'T' 'T' 'C' 'C' 'C' 'A' 'A'
-  'A' 'C' 'C' 'T' 'G' 'A' 'G' 'G' 'G' 'A' 'C' 'T' 'T' 'C' 'C' 'T' 'G' 'G'
-  'C' 'C' 'C' 'G' 'C' 'T' 'T' 'C' 'G' 'A' 'G' 'G' 'G' 'C' 'C' 'T' 'C' 'A'
-  'A' 'G' 'A' 'A' 'G' 'A' 'T' 'C' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'C' 'A'
-  'T' 'G']]""",
-        )
         # pGT875   RABGSTB
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1433,26 +1059,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'G' 'G' 'T' 'A' 'T' 'T' 'G' 'A' 'T' 'G' 'T' 'T' 'C' 'C' 'A' 'G' 'C'
-  'A' 'A' 'G' 'T' 'G' 'C' 'C' 'C' 'A' 'T' 'G' 'G' 'T' 'T' 'G' 'A' '-' '-'
-  'G' 'A' 'T' 'T' 'G' 'A' 'T' 'G' 'G' 'G' 'A' 'T' 'G' 'A' 'A' 'G' 'C' 'T'
-  'G' 'G' 'T' 'G' 'C' 'A' 'G' 'A' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'C' 'A' 'T'
-  'T' 'T' 'T' 'C' 'A' 'A' 'C' 'T' 'A' 'C' 'A' 'T' 'T' 'G' 'C' 'A' 'G' 'A'
-  'C' 'A' 'A' 'G' 'C' 'A' 'C' 'A' 'A' 'C' 'C' 'T' 'G' 'T' 'A' 'T' 'G' 'G'
-  'G' 'A' 'A' 'A' 'G' 'A' 'C' 'A' 'T' 'A' '-' 'A' 'A' 'G' 'G' 'A' 'G' 'A'
-  '-' 'G' 'A' 'G' 'C' 'C' 'C' 'T' 'G']
- ['G' 'G' 'G' 'C' 'C' 'T' 'G' 'G' 'A' 'C' 'T' 'T' 'T' 'C' 'C' '-' '-' 'C'
-  'A' 'A' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'T' 'A' 'C' 'T' 'T' 'G' 'A' 'T' 'C'
-  'G' 'A' 'T' 'G' 'G' 'A' 'T' 'C' 'A' 'C' 'A' '-' 'C' 'A' 'A' 'G' 'A' 'T'
-  'C' 'A' 'C' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T'
-  'C' 'C' 'T' 'G' 'C' 'G' 'C' 'T' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G'
-  'A' 'A' 'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'A' 'T' '-' 'G'
-  'G' 'A' 'G' 'A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A'
-  'G' 'G' 'A' 'T' 'C' 'C' 'G' 'T' 'G']]""",
-        )
         # pGT875   OCDHPR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1485,14 +1091,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'A' 'G' '-'
-  'T' 'C' 'T' 'G' 'T' 'G']
- ['A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A'
-  'T' 'C' 'C' 'G' 'T' 'G']]""",
-        )
         # pGT875   RABALP1A
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1525,16 +1123,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'C' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'A' 'G' 'C' 'C' 'A' '-' '-' 'T' 'G'
-  'G' '-' 'T' 'G' 'G' 'A' 'G' 'G' 'C' 'T' 'G' 'C' 'G' 'A' 'T' 'G' 'G' 'A'
-  'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'C']
- ['G' 'C' 'C' 'C' 'G' 'A' 'A' 'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G'
-  'G' 'A' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'A' 'C' 'A' 'G' 'A' '-' 'G' 'G' 'A'
-  'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'C']]""",
-        )
         # pGT875   OCDHPR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1563,12 +1151,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']
- ['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']]""",
-        )
         # pGT875   RABALP1A
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1597,12 +1179,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']
- ['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']]""",
-        )
         # pGT875   RABGSTB
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1631,12 +1207,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' 'G' 'G' 'T' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'C' 'T' 'C']
- ['C' 'C' 'A' 'G' 'C' 'T' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'C' 'T' 'C']]""",
-        )
         # pGT875   RABGLTR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1671,20 +1241,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'C' 'A' 'T' 'G' 'G' 'C' 'T' 'G' 'G' 'G' 'T' 'G' 'G' 'G' 'G' 'C' 'A'
-  'G' 'G' 'A' 'T' 'T' 'A' 'G' 'T' 'G' 'T' 'G' 'G' 'G' 'G' 'G' 'G' 'A' 'G'
-  'T' 'T' 'G' 'G' 'G' 'T' 'G' 'C' 'T' 'C' 'A' 'G' 'G' 'C' 'A' 'G' 'G' 'G'
-  'C' 'T' 'A' 'T' 'G' 'A' 'G' 'G' 'G' 'A' 'T' 'C' 'T' 'T' 'G' 'T' 'T' 'C'
-  'A' 'T' 'T' 'T' 'C' 'C' 'G' 'G' 'G' 'C' 'C' 'C']
- ['G' 'C' 'A' 'A' 'G' 'G' 'T' 'A' 'G' 'C' 'G' 'C' 'A' 'G' 'G' 'A' 'T' 'G'
-  'G' 'C' 'A' 'T' 'T' 'G' 'C' 'T' 'C' 'T' 'G' 'G' 'G' 'T' 'G' 'A' 'T' 'C'
-  'T' 'T' 'G' 'T' 'G' 'T' 'G' 'A' 'T' 'C' 'C' 'A' 'T' 'C' 'G' 'A' 'T' 'C'
-  'A' 'A' 'G' 'T' 'A' 'A' 'G' 'G' 'C' 'A' 'G' 'A' 'T' 'T' 'G' 'G' 'G' 'A'
-  'A' 'A' 'G' 'T' 'C' 'C' 'A' 'G' 'G' 'C' 'C' 'C']]""",
-        )
         # pGT875   pGT875
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1713,12 +1269,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCTGGTTCTC")
         self.assertEqual(alignment[1], "CCTGGTTCTC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' 'G' 'G' 'T' 'T' 'C' 'T' 'C']
- ['C' 'C' 'T' 'G' 'G' 'T' 'T' 'C' 'T' 'C']]""",
-        )
         # pGT875   BTGST
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1756,20 +1306,6 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'G' 'C' 'G' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'C' 'G' 'C'
-  'A' 'C' 'C' 'C' 'T' 'C' '-' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'A' '-' '-' 'T'
-  'G' 'G' 'G' 'A' 'A' 'G' 'G' 'A' 'C' 'C' 'A' 'G' 'C' 'A' 'G' 'G' 'A' 'G'
-  'G' 'C' 'G' 'G' 'C' 'C' 'C' 'T' 'G' 'G' 'T' 'G' 'G' 'A' 'C' 'A' 'T' 'G'
-  'G' 'T']
- ['C' 'T' 'C' 'T' 'G' 'G' 'C' 'T' 'T' 'C' 'T' 'G' 'C' 'T' 'T' 'C' 'T' 'C'
-  'A' 'A' 'A' 'G' 'T' 'C' 'A' 'G' 'G' 'G' 'T' 'T' 'G' 'T' 'A' 'A' 'C' 'A'
-  'G' 'A' 'G' 'C' 'A' 'T' 'G' 'A' 'T' 'G' 'A' 'G' 'C' 'T' 'G' 'C' 'A' 'T'
-  'G' 'C' 'G' 'G' 'G' 'T' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G'
-  'G' 'T']]""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -1821,12 +1357,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'T' 'G' ... 'T' 'A' 'G']
- ['A' 'T' 'G' ... 'T' 'A' 'G']]""",
-        )
         # pGT875   RABGLTR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -1860,12 +1390,6 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'T' 'G' ... 'G' 'G' 'A']
- ['A' 'T' 'G' ... 'G' 'G' 'A']]""",
         )
         # pGT875   BTGST
         alignment = next(alignments)
@@ -1907,60 +1431,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "ATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCT-CATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCT-----ACTCTG-AGTTCCTGGGCAA--GAGGCCATGGTTT----GCAGGGGACAAGGTCACCTATGTGGATTTC--CTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'C' 'T' 'C' 'C' 'C' 'C' 'A' 'A' 'G' 'T' 'T' 'C' 'C' 'A' 'G' 'G'
-  'A' 'C' 'G' 'G' 'A' 'G' 'A' 'C' 'C' 'T' 'C' 'A' 'C' 'G' 'C' 'T' 'G' 'T'
-  'A' 'C' 'C' 'A' 'G' 'T' 'C' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T' 'C' 'C'
-  'T' 'G' 'C' 'G' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'C' 'G' 'C' 'A'
-  'C' 'C' 'C' 'T' 'C' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'A' 'T' 'G' 'G' 'G' 'A'
-  'A' 'G' 'G' 'A' 'C' 'C' 'A' 'G' 'C' 'A' 'G' 'G' 'A' 'G' 'G' 'C' 'G' 'G'
-  'C' 'C' 'C' 'T' 'G' 'G' 'T' 'G' 'G' 'A' 'C' 'A' 'T' 'G' 'G' 'T' 'G' 'A'
-  'A' 'T' 'G' 'A' 'C' 'G' 'G' 'T' 'G' 'T' 'A' 'G' 'A' 'G' 'G' 'A' 'C' 'C'
-  'T' 'T' 'C' 'G' 'C' '-' 'T' 'G' 'C' 'A' 'A' 'A' 'T' 'A' 'C' 'G' 'T' 'C'
-  'T' 'C' 'C' 'C' 'T' 'C' 'A' 'T' 'T' 'T' 'A' 'C' 'A' '-' '-' '-' 'C' 'C'
-  'A' 'A' 'C' 'T' 'A' 'C' 'G' 'A' 'G' 'G' 'C' 'G' 'G' 'G' 'C' 'A' 'A' 'G'
-  'G' 'A' 'G' 'G' 'A' 'C' 'T' 'A' 'T' 'G' 'T' 'G' 'A' 'A' 'G' 'G' 'C' 'G'
-  'C' 'T' 'G' 'C' 'C' 'C' 'C' 'A' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'A' 'A' 'G'
-  'C' 'C' 'T' 'T' 'T' 'C' 'G' 'A' 'G' 'A' 'C' 'C' 'C' 'T' 'G' 'C' 'T' 'G'
-  'T' 'C' 'C' 'C' 'A' 'G' 'A' 'A' 'C' 'A' 'A' 'G' 'G' 'G' 'T' 'G' 'G' 'C'
-  'C' 'A' 'G' 'G' 'C' 'C' 'T' 'T' 'C' 'A' 'T' 'C' 'G' 'T' 'G' 'G' 'G' 'C'
-  'G' 'A' 'C' 'C' 'A' 'G' 'A' 'T' 'C' 'T' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'G'
-  'G' 'A' 'C' 'T' 'A' 'C' 'A' 'A' 'C' 'C' 'T' 'G' 'C' 'T' '-' '-' 'G' 'G'
-  'A' 'C' 'C' 'T' 'G' 'C' 'T' 'T' 'C' 'G' 'G' 'A' 'T' 'T' 'C' 'A' 'C' 'C'
-  'A' 'G' 'G' 'T' 'C' 'C' 'T' 'G' 'G' 'C' 'C' 'C' 'C' 'C' 'A' 'G' 'C' 'T'
-  'G' 'T' 'C' 'T' 'G' 'G' 'A' 'C' 'T' 'C' 'C' 'T' 'T' 'C' 'C' 'C' 'C' 'C'
-  'T' 'G' 'C' 'T' 'C' 'T' 'C' 'A' 'G' 'C' 'C' 'T' 'A' 'C' 'G' 'T' 'G' 'G'
-  'C' 'C' 'C' 'G' 'T' 'C' 'T' 'C' 'A' 'A' 'C' 'T' 'C' 'C' 'C' 'G' 'G' 'C'
-  'C' 'C' 'A' 'A' 'G' 'C' 'T' 'C' 'A' 'A' 'G' 'G' 'C' 'C' 'T' 'T' 'C' 'C'
-  'T' 'G']
- ['A' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'T' 'A' 'C' 'T' 'T' 'G' 'A' 'T' 'C' 'G'
-  'A' 'T' 'G' 'G' 'A' 'T' 'C' 'A' 'C' 'A' 'C' 'A' 'A' 'G' 'A' 'T' 'C' 'A'
-  'C' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T' 'C' 'C'
-  'T' 'G' 'C' 'G' 'C' 'T' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G' 'A' 'A'
-  'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'G'
-  'A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A'
-  'T' 'C' 'C' 'G' 'T' 'G' 'C' 'A' 'G' 'A' 'C' 'A' 'T' 'T' 'G' 'T' 'G' 'G'
-  'A' 'G' 'A' 'A' 'C' 'C' 'A' 'G' 'G' 'T' 'C' 'A' 'T' 'G' 'G' 'A' 'C' 'A'
-  'C' 'C' 'C' 'G' 'C' 'A' 'T' 'G' 'C' 'A' 'G' 'C' 'T' '-' 'C' 'A' 'T' 'C'
-  'A' 'T' 'G' 'C' 'T' 'C' 'T' 'G' 'T' 'T' 'A' 'C' 'A' 'A' 'C' 'C' 'C' 'T'
-  'G' 'A' 'C' 'T' 'T' 'T' 'G' 'A' 'G' 'A' 'A' 'G' 'C' 'A' 'G' 'A' 'A' 'G'
-  'C' 'C' 'A' 'G' 'A' 'G' 'T' 'T' 'C' 'T' 'T' 'G' 'A' 'A' 'G' 'A' 'C' 'C'
-  'A' 'T' 'C' 'C' 'C' 'T' 'G' 'A' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'A' 'A' 'G'
-  'C' 'T' 'C' 'T' '-' '-' '-' '-' '-' 'A' 'C' 'T' 'C' 'T' 'G' '-' 'A' 'G'
-  'T' 'T' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'A' 'A' '-' '-' 'G' 'A' 'G' 'G' 'C'
-  'C' 'A' 'T' 'G' 'G' 'T' 'T' 'T' '-' '-' '-' '-' 'G' 'C' 'A' 'G' 'G' 'G'
-  'G' 'A' 'C' 'A' 'A' 'G' 'G' 'T' 'C' 'A' 'C' 'C' 'T' 'A' 'T' 'G' 'T' 'G'
-  'G' 'A' 'T' 'T' 'T' 'C' '-' '-' 'C' 'T' 'T' 'G' 'C' 'T' 'T' 'A' 'T' 'G'
-  'A' 'C' 'A' 'T' 'T' 'C' 'T' 'T' 'G' 'A' 'C' 'C' 'A' 'G' 'T' 'A' 'C' 'C'
-  'G' 'T' 'A' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'G' 'C' 'C' 'C' 'A' 'A' 'G' 'T'
-  'G' 'C' 'C' 'T' 'G' 'G' 'A' 'C' 'G' 'C' 'C' 'T' 'T' 'C' 'C' 'C' 'A' 'A'
-  'A' 'C' 'C' 'T' 'G' 'A' 'G' 'G' 'G' 'A' 'C' 'T' 'T' 'C' 'C' 'T' 'G' 'G'
-  'C' 'C' 'C' 'G' 'C' 'T' 'T' 'C' 'G' 'A' 'G' 'G' 'G' 'C' 'C' 'T' 'C' 'A'
-  'A' 'G' 'A' 'A' 'G' 'A' 'T' 'C' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'C' 'A'
-  'T' 'G']]""",
-        )
         # pGT875   RABGSTB
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2001,26 +1471,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "GGGCCTGGACTTTCC--CAATCTGCCTTACTTGATCGATGGATCACA-CAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGAT-GGAGAGACAGAGGAGGAGAGGATCCGTG",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'G' 'G' 'T' 'A' 'T' 'T' 'G' 'A' 'T' 'G' 'T' 'T' 'C' 'C' 'A' 'G' 'C'
-  'A' 'A' 'G' 'T' 'G' 'C' 'C' 'C' 'A' 'T' 'G' 'G' 'T' 'T' 'G' 'A' '-' '-'
-  'G' 'A' 'T' 'T' 'G' 'A' 'T' 'G' 'G' 'G' 'A' 'T' 'G' 'A' 'A' 'G' 'C' 'T'
-  'G' 'G' 'T' 'G' 'C' 'A' 'G' 'A' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'C' 'A' 'T'
-  'T' 'T' 'T' 'C' 'A' 'A' 'C' 'T' 'A' 'C' 'A' 'T' 'T' 'G' 'C' 'A' 'G' 'A'
-  'C' 'A' 'A' 'G' 'C' 'A' 'C' 'A' 'A' 'C' 'C' 'T' 'G' 'T' 'A' 'T' 'G' 'G'
-  'G' 'A' 'A' 'A' 'G' 'A' 'C' 'A' 'T' 'A' '-' 'A' 'A' 'G' 'G' 'A' 'G' 'A'
-  '-' 'G' 'A' 'G' 'C' 'C' 'C' 'T' 'G']
- ['G' 'G' 'G' 'C' 'C' 'T' 'G' 'G' 'A' 'C' 'T' 'T' 'T' 'C' 'C' '-' '-' 'C'
-  'A' 'A' 'T' 'C' 'T' 'G' 'C' 'C' 'T' 'T' 'A' 'C' 'T' 'T' 'G' 'A' 'T' 'C'
-  'G' 'A' 'T' 'G' 'G' 'A' 'T' 'C' 'A' 'C' 'A' '-' 'C' 'A' 'A' 'G' 'A' 'T'
-  'C' 'A' 'C' 'C' 'C' 'A' 'G' 'A' 'G' 'C' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'T'
-  'C' 'C' 'T' 'G' 'C' 'G' 'C' 'T' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G'
-  'A' 'A' 'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'A' 'T' '-' 'G'
-  'G' 'A' 'G' 'A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A'
-  'G' 'G' 'A' 'T' 'C' 'C' 'G' 'T' 'G']]""",
-        )
         # pGT875   OCDHPR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2053,14 +1503,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "AGACAGAGGAGGAGAAG-TCTGTG")
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'A' 'G' '-'
-  'T' 'C' 'T' 'G' 'T' 'G']
- ['A' 'G' 'A' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A'
-  'T' 'C' 'C' 'G' 'T' 'G']]""",
-        )
         # pGT875   RABALP1A
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2093,16 +1535,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "GCTGGAGAGAGCCA--TGG-TGGAGGCTGCGATGGAGGAGAGGATC")
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'C' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'A' 'G' 'C' 'C' 'A' '-' '-' 'T' 'G'
-  'G' '-' 'T' 'G' 'G' 'A' 'G' 'G' 'C' 'T' 'G' 'C' 'G' 'A' 'T' 'G' 'G' 'A'
-  'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'C']
- ['G' 'C' 'C' 'C' 'G' 'A' 'A' 'A' 'G' 'C' 'A' 'C' 'C' 'A' 'C' 'C' 'T' 'G'
-  'G' 'A' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'A' 'C' 'A' 'G' 'A' '-' 'G' 'G' 'A'
-  'G' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'C']]""",
-        )
         # pGT875   OCDHPR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2131,12 +1563,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']
- ['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']]""",
-        )
         # pGT875   RABALP1A
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2165,12 +1591,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCATGACCTGGT")
         self.assertEqual(alignment[1], "CCATGACCTGGT")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']
- ['C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G' 'T']]""",
-        )
         # pGT875   RABGSTB
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2199,12 +1619,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCTGGTTGAACTTCTC")
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' 'G' 'G' 'T' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'C' 'T' 'C']
- ['C' 'C' 'A' 'G' 'C' 'T' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'C' 'T' 'C']]""",
-        )
         # pGT875   RABGLTR
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2239,20 +1653,6 @@ class TestFastaNucleotide(unittest.TestCase):
             alignment[1],
             "GCAAGGTAGCGCAGGATGGCATTGCTCTGGGTGATCTTGTGTGATCCATCGATCAAGTAAGGCAGATTGGGAAAGTCCAGGCCC",
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'C' 'A' 'T' 'G' 'G' 'C' 'T' 'G' 'G' 'G' 'T' 'G' 'G' 'G' 'G' 'C' 'A'
-  'G' 'G' 'A' 'T' 'T' 'A' 'G' 'T' 'G' 'T' 'G' 'G' 'G' 'G' 'G' 'G' 'A' 'G'
-  'T' 'T' 'G' 'G' 'G' 'T' 'G' 'C' 'T' 'C' 'A' 'G' 'G' 'C' 'A' 'G' 'G' 'G'
-  'C' 'T' 'A' 'T' 'G' 'A' 'G' 'G' 'G' 'A' 'T' 'C' 'T' 'T' 'G' 'T' 'T' 'C'
-  'A' 'T' 'T' 'T' 'C' 'C' 'G' 'G' 'G' 'C' 'C' 'C']
- ['G' 'C' 'A' 'A' 'G' 'G' 'T' 'A' 'G' 'C' 'G' 'C' 'A' 'G' 'G' 'A' 'T' 'G'
-  'G' 'C' 'A' 'T' 'T' 'G' 'C' 'T' 'C' 'T' 'G' 'G' 'G' 'T' 'G' 'A' 'T' 'C'
-  'T' 'T' 'G' 'T' 'G' 'T' 'G' 'A' 'T' 'C' 'C' 'A' 'T' 'C' 'G' 'A' 'T' 'C'
-  'A' 'A' 'G' 'T' 'A' 'A' 'G' 'G' 'C' 'A' 'G' 'A' 'T' 'T' 'G' 'G' 'G' 'A'
-  'A' 'A' 'G' 'T' 'C' 'C' 'A' 'G' 'G' 'C' 'C' 'C']]""",
-        )
         # pGT875   pGT875
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2281,12 +1681,6 @@ class TestFastaNucleotide(unittest.TestCase):
         alignment.sequences[1].seq = query
         self.assertEqual(alignment[0], "CCTGGTTCTC")
         self.assertEqual(alignment[1], "CCTGGTTCTC")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' 'G' 'G' 'T' 'T' 'C' 'T' 'C']
- ['C' 'C' 'T' 'G' 'G' 'T' 'T' 'C' 'T' 'C']]""",
-        )
         # pGT875   BTGST
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
@@ -2324,20 +1718,6 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(
             alignment[1],
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'G' 'C' 'G' 'G' 'C' 'A' 'C' 'C' 'T' 'G' 'G' 'G' 'C' 'C' 'G' 'C'
-  'A' 'C' 'C' 'C' 'T' 'C' '-' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'A' '-' '-' 'T'
-  'G' 'G' 'G' 'A' 'A' 'G' 'G' 'A' 'C' 'C' 'A' 'G' 'C' 'A' 'G' 'G' 'A' 'G'
-  'G' 'C' 'G' 'G' 'C' 'C' 'C' 'T' 'G' 'G' 'T' 'G' 'G' 'A' 'C' 'A' 'T' 'G'
-  'G' 'T']
- ['C' 'T' 'C' 'T' 'G' 'G' 'C' 'T' 'T' 'C' 'T' 'G' 'C' 'T' 'T' 'C' 'T' 'C'
-  'A' 'A' 'A' 'G' 'T' 'C' 'A' 'G' 'G' 'G' 'T' 'T' 'G' 'T' 'A' 'A' 'C' 'A'
-  'G' 'A' 'G' 'C' 'A' 'T' 'G' 'A' 'T' 'G' 'A' 'G' 'C' 'T' 'G' 'C' 'A' 'T'
-  'G' 'C' 'G' 'G' 'G' 'T' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'C' 'C' 'T' 'G'
-  'G' 'T']]""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)

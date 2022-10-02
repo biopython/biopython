@@ -85,19 +85,6 @@ class TestCombinedFile(unittest.TestCase):
             self.assertEqual(
                 alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
             )
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['A' 'A' 'G' 'C' 'C' 'C' 'T' 'C' 'C' 'T' 'A' 'G' 'C' 'A' 'C' 'A' 'C' 'A'
-  'C' 'C' 'C' 'G' 'G' 'A' 'G' 'T' 'G' 'G' '-' 'C' 'C' 'G' 'G' 'G' 'C' 'C'
-  'G' 'T' 'A' 'C' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'T' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['A' 'A' 'G' 'C' 'C' 'C' 'T' 'G' 'C' '-' '-' 'G' 'C' 'G' 'C' 'T' 'C' 'A'
-  'G' 'C' 'C' 'G' 'G' 'A' 'G' 'T' 'G' 'T' 'C' 'C' 'C' 'G' 'G' 'G' 'C' 'C'
-  'C' 'T' 'G' 'C' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'T' 'T']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -133,11 +120,6 @@ AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "G")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['G']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
             )
@@ -162,11 +144,6 @@ G
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "A")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['A']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
             )
@@ -191,13 +168,6 @@ A
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['G' 'A' 'A' 'G' 'A' 'G' 'G' 'A' 'A' 'A' 'A' 'G' 'T' 'A' 'G' 'A' 'T' 'C'
-  'C' 'C' 'T' 'G' 'G' 'C' 'G' 'T' 'C' 'C' 'G' 'G' 'A' 'G' 'C' 'T' 'G' 'G'
-  'G' 'A' 'C' 'G' 'T']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
             )
@@ -220,11 +190,6 @@ GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "C")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['C']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
             )
@@ -249,11 +214,6 @@ C
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "C")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['C']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
             )
@@ -413,16 +373,6 @@ class TestDSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[0], "------------------------")
             self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
             self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-']
- ['G' 'T' 'C' 'C' 'C' 'G' 'G' 'G' 'C' 'C' 'C' 'T' 'G' 'C' 'T' 'T' 'T' 'C'
-  'C' 'T' 'T' 'T' 'T' 'C']
- ['G' 'C' 'C' 'A' 'G' 'G' 'G' 'A' 'T' 'C' 'T' 'A' 'C' 'T' 'T' 'T' 'T' 'C'
-  'C' 'T' 'C' 'T' 'T' 'C']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -457,13 +407,6 @@ GCCAGGGATCTACTTTTCCTCTTC
             self.assertEqual(
                 alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
             )
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['G' 'A' 'A' 'A' 'A' 'G' 'G' 'A' 'A' 'A' 'G' 'T' 'A' 'C' 'G' 'G' 'C' 'C'
-  'C' 'G' 'G' 'C' 'C' 'A' 'C' 'T' 'C' 'C' 'G' 'G' 'G' 'T' 'G' 'T' 'G' 'T'
-  'G' 'C' 'T' 'A' 'G' 'G' 'A' 'G' 'G' 'G' 'C' 'T' 'T' 'A']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
             )
@@ -486,12 +429,6 @@ GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['C' 'A' 'A' 'G' 'C' 'C' 'C' 'T' 'G' 'C' 'G' 'C' 'G' 'C' 'T' 'C' 'A' 'G'
-  'C' 'C' 'G' 'G' 'A' 'G' 'T']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
             )
@@ -519,11 +456,6 @@ CAAGCCCTGCGCGCTCAGCCGGAGT
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
-            self.assertEqual(
-                str(numpy.array(alignment, "U")),
-                """\
-[['G' 'T' 'C' 'C' 'G' 'G' 'A' 'G' 'C' 'T' 'G' 'G' 'G' 'A' 'C' 'G' 'T']]""",
-            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
             )

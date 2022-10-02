@@ -8,16 +8,6 @@ import unittest
 
 from io import StringIO
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.fasta."
-    ) from None
-
-
 from Bio import Align
 
 
@@ -80,12 +70,6 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 >gi|671626|emb|CAA85685.1|
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD---
 """,
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['M' 'E' 'N' ... 'S' 'V' 'V']
- ['-' '-' '-' ... '-' '-' '-']]""",
         )
         self.check_reading_writing(path)
 
@@ -198,17 +182,6 @@ MKSVL-------KVS----LAALTLA--FAVSSH---------A----------ADKKLVVATDTAFVPFEFKQ--GDKY
 MKKLVL------SLS----LV---LA--FSSATA---------------A-FAAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAK-NSDIQPTVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG---G
 """,
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['M' 'K' 'N' ... '-' '-' '-']
- ['M' 'K' 'M' ... 'Q' 'K' 'H']
- ['M' 'K' 'L' ... '-' '-' '-']
- ...
- ['M' 'K' 'K' ... '-' '-' '-']
- ['M' 'K' 'S' ... '-' '-' '-']
- ['M' 'K' 'K' ... '-' '-' 'G']]""",
-        )
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -261,13 +234,6 @@ ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCACATCAAAGTTACAATAACTGA
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACAAAGTAGCGAGGAAGAA------------------------------CAAAACATC----------------------------------------------------------------------------------------------------------------------------------------------------------------------------AGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 """,
         )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' '-' '-' ... 'T' 'T' '-']
- ['A' 'T' 'G' ... 'T' 'A' 'G']
- ['-' '-' '-' ... 'T' 'A' 'G']]""",
-        )
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -296,14 +262,6 @@ GCTGGGGATGGAGAGGGAACAGAGT-T
 >AT3G20900
 GCTGGGGATGGAGAGGGAACAGAGTAG
 """,
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'C' 'T' 'G' 'G' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'G' 'A'
-  'A' 'C' 'A' 'G' 'A' 'G' 'T' '-' 'T']
- ['G' 'C' 'T' 'G' 'G' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'G' 'A' 'G' 'G' 'G' 'A'
-  'A' 'C' 'A' 'G' 'A' 'G' 'T' 'A' 'G']]""",
         )
         self.check_reading_writing(path)
 
@@ -380,40 +338,6 @@ VQIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG-ES-APALSNTKLRIAPGSFYSVTLGT---P
 >azup_achcy
 VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---PGVYGVKCTPHYGMGMVGVVEV
 """,
-        )
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['D' '-' 'V' 'L' 'L' 'G' 'A' 'N' 'G' 'G' 'V' 'L' 'V' 'F' 'E' 'P' 'N' 'D'
-  'F' 'S' 'V' 'K' 'A' 'G' 'E' 'T' 'I' 'T' 'F' 'K' 'N' 'N' 'A' 'G' 'Y' 'P'
-  'H' 'N' 'V' 'V' 'F' 'D' 'E' 'D' 'A' 'V' 'P' 'S' 'G' '-' 'V' 'D' '-' 'V'
-  'S' 'K' 'I' 'S' 'Q' 'E' 'E' 'Y' 'L' 'T' 'A' 'P' 'G' 'E' 'T' 'F' 'S' 'V'
-  'T' 'L' 'T' 'V' '-' '-' '-' 'P' 'G' 'T' 'Y' 'G' 'F' 'Y' 'C' 'E' 'P' 'H'
-  'A' 'G' 'A' 'G' 'M' 'V' 'G' 'K' 'V' 'T' 'V']
- ['-' '-' 'V' 'K' 'L' 'G' 'A' 'D' 'S' 'G' 'A' 'L' 'E' 'F' 'V' 'P' 'K' 'T'
-  'L' 'T' 'I' 'K' 'S' 'G' 'E' 'T' 'V' 'N' 'F' 'V' 'N' 'N' 'A' 'G' 'F' 'P'
-  'H' 'N' 'I' 'V' 'F' 'D' 'E' 'D' 'A' 'I' 'P' 'S' 'G' '-' 'V' 'N' '-' 'A'
-  'D' 'A' 'I' 'S' 'R' 'D' 'D' 'Y' 'L' 'N' 'A' 'P' 'G' 'E' 'T' 'Y' 'S' 'V'
-  'K' 'L' 'T' 'A' '-' '-' '-' 'A' 'G' 'E' 'Y' 'G' 'Y' 'Y' 'C' 'E' 'P' 'H'
-  'Q' 'G' 'A' 'G' 'M' 'V' 'G' 'K' 'I' 'I' 'V']
- ['-' '-' 'V' 'K' 'L' 'G' 'S' 'D' 'K' 'G' 'L' 'L' 'V' 'F' 'E' 'P' 'A' 'K'
-  'L' 'T' 'I' 'K' 'P' 'G' 'D' 'T' 'V' 'E' 'F' 'L' 'N' 'N' 'K' 'V' 'P' 'P'
-  'H' 'N' 'V' 'V' 'F' 'D' 'A' 'A' 'L' 'N' 'P' 'A' 'K' 'S' 'A' 'D' 'L' 'A'
-  'K' 'S' 'L' 'S' 'H' 'K' 'Q' 'L' 'L' 'M' 'S' 'P' 'G' 'Q' 'S' 'T' 'S' 'T'
-  'T' 'F' 'P' 'A' 'D' 'A' 'P' 'A' 'G' 'E' 'Y' 'T' 'F' 'Y' 'C' 'E' 'P' 'H'
-  'R' 'G' 'A' 'G' 'M' 'V' 'G' 'K' 'I' 'T' 'V']
- ['V' 'Q' 'I' 'K' 'M' 'G' 'T' 'D' 'K' 'Y' 'A' 'P' 'L' 'Y' 'E' 'P' 'K' 'A'
-  'L' 'S' 'I' 'S' 'A' 'G' 'D' 'T' 'V' 'E' 'F' 'V' 'M' 'N' 'K' 'V' 'G' 'P'
-  'H' 'N' 'V' 'I' 'F' 'D' 'K' '-' '-' 'V' 'P' 'A' 'G' '-' 'E' 'S' '-' 'A'
-  'P' 'A' 'L' 'S' 'N' 'T' 'K' 'L' 'R' 'I' 'A' 'P' 'G' 'S' 'F' 'Y' 'S' 'V'
-  'T' 'L' 'G' 'T' '-' '-' '-' 'P' 'G' 'T' 'Y' 'S' 'F' 'Y' 'C' 'T' 'P' 'H'
-  'R' 'G' 'A' 'G' 'M' 'V' 'G' 'T' 'I' 'T' 'V']
- ['V' 'H' 'M' 'L' 'N' 'K' 'G' 'K' 'D' 'G' 'A' 'M' 'V' 'F' 'E' 'P' 'A' 'S'
-  'L' 'K' 'V' 'A' 'P' 'G' 'D' 'T' 'V' 'T' 'F' 'I' 'P' 'T' 'D' 'K' '-' 'G'
-  'H' 'N' 'V' 'E' 'T' 'I' 'K' 'G' 'M' 'I' 'P' 'D' 'G' '-' 'A' 'E' '-' 'A'
-  '-' '-' '-' '-' '-' '-' '-' 'F' 'K' 'S' 'K' 'I' 'N' 'E' 'N' 'Y' 'K' 'V'
-  'T' 'F' 'T' 'A' '-' '-' '-' 'P' 'G' 'V' 'Y' 'G' 'V' 'K' 'C' 'T' 'P' 'H'
-  'Y' 'G' 'M' 'G' 'M' 'V' 'G' 'V' 'V' 'E' 'V']]""",
         )
         self.check_reading_writing(path)
 

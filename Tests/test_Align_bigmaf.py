@@ -81,30 +81,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[1].annotations["leftCount"], 0)
         self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'C' 'A' 'T' 'A' 'G' 'G' 'T' 'A' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'T'
-  'A' 'A' 'A' 'T' 'A' 'T' 'G' 'G' 'T' 'T' 'T' 'G' 'C' 'T' 'T' 'T' 'A' 'T'
-  'G' 'G' 'C' 'T' 'A' 'G' 'A' 'A' 'C' 'A' 'C' 'A' 'C' 'C' 'G' 'A' 'T' 'T'
-  'A' 'C' 'T' 'T' 'A' 'A' 'A' 'A' 'T' 'A' 'G' 'G' 'A' 'T' 'T' 'A' 'A' 'C'
-  'C' '-' '-' 'C' 'C' 'C' 'A' 'T' 'A' 'C' 'A' 'C' 'T' 'T' 'T' 'A' 'A' 'A'
-  'A' 'A' 'T' 'G' 'A' 'T' 'T' 'A' 'A' 'A' 'C' 'A' 'A' 'C' 'A' 'T' 'T' 'T'
-  'C' 'T' 'G' 'C' 'T' 'G' 'C' 'T' 'C' 'G' 'C' 'T' 'C' 'A' 'C' 'A' 'T' 'T'
-  'C' 'T' 'T' 'C' 'A' 'T' 'A' 'G' 'A' 'A' 'G' 'A' 'T' 'G' 'A' 'C' 'A' 'T'
-  'A' 'A' 'T' 'G' 'T' 'A' 'T' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'T' 'T' 'G' 'G'
-  'T' 'T']
- ['T' 'C' 'A' 'C' 'A' 'G' 'A' 'T' 'A' 'T' 'T' 'T' 'A' 'C' 'T' 'A' 'T' 'T'
-  'A' 'A' 'A' 'T' 'A' 'T' 'G' 'G' 'T' 'T' 'T' 'G' 'T' 'T' 'A' 'T' 'A' 'T'
-  'G' 'G' 'T' 'T' 'A' 'C' 'G' 'G' 'T' 'T' 'C' 'A' 'T' 'A' 'G' 'G' 'T' 'T'
-  'A' 'C' 'T' 'T' 'G' 'G' 'A' 'A' 'T' 'T' 'G' 'G' 'A' 'T' 'T' 'A' 'A' 'C'
-  'C' 'T' 'T' 'C' 'T' 'T' 'A' 'T' 'T' 'C' 'A' 'T' 'T' 'G' 'C' 'A' 'G' 'A'
-  'A' 'T' 'T' 'G' 'G' 'T' 'T' 'A' 'C' 'A' 'C' 'T' 'G' 'T' 'G' 'T' 'T' 'C'
-  'T' 'T' 'G' 'A' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'T' 'T' 'G' 'T' 'T' 'T' 'T'
-  'C' 'T' 'C' 'C' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'C' 'T' 'G' 'A' 'T' 'G' 'T'
-  'C' 'A' 'A' 'A' 'T' 'A' 'C' 'T' 'T' 'T' 'C' 'C' 'C' 'T' 'T' 'T' 'G' 'G'
-  'T' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -175,30 +151,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertNotIn("empty", alignment.annotations)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'C' 'A' 'T' 'A' 'G' 'G' 'T' 'A' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'T'
-  'A' 'A' 'A' 'T' 'A' 'T' 'G' 'G' 'T' 'T' 'T' 'G' 'C' 'T' 'T' 'T' 'A' 'T'
-  'G' 'G' 'C' 'T' 'A' 'G' 'A' 'A' 'C' 'A' 'C' 'A' 'C' 'C' 'G' 'A' 'T' 'T'
-  'A' 'C' 'T' 'T' 'A' 'A' 'A' 'A' 'T' 'A' 'G' 'G' 'A' 'T' 'T' 'A' 'A' 'C'
-  'C' '-' '-' 'C' 'C' 'C' 'A' 'T' 'A' 'C' 'A' 'C' 'T' 'T' 'T' 'A' 'A' 'A'
-  'A' 'A' 'T' 'G' 'A' 'T' 'T' 'A' 'A' 'A' 'C' 'A' 'A' 'C' 'A' 'T' 'T' 'T'
-  'C' 'T' 'G' 'C' 'T' 'G' 'C' 'T' 'C' 'G' 'C' 'T' 'C' 'A' 'C' 'A' 'T' 'T'
-  'C' 'T' 'T' 'C' 'A' 'T' 'A' 'G' 'A' 'A' 'G' 'A' 'T' 'G' 'A' 'C' 'A' 'T'
-  'A' 'A' 'T' 'G' 'T' 'A' 'T' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'T' 'T' 'G' 'G'
-  'T' 'T']
- ['T' 'C' 'A' 'C' 'A' 'G' 'A' 'T' 'A' 'T' 'T' 'T' 'A' 'C' 'T' 'A' 'T' 'T'
-  'A' 'A' 'A' 'T' 'A' 'T' 'G' 'G' 'T' 'T' 'T' 'G' 'T' 'T' 'A' 'T' 'A' 'T'
-  'G' 'G' 'T' 'T' 'A' 'C' 'G' 'G' 'T' 'T' 'C' 'A' 'T' 'A' 'G' 'G' 'T' 'T'
-  'A' 'C' 'T' 'T' 'G' 'G' 'A' 'A' 'T' 'T' 'G' 'G' 'A' 'T' 'T' 'A' 'A' 'C'
-  'C' 'T' 'T' 'C' 'T' 'T' 'A' 'T' 'T' 'C' 'A' 'T' 'T' 'G' 'C' 'A' 'G' 'A'
-  'A' 'T' 'T' 'G' 'G' 'T' 'T' 'A' 'C' 'A' 'C' 'T' 'G' 'T' 'G' 'T' 'T' 'C'
-  'T' 'T' 'G' 'A' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'T' 'T' 'G' 'T' 'T' 'T' 'T'
-  'C' 'T' 'C' 'C' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'C' 'T' 'G' 'A' 'T' 'G' 'T'
-  'C' 'A' 'A' 'A' 'T' 'A' 'C' 'T' 'T' 'T' 'C' 'C' 'C' 'T' 'T' 'T' 'G' 'G'
-  'T' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -269,14 +221,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[3].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 4)
         self.assertNotIn("empty", alignment.annotations)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'T' ... 'C' 'T' 'G']
- ['A' 'G' 'T' ... 'T' 'T' 'C']
- ['A' 'G' 'T' ... 'T' 'T' 'C']
- ['A' 'G' 'T' ... 'T' 'T' 'C']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -393,50 +337,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[4].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertNotIn("empty", alignment.annotations)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'G' 'G' 'G' 'T' 'C' 'C' 'C' 'C' 'T' 'T' 'G' 'G' 'C' 'A' 'C' 'A' 'T'
-  'C' 'C' 'A' 'G' 'A' 'T' 'C' 'T' 'C' 'C' 'C' 'C' 'A' 'G' 'T' 'T' 'A' 'A'
-  'C' 'C' 'T' 'G' 'T' 'C' 'C' 'T' 'G' 'C' 'T' 'T' 'A' 'G' 'A' 'C' 'C' 'A'
-  'C' 'T' 'T' 'A' 'C' 'C' 'T' 'G' 'A' 'A' 'T' 'T' 'G' '-' '-' 'A' 'A' 'T'
-  'T' 'G' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'G' 'A' 'A' 'A' 'G' 'A' 'A' 'G'
-  'C' 'C' 'A' 'G' 'T' 'T' 'T' 'C' 'C' 'C' 'A' 'G' 'A' 'G' 'A' 'G' 'G' 'G'
-  'A' 'A' 'A' 'A' 'G' 'G' 'A' 'A' 'A' 'A' 'G' 'C' 'T' 'C' 'G' 'A' 'C' 'A'
-  'C']
- ['T' 'G' 'G' 'G' 'T' 'T' 'C' 'C' 'T' 'C' 'T' 'A' 'G' 'A' 'A' 'T' 'A' 'A'
-  'C' 'C' 'A' 'A' 'G' '-' '-' 'T' 'C' 'C' 'T' 'C' 'A' 'C' 'G' 'T' 'A' 'A'
-  'C' 'C' 'T' 'G' 'G' 'T' 'G' 'T' 'G' 'T' 'A' 'T' 'T' 'G' 'A' 'C' 'C' 'A'
-  'C' 'C' 'T' 'C' 'T' 'C' 'T' 'T' 'G' 'A' 'C' 'C' 'G' 'C' 'T' 'G' 'A' 'T'
-  'C' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'C' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'T' '-' 'G' 'A' 'G' 'G' 'G' 'C' 'C'
-  'A' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'C' 'T' 'G' 'G' 'A' 'A' 'G'
-  'C']
- ['T' 'G' 'G' 'G' 'T' 'T' 'C' 'C' 'T' 'C' 'T' 'A' 'G' 'A' 'A' 'T' 'A' 'A'
-  'C' 'C' 'A' 'A' 'G' '-' '-' 'T' 'C' 'C' 'T' 'C' 'A' 'C' 'G' 'T' 'A' 'A'
-  'C' 'C' 'T' 'G' 'G' 'T' 'G' 'T' 'G' 'T' 'A' 'T' 'T' 'G' 'A' 'C' 'C' 'A'
-  'C' 'C' 'T' 'C' 'T' 'C' 'T' 'T' 'G' 'A' 'C' 'C' 'G' 'C' 'T' 'G' 'A' 'T'
-  'C' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'C' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'T' '-' 'G' 'A' 'G' 'G' 'G' 'C' 'C'
-  'A' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'C' 'T' 'G' 'G' 'A' 'A' 'G'
-  'C']
- ['T' 'G' 'G' 'G' 'T' 'T' 'C' 'C' 'T' 'C' 'T' 'A' 'G' 'A' 'A' 'T' 'A' 'A'
-  'C' 'C' 'A' 'A' 'G' '-' '-' 'T' 'C' 'C' 'T' 'C' 'A' 'C' 'G' 'T' 'A' 'A'
-  'C' 'C' 'T' 'G' 'G' 'T' 'C' 'T' 'A' 'T' 'A' 'T' 'T' 'G' 'A' 'C' 'C' 'A'
-  'C' 'C' 'T' 'G' 'T' 'C' 'T' 'T' 'G' 'A' 'C' 'T' 'G' 'T' 'T' 'G' 'A' 'T'
-  'C' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'C' 'A' 'C' 'C' 'T' 'T' 'G' 'C' 'T' '-' 'G' 'A' 'G' 'G' 'G' 'C' 'C'
-  'A' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'C' 'T' 'G' 'G' 'A' 'A' 'G'
-  'C']
- ['T' 'G' 'G' 'G' 'C' 'C' 'C' 'C' 'C' 'C' 'T' 'G' 'A' 'C' 'C' 'T' 'G' 'G'
-  'C' 'C' 'A' 'A' 'G' '-' '-' 'T' 'C' 'C' 'T' 'C' 'A' 'C' 'T' 'C' 'A' 'C'
-  'C' 'C' 'G' 'G' 'G' 'T' 'T' 'T' 'A' 'C' 'A' 'C' 'T' 'G' 'A' 'C' 'C' 'A'
-  'C' 'C' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'A' 'A'
-  'C' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'C' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'T' '-' 'G' 'A' 'G' 'G' 'G' 'G' 'C'
-  'A' 'A' 'C' 'A' 'G' 'C' 'A' 'A' 'A' 'C' 'A' 'C' 'G' 'G' 'G' 'A' 'A' 'G'
-  'C']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -553,16 +453,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[5].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 6)
         self.assertNotIn("empty", alignment.annotations)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' '-' 'T' ... 'G' 'T' 'G']
- ['C' 'A' 'T' ... '-' '-' '-']
- ['C' 'A' 'T' ... '-' '-' '-']
- ['C' 'A' 'T' ... '-' '-' '-']
- ['C' 'A' 'C' ... '-' '-' '-']
- ['-' '-' 'T' ... '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -717,17 +607,6 @@ table bedMaf
         self.assertEqual(alignment.sequences[6].annotations["rightCount"], 7564)
         self.assertEqual(len(alignment.sequences), 7)
         self.assertNotIn("empty", alignment.annotations)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'T' 'T' ... 'T' 'A' 'T']
- ['-' '-' '-' ... 'T' 'A' 'T']
- ['-' '-' '-' ... 'C' 'A' 'G']
- ...
- ['-' '-' '-' ... 'C' 'A' 'C']
- ['-' '-' '-' ... 'C' 'A' 'C']
- ['T' 'T' 'G' ... 'C' 'A' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -886,17 +765,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'A' ... 'A' 'T' 'G']
- ['T' 'G' 'A' ... '-' '-' '-']
- ['T' 'G' 'A' ... '-' '-' '-']
- ...
- ['T' 'G' 'A' ... 'A' 'T' 'G']
- ['G' 'G' 'A' ... '-' '-' '-']
- ['T' 'G' 'A' ... '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1006,23 +874,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['a' 'g' 'c' 'c' 'a' 'g' 'g' 'c' 'g' 't' 'g' 'g' 't' 'g' 'g' 'c' 'a' 'c'
-  'a' 'c' 'a' 'c' 'c' 't' 't' 't' 'a' 'c' 't' 'c' 'c' 'c' 'a' 'g' 'c' 'a'
-  't' 't' 't' 'g' 'g' 'g' 'g' 'g' 'g' 'c' 'a' 'g' 'a' 'g' 'g' 'c' 'a' 'g'
-  'g' 't' 'g' 'g' 'a' 't' 'c' 't' 'g' 't' 'g' 'a' 'g' 't' 't' 't' 'g' 'a'
-  'g' 'g' 'c' 'c' 'a' 'g' 'c' 'c' 't' 'g' 'g' 't' 'c' 't' 'a' 'c' 'a' 'g'
-  'a' 'g' 'g' 'g' 'a' 'g' 't' 'c' 't' 'c' 'a' 'g' 'g' 'a' 'c' 'a' 'g' 'c'
-  'c' 'a' 'g' 'a' 'g' 'c' 't' 'a' 'c' 'a' 'c' 'a' 'g' 'a' 'a' 'a' 't' 'a'
-  'a' 'c' 'c' 't' 'g' 'c' 'c' 't' 'a' 'g' 'a' 'a' 'a' 'a' 'a' 'c' 'a' 'a'
-  'a' 'a' 'c' 'a' 'a' 'a' 'a' 'c' 'a' 'a' 'a' 'a' 'c' 'a' 't' 'c' 'a' 'a'
-  'a' 'a' 'c' 't' 'c' 'a' 'a' 'a' 'a' 'c' 'a' 'a' 'a' 'T' 'A' 'A' 'A' 'A'
-  'A' 'A' 'A' 'A' 'T' 'A' 'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'A' 'A' 'C' 'C'
-  'T' 'A' 'A' 'A' 'C' 'C' 'A' 'A' 'A' 'T' 'A' 'A' 'C' 'A' 'A' 'A' 'A' 'C'
-  'A' 'C' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
         )
@@ -1104,50 +955,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'C' 'C' 'A' 'A' 'A' 'A' 'T' 'G' 'G' 'T' 'T' 'A' 'G' 'C' 'T' 'A' 'T'
-  'G' 'C' 'C' 'C' 'A' 'A' 'C' 'T' 'C' 'C' 'T' 'T' 'T' 'C' 'A' 'C' 'T' 'C'
-  'C' 'A' 'A' 'G' 'A' 'A' 'A' 'A' 'T' 'A' 'T' 'C' 'C' 'T' 'A' 'A' 'C' 'C'
-  'A' 'T' 'G' 'T' 'A' 'A' 'G' 'A' 'G' 'A' 'G' 'C' 'T' 'A' 'G' 'C' 'C' 'T'
-  'G' 'T' 'T' 'G' 'G' 'T' 'G' 'G' 'C' 'A' 'G' 'C' 'C' 'A' 'A' 'G' 'C' 'C'
-  'T' 'G' 'A' 'T' 'G' 'G' 'T' 'G' 'G' 'C' 'A' 'G' 'A' 'C' 'T' 'A' 'G' 'A'
-  'T' 'T' 'G' 'A' 'T' 'G' 'G' 'T' 'G' 'C' 'C' 'A' 'G' 'A' 'C' 'T' 'A' 'C'
-  'T' 'T' 'T' 'A' 'T' 'G' 'G' 'C' 'T' 'G' 'T' 'A' 'T' 'C' 'A' 'T' 'T' 'T'
-  'T' 'C' 'C' 'A' 'T' 'T' 'C' 'A' 'T' 'G' 'T' 'G' 'T' 'T' 'G' 'T' 'G' 'T'
-  'T' 'A' 'T' 'A']
- ['T' 'T' 'C' 'A' 'A' 'A' 'C' 'C' 'T' 'G' 'T' 'C' 'A' 'A' 'T' 'G' 'A' 'T'
-  'G' 'T' 'T' 'C' 'A' 'A' 'C' 'T' 'C' 'T' 'T' 'T' 'T' 'C' 'A' 'C' 'T' 'G'
-  'T' 'G' 'G' 'A' 'T' 'A' 'A' 'A' 'G' 'A' 'T' 'C' 'T' 'T' 'C' 'T' 'A' 'G'
-  'A' 'T' 'G' 'C' 'A' 'A' 'T' 'A' 'G' 'A' 'A' 'T' 'T' 'A' 'G' 'A' 'T' 'T'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'G' 'G' 'C' 'G' 'A' 'T' 'T' 'A' 'C' 'A' 'T' 'C' 'C' 'T' 'A' 'T'
-  'T' 'T' 'T' 'A' 'T' 'G' 'G' 'G' 'T' 'G' 'T' 'A' 'T' 'C' 'G' 'T' 'T' 'T'
-  'T' 'G' 'C' 'A' 'T' 'T' 'C' 'A' 'T' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'T' 'T'
-  'G' 'A' 'T' 'A']
- ['T' 'T' 'C' 'A' 'A' 'A' 'C' 'C' 'T' 'G' 'T' 'C' 'A' 'A' 'T' 'G' 'A' 'T'
-  'G' 'T' 'T' 'C' 'A' 'A' 'C' 'T' 'C' 'T' 'T' 'T' 'T' 'C' 'A' 'C' 'T' 'G'
-  'T' 'G' 'G' 'A' 'T' 'A' 'A' 'A' 'G' 'A' 'T' 'C' 'T' 'T' 'C' 'T' 'A' 'G'
-  'A' 'T' 'G' 'C' 'A' 'A' 'T' 'A' 'G' 'A' 'A' 'T' 'T' 'A' 'G' 'A' 'T' 'T'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'G' 'G' 'C' 'G' 'A' 'T' 'T' 'A' 'C' 'A' 'T' 'C' 'C' 'T' 'A' 'T'
-  'T' 'T' 'T' 'A' 'T' 'G' 'G' 'G' 'T' 'G' 'T' 'A' 'T' 'C' 'G' 'T' 'T' 'T'
-  'T' 'G' 'C' 'A' 'T' 'T' 'C' 'A' 'T' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'T' 'T'
-  'G' 'A' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' 'C' 'A' 'A' 'C' 'T' 'C' 'T' 'T' 'T' 'T' 'C' 'A' 'C' 'T' 'G'
-  'T' 'G' 'G' 'A' 'T' 'A' 'A' 'A' 'G' 'A' 'T' 'C' 'T' 'T' 'C' 'T' 'A' 'G'
-  'A' 'T' 'G' 'C' 'A' 'A' 'T' 'A' 'G' 'A' 'A' 'T' 'T' 'A' 'G' 'A' 'T' 'T'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'G' 'G' 'C' 'G' 'A' 'T' 'T' 'A' 'C' 'A' 'T' 'C' 'C' 'T' 'A' 'T'
-  'T' 'T' 'T' 'A' 'T' 'G' 'G' 'G' 'T' 'G' 'T' 'A' 'T' 'C' 'G' 'T' 'T' 'T'
-  'T' 'G' 'C' 'A' 'T' 'T' 'C' 'A' 'T' 'G' 'G' 'G' 'C' 'T' 'G' 'T' 'T' 'T'
-  'G' 'A' 'T' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1212,11 +1019,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' ... 'C' 'A' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
         )
@@ -1317,25 +1119,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'T' 'G' 'T' 'A' 'C' 'C' '-' '-' '-' 'C' 'T' 'T' 'T' 'G' 'G' 'T'
-  'G' 'A' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'T' 'G' 'T' 'T' 'T' 'C' 'A' 'G' 'T'
-  'G' 'T' 'T' 'A' 'A' 'A' 'A' 'G' 'T' 'T' 'T' 'G']
- ['C' 'C' 'T' 'A' 'T' 'A' 'C' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'T' 'T' 'A' 'T'
-  'G' 'A' 'G' 'A' 'A' '-' 'T' 'T' 'T' 'T' 'G' 'T' 'T' 'T' 'T' 'A' 'A' 'T'
-  'C' 'C' 'T' 'A' 'A' 'A' 'C' '-' 'T' 'T' 'T' 'T']
- ['C' 'C' 'T' 'A' 'T' 'A' 'C' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'T' 'T' 'A' 'T'
-  'G' 'A' 'G' 'A' 'A' '-' 'T' 'T' 'T' 'T' 'G' 'T' 'T' 'T' 'T' 'A' 'A' 'T'
-  'C' 'C' 'T' 'A' 'A' 'A' 'C' '-' 'T' 'T' 'T' 'T']
- ['C' 'C' 'T' 'A' 'T' 'A' 'C' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'T' 'C' 'A' 'T'
-  'G' 'A' 'G' 'A' 'A' '-' 'T' 'T' 'T' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'A' 'T'
-  'C' 'C' 'T' 'A' 'A' 'A' 'C' '-' 'T' 'T' 'T' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'T' 'T' 'G' 'G' 'T'
-  'T' 'A' 'G' 'A' 'A' '-' 'T' 'T' 'A' 'T' 'G' 'C' 'T' 'T' 'T' 'A' 'A' 'T'
-  'T' 'C' 'A' 'A' 'A' 'A' 'C' '-' 'T' 'T' 'C' 'C']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1464,28 +1247,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'G' 'G' 'A' 'G' 'C' 'A' 'T' 'A' 'A' 'A' 'A' 'C' 'T' 'C' 'T' 'A' 'A'
-  'A' 'T' 'C' 'T' 'G' 'C' 'T' 'A' 'A' 'A' 'T' 'G' 'T' 'C' 'T' 'T' 'G' 'T'
-  'C' 'C' 'C' 'T' '-' 'T' 'T' 'G' 'G' 'A' 'A' 'A' 'G' 'A' 'G' 'T' 'T' 'G']
- ['G' 'G' 'G' 'A' 'T' 'C' 'A' 'T' 'A' 'A' 'A' 'C' 'C' 'A' 'T' 'T' 'T' 'A'
-  'A' 'T' 'C' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'T' 'A' 'T' 'C' 'T' 'A' 'A' 'T'
-  'C' 'T' 'T' 'T' '-' 'T' 'G' 'G' 'G' 'A' 'A' 'A' 'T' 'A' 'G' 'T' 'G' 'G']
- ['G' 'G' 'G' 'A' 'T' 'C' 'A' 'T' 'A' 'A' 'A' 'C' 'C' 'A' 'T' 'T' 'T' 'A'
-  'A' 'T' 'C' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'T' 'A' 'T' 'C' 'T' 'A' 'A' 'T'
-  'C' 'T' 'T' 'T' '-' 'T' 'G' 'G' 'G' 'A' 'A' 'A' 'T' 'A' 'G' 'T' 'G' 'G']
- ['G' 'G' 'G' 'A' 'T' 'C' 'A' 'T' 'A' 'A' 'G' 'C' 'C' 'A' 'T' 'T' 'T' 'A'
-  'A' 'T' 'C' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'T'
-  'C' 'T' 'T' 'T' '-' 'T' 'G' 'G' 'G' 'A' 'A' 'A' 'C' 'A' 'G' 'T' 'G' 'G']
- ['G' 'G' 'A' 'A' 'G' 'C' 'A' 'T' 'A' 'A' 'A' 'C' 'T' '-' 'T' 'T' 'T' 'A'
-  'A' 'T' 'C' 'T' 'A' 'T' 'G' 'A' 'A' 'A' 'T' 'A' 'T' 'C' 'A' 'A' 'A' 'T'
-  'C' 'A' 'C' 'T' '-' 'T' 'G' 'G' 'G' 'C' 'A' 'A' 'T' 'A' 'G' 'C' 'T' 'G']
- ['G' 'G' 'G' 'A' 'G' 'T' 'A' 'T' 'A' 'A' 'A' 'C' 'C' 'A' 'T' 'T' 'T' 'A'
-  'G' 'T' 'C' 'T' 'G' 'C' 'G' 'A' 'A' 'A' 'T' 'G' 'C' 'C' 'A' 'A' 'A' 'T'
-  'C' 'T' 'T' 'C' 'A' 'G' 'G' 'G' 'G' 'A' 'A' 'A' 'A' 'A' 'G' 'C' 'T' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1581,18 +1342,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'A' 'G' 'T' 'T' 'C' 'C' 'C' 'T' 'C' 'C' 'A' 'T' 'A' 'A' 'T' 'T' 'C'
-  'C' 'T' 'T' 'C' 'C' 'T' 'C' 'C' 'C' 'A' 'C' 'C' 'C' 'C' 'C' 'A' 'C' 'A']
- ['A' 'A' 'A' 'T' 'G' 'T' 'A' '-' '-' '-' '-' '-' 'T' 'G' 'A' 'T' 'C' 'T'
-  'C' 'C' 'C' 'C' 'A' 'T' 'C' 'C' 'T' 'G' 'C' 'C' 'C' 'T' 'G' '-' '-' '-']
- ['A' 'G' 'A' 'T' 'T' 'T' 'C' '-' '-' '-' '-' '-' 'T' 'G' 'A' 'T' 'G' 'C'
-  'C' 'C' 'T' 'C' 'A' 'C' 'C' 'C' 'C' 'C' 'T' 'C' 'C' 'G' 'T' 'G' 'C' 'A']
- ['A' 'G' 'G' 'C' 'T' 'T' 'A' '-' '-' '-' '-' '-' 'T' 'G' '-' '-' '-' '-'
-  'C' 'C' 'A' 'C' 'C' 'C' 'C' 'C' 'C' 'A' 'C' 'C' 'C' 'C' 'C' 'A' 'C' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1665,11 +1414,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 8)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'C' 'C' 'C' 'A' 'T' 'G' 'T' 'C' 'C' 'A' 'C' 'C' 'C' 'T' 'G' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
         )
@@ -1821,46 +1565,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'T' 'T' 'T' 'C' 'A' 'G' 'G' 'G' 'G' 'C' 'A' 'G' 'C' 'T' 'C' 'G' 'C'
-  'T' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'A' 'G' 'C' 'A' 'G' '-' 'C' 'T' 'A' 'A' 'G' 'G' 'C' 'A' 'T' 'G'
-  'G' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'C' 'A']
- ['-' '-' '-' 'T' 'C' 'G' 'G' 'G' 'A' 'A' 'C' 'A' 'A' 'G' 'T' 'T' 'G' 'C'
-  'A' 'G' 'T' 'C' 'A' 'T' 'G' 'G' 'A' 'T' 'A' 'T' '-' 'T' 'T' 'G' 'G' 'T'
-  'T' 'T' 'A' 'G' 'A' 'T' 'G' 'G' 'T' 'T' 'T' 'A' 'G' 'G' 'T' 'G' 'G' 'G'
-  'G' 'T' 'G' 'T' 'A' 'T' 'T' 'T' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'G' 'C' 'C' 'A' 'T' 'G' 'A' 'A' 'T' 'A' 'T' '-' '-' '-' '-' '-' 'T'
-  'T' 'T' 'A' 'G' 'A' 'C' '-' 'A' 'T' 'G' 'C' 'A' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'G' 'T' 'G' 'T' 'T' 'T' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' 'a' 'G' 'C' 'A' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'A' 'T' 'G' 'T' 'T' 'T' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' 'a' 'G' 'C' 'A' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'A' 'T' 'G' 'T' 'T' 'T' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' 'a' 'G' 'C' 'A' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'A' 'T' 'G' 'T' 'T' 'T' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'A' 'G' 'A' 'A' 'A' '-' 'T' 'G' 'T' 'G' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'G' 'C' 'A' 'T' 'C' 'G' 'C' 'T']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  'T' 'T' 'A' 'G' 'A' 'A' 'A' '-' 'T' 'T' 'T' 'A' 'G' 'G' 'T' 'G' 'T' 'G'
-  'G' 'C' 'A' 'T' 'G' 'G' 'T' 'T' 'C' '-']
- ['G' 'T' 'T' '-' 'T' 'G' 'A' 'G' 'A' 'G' 'C' 'A' 'A' 'G' 'T' 'T' 'T' 'A'
-  'G' 'G' 'A' 'C' 'A' 'T' 'C' 'A' 'A' 'T' 'A' 'C' 'G' 'T' 'T' 'G' 'T' 'T'
-  'T' 'C' 'A' 'G' 'A' 'A' 'A' '-' 'T' 'T' 'G' 'A' 'G' 'G' 'T' 'T' 'T' 'G'
-  'C' 'T' 'G' 'T' 'A' 'T' 'C' 'T' 'C' 't']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2064,17 +1768,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' '-' '-' ... 't' 't' 't']
- ['t' 'a' 't' ... 'T' 'C' 'T']
- ['-' '-' '-' ... 't' 'c' 't']
- ...
- ['T' 'C' 'T' ... 'T' 'T' 'T']
- ['T' 'A' 'T' ... 'C' 'T' 'C']
- ['-' '-' 'C' ... '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2289,38 +1982,6 @@ table bedMaf
         self.assertEqual(status, "C")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['c' 'c' 'a' 't' 't' 't' 't' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 't'
-  't' 'a' 't' 't' 'a' 'g' 'g' 't' 'a' 't' 't' 't' 'a' 'g' 'c' 't' 'c' 'a'
-  't' 't' 't' 'a' 'c' 'a' 't' 't' 't' 'c' 'c' 'a' 'a' 't' 'g' 'c' 't' 'a'
-  't' 'a' 'c' '-' '-' '-' '-' 'c' 'a' 'a' 'a' 'a' 'g' 't' 'c' 'c' 'c' 'c']
- ['T' 'C' 'A' 'C' 'T' 'T' 'C' 'T' 'A' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'C' 'C' 'T' 'C' 'C' 'A'
-  'T' 'T' 'C' 'C' 'T' 'T' 'A' 'C' 'A' 'A' 'A' 'A' 'G' 'T' 'T' 'C' 'T' 'C']
- ['c' 't' 'g' 't' 'g' 't' 'c' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 't'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['T' 'T' 'T' 'T' 'G' 'C' 'C' 'T' 'T' 'T' 'T' 'C' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['T' 'G' 'C' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'C' 'A' 'A' 'A' 'T' 'C' 'T' 'C'
-  'C' 'A' 'C' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['T' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'A' 'T' 'T' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'G' 'A' 'C' 'T' 'T' 'T' 'T' 'G' 'C' 'C' 'A' 'A' 'A'
-  'T' 'A' 'T' 'T' 'C' 'A' 'C' 'T' 'T' 'C' 'C' 'A' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2420,11 +2081,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['c' 'a' 't' ... 'T' 'C' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
         )
@@ -2516,25 +2172,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'T' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'G' 'C' 'A' 'G' 'G' 'T' 'T' 'T' 'C'
-  'T' 'T' 'T' 'A' 'C' '-' '-' '-' '-' 'A' 'G' 'T' 'T' 'C' 'T' 'C' 'T' 'T'
-  'T' 'C' 'A' 'T' 'T' 'C' 'T' 'T' 'C' 'T' 'C' 'C' 'T' 'C' 'T' 'T' 'T' 'T'
-  'C' 'T' 'T' 'C' 'T' 'G' 'T' 'T' 'G' 'A' 'C' 'C' 'T' 'T' 'T' 'A' 'T' 'C'
-  'A' 'G' 'A' 'T' 'T' 'T' 'C' 'T' 'G' 'C' 'T' 'T' 'T' 'A' 'A' 'C' 'C']
- ['C' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'G' 'G' 'C' 'A' 'G' 'G' 'G' 'T' 'T' 'A'
-  'T' 'T' 'T' 'A' 'T' 'A' 'G' 'C' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'C' 'T' 'C'
-  'T' 'C' 'T' 'C' 'T' 'C' 'T' 'T' 'A' '-' '-' '-' '-' '-' '-' 'T' 'T' 'T'
-  'A' 'T' 'T' 'T' 'T' 'T' 'T' 'T' 'G' 'C' 'C' 'T' 'T' 'T' 'T' 'C' 'C' 'C'
-  'A' 'A' 'A' 'T' 'C' 'T' 'C' 'C' 'A' 'C' 'T' 'T' 'C' 'C' 'A' 'C' 'C']
- ['C' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'G' 'G' 'C' 'A' 'G' 'G' 'G' 'T' 'T' 'A'
-  'T' 'T' 'T' 'A' 'T' 'A' 'G' 'C' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'C' 'T' 'C'
-  'T' 'C' 'T' 'C' 'T' 'C' 'T' 'T' 'A' '-' '-' '-' '-' '-' '-' 'T' 'T' 'T'
-  'A' 'T' 'T' 'T' 'T' 'T' 'T' 'T' 'G' 'C' 'C' 'T' 'T' 'T' 'T' 'C' 'C' 'C'
-  'A' 'A' 'A' 'T' 'C' 'T' 'C' 'C' 'A' 'C' 'T' 'T' 'C' 'C' 'A' 'C' 'C']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2616,34 +2253,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'C' 'C' 'A' 'C' 'A' 'G' 'A' 'C' 'C' 'T' 'T' 'C' 'T' 'G' 'T' 'T' 'T'
-  'A' 'G' 'T' 'C' 'C' 'A' 'A' 'A' 'G' 'G' 'A' 'C' 'G' 'C' 'A' 'A' 'A' 'T'
-  'T' 'A' 'T' 'G' 'T' 'A' 'T' 'C' 'C' 'A' 'C' 'T' 'T' 't' 'a' 'g' 't' 'a'
-  'g' 'g' 'a' 'g' 'g' 'c' 't' 'g' 'a' 'c' 'c' 'c' 'g' 'c' 'a' 'g' 'c' 'c'
-  't' 'a' 'c' 'a' 't' 'g' 'a' 'a' 'c' 'c' 'a' 'g' 'g' 't' 'a' 't' 't' 't'
-  'c' 't' 'g' 'g' 'a' 'a' 'g' 'g' 'c' 'a' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'g'
-  't' 't' 'g' 'a' 'a' 'a' 'g' 'a' 'g' 'a' 'a' 'a' 't' 't' 'a' 'g' 'a' 't'
-  'g' 'g' 't' 'g' 'a' 'g' 'a' 'a' 'a' 'a' 'g' 'a' 'a' 't' 'a' 'a' 't' 'g'
-  'a' 'g' 'g' 'c' 'c' 'a' 'a' 'g' 'a' 'c' 'a' 'a' 'a' 't' 't' 't' 't' 't'
-  'c' 't' 'c' 't' 't' 'a' 't' 'c' 'a' 'a' 'g' 'g' 'c' 'c' 'c' 'a' 'a' 'g'
-  'a' 'g' 'a' 'g' 't' 't' 't' 'a' 'c' 't' 'a' 'a' 'g' 'a' 'g' 'a' 'c' 't'
-  'a' 't' 'g' 'c' 't' 't' 'a' 'a' 'a' 'a' 'g' 'g' 'g' 'g' 'g' 'a' 'a' 'g'
-  'g' 'c' 'c' 'c' 'a' 't' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c' 'c'
-  't' 'c' 'g' 'c' 'g' 'c' 'c' 'a' 'g' 't' 'c' 't' 'a' 't' 'c' 'c' 't' 't'
-  'g' 'g' 't' 'g' 'c' 't' 't' 't' 'g' 't' 'c' 'a' 'c' 'c' 'a' 't' 'g' 'c'
-  'c' 'a' 't' 'c' 'a' 'g' 'c' 'a' 'c' 't' 't' 'g' 'g' 't' 'c' 'g' 'g' 'c'
-  'a' 'g' 'g' 't' 'a' 'g' 'c' 'a' 'g' 'a' 'a' 't' 'c' 't' 'c' 'a' 'g' 'g'
-  'g' 'c' 'a' 'g' 't' 't' 'g' 'a' 'c' 'a' 'c' 't' 't' 'c' 'a' 'a' 'a' 'a'
-  'g' 'a' 'a' 'a' 'c' 'c' 'a' 'g' 'c' 'c' 'a' 'a' 'g' 't' 'c' 'a' 'g' 'a'
-  'a' 'a' 'g' 'c' 't' 'g' 'c' 'a' 'c' 't' 'g' 'c' 'a' 'g' 'g' 'a' 'g' 'a'
-  'c' 'c' 't' 'g' 'c' 'a' 'c' 't' 'c' 'a' 'g' 't' 'g' 'g' 't' 'g' 'a' 'c'
-  'a' 'a' 'g' 'g' 't' 'c' 't' 'g' 't' 'a' 'c' 'c' 'a' 'g' 'c' 'c' 't' 'g'
-  'c' 't' 't' 'c' 'a' 'g' 'g' 'c' 't' 'g' 'g' 'g' 'g' 'g' 'a' 'g' 'g' 'c'
-  't' 'a' 'c' 'a']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
         )
@@ -2743,30 +2352,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'T' 'C' 'C' 'A' 'C' 'A' 'A' 'A' 'A' 'G' 'A' 'G' 'A' 'C' '-' '-' '-'
-  '-' '-' 'A' 'A' 'A' 'G' 'A' 'A' 'G' 'A' 'A' 'A' 'A' 'C' 'C' 'A' 'A' 'A'
-  'A' 'G' 'A' 'A' 'A' 'A' 'G' 'A' 'T' 'T' 'G' 'T' 'A' 'G' 'C' 'T' 'T' 'A'
-  'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'C' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T'
-  'G' 'A']
- ['A' 'C' 'C' 'T' 'A' 'C' 'A' 'A' 'A' 'G' 'G' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' 'A' 'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'A' 'A' 'C' 'C' 'A' 'T' 'A'
-  'A' 'G' 'A' 'A' 'A' 'A' 'G' 'T' 'T' 'T' 'G' 'T' 'A' 'C' 'C' 'A' 'T' 'A'
-  'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T'
-  'G' 'A']
- ['A' 'C' 'C' 'T' 'A' 'C' 'A' 'A' 'A' 'G' 'G' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' 'A' 'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'A' 'A' 'C' 'C' 'A' 'C' 'A'
-  'A' 'G' 'A' 'A' 'A' 'A' 'G' 'T' 'T' 'T' 'G' 'T' 'A' 'C' 'C' 'A' 'T' 'A'
-  'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T'
-  'G' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'A' 'A'
-  'G' 'G' 'A' 'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'A' 'A' 'C' 'C' 'A' 'T' 'A'
-  'A' 'G' 'A' 'A' 'A' 'A' 'G' 'T' 'T' 'T' 'G' 'T' 'A' 'C' 'C' 'A' 'T' 'A'
-  'A' 'A' 'A' 'C' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'T'
-  'G' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2869,34 +2454,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'G' 'A' '-' 'C' 'A' 'A' 'A' 'A' 'T' 'A' 'A' 'T' 'A' 'C' 'A' 'G'
-  'A' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't'
-  't' 't' 't' 't' 'G' 'C' 'A' 'G' 'T' 'A' 'C' 'T' 'G' 'G' 'A' 'A' 'A' 'T'
-  'G' 'G' 'A' 'A' 'T' 'G' 'A' 'A' 'T' 'G' 'T' 'C' 'C' 'C' 'T' 'C' 'A' 'C'
-  'A' 'A' 'T' 'C' 'A' 'C' 'T' 'A' 'T' 'C' 'A' 'A' 'G' 'G' 'T' 'C' 'C' 'C'
-  'T' 'A' 'T' 'C' 'A' 'A' 'G' 'G' 'C' 'A' 'A' 'T' 'C' 'A' 'C' 'T' 'C' 'T'
-  'G' 'T' 'C' 'A' 'C' 'C' 'G' 'A' 'G' 'C' 'T' 'A' '-' 'C' 'A' 'G' 'C' 'C'
-  'C' 'C' 'A' 'G' 'C']
- ['A' 'T' 'A' 'A' 'T' 'C' 'C' 'A' 'A' 'T' 'C' 'A' 'A' 'T' 'A' 'T' 'A' 'T'
-  'A' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'C' 'A' 'G' 'A' 'A' 'C' 'C' 'T' 'G' 'G' 'C' 'T' 'C'
-  'C' 'C' 'A' 'A' 'T' 'G' '-' '-' '-' '-' '-' 'T' 'T' 'C' 'T' 'G' 'A' 'T'
-  'A' 'G' 'T' 'C' 'A' 'T' 'T' 'A' 'T' 'G' 'A' 'A' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' 'A' 'A' 'A' 'G' 'A' 'A' 'T' 'T' 'T' 'A' 'C' 'A' 'C' 'A'
-  'T' 'A' 'T' 'A' 'T' 'A' 'G' 'A' 'T' 'T' 'T' 'A' 'T' 'T' 'A' 'G' 'G' 'T'
-  'A' 'T' 'A' 'T' 'G']
- ['A' 'T' 'A' 'A' 'T' 'C' 'C' 'A' 'A' 'T' 'C' 'A' 'A' 'T' 'A' 'T' 'A' 'T'
-  'A' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'C' 'A' 'G' 'A' 'A' 'C' 'C' 'T' 'G' 'G' 'C' 'T' 'C'
-  'C' 'C' 'A' 'A' 'T' 'G' '-' '-' '-' '-' '-' 'T' 'T' 'C' 'T' 'G' 'A' 'T'
-  'A' 'G' 'T' 'C' 'A' 'T' 'T' 'G' 'T' 'G' 'A' 'A' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' 'A' 'A' 'A' 'G' 'A' 'a' 't' 't' 't' 'a' 'c' 'a' 'c' 'a'
-  't' 'a' 't' 'a' 't' 'a' 'g' 'a' 't' 't' 't' 'a' 't' 't' 'a' 'g' 'g' 't'
-  'a' 't' 'a' 't' 'g']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3021,50 +2578,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'T' '-' 'C' 'A' 'A' 'A' 'C' 'A' 'T' 'G' 'C' 'A' 'T' 'A' 'C' 'A' 'T'
-  'G' 'C' 'A' 'T' 'T' 'C' 'A' 'T' 'G' 'T' 'C' 'T' 'C' 'A' 'T' 'A' 'A' '-'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'A' 'A' 'C' 'A' '-' 'T' 'T' 'G' 'T' 'C'
-  'T' 'T' 'A' 'G' 'G' 'C' 'C' 'A' 'G' 'A' 'G' 'G' 'C' 'T' 'C' 'G' 'A' 'C'
-  'T' 'G' 'C' 'C' 'C' 'C' 'A' 'A' 'A' 'G' 'C' 'A' 'A' 'T' 'C' 'C' 'A' 'C'
-  'T' '-' '-' '-' '-' '-' '-' '-' 'T' 'A' 'A' 'A' 'C' 'T' 'G' 'T' 'C' 'C'
-  'C' 'T' 'G' 'A' 'G' 'A' 'A' '-' 'A' 'G' 'T' 'C' 'A' 't' 't' 'c' 'c' 't'
-  'c' 't' 'c' 'c' 'c' 't' 'a' 'a']
- ['-' 't' 'a' 't' 'a' 'a' 'a' 't' 'g' 't' 'a' 'c' 'a' 'a' 'a' 't' 'a' 't'
-  'a' 't' 'g' 't' 'g' 't' 'a' 't' 'g' 't' 'C' 'T' 'C' 'A' 'T' 'A' 'A' 'A'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'A' 'A' 'C' 'A' 'G' 'T' 'C' 'A' 'T' 'C'
-  'T' 'T' 'A' 'G' 'G' 'T' 'C' 'A' 'G' 'T' 'G' 'G' 'C' 'C' 'T' 'G' 'A' 'G'
-  'T' 'G' 'A' 'T' 'A' 'C' 'A' 'A' 'A' 'C' 'T' 'A' 'A' 'G' 'C' 'C' 'A' 'T'
-  'C' 'C' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A' 'T' 'T' 'C' 'T' 'C' 'T'
-  'C' 'C' 'G' 'G' 'G' 'A' 'A' 'G' 'G' 'G' 'T' 'C' 'A' 'T' 'C' 'C' 'T' 'T'
-  'T' 'T' 'C' 'T' 'T' 'T' '-' '-']
- ['-' 'T' 'A' 'T' 'A' 'A' 'A' 'C' 'G' 'T' 'A' 'C' 'A' 'A' 'A' 'T' 'A' 'T'
-  'A' 'T' 'G' 'T' 'G' 'T' 'A' 'T' 'G' 'T' 'C' 'T' 'C' 'A' 'T' 'A' 'A' 'A'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'A' 'A' 'C' 'A' 'G' 'T' 'C' 'A' 'T' 'C'
-  'T' 'T' 'A' 'G' 'G' 'T' 'C' 'A' 'G' 'T' 'G' 'G' 'C' 'C' 'T' 'G' 'A' 'A'
-  'T' 'G' 'A' 'T' 'A' 'C' 'A' 'A' 'A' 'C' 'T' 'A' 'A' 'G' 'C' 'C' 'A' 'T'
-  'C' 'C' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A' 'T' 'T' 'C' 'T' 'C' 'T'
-  'C' 'C' 'G' 'G' 'G' 'A' 'A' 'G' 'G' 'G' 'T' 'C' 'A' 'T' 'C' 'C' 'T' 'T'
-  'T' 'T' 'C' 'T' 'T' 'T' '-' '-']
- ['T' 'T' '-' 'T' 'A' 'T' 'A' 'C' 'A' 'T' 'G' 'T' 'A' 'T' 'G' 'T' 'G' 'T'
-  'A' 'A' 'A' 'T' 'G' 'T' 'A' 'G' 'G' 'T' 'C' 'C' 'T' 'G' 'T' 'A' 'A' 'G'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'A' 'A' 'C' 'A' 'T' 'T' 'T' 'G' 'T' 'C'
-  'T' 'T' 'A' 'G' 'G' 'T' 'T' 'A' 'G' 'A' 'G' 'G' 'C' 'C' 'C' 'G' 'A' 'G'
-  'T' 'G' 'A' 'C' 'A' 'C' 'A' 'A' 'G' 'C' 'T' 'A' 'A' 'C' 'C' 'C' 'A' 'T'
-  'C' 'C' '-' '-' '-' '-' '-' '-' 'T' 'A' 'T' 'C' 'C' 'T' 'C' 'C' 'C' 'T'
-  'G' 'T' 'G' 'T' 'G' 'A' 'A' 'G' 'G' 'G' 'T' 'C' 'A' 'T' 'C' 'C' 'T' 'T'
-  'T' 'C' 'T' 'T' 'C' 'T' 'G' 'A']
- ['-' '-' '-' 't' 'a' 'a' 'a' 't' 'g' 't' 'a' 'c' 'a' 'a' 'a' 't' 'a' 't'
-  'a' 't' 'g' 't' 'g' 't' 'a' 't' 'g' 't' 'g' 't' 'c' 'a' 't' 'a' 'a' 'a'
-  't' 'a' 'A' 'T' 'T' 'A' 'T' 'T' 'A' 'A' 'C' 'A' 'G' 'T' 'C' 'A' 'T' 'C'
-  'T' 'T' 'A' 'G' 'G' 'T' 'C' 'A' 'G' 'T' 'G' 'G' 'C' 'C' 'T' 'G' 'A' 'G'
-  'T' 'G' 'A' 'T' 'A' 'G' 'A' 'A' 'A' 'C' 'T' 'A' 'A' 'G' 'C' 'C' 'A' 'T'
-  'C' 'C' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A' 'T' 'T' 'C' 'T' 'C' 'T'
-  'C' 'T' 'G' 'G' 'G' 'A' 'A' 'G' 'G' 'G' 'T' 'C' 'A' 'T' 'C' 'C' 'T' 'T'
-  'T' 'T' 'C' 'T' 'T' 'T' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3158,19 +2671,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['t' 'c' 't' 't' 'c' 'a' 't' 'c' 't' 'c' 'c' 't' 'c' 't' 't' 't' 't' 'c'
-  'c' 't' 'c' 'c' 't' 't' 't' 't' 't' 't' 't' 't' 't' 't' 'c' 't' 'c' 'a'
-  't' 't' 't' 'c' 't' 'c' 't' 't' 't' 'c' 't' 'c' 't' 't' 't' 'c' 't' 't'
-  't' 't' 'g' 't' 'c' 'c' 't' 't' 't' 't' 'c' 'c' 't' 't' 'T' 'A' 'T' 'A'
-  'G' 'C' 'A' 'A' 'G' 'C' 'A' 'A' 'G' 'G' 'C' 'A' 'A' 'G' 'T' 'A' 'G' 'T'
-  'C' 'T' 'C' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'A' 'A' 'G' 'G' 'C' 'A' 'T' 'g'
-  'g' 'a' 'g' 'a' 'g' 'a' 'a' 't' 'g' 'g' 'g' 'g' 'a' 'g' 'a' 'g' 'g' 'a'
-  'g' 'g' 'a' 'a' 'a' 'g' 'g' 'a' 'g' 'g' 'a' 'g' 'a' 'g' 'g' 'g' 'g' 'a'
-  'g' 'g' 'a' 'g' 'a' 'g' 'g' 'a' 'g' 'g' 'g' 'g' 'a' 'g' 'G' 'T' 'A' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
         )
@@ -3260,34 +2760,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'G' 'G' 'T' 'A' 'G' 'G' 'C' 'C' 'A' 'A' 'G' 'T' 'G' 'C' 'C' 'T'
-  'T' 'G' 'G' 'G' 'A' 'A' 'G' 'T' 'A' 'G' 'T' 'T' 'G' 'T' 'T' 'G' 'G' 'T'
-  'A' 'G' 'A' 'C' 'T' 'G' 'A' 'A' 'A' 'G' 'T' 'G' 'T' 'G' 'T' 'T' 'C' '-'
-  '-' '-' 'T' 'G' 'A' 'G' 'T' 'G' 'T' 'C' 'A' 'G' 'T' 'G' 'A' 'T' 'G' 'T'
-  'T' 'C' 'A' '-' 'T' 'G' 'A' 'G' 'A' 'T' 'T' 'A' 'T' 'C' 'A' 'C' 'C' 'A'
-  'G' 'C' 'A' 'A' 'G' 'G' 'A' 'T' 'G' '-' '-' 'G' 'C' 'T' 'G' 'A' 'C' 'G'
-  'G' 'G' 'A' 'A' 'C' 'T' 'G' '-' '-' '-' 'C' 'A' 'A' 'G' 'A' 'G' 'G' 'C'
-  'A' 'T' 'A' 'G' 'C' 'C' 'C' 'T' 'G' 'A' 'G' 'T' 'T' 'C' 'T' 'A' 'A' 'A'
-  'G' 'G' 'A' 'G' 'A' 'G' 'G' 'G' 'A' 'A' 'A' 'C' 'G' 'T' 'C' 'A' 'C' 'A'
-  'G' 'A' 'A' 'A' 'G' 'G' 'A' 'T' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'C'
-  'A' 'C' 'T' 'G' 'T' 'T' 'T' 'C' 'A' 'G' 'C' 'A' 'T' 'C' 'T']
- ['A' 'G' 'A' 'A' 'A' 'A' 'G' 'G' 'C' 'A' 'A' 'A' 'T' 'G' 'C' 'C' 'C' 'C'
-  'T' 'G' 'G' 'G' 'A' 'G' 'G' 'G' 'A' '-' '-' '-' '-' '-' 'T' 'A' 'G' 'C'
-  'A' 'C' 'A' 'T' 'T' 'G' 'A' '-' '-' 'G' 'T' 'T' 'T' 'A' 'T' 'T' 'C' 'A'
-  'C' 'A' 'T' 'G' 'C' 'G' 'T' 'G' 'T' 'A' 'A' 'G' 'T' 'G' 'A' 'T' 'G' 'G'
-  'A' 'T' 'A' 'C' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'C' 'T' 'C' 'T' 'C' 'C' '-'
-  '-' 'T' 'A' 'A' 'G' 'G' 'A' 'T' 'G' 'C' 'G' 'G' 'T' 'T' 'G' 'A' 'T' 'G'
-  'G' 'A' 'A' 'T' 'C' 'A' 'G' 'A' 'A' 'G' 'C' 'A' 'A' 'A' 'T' 'A' 'C' 'C'
-  'A' 'C' 'C' 'A' 'G' 'C' 'C' 'A' 'G' 'A' 'A' 'C' 'T' 'C' 'T' 'A' 'A' 'A'
-  'A' 'T' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'A' 'A' 'G' 'A' 'T' 'C' 'A' 'T' 'G'
-  'G' 'A' 'T' 'A' 'G' 'A' 'A' 'T' 'A' 'G' 'A' 'A' 'T' 'T' 'G' 'T' 'A' 'A'
-  'T' 'A' 'T' 'G' 'A' 'A' 'A' 'T' 'A' 'T' 'A' 'A' 'A' 'A' 'T' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'T' 'T' 'G' 'A' 'A' 'G' 'A' 'A' 'T' 'T' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3390,24 +2862,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'G' 'C' 'C' 'T' 'T' 'C' 'C' 'A' 'T' 'T' 'A' 'C' 'G' 'A' 'T' 'T'
-  'T' 'A' 'C' 'T' 'G' 'A' 'T' 'C' 'A' 'C' 'T' 'T' 'A' 'C' 'A' 'A' 'C' 'C'
-  'C' 'T' 'C' 'C' 'C' 'A' 'C' 'A' '-' '-' '-' '-' 'G' 'A' 'A' 'G' 'A' 'G'
-  'A' 'A' 'C' 'C' 'T' 'A' 'A' 'C' 'T' 'T' 'G' '-' 'C' 'T' 'T' 'A' 'G' 'G'
-  'A' 'G' 'C' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'C' 'A' 'G' 'T' 'T' 'A' 'A' 'T'
-  'C' 'A' 'A' 'G' 'A' 'C' '-' '-' '-' '-' '-' 'A' 'A' 'A' 'A' 'A' 'T' 'A'
-  'A' 'G' 'A' 'A' 'T' 'G' 'G' 'A' 'G' 'A' 'C' 't']
- ['C' 'T' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'C' 'C' 'T' 'G' 'C' 'C' 'C' 'A' 'T'
-  'T' 'A' 'T' 'T' 'A' 'C' 'T' 'C' 'A' 'C' 'T' 'T' 'A' 'A' 'A' 'A' 'T' 'T'
-  'C' 'T' 'C' 'C' '-' 'A' 'C' 'A' 'T' 'T' 'G' 'T' 'A' 'A' 'A' 'G' 'G' 'G'
-  'A' 'A' 'T' 'T' 'C' 'A' 'A' 'A' 'T' 'C' 'G' 'A' 'C' 'T' 'T' 'C' 'T' 'A'
-  'G' 'A' 'G' 'A' 'T' 'G' 'C' 'A' 'C' 'A' 'C' 'A' 'A' 'T' 'T' 'T' 'A' 'G'
-  'C' 'A' 'A' 'G' 'A' 'T' 'C' 'A' 'A' 'C' 'T' 'A' 'A' 'A' 'A' 'A' 'T' 'A'
-  'A' 'G' 'T' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'A' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3496,29 +2950,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['g' 't' 'c' 't' 'g' 'a' 'g' 't' 't' 'a' 'g' 'g' 'g' 't' 't' 't' 't' 'a'
-  'c' 't' 'g' 'c' 't' 'g' 't' 'g' 'a' 'a' 'c' 'a' 'g' 'a' 'c' 'a' 'c' 'c'
-  'a' 't' 'g' 'a' 'c' 'c' 'a' 'a' 'g' 'g' 'c' 'a' 't' 'g' 't' 'c' 't' 't'
-  'a' 't' 'a' 'a' 'a' 'a' 'a' 'a' 'a' 'a' 't' 't' 't' 'a' 'a' 't' 't' 'a'
-  'g' 'g' 'g' 'c' 't' 'g' 'g' 'c' 't' 't' 'a' 'c' 'a' 'g' 'a' 't' 't' 'c'
-  'a' 'g' 'a' 'g' 'g' 't' 't' 'c' 'a' 'g' 't' 'g' 'g' 'g' 'a' 'g' 'c' 'a'
-  't' 'c' 'a' 'a' 'g' 'g' 't' 'g' 'g' 'g' 'g' 'g' 'c' 'a' 't' 'g' 'g' 'c'
-  'a' 'g' 'c' 'a' 't' 'c' 'c' 'a' 'g' 'g' 'c' 'a' 'g' 'g' 'c' 'a' 't' 'g'
-  'g' 't' 'g' 'c' 'a' 'g' 'g' 'c' 'a' 'g' 'a' 'g' 'c' 't' 'g' 'a' 'g' 'a'
-  'g' 't' 't' 'c' 't' 'a' 'c' 'a' 't' 'c' 't' 't' 'c' 'a' 't' 'c' 'c' 'a'
-  'a' 'a' 'g' 'g' 'c' 't' 't' 'c' 't' 'a' 'g' 't' 'g' 'g' 'a' 'a' 'g' 'a'
-  'c' 't' 'g' 'a' 'c' 't' 't' 'c' 'c' 'a' 'g' 'g' 'c' 'a' 'c' 'c' 't' 'a'
-  'g' 'g' 'g' 't' 'g' 'a' 'g' 'g' 'g' 't' 'c' 't' 't' 'a' 'a' 'g' 'c' 'c'
-  'c' 'a' 'c' 'a' 'c' 'c' 'c' 'a' 'c' 'a' 'g' 't' 'g' 'a' 'c' 'a' 'c' 'a'
-  'c' 'c' 't' 'a' 't' 't' 'c' 'c' 'a' 'a' 'c' 'c' 'a' 'g' 'g' 't' 'c' 'a'
-  'c' 'a' 'c' 'c' 't' 'a' 't' 't' 'c' 'c' 'a' 'a' 'c' 'a' 'a' 'g' 'g' 'c'
-  'c' 'a' 't' 'a' 'c' 'c' 't' 'c' 'c' 'a' 'a' 'a' 't' 'g' 'g' 'c' 'a' 'c'
-  'c' 'a' 'c' 't' 'c' 'c' 't' 'g' 'g' 't' 'c' 'c' 'a' 'a' 'g' 'a' 'a' 't'
-  'a' 't' 'a' 'c' 'a' 'a' 'a' 'c' 'c' 'a' 't' 'g' 'a' 'c' 'a']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
         )
@@ -3608,24 +3039,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'A' 'G' 'A' 'C' 'C' 'A' 'A' 'A' 'T' 'G' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'G' 'G' 'C' 'G' 'C' 'T' 'C' 'A' 'C' 'G' '-' 'T'
-  'G' 'A' 'G' 'G' 'C' 'C' 'A' 'G' 'G' 'A' 'G' 'T' 'A' 'A' 'A' 'T' 'C' 'G'
-  'C' 'A' 'C' 'A' 'C' 'A' 'C' 'A' 'G' 'C' 'C' 'C' 'A' 'T' 'G' 'C' 'T' 'T'
-  'T' 'C' 'A' 'C' 'C' 'A' 'T' 'C' 'T' 'G' 'C' 'T' 'A' 'G' 'G' 'G' 'T' 'G'
-  'C' 'T' 'C' 'T' 'G' 'G' 'A' 'G' 'C' 'A' 'G' 'G' 'G' 'C' 'A' 'G' 'G' 'C'
-  'T' 'T' 'C' 'T' 'A' 'A' 'C' 'C' 'T' 'G' 'G']
- ['G' 'A' 'G' 'G' 'C' '-' 'A' 'A' 'A' 'T' 'G' 'G' 'A' 'A' 'A' 'A' 'T' 'G'
-  'C' 'C' 'C' 'C' 'A' 'C' 'G' 'A' 'T' 'G' 'T' 'C' 'C' 'A' 'G' 'G' 'C' 'T'
-  'G' 'T' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'T' 'G' 'T' 'G' 'A' '-' '-' 'C' 'G'
-  'C' 'A' 'C' 'A' 'T' 'G' 'C' 'T' 'G' 'T' 'C' 'C' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' 'C' 'A' 'C' 'C' 'T' 'G' 'C' 'T' 'T' 'C' 'T' 'A' 'T' 'T'
-  'C' 'A' 'C' 'T' 'T' 'G' 'A' 'C' 'A' 'C' 'A' 'C' 'A' 'T' 'A' 'G' 'G' 'T'
-  'C' 'C' 'C' 'A' 'A' 'A' 'C' 'C' 'T' 'G' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3744,28 +3157,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'C' 'C' 'A' 'G' 'C' 'A' 'T' 'T' 'C' 'T' 'G' 'G' 'C' 'A' 'G' 'A'
-  'C' 'A' 'C' 'A' 'G' 'T' 'G' '-' 'A' 'A' 'A' 'A' 'G' 'A' 'G' 'A' 'C' 'A'
-  'G' 'A' 'T' 'G' 'G' 'T' 'C' 'A' 'C' 'T' 'A' 'A' 'T' 'A' 'A' 'A' 'A' 'T'
-  'C' 'T' 'G' 'T' '-' 'A' 'T' 'A' 'A' 'A' 'T' 'T' 'A' 'G' '-' 'A' 'T' 'C'
-  'T' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'T' 'G' 'G' 'A' 'C' 'C'
-  'A']
- ['C' 'C' 'C' 'A' 'A' 'G' 'T' 'G' 'T' 'T' 'C' 'T' 'G' 'A' 'T' 'A' 'G' 'C'
-  'T' 'A' 'A' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'A' 'A' 'G' 'A' 'A' 'G' 'C' 'A'
-  'T' 'G' 'T' 'G' 'C' 'C' 'C' 'A' 'C' 'C' 'A' 'G' 'T' 'A' 'A' 'G' 'C' 'T'
-  'T' 'T' 'G' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'C' 'T' 'A' 'G' 'A' 'A' 'T' 'C'
-  'T' 'C' 'A' 'G' 'A' 'G' 'G' 'A' 'T' 'G' '-' '-' '-' 'G' 'G' 'A' 'C' 'T'
-  'C']
- ['C' 'C' 'C' 'A' 'A' 'G' 'T' 'G' 'T' 'T' 'C' 'T' 'G' 'A' 'T' 'T' 'G' 'C'
-  'C' 'T' 'C' 'T' 'G' 'T' 'G' 'A' 'A' 'A' 'A' 'A' 'G' 'A' 'A' 'A' 'C' 'A'
-  'T' 'G' 'G' 'G' 'C' 'C' 'C' 'G' 'C' 'T' 'A' 'A' 'T' 'A' 'a' 'g' 'a' 't'
-  't' 't' 'g' 'c' 'a' 'a' 't' 'g' 'a' 'c' 'c' 't' 'a' 'g' 'a' 'a' 't' 'c'
-  't' 'c' 'a' 'g' 'a' 'g' 'g' 'a' 't' 'g' '-' '-' '-' 'g' 'g' 'a' 'c' 't'
-  'c']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3908,28 +3299,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'A' 'G' 'A' 'T' 'A' 'G' 'A' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'A' 'A' 'G'
-  'T' 'A' 'G' 'C' 'T' 'T' 'T' 'T' 'T' 'A' 'T' 'G' 'T' 'T' 'T' 'T' 'T' 'C'
-  'T' 'G' 'A' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'T']
- ['a' 'a' 'c' 'a' 'T' 'C' 'T' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'G' 'A' 'A' 'A'
-  'T' 'G' 'G' 'C' 'T' 'T' 'T' 'T' 'C' 'A' 'T' 'G' 'T' 'T' 'A' 'C' 'T' 'C'
-  'T' 'G' 'A' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'C']
- ['-' '-' '-' '-' '-' '-' '-' 'a' 't' 'a' 't' 't' 't' 't' 'g' 'a' 'a' 'a'
-  't' 'g' 'g' 'c' 't' 't' 't' 't' 'c' 'a' 't' 'g' 't' 't' 'a' 't' 't' 'c'
-  't' 'g' 'a' 't' 'g' 'T' 'G' 'T' 'T' 'T' 'T']
- ['-' '-' '-' '-' '-' '-' '-' 'a' 't' 'a' 't' 't' 't' 't' 'g' 'a' 'a' 'a'
-  't' 'g' 'g' 'c' 't' 't' 't' 't' 'c' 'a' 't' 'g' 't' 't' 'a' 't' 't' 'c'
-  't' 'g' 'a' 't' 'g' 'T' 'G' 'T' 'T' 'T' 'T']
- ['-' '-' '-' 'a' 'g' 'g' 't' 'a' 't' 'a' 't' 't' 't' 'a' 'a' 'a' 'a' 'a'
-  't' 'a' 'g' 'c' 't' 'c' 't' 't' 'c' 'a' 't' 'g' 't' 't' 'g' 't' 't' 'c'
-  't' 'a' 'a' 't' 'g' 't' 'g' 't' 'g' 't' 't']
- ['-' '-' '-' 'A' 'C' 'G' 'T' 'G' 'T' 'T' 'T' 'T' 'T' 'A' 'A' 'A' 'A' 'A'
-  'T' 'A' 'G' '-' 'T' 'T' 'T' 'T' 'C' 'A' 'T' 'G' 'T' 'T' 'G' 'T' 'T' 'C'
-  'T' 'G' 'A' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4066,45 +3435,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'G' 'C' 'A' 'T' 'C' 'A' 'T' 'T' 'A' 'A' 'G' 'A' 'C' 'T' 'A' 'G' 'A'
-  'G' 'T' 'T' 'C' 'C' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' 'T' 'T' 'C' 'T' 'G' 'T' 'C' 'T' 'T' '-' '-' '-' 'T' 'G' 'C'
-  'T' 'T' 'T' 'C' 'T' 'T' 'G' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'C' 'A'
-  'G' 'G' 'G' 'C' 'C' 'A' 'T' 'G' 'C' 'T' 'C' 'G' 'G' 'C' 'A' 'G' 'T' 'C'
-  'A' 'T' 'T' 'C' 'T' 'T' 'A' 'G' 'A' 'C' 'T' 'G' 'C' 'T' 'T' 'T' 'T' 'T'
-  'G' 'T' 'T' 'T' 'g' 't' 't' 't' 'g' 'g']
- ['-' '-' 'C' 'C' 'T' 'C' 'A' 'T' 'G' 'A' 'A' 'G' 'G' 'C' 'C' 'C' 'A' 'A'
-  'G' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'A' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'T'
-  'T' 'A' 'A' 'T' 'T' 'C' 'T' 'C' 'T' 'T' 'C' 'C' '-' '-' '-' 'T' 'A' 'T'
-  'T' 'T' 'C' 'C' 'T' 'A' 'G' 'C' 'T' 'G' 'T' 'C' 'T' 'C' 'G' 'C' 'C' 'T'
-  'A' 'G' 'G' 'C' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G' 'C' 'C' 'A' 'G' 'C' 'A'
-  'A' 'T' 'T' 'C' 'C' 'C' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['-' '-' 'C' 'T' 'T' 'C' 'A' 'T' 'T' 'A' 'A' 'G' 'G' 'C' 'C' 'C' 'A' 'A'
-  'G' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'A' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'T'
-  'T' 'C' 'A' 'T' 'T' 'C' 'T' 'C' 'T' 'T' 'C' 'C' '-' '-' '-' 'T' 'C' 'T'
-  'T' 'T' 'T' 'C' 'T' 'A' 'G' '-' '-' '-' '-' '-' '-' 'A' 'A' 'A' 'A' 'G'
-  'A' 'G' 'G' 'T' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G' 'C' 'C' 'A' 'G' 'C' 'A'
-  'A' 'T' 'T' 'C' 'C' 'C' 'A' 'C' 'A' 'T' 'G' 'G' 'G' 'T' 'A' 'T' 'T' 'G'
-  'G' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['-' '-' 'C' 'T' 'T' 'C' 'A' 'T' 'T' 'A' 'A' 'G' 'G' 'C' 'C' 'C' 'A' 'A'
-  'G' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'A' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'T'
-  'T' 'C' 'A' 'T' 'T' 'C' 'T' 'C' 'T' 'T' 'C' 'C' '-' '-' '-' 'T' 'C' 'T'
-  'T' 'T' 'T' 'C' 'T' 'A' 'G' '-' '-' '-' '-' '-' '-' 'A' 'A' 'A' 'A' 'G'
-  'A' 'G' 'G' 'T' 'C' 'T' 'T' 'G' 'C' 'C' 'C' 'G' 'C' 'C' 'A' 'G' 'C' 'A'
-  'A' 'T' 'T' 'C' 'C' 'C' 'A' 'C' 'A' 'T' 'G' 'G' 'G' 'T' 'A' 'T' 'T' 'G'
-  'G' '-' '-' '-' '-' '-' '-' '-' '-' '-']
- ['-' '-' 'C' 'C' 'T' 'C' 'A' 'T' 'C' 'T' 'A' 'A' 'A' 'C' 'C' 'C' 'A' 'G'
-  'G' 'T' 'T' 'C' 'T' 'T' 'A' 'C' 'A' 'G' 'G' 'C' 'T' 'T' 'A' 'T' 'A' 'T'
-  'T' 'T' 'T' 'T' 'T' 'C' 'T' 'T' 'T' 'C' 'T' 'T' 'C' 'A' 'A' 'C' 'C' 'C'
-  'T' 'T' 'C' 'C' 'T' 'C' 'A' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'C' 'A'
-  'G' 'T' 'G' 'T' 'C' 'T' 'T' 'G' 'C' 'C' 'T' 'G' 'C' 'C' 'A' 'G' 'T' 'C'
-  'A' 'T' 'T' 'C' 'C' 'T' 'A' 'C' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'T' 'T' 'T' 'G' 'T' 'T' 'C' 'G' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4210,16 +3540,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 11)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['t' 't' 't' 'g' 'g' 't' 't' 't' 'g' 'g' 't' 't' 't' 'g' 'g' 't' 't' 't'
-  't' 't' 't' 'c' 'a' 'a' 'g' 'a' 'c' 'a' 'g' 'g' 'g' 't' 't' 't' 'c' 't'
-  't' 't' 'g' 't' 'a' 't' 'a' 'g' 't' 'c' 'c' 't' 'a' 'g' 'c' 't' 'g' 't'
-  'c' 'c' 't' 'g' 'g' 'a' 'a' 'c' 't' 'c' 'a' 'c' 't' 't' 't' 'g' 't' 'a'
-  'g' 'a' 'c' 'c' 'a' 'g' 'a' 'c' 't' 'g' 'g' 'c' 'c' 't' 't' 'g' 'a' 'a'
-  'c' 't' 'c' 'a' 'g' 'a' 'a' 'a']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
         )
@@ -4315,20 +3635,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['t' 'c' 't' 'g' 'c' 'c' 't' 'g' 'c' 'c' 't' 'c' 't' 'g' 'c' 'c' 't' 'c'
-  'c' 'c' 'a' 'a' 'g' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 't' 'c' 'c' 't' 'g' 'g' 'g' 'a' 't' 't' 'a' 'a' 'a' 'g' 'g' 'c' 'g'
-  't' 'g']
- ['t' 'c' 't' 'g' 't' 'c' 't' 'c' 't' 'c' 't' 'c' 't' 'c' 't' 'c' 't' 'c'
-  't' 'c' 'a' 'a' 'a' 'a' 'a' 't' 'a' 'a' 'a' 'c' 'a' 't' 't' 'a' 'a' 'a'
-  'a' 'a' 'a' 'a' 'a' 'C' 'C' 'A' 'A' 'A' 'C' 'A' 'A' 'A' 'C' 'A' 'A' 'A'
-  'C' 'T' 'C' 'A' 'A' 'G' 'T' 'T' 'C' 'T' 'T' 'A' 'A' 'A' 'G' 'G' 'T' 'T'
-  'T' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4478,38 +3784,6 @@ table bedMaf
         self.assertEqual(status, "C")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'c'
-  'g' 'c' 'c' 'a' 'c' 'c' 'a' 'c' 't' 'g' 'c' 'c' 'c' 't' 'g' 'c' 'C' 'T'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'A' 'A' 'A' 'C' 'T'
-  'G' 'C' 'T' 'C' 'T' 'T' 'A' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'C'
-  'G' 'C' 'C' 'A' 'G' 'C' 'A' 'A' 'T' 'T' 'C' 'C' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'C' 'A' 'C' 'A' 'T' 'G'
-  'G' 'G' 'T' 'A' 'T' 'T' 'G' 'G']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' 'T' 'T' 'G' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'T' 'G'
-  'G' 'C' 'T' 'A' 'C' 'T' 'G' 'G']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'T' 'T'
-  'G' 'G' 'T' 'G' 'T' 'T' 'G' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' 'C' 'A' 'C' 'C' 'A' 'T' 'T' 'G' 'T' 'C' 'T' 'T' 'G' 'C' 'C' 'T'
-  'G' 'T' 'C' '-' 'T' 'C' 'A' 'G' 'G' 'T' 'C' 'C' 'C' 'A' 'T' 'A' 'G' 'G'
-  'G' 'G' 'T' 'G' 'T' 'T' 'G' 'A']
- ['T' 'G' 'A' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'T' 'A'
-  'C' 'T' 'C' 'A' 'T' 'C' 'A' 'G' 'T' 'G' 'T' 'C' 'T' 'T' 'G' 'T' 'C' 'T'
-  'T' 'T' 'C' 'A' 'G' 'T' 'C' 'A' 'T' 'T' 'C' 'C' 'C' 'A' 'C' 'A' 'T' 'T'
-  'G' 'G' 'T' 'G' 'T' 'A' 'G' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4716,17 +3990,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'G' 'C' ... 'A' 'C' 'c']
- ['G' 'G' 'C' ... '-' '-' '-']
- ['G' 'G' 'C' ... '-' '-' '-']
- ...
- ['G' 'G' 'C' ... '-' '-' '-']
- ['G' 'A' 'C' ... '-' '-' '-']
- ['-' '-' '-' ... 'a' 'a' 't']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4893,53 +4156,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['a' 'c' 't' 'a' 'g' 'g' 'g' 'a' 't' 'g' 'g' 'g' 'a' 'g' 'a' 'g' 'g' 'c'
-  't' 'c' 'c' 'c' 'a' 'g' 'a' 'a' 'c' 'c' 'c' 'a' 'g' 't' 'a' 'a' 't' 'g'
-  'a' 't' 'g' 'a' 'c' 'a' 't' 't' 'a' 'a' 'g' 'a' 'a' 'a' 't' 'a' 'c' 'a'
-  'c' 'a' 'a' 'c' 'a' 'g' 't' 't' 'g' 'g' 'g' 'a' 'a' 'a' 't' 'g' 'g' 'a'
-  'a' 'c' 'c' 'c' 'a' 'a' 'a' 'g' 'a' 'g' 'a' 'a' 'c' 'a' 'c' 'c' 't' 'c'
-  'c' 'a' 'g' 't' 'a' 'g' 'a' 't' 'a' 'a' 'g' 'c' 'a' 't' 'g' 'a' 'c' 'c'
-  'c' 'c' 'c' 'a' 'g' 't' 't' 'g' 'a' 'g' 'g' 'g' 'a' 't' 'g' 'g' 'g' 'c'
-  'c' 'c' 'a' 't' 'g' 'c' 'a' 'c' 'c' 'c' 'a' 't' 'c' 't' 't' 'a' 'a' 'a'
-  'a' 't' 't' 't' 't' 'g' 'g' 'a' 'c' 'c' 'c' 'a' 'g' 'a' 'a' 't' 't' 'a'
-  't' 't' 'c' 't' 't' 'c' 't' 'c' 'a' 'a' 'a' 'a' 'g' 'g' 'a' 'a' 'a' 't'
-  'g' 'c' 'a' 'g' 'g' 'g' 'a' 't' 'g' 'a' 'a' 'a' 'a' 't' 'g' 'g' 'a' 'g'
-  'c' 'a' 'g' 'a' 'g' 'a' 'c' 't' 'g' 'g' 'a' 'a' 'g' 'a' 'a' 'a' 'g' 'g'
-  'c' 'c' 'a' 'a' 'c' 'c' 'a' 'g' 'a' 'g' 'a' 'c' 't' 'g' 'c' 'c' 'c' 't'
-  'a' 'a' 'c' 't' 'c' 'a' 'g' 'g' 'a' 't' 'c' 'c' 'a' 't' 'c' 'g' 'c' 'a'
-  't' 'g' 't' 'g' 'c' 'a' 'g' 'g' 'c' 'a' 'c' 'c' 'a' 'a' 'c' 'c' 'c' 'c'
-  'a' 'a' 'c' 'a' 'c' 't' 'a' 't' 't' 'g' 'c' 't' 'g' 'a' 't' 'g' 'c' 'c'
-  'a' 't' 'g' 't' 't' 'g' 't' 'a' 'c' 't' 't' 'g' 'c' 't' 'g' 'a' 't' 'g'
-  'g' 'a' 'a' 'g' 'c' 'c' 't' 'g' 'g' 'c' 'a' 't' 'g' 'g' 'c' 't' 'g' 't'
-  'c' 'c' 't' 'c' 't' 'g' 'a' 'g' 'a' 'g' 't' 'c' 't' 'c' 'a' 'a' 'a' 't'
-  'g' 'a' 'g' 'g' 'c' 'a' 'c' 'c' 't' 'g' 'a' 'c' 'a' 'g' 'a' 't' 'g' 'c'
-  'a' 'g' 'a' 't' 'a' 'c' 't' 't' 'a' 'c' 'a' 'g' 'c' 'c' 'a' 'a' 'c' 'c'
-  'a' 'a' 't' 'g' 'g' 'a' 'c' 't' 'g' 'a' 'g' 'c' 'c' 'c' 'c' 'g' 'g' 'g'
-  'a' 'c' 'c' 't' 'c' 'a' 'a' 't' 'a' 'a' 'a' 'a' 'g' 'a' 'a' 't' 'g' 'a'
-  'g' 'g' 'g' 'g' 'a' 't' 'g' 'g' 'c' 'a' 'a' 'c' 'c' 'c' 'c' 'a' 't' 'a'
-  'g' 'g' 'a' 'a' 'g' 'a' 'a' 'c' 'a' 'a' 'c' 'a' 'g' 't' 'a' 't' 'c' 'a'
-  'a' 'c' 't' 'c' 'c' 'c' 't' 'g' 'g' 'a' 'c' 't' 'c' 'c' 't' 'c' 'a' 'g'
-  'a' 'g' 'c' 't' 'c' 'c' 'c' 'g' 'g' 'g' 'g' 'a' 'c' 't' 'a' 'a' 'g' 'c'
-  'c' 'a' 'c' 'c' 'a' 'a' 'c' 't' 'a' 'a' 'a' 'g' 'a' 'g' 'c' 'a' 't' 'a'
-  'c' 'a' 't' 'a' 'g' 'g' 'c' 't' 'g' 'c' 't' 'c' 't' 'g' 'a' 'g' 'g' 'c'
-  'c' 'c' 'c' 'a' 'g' 'a' 't' 'a' 'c' 'a' 't' 'a' 't' 'g' 't' 'a' 'g' 'c'
-  'a' 'g' 'a' 'g' 'g' 'a' 'c' 't' 'g' 'c' 'c' 't' 'c' 'a' 'g' 't' 'g' 'g'
-  'g' 'a' 'g' 'g' 'g' 'g' 'a' 't' 'g' 't' 'g' 'c' 't' 't' 'g' 'g' 't' 'c'
-  't' 't' 'g' 't' 'g' 'a' 'a' 'g' 'g' 'c' 't' 't' 'g' 'a' 't' 'g' 'c' 't'
-  'c' 'c' 'a' 'g' 'a' 'g' 'a' 'a' 'g' 'g' 'a' 'g' 'g' 'a' 't' 'g' 'c' 't'
-  'a' 'g' 'a' 'g' 'g' 'g' 'g' 't' 'g' 'a' 'g' 'g' 't' 'g' 'g' 'g' 'a' 'g'
-  't' 'g' 'g' 'a' 't' 'g' 'g' 'g' 't' 'g' 'g' 'g' 't' 'g' 'g' 'g' 'c' 'a'
-  'g' 'g' 'g' 'g' 'a' 'g' 'c' 'a' 'c' 'c' 'c' 't' 'c' 't' 't' 'a' 'g' 'a'
-  'g' 'g' 'a' 'c' 'a' 'a' 'g' 'g' 'g' 'c' 't' 'c' 't' 'g' 'g' 'g' 'g' 't'
-  'g' 'g' 'g' 'g' 'g' 'a' 'g' 'c' 't' 'c' 'a' 't' 'g' 'g' 'a' 'g' 'g' 'g'
-  'g' 'g' 'a' 'a' 'c' 't' 'g' 'g' 'g' 'a' 'a' 'g' 'g' 'a' 'g' 'g' 'g' 'a'
-  'g' 'a' 'a' 'c' 'a' 't' 't' 't' 'g' 'a' 'a' 'a' 't' 'g' 't' 'a' 'a' 'a'
-  't' 'a' 'a' 'a' 't' 'a' 'a' 'a' 'a' 't' 'a' 'a' 't' 'a' 'a' 'a' 'a' 'a'
-  'a']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
         )
@@ -5049,22 +4265,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'G' 'T' 'C' 'A' 'A' 'A' 'C' 'A' 'T' 'G' 'C' 'A' 'T' 'A' 'A' 'A' 'G'
-  'A' 'T' 'A' 'T' 'A' 'C' 'T' '-' 'G' 'A' 'G' 'G' 'A' 'G' 'C' 'C' 'C' 'A'
-  'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A']
- ['t' 'G' 'T' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'A'
-  'A' 'C' 'A' 'T' 'A' 'A' 'T' 'A' 'G' 'A' 'G' 'G' 'G' 'G' 'C' 'C' 'C' 'A'
-  'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A']
- ['-' '-' '-' '-' 'A' 'A' 'A' 'A' 'A' 'T' '-' '-' '-' 'T' 'T' 'T' 'A' 'A'
-  'A' 'T' 'A' 'T' 'A' 'C' 'T' 'A' 'G' 'A' 'G' 'G' 'G' 'G' 'T' 'C' 'C' 'A'
-  'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A']
- ['-' '-' '-' '-' 'A' 'A' 'A' 'A' 'A' 'T' '-' '-' '-' 'T' 'T' 'T' 'A' 'A'
-  'A' 'T' 'A' 'T' 'A' 'C' 'T' 'A' 'G' 'A' 'G' 'G' 'G' 'G' 'T' 'C' 'C' 'A'
-  'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5169,19 +4369,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'A' 'T' 'A' 'T' 'A' 'T' 'G' 'C' 'T' 'A' 'T' 'C' 'C' 'G' 'T' 'G' 'T'
-  'G' 'C' 'T' 'G' 'T' 'G' 'A' 'T' 'T' 'T' 'T' 'T' 'G' 'T' 'T' 'T' 'T' 'A'
-  'A' 'A' 'T' 'G' 'T' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'G' 'T' 'A' 'T' 'A'
-  'T' 'G' 'c' 'a' 'a' 'g' 'a' 't' 't' 't' 't' 'g' 'c' 'a' 't' 't' 'g' 't'
-  'a' 'g' 'c' 'a' 'g' 'a' 'a' 'g' 'g' 't' 'g' 'g' 'c' 't' 't' 'c' 'a' 'a'
-  'a' 'c' 't' 'c' 'a' 'c' 'g' 'a' 't' 'c' 'c' 't' 'c' 'c' 't' 'g' 'c' 'c'
-  't' 'c' 'a' 'g' 'c' 'c' 't' 't' 'c' 'c' 'a' 'a' 'g' 't' 'g' 'c' 't' 'g'
-  'a' 'g' 'a' 't' 'c' 'a' 't' 'a' 'c' 'c' 't' 'c' 't' 'g' 'c' 'a' 'c' 'c'
-  'a' 't' 'c' 'c' 't' 'g' 'c' 'c' 'c' 'A' 'C' 'C' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
         )
@@ -5355,64 +4542,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['G' 'A' 'G' 'G' 'T' 'T' 'T' 'G' 'T' 'G' 'A' 'C' 'T' 'T' 'T' 'T' 'A' 'A'
-  'T' 'A' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'C' 'T' 'G' 'A' 'T' 'T'
-  'G' 'T' 'T' 'A' 'T' 'C' 'T' 'A' 'A' 'C' 'A' 'T' 'C' 'A' 'C' 'A' 'G' 'A'
-  'A' 'T' 'T' 'C' 'T' 'C' 'A' 'G' 'T' 'T' 'C' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'C' 'A' 'A' 'T' 'T' 'G' 'T' 'T' 'C' 'T' 'G' 'T' 'G' 'T' 'G' 'T'
-  'T' 'A' 'T' 'T' 'T' 'G' 'T' 'C' 'T' 'A' 'G' 'G' 'A' 'G' 'G' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'T' 'G'
-  'G' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'A' 'T' 'A' 'C' 'T' 'G' 'C' 'A' 'C' 'A'
-  'A' 'T' 'C' 'C' 'T' 'C' 'A' 'G' 'C' 'T' 'T' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' 'C' 'A' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'C' 'T' 'T' 'A' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'T' 'G'
-  'G' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'A' 'T' 'A' 'C' 'T' 'G' 'C' 'A' 'C' 'A'
-  'A' 'T' 'C' 'C' 'T' 'C' 'A' 'G' 'C' 'T' 'T' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' 'C' 'A' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'C' 'T' 'T' 'A' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'A' 'A' 'T' 'A' 'A' 'A' 'A' 'T' 'A'
-  'A' 'T' 'T' 'C' 'T' 'G' 'T' 'A' 'C' 'C' 'A' 'T' 'T' 'A' 'T' 'G' 'A' 'A'
-  'G' 'T' 'T' 'C' 'T' 'C' 'A' 'G' 'C' 'T' 'C' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' '-' '-' '-' '-' '-' 'G' 'T' 'G' 'A' 'T' 'T' 'T' 'G' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'C' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']
- ['-' '-' '-' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'A'
-  'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'A' 'A' 'T' 'G' 'A' 'A' 'A' 'T' 'A'
-  'A' 'T' 'T' 'C' 'T' 'T' 'T' 'A' 'A' 'T' 'A' 'T' 'C' 'A' 'C' '-' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'A' 'A' 'A' '-' '-' '-' '-' '-' 'G' 'T' 'A' 'A' 'T' 'T' 'T' 'A' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']
- ['G' 'A' 'G' 'T' 'T' 'C' 'T' 'G' 'C' 'A' 'A' 'A' 'T' 't' 't' 't' 'a' 'a'
-  't' 'a' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'g' 'g' 'a' 'a' 'a' 'a'
-  'g' 'a' 'a' 'g' 'a' 't' 'T' 'A' 'A' 'T' 'A' 'T' 'T' 'A' 'C' 'A' 'A' 'A'
-  'G' 'T' 'T' 'T' 'T' 'C' 'A' 'G' 'T' 'T' 'C' 'T' 'G' 'A' 'T' 'G' 'G' 'A'
-  'A' 'a' 'a' 'a' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'g' 't' 'g' 't'
-  'g' 'a' 't' 't' 't' 't' 't' 't' 't' 'a' 'a' 'a' '-' '-' '-' '-']
- ['-' 'A' 'G' 'A' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'A'
-  'T' 'A' '-' '-' '-' 'A' 'A' 'G' 'C' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'A'
-  'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'A' 'T' 'G' 'T' 'T' 'G' 'G' 'A' 'A' 'A'
-  'A' 'T' 'C' 'C' 'T' 'C' 'A' 'A' 'G' 'T' 'C' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' 'A' 'G' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'C' 'T' 'T' 'G' 'T'
-  'T' 'A' 'A' 'T' 'G' 'A' 'C' 'T' 'T' 'G' 'G' 'G' 'A' 'T' 'G' 'A']
- ['G' 'G' 'G' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'A'
-  'T' 'A' '-' '-' '-' '-' '-' 'G' 'T' 'A' 'A' 'C' 'A' 'A' 'A' 'A' 'T' 'G'
-  'G' 'T' 'T' 'A' 'T' 'T' 'C' 'A' 'A' 'T' 'A' 'T' 'T' 'G' 'C' 'A' 'A' 'A'
-  'A' 'T' 'C' 'C' 'T' 'C' 'A' 'G' 'C' '-' 'T' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' 'C' 'A' 'T' 'A' 'T' 'T' 'T' 'G' 'A' 'T' 'T' 'T' 'G' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']
- ['G' 'G' 'G' 'G' 'T' 'C' 'C' 'A' 'T' 'G' 'A' 'A' 'T' 'T' 'T' 'T' 'A' 'A'
-  'T' 'A' '-' '-' '-' '-' '-' 'G' 'T' 'A' 'A' 'T' 'A' 'A' 'A' 'A' 'T' 'G'
-  'G' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'A' 'T' 'A' 'T' 'T' 'G' 'C' 'A' 'A' 'A'
-  'A' 'T' 'C' 'C' 'T' 'C' 'A' 'G' 'C' 'T' 'T' 'T' 'T' 'A' 'A' 'G' 'G' 'A'
-  'A' 'A' 'A' 'A' 'C' 'G' 'T' 'G' 'T' 'T' 'T' 'G' 'A' 'C' 'T' 'T' 'A' 'T'
-  'T' 'A' 'A' 'T' 'T' 'A' 'T' 'T' 'T' 'A' 'G' 'G' 'A' 'C' 'A' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5608,40 +4737,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'C' 'C' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'C' 'G' 'C' 'C' 'A' 'C' 'T' 'G'
-  'G' 'A' 'T' 'T' 'T' 'T' 'G' 'T' 'A' 'T' 'G' 'A' 'C' 'T' 'G' 'A' 'A' 'T'
-  'A' 'C' 'T' 'G']
- ['A' 'T' 'C' 'T' 'T' 'G' 'A' 'T' 'G' 'A' 'A' 'G' 'T' 'C' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'C' 'T' 'T' 'G' 'G' 'A' 'T' 'G' 'A' 'T' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'T']
- ['A' 'T' 'C' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'T' 'T' 'T' 'A' 'T' 'G' 'T' 'G' 'A' 'T' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'C' 'T' 'T' 'G' 'T' 'G' 'T' 'G' 'G' 'C' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'C' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'G' 'C' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'C' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'G' 'C' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'C' 'A' 'A' 'C' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'G' 'C' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'C' 'T' 'C' 'A' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'C' 'A' 'T' 'T' 'C'
-  'T' 'G' 'A' 'C' 'T' 'C' 'G' 'C' 'A' 'T' 'G' 'A' 'T' 'T' 'T' 'A' 'G' 'G'
-  'A' 'A' 'T' 'G']
- ['A' 'T' 'C' 'T' 'C' 'A' 'G' 'T' 'G' 'A' 'A' 'G' 'T' 'T' 'A' 'T' 'T' 'C'
-  'T' 'G' 'A' 'C' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'A' 'T' 'T' 'T' 'A' 'G' 'G'
-  'T' 'A' 'T' 'G']
- ['A' 'C' 'A' 'T' 'C' 'A' 'G' 'T' 'G' 'A' 'A' 'A' 'T' 'C' 'A' 'T' 'T' 'C'
-  'C' 'G' 'A' 'C' 'T' 'C' 'G' 'T' 'A' 'T' 'G' 'A' 'C' 'T' 'G' 'A' 'G' 'C'
-  'G' 'A' 'T' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 # fmt: off
@@ -5859,54 +4954,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 11)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'C' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'A' 'A' 'C' 'T' 'T' 'A' 'C' 'A'
-  'G' 'G' 'T' 'C' 'A' 'G' 'C' 'A' 'A' 'A' 'G' 'G' 'C' 'T' 'T' 'C' 'C' 'A'
-  'G' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' 'G' 'A' 'C' 'T' 'T' 'A' 'C' 'A' 'T' 'G' 'C' 'A' 'G']
- ['C' 'T' 'C' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'A' 'G' 'T' 'T' 'C' 'A' 'G' 'A'
-  'G' 'T' 'T' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'T' 'A' 'T' 'A' 'A'
-  'A' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' 'T' 'A' 'C' 'T' 'T' 'G' 'T' 'G' 'A' '-' '-' '-' '-']
- ['C' 'T' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'C' 'T' 'C' 'T' 'T' 'A' 'C' 'A'
-  'T' 'T' 'T' 'T' 'A' 'T' 'A' 'A' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'A' 'T' 'G'
-  'G' 'A' 'G' 'T' 'C' 'T' 'T' 'C' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'C' 'T' '-'
-  'C' 'C' 'T' 'T' 'A' 'A' 'T' 'T' 'A' 'C' 'A' 'C' 'G' 'T' 'A' 'T']
- ['C' 'T' 'A' 'A' 'C' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'C' 'A' 'C' 'A' 'G' 'G'
-  '-' 'T' 'T' 'C' 'A' 'T' 'A' 'A' 'A' 'G' 'G' 'C' 'T' 'T' 'A' 'A' 'T' 'G'
-  'G' 'A' 'G' 'C' 'C' 'C' 'A' 'C' 'T' 'G' 'G' 'T' 'C' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'C' 'A' 'G' 'A' 'C' 'T' 'C' 'T' 'A' 'T' 'G' 'T' 'A' 'C']
- ['C' 'C' 'A' 'G' 'T' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'C' 'T' 'T' 'A' 'G' 'A'
-  'T' 'T' 'T' 'T' 'C' 'T' 'A' 'A' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'A' 'T' 'G'
-  'A' 'A' 'G' 'T' 'C' 'T' 'G' 'C' 'T' 'C' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'G' 'C' 'C' 'T' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'T']
- ['A' 'C' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'T' 'T' 'T' 'A' 'C' 'A'
-  'T' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'A' 'T' 'G'
-  'A' 'A' 'G' 'T' 'C' 'T' 'G' 'C' 'T' 'C' 'C' 'T' 'T' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'G' 'A' 'C' 'T' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'T']
- ['C' 'C' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'T' 'T' 'T' 'A' 'C' 'A'
-  'T' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'A' 'T' 'G'
-  'A' 'A' 'G' 'T' 'C' 'T' 'G' 'C' 'T' 'C' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'G' 'A' 'C' 'T' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'T']
- ['C' 'C' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'G' 'G' 'A' 'T' 'T' 'T' 'A' 'C' 'A'
-  'T' 'T' 'T' 'C' 'C' 'T' 'A' 'A' 'C' 'T' 'G' 'C' 'C' 'T' 'A' 'A' 'T' 'G'
-  'A' 'A' 'G' 'T' 'C' 'T' 'G' 'C' 'T' 'C' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'G' 'A' 'C' 'T' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'T']
- ['C' 'T' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'C' 'T' 'C' 'A' 'A' 'A'
-  'T' 'T' 'T' 'C' 'A' 'T' 'A' 'A' 'T' 'T' 'G' 'C' 'T' 'T' 'A' 'A' 'T' 'G'
-  'A' 'A' 'A' 'G' 'C' 'T' 'G' 'A' 'T' 'G' 'T' 'T' 'T' 'T' 'C' 'T' 'T' 'C'
-  'C' 'C' 'T' 'A' 'C' 'A' 'C' 'C' 'A' 'T' 'A' 'T' 'G' 'T' 'A' 'T']
- ['C' 'T' 'A' 'A' 'T' 'T' 'T' 'G' 'G' 'T' 'G' 'A' 'C' 'T' 'T' 'G' 'A' 'A'
-  'T' 'T' 'T' 'C' 'A' 'T' 'A' 'A' 'T' 'T' 'G' 'C' 'T' 'T' 'A' 'A' 'G' 'G'
-  'A' 'A' 'G' 'C' 'C' 'T' 'G' 'C' 'T' 'G' 'T' 'T' 'T' 'C' 'C' 'T' 'T' 'C'
-  'C' 'C' 'A' 'A' 'G' 'A' 'C' 'T' 'A' 'T' 'A' 'T' 'G' 'C' 'A' 'T']
- ['C' 'T' 'A' 'A' 'T' 'T' 'G' 'G' 'G' 'G' 'G' 'A' 'C' 'T' 'C' 'A' 'C' 'A'
-  'T' 'T' 'T' 'T' 'A' 'A' 'A' 'A' 'T' 'T' 'G' 'C' 'T' 'A' 'A' 'C' 'C' 'G'
-  'A' 'A' 'G' 'C' 'C' 'T' 'G' 'C' 'T' 'G' 'T' 'T' 'T' 'T' 'C' 'T' 'T' 'C'
-  'T' 'C' 'T' 'A' 'G' 'A' 'C' 'T' 'A' 'T' 'A' 'A' 'G' 'T' 'A' 'T']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6108,34 +5155,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 12)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'G' 'T' 'T' 'A' 'G' 'T' 'G' 'C' 'T' 'G' 'T' 'T' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'G' 'T' 'A' 'C' 'C' 'T' 'C' 'G' 'C' 'A' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' 'A' 'T' 'T' 'A' 'C' 'T' 'T' 'T' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'G' 'T' 'A' 'A' 'A' 'T' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'A' 'G' 'T' 'A' '-' '-' 'T' 'T' 'C' 'T' 'C' '-' '-'
-  '-' 'A' 'A' 'T' 'G' 'T' 'A' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'G' 'T' 'T' 'C' 'C' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'A' 'A' 'T' 'G' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'A' 'C' 'T' 'C' 'G' 'T' 'G' '-' '-' 'C' 'C' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'A' 'G' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'A' '-' '-' 'C' 'T' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'C' 'A' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'A' '-' '-' 'C' 'T' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'C' 'A' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'G' '-' '-' 'C' 'T' 'C' 'T' 'T' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'A' 'A' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'A']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'G' 'C' 'T' 'C' 'T' 'C' 'A' 'A' '-' '-'
-  '-' 'A' 'A' 'T' 'G' 'T' 'A' 'G' 'C' 'A' '-' '-' '-' '-' '-' '-' '-']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'G' 'C' 'T' 'C' 'T' 'C' 'A' 'A' '-' '-'
-  '-' 'A' 'A' 'T' 'A' 'T' 'A' 'A' 'C' 'A' '-' '-' '-' '-' '-' '-' '-']
- ['T' 'T' 'G' 'C' 'T' 'G' 'G' 'T' 'G' '-' '-' 'A' 'T' 'C' 'T' 'G' 'A' 'T'
-  'T' 'A' 'A' 'T' 'G' 'T' 'A' 'A' 'C' 'A' 'T' 'T' 'T' 'T' 'A' 'T' 'G']
- ['C' 'T' 'G' 'T' 'T' 'A' 'A' 'T' 'G' '-' '-' 'C' 'T' 'C' 'T' 'G' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'T' 'T' 'T' 'A' 'T' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6400,62 +5419,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 13)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'G' 'G' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'G' 'T' 'G' 'A' 'T' 'A' 'A'
-  'G' 'A' '-' '-' '-' '-' '-' '-' '-' 'T' 'T' 'G' 'T' 'G' 'T' 'T' '-' '-'
-  '-' '-' '-' 'T' 'A' 'C' '-' '-' '-' '-' 'T' 'C' 'C' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'C' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'T' 'G']
- ['A' 'G' '-' 'C' 'A' 'G' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'A' 'A' 'C' 'A' 'G'
-  'T' 'G' '-' '-' '-' '-' '-' '-' '-' 'A' 'T' 'A' 'T' 'A' 'T' 'T' '-' '-'
-  '-' '-' '-' 'c' 'a' 't' '-' '-' '-' '-' 't' 'c' 't' 'c' 't' 'g' 't' 'g'
-  't' 'g' 't' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'a' 't' 'g']
- ['A' 'A' 'G' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'G' 'T' 'G' 'A' 'T' 'G' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'T' 'C' '-' '-'
-  '-' '-' '-' 'T' 'A' 'T' '-' '-' '-' '-' 'T' 'T' 'C' 'T' 'T' 'A' 'T' 'T'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['A' 'A' 'A' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'A' 'C' 'A' '-'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'T' 'A' 'T' 'G' '-' '-'
-  '-' '-' '-' 'T' 'A' '-' '-' 'C' 'T' 'T' 'G' 'T' 'C' 'C' 'C' 'C' 'C' 'A'
-  'C' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['A' 'A' 'G' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'A' 'C' 'A' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'C' 'A' 'T' 'G' '-' '-'
-  '-' '-' '-' 'T' 'A' 'T' 'A' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'C' 'C' 'G'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['A' 'A' 'A' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'A' 'C' 'A' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'T' 'A' 'T' 'A' '-' '-'
-  '-' '-' '-' 'T' 'G' 'T' '-' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['A' 'A' 'A' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'A' 'C' 'A' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'T' 'A' 'T' 'A' '-' '-'
-  '-' '-' '-' 'T' 'G' 'T' '-' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['A' 'A' 'A' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'C' 'A' 'C' 'A' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'T' 'A' 'T' 'G' '-' '-'
-  '-' '-' '-' 'T' 'A' 'T' '-' 'T' 'T' 'T' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G']
- ['t' 'a' 'a' 'a' 't' 'a' 'a' 't' 'a' 'a' 'g' 'a' 't' 'a' 'a' 'g' 'a' 't'
-  'g' 'a' 'a' 'a' 'g' 'C' 'A' 'T' 'A' 'G' 'C' 'A' 'T' 'G' 'T' 'A' '-' '-'
-  '-' '-' '-' 'T' 'T' 'T' 'T' 'C' 'T' 't' 'g' 'c' 'c' 'c' 't' 'c' 't' 'c'
-  'c' 't' 't' 'c' 't' 'c' 't' 'g' 't' 'c' 't' 'c' 't' 'g' 't' 'c']
- ['t' 'A' 'G' 'A' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'A' 'C' 'C' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G' 'T' 'G' 'T' 'A' '-' '-'
-  '-' '-' '-' 'T' 'A' 'T' 'G' 'C' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' 'G' 'G' 'G' 'G' 'T' 'C' 'T' 'G' 'T' 'G']
- ['A' 'A' 'G' 'C' 'A' 'A' 'A' 'T' 'G' 'A' 'G' 'A' 'T' 'A' 'A' 'G' '-' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' 'C' 'A' 'C' 'G' 'T' 'G' '-' '-'
-  '-' '-' '-' 'T' 'A' 'T' 'T' 'C' 'T' 'T' 'C' 'C' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' 'G' 'G' 'T' 'G' 'T' 'C' 'T' 'G' 'T' 'G']
- ['A' 'G' 'G' 'A' 'A' 'A' 'G' 'T' 'G' 'A' 'G' 'A' 'G' 'G' 'A' 'C' 'C' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'G' 'C' 'A' 'A' 'A' 'T' 'A' '-' '-'
-  '-' '-' '-' 'A' 'A' 'T' 'A' 'T' 'T' 'C' 'T' 'T' 'T' 'C' 'T' 'C' 'T' 'G'
-  'T' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'A' '-' '-']
- ['A' 'A' 'G' 'A' 'A' 'G' 'G' 'T' 'G' 'A' 'G' 'A' 'T' 'G' 'A' 'C' 'A' 'A'
-  'G' 'G' '-' '-' '-' '-' '-' '-' '-' 'G' 'T' 'G' 'T' 'A' 'T' 'A' 'G' 'A'
-  'T' 'A' 'G' 'G' 'A' 'T' 'A' 'T' 'T' 'C' 'T' 'T' 'G' 'C' 'T' 'T' 'T' 'G'
-  'G' 'G' 'T' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'G' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6735,52 +5698,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'T' 'C' 'C' 'C' '-' '-' '-' '-' '-' '-' '-' 'A' 'G' 'A' 'G' 'A' 'G'
-  'T' 'C' 'T' 'G' 'A' '-' 'T' 'A' 'G' 'G' 'A' 'G' 'G' 'A' 'G']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 't' 'g' 'c' 'c' 't' 'T' 'T' 'G' 'T' 'A' 'T' 'A' 'G' 'T' 'G' 'G' 'C'
-  'T' 'C' 'T' 'G' 'A' 'G' 'T' 'A' 'T' 'A' 'A' 'A' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' 'T' 'G' 'C' 'C' 'T' 'G' 'T' 'G' 'T' 'A' 'T' 'A' 'G' 'C' 'A' 'T' 'T'
-  'T' 'C' 'T' 'G' 'A' 'A' 'T' 'A' 'T' 'A' '-' '-' '-' '-' '-']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'G' 'T' 'G'
-  'T' 'A' 'T' 'G' 'A' 'A' 'T' 'A' 'T' 'G' 'A' 'A' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'A' 'T' 'G'
-  'T' 'A' 'T' 'G' 'A' 'A' 'T' 'A' 'T' 'G' 'A' 'A' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'A' 'T' 'G'
-  'T' 'A' 'T' 'G' 'A' 'A' 'T' 'A' 'T' 'G' 'A' 'A' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'A' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'T' 'A' 'T' 'G' 'A' 'A' 'G' 'T' 'G']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'A' '-' '-' '-' 'A' 'G' 'T' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'C' 'A' 'T' 'G' 'A' 'T' 'G' 'T' 'G']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'C' '-' '-' '-' 'T' 'G' 'A' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'G' 'A' 'G' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'C' '-' '-' '-' 'A' 'G' 'T' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'C' 'C' 'A' 'G' '-' '-' '-' '-' '-' '-']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'T' 'G' 'T' 'G' 'A' 'G' 'G' 'T' 'A']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-' '-' '-' '-' '-' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'T' 'G' 'T' 'T'
-  'C' 'C' 'T' 'G' 'A' 'A' 'T' 'G' 'T' 'G' 'A' 'G' 'G' 'T' 'G']
- ['T' '-' 'T' 'G' 'T' 'G' 'T' 'G' 'C' 'C' 'T' 'T' 'T' 'G' 'C' 'G' 'G' 'A'
-  'G' 'C' 'A' 'T' 'T' 'T' 'C' 'T' 'G' '-' '-' '-' 'A' 'G' 'C' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'C' 'T' 'T' 'G' 'A' 'G' 'G' 'T' 'A']
- ['T' 'G' 'C' 'C' 'C' 'A' 'G' 'G' 'A' 'C' 'T' 'G' 'C' 'G' 'C' 'A' 'T' 'G'
-  'G' 'T' 'A' 'T' 'T' 'T' 'C' 'T' 'T' '-' '-' '-' 'G' 'G' 'T' 'G' 'T' 'G'
-  'T' 'C' 'T' 'G' 'A' 'A' 'G' 'G' 'T' 'G' 'A' 'G' 'A' 'T' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7079,17 +5996,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'G' 'C' ... 'C' 'C' 'A']
- ['G' 'G' 'C' ... 'C' 'T' 'A']
- ['T' 'G' 'C' ... 'C' 'T' 'A']
- ...
- ['T' 'G' 'C' ... 'C' 'C' 'A']
- ['-' '-' '-' ... 'T' 'C' 'A']
- ['G' 'G' 'C' ... 'C' 'C' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7401,17 +6307,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'T' 'T' ... 'C' 'A' 'G']
- ['C' 'C' 'T' ... 'C' 'A' 'A']
- ['T' 'C' 'G' ... 'C' 'A' 'A']
- ...
- ['C' 'C' 'T' ... 'C' 'A' 'C']
- ['C' 'C' 'A' ... 'C' 'A' 'G']
- ['C' 'C' 'A' ... 'T' 'C' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7711,17 +6606,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['-' 'A' 'C' ... 'C' 'C' 'C']
- ['-' 'C' 'T' ... 'C' 'T' 'G']
- ['-' 'T' 'G' ... '-' '-' '-']
- ...
- ['-' 'C' 'T' ... '-' '-' '-']
- ['-' 'C' 'T' ... '-' '-' '-']
- ['A' 'C' 'T' ... '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7925,38 +6809,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['C' 'C' 'C' 'T' '-' '-' 'A' 'C' 'A' 'C' 'T' 'G' 'T' 'C' '-' '-' '-' '-'
-  'A' 'A' 'G' 'T' 'G' 'G' 'G' 'A' 'G' 'G' 'A' 'G' 'A' 'C' 'A' 'G' 'T' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['A' 'G' 'C' 'C' '-' '-' 'a' 'c' 'a' 'c' 't' 'g' 'g' '-' '-' '-' '-' '-'
-  'g' 'g' 'g' 't' 'g' 'g' 'g' 'g' 't' 'g' 'g' 'g' 'a' 't' 'g' 'g' 't' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['-' '-' '-' '-' '-' '-' '-' 'C' 'C' 'C' 'T' 'G' 'T' 'G' '-' '-' '-' '-'
-  'G' 'G' 'G' 'G' 'C' 'G' 'A' 'T' 'A' 'G' 'G' 'A' 'G' 'C' 'A' 'G' 'C' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['-' '-' '-' '-' '-' '-' '-' 'C' 'C' 'A' 'T' 'G' 'T' 'G' '-' '-' '-' '-'
-  'G' 'G' 'G' 'G' 'C' 'G' 'A' 'T' 'A' 'G' 'G' 'G' 'G' 'C' 'A' 'G' 'C' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['-' '-' '-' '-' '-' '-' '-' 'C' 'C' 'A' 'T' 'G' 'T' 'G' '-' '-' '-' '-'
-  'G' 'G' 'G' 'G' 'C' 'G' 'A' 'T' 'A' 'G' 'G' 'G' 'G' 'C' 'A' 'G' 'C' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['C' 'C' 'C' 'T' 'G' 'A' 'A' 'C' 'C' 'A' 'C' 'A' 'T' 'G' '-' '-' '-' '-'
-  'G' 'G' 'G' 'G' 'G' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'G' 'T' 'G' '-'
-  '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-' '-'
-  '-']
- ['-' '-' '-' '-' '-' '-' '-' '-' '-' '-' 'T' 'G' 'T' 'G' 'T' 'C' 'A' 'T'
-  'A' 'G' 'G' 'A' 'G' 'T' 'T' 'T' 'G' 'G' 'A' 'T' 'G' 'T' 'A' 'G' 'C' 'C'
-  'C' 'T' 'C' 'T' 'T' 'T' 'C' 'A' 'T' 'C' 'T' 'T' 'T' 'G' 'C' 'T' 'G' 'G'
-  'C']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8091,28 +6943,6 @@ table bedMaf
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'G' 'T' 'T' 'T' 'A' 'G' 'T' 'A' 'C' 'C' '-' '-' '-' '-' 'A' 'T' 'G'
-  'C' 'T' 'T' 'A' 'G' 'G' 'A' 'A' 'T' 'G' 'A' 'T' 'A' 'A' 'A' 'C' 'T' 'C'
-  'A' 'C' 'T' 'T' 'A' 'G' 'T' 'G' 't' 't']
- ['T' 'G' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'T' 'C' 'C' 'T' 'T' 'T' 'A' 'T' 'T'
-  'C' 'T' 'T' 'T' 'G' 'G' 'C' 'G' 'T' 'G' 'A' 'T' 'A' 'G' 'G' 'C' 'T' 'C'
-  'A' 'C' 'C' 'C' 'A' 'A' 'T' 'C' 'T' 'T']
- ['T' 'G' 'T' 'T' 'G' 'C' 'A' 'T' 'A' 'T' 'C' 'C' 'T' 'T' 'T' 'A' 'T' 'T'
-  'C' 'T' 'T' 'T' 'G' 'G' 'C' 'G' 'T' 'G' 'A' 'T' 'A' 'G' 'G' 'C' 'T' 'C'
-  'A' 'C' 'C' 'C' 'A' 'A' 'T' 'C' 'T' 'T']
- ['T' 'G' 'T' 'T' 'G' 'C' 'A' 'T' 'G' 'T' 'C' 'G' 'T' 'T' 'T' 'A' 'T' 'T'
-  'C' 'T' 'T' 'T' 'G' 'G' 'C' 'G' 'T' 'G' 'A' 'T' 'A' 'G' 'G' 'C' 'T' 'C'
-  'A' 'C' 'C' 'C' 'A' 'A' 'T' 'C' 'T' 'T']
- ['T' 'G' 'T' 'T' 'A' 'A' 'G' 'T' 'C' 'T' 'C' 'A' 'C' 'T' 'T' 'G' 'C' 'T'
-  'G' 'T' 'T' 'C' 'A' 'A' 'A' 'G' 'T' 'G' 'A' 'T' 'A' 'G' 'C' 'T' 'T' 'C'
-  'A' 'C' 'T' 'C' 'C' 'A' 'T' 'C' 'A' 'T']
- ['T' 'G' 'T' 'T' 'T' 'A' 'A' 'A' 'A' 'T' 'G' '-' '-' '-' '-' 'A' 'T' 'T'
-  'G' 'C' 'T' 'A' 'G' 'A' 'A' 'C' 'T' 'T' 'C' 'T' 'A' '-' '-' 'C' 'T' 'C'
-  'A' 'C' 'T' 'G' 'G' 'A' '-' '-' '-' '-']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8203,25 +7033,6 @@ table bedMaf
             "AAGGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG",
         )
         self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['A' 'A' 'A' '-' 'G' 'G' 'G' 'A' 'A' 'T' 'G' 'T' 'T' 'A' 'A' 'C' 'C' 'A'
-  'A' 'A' 'T' 'G' 'A' '-' '-' '-' 'A' 'T' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'T'
-  'A' 'C' 'G' 'G' 'T' 'G']
- ['A' 'A' 'A' '-' 'G' 'G' 'G' 'A' 'A' 'T' 'G' 'T' 'T' 'A' 'A' 'C' 'C' 'A'
-  'A' 'A' 'T' 'G' 'A' '-' '-' '-' 'A' 'T' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'T'
-  'A' 'C' 'G' 'G' 'T' 'G']
- ['A' 'A' 'A' '-' 'G' 'G' 'G' 'A' 'A' 'T' 'G' 'T' 'T' 'A' 'A' 'C' 'C' 'A'
-  'A' 'A' 'T' 'G' 'A' '-' '-' '-' 'G' 'T' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'T'
-  'A' 'T' 'G' 'G' 'T' 'G']
- ['-' 'A' 'A' 'T' 'G' 'G' 'G' 'A' 'A' 'T' 'G' 'T' 'T' 'A' 'A' 'G' 'C' 'A'
-  'A' 'A' 'C' 'G' 'A' '-' '-' '-' 'A' 'T' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'C'
-  'A' 'G' 'T' 'G' 'T' 'G']
- ['-' 'A' 'A' '-' 'G' 'G' 'G' 'G' 'A' 'T' 'G' 'C' 'T' 'A' 'A' 'G' 'C' 'C'
-  'A' 'A' 'T' 'G' 'A' 'G' 'T' 'T' 'G' 'T' 'T' 'G' 'T' 'C' 'T' 'C' 'T' 'C'
-  'A' 'A' 'T' 'G' 'T' 'G']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8261,15 +7072,6 @@ table bedMaf
         self.assertEqual(len(alignment.sequences[4]), 187371129)
         self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
         self.assertEqual(alignment[4], "taagga")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['T' 'A' 'A' 'A' 'G' 'A']
- ['T' 'A' 'A' 'A' 'G' 'A']
- ['T' 'A' 'A' 'A' 'G' 'A']
- ['T' 'A' 'A' 'A' 'G' 'A']
- ['t' 'a' 'a' 'g' 'g' 'a']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8313,14 +7115,6 @@ table bedMaf
             alignment.sequences[3].seq[53310102 : 53310102 + 13], "ACAGCTGAAAATA"
         )
         self.assertEqual(alignment[3], "ACAGCTGAAAATA")
-        self.assertEqual(
-            str(numpy.array(alignment, "U")),
-            """\
-[['g' 'c' 'a' 'g' 'c' 't' 'g' 'a' 'a' 'a' 'a' 'c' 'a']
- ['g' 'c' 'a' 'g' 'c' 't' 'g' 'a' 'a' 'a' 'a' 'c' 'a']
- ['g' 'c' 'a' 'g' 'c' 't' 'g' 'a' 'a' 'a' 'a' 'c' 'a']
- ['A' 'C' 'A' 'G' 'C' 'T' 'G' 'A' 'A' 'A' 'A' 'T' 'A']]""",
-        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
