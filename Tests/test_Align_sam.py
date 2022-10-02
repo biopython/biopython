@@ -3021,6 +3021,16 @@ AAAAAAAACCCCCC
         self.assertEqual(cigar, "6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
+             ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3051,6 +3061,18 @@ AAAAAAAACCCCCC
         self.assertEqual(cigar, "8D6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3081,6 +3103,18 @@ GGGGAAAAAAAACCCCCC
         self.assertEqual(cigar, "8D6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3113,6 +3147,18 @@ AAAAAAAACCCCCC
         self.assertEqual(cigar, "8I6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3145,6 +3191,18 @@ GGGG--------CCCCCC
         self.assertEqual(cigar, "8I6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3177,6 +3235,16 @@ AAAAAAAACCCCCC
         self.assertEqual(cigar, "8S6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
+             ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3209,6 +3277,18 @@ GGGG--------CCCCCC
         self.assertEqual(cigar, "4S8D6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3241,6 +3321,18 @@ GGGG--------CCCCCC
         self.assertEqual(cigar, "4I8D6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
+              'C', 'C', 'C', 'C', 'C'],
+             ['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
+              'C', 'C', 'C', 'C', 'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3273,6 +3365,16 @@ AAAAAAAACCCCCC
         self.assertEqual(cigar, "4S6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
+             ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3305,6 +3407,18 @@ GGGG--------CCCCCC
         self.assertEqual(cigar, "4D8I6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
+              'C', 'C', 'C', 'C', 'C'],
+             ['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
+              'C', 'C', 'C', 'C', 'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
@@ -3337,6 +3451,18 @@ GGGGAAAAAAAACCCCCC
         self.assertEqual(cigar, "4S8I6M")
         stream = StringIO(line)
         alignments = Align.parse(stream, "sam")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
+              'C'],
+             ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
+              'C']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         stream.close()
         self.assertTrue(numpy.array_equal(alignment.coordinates, coordinates))
