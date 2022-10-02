@@ -109,6 +109,26 @@ AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
 =
 """,
             )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
+              'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
+              'G', 'G', '-', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'G', 'T', 'A',
+              'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T'],
+             ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+             ['A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', '-', '-', 'G', 'C',
+              'G', 'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
+              'G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T', 'G',
+              'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T']], dtype='U')
+                    # fmt: on
+                )
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -130,6 +150,15 @@ AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
 G
 =
 """,
+            )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['G']], dtype='U')
+                    # fmt: on
+                )
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -155,6 +184,15 @@ A
 =
 """,
             )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['A']], dtype='U')
+                    # fmt: on
+                )
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -179,6 +217,18 @@ GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
 =
 """,
             )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
+              'A', 'G', 'A', 'T', 'C', 'C', 'C', 'T', 'G', 'G', 'C', 'G', 'T',
+              'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C',
+              'G', 'T']], dtype='U')
+                    # fmt: on
+                )
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -200,6 +250,15 @@ GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
 C
 =
 """,
+            )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['C']], dtype='U')
+                    # fmt: on
+                )
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -224,6 +283,15 @@ C
 C
 =
 """,
+            )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['C']], dtype='U')
+                    # fmt: on
+                )
             )
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
@@ -391,6 +459,21 @@ GCCAGGGATCTACTTTTCCTCTTC
 =
 """,
             )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+             ['G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T', 'G',
+              'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C'],
+             ['G', 'C', 'C', 'A', 'G', 'G', 'G', 'A', 'T', 'C', 'T', 'A', 'C',
+              'T', 'T', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'T', 'C']],
+            dtype='U')
+                    # fmt: on
+                )
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -418,6 +501,19 @@ GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
 =
 """,
             )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
+              'C', 'G', 'G', 'C', 'C', 'C', 'G', 'G', 'C', 'C', 'A', 'C', 'T',
+              'C', 'C', 'G', 'G', 'G', 'T', 'G', 'T', 'G', 'T', 'G', 'C', 'T',
+              'A', 'G', 'G', 'A', 'G', 'G', 'G', 'C', 'T', 'T', 'A']],
+            dtype='U')
+                    # fmt: on
+                )
+            )
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -439,6 +535,17 @@ GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
 CAAGCCCTGCGCGCTCAGCCGGAGT
 =
 """,
+            )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
+              'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G', 'T']],
+            dtype='U')
+                    # fmt: on
+                )
             )
             alignment = next(alignments)
             saved_alignments.append(alignment)
@@ -466,6 +573,16 @@ CAAGCCCTGCGCGCTCAGCCGGAGT
 GTCCGGAGCTGGGACGT
 =
 """,
+            )
+            self.assertTrue(
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
+                    # fmt: off
+# flake8: noqa
+numpy.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
+              'A', 'C', 'G', 'T']], dtype='U')
+                    # fmt: on
+                )
             )
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
