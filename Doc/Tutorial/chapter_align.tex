@@ -843,14 +843,14 @@ object into an array of letters -- and you can do this with NumPy:
 >>> align_array = np.array(alignment)
 >>> print("Array shape %i by %i" % align_array.shape)
 Array shape 7 by 52
->>> align_array[:, :10]
+>>> align_array[:, :10]  # doctest:+ELLIPSIS
 array([['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
        ['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
        ['D', 'G', 'T', 'S', 'T', 'A', 'T', 'S', 'Y', 'A'],
        ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
        ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
        ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
-       ['F', 'A', 'A', 'D', 'D', 'A', 'T', 'S', 'Q', 'A']], dtype='<U1')
+       ['F', 'A', 'A', 'D', 'D', 'A', 'T', 'S', 'Q', 'A']],...
 \end{minted}
 
 Note that this leaves the original Biopython alignment object and the NumPy array
