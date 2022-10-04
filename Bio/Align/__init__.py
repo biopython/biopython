@@ -1298,11 +1298,7 @@ class Alignment:
 
         where row is an integer. Return value is a string.
         """
-        coordinates = self.coordinates.copy()
-        for sequence, row in zip(self.sequences, coordinates):
-            if row[0] > row[-1]:  # reverse strand
-                row[:] = len(sequence) - row[:]
-        steps = numpy.diff(coordinates, 1)
+        steps = abs(numpy.diff(self.coordinates, 1))
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
             raise ValueError("Unequal step sizes in alignment")
@@ -1311,12 +1307,13 @@ class Alignment:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
             pass
+        i = self.coordinates[index, 0]
         if self.coordinates[index, 0] > self.coordinates[index, -1]:
             # reverse strand
             sequence = reverse_complement(sequence, inplace=False)
-        line = ""
+            i = len(sequence) - i
         steps = steps[index]
-        i = coordinates[index, 0]
+        line = ""
         for step, gap in zip(steps, gaps):
             if step:
                 j = i + step
