@@ -1054,12 +1054,13 @@ class Alignment:
         self.coordinates = coordinates
 
     def __array__(self, dtype=None):
-        n, m = self.shape
-        data = numpy.empty((n, m), "S1")
         steps = abs(numpy.diff(self.coordinates, 1))
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
             raise ValueError("Unequal step sizes in alignment")
+        n = len(steps)
+        m = sum(gaps)
+        data = numpy.empty((n, m), "S1")
         for i in range(n):
             sequence = self.sequences[i]
             try:
@@ -1080,7 +1081,7 @@ class Alignment:
                         subsequence = bytes(sequence[k:j])
                     except TypeError:  # str
                         subsequence = bytes(sequence[k:j], "UTF8")
-                    data[i, m:n] = numpy.frombuffer(subsequence, "S1")
+                    data[i, :].data.cast("B")[m:n] = subsequence
                     k = j
                 else:
                     n = m + gap
