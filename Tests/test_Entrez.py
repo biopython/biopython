@@ -120,11 +120,15 @@ def deconstruct_request(request, testcase=None):
 class TestURLConstruction(unittest.TestCase):
     def test_email_warning(self):
         """Test issuing warning when user does not specify email address."""
+        email = Entrez.email
         Entrez.email = None
 
-        with warnings.catch_warnings(record=True) as w:
-            Entrez._construct_params(params=None)
-            self.assertEqual(len(w), 1)
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                Entrez._construct_params(params=None)
+                self.assertEqual(len(w), 1)
+        finally:
+            Entrez.email = email
 
     def test_construct_cgi_ecitmatch(self):
         citation = {
