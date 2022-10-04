@@ -1054,8 +1054,41 @@ class Alignment:
         self.coordinates = coordinates
 
     def __array__(self, dtype=None):
-        data = [list(row) for row in self]
-        return numpy.array(data, dtype)
+        n, m = self.shape
+        data = numpy.empty((n, m), "S1")
+        steps = abs(numpy.diff(self.coordinates, 1))
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps == 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        for i in range(n):
+            sequence = self.sequences[i]
+            try:
+                sequence = sequence.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
+            k = self.coordinates[i, 0]
+            if self.coordinates[i, 0] > self.coordinates[i, -1]:
+                # reverse strand
+                sequence = reverse_complement(sequence, inplace=False)
+                k = len(sequence) - k
+            m = 0
+            for step, gap in zip(steps[i], gaps):
+                if step:
+                    j = k + step
+                    n = m + step
+                    try:
+                        subsequence = bytes(sequence[k:j])
+                    except TypeError:  # str
+                        subsequence = bytes(sequence[k:j], "UTF8")
+                    data[i, m:n] = numpy.frombuffer(subsequence, "S1")
+                    k = j
+                else:
+                    n = m + gap
+                    data[i, m:n] = b"-"
+                m = n
+        if dtype is not None:
+            data = numpy.array(data, dtype)
+        return data
 
     @property
     def target(self):
@@ -1277,13 +1310,12 @@ class Alignment:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
             pass
-        coordinates = coordinates[index]
         if self.coordinates[index, 0] > self.coordinates[index, -1]:
             # reverse strand
             sequence = reverse_complement(sequence, inplace=False)
         line = ""
         steps = steps[index]
-        i = coordinates[0]
+        i = coordinates[index, 0]
         for step, gap in zip(steps, gaps):
             if step:
                 j = i + step
