@@ -722,7 +722,6 @@ class SeqRecord:
         and binary formats are not supported).
         """
         # See also the __format__ method
-        # See also the Bio.Align.Generic.Alignment class and its format()
         return self.__format__(format)
 
     def __format__(self, format_spec):
