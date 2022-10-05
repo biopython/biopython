@@ -68,6 +68,36 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E'],
+             ['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E']], dtype='U')
+                # fmt: on
+            )
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -110,6 +140,18 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment[1], "CGTTTGAGTACTGGGATG")
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||"
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', '-', 'C', 'T', 'G',
+              'G', 'G', 'A', 'T', 'G'],
+             ['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', 'A', 'C', 'T', 'G',
+              'G', 'G', 'A', 'T', 'G']], dtype='U')
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -154,6 +196,18 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment[1], "GVPPEEAGAAVAAESS")
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "|.||:......|.|||"
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
+              'E', 'S', 'S'],
+             ['G', 'V', 'P', 'P', 'E', 'E', 'A', 'G', 'A', 'A', 'V', 'A', 'A',
+              'E', 'S', 'S']], dtype='U')
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -217,6 +271,38 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             "|:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| |||.     |:.:||.|||||..|.::.:||:|::....:.||:||..||.|||.||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
+              'G', 'K', 'V', 'G', 'A', 'H', 'A', 'G', 'E', 'Y', 'G', 'A', 'E',
+              'A', 'L', 'E', 'R', 'M', 'F', 'L', 'S', 'F', 'P', 'T', 'T', 'K',
+              'T', 'Y', 'F', 'P', 'H', 'F', '-', 'D', 'L', 'S', 'H', '-', '-',
+              '-', '-', '-', 'G', 'S', 'A', 'Q', 'V', 'K', 'G', 'H', 'G', 'K',
+              'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H', 'V',
+              'D', 'D', 'M', 'P', 'N', 'A', 'L', 'S', 'A', 'L', 'S', 'D', 'L',
+              'H', 'A', 'H', 'K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K',
+              'L', 'L', 'S', 'H', 'C', 'L', 'L', 'V', 'T', 'L', 'A', 'A', 'H',
+              'L', 'P', 'A', 'E', 'F', 'T', 'P', 'A', 'V', 'H', 'A', 'S', 'L',
+              'D', 'K', 'F', 'L', 'A', 'S', 'V', 'S', 'T', 'V', 'L', 'T', 'S',
+              'K', 'Y'],
+             ['L', 'T', 'P', 'E', 'E', 'K', 'S', 'A', 'V', 'T', 'A', 'L', 'W',
+              'G', 'K', 'V', '-', '-', 'N', 'V', 'D', 'E', 'V', 'G', 'G', 'E',
+              'A', 'L', 'G', 'R', 'L', 'L', 'V', 'V', 'Y', 'P', 'W', 'T', 'Q',
+              'R', 'F', 'F', 'E', 'S', 'F', 'G', 'D', 'L', 'S', 'T', 'P', 'D',
+              'A', 'V', 'M', 'G', 'N', 'P', 'K', 'V', 'K', 'A', 'H', 'G', 'K',
+              'K', 'V', 'L', 'G', 'A', 'F', 'S', 'D', 'G', 'L', 'A', 'H', 'L',
+              'D', 'N', 'L', 'K', 'G', 'T', 'F', 'A', 'T', 'L', 'S', 'E', 'L',
+              'H', 'C', 'D', 'K', 'L', 'H', 'V', 'D', 'P', 'E', 'N', 'F', 'R',
+              'L', 'L', 'G', 'N', 'V', 'L', 'V', 'C', 'V', 'L', 'A', 'H', 'H',
+              'F', 'G', 'K', 'E', 'F', 'T', 'P', 'P', 'V', 'Q', 'A', 'A', 'Y',
+              'Q', 'K', 'V', 'V', 'A', 'G', 'V', 'A', 'N', 'A', 'L', 'A', 'H',
+              'K', 'Y']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -249,6 +335,17 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], ":||...:.||:||"
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
+             ['Q', 'K', 'V', 'V', 'A', 'G', 'V', 'A', 'N', 'A', 'L', 'A', 'H']],
+            dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -279,6 +376,18 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "|:.||.|..:.|...|:|"
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
+              'H', 'C', 'L', 'L', 'V'],
+             ['K', 'V', 'N', 'V', 'D', 'E', 'V', 'G', 'G', 'E', 'A', 'L', 'G',
+              'R', 'L', 'L', 'V', 'V']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -307,6 +416,16 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment[0], "LSALSDLHAH")
         self.assertEqual(alignment[1], "LGAFSDGLAH")
         self.assertEqual(alignment.column_annotations["emboss_consensus"], "|.|.||..||")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
+             ['L', 'G', 'A', 'F', 'S', 'D', 'G', 'L', 'A', 'H']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -337,6 +456,16 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(alignment[0], "VKAAWGKVGA")
         self.assertEqual(alignment[1], "VQAAYQKVVA")
         self.assertEqual(alignment.column_annotations["emboss_consensus"], "|:||:.||.|")
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
+             ['V', 'Q', 'A', 'A', 'Y', 'Q', 'K', 'V', 'V', 'A']], dtype='U')
+                # fmt: on
+            )
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -397,6 +526,36 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E'],
+             ['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -438,6 +597,36 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "||||||||||||||||||||||  |||||.||||.|||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||  ||||.||||.|||||||||||||..|||||||",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E'],
+             ['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', '-', '-', 'R', 'P',
+              'S', 'P', 'P', 'P', 'P', 'R', 'R', 'P', 'P', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'P', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', '-', '-', 'G', 'S', 'R', 'P', 'P',
+              'R', 'F', 'A', 'P', 'P', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'P', 'P', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
@@ -482,6 +671,36 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||:||||||||||||||||| |||||||||||    |||||||||||||:||||||||||||||||||||:|||||||||||||||||||||||  |||||||||||||||:||||||||:|||||||",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'W', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'W', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', 'S', 'A', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'I', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'W', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E'],
+             ['T', 'S', 'P', 'A', 'S', 'L', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
+              'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', '-', 'R', 'P',
+              'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', '-', '-', '-', '-',
+              'C', 'S', 'A', 'A', 'P', 'R', 'R', 'P', 'Q', 'A', 'T', 'G', 'G',
+              'Y', 'K', 'T', 'C', 'S', 'G', 'T', 'C', 'T', 'T', 'S', 'T', 'S',
+              'T', 'R', 'H', 'R', 'G', 'R', 'S', 'G', 'Y', 'S', 'A', 'R', 'T',
+              'T', 'T', 'A', 'A', 'C', 'L', 'R', 'A', 'S', 'R', 'K', 'S', 'M',
+              'R', 'A', 'A', 'C', 'S', 'R', '-', '-', 'G', 'S', 'R', 'P', 'N',
+              'R', 'F', 'A', 'P', 'T', 'L', 'M', 'S', 'S', 'C', 'L', 'T', 'S',
+              'T', 'T', 'G', 'P', 'P', 'A', 'Y', 'A', 'G', 'D', 'R', 'S', 'H',
+              'E']], dtype='U')
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -540,6 +759,34 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             " :|:.||    :.|.|::|.:  :.|.....:|.:|.||:.:..:..|.:|::|..:|||.|::..|:::....:|.|:::|.:.|...::.:.|.||..:..| ..|:|.|: ||        ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
+              'G', 'I', 'R', 'I', 'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E',
+              'G', 'Y', 'Q', 'T', 'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A',
+              'L', 'D', 'I', 'V', 'T', 'K', 'E', 'R', 'P', 'D', 'L', 'V', 'L',
+              'L', 'D', 'M', 'K', 'I', 'P', 'G', 'M', 'D', 'G', 'I', 'E', 'I',
+              'L', 'K', 'R', 'M', 'K', 'V', 'I', 'D', 'E', 'N', 'I', 'R', 'V',
+              'I', 'I', 'M', 'T', 'A', 'Y', 'G', 'E', 'L', 'D', 'M', 'I', 'Q',
+              'E', 'S', 'K', 'E', 'L', 'G', 'A', 'L', 'T', 'H', 'F', 'A', 'K',
+              '-', 'P', 'F', 'D', 'I', 'D', 'E', 'I', 'R', 'D', 'A', 'V', '-',
+              '-', '-', '-', '-', '-', '-', '-'],
+             ['-', 'V', 'L', 'L', 'A', 'D', 'D', 'H', 'A', 'L', 'V', 'R', 'R',
+              'G', 'F', 'R', 'L', 'M', 'L', 'E', 'D', '-', '-', 'D', 'P', 'E',
+              'I', 'E', 'I', 'V', 'A', 'E', 'A', 'G', 'D', 'G', 'A', 'Q', 'A',
+              'V', 'K', 'L', 'A', 'G', 'E', 'L', 'H', 'P', 'R', 'V', 'V', 'V',
+              'M', 'D', 'C', 'A', 'M', 'P', 'G', 'M', 'S', 'G', 'M', 'D', 'A',
+              'T', 'K', 'Q', 'I', 'R', 'T', 'Q', 'W', 'P', 'D', 'I', 'A', 'V',
+              'L', 'M', 'L', 'T', 'M', 'H', 'S', 'E', 'D', 'T', 'W', 'V', 'R',
+              'L', 'A', 'L', 'E', 'A', 'G', 'A', 'N', 'G', 'Y', 'I', 'L', 'K',
+              'S', 'A', 'I', 'D', 'L', 'D', 'L', 'I', 'Q', '-', 'A', 'V', 'R',
+              'R', 'V', 'A', 'N', 'G', 'E', 'T']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -577,6 +824,34 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             " ||||||:......|:..|...|::.....|.::||:|...:..||:|.|:.:||.||:.:|:.:|.......|::|:....::|..::..||||....||...|::...|        ",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
+              'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
+              'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
+              'T', 'K', 'E', 'R', 'P', 'D', 'L', 'V', 'L', 'L', 'D', 'M', 'K',
+              'I', 'P', 'G', 'M', 'D', 'G', 'I', 'E', 'I', 'L', 'K', 'R', 'M',
+              'K', 'V', 'I', 'D', 'E', 'N', 'I', 'R', 'V', 'I', 'I', 'M', 'T',
+              'A', 'Y', 'G', 'E', 'L', 'D', 'M', 'I', 'Q', 'E', 'S', 'K', 'E',
+              'L', 'G', 'A', 'L', 'T', 'H', 'F', 'A', 'K', 'P', 'F', 'D', 'I',
+              'D', 'E', 'I', 'R', 'D', 'A', 'V', '-', '-', '-', '-', '-', '-',
+              '-', '-'],
+             ['-', 'I', 'L', 'I', 'V', 'D', 'D', 'E', 'A', 'N', 'T', 'L', 'A',
+              'S', 'L', 'S', 'R', 'A', 'F', 'R', 'L', 'A', 'G', 'H', 'E', 'A',
+              'T', 'V', 'C', 'D', 'N', 'A', 'V', 'R', 'A', 'L', 'E', 'I', 'A',
+              'K', 'S', 'K', 'P', 'F', 'D', 'L', 'I', 'L', 'S', 'D', 'V', 'V',
+              'M', 'P', 'G', 'R', 'D', 'G', 'L', 'T', 'L', 'L', 'E', 'D', 'L',
+              'K', 'T', 'A', 'G', 'V', 'Q', 'A', 'P', 'V', 'V', 'M', 'M', 'S',
+              'G', 'Q', 'A', 'H', 'I', 'E', 'M', 'A', 'V', 'K', 'A', 'T', 'R',
+              'L', 'G', 'A', 'L', 'D', 'F', 'L', 'E', 'K', 'P', 'L', 'S', 'T',
+              'D', 'K', 'L', 'L', 'L', 'T', 'V', 'E', 'N', 'A', 'L', 'K', 'L',
+              'K', 'R']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -613,6 +888,34 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             " .|::|||..|..:.:..||.:.|:..........|.:.:.....||.::|:.:....|:|:|:|.:|....:..:|:|....|:|...|...||:.:..||.|||.:.:..        ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
+              'I', 'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q',
+              'T', 'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I',
+              'V', 'T', 'K', 'E', 'R', 'P', 'D', 'L', 'V', 'L', 'L', 'D', 'M',
+              'K', 'I', 'P', 'G', 'M', 'D', 'G', 'I', 'E', 'I', 'L', 'K', 'R',
+              'M', 'K', 'V', 'I', 'D', 'E', 'N', 'I', 'R', 'V', 'I', 'I', 'M',
+              'T', 'A', 'Y', 'G', 'E', 'L', 'D', 'M', 'I', 'Q', 'E', 'S', 'K',
+              'E', 'L', 'G', 'A', 'L', 'T', 'H', 'F', 'A', 'K', 'P', 'F', 'D',
+              'I', 'D', 'E', 'I', 'R', 'D', 'A', 'V', '-', '-', '-', '-', '-',
+              '-', '-', '-'],
+             ['L', 'H', 'I', 'V', 'V', 'V', 'D', 'D', 'D', 'P', 'G', 'T', 'C',
+              'V', 'Y', 'I', 'E', 'S', 'V', 'F', 'A', 'E', 'L', 'G', 'H', 'T',
+              'C', 'K', 'S', 'F', 'V', 'R', 'P', 'E', 'A', 'A', 'E', 'E', 'Y',
+              'I', 'L', 'T', 'H', 'P', 'V', 'D', 'L', 'A', 'I', 'V', 'D', 'V',
+              'Y', 'L', 'G', 'S', 'T', 'T', 'G', 'V', 'E', 'V', 'L', 'R', 'R',
+              'C', 'R', 'V', 'H', 'R', 'P', 'K', 'L', 'Y', 'A', 'V', 'I', 'I',
+              'T', 'G', 'Q', 'I', 'S', 'L', 'E', 'M', 'A', 'A', 'R', 'S', 'I',
+              'A', 'E', 'G', 'A', 'V', 'D', 'Y', 'I', 'Q', 'K', 'P', 'I', 'D',
+              'I', 'D', 'A', 'L', 'L', 'N', 'I', 'A', 'E', 'R', 'A', 'L', 'E',
+              'H', 'K', 'E']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
@@ -657,6 +960,34 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             " :|:|:|:..:|....:.....||:...|.:|.:||.:.:|  ||.|:::.|:.:||:.|..:.:.:..|....:|:.|:.|.: :.:..:.|:.:.:.| .|||.:|    :||:.:",
         )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
+              'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
+              'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
+              'T', 'K', '-', '-', 'E', 'R', 'P', 'D', 'L', 'V', 'L', 'L', 'D',
+              'M', 'K', 'I', 'P', 'G', 'M', 'D', 'G', 'I', 'E', 'I', 'L', 'K',
+              'R', 'M', 'K', 'V', 'I', 'D', 'E', 'N', 'I', 'R', 'V', 'I', 'I',
+              'M', 'T', 'A', 'Y', 'G', 'E', 'L', 'D', 'M', 'I', 'Q', 'E', 'S',
+              'K', 'E', 'L', 'G', 'A', 'L', 'T', 'H', 'F', '-', 'A', 'K', 'P',
+              'F', 'D', 'I', 'D', '-', '-', '-', '-', 'E', 'I', 'R', 'D', 'A',
+              'V'],
+             ['-', 'V', 'L', 'L', 'V', 'E', 'D', 'E', 'E', 'A', 'L', 'R', 'A',
+              'A', 'A', 'G', 'D', 'F', 'L', 'E', 'T', 'R', 'G', 'Y', 'K', 'I',
+              'M', 'T', 'A', 'R', 'D', 'G', 'T', 'E', 'A', 'L', 'S', 'M', 'A',
+              'S', 'K', 'F', 'A', 'E', 'R', 'I', 'D', 'V', 'L', 'I', 'T', 'D',
+              'L', 'V', 'M', 'P', 'G', 'I', 'S', 'G', 'R', 'V', 'L', 'A', 'Q',
+              'E', 'L', 'V', 'K', 'I', 'H', 'P', 'E', 'T', 'K', 'V', 'M', 'Y',
+              'M', 'S', 'G', 'Y', 'D', 'D', '-', 'E', 'T', 'V', 'M', 'V', 'N',
+              'G', 'E', 'I', 'D', 'S', 'S', 'S', 'A', 'F', 'L', 'R', 'K', 'P',
+              'F', 'R', 'M', 'D', 'A', 'L', 'S', 'A', 'K', 'I', 'R', 'E', 'V',
+              'L']], dtype='U')
+                # fmt: on
+            )
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -699,6 +1030,34 @@ class TestEmboss(unittest.TestCase):
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             ".:|:|:|:.|:|.|:..:.:::||...:|.:|.:||:||  :.::.|::|.|:.:.||.|.|:.:|:::...:::||.|:.|.:..:::.    |.||..|    |||..|.:...|        ",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
+              'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
+              'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
+              '-', '-', 'T', 'K', 'E', 'R', 'P', 'D', 'L', 'V', 'L', 'L', 'D',
+              'M', 'K', 'I', 'P', 'G', 'M', 'D', 'G', 'I', 'E', 'I', 'L', 'K',
+              'R', 'M', 'K', 'V', 'I', 'D', 'E', 'N', 'I', 'R', 'V', 'I', 'I',
+              'M', 'T', 'A', 'Y', 'G', 'E', 'L', 'D', 'M', 'I', 'Q', 'E', 'S',
+              'K', 'E', 'L', 'G', 'A', 'L', 'T', 'H', 'F', 'A', '-', '-', '-',
+              '-', 'K', 'P', 'F', 'D', 'I', 'D', 'E', 'I', 'R', 'D', 'A', 'V',
+              '-', '-', '-', '-', '-', '-', '-', '-'],
+             ['T', 'V', 'L', 'L', 'V', 'E', 'D', 'E', 'E', 'G', 'V', 'R', 'K',
+              'L', 'V', 'R', 'G', 'I', 'L', 'S', 'R', 'Q', 'G', 'Y', 'H', 'V',
+              'L', 'E', 'A', 'T', 'S', 'G', 'E', 'E', 'A', 'L', 'E', 'I', 'V',
+              'R', 'E', 'S', 'T', 'Q', 'K', 'I', 'D', 'M', 'L', 'L', 'S', 'D',
+              'V', 'V', 'L', 'V', 'G', 'M', 'S', 'G', 'R', 'E', 'L', 'S', 'E',
+              'R', 'L', 'R', 'I', 'Q', 'M', 'P', 'S', 'L', 'K', 'V', 'I', 'Y',
+              'M', 'S', 'G', 'Y', 'T', 'D', 'D', 'A', 'I', 'V', 'R', 'H', '-',
+              '-', '-', '-', 'G', 'V', 'L', 'T', 'E', 'S', 'A', 'E', 'F', 'L',
+              'Q', 'K', 'P', 'F', 'T', 'S', 'D', 'S', 'L', 'L', 'R', 'K', 'V',
+              'R', 'A', 'V', 'L', 'Q', 'K', 'R', 'Q']], dtype='U')
+                # fmt: on
+            )
         )
         with self.assertRaises(StopIteration):
             next(alignments)

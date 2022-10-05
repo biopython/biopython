@@ -1050,6 +1050,44 @@ class Alignment:
                 coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
+    def __array__(self, dtype=None):
+        steps = abs(numpy.diff(self.coordinates, 1))
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps == 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        n = len(steps)
+        m = sum(gaps)
+        data = numpy.empty((n, m), "S1")
+        for i in range(n):
+            sequence = self.sequences[i]
+            try:
+                sequence = sequence.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
+            k = self.coordinates[i, 0]
+            if self.coordinates[i, 0] > self.coordinates[i, -1]:
+                # reverse strand
+                sequence = reverse_complement(sequence, inplace=False)
+                k = len(sequence) - k
+            m = 0
+            for step, gap in zip(steps[i], gaps):
+                if step:
+                    j = k + step
+                    n = m + step
+                    try:
+                        subsequence = bytes(sequence[k:j])
+                    except TypeError:  # str
+                        subsequence = bytes(sequence[k:j], "UTF8")
+                    data[i, :].data.cast("B")[m:n] = subsequence
+                    k = j
+                else:
+                    n = m + gap
+                    data[i, m:n] = b"-"
+                m = n
+        if dtype is not None:
+            data = numpy.array(data, dtype)
+        return data
+
     @property
     def target(self):
         """Return self.sequences[0] for a pairwise alignment."""
@@ -1257,11 +1295,7 @@ class Alignment:
 
         where row is an integer. Return value is a string.
         """
-        coordinates = self.coordinates.copy()
-        for sequence, row in zip(self.sequences, coordinates):
-            if row[0] > row[-1]:  # reverse strand
-                row[:] = len(sequence) - row[:]
-        steps = numpy.diff(coordinates, 1)
+        steps = abs(numpy.diff(self.coordinates, 1))
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
             raise ValueError("Unequal step sizes in alignment")
@@ -1270,13 +1304,13 @@ class Alignment:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
             pass
-        coordinates = coordinates[index]
+        i = self.coordinates[index, 0]
         if self.coordinates[index, 0] > self.coordinates[index, -1]:
             # reverse strand
             sequence = reverse_complement(sequence, inplace=False)
-        line = ""
+            i = len(sequence) - i
         steps = steps[index]
-        i = coordinates[0]
+        line = ""
         for step, gap in zip(steps, gaps):
             if step:
                 j = i + step
