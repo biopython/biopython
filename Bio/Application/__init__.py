@@ -274,13 +274,13 @@ class AbstractCommandline:
 
             # Beware of binding-versus-assignment confusion issues
             def getter(name):
-                return lambda x: x._get_parameter(name)
+                return lambda x: x._get_parameter(name)  # noqa: B023
 
             def setter(name):
-                return lambda x, value: x.set_parameter(name, value)
+                return lambda x, value: x.set_parameter(name, value)  # noqa: B023
 
             def deleter(name):
-                return lambda x: x._clear_parameter(name)
+                return lambda x: x._clear_parameter(name)  # noqa: B023
 
             doc = p.description
             if isinstance(p, _Switch):

@@ -386,10 +386,10 @@ class TypeCompiler:
                 """Dynamically defined restriction enzyme class."""
 
                 def __new__(cls):
-                    return type.__new__(cls, f"type{n:d}", ty, dct)
+                    return type.__new__(cls, f"type{n:d}", ty, dct)  # noqa: B023
 
                 def __init__(cls):
-                    super().__init__(f"type{n:d}", ty, dct)
+                    super().__init__(f"type{n:d}", ty, dct)  # noqa: B023
 
             yield klass()
             n += 1
