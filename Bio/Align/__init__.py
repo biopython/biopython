@@ -120,9 +120,6 @@ class MultipleSeqAlignment:
     TATACATTAAGTATACCAGA gi|6273289|gb|AF191663.1|AF191
     TATACATTAAGTGTACCAGA gi|6273291|gb|AF191665.1|AF191
 
-    Note - This object replaced the older Alignment object defined in module
-    Bio.Align.Generic but is not fully backwards compatible with it.
-
     Note - This object does NOT attempt to model the kind of alignments used
     in next generation sequencing with multiple sequencing reads which are
     much shorter than the alignment, and where there is usually a consensus or
