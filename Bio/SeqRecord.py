@@ -897,7 +897,7 @@ class SeqRecord:
         if not isinstance(other, SeqRecord):
             # Assume it is a string or a Seq.
             # Note can't transfer any per-letter-annotations
-            return SeqRecord(
+            return type(self)(
                 self.seq + other,
                 id=self.id,
                 name=self.name,
@@ -907,7 +907,7 @@ class SeqRecord:
                 dbxrefs=self.dbxrefs[:],
             )
         # Adding two SeqRecord objects... must merge annotation.
-        answer = SeqRecord(
+        answer = type(self)(
             self.seq + other.seq, features=self.features[:], dbxrefs=self.dbxrefs[:]
         )
         # Will take all the features and all the db cross refs,
@@ -962,7 +962,7 @@ class SeqRecord:
         # Assume it is a string or a Seq.
         # Note can't transfer any per-letter-annotations
         offset = len(other)
-        return SeqRecord(
+        return type(self)(
             other + self.seq,
             id=self.id,
             name=self.name,
@@ -1006,7 +1006,7 @@ class SeqRecord:
         "#$%&'()
         <BLANKLINE>
         """
-        return SeqRecord(
+        return type(self)(
             self.seq.upper(),
             id=self.id,
             name=self.name,
@@ -1049,7 +1049,7 @@ class SeqRecord:
         >>> old.dbxrefs == new.dbxrefs
         True
         """
-        return SeqRecord(
+        return type(self)(
             self.seq.lower(),
             id=self.id,
             name=self.name,
@@ -1240,7 +1240,7 @@ class SeqRecord:
             )  # TODO: remove inplace=False
         if isinstance(self.seq, MutableSeq):
             seq = Seq(seq)
-        answer = SeqRecord(seq)
+        answer = type(self)(seq)
         if isinstance(id, str):
             answer.id = id
         elif id:
