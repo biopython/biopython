@@ -2672,38 +2672,44 @@ class PairwiseAlignments:
         """
         self.sequences = [seqA, seqB]
         self.score = score
-        self.paths = paths
+        self._paths = paths
         self._index = -1
 
     def __len__(self):
         """Return the number of alignments."""
-        return len(self.paths)
+        return len(self._paths)
 
     def __getitem__(self, index):
+        if not isinstance(index, int):
+            raise TypeError(f"index must be an integer, not {index.__class__.__name__}")
+        if index < 0:
+            index += len(self._paths)
         if index == self._index:
-            return self.alignment
+            return self._alignment
         if index < self._index:
-            self.paths.reset()
+            self._paths.reset()
             self._index = -1
-        while self._index < index:
+        while True:
             try:
                 alignment = next(self)
             except StopIteration:
                 raise IndexError("index out of range") from None
+            if self._index == index:
+                break
         return alignment
 
     def __iter__(self):
-        self.paths.reset()
+        self._paths.reset()
         self._index = -1
         return self
 
     def __next__(self):
-        path = next(self.paths)
+        path = next(self._paths)
         self._index += 1
         coordinates = numpy.array(path)
         alignment = Alignment(self.sequences, coordinates)
         alignment.score = self.score
-        self.alignment = alignment
+        self._alignment = alignment
         return alignment
 
 
