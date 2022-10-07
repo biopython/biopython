@@ -345,7 +345,7 @@ class Parser:
                                         )
                                         start = int(pair[1].split("-")[0]) - 1
                                         end = int(pair[1].split("-")[1])
-                                        feature.location = SeqFeature.FeatureLocation(
+                                        feature.location = SeqFeature.SimpleLocation(
                                             start, end
                                         )
                                         # self.ParsedSeqRecord.features.append(feature)
@@ -464,7 +464,7 @@ class Parser:
                         start_position = _parse_position(element, -1)
                         element = feature_element.findall(NS + "end")[0]
                         end_position = _parse_position(element)
-                    feature.location = SeqFeature.FeatureLocation(
+                    feature.location = SeqFeature.SimpleLocation(
                         start_position, end_position
                     )
                 else:

@@ -22,7 +22,7 @@ import re
 
 from Bio.SeqFeature import (
     SeqFeature,
-    FeatureLocation,
+    SimpleLocation,
     ExactPosition,
     BeforePosition,
     AfterPosition,
@@ -157,7 +157,7 @@ class FeatureTable(SeqFeature):
     attributes are used as follows:
 
      - ``location``: location of the feature on the canonical or isoform
-       sequence; the location is stored as an instance of FeatureLocation,
+       sequence; the location is stored as an instance of SimpleLocation,
        defined in Bio.SeqFeature, with the ref attribute set to the isoform
        ID referring to the canonical or isoform sequence on which the feature
        is defined
@@ -750,7 +750,7 @@ def _read_ft(record, line):
         else:
             position = int(to_res)
             to_res = ExactPosition(position)
-        location = FeatureLocation(from_res, to_res, ref=isoform_id)
+        location = SimpleLocation(from_res, to_res, ref=isoform_id)
         feature = FeatureTable(
             location=location, type=name, id=None, qualifiers=qualifiers
         )

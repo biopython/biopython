@@ -15,7 +15,7 @@ from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
@@ -115,11 +115,11 @@ def _parse_location(rangespec, strand, record):
     start = start - 1
     if start > end:
         # Range wrapping the end of the sequence
-        l1 = FeatureLocation(start, len(record), strand=strand)
-        l2 = FeatureLocation(0, end, strand=strand)
+        l1 = SimpleLocation(start, len(record), strand=strand)
+        l2 = SimpleLocation(0, end, strand=strand)
         location = l1 + l2
     else:
-        location = FeatureLocation(start, end, strand=strand)
+        location = SimpleLocation(start, end, strand=strand)
     return location
 
 

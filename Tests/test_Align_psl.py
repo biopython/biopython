@@ -10,7 +10,7 @@ from io import StringIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
+from Bio.SeqFeature import SimpleLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
 from Bio import Align
 
@@ -3868,7 +3868,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             feature = alignment.target.features[0]
             self.assertEqual(
                 feature.location,
-                FeatureLocation(
+                SimpleLocation(
                     ExactPosition(75566694), ExactPosition(75566850), strand=+1
                 ),
             )
@@ -3919,7 +3919,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             feature = alignment.target.features[0]
             self.assertEqual(
                 feature.location,
-                FeatureLocation(
+                SimpleLocation(
                     ExactPosition(75560749), ExactPosition(75560881), strand=+1
                 ),
             )
@@ -3972,10 +3972,10 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(75549820), ExactPosition(75549865), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(75567225), ExactPosition(75567312), strand=+1
                         ),
                     ],
@@ -4031,10 +4031,10 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(75604767), ExactPosition(75604827), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(75605728), ExactPosition(75605809), strand=+1
                         ),
                     ],
@@ -4085,7 +4085,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             feature = alignment.target.features[0]
             self.assertEqual(
                 feature.location,
-                FeatureLocation(
+                SimpleLocation(
                     ExactPosition(75594914), ExactPosition(75594989), strand=+1
                 ),
             )
@@ -4132,7 +4132,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             feature = alignment.target.features[0]
             self.assertEqual(
                 feature.location,
-                FeatureLocation(
+                SimpleLocation(
                     ExactPosition(75569459), ExactPosition(75569507), strand=+1
                 ),
             )
@@ -4179,7 +4179,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             feature = alignment.target.features[0]
             self.assertEqual(
                 feature.location,
-                FeatureLocation(
+                SimpleLocation(
                     ExactPosition(41260685), ExactPosition(41260787), strand=+1
                 ),
             )
@@ -4232,10 +4232,10 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(41257605), ExactPosition(41257731), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(41263227), ExactPosition(41263290), strand=+1
                         ),
                     ],
@@ -4477,25 +4477,25 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9712654), ExactPosition(9712786), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9715941), ExactPosition(9716097), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9716445), ExactPosition(9716532), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9718374), ExactPosition(9718422), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9739264), ExactPosition(9739339), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9743706), ExactPosition(9743766), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(9744511), ExactPosition(9744592), strand=+1
                         ),
                     ],
@@ -4558,10 +4558,10 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(2103463), ExactPosition(2103523), strand=+1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(2103522), ExactPosition(2104149), strand=+1
                         ),
                     ],
@@ -4622,10 +4622,10 @@ QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHLYEL
                 feature.location,
                 CompoundLocation(
                     [
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(20872472), ExactPosition(20873021), strand=-1
                         ),
-                        FeatureLocation(
+                        SimpleLocation(
                             ExactPosition(20872390), ExactPosition(20872471), strand=-1
                         ),
                     ],

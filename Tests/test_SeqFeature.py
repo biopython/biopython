@@ -19,7 +19,7 @@ from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import UnknownPosition
@@ -55,8 +55,8 @@ class TestReference(unittest.TestCase):
         )
 
 
-class TestFeatureLocation(unittest.TestCase):
-    """Tests for the SeqFeature.FeatureLocation class."""
+class TestSimpleLocation(unittest.TestCase):
+    """Tests for the SeqFeature.SimpleLocation class."""
 
     def test_offsets(self):
         """Test adding and subtracting integer offsets."""
@@ -73,72 +73,72 @@ class TestFeatureLocation(unittest.TestCase):
 
     def test_eq_identical(self):
         """Test two identical locations are equal."""
-        loc1 = FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, -1)
-        loc2 = FeatureLocation(23, 42, -1)
+        loc1 = SimpleLocation(23, 42, -1)
+        loc2 = SimpleLocation(23, 42, -1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(BeforePosition(23), AfterPosition(42), 1)
-        loc2 = FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(BeforePosition(23), AfterPosition(42), 1)
+        loc2 = SimpleLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
-        loc2 = FeatureLocation(23, 42, 1, "foo", "bar")
+        loc1 = SimpleLocation(23, 42, 1, "foo", "bar")
+        loc2 = SimpleLocation(23, 42, 1, "foo", "bar")
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
         """Test two different locations are not equal."""
-        loc1 = FeatureLocation(22, 42, 1)
-        loc2 = FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(22, 42, 1)
+        loc2 = SimpleLocation(23, 42, 1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(23, 43, 1)
+        loc1 = SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(23, 43, 1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(23, 42, -1)
+        loc1 = SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(23, 42, -1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(23, 42, 1)
         loc2 = (23, 42, 1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, "foo")
-        loc2 = FeatureLocation(23, 42, 1, "bar")
+        loc1 = SimpleLocation(23, 42, 1, "foo")
+        loc2 = SimpleLocation(23, 42, 1, "bar")
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
-        loc2 = FeatureLocation(23, 42, 1, "foo", "baz")
+        loc1 = SimpleLocation(23, 42, 1, "foo", "bar")
+        loc2 = SimpleLocation(23, 42, 1, "foo", "baz")
         self.assertNotEqual(loc1, loc2)
 
     def test_start_before_end(self):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
-            FeatureLocation(42, 23, 1)
+            SimpleLocation(42, 23, 1)
         self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
-            FeatureLocation(42, 0, 1)
+            SimpleLocation(42, 0, 1)
         self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
-            FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
+            SimpleLocation(BeforePosition(42), AfterPosition(23), -1)
         self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
-            FeatureLocation(42, AfterPosition(0), 1)
+            SimpleLocation(42, AfterPosition(0), 1)
         self.assertIn(expected, str(err.exception))
 
         # Features with UnknownPositions should pass check
-        FeatureLocation(42, UnknownPosition())
-        FeatureLocation(UnknownPosition(), 42)
+        SimpleLocation(42, UnknownPosition())
+        SimpleLocation(UnknownPosition(), 42)
 
         # Same start and end should pass check
-        FeatureLocation(42, 42)
+        SimpleLocation(42, 42)
 
 
 class TestCompoundLocation(unittest.TestCase):
@@ -146,39 +146,35 @@ class TestCompoundLocation(unittest.TestCase):
 
     def test_eq_identical(self):
         """Test two identical locations are equal."""
-        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = CompoundLocation(
-            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
-        )
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = CompoundLocation([SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)])
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
         """Test two different locations are not equal."""
-        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
         loc2 = (
-            FeatureLocation(12, 17, 1)
-            + FeatureLocation(23, 42, 1)
-            + FeatureLocation(50, 60, 1)
+            SimpleLocation(12, 17, 1)
+            + SimpleLocation(23, 42, 1)
+            + SimpleLocation(50, 60, 1)
         )
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(12, 17, -1) + FeatureLocation(23, 42, -1)
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(12, 17, -1) + SimpleLocation(23, 42, -1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = CompoundLocation(
-            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
-        )
+        loc1 = CompoundLocation([SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)])
         loc2 = CompoundLocation(
-            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], "order"
+            [SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)], "order"
         )
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
         loc2 = 5
         self.assertNotEqual(loc1, loc2)
 
@@ -189,7 +185,7 @@ class TestSeqFeature(unittest.TestCase):
     def test_eq_identical(self):
         f1 = SeqFeature(
             type="CDS",
-            location=FeatureLocation(0, 182, 1),
+            location=SimpleLocation(0, 182, 1),
             qualifiers={
                 "product": ["interferon beta, fibroblast"],
             },
@@ -200,7 +196,7 @@ class TestSeqFeature(unittest.TestCase):
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""
         seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
-        f = SeqFeature(FeatureLocation(0, 30), type="CDS")
+        f = SeqFeature(SimpleLocation(0, 30), type="CDS")
         f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):
             f.translate(seq)
@@ -225,9 +221,9 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(str(before_pos), "<15")
         self.assertEqual(str(after_pos), ">40")
         # put these into Locations
-        location1 = FeatureLocation(exact_pos, within_pos_e)
-        location2 = FeatureLocation(before_pos, between_pos_e)
-        location3 = FeatureLocation(within_pos_s, after_pos)
+        location1 = SimpleLocation(exact_pos, within_pos_e)
+        location2 = SimpleLocation(before_pos, between_pos_e)
+        location3 = SimpleLocation(within_pos_s, after_pos)
         self.assertEqual(str(location1), "[5:(10.13)]")
         self.assertEqual(str(location1.start), "5")
         self.assertEqual(str(location1.end), "(10.13)")
@@ -281,7 +277,7 @@ class TestExtract(unittest.TestCase):
         """Test location with reference to another record."""
         parent_record = SeqRecord.SeqRecord(seq=Seq.Seq("actg"))
         another_record = SeqRecord.SeqRecord(seq=Seq.Seq("gtcagctac"))
-        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        location = SimpleLocation(5, 8, ref="ANOTHER.7")
         with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
@@ -302,7 +298,7 @@ class TestExtract(unittest.TestCase):
         """Test location with reference to another sequence."""
         parent_sequence = Seq.Seq("actg")
         another_sequence = Seq.Seq("gtcagctac")
-        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        location = SimpleLocation(5, 8, ref="ANOTHER.7")
         sequence = location.extract(
             parent_sequence, references={"ANOTHER.7": another_sequence}
         )
@@ -313,7 +309,7 @@ class TestExtract(unittest.TestCase):
         """Test compound location with reference to another record."""
         parent_record = SeqRecord.SeqRecord(Seq.Seq("aaccaaccaaccaaccaa"))
         another_record = SeqRecord.SeqRecord(Seq.Seq("ttggttggttggttggtt"))
-        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        location = SimpleLocation(2, 6) + SimpleLocation(5, 8, ref="ANOTHER.7")
         with self.assertRaisesRegex(
             ValueError,
             r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
@@ -334,7 +330,7 @@ class TestExtract(unittest.TestCase):
         """Test compound location with reference to another sequence."""
         parent_sequence = Seq.Seq("aaccaaccaaccaaccaa")
         another_sequence = Seq.Seq("ttggttggttggttggtt")
-        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        location = SimpleLocation(2, 6) + SimpleLocation(5, 8, ref="ANOTHER.7")
         sequence = location.extract(
             parent_sequence, references={"ANOTHER.7": another_sequence}
         )

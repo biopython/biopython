@@ -18,7 +18,7 @@ from struct import unpack
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
@@ -134,7 +134,7 @@ def _read_feature(handle, record):
     # Assemble the feature
     # Shift start by -1 as XDNA feature coordinates are 1-based
     # while Biopython uses 0-based counting.
-    location = FeatureLocation(start - 1, end, strand=strand)
+    location = SimpleLocation(start - 1, end, strand=strand)
     qualifiers = {}
     if name:
         qualifiers["label"] = [name]
