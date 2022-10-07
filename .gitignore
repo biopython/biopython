@@ -129,3 +129,6 @@ Doc/api/*.rst
 env/
 venv/
 ENV/
+
+# Testing
+**/.coverage
