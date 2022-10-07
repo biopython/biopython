@@ -1792,7 +1792,7 @@ class Ambiguous(AbstractCut):
             elif 0 <= f3 + length <= length:
                 re = "N^" + abs(f5) * "N" + site[:f3] + "_" + site[f3:]
             elif f3 + length < 0:
-                re = "N^" * abs(f5) * "N" + "_" + abs(length + f3) * "N" + site
+                re = "N^" + abs(f5) * "N" + "_" + abs(length + f3) * "N" + site
             elif f5 > length:
                 re = site + (f5 - length) * "N" + "^" + (length + f3 - f5) * "N" + "_N"
             else:
