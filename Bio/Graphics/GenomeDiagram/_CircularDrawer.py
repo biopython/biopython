@@ -309,7 +309,7 @@ class CircularDrawer(AbstractDrawer):
 
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
-        midangle, midcos, midsin = self.canvas_angle(float(locend + locstart) / 2)
+        midangle, midcos, midsin = self.canvas_angle((locend + locstart) / 2)
 
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
@@ -1114,7 +1114,7 @@ class CircularDrawer(AbstractDrawer):
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
-        if abs(float(endangle - startangle)) > 0.01:
+        if abs(endangle - startangle) > 0.01:
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor, fillColor=color, strokewidth=0)
             # Note reportlab counts angles anti-clockwise from the horizontal
@@ -1298,7 +1298,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)
+        angle = endangle - startangle
 
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
@@ -1421,7 +1421,7 @@ class CircularDrawer(AbstractDrawer):
                 f"Invalid orientation {orientation!r}, should be 'left' or 'right'"
             )
 
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
         shaft_height = boxheight * shaft_height_ratio
@@ -1615,7 +1615,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         height = outer_radius - inner_radius
 
         assert startangle <= endangle and angle >= 0

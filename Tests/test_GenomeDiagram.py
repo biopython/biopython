@@ -166,7 +166,7 @@ def calc_gc_skew(sequence):
     if g + c == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (g - c) / float(g + c)
+        return (g - c) / (g + c)
 
 
 def calc_at_skew(sequence):
@@ -183,7 +183,7 @@ def calc_at_skew(sequence):
     if a + t == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (a - t) / float(a + t)
+        return (a - t) / (a + t)
 
 
 def calc_dinucleotide_counts(sequence):

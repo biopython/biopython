@@ -88,9 +88,7 @@ class ChromosomeCounts:
         are instead counts divided by some number.
         """
         try:
-            self._count_info[segment_name] = float(
-                self._count_info[segment_name]
-            ) / float(scale_value)
+            self._count_info[segment_name] /= scale_value
         except KeyError:
             raise KeyError(f"Segment name {segment_name} not found.") from None
 
