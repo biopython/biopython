@@ -4,13 +4,10 @@
 # as part of this package.
 """Tests for Align.bigpsl module."""
 import unittest
-from io import StringIO
 
 
 from Bio import Align
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import FeatureLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
 
 
