@@ -15,9 +15,9 @@ Comput Appl Biosci 1997 , 13:291-295
 
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
-
-import subprocess
 import os
+import subprocess
+import tempfile
 
 from Bio.PDB.Polypeptide import is_aa
 
@@ -36,34 +36,35 @@ def run_psea(fname, verbose=False):
     """
     last = fname.split("/")[-1]
     base = last.split(".")[0]
-    cmd = ["psea", fname]
+    cmd = ["psea", os.path.abspath(fname)]
 
-    p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
+    curdir = os.getcwd()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        os.chdir(tmpdir)
+        p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
+        output_file = base + ".sea"
+        if verbose:
+            print(p.stdout)
+        if not p.stderr.strip() and os.path.exists(output_file):
+            with open(output_file) as output:
+                os.chdir(curdir)
+                return output.read()
+        else:
+            raise RuntimeError(f"Error running p-sea: {p.stdout}")
 
-    if verbose:
-        print(p.stdout)
 
-    if not p.stderr.strip() and os.path.exists(base + ".sea"):
-        return base + ".sea"
-    else:
-        raise RuntimeError(f"Error running p-sea: {p.stderr}")
-
-
-def psea(pname):
+def psea(pname, verbose=False):
     """Parse PSEA output file."""
-    fname = run_psea(pname)
+    psea_output = run_psea(pname, verbose)
     start = 0
     ss = ""
-    with open(fname) as fp:
-        for l in fp:
-            if l[0:6] == ">p-sea":
-                start = 1
-                continue
-            if not start:
-                continue
-            if l[0] == "\n":
-                break
-            ss = ss + l[0:-1]
+    for l in psea_output.splitlines():
+        if l.startswith(">p-sea"):
+            start = 1
+            continue
+        if not start:
+            continue
+        ss = ss + l
     return ss
 
 
