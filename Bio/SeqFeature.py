@@ -54,7 +54,7 @@ Classes:
 import functools
 import re
 import warnings
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
@@ -1611,6 +1611,7 @@ class CompoundLocation:
 class Position(ABC):
     """Abstract base class representing a position."""
 
+    @abstractmethod
     def __repr__(self):
         """Represent the Position object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
