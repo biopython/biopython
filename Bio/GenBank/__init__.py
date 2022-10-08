@@ -648,12 +648,25 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
                 BiopythonParserWarning,
             )
             part = part[5:-1]
+            start = SeqFeature.Position.fromstring(part, -1)
+            end = SeqFeature.Position.fromstring(part)
+            if start < 0:
+                break
+            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            locs.append(loc)
+        elif key == "solo":
+            # e.g. "123"
+            start = SeqFeature.Position.fromstring(part, -1)
+            end = SeqFeature.Position.fromstring(part)
+            if start < 0:
+                break
+            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            locs.append(loc)
         elif key in ("pair", "within", "oneof"):
             s, e = part.split("..")
             # Attempt to fix features that span the origin
             s_pos = SeqFeature.Position.fromstring(s, -1)
             e_pos = SeqFeature.Position.fromstring(e)
-        if key in ("pair", "within", "oneof"):
             if int(s_pos) > int(e_pos):
                 # There is likely a problem with origin wrapping.
                 # Create a CompoundLocation of the wrapped feature,
@@ -710,14 +723,6 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             else:
                 raise ValueError(f"Invalid between location {part!r}") from None
             loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
-            locs.append(loc)
-        elif key in ("bond", "solo"):
-            # e.g. "123"
-            start = SeqFeature.Position.fromstring(part, -1)
-            end = SeqFeature.Position.fromstring(part)
-            if start < 0:
-                break
-            loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
             locs.append(loc)
     else:
         if len(locs) == 1:
