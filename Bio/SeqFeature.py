@@ -52,12 +52,26 @@ Classes:
 
 """
 import functools
+import re
 import warnings
+from abc import ABC
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
+
+
+_within_position = r"\((\d+)\.(\d+)\)"
+_re_within_position = re.compile(_within_position)
+assert _re_within_position.match("(3.9)")
+
+_oneof_position = r"one\-of\((\d+[,\d+]+)\)"
+_re_oneof_position = re.compile(_oneof_position)
+assert _re_oneof_position.match("one-of(6,9)")
+assert not _re_oneof_position.match("one-of(3)")
+assert _re_oneof_position.match("one-of(3,6)")
+assert _re_oneof_position.match("one-of(3,6,9)")
 
 
 class SeqFeature:
@@ -119,20 +133,6 @@ class SeqFeature:
         >>> f3.strand == f3.location.strand == -1
         True
 
-        An invalid strand will trigger an exception:
-
-        >>> f4 = SeqFeature(SimpleLocation(50, 60, strand=2))
-        Traceback (most recent call last):
-           ...
-        ValueError: Strand should be +1, -1, 0 or None, not 2
-
-        Similarly if set via the SimpleLocation directly:
-
-        >>> loc4 = SimpleLocation(50, 60, strand=2)
-        Traceback (most recent call last):
-           ...
-        ValueError: Strand should be +1, -1, 0 or None, not 2
-
         For exact start/end positions, an integer can be used (as shown above)
         as shorthand for the ExactPosition object. For non-exact locations, the
         SimpleLocation must be specified via the appropriate position objects.
@@ -173,7 +173,7 @@ class SeqFeature:
         if qualifiers is not None:
             self.qualifiers.update(qualifiers)
         if sub_features is not None:
-            raise TypeError("Rather than sub_features, use a CompoundSimpleLocation")
+            raise TypeError("Rather than sub_features, use a CompoundLocation")
         if ref is not None:
             warnings.warn(
                 "Using the ref argument is deprecated, and will be removed in a future release. "
@@ -327,7 +327,7 @@ class SeqFeature:
     def _shift(self, offset):
         """Return a copy of the feature with its location shifted (PRIVATE).
 
-        The annotation qaulifiers are copied.
+        The annotation qualifiers are copied.
         """
         return SeqFeature(
             location=self.location._shift(offset),
@@ -344,7 +344,7 @@ class SeqFeature:
         after flipping 10..30 (-1 strand). Strandless (None) or unknown
         strand (0) remain like that - just their end points are changed.
 
-        The annotation qaulifiers are copied.
+        The annotation qualifiers are copied.
         """
         return SeqFeature(
             location=self.location._flip(length),
@@ -753,10 +753,10 @@ class SimpleLocation:
 
         start and end arguments specify the values where the feature begins
         and ends. These can either by any of the ``*Position`` objects that
-        inherit from AbstractPosition, or can just be integers specifying the
-        position. In the case of integers, the values are assumed to be
-        exact and are converted in ExactPosition arguments. This is meant
-        to make it easy to deal with non-fuzzy ends.
+        inherit from Position, or can just be integers specifying the position.
+        In the case of integers, the values are assumed to be exact and are
+        converted in ExactPosition arguments. This is meant to make it easy
+        to deal with non-fuzzy ends.
 
         i.e. Short form:
 
@@ -804,13 +804,13 @@ class SimpleLocation:
 
         """
         # TODO - Check 0 <= start <= end (<= length of reference)
-        if isinstance(start, AbstractPosition):
+        if isinstance(start, Position):
             self._start = start
         elif isinstance(start, int):
             self._start = ExactPosition(start)
         else:
             raise TypeError(f"start={start!r} {type(start)}")
-        if isinstance(end, AbstractPosition):
+        if isinstance(end, Position):
             self._end = end
         elif isinstance(end, int):
             self._end = ExactPosition(end)
@@ -1053,8 +1053,8 @@ class SimpleLocation:
         if self.ref or self.ref_db:
             return self
         return SimpleLocation(
-            start=self._start._shift(offset),
-            end=self._end._shift(offset),
+            start=self._start + offset,
+            end=self._end + offset,
             strand=self.strand,
         )
 
@@ -1083,9 +1083,9 @@ class SimpleLocation:
     def parts(self):
         """Read only list of sections (always one, the SimpleLocation object).
 
-        This is a convenience property allowing you to write code handling both
-        SimpleLocation objects (with one part) and more complex CompoundLocation
-        objects (with multiple parts) interchangeably.
+        This is a convenience property allowing you to write code handling
+        both SimpleLocation objects (with one part) and more complex
+        CompoundLocation objects (with multiple parts) interchangeably.
         """
         return [self]
 
@@ -1239,10 +1239,10 @@ class CompoundLocation:
         >>> f.end == max(f) + 1
         True
 
-        This is consistent with the behavior of the SimpleLocation for a
-        simple region, where again the 'start' and 'end' do not necessarily
-        give the biological start and end, but rather the 'minimal' and
-        'maximal' coordinate boundaries.
+        This is consistent with the behavior of the SimpleLocation for a single
+        region, where again the 'start' and 'end' do not necessarily give the
+        biological start and end, but rather the 'minimal' and 'maximal'
+        coordinate boundaries.
 
         Note that adding locations provides a more intuitive method of
         construction:
@@ -1608,11 +1608,11 @@ class CompoundLocation:
         return f_seq
 
 
-class AbstractPosition:
+class Position(ABC):
     """Abstract base class representing a position."""
 
     def __repr__(self):
-        """Represent the AbstractPosition object as a string for debugging."""
+        """Represent the Position object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
 
     @property
@@ -1639,8 +1639,102 @@ class AbstractPosition:
         )
         return 0
 
+    @staticmethod
+    def fromstring(text, offset=0):
+        """Build a Position object from the text string.
 
-class ExactPosition(int, AbstractPosition):
+        For an end position, leave offset as zero (default):
+
+        >>> Position.fromstring("5")
+        ExactPosition(5)
+
+        For a start position, set offset to minus one (for Python counting):
+
+        >>> Position.fromstring("5", -1)
+        ExactPosition(4)
+
+        This also covers fuzzy positions:
+
+        >>> p = Position.fromstring("<5")
+        >>> p
+        BeforePosition(5)
+        >>> print(p)
+        <5
+        >>> int(p)
+        5
+
+        >>> Position.fromstring(">5")
+        AfterPosition(5)
+
+        By default assumes an end position, so note the integer behavior:
+
+        >>> p = Position.fromstring("one-of(5,8,11)")
+        >>> p
+        OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+        >>> print(p)
+        one-of(5,8,11)
+        >>> int(p)
+        11
+
+        >>> Position.fromstring("(8.10)")
+        WithinPosition(10, left=8, right=10)
+
+        Fuzzy start positions:
+
+        >>> p = Position.fromstring("<5", -1)
+        >>> p
+        BeforePosition(4)
+        >>> print(p)
+        <4
+        >>> int(p)
+        4
+
+        Notice how the integer behavior changes too!
+
+        >>> p = Position.fromstring("one-of(5,8,11)", -1)
+        >>> p
+        OneOfPosition(4, choices=[ExactPosition(4), ExactPosition(7), ExactPosition(10)])
+        >>> print(p)
+        one-of(4,7,10)
+        >>> int(p)
+        4
+
+        """
+        if offset != 0 and offset != -1:
+            raise ValueError(
+                "To convert one-based indices to zero-based indices, offset must be either 0 (for end positions) or -1 (for start positions)."
+            )
+        if text == "?":
+            return UnknownPosition()
+        if text.startswith("?"):
+            return UncertainPosition(int(text[1:]) + offset)
+        if text.startswith("<"):
+            return BeforePosition(int(text[1:]) + offset)
+        if text.startswith(">"):
+            return AfterPosition(int(text[1:]) + offset)
+        m = _re_within_position.match(text)
+        if m is not None:
+            s, e = m.groups()
+            s = int(s) + offset
+            e = int(e) + offset
+            if offset == -1:
+                default = s
+            else:
+                default = e
+            return WithinPosition(default, left=s, right=e)
+        m = _re_oneof_position.match(text)
+        if m is not None:
+            positions = m.groups()[0]
+            parts = [ExactPosition(int(pos) + offset) for pos in positions.split(",")]
+            if offset == -1:
+                default = min(int(pos) for pos in parts)
+            else:
+                default = max(int(pos) for pos in parts)
+            return OneOfPosition(default, choices=parts)
+        return ExactPosition(int(text) + offset)
+
+
+class ExactPosition(int, Position):
     """Specify the specific position of a boundary.
 
     Arguments:
@@ -1657,7 +1751,7 @@ class ExactPosition(int, AbstractPosition):
     >>> print(p)
     5
 
-    >>> isinstance(p, AbstractPosition)
+    >>> isinstance(p, Position)
     True
     >>> isinstance(p, int)
     True
@@ -1671,7 +1765,7 @@ class ExactPosition(int, AbstractPosition):
     >>> p <= 5
     True
     >>> p + 10
-    15
+    ExactPosition(15)
 
     """
 
@@ -1690,7 +1784,7 @@ class ExactPosition(int, AbstractPosition):
         """Represent the ExactPosition object as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         # By default preserve any subclass
         return self.__class__(int(self) + offset)
@@ -1711,7 +1805,7 @@ class UncertainPosition(ExactPosition):
     pass
 
 
-class UnknownPosition(AbstractPosition):
+class UnknownPosition(Position):
     """Specify a specific position which is unknown (has no position).
 
     This is used in UniProt, e.g. ? or in the XML as unknown.
@@ -1748,7 +1842,7 @@ class UnknownPosition(AbstractPosition):
         )
         return None
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self
 
@@ -1757,7 +1851,7 @@ class UnknownPosition(AbstractPosition):
         return self
 
 
-class WithinPosition(int, AbstractPosition):
+class WithinPosition(int, Position):
     """Specify the position of a boundary within some coordinates.
 
     Arguments:
@@ -1788,11 +1882,11 @@ class WithinPosition(int, AbstractPosition):
     >>> p < 11
     True
     >>> p + 10
-    20
+    WithinPosition(20, left=20, right=23)
 
     >>> isinstance(p, WithinPosition)
     True
-    >>> isinstance(p, AbstractPosition)
+    >>> isinstance(p, Position)
     True
     >>> isinstance(p, int)
     True
@@ -1879,8 +1973,8 @@ class WithinPosition(int, AbstractPosition):
         )
         return self._right - self._left
 
-    def _shift(self, offset):
-        """Return a copy of the position object with its location shifted (PRIVATE)."""
+    def __add__(self, offset):
+        """Return a copy of the position object with its location shifted."""
         return self.__class__(
             int(self) + offset, self._left + offset, self._right + offset
         )
@@ -1892,7 +1986,7 @@ class WithinPosition(int, AbstractPosition):
         )
 
 
-class BetweenPosition(int, AbstractPosition):
+class BetweenPosition(int, Position):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
@@ -2001,7 +2095,7 @@ class BetweenPosition(int, AbstractPosition):
         )
         return self._right - self._left
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(
             int(self) + offset, self._left + offset, self._right + offset
@@ -2014,7 +2108,7 @@ class BetweenPosition(int, AbstractPosition):
         )
 
 
-class BeforePosition(int, AbstractPosition):
+class BeforePosition(int, Position):
     """Specify a position where the actual location occurs before it.
 
     Arguments:
@@ -2034,7 +2128,7 @@ class BeforePosition(int, AbstractPosition):
     >>> int(p)
     5
     >>> p + 10
-    15
+    BeforePosition(15)
 
     Note this potentially surprising behavior:
 
@@ -2062,7 +2156,7 @@ class BeforePosition(int, AbstractPosition):
         """Return a representation of the BeforePosition object (with python counting)."""
         return f"<{int(self)}"
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset)
 
@@ -2071,7 +2165,7 @@ class BeforePosition(int, AbstractPosition):
         return AfterPosition(length - int(self))
 
 
-class AfterPosition(int, AbstractPosition):
+class AfterPosition(int, Position):
     """Specify a position where the actual location is found after it.
 
     Arguments:
@@ -2091,11 +2185,11 @@ class AfterPosition(int, AbstractPosition):
     >>> int(p)
     7
     >>> p + 10
-    17
+    AfterPosition(17)
 
     >>> isinstance(p, AfterPosition)
     True
-    >>> isinstance(p, AbstractPosition)
+    >>> isinstance(p, Position)
     True
     >>> isinstance(p, int)
     True
@@ -2126,7 +2220,7 @@ class AfterPosition(int, AbstractPosition):
         """Return a representation of the AfterPosition object (with python counting)."""
         return f">{int(self)}"
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset)
 
@@ -2135,7 +2229,7 @@ class AfterPosition(int, AbstractPosition):
         return BeforePosition(length - int(self))
 
 
-class OneOfPosition(int, AbstractPosition):
+class OneOfPosition(int, Position):
     """Specify a position where the location can be multiple positions.
 
     This models the GenBank 'one-of(1888,1901)' function, and tries
@@ -2157,11 +2251,11 @@ class OneOfPosition(int, AbstractPosition):
     >>> p > 1888
     False
     >>> p + 100
-    1988
+    OneOfPosition(1988, choices=[ExactPosition(1988), ExactPosition(2001)])
 
     >>> isinstance(p, OneOfPosition)
     True
-    >>> isinstance(p, AbstractPosition)
+    >>> isinstance(p, Position)
     True
     >>> isinstance(p, int)
     True
@@ -2171,8 +2265,8 @@ class OneOfPosition(int, AbstractPosition):
     def __new__(cls, position, choices):
         """Initialize with a set of possible positions.
 
-        position_list is a list of AbstractPosition derived objects,
-        specifying possible locations.
+        choices is a list of Position derived objects, specifying possible
+        locations.
 
         position is an integer specifying the default behavior.
         """
@@ -2231,10 +2325,10 @@ class OneOfPosition(int, AbstractPosition):
         # replace the last comma with the closing parenthesis
         return out[:-1] + ")"
 
-    def _shift(self, offset):
+    def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(
-            int(self) + offset, [p._shift(offset) for p in self.position_choices]
+            int(self) + offset, [p + offset for p in self.position_choices]
         )
 
     def _flip(self, length):
