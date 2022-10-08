@@ -60,8 +60,8 @@ class TestSimpleLocation(unittest.TestCase):
 
     def test_offsets(self):
         """Test adding and subtracting integer offsets."""
-        loc1 = FeatureLocation(23, 42, -1)
-        loc2 = FeatureLocation(123, 142, -1)
+        loc1 = SimpleLocation(23, 42, -1)
+        loc2 = SimpleLocation(123, 142, -1)
         self.assertEqual(loc1 + 100, loc2)
         self.assertEqual(loc1, loc2 + (-100))
         self.assertEqual(loc1, loc2 - 100)

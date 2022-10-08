@@ -937,8 +937,8 @@ class SimpleLocation:
     def __sub__(self, other):
         """Subtracting an integer will shift the start and end by that amount.
 
-        >>> from Bio.SeqFeature import FeatureLocation
-        >>> f1 = FeatureLocation(105, 150)
+        >>> from Bio.SeqFeature import SimpleLocation
+        >>> f1 = SimpleLocation(105, 150)
         >>> print(f1)
         [105:150]
         >>> print(f1 - 100)
