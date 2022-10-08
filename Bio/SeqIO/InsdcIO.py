@@ -243,7 +243,7 @@ def _insdc_feature_position_string(pos, offset=0):
         return "one-of(%s)" % ",".join(
             _insdc_feature_position_string(p, offset) for p in pos.position_choices
         )
-    elif isinstance(pos, SeqFeature.AbstractPosition):
+    elif isinstance(pos, SeqFeature.Position):
         raise NotImplementedError("Please report this as a bug in Biopython.")
     else:
         raise ValueError("Expected a SeqFeature position object.")
@@ -342,7 +342,7 @@ def _insdc_location_string(location, rec_length):
                 ",".join(_insdc_location_string(p, rec_length) for p in parts),
             )
     except AttributeError:
-        # Simple SimpleLocation
+        # SimpleLocation
         loc = _insdc_location_string_ignoring_strand_and_subfeatures(
             location, rec_length
         )
