@@ -7388,7 +7388,10 @@ qualifiers:
             record = SeqIO.read(file_fails, "gb")
             self.assertEqual(len(caught), 1)
             self.assertEqual(caught[0].category, BiopythonParserWarning)
-            self.assertTrue("Skipping feature" in str(caught[0].message))
+            self.assertEqual(
+                str(caught[0].message),
+                "It appears that '8569..276' is a feature that spans the origin, but the sequence topology is undefined. Setting location to None.",
+            )
 
         # The last feature location is None
         self.assertIsNone(record.features[-1].location)

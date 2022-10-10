@@ -347,14 +347,14 @@ class Iterator:
         return iter(self.__next__, None)
 
 
-class ParserFailureError(Exception):
+class ParserFailureError(ValueError):
     """Failure caused by some kind of problem in the parser."""
 
     pass
 
 
-class LocationParserError(Exception):
-    """Could not Properly parse out a location from a GenBank file."""
+class LocationParserError(ValueError):
+    """Could not parse a feature location string."""
 
     pass
 
@@ -575,7 +575,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
     >>> fromstring("123^456", 1000)
     Traceback (most recent call last):
        ...
-    ValueError: Invalid between location '123^456'
+    Bio.GenBank.LocationParserError: Invalid between location '123^456'
 
     You can optionally provide a reference name:
 
@@ -676,7 +676,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
                     warnings.warn(
                         "It appears that %r is a feature that spans "
                         "the origin, but the sequence topology is "
-                        "undefined. Skipping feature." % part,
+                        "undefined. Setting location to None." % part,
                         BiopythonParserWarning,
                     )
                     return
@@ -721,7 +721,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             elif int(s) == length and e == "1":
                 pos = SeqFeature.Position.fromstring(s)
             else:
-                raise ValueError(f"Invalid between location {part!r}") from None
+                raise LocationParserError(f"Invalid between location {part!r}")
             loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
             locs.append(loc)
     else:
@@ -1189,9 +1189,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         is_circular = "circular" in self.data.annotations.get("topology", "").lower()
         stranded = "PROTEIN" not in self._seq_type.upper()
 
-        self._cur_feature.location = fromstring(
-            location_line, length, is_circular, stranded
-        )
+        try:
+            location = fromstring(location_line, length, is_circular, stranded)
+        except LocationParserError as e:
+            warnings.warn(
+                f"{e} Setting feature location to None.", BiopythonParserWarning
+            )
+            location = None
+        self._cur_feature.location = location
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.
